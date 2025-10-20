@@ -44,14 +44,18 @@ nav {
   width: 100%;
   background: var(--white);
   z-index: 1000;
-  padding: 1.25rem 0;
+  padding: 1.5rem 0;
   transition: all 0.3s ease;
   border-bottom: 1px solid transparent;
 }
 
 nav.scrolled {
+  padding: 1rem 0;
   border-bottom: 1px solid #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.97);
 }
 
 .nav-container {
@@ -77,12 +81,17 @@ nav.scrolled {
 }
 
 .logo img {
-  height: 42px;
+  height: 52px;
+  transition: height 0.3s ease;
+}
+
+nav.scrolled .logo img {
+  height: 44px;
 }
 
 .nav-right {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.75rem;
   align-items: center;
   justify-self: end;  /* Align to end of its grid cell */
 }
@@ -91,29 +100,47 @@ nav.scrolled {
   color: var(--black);
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1rem;
   transition: all 0.2s ease;
   position: relative;
   white-space: nowrap;  /* Prevent text wrapping */
+  letter-spacing: -0.01em;
 }
 
-.nav-right a:hover {
+.nav-right a:not(.btn-donate):not(.btn-resources)::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: width 0.3s ease;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-resources):hover::after {
+  width: 100%;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-resources):hover {
   color: var(--orange);
-  transform: translateY(-2px);
+  transform: none;
 }
 
 .btn-donate {
   background: var(--orange);
   color: var(--white) !important;
-  padding: 0.6rem 1.5rem;
+  padding: 0.75rem 1.75rem;
   text-decoration: none;
   font-weight: 700;
   transition: all 0.2s ease;
   border: none;
   position: relative;
   overflow: hidden;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   white-space: nowrap;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .btn-donate::before {
@@ -139,15 +166,17 @@ nav.scrolled {
 .btn-resources {
   background: transparent;
   color: var(--black) !important;
-  padding: 0.6rem 1.5rem;
+  padding: 0.75rem 1.75rem;
   text-decoration: none;
   font-weight: 700;
   transition: all 0.2s ease;
   border: 2px solid var(--black);
   position: relative;
   overflow: hidden;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   white-space: nowrap;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .btn-resources::before {
@@ -185,7 +214,7 @@ nav.scrolled {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6rem 0 4rem;
+  padding: 7rem 0 4rem;
   position: relative;
   background: var(--white);
 }
@@ -1051,17 +1080,17 @@ footer {
 /* Add media query for medium screens */
 @media (max-width: 1200px) {
   .nav-right {
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
   
   .nav-right a {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
   
   .btn-donate,
   .btn-resources {
-    padding: 0.55rem 1.25rem;
-    font-size: 0.85rem;
+    padding: 0.65rem 1.5rem;
+    font-size: 0.9rem;
   }
   
   .hero h1 {
@@ -1085,18 +1114,35 @@ footer {
 
 /* Add media query for tablets/smaller laptops */
 @media (max-width: 1080px) {
+  nav {
+    padding: 1.25rem 0;
+  }
+  
+  nav.scrolled {
+    padding: 0.875rem 0;
+  }
+  
+  .logo img {
+    height: 48px;
+  }
+  
+  nav.scrolled .logo img {
+    height: 42px;
+  }
+  
   .nav-right {
-    gap: 1rem;
+    gap: 1.25rem;
   }
   
   .nav-right a {
-    font-size: 0.875rem;
+    font-size: 0.9rem;
   }
   
   .btn-donate,
   .btn-resources {
-    padding: 0.5rem 1rem;
-    font-size: 0.825rem;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.85rem;
+    text-transform: none;
   }
 }
 
@@ -1138,7 +1184,7 @@ footer {
   }
   
   .hero {
-    padding-top: 6rem;
+    padding-top: 7rem;
   }
   
   .hero h1 {
