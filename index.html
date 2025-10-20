@@ -37,7 +37,7 @@ body {
   cursor: crosshair;
 }
 
-/* Navigation */
+/* Navigation - UPDATED */
 nav {
   position: fixed;
   top: 0;
@@ -58,8 +58,9 @@ nav.scrolled {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 2rem;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* Match hero grid */
+  gap: 4rem;  /* Match hero gap */
   align-items: center;
 }
 
@@ -68,6 +69,7 @@ nav.scrolled {
   align-items: center;
   text-decoration: none;
   transition: transform 0.3s ease;
+  justify-self: start;  /* Align to start of its grid cell */
 }
 
 .logo:hover {
@@ -82,6 +84,7 @@ nav.scrolled {
   display: flex;
   gap: 1.75rem;
   align-items: center;
+  justify-self: end;  /* Align to end of its grid cell */
 }
 
 .nav-right a {
@@ -163,6 +166,14 @@ nav.scrolled {
 .btn-resources:hover {
   color: var(--white) !important;
   transform: scale(1.05);
+}
+
+/* Mobile controls container - UPDATED */
+.mobile-controls {
+  display: none;
+  gap: 1rem;
+  align-items: center;
+  justify-self: end;
 }
 
 /* Hero Section */
@@ -1031,10 +1042,19 @@ footer {
   padding-left: 1rem;
 }
 
-/* Responsive */
+/* Responsive - UPDATED */
 @media (max-width: 968px) {
+  .nav-container {
+    grid-template-columns: 1fr auto;  /* Logo takes most space, mobile controls at end */
+    gap: 1rem;
+  }
+  
   .nav-right {
     display: none;
+  }
+  
+  .mobile-controls {
+    display: flex;
   }
   
   .mobile-menu-btn {
@@ -1126,7 +1146,7 @@ footer {
       <a href="resources.html" class="btn-resources">Resources</a>
       <a href="donate.html" class="btn-donate">Donate</a>
     </div>
-    <div style="display: flex; gap: 1rem; align-items: center;">
+    <div class="mobile-controls">
       <a href="resources.html" class="btn-resources mobile-resources">Resources</a>
       <button class="mobile-menu-btn" id="mobileMenuBtn">
         <span></span>
