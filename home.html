@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinMango - Financial Health Is A Right</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --orange: #FF6B35;
+  --orange-dark: #E55A2B;
+  --gray: #666666;
+  --light-gray: #f5f5f5;
+  --max-width: 1200px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--white);
+  color: var(--black);
+  line-height: 1.5;
+  font-size: 18px;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--white);
+  z-index: 1000;
+  padding: 1.5rem 0;
+  transition: all 0.3s ease;
+}
+
+nav.scrolled {
+  box-shadow: 0 4px 0 0 var(--orange);
+  transform: translateY(-2px);
+}
+
+.nav-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: rotate(-2deg) scale(1.05);
+}
+
+.logo img {
+  height: 40px;
+}
+
+.nav-right {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-right a {
+  color: var(--black);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-right a:hover {
+  color: var(--orange);
+  transform: translateY(-2px);
+}
+
+.btn-donate {
+  background: var(--orange);
+  color: var(--white) !important;
+  padding: 0.75rem 2rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-donate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-donate:hover::before {
+  left: 0;
+}
+
+.btn-donate:hover {
+  transform: scale(1.05);
+}
+
+.btn-resources {
+  background: transparent;
+  color: var(--black) !important;
+  padding: 0.75rem 2rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid var(--black);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-resources::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-resources:hover::before {
+  left: 0;
+}
+
+.btn-resources:hover {
+  color: var(--white) !important;
+  transform: scale(1.05);
+}
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 2rem 4rem;
+  position: relative;
+  background: linear-gradient(135deg, var(--white) 0%, var(--light-gray) 100%);
+}
+
+.hero-content {
+  max-width: var(--max-width);
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.hero-text {
+  flex: 1;
+}
+
+.hero-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-image img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border: 4px solid var(--black);
+  box-shadow: 16px 16px 0 var(--orange);
+  transition: all 0.3s ease;
+  transform: rotate(-2deg);
+}
+
+.hero-image img:hover {
+  transform: rotate(0deg) scale(1.02);
+  box-shadow: 20px 20px 0 var(--orange);
+}
+
+.hero-label {
+  font-size: 0.9rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 2rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.hero h1 {
+  font-size: clamp(3.5rem, 9vw, 8rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  margin-bottom: 2rem;
+}
+
+.hero h1 .highlight {
+  color: var(--orange);
+  position: relative;
+  display: inline-block;
+  animation: glitch 3s infinite;
+}
+
+@keyframes glitch {
+  0%, 90%, 100% { transform: translate(0); }
+  92% { transform: translate(-2px, 2px); }
+  94% { transform: translate(2px, -2px); }
+  96% { transform: translate(-2px, -2px); }
+}
+
+.hero-subtitle {
+  font-size: 1.75rem;
+  font-weight: 400;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  line-height: 1.4;
+  color: var(--gray);
+}
+
+.hero-stats {
+  display: flex;
+  gap: 4rem;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  cursor: help;
+}
+
+.stat-item:hover {
+  transform: translateY(-4px);
+}
+
+.stat-number {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--orange);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: var(--gray);
+  margin-top: 0.5rem;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--orange);
+  color: var(--white);
+  padding: 1.25rem 3rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.25rem;
+  transition: all 0.2s ease;
+  display: inline-block;
+  border: 3px solid var(--orange);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.btn-primary::after {
+  content: '→';
+  position: absolute;
+  right: -30px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover::after {
+  right: 20px;
+  opacity: 1;
+}
+
+.btn-primary:hover {
+  background: var(--orange-dark);
+  border-color: var(--orange-dark);
+  transform: translateY(-4px) translateX(2px);
+  padding-right: 4rem;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--black);
+  padding: 1.25rem 3rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.25rem;
+  border: 3px solid var(--black);
+  transition: all 0.2s ease;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: var(--black);
+  color: var(--white);
+  transform: translateY(-4px) translateX(-2px);
+}
+
+/* Trust Bar */
+.trust-bar {
+  padding: 4rem 2rem;
+  background: var(--black);
+  color: var(--white);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.trust-bar::before {
+  content: 'TRUSTED • GLOBAL • IMPACT • ';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  font-size: 0.75rem;
+  opacity: 0.1;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  animation: scroll 20s linear infinite;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.trust-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.trust-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-bottom: 2rem;
+}
+
+.trust-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.trust-logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.trust-logo:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Problem Section */
+.problem {
+  padding: 8rem 2rem;
+  background: var(--orange);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.problem::before {
+  content: '⚠';
+  position: absolute;
+  font-size: 30rem;
+  opacity: 0.05;
+  top: -5rem;
+  right: -5rem;
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.problem-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.problem h2 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 3rem;
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
+  margin-top: 4rem;
+}
+
+.problem-stat {
+  padding: 2.5rem;
+  background: rgba(0,0,0,0.2);
+  border-left: 4px solid var(--white);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.problem-stat::after {
+  content: '↗';
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.problem-stat:hover {
+  background: rgba(0,0,0,0.4);
+  border-left-width: 8px;
+  transform: translateX(8px);
+}
+
+.problem-stat:hover::after {
+  opacity: 0.6;
+}
+
+.problem-stat-number {
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.problem-stat-text {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  opacity: 0.95;
+}
+
+/* Solution Section */
+.solution {
+  padding: 8rem 2rem;
+}
+
+.solution-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.solution h2 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 5rem;
+}
+
+.solution-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 4rem;
+}
+
+.solution-card {
+  position: relative;
+  padding: 3rem 2rem;
+  border: 3px solid var(--black);
+  transition: all 0.3s ease;
+  background: var(--white);
+}
+
+.solution-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--orange);
+  transform: scale(0);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+
+.solution-card:hover::before {
+  transform: scale(1);
+}
+
+.solution-card:hover {
+  transform: translateY(-12px) rotate(1deg);
+  box-shadow: 16px 16px 0 var(--orange);
+  color: var(--white);
+}
+
+.solution-card:hover .solution-text {
+  color: var(--white);
+  opacity: 0.9;
+}
+
+.solution-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.solution-card:hover .solution-icon {
+  transform: scale(1.2) rotate(10deg);
+}
+
+.solution-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.solution-text {
+  color: var(--gray);
+  line-height: 1.6;
+  font-size: 1.05rem;
+  transition: color 0.3s ease;
+}
+
+/* Featured Work Section */
+.featured {
+  padding: 8rem 2rem;
+  background: var(--light-gray);
+}
+
+.featured-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 0.875rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.featured h2 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.featured-card {
+  background: var(--white);
+  border: 3px solid var(--black);
+  padding: 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.featured-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 12px 12px 0 var(--black);
+}
+
+.featured-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.featured-image img {
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--black);
+  transition: transform 0.3s ease;
+}
+
+.featured-image img:hover {
+  transform: scale(1.05);
+}
+
+.featured-content h3 {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.featured-meta {
+  font-size: 0.95rem;
+  color: var(--gray);
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.featured-text {
+  color: var(--gray);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  font-size: 1.05rem;
+}
+
+.featured-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 2rem 0;
+  border-top: 2px solid var(--light-gray);
+  border-bottom: 2px solid var(--light-gray);
+}
+
+.featured-stat-number {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--orange);
+  line-height: 1;
+}
+
+.featured-stat-label {
+  font-size: 0.85rem;
+  color: var(--gray);
+  margin-top: 0.5rem;
+}
+
+.featured-link {
+  display: inline-block;
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.featured-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: width 0.3s ease;
+}
+
+.featured-link:hover::after {
+  width: 100%;
+}
+
+/* Impact Numbers */
+.impact {
+  padding: 8rem 2rem;
+  background: var(--black);
+  color: var(--white);
+  text-align: center;
+}
+
+.impact-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.impact h2 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  margin-bottom: 5rem;
+  letter-spacing: -0.03em;
+}
+
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 4rem;
+}
+
+.impact-stat {
+  font-size: 4.5rem;
+  font-weight: 900;
+  color: var(--orange);
+  line-height: 1;
+  margin-bottom: 1rem;
+  letter-spacing: -0.03em;
+  transition: transform 0.3s ease;
+  cursor: default;
+}
+
+.impact-stat:hover {
+  transform: scale(1.1);
+}
+
+.impact-label {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+/* CTA Section */
+.cta {
+  padding: 10rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%);
+}
+
+.cta h2 {
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-bottom: 3rem;
+}
+
+.cta-subtitle {
+  font-size: 1.5rem;
+  color: var(--gray);
+  margin-bottom: 4rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Newsletter Section */
+.newsletter {
+  padding: 8rem 2rem;
+  background: var(--orange);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.newsletter::before {
+  content: '✉';
+  position: absolute;
+  font-size: 30rem;
+  opacity: 0.05;
+  top: -5rem;
+  right: -5rem;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.newsletter-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.newsletter h2 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
+.newsletter-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 3rem;
+  opacity: 0.95;
+  line-height: 1.5;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.newsletter-input {
+  flex: 1;
+  min-width: 250px;
+  padding: 1.25rem 1.5rem;
+  font-size: 1.1rem;
+  border: 3px solid var(--white);
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.newsletter-input:focus {
+  outline: none;
+  border-color: var(--black);
+  transform: translateY(-2px);
+}
+
+.newsletter-input::placeholder {
+  color: var(--gray);
+}
+
+.newsletter-submit {
+  padding: 1.25rem 3rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: var(--black);
+  color: var(--white);
+  border: 3px solid var(--black);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+}
+
+.newsletter-submit:hover {
+  background: var(--white);
+  color: var(--black);
+  transform: translateY(-2px);
+}
+
+.newsletter-note {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Footer */
+footer {
+  padding: 4rem 2rem 2rem;
+  border-top: 4px solid var(--orange);
+  background: var(--black);
+  color: var(--white);
+}
+
+.footer-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-brand {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+
+.footer-brand span {
+  color: var(--orange);
+}
+
+.footer-tagline {
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+.footer-section h4 {
+  font-size: 0.875rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  opacity: 0.6;
+}
+
+.footer-section a {
+  display: block;
+  color: var(--white);
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.footer-section a:hover {
+  color: var(--orange);
+  transform: translateX(4px);
+}
+
+.footer-bottom {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.6;
+  font-size: 0.9rem;
+}
+
+/* Mobile */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mobile-resources {
+  display: none;
+}
+
+.mobile-menu-btn span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: var(--black);
+  margin: 6px 0;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  height: 100vh;
+  background: var(--white);
+  z-index: 999;
+  padding: 6rem 2rem;
+  transition: right 0.3s ease;
+}
+
+.mobile-menu.active {
+  right: 0;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 1.5rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--black);
+  text-decoration: none;
+  border-bottom: 2px solid var(--black);
+  transition: all 0.2s ease;
+}
+
+.mobile-menu a:hover {
+  color: var(--orange);
+  padding-left: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .nav-right {
+    display: none;
+  }
+  
+  .mobile-menu-btn {
+    display: block;
+  }
+  
+  .mobile-resources {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9rem;
+  }
+  
+  .mobile-menu {
+    display: block;
+  }
+  
+  .newsletter-form {
+    flex-direction: column;
+  }
+  
+  .newsletter-input {
+    min-width: 100%;
+  }
+  
+  .hero {
+    padding-top: 8rem;
+  }
+  
+  .hero h1 {
+    font-size: 3rem;
+  }
+  
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .hero-image {
+    order: 1;
+  }
+  
+  .hero-stats {
+    gap: 2rem;
+  }
+  
+  .stat-number {
+    font-size: 2.5rem;
+  }
+  
+  .featured-card {
+    grid-template-columns: 1fr;
+  }
+  
+  .featured-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .solution-grid,
+  .problem-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <img src="finmango-logo.png" alt="FinMango">
+    </a>
+    <div class="nav-right">
+      <a href="about.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <a href="advocacy.html">Advocacy</a>
+      <a href="get-involved.html">Get Involved</a>
+      <a href="resources.html" class="btn-resources">Resources</a>
+      <a href="donate.html" class="btn-donate">Donate</a>
+    </div>
+    <div style="display: flex; gap: 1rem; align-items: center;">
+      <a href="resources.html" class="btn-resources mobile-resources">Resources</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="about.html">About</a>
+  <a href="research.html">Research</a>
+  <a href="education.html">Education</a>
+  <a href="advocacy.html">Advocacy</a>
+  <a href="get-involved.html">Get Involved</a>
+  <a href="donate.html">Donate</a>
+</div>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-label">Fighting Financial Inequality</div>
+      <h1>
+        Financial Health<br>
+        Is A <span class="highlight">Right</span>,<br>
+        Not A Privilege
+      </h1>
+      <p class="hero-subtitle">
+        We harness data, technology, and education to solve the financial health crisis endangering young adults and vulnerable communities worldwide.
+      </p>
+      
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number">1M+</div>
+          <div class="stat-label">Lives Impacted</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">100+</div>
+          <div class="stat-label">Countries Reached</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">75K+</div>
+          <div class="stat-label">Students Educated Locally</div>
+        </div>
+      </div>
+      
+      <div class="hero-cta">
+        <a href="#solution" class="btn-primary">See Our Work</a>
+        <a href="#" class="btn-secondary">Join The Movement</a>
+      </div>
+    </div>
+    
+    <div class="hero-image">
+      <img src="hero-image.jpg" alt="Financial Health Impact">
+    </div>
+  </div>
+</section>
+
+<section class="trust-bar">
+  <div class="trust-container">
+    <div class="trust-label">Trusted By Global Leaders</div>
+    <div class="trust-logos">
+      <div class="trust-logo">WHO</div>
+      <div class="trust-logo">World Bank</div>
+      <div class="trust-logo">IMF</div>
+      <div class="trust-logo">Google Health</div>
+      <div class="trust-logo">Harvard University</div>
+    </div>
+  </div>
+</section>
+
+<section class="problem" id="problem">
+  <div class="problem-container">
+    <h2>
+      The financial health crisis<br>
+      isn't coming.<br>
+      It's here.
+    </h2>
+    
+    <div class="problem-grid">
+      <a href="https://www.cnbc.com/2023/01/19/57percent-of-americans-cant-afford-a-1000-emergency-expense.html" target="_blank" rel="noopener noreferrer" class="problem-stat">
+        <div class="problem-stat-number">63%</div>
+        <div class="problem-stat-text">
+          of Americans can't cover a $500 emergency expense
+        </div>
+      </a>
+      
+      <a href="https://www.worldbank.org/en/publication/globalfindex" target="_blank" rel="noopener noreferrer" class="problem-stat">
+        <div class="problem-stat-number">2.5B</div>
+        <div class="problem-stat-text">
+          people worldwide lack access to basic financial services
+        </div>
+      </a>
+      
+      <a href="https://www.apa.org/news/press/releases/stress/2023/collective-trauma-mental-health-crisis" target="_blank" rel="noopener noreferrer" class="problem-stat">
+        <div class="problem-stat-number">78%</div>
+        <div class="problem-stat-text">
+          of young adults report financial stress impacting mental health
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="solution" id="solution">
+  <div class="solution-container">
+    <h2>We don't just study the problem.<br>We fix it.</h2>
+    
+    <div class="solution-grid">
+      <div class="solution-card">
+        <div class="solution-icon">📊</div>
+        <h3 class="solution-title">Data & Research</h3>
+        <p class="solution-text">
+          Real-time financial health data and AI-powered insights that drive policy change. We partnered with Google Health to build comprehensive datasets used by WHO, World Bank, and IMF.
+        </p>
+      </div>
+      
+      <div class="solution-card">
+        <div class="solution-icon">🎓</div>
+        <h3 class="solution-title">Education</h3>
+        <p class="solution-text">
+          Teaching high school students about mutual funds, Roth IRAs, and financial planning. Over 50,000 students in Northeast Ohio equipped with real wealth-building knowledge since 2017.
+        </p>
+      </div>
+      
+      <div class="solution-card">
+        <div class="solution-icon">🌍</div>
+        <h3 class="solution-title">Global Advocacy</h3>
+        <p class="solution-text">
+          Youth ambassadors driving policy change worldwide. From climate migration research to financial equity campaigns, we amplify voices that demand systemic transformation.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="featured">
+  <div class="featured-container">
+    <div class="section-label">Featured Partnership</div>
+    <h2>Building global health data infrastructure</h2>
+    
+    <div class="featured-card">
+      <div class="featured-image">
+        <img src="google-health-collaboration.jpg" alt="Google Health Partnership">
+      </div>
+      
+      <div class="featured-content">
+        <h3>Google Health Collaboration</h3>
+        <p class="featured-meta">Published in Nature (Scientific Data) & American Journal of Health Education</p>
+        
+        <p class="featured-text">
+          Our partnership with Google Health has produced groundbreaking open-source datasets used by global institutions. Our work creates the data infrastructure decision-makers need to build equitable health and financial systems.
+        </p>
+        
+        <div class="featured-stats">
+          <div>
+            <div class="featured-stat-number">22K+</div>
+            <div class="featured-stat-label">Global locations tracked</div>
+          </div>
+          <div>
+            <div class="featured-stat-number">190+</div>
+            <div class="featured-stat-label">Countries covered</div>
+          </div>
+          <div>
+            <div class="featured-stat-number">Open</div>
+            <div class="featured-stat-label">Source on GitHub</div>
+          </div>
+        </div>
+        
+        <a href="https://www.finmango.org/research" class="featured-link">Explore our research →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="impact" id="impact">
+  <div class="impact-container">
+    <h2>Real impact.<br>Real numbers.</h2>
+    
+    <div class="impact-grid">
+      <div>
+        <div class="impact-stat">1M+</div>
+        <div class="impact-label">Lives Changed Globally</div>
+      </div>
+      
+      <div>
+        <div class="impact-stat">100+</div>
+        <div class="impact-label">Countries Impacted</div>
+      </div>
+      
+      <div>
+        <div class="impact-stat">75K+</div>
+        <div class="impact-label">Students Educated</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="newsletter">
+  <div class="newsletter-container">
+    <h2>Stay in the fight.</h2>
+    <p class="newsletter-subtitle">
+      Join 10,000+ people getting monthly updates on research, impact stories, and ways to take action.
+    </p>
+    
+    <form class="newsletter-form" action="https://finmango.org/newsletter-signup" method="POST">
+      <input 
+        type="email" 
+        name="email" 
+        class="newsletter-input" 
+        placeholder="your@email.com" 
+        required
+      >
+      <button type="submit" class="newsletter-submit">Subscribe</button>
+    </form>
+    
+    <p class="newsletter-note">
+      No spam. Unsubscribe anytime. We respect your inbox.
+    </p>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>
+    Financial inequality<br>
+    won't fix itself.
+  </h2>
+  <p class="cta-subtitle">
+    Join us in building a world where everyone has the chance to thrive financially, regardless of where they start.
+  </p>
+  <div class="hero-cta" style="justify-content: center;">
+    <a href="#" class="btn-primary">Support Our Mission</a>
+    <a href="#" class="btn-secondary">Become An Ambassador</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div>
+      <div class="footer-brand">
+        <img src="finmango-logo.png" alt="FinMango" style="height: 32px; filter: brightness(0) invert(1);">
+      </div>
+      <p class="footer-tagline">
+        A 501(c)(3) non-profit pioneering data-driven solutions for financial health equity worldwide.
+      </p>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Our Work</h4>
+      <a href="#">Research</a>
+      <a href="#">Education</a>
+      <a href="#">Advocacy</a>
+      <a href="#">Projects</a>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Get Involved</h4>
+      <a href="#">Donate</a>
+      <a href="#">Ambassador Program</a>
+      <a href="#">Partner With Us</a>
+      <a href="#">Careers</a>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Connect</h4>
+      <a href="#">LinkedIn</a>
+      <a href="#">Twitter</a>
+      <a href="#">Facebook</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div>© 2025 FinMango. All rights reserved.</div>
+    <div>
+      <a href="#" style="display: inline; margin: 0 1rem;">Privacy</a>
+      <a href="#" style="display: inline; margin: 0 1rem;">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Navigation scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+});
+
+// Mobile menu
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+
+mobileMenuBtn.addEventListener('click', () => {
+  mobileMenu.classList.toggle('active');
+  mobileMenuBtn.classList.toggle('active');
+  document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+});
+
+// Close mobile menu on link click
+document.querySelectorAll('.mobile-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('active');
+    mobileMenuBtn.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
