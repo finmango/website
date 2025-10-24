@@ -280,26 +280,47 @@ nav.scrolled .logo img {
 }
 
 .hero-stats {
-  display: flex;
-  gap: 3rem;
-  justify-content: center;
-  margin-top: 3rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 3rem auto 0;
 }
 
 .hero-stat {
   text-align: center;
+  padding: 2rem 1.5rem;
+  border: 3px solid var(--black);
+  background: var(--white);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.hero-stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--orange);
+}
+
+.hero-stat:hover {
+  transform: translateY(-4px);
+  box-shadow: 6px 6px 0 var(--black);
 }
 
 .stat-number {
   font-size: 3rem;
   font-weight: 900;
-  color: var(--orange);
+  color: var(--black);
   line-height: 1;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .stat-label {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--gray);
   font-weight: 600;
 }
@@ -340,6 +361,10 @@ nav.scrolled .logo img {
 .section {
   padding: 6rem 2rem;
   background: var(--white);
+}
+
+.section.testimonials-section {
+  padding-top: 4rem;
 }
 
 .section-alt {
@@ -1011,19 +1036,35 @@ footer {
   }
   
   .hero-stats {
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    max-width: 100%;
+  }
+  
+  .hero-stat {
+    padding: 1.25rem 0.75rem;
+  }
+  
+  .hero-stat:hover {
+    transform: none;
+    box-shadow: none;
   }
   
   .stat-number {
-    font-size: 2.5rem;
+    font-size: 1.75rem;
   }
   
   .stat-label {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    line-height: 1.3;
   }
   
   .section {
     padding: 4rem 2rem;
+  }
+  
+  .section.testimonials-section {
+    padding-top: 3rem;
   }
   
   .outcomes-grid,
@@ -1074,6 +1115,19 @@ footer {
     padding: 0.65rem 0.85rem !important;
     font-size: 0.75rem !important;
     gap: 0.3rem !important;
+  }
+  
+  /* Extra compact hero stats for small phones */
+  .hero-stat {
+    padding: 1rem 0.5rem;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .stat-label {
+    font-size: 0.65rem;
   }
   
   /* Video padding on mobile */
@@ -1230,7 +1284,7 @@ footer {
 </section>
 
 <!-- Testimonials Section -->
-<section class="section section-alt">
+<section class="section section-alt testimonials-section">
   <div class="section-container">
     <span class="section-label">Student Feedback</span>
     <h2 class="section-title">Real feedback from our financial literacy program</h2>
