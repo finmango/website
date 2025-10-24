@@ -41,8 +41,17 @@ nav {
   background: var(--white);
   z-index: 1000;
   padding: 1.5rem 0;
+  transition: all 0.3s ease;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+nav.scrolled {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.97);
 }
 
 .nav-container {
@@ -69,6 +78,11 @@ nav {
 
 .logo img {
   height: 52px;
+  transition: height 0.3s ease;
+}
+
+nav.scrolled .logo img {
+  height: 44px;
 }
 
 .nav-right {
@@ -86,6 +100,7 @@ nav {
   transition: all 0.2s ease;
   position: relative;
   white-space: nowrap;
+  letter-spacing: -0.01em;
 }
 
 .nav-right a:not(.btn-donate):not(.btn-resources)::after {
@@ -225,7 +240,7 @@ nav {
 }
 
 .hero-container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -251,27 +266,18 @@ nav {
   font-size: 1.25rem;
   color: var(--gray);
   max-width: 700px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 3rem;
   line-height: 1.6;
 }
 
-/* Filter Pills */
-.filters-section {
-  padding: 4rem 2rem;
-  background: var(--light-gray);
-}
-
-.filters-container {
-  max-width: var(--max-width);
-  margin: 0 auto;
-}
-
+/* Filter Pills - now in hero */
 .filters {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
+  margin-top: 3rem;
 }
 
 .filter-btn {
@@ -548,6 +554,7 @@ footer {
       <a href="research.html">Research</a>
       <a href="education.html">Education</a>
       <a href="advocacy.html">Advocacy</a>
+      <a href="get-involved.html">Get Involved</a>
       <a href="resources.html" class="btn-resources">Resources</a>
       <a href="https://www.every.org/finmango?donateTo=finmango#/donate/card" target="_blank" rel="noopener noreferrer" class="btn-donate">Donate</a>
     </div>
@@ -565,6 +572,7 @@ footer {
   <a href="research.html">Research</a>
   <a href="education.html">Education</a>
   <a href="advocacy.html">Advocacy</a>
+  <a href="get-involved.html">Get Involved</a>
   <a href="resources.html">Resources</a>
   <a href="https://www.every.org/finmango?donateTo=finmango#/donate/card" target="_blank" rel="noopener noreferrer">Donate</a>
 </div>
@@ -578,11 +586,8 @@ footer {
     <p class="hero-subtitle">
       Interactive calculators, guides, and tools to help you make smarter money decisions. All free. All backed by research.
     </p>
-  </div>
-</section>
-
-<section class="filters-section">
-  <div class="filters-container">
+    
+    <!-- Filters moved into hero -->
     <div class="filters">
       <button class="filter-btn active" data-category="all">All</button>
       <button class="filter-btn" data-category="education">Education</button>
@@ -652,6 +657,16 @@ footer {
 </footer>
 
 <script>
+// Navigation scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+});
+
 // Resources Data
 const resources = [
   {
