@@ -135,7 +135,7 @@ nav.scrolled .logo img {
   letter-spacing: -0.01em;
 }
 
-.nav-right a:not(.btn-donate):not(.btn-resources)::after {
+.nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
   content: '';
   position: absolute;
   bottom: -4px;
@@ -146,42 +146,30 @@ nav.scrolled .logo img {
   transition: width 0.3s ease;
 }
 
-.nav-right a:not(.btn-donate):not(.btn-resources):hover::after {
+.nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
   width: 100%;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+  color: var(--orange);
 }
 
 .btn-donate {
   background: var(--orange);
-  color: var(--white);
-  padding: 0.6rem 1.5rem;
-  border: 3px solid var(--black);
+  color: var(--white) !important;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
   font-weight: 700;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.btn-donate:hover {
-  transform: translateY(-2px);
-  box-shadow: 4px 4px 0 var(--black);
-}
-
-.btn-resources {
-  background: transparent;
-  color: var(--black);
-  padding: 0.6rem 1.5rem;
+  transition: all 0.2s ease;
   border: 2px solid var(--black);
-  font-weight: 700;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
   position: relative;
   overflow: hidden;
-  z-index: 1;
-  cursor: pointer;
+  font-size: 0.85rem;
   white-space: nowrap;
   letter-spacing: 0.01em;
 }
 
-.btn-resources::before {
+.btn-donate::before {
   content: '';
   position: absolute;
   top: 0;
@@ -193,11 +181,46 @@ nav.scrolled .logo img {
   z-index: -1;
 }
 
-.btn-resources:hover::before {
+.btn-donate:hover::before {
   left: 0;
 }
 
-.btn-resources:hover {
+.btn-donate:hover {
+  transform: scale(1.05);
+}
+
+.btn-get-involved {
+  background: transparent;
+  color: var(--black) !important;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid var(--black);
+  position: relative;
+  overflow: hidden;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.btn-get-involved::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-get-involved:hover::before {
+  left: 0;
+}
+
+.btn-get-involved:hover {
   color: var(--white) !important;
   transform: scale(1.05);
 }
@@ -214,51 +237,58 @@ nav.scrolled .logo img {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0;
 }
 
-.hamburger {
-  width: 24px;
-  height: 20px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.hamburger span {
+.mobile-menu-btn span {
   display: block;
+  width: 28px;
   height: 3px;
-  width: 100%;
   background: var(--black);
+  margin: 6px 0;
   transition: all 0.3s ease;
 }
 
-.mobile-resources {
+.mobile-menu-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.mobile-get-involved {
   display: none;
 }
 
 .mobile-menu {
   display: none;
   position: fixed;
-  top: 70px;
-  left: 0;
+  top: 0;
+  right: -100%;
   width: 100%;
+  height: 100vh;
   background: var(--white);
-  border-bottom: 3px solid var(--black);
-  padding: 2rem;
-  flex-direction: column;
-  gap: 1.5rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   z-index: 999;
+  padding: 6rem 2rem;
+  transition: right 0.3s ease;
+}
+
+.mobile-menu.active {
+  right: 0;
 }
 
 .mobile-menu a {
+  display: block;
+  padding: 1.5rem 0;
+  font-size: 2rem;
+  font-weight: 700;
   color: var(--black);
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1.1rem;
-  padding: 0.75rem 0;
   border-bottom: 2px solid var(--black);
   transition: all 0.2s ease;
 }
@@ -665,7 +695,7 @@ footer {
   }
   
   .btn-donate,
-  .btn-resources {
+  .btn-get-involved {
     padding: 0.65rem 1.5rem;
     font-size: 0.9rem;
   }
@@ -681,7 +711,7 @@ footer {
   }
   
   .logo img {
-    height: 42px;
+    height: 36px;
   }
   
   nav.scrolled .logo img {
@@ -697,9 +727,10 @@ footer {
   }
   
   .btn-donate,
-  .btn-resources {
+  .btn-get-involved {
     padding: 0.6rem 1.25rem;
     font-size: 0.85rem;
+    text-transform: none;
   }
   
   .involvement-grid {
@@ -735,7 +766,7 @@ footer {
     display: block;
   }
   
-  .mobile-resources {
+  .mobile-get-involved {
     display: inline-block;
     padding: 0.35rem 0.85rem;
     font-size: 0.72rem;
@@ -758,15 +789,16 @@ footer {
   }
   
   .hero-subtitle {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
   
-  .hero-stats {
-    gap: 2rem;
+  .involvement {
+    padding: 5rem 1.5rem;
   }
   
-  .hero-stat-number {
-    font-size: 2rem;
+  .section-subtitle {
+    font-size: 1.05rem;
+    margin-bottom: 3rem;
   }
   
   .involvement-grid {
@@ -781,31 +813,74 @@ footer {
   
   .card-image {
     width: 100%;
-    height: 150px;
-    font-size: 3rem;
+    height: 120px;
+    font-size: 2.5rem;
   }
   
   .card-content {
     width: 100%;
-    padding: 2rem 1.5rem;
+    padding: 1.75rem 1.5rem;
   }
   
   .card-title {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+  }
+  
+  .card-description {
+    font-size: 0.95rem;
+  }
+  
+  .petition {
+    padding: 5rem 1.5rem;
+  }
+  
+  .petition h2 {
+    font-size: clamp(1.75rem, 6vw, 2.25rem);
+  }
+  
+  .petition-description {
+    font-size: 1.05rem;
+    margin-bottom: 2.5rem;
   }
   
   .petition-box {
     padding: 2rem 1.5rem;
   }
   
+  .petition-count {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .petition-count .number {
+    font-size: 2rem;
+  }
+  
+  .petition-button {
+    padding: 1rem 2rem;
+    font-size: 0.9rem;
+  }
+  
+  .social {
+    padding: 4rem 1.5rem;
+  }
+  
+  .social h2 {
+    font-size: clamp(1.75rem, 6vw, 2rem);
+  }
+  
+  .social-subtitle {
+    font-size: 1rem;
+  }
+  
   .social-links {
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
   
   .social-link {
-    width: 70px;
-    height: 70px;
-    font-size: 1.75rem;
+    width: 60px;
+    height: 60px;
+    font-size: 1.3rem;
   }
   
   .footer-container {
@@ -833,17 +908,16 @@ footer {
       <a href="research.html">Research</a>
       <a href="education.html">Education</a>
       <a href="advocacy.html">Advocacy</a>
-      <a href="get-involved.html">Get Involved</a>
-      <a href="resources.html" class="btn-resources">Resources</a>
+      <a href="resources.html">Resources</a>
+      <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+      <a href="https://www.every.org/finmango?donateTo=finmango#/donate/card" target="_blank" rel="noopener noreferrer" class="btn-donate">Donate</a>
     </div>
     <div class="mobile-controls">
-      <a href="resources.html" class="btn-resources mobile-resources">Resources</a>
-      <button class="mobile-menu-btn" onclick="toggleMenu()">
-        <div class="hamburger">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
+      <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
     </div>
   </div>
@@ -854,7 +928,9 @@ footer {
   <a href="research.html">Research</a>
   <a href="education.html">Education</a>
   <a href="advocacy.html">Advocacy</a>
+  <a href="resources.html">Resources</a>
   <a href="get-involved.html">Get Involved</a>
+  <a href="https://www.every.org/finmango?donateTo=finmango#/donate/card" target="_blank" rel="noopener noreferrer">Donate</a>
 </div>
 
 <!-- Hero -->
@@ -1029,9 +1105,9 @@ footer {
 </footer>
 
 <script>
-// Navbar scroll effect
+// Navigation scroll effect
+const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
-  const nav = document.getElementById('nav');
   if (window.scrollY > 50) {
     nav.classList.add('scrolled');
   } else {
@@ -1039,19 +1115,34 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// Mobile menu toggle
-function toggleMenu() {
-  const menu = document.getElementById('mobileMenu');
-  menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-}
+// Mobile menu
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
 
-// Close mobile menu when clicking outside
-document.addEventListener('click', (e) => {
-  const menu = document.getElementById('mobileMenu');
-  const menuBtn = document.querySelector('.mobile-menu-btn');
-  if (menu.style.display === 'flex' && !menu.contains(e.target) && !menuBtn.contains(e.target)) {
-    menu.style.display = 'none';
-  }
+mobileMenuBtn.addEventListener('click', () => {
+  mobileMenu.classList.toggle('active');
+  mobileMenuBtn.classList.toggle('active');
+  document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+});
+
+// Close mobile menu on link click
+document.querySelectorAll('.mobile-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('active');
+    mobileMenuBtn.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+});
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
 });
 </script>
 
