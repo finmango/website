@@ -799,6 +799,11 @@ footer {
     font-size: 0.65rem;
   }
   
+  section[style*="height: 500px"] > div {
+    height: 350px !important;
+    margin: 0 1rem !important;
+  }
+  
   .impact-grid {
     grid-template-columns: 1fr;
   }
@@ -832,6 +837,10 @@ footer {
     padding: 1.25rem 0;
   }
   
+  section[style*="height: 500px"] > div {
+    height: 250px !important;
+  }
+  
   .stats-box {
     padding: 2rem 1.5rem;
   }
@@ -856,9 +865,8 @@ footer {
       <a href="advocacy.html">Advocacy</a>
       <a href="resources.html">Resources</a>
       <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
-      <a href="https://www.every.org/finmango#/donate" 
-         data-every-org-donate="finmango" 
-         data-every-org-theme-color="ff8f00"
+      <a href="https://www.every.org/finmango?theme_color=ff8f00#/donate" 
+         data-donate-trigger
          class="btn-donate">Donate</a>
     </div>
     <div class="mobile-controls">
@@ -878,9 +886,8 @@ footer {
   <a href="education.html">Education</a>
   <a href="advocacy.html">Advocacy</a>
   <a href="resources.html">Resources</a>
-  <a href="https://www.every.org/finmango#/donate" 
-     data-every-org-donate="finmango" 
-     data-every-org-theme-color="ff8f00">Donate</a>
+  <a href="https://www.every.org/finmango?theme_color=ff8f00#/donate" 
+     data-donate-trigger>Donate</a>
 </div>
 
 <!-- Hero -->
@@ -893,12 +900,18 @@ footer {
     <p class="hero-subtitle">
       Your donation doesn't just support our work—it funds evidence that decision-makers can't ignore and voices they can't silence.
     </p>
-    <a href="https://www.every.org/finmango#/donate" 
-       data-every-org-donate="finmango" 
-       data-every-org-theme-color="ff8f00"
+    <a href="https://www.every.org/finmango?theme_color=ff8f00#/donate" 
+       data-donate-trigger
        class="btn-donate-hero">
       Donate Now
     </a>
+  </div>
+</section>
+
+<!-- Featured Image -->
+<section style="padding: 0; max-width: 1200px; margin: 0 auto;">
+  <div style="width: 100%; height: 500px; overflow: hidden; border: 4px solid var(--black); margin: 0 2rem;">
+    <img src="donation3.jpg" alt="Support FinMango's mission" style="width: 100%; height: 100%; object-fit: cover; display: block;">
   </div>
 </section>
 
@@ -958,9 +971,8 @@ footer {
     </div>
     
     <div style="text-align: center; margin-top: 3rem;">
-      <a href="https://www.every.org/finmango#/donate" 
-         data-every-org-donate="finmango" 
-         data-every-org-theme-color="ff8f00"
+      <a href="https://www.every.org/finmango?theme_color=ff8f00#/donate" 
+         data-donate-trigger
          class="btn-donate-secondary">
         Make Your Contribution →
       </a>
@@ -1052,9 +1064,8 @@ footer {
     </div>
     
     <div style="text-align: center; margin-top: 3rem;">
-      <a href="https://www.every.org/finmango#/donate" 
-         data-every-org-donate="finmango" 
-         data-every-org-theme-color="ff8f00"
+      <a href="https://www.every.org/finmango?theme_color=ff8f00#/donate" 
+         data-donate-trigger
          class="btn-donate-hero">
         Donate Now
       </a>
@@ -1110,9 +1121,38 @@ footer {
   </div>
 </footer>
 
-<script data-every-style async defer src="https://embeds.every.org/0.4/button.js"></script>
+<script src="https://embeds.every.org/0.4/button.js?explicit=1" id="every-donate-btn"></script>
 
 <script>
+// Initialize Every.org donation modal
+function initDonateButtons() {
+  const donateButtons = document.querySelectorAll('[data-donate-trigger]');
+  
+  donateButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      if (typeof EveryDotOrgDonateButton !== 'undefined') {
+        EveryDotOrgDonateButton.load({
+          selector: this,
+          nonprofitSlug: 'finmango',
+          defaultFrequency: 'once'
+        });
+      } else {
+        // Fallback to regular link if script hasn't loaded
+        window.open('https://www.every.org/finmango?theme_color=ff8f00#/donate', '_blank');
+      }
+    });
+  });
+}
+
+// Wait for Every.org script to load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initDonateButtons);
+} else {
+  initDonateButtons();
+}
+
 // Navigation scroll effect
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
