@@ -232,6 +232,85 @@ nav.scrolled .logo img {
   transform: scale(1.05);
 }
 
+/* Mobile controls container */
+.mobile-controls {
+  display: none;
+  gap: 1rem;
+  align-items: center;
+  justify-self: end;
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mobile-get-involved {
+  display: none;
+}
+
+.mobile-menu-btn span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: var(--black);
+  margin: 6px 0;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  height: 100vh;
+  background: var(--white);
+  z-index: 999;
+  padding: 6rem 2rem;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-menu.active {
+  display: block;
+  right: 0;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 1.5rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--black);
+  text-decoration: none;
+  border-bottom: 2px solid var(--black);
+  transition: all 0.2s ease;
+}
+
+.mobile-menu a:hover {
+  color: var(--orange);
+  padding-left: 1rem;
+}
+
 /* PROFILE HERO - BOLD & CONTRARIAN */
 .profile-hero {
   min-height: 85vh;
@@ -650,14 +729,81 @@ footer {
 }
 
 /* MOBILE RESPONSIVE */
+@media (max-width: 1200px) {
+  .nav-right {
+    gap: 1.5rem;
+  }
+  
+  .nav-right a {
+    font-size: 0.95rem;
+  }
+  
+  .btn-donate,
+  .btn-get-involved {
+    padding: 0.65rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 1080px) {
+  nav {
+    padding: 1.25rem 0;
+  }
+  
+  nav.scrolled {
+    padding: 0.875rem 0;
+  }
+  
+  .logo img {
+    height: 42px;
+  }
+  
+  nav.scrolled .logo img {
+    height: 36px;
+  }
+  
+  .nav-right {
+    gap: 1.25rem;
+  }
+  
+  .nav-right a {
+    font-size: 0.9rem;
+  }
+  
+  .btn-donate,
+  .btn-get-involved {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.85rem;
+    text-transform: none;
+  }
+}
+
 @media (max-width: 968px) {
   .nav-container {
     grid-template-columns: 1fr auto;
-    gap: 2rem;
+    gap: 1rem;
   }
 
   .nav-right {
     display: none;
+  }
+
+  .mobile-controls {
+    display: flex;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .mobile-get-involved {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.72rem;
+  }
+
+  .mobile-menu {
+    display: block;
   }
 
   .profile-hero-container {
@@ -728,6 +874,17 @@ footer {
     padding: 2rem;
   }
 }
+
+@media (max-width: 480px) {
+  .mobile-menu {
+    padding: 5rem 1.5rem 2rem;
+  }
+  
+  .mobile-menu a {
+    font-size: 1.5rem;
+    padding: 1.25rem 0;
+  }
+}
 </style>
 </head>
 <body>
@@ -738,17 +895,36 @@ footer {
     <a href="index.html" class="logo">
       <img src="finmango.png" alt="FinMango">
     </a>
+    
     <div class="nav-right">
       <a href="index.html">Home</a>
       <a href="research.html">Research</a>
       <a href="education.html">Education</a>
       <a href="advocacy.html">Advocacy</a>
       <a href="resources.html">Resources</a>
-      <a href="donate.html" class="btn-donate">Donate</a>
       <a href="advocacy.html#apply" class="btn-get-involved">Get Involved</a>
+      <a href="donate.html" class="btn-donate">Donate</a>
+    </div>
+    
+    <div class="mobile-controls">
+      <a href="advocacy.html#apply" class="btn-get-involved mobile-get-involved">Get Involved</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
   </div>
 </nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="research.html">Research</a>
+  <a href="education.html">Education</a>
+  <a href="advocacy.html">Advocacy</a>
+  <a href="resources.html">Resources</a>
+  <a href="donate.html">Donate</a>
+</div>
 
 <!-- Profile Hero -->
 <section class="profile-hero">
@@ -899,6 +1075,25 @@ window.addEventListener('scroll', () => {
   } else {
     nav.classList.remove('scrolled');
   }
+});
+
+// Mobile menu
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+
+mobileMenuBtn.addEventListener('click', () => {
+  mobileMenu.classList.toggle('active');
+  mobileMenuBtn.classList.toggle('active');
+  document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+});
+
+// Close mobile menu on link click
+document.querySelectorAll('.mobile-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('active');
+    mobileMenuBtn.classList.remove('active');
+    document.body.style.overflow = '';
+  });
 });
 
 // Smooth scroll
