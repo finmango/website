@@ -1397,9 +1397,31 @@ window.addEventListener('load', () => {
     const element = document.querySelector(window.location.hash);
     if (element) {
       setTimeout(() => {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const navHeight = nav.offsetHeight;
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = elementPosition - navHeight - 20;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
       }, 100);
     }
+  }
+});
+
+// Also handle hash changes during navigation
+window.addEventListener('hashchange', () => {
+  const element = document.querySelector(window.location.hash);
+  if (element) {
+    const navHeight = nav.offsetHeight;
+    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = elementPosition - navHeight - 20;
+    
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    });
   }
 });
 </script>
