@@ -496,6 +496,18 @@ nav.scrolled .logo img {
   box-shadow: 8px 8px 0 var(--orange);
 }
 
+.need-card.active {
+  background: var(--orange);
+  border-color: var(--black);
+  transform: translateX(8px);
+  box-shadow: 8px 8px 0 var(--black);
+}
+
+.need-card.active .need-label,
+.need-card.active .need-arrow {
+  color: var(--white);
+}
+
 .need-icon {
   font-size: 2rem;
   flex-shrink: 0;
@@ -1197,10 +1209,14 @@ function selectState() {
 
 function toggleNeed(need) {
   const index = formState.needs.indexOf(need);
+  const card = event.currentTarget;
+  
   if (index > -1) {
     formState.needs.splice(index, 1);
+    card.classList.remove('active');
   } else {
     formState.needs.push(need);
+    card.classList.add('active');
   }
 }
 
