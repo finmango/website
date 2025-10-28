@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rule of 72 Calculator - FinMango</title>
+<meta name="description" content="Use the Rule of 72 to estimate how long it takes for your investments to double. See compound growth in action.">
+<link rel="icon" type="image/png" href="favicon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DW5HBYS9JW');
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --orange: #FF6B35;
+  --gold: #F59E0B;
+  --green: #10B981;
+  --gray: #666666;
+  --light-gray: #f5f5f5;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--white);
+  color: var(--black);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--white);
+  z-index: 1000;
+  padding: 1.5rem 0;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+nav.scrolled {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.97);
+}
+
+.nav-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+  justify-self: start;
+}
+
+.logo:hover {
+  transform: rotate(-2deg) scale(1.05);
+}
+
+.logo img {
+  height: 46px;
+  transition: height 0.3s ease;
+}
+
+nav.scrolled .logo img {
+  height: 38px;
+}
+
+.nav-right {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+  justify-self: end;
+}
+
+.nav-right a {
+  color: var(--black);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  position: relative;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: width 0.3s ease;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
+  width: 100%;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+  color: var(--orange);
+}
+
+.btn-donate {
+  background: var(--orange);
+  color: var(--white) !important;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid var(--black);
+  position: relative;
+  overflow: hidden;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.btn-donate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-donate:hover::before {
+  left: 0;
+}
+
+.btn-donate:hover {
+  transform: scale(1.05);
+}
+
+.btn-get-involved {
+  background: transparent;
+  color: var(--black) !important;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid var(--black);
+  position: relative;
+  overflow: hidden;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.btn-get-involved::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-get-involved:hover::before {
+  left: 0;
+}
+
+.btn-get-involved:hover {
+  color: var(--white) !important;
+  transform: scale(1.05);
+}
+
+/* Mobile Menu */
+.mobile-controls {
+  display: none;
+  gap: 1rem;
+  align-items: center;
+  justify-self: end;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mobile-menu-btn span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: var(--black);
+  margin: 6px 0;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.mobile-get-involved {
+  display: none;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  height: 100vh;
+  background: var(--white);
+  z-index: 999;
+  padding: 6rem 2rem;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-menu.active {
+  display: block;
+  right: 0;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 1.5rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--black);
+  text-decoration: none;
+  border-bottom: 2px solid var(--black);
+  transition: all 0.2s ease;
+}
+
+.mobile-menu a:hover {
+  color: var(--orange);
+  padding-left: 1rem;
+}
+
+/* Hero */
+.hero {
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9rem 2rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 100%);
+  color: var(--white);
+  position: relative;
+}
+
+.hero-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 600;
+  max-width: 700px;
+  margin: 0 auto;
+  opacity: 0.95;
+}
+
+/* Main Content */
+.main-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.content-section {
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.section-text {
+  font-size: 1.1rem;
+  color: var(--gray);
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+/* Calculator Sections */
+.calc-section {
+  border: 3px solid var(--black);
+  margin-bottom: 1.5rem;
+  background: var(--white);
+  overflow: hidden;
+}
+
+.calc-section-header {
+  background: var(--orange);
+  color: var(--white);
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid var(--black);
+}
+
+.calc-section-header:hover {
+  background: var(--black);
+}
+
+.calc-section-title {
+  font-size: 1.3rem;
+  font-weight: 900;
+  margin: 0;
+}
+
+.calc-section-arrow {
+  font-size: 1.5rem;
+  font-weight: 900;
+  transition: transform 0.3s ease;
+}
+
+.calc-section.active .calc-section-arrow {
+  transform: rotate(180deg);
+}
+
+.calc-section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  padding: 0 1.5rem;
+}
+
+.calc-section.active .calc-section-content {
+  max-height: 2000px;
+  padding: 1.5rem;
+}
+
+/* Calculator Box */
+.calculator-box {
+  background: var(--light-gray);
+  border: 3px solid var(--black);
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.input-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--black);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-prefix {
+  position: absolute;
+  left: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--gray);
+}
+
+.input-suffix {
+  position: absolute;
+  right: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--gray);
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2rem;
+  font-size: 1rem;
+  border: 2px solid var(--black);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+input[type="number"]:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+input[type="range"] {
+  width: 100%;
+  height: 8px;
+  border-radius: 5px;
+  background: #ddd;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gold);
+  cursor: pointer;
+  border: 3px solid var(--black);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gold);
+  cursor: pointer;
+  border: 3px solid var(--black);
+}
+
+.slider-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--gray);
+}
+
+/* Doubling Display */
+.doubling-display {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 100%);
+  border: 3px solid var(--black);
+  padding: 3rem 2rem;
+  margin: 2rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.doubling-display::before {
+  content: '💰';
+  position: absolute;
+  font-size: 15rem;
+  opacity: 0.1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.doubling-label {
+  color: var(--white);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.doubling-number {
+  color: var(--white);
+  font-size: 4rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.doubling-sublabel {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Chart Box */
+.chart-box {
+  background: var(--white);
+  border: 3px solid var(--black);
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+/* Doubling Timeline */
+.doubling-timeline {
+  margin: 2rem 0;
+}
+
+.timeline-item {
+  background: var(--light-gray);
+  border: 3px solid var(--black);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.timeline-icon {
+  font-size: 2rem;
+}
+
+.timeline-content {
+  flex: 1;
+}
+
+.timeline-title {
+  font-size: 1.2rem;
+  font-weight: 900;
+  margin-bottom: 0.25rem;
+}
+
+.timeline-desc {
+  font-size: 0.9rem;
+  color: var(--gray);
+}
+
+.timeline-value {
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-align: right;
+}
+
+/* Footer */
+footer {
+  background: var(--black);
+  color: var(--white);
+  padding: 4rem 2rem 2rem;
+  margin-top: 4rem;
+}
+
+.footer-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.footer-brand img {
+  height: 50px;
+  margin-bottom: 1rem;
+  filter: brightness(0) invert(1);
+}
+
+.footer-tagline {
+  color: #999;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.footer-section h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.footer-section a {
+  display: block;
+  color: #999;
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.footer-section a:hover {
+  color: var(--orange);
+  padding-left: 0.5rem;
+}
+
+.footer-bottom {
+  border-top: 1px solid #333;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .footer-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-right {
+    display: none;
+  }
+  
+  .mobile-controls {
+    display: flex;
+  }
+  
+  .mobile-menu-btn {
+    display: block;
+  }
+  
+  .mobile-get-involved {
+    display: inline-block;
+  }
+  
+  .hero {
+    padding: 7rem 1.5rem 2rem;
+  }
+  
+  .doubling-number {
+    font-size: 2.5rem;
+  }
+  
+  .timeline-item {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .timeline-value {
+    text-align: center;
+  }
+  
+  .footer-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <img src="finmango.png" alt="FinMango" loading="eager">
+    </a>
+    <div class="nav-right">
+      <a href="about.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <a href="advocacy.html">Advocacy</a>
+      <a href="resources.html">Resources</a>
+      <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+      <a href="donate.html" class="btn-donate">Donate</a>
+    </div>
+    <div class="mobile-controls">
+      <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="about.html">About</a>
+  <a href="research.html">Research</a>
+  <a href="education.html">Education</a>
+  <a href="advocacy.html">Advocacy</a>
+  <a href="resources.html">Resources</a>
+  <a href="donate.html">Donate</a>
+</div>
+
+<section class="hero">
+  <div class="hero-container">
+    <h1 class="hero-title">Rule of 72 💰</h1>
+    <p class="hero-subtitle">
+      Estimate how long it takes for your investments to double
+    </p>
+  </div>
+</section>
+
+<div class="main-content">
+  <div class="content-section">
+    <p class="section-text">
+      The rule of 72 is a popular formula used to roughly estimate how long it will take for your investments to double in time assuming a constant rate of return.
+    </p>
+    <p class="section-text">
+      The formula is extremely simple! Just take the number 72 and divide it by the interest rate that you hope to earn from your investments.
+    </p>
+    <p class="section-text">
+      We'll now ask you a few questions about your personal finances to show you that, even with modest initial savings, you can accumulate a significant amount of wealth.
+    </p>
+  </div>
+
+  <!-- Section 1: How much can you start with? -->
+  <div class="calc-section active">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">1. How much can you start with?</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <div class="calculator-box">
+        <div class="input-grid">
+          <div class="input-group">
+            <label class="input-label">Total Invested Amount</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              Total money invested in stock market, 401K, etc.
+            </p>
+            <div class="input-wrapper">
+              <span class="input-prefix">$</span>
+              <input type="number" id="initialAmount" value="10000" min="0" step="1000">
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Expected Investment Annual Return Rate</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              The average stock market return for a 10-year period is 9.2% per year.
+            </p>
+            <input type="range" id="returnRate" min="1" max="15" step="0.5" value="7">
+            <div class="slider-info">
+              <span>Conservative (3-5%)</span>
+              <span id="returnValue" style="font-weight: 900; color: var(--gold);">7%</span>
+              <span>Aggressive (10-15%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Doubling Time -->
+  <div class="calc-section active">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">2. Doubling Time</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <p class="section-text">
+        With the expected annual return rate, the rule of 72 lets you estimate that your investments will double every <span id="doublingYearsText" style="font-weight: 900; color: var(--gold);">10.3</span> years.
+      </p>
+      
+      <div class="doubling-display">
+        <div class="doubling-label">Your Money Doubles Every</div>
+        <div class="doubling-number" id="doublingYears">10.3</div>
+        <div class="doubling-sublabel">Years</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Compounding Results -->
+  <div class="calc-section active">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">3. Now let's watch what happens when we take advantage of compounding interest...</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <div class="chart-box">
+        <canvas id="compoundingChart"></canvas>
+      </div>
+      
+      <div class="doubling-timeline" id="doublingTimeline">
+        <!-- Timeline items will be inserted here by JavaScript -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-container">
+    <div>
+      <div class="footer-brand">
+        <img src="finmango.png" alt="FinMango" loading="lazy">
+      </div>
+      <p class="footer-tagline">
+        A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
+      </p>
+      <p class="footer-tagline" style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem;">
+        EIN: 81-2543425
+      </p>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Our Work</h4>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <a href="advocacy.html">Advocacy</a>
+      <a href="resources.html">Resources</a>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Get Involved</h4>
+      <a href="donate.html">Donate</a>
+      <a href="advocacy.html">Ambassador Program</a>
+      <a href="mailto:hello@finmango.org">Partner With Us</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Connect</h4>
+      <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
+      <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="mailto:hello@finmango.org">Contact</a>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div>© 2025 FinMango. All rights reserved.</div>
+    <div>
+      <a href="#" style="display: inline; margin: 0 1rem; color: #999;">Privacy</a>
+      <a href="#" style="display: inline; margin: 0 1rem; color: #999;">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+let chart = null;
+
+function formatCurrency(value) {
+  if (value >= 1000000) {
+    return '$' + (value / 1000000).toFixed(2) + 'M';
+  } else if (value >= 1000) {
+    return '$' + (value / 1000).toFixed(0) + 'K';
+  }
+  return '$' + Math.round(value).toLocaleString();
+}
+
+function calculate() {
+  const initialAmount = parseFloat(document.getElementById('initialAmount').value) || 10000;
+  const returnRate = parseFloat(document.getElementById('returnRate').value) / 100;
+  
+  // Calculate doubling time using Rule of 72
+  const doublingYears = 72 / (returnRate * 100);
+  
+  // Update doubling displays
+  document.getElementById('doublingYears').textContent = doublingYears.toFixed(1);
+  document.getElementById('doublingYearsText').textContent = doublingYears.toFixed(1);
+  
+  // Calculate compounding over time (show 5 doublings or 50 years, whichever comes first)
+  const numDoublings = Math.min(5, Math.floor(50 / doublingYears));
+  const years = Math.ceil(numDoublings * doublingYears);
+  
+  const balanceData = [initialAmount];
+  const labels = ['Start'];
+  let currentValue = initialAmount;
+  
+  // Generate data points
+  for (let year = 1; year <= years; year++) {
+    currentValue = initialAmount * Math.pow(1 + returnRate, year);
+    balanceData.push(currentValue);
+    labels.push('Year ' + year);
+  }
+  
+  // Update chart
+  updateChart(labels, balanceData);
+  
+  // Update timeline
+  updateTimeline(initialAmount, doublingYears, numDoublings);
+}
+
+function updateChart(labels, balanceData) {
+  const ctx = document.getElementById('compoundingChart').getContext('2d');
+  
+  if (chart) {
+    chart.destroy();
+  }
+  
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Investment Value',
+          data: balanceData,
+          borderColor: '#F59E0B',
+          backgroundColor: 'rgba(245, 158, 11, 0.1)',
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function(value) {
+              return formatCurrency(value);
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function updateTimeline(initialAmount, doublingYears, numDoublings) {
+  const timeline = document.getElementById('doublingTimeline');
+  timeline.innerHTML = '';
+  
+  const icons = ['💰', '💎', '🏆', '🚀', '👑'];
+  
+  for (let i = 1; i <= numDoublings; i++) {
+    const years = Math.round(doublingYears * i);
+    const value = initialAmount * Math.pow(2, i);
+    const doubling = i === 1 ? '1st' : i === 2 ? '2nd' : i === 3 ? '3rd' : i + 'th';
+    
+    const item = document.createElement('div');
+    item.className = 'timeline-item';
+    item.innerHTML = `
+      <div class="timeline-icon">${icons[i - 1]}</div>
+      <div class="timeline-content">
+        <div class="timeline-title">${doubling} Doubling</div>
+        <div class="timeline-desc">After ${years} years</div>
+      </div>
+      <div class="timeline-value">${formatCurrency(value)}</div>
+    `;
+    timeline.appendChild(item);
+  }
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+  
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  
+  mobileMenuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+    mobileMenuBtn.classList.toggle('active');
+    document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+  });
+  
+  document.querySelectorAll('.mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      mobileMenuBtn.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
+  
+  // Collapsible section handlers
+  document.querySelectorAll('.calc-section-header').forEach(header => {
+    header.addEventListener('click', function() {
+      const section = this.parentElement;
+      section.classList.toggle('active');
+    });
+  });
+  
+  // Input listeners
+  document.getElementById('initialAmount').addEventListener('input', calculate);
+  
+  document.getElementById('returnRate').addEventListener('input', function() {
+    document.getElementById('returnValue').textContent = this.value + '%';
+    calculate();
+  });
+  
+  calculate();
+});
+</script>
+
+</body>
+</html>
