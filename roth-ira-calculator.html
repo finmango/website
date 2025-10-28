@@ -5,22 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Roth IRA Calculator - FinMango</title>
 <meta name="description" content="Build tax-free wealth for retirement with a Roth IRA. See how your contributions grow over time and start planning at any age.">
-<meta name="keywords" content="roth ira calculator, retirement calculator, tax-free retirement, roth ira growth, retirement planning, ira contribution limits">
-<meta name="author" content="FinMango">
-<link rel="canonical" href="https://finmango.org/roth-ira">
 <link rel="icon" type="image/png" href="favicon.png">
-
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://finmango.org/roth-ira">
-<meta property="og:title" content="Roth IRA Calculator - FinMango">
-<meta property="og:description" content="Build tax-free wealth for retirement with a Roth IRA. See how your contributions grow over time and start planning at any age.">
-<meta property="og:image" content="https://finmango.org/finmango-og.png">
-
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://finmango.org/roth-ira">
-<meta property="twitter:title" content="Roth IRA Calculator - FinMango">
-<meta property="twitter:description" content="Build tax-free wealth for retirement with a Roth IRA. See how your contributions grow over time and start planning at any age.">
-<meta property="twitter:image" content="https://finmango.org/finmango-og.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -297,6 +282,58 @@ nav.scrolled .logo img {
 .mobile-menu a:hover {
   color: var(--orange);
   padding-left: 1rem;
+}
+
+/* Calculator Sections */
+.calc-section {
+  border: 3px solid var(--black);
+  margin-bottom: 1.5rem;
+  background: var(--white);
+  overflow: hidden;
+}
+
+.calc-section-header {
+  background: var(--orange);
+  color: var(--white);
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid var(--black);
+}
+
+.calc-section-header:hover {
+  background: var(--black);
+}
+
+.calc-section-title {
+  font-size: 1.3rem;
+  font-weight: 900;
+  margin: 0;
+}
+
+.calc-section-arrow {
+  font-size: 1.5rem;
+  font-weight: 900;
+  transition: transform 0.3s ease;
+}
+
+.calc-section.active .calc-section-arrow {
+  transform: rotate(180deg);
+}
+
+.calc-section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  padding: 0 1.5rem;
+}
+
+.calc-section.active .calc-section-content {
+  max-height: 2000px;
+  padding: 1.5rem;
 }
 
 /* Hero */
@@ -658,110 +695,134 @@ footer {
     </p>
   </div>
 
-  <div class="content-section">
-    <h2 class="section-title">What is your age and income?</h2>
-    <p class="section-text">
-      You can open a Roth IRA at any age as long as you make money from a job or self-employment (examples: Baby-Sitting, running your own business). If you are below 18, you may need your parent or guardian's help.
-    </p>
-    
-    <div class="calculator-box">
-      <div class="input-grid">
-        <div class="input-group">
-          <label class="input-label">How old are you?</label>
-          <input type="number" id="age" value="16" min="0" max="100">
-        </div>
-        
-        <div class="input-group">
-          <label class="input-label">How Much $ Do You Make Per Year?</label>
-          <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-            Sources of earned income are having a job or self-employment. To qualify for a Roth IRA, you must make less than $140,000 per year before taxes.
-          </p>
-          <div class="input-wrapper">
-            <span class="input-prefix">$</span>
-            <input type="number" id="income" value="20000" min="0" step="1000">
+  <!-- Section 1: Age & Income -->
+  <div class="calc-section active">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">1. What is your age and income?</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <p class="section-text">
+        You can open a Roth IRA at any age as long as you make money from a job or self-employment (examples: Baby-Sitting, running your own business). If you are below 18, you may need your parent or guardian's help.
+      </p>
+      
+      <div class="calculator-box">
+        <div class="input-grid">
+          <div class="input-group">
+            <label class="input-label">How old are you?</label>
+            <input type="number" id="age" value="16" min="0" max="100">
           </div>
-        </div>
-        
-        <div class="input-group">
-          <label class="input-label">Current Roth IRA Balance</label>
-          <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-            Set to $0 if you do not have one yet!
-          </p>
-          <div class="input-wrapper">
-            <span class="input-prefix">$</span>
-            <input type="number" id="currentBalance" value="0" min="0" step="100">
-          </div>
-        </div>
-        
-        <div class="input-group">
-          <label class="input-label">Your Annual Contribution</label>
-          <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-            The max you can contribute if you are less than 50 years old is about $7000 per year.
-          </p>
-          <div class="input-wrapper">
-            <span class="input-prefix">$</span>
-            <input type="number" id="contribution" value="2000" min="0" max="7000" step="100">
+          
+          <div class="input-group">
+            <label class="input-label">How Much $ Do You Make Per Year?</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              Sources of earned income are having a job or self-employment. To qualify for a Roth IRA, you must make less than $140,000 per year before taxes.
+            </p>
+            <div class="input-wrapper">
+              <span class="input-prefix">$</span>
+              <input type="number" id="income" value="20000" min="0" step="1000">
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="content-section">
-    <h2 class="section-title">Contributing To and Withdrawing From Your Roth IRA</h2>
-    <p class="section-text">
-      If you are under the age of 50, you can contribute up to about $7,000 per year and can add money anytime.
-    </p>
-    <p class="section-text">
-      However if you withdraw money early (before the age of 59.5), you may have to pay some taxes on your earnings. Whether or not you have to pay depends on what you use the money for. Set this money aside to grow more wealth in the long-run!
-    </p>
-  </div>
-
-  <div class="content-section">
-    <h2 class="section-title">Your Roth IRA Grows Tax-Free</h2>
-    <p class="section-text">
-      In addition to growing tax-free, money in a Roth IRA earns interest and grows quickly over time by <strong>COMPOUNDING 📈</strong>, especially when you start early.
-    </p>
-    <p class="section-text">
-      How you invest your money (examples: stocks of companies, bonds, mutual funds, ETFs) and your risk tolerance impacts how much your money grows.
-    </p>
-  </div>
-
-  <div class="content-section">
-    <h2 class="section-title">What is your risk tolerance?</h2>
-    <p class="section-text">
-      The <strong>RISK/RETURN TRADE-OFF</strong> is that the more aggressive risk you take on, the greater the reward and your Rate of Return (RoR) if the investment makes money. On the other hand, if you only take a small risk, you will get a smaller reward. Your <strong>RISK TOLERANCE</strong> is a personal choice!
-    </p>
-    <p class="section-text">
-      For example, if you invest in Tesla stock 🚗, you may see the value of your account take dips at times. This is okay, especially if you do not need the money in the near future and want to see it grow more in the long haul.
-    </p>
-    
-    <div class="calculator-box">
-      <div class="input-group">
-        <label class="input-label">Expected Annual Return (%)</label>
-        <input type="range" id="returnRate" min="1" max="15" step="0.5" value="7">
-        <div class="slider-info">
-          <span>Conservative (3-5%)</span>
-          <span id="returnValue" style="font-weight: 900; color: var(--green);">7%</span>
-          <span>Aggressive (10-15%)</span>
+  <!-- Section 2: Contributions -->
+  <div class="calc-section">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">2. How much will you contribute?</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <p class="section-text">
+        If you are under the age of 50, you can contribute up to about $7,000 per year and can add money anytime.
+      </p>
+      <p class="section-text">
+        However if you withdraw money early (before the age of 59.5), you may have to pay some taxes on your earnings. Whether or not you have to pay depends on what you use the money for. Set this money aside to grow more wealth in the long-run!
+      </p>
+      
+      <div class="calculator-box">
+        <div class="input-grid">
+          <div class="input-group">
+            <label class="input-label">Current Roth IRA Balance</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              Set to $0 if you do not have one yet!
+            </p>
+            <div class="input-wrapper">
+              <span class="input-prefix">$</span>
+              <input type="number" id="currentBalance" value="0" min="0" step="100">
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Your Annual Contribution</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              The max you can contribute if you are less than 50 years old is about $7000 per year.
+            </p>
+            <div class="input-wrapper">
+              <span class="input-prefix">$</span>
+              <input type="number" id="contribution" value="2000" min="0" max="7000" step="100">
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="content-section">
-    <h2 class="section-title">Compounding Interest... 💲💲💲</h2>
-    <p class="section-text">
-      A Roth IRA is one way to build wealth for your future. Now, let's see how its balance grows tax-free over time!
-    </p>
-    
-    <div class="result-box">
-      <div class="result-label">Your Roth IRA at Age 65</div>
-      <div class="result-value" id="finalValue">$0</div>
+  <!-- Section 3: Risk Tolerance -->
+  <div class="calc-section">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">3. What is your risk tolerance?</h2>
+      <span class="calc-section-arrow">▼</span>
     </div>
-    
-    <div class="chart-box">
-      <canvas id="rothChart"></canvas>
+    <div class="calc-section-content">
+      <p class="section-text">
+        In addition to growing tax-free, money in a Roth IRA earns interest and grows quickly over time by <strong>COMPOUNDING 📈</strong>, especially when you start early.
+      </p>
+      <p class="section-text">
+        How you invest your money (examples: stocks of companies, bonds, mutual funds, ETFs) and your risk tolerance impacts how much your money grows.
+      </p>
+      <p class="section-text">
+        The <strong>RISK/RETURN TRADE-OFF</strong> is that the more aggressive risk you take on, the greater the reward and your Rate of Return (RoR) if the investment makes money. On the other hand, if you only take a small risk, you will get a smaller reward. Your <strong>RISK TOLERANCE</strong> is a personal choice!
+      </p>
+      <p class="section-text">
+        For example, if you invest in Tesla stock 🚗, you may see the value of your account take dips at times. This is okay, especially if you do not need the money in the near future and want to see it grow more in the long haul.
+      </p>
+      
+      <div class="calculator-box">
+        <div class="input-group">
+          <label class="input-label">Expected Annual Return (%)</label>
+          <input type="range" id="returnRate" min="1" max="15" step="0.5" value="7">
+          <div class="slider-info">
+            <span>Conservative (3-5%)</span>
+            <span id="returnValue" style="font-weight: 900; color: var(--green);">7%</span>
+            <span>Aggressive (10-15%)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Results -->
+  <div class="calc-section active">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">4. See your results!</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <p class="section-text">
+        A Roth IRA is one way to build wealth for your future. Now, let's see how its balance grows tax-free over time!
+      </p>
+      
+      <div class="result-box">
+        <div class="result-label">Your Roth IRA at Age 65</div>
+        <div class="result-value" id="finalValue">$0</div>
+      </div>
+      
+      <div class="chart-box">
+        <canvas id="rothChart"></canvas>
+      </div>
     </div>
   </div>
 </div>
@@ -955,6 +1016,14 @@ document.addEventListener('DOMContentLoaded', function() {
       mobileMenu.classList.remove('active');
       mobileMenuBtn.classList.remove('active');
       document.body.style.overflow = '';
+    });
+  });
+  
+  // Collapsible section handlers
+  document.querySelectorAll('.calc-section-header').forEach(header => {
+    header.addEventListener('click', function() {
+      const section = this.parentElement;
+      section.classList.toggle('active');
     });
   });
   
