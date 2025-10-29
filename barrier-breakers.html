@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barrier Breakers - Financial Health Innovation Challenge at Kent State</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --black: #000;
+  --white: #fff;
+  --gray-100: #f8f8f8;
+  --gray-200: #e5e5e7;
+  --gray-400: #8e8e93;
+  --gray-500: #636366;
+  --gray-900: #1d1d1f;
+  --orange: #FF6B35;
+  --orange-light: #FF9500;
+  --orange-dark: #ff5722;
+  --orange-glow: rgba(255, 107, 53, 0.3);
+  --transition: cubic-bezier(0.4, 0, 0, 1);
+}
+
+[data-theme="dark"] {
+  --bg: var(--black);
+  --text: var(--white);
+  --text-secondary: var(--gray-400);
+  --surface: #0a0a0a;
+  --border: rgba(255, 255, 255, 0.1);
+  --grid: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="light"] {
+  --bg: var(--white);
+  --text: var(--black);
+  --text-secondary: var(--gray-500);
+  --surface: var(--gray-100);
+  --border: rgba(0, 0, 0, 0.1);
+  --grid: rgba(0, 0, 0, 0.03);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  transition: background 0.6s var(--transition), color 0.6s var(--transition);
+  min-height: 100vh;
+}
+
+.fm-theme-toggle {
+  position: fixed;
+  top: 7rem;
+  right: 2rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s var(--transition);
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.fm-theme-toggle:hover {
+  background: var(--orange);
+  border-color: var(--orange);
+  transform: rotate(180deg);
+  color: var(--white);
+}
+
+.fm-theme-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.fm-grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 1;
+  background-image: 
+    repeating-linear-gradient(0deg, var(--grid) 0px, transparent 1px, transparent 80px, var(--grid) 80px),
+    repeating-linear-gradient(90deg, var(--grid) 0px, transparent 1px, transparent 80px, var(--grid) 80px);
+  animation: grid-pulse 20s ease-in-out infinite;
+}
+
+@keyframes grid-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.fm-hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 10rem 2rem 6rem;
+  overflow: hidden;
+}
+
+.fm-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, var(--orange-glow) 0%, transparent 50%);
+  opacity: 0.3;
+  animation: rotate 60s linear infinite;
+}
+
+@keyframes rotate {
+  to { transform: rotate(360deg); }
+}
+
+.fm-hero-content {
+  max-width: 1200px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.fm-hero-label {
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeInUp 0.8s 0.3s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fm-hero-title {
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 200;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+  opacity: 0;
+  animation: fadeInUp 0.8s 0.5s forwards;
+}
+
+.fm-title-accent {
+  color: var(--orange);
+  font-weight: 600;
+}
+
+.fm-hero-subtitle {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 2rem auto 3rem;
+  opacity: 0;
+  animation: fadeInUp 0.8s 0.7s forwards;
+  max-width: 800px;
+}
+
+.fm-hero-cta {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  margin: 2rem 0 3rem;
+  opacity: 0;
+  animation: fadeInUp 0.8s 0.9s forwards;
+}
+
+.fm-hero-cta strong {
+  color: var(--orange);
+  font-weight: 600;
+}
+
+.fm-hero-actions {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeInUp 0.8s 1.1s forwards;
+  flex-wrap: wrap;
+}
+
+.fm-btn {
+  padding: 1.2rem 2.5rem;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  position: relative;
+  transition: all 0.3s var(--transition);
+  overflow: hidden;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.fm-btn-primary {
+  background: var(--orange);
+  color: var(--white);
+  border-color: var(--orange);
+}
+
+.fm-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.fm-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.fm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+}
+
+section {
+  padding: 8rem 4rem;
+  position: relative;
+}
+
+.fm-section-header {
+  max-width: 900px;
+  margin: 0 auto 6rem;
+  text-align: center;
+}
+
+.fm-section-label {
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 1.5rem;
+  display: inline-block;
+}
+
+.fm-section-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+}
+
+.fm-section-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.fm-priorities {
+  background: var(--surface);
+}
+
+.fm-priorities-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.fm-priority-card {
+  background: var(--bg);
+  padding: 3rem 2rem;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s var(--transition);
+}
+
+.fm-priority-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--orange), var(--orange-light));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--transition);
+}
+
+.fm-priority-card:hover::before {
+  transform: scaleX(1);
+}
+
+.fm-priority-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--orange);
+  box-shadow: 0 15px 35px rgba(255, 107, 53, 0.15);
+}
+
+.fm-priority-number {
+  font-size: 4rem;
+  font-weight: 100;
+  color: var(--orange);
+  opacity: 0.5;
+  margin-bottom: 1.5rem;
+  font-family: "SF Mono", "Monaco", monospace;
+  line-height: 1;
+}
+
+.fm-priority-card h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.fm-priority-card p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+.fm-how-it-works {
+  background: var(--bg);
+}
+
+.fm-steps {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  gap: 3rem;
+}
+
+.fm-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.fm-step-number {
+  width: 64px;
+  height: 64px;
+  background: var(--orange);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.fm-step-content h3 {
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.fm-step-content p {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.fm-prizes {
+  background: var(--surface);
+}
+
+.fm-prize-intro {
+  max-width: 800px;
+  margin: 0 auto 4rem;
+  text-align: center;
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.fm-prize-pool {
+  max-width: 600px;
+  margin: 0 auto 5rem;
+  padding: 3rem;
+  background: var(--bg);
+  border: 2px solid var(--orange);
+  text-align: center;
+}
+
+.fm-prize-pool-label {
+  font-size: 0.875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 1rem;
+}
+
+.fm-prize-pool-amount {
+  font-size: 4rem;
+  font-weight: 200;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.fm-prize-pool-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.fm-prize-divisions {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 3rem;
+}
+
+.fm-division {
+  padding: 3rem 2.5rem;
+  background: var(--bg);
+  border-left: 4px solid var(--orange);
+}
+
+.fm-division h3 {
+  font-size: 1.75rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.fm-division-desc {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+.fm-prize-list {
+  list-style: none;
+}
+
+.fm-prize-item {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fm-prize-item:last-child {
+  border-bottom: none;
+}
+
+.fm-prize-item strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.fm-prize-item span {
+  color: var(--orange);
+  font-weight: 600;
+}
+
+.fm-experience {
+  background: linear-gradient(135deg, var(--orange), var(--orange-light));
+  color: var(--white);
+  overflow: hidden;
+}
+
+.fm-experience::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: rotate 60s linear infinite;
+}
+
+.fm-experience-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.fm-experience .fm-section-title {
+  color: var(--white);
+}
+
+.fm-experience .fm-section-subtitle {
+  color: var(--white);
+  opacity: 0.95;
+}
+
+.fm-activities {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.fm-activity {
+  padding: 2rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+  transition: all 0.3s var(--transition);
+}
+
+.fm-activity:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-8px) scale(1.05);
+}
+
+.fm-activity-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.fm-activity h4 {
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.fm-activity p {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.fm-support {
+  background: var(--bg);
+}
+
+.fm-support-grid {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+}
+
+.fm-support-item {
+  padding: 2.5rem;
+  padding-left: 3rem;
+  border-left: 3px solid var(--orange);
+  background: var(--surface);
+  transition: all 0.3s var(--transition);
+}
+
+.fm-support-item:hover {
+  transform: translateX(8px);
+  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.1);
+}
+
+.fm-support-item h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.fm-support-item p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.fm-faq {
+  background: var(--bg);
+  padding: 8rem 4rem;
+}
+
+.fm-faq-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.fm-faq-item {
+  border-bottom: 1px solid var(--border);
+}
+
+.fm-faq-question {
+  width: 100%;
+  padding: 2rem 0;
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--text);
+  text-align: left;
+  transition: color 0.3s var(--transition);
+}
+
+.fm-faq-question:hover {
+  color: var(--orange);
+}
+
+.fm-faq-icon {
+  font-size: 1.5rem;
+  color: var(--orange);
+  transition: transform 0.3s var(--transition);
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.fm-faq-item.active .fm-faq-icon {
+  transform: rotate(45deg);
+}
+
+.fm-faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s var(--transition);
+}
+
+.fm-faq-item.active .fm-faq-answer {
+  max-height: 500px;
+  padding-bottom: 2rem;
+}
+
+.fm-faq-answer p {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+.fm-cta {
+  padding: 10rem 4rem;
+  text-align: center;
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+}
+
+.fm-cta::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, var(--orange-glow) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  opacity: 0.3;
+}
+
+.fm-cta-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.fm-cta-title {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 200;
+  margin-bottom: 2rem;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.fm-cta-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 3rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.fm-cta-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.fm-contact-info {
+  margin-top: 3rem;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.fm-contact-info a {
+  color: var(--orange);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.fm-contact-info a:hover {
+  color: var(--orange-light);
+  text-decoration: underline;
+}
+
+.fm-contact-info a:hover {
+  color: var(--orange-light);
+  text-decoration: underline;
+}
+
+/* Footer */
+footer {
+  padding: 4rem 2rem 2rem;
+  border-top: 4px solid var(--orange);
+  background: var(--black);
+  color: var(--white);
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-brand {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+
+.footer-tagline {
+  opacity: 0.7;
+  line-height: 1.6;
+  color: var(--white);
+}
+
+.footer-section h4 {
+  font-size: 0.875rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  opacity: 0.6;
+  color: var(--white);
+}
+
+.footer-section a {
+  display: block;
+  color: var(--white);
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.footer-section a:hover {
+  color: var(--orange);
+  transform: translateX(4px);
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.6;
+  font-size: 0.9rem;
+  color: var(--white);
+}
+
+.footer-bottom a {
+  color: #999;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footer-bottom a:hover {
+  color: var(--orange);
+}
+
+@media (max-width: 768px) {
+  section {
+    padding: 4rem 2rem;
+  }
+  
+  .fm-hero {
+    padding: 8rem 2rem 4rem;
+  }
+  
+  .fm-hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .fm-hero-subtitle {
+    font-size: 1.25rem;
+  }
+  
+  .fm-priorities-grid,
+  .fm-prize-divisions,
+  .fm-support-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .fm-step {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .fm-step-number {
+    margin: 0 auto 1.5rem;
+  }
+  
+  .fm-activities {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  
+  .fm-cta {
+    padding: 6rem 2rem;
+  }
+  
+  .fm-faq {
+    padding: 4rem 2rem;
+  }
+  
+  .fm-faq-question {
+    font-size: 1.125rem;
+    padding: 1.5rem 0;
+  }
+  
+  .nav-container {
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+  }
+  
+  .nav-right {
+    display: none;
+  }
+  
+  .mobile-controls {
+    display: flex;
+  }
+  
+  .mobile-menu-btn {
+    display: block;
+  }
+  
+  .mobile-get-involved {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.72rem;
+  }
+  
+  .mobile-menu {
+    display: block;
+  }
+  
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--bg);
+  z-index: 1000;
+  padding: 1.5rem 0;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid var(--border);
+}
+
+nav.scrolled {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.nav-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+  justify-self: start;
+}
+
+.logo:hover {
+  transform: rotate(-2deg) scale(1.05);
+}
+
+.logo img {
+  height: 46px;
+  transition: height 0.3s ease;
+  filter: brightness(0) invert(1);
+}
+
+[data-theme="light"] .logo img {
+  filter: brightness(0) invert(0);
+}
+
+nav.scrolled .logo img {
+  height: 38px;
+}
+
+.nav-right {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+  justify-self: end;
+}
+
+.nav-right a {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  position: relative;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: width 0.3s ease;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
+  width: 100%;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+  color: var(--orange);
+}
+
+.btn-donate {
+  background: var(--orange);
+  color: var(--white) !important;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid var(--text);
+  position: relative;
+  overflow: hidden;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.btn-donate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-donate:hover::before {
+  left: 0;
+}
+
+.btn-donate:hover {
+  transform: scale(1.05);
+}
+
+.btn-get-involved {
+  background: transparent;
+  color: var(--text) !important;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid var(--text);
+  position: relative;
+  overflow: hidden;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.btn-get-involved::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--text);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-get-involved:hover::before {
+  left: 0;
+}
+
+.btn-get-involved:hover {
+  color: var(--bg) !important;
+  transform: scale(1.05);
+}
+
+.mobile-controls {
+  display: none;
+  gap: 1rem;
+  align-items: center;
+  justify-self: end;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mobile-get-involved {
+  display: none;
+}
+
+.mobile-menu-btn span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: var(--text);
+  margin: 6px 0;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  height: 100vh;
+  background: var(--bg);
+  z-index: 999;
+  padding: 6rem 2rem;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-menu.active {
+  display: block;
+  right: 0;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 1.5rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 2px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.mobile-menu a:hover {
+  color: var(--orange);
+  padding-left: 1rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+</style>
+</head>
+<body data-theme="dark">
+
+<nav id="nav">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <img src="finmango.png" alt="FinMango">
+    </a>
+    
+    <div class="nav-right">
+      <a href="about.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <a href="advocacy.html">Advocacy</a>
+      <a href="resources.html">Resources</a>
+      <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+      <a href="donate.html" class="btn-donate">Donate</a>
+    </div>
+    
+    <div class="mobile-controls">
+      <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="about.html">About</a>
+  <a href="research.html">Research</a>
+  <a href="education.html">Education</a>
+  <a href="advocacy.html">Advocacy</a>
+  <a href="resources.html">Resources</a>
+  <a href="donate.html">Donate</a>
+</div>
+
+<div class="fm-grid-overlay"></div>
+<button class="fm-theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="5"></circle>
+    <line x1="12" y1="1" x2="12" y2="3"></line>
+    <line x1="12" y1="21" x2="12" y2="23"></line>
+    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+    <line x1="1" y1="12" x2="3" y2="12"></line>
+    <line x1="21" y1="12" x2="23" y2="12"></line>
+    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+  </svg>
+</button>
+
+<section class="fm-hero">
+  <div class="fm-hero-content">
+    <div class="fm-hero-label">Kent State University × FinMango</div>
+    <h1 class="fm-hero-title">
+      <span class="fm-title-accent">Barrier Breakers</span><br>
+      <span style="font-size: 0.65em; font-weight: 400;">Innovation Challenge</span>
+    </h1>
+    <p class="fm-hero-subtitle">
+      Spend several weeks researching a barrier to financial health and building a solution. Use AI to help prototype. Submit 3 weeks before the event—we'll tell you if you're pitching on stage or presenting via poster.
+    </p>
+    <div class="fm-hero-cta">
+      <strong>$10,000+ in prizes.</strong> Cash + Kent State scholarships.
+    </div>
+    <div class="fm-hero-actions">
+      <a href="#register" class="fm-btn fm-btn-primary">Register Your School</a>
+      <a href="mailto:competition@finmango.org" class="fm-btn">Email Questions</a>
+    </div>
+  </div>
+</section>
+
+<section class="fm-priorities">
+  <div class="fm-section-header">
+    <div class="fm-section-label">Pick Your Focus</div>
+    <h2 class="fm-section-title">Four Innovation Tracks</h2>
+    <p class="fm-section-subtitle">
+      Choose one challenge. Research why it's a barrier to financial health. Build a solution—policy proposal, app prototype, financial literacy tool, community program, or anything else that could create change.
+    </p>
+  </div>
+  <div class="fm-priorities-grid">
+    <div class="fm-priority-card">
+      <div class="fm-priority-number">01</div>
+      <h3>Transportation</h3>
+      <p>Car ownership costs, insurance rates, and public transit gaps prevent young adults from accessing jobs and building financial stability.</p>
+    </div>
+    <div class="fm-priority-card">
+      <div class="fm-priority-number">02</div>
+      <h3>Housing Affordability</h3>
+      <p>Rent burden, security deposits, and credit requirements block young adults from stable housing. How can communities make housing accessible without financial devastation?</p>
+    </div>
+    <div class="fm-priority-card">
+      <div class="fm-priority-number">03</div>
+      <h3>Healthcare Access</h3>
+      <p>Medical debt is a leading cause of bankruptcy. How can communities support health without causing financial devastation?</p>
+    </div>
+    <div class="fm-priority-card">
+      <div class="fm-priority-number">04</div>
+      <h3>Your Community's Challenge</h3>
+      <p>Identify a unique barrier in your area—housing affordability, childcare costs, mental health, or another systemic issue affecting financial wellness.</p>
+    </div>
+  </div>
+</section>
+
+<section class="fm-how-it-works">
+  <div class="fm-section-header">
+    <div class="fm-section-label">Simple Process</div>
+    <h2 class="fm-section-title">Three Steps</h2>
+  </div>
+  <div class="fm-steps">
+    <div class="fm-step">
+      <div class="fm-step-number">1</div>
+      <div class="fm-step-content">
+        <h3>Register</h3>
+        <p>Your school signs up teams. Individual students or groups welcome (groups split the cash prizes). Choose one innovation track and start exploring.</p>
+      </div>
+    </div>
+    <div class="fm-step">
+      <div class="fm-step-number">2</div>
+      <div class="fm-step-content">
+        <h3>Research & Build</h3>
+        <p>Spend several weeks understanding the barrier and building your solution. Use AI tools to help prototype apps, analyze data, or create content. Submit 3 weeks before the event. Any format—video demo, working prototype, policy proposal, presentation.</p>
+      </div>
+    </div>
+    <div class="fm-step">
+      <div class="fm-step-number">3</div>
+      <div class="fm-step-content">
+        <h3>Prepare & Present</h3>
+        <p>We'll review submissions and notify you 2 weeks before the event whether you're pitching on stage (7 min + Q&A) or presenting via poster gallery (1-on-1 with judges). Then prepare your presentation format and compete at Kent State.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fm-prizes">
+  <div class="fm-section-header">
+    <div class="fm-section-label">Rewards</div>
+    <h2 class="fm-section-title">Two Ways to Win</h2>
+  </div>
+  <div class="fm-prize-intro">
+    We're finalizing our sponsor commitments now. Prize amounts will be announced 6 weeks before the event. Here's what we're building toward:
+  </div>
+  <div class="fm-prize-pool">
+    <div class="fm-prize-pool-label">Total Prize Pool</div>
+    <div class="fm-prize-pool-amount">$10,000+</div>
+    <p class="fm-prize-pool-desc">Cash prizes + Kent State scholarships + school grants</p>
+  </div>
+  <div class="fm-prize-divisions">
+    <div class="fm-division">
+      <h3>🎤 Stage Presentation</h3>
+      <p class="fm-division-desc">Top 5 submissions selected for main stage. 7-minute pitch + 3-minute Q&A.</p>
+      <ul class="fm-prize-list">
+        <li class="fm-prize-item">
+          <strong>1st Place</strong>
+          <span>Cash + KSU Scholarship + School Grant</span>
+        </li>
+        <li class="fm-prize-item">
+          <strong>2nd Place</strong>
+          <span>Cash + KSU Scholarship + School Grant</span>
+        </li>
+        <li class="fm-prize-item">
+          <strong>3rd Place</strong>
+          <span>Cash + KSU Scholarship + School Grant</span>
+        </li>
+      </ul>
+    </div>
+    <div class="fm-division">
+      <h3>📊 Poster Gallery</h3>
+      <p class="fm-division-desc">All other submissions. Present 1-on-1 with judges throughout the day.</p>
+      <ul class="fm-prize-list">
+        <li class="fm-prize-item">
+          <strong>1st Place</strong>
+          <span>Cash Prize</span>
+        </li>
+        <li class="fm-prize-item">
+          <strong>2nd Place</strong>
+          <span>Cash Prize</span>
+        </li>
+        <li class="fm-prize-item">
+          <strong>3rd Place</strong>
+          <span>Cash Prize</span>
+        </li>
+        <li class="fm-prize-item">
+          <strong>People's Choice</strong>
+          <span>Cash Prize (Attendee Vote)</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="fm-experience">
+  <div class="fm-experience-content">
+    <div class="fm-section-header">
+      <h2 class="fm-section-title">Your Day at Kent State</h2>
+      <p class="fm-section-subtitle">
+        Campus tours, food, poster gallery, stage pitches, networking, and awards celebration throughout the day.
+      </p>
+    </div>
+    <div class="fm-activities">
+      <div class="fm-activity">
+        <div class="fm-activity-icon">🎓🍽️</div>
+        <h4>Tours & Food</h4>
+        <p>Optional campus tours + food provided</p>
+      </div>
+      <div class="fm-activity">
+        <div class="fm-activity-icon">📊</div>
+        <h4>Poster Gallery</h4>
+        <p>1-on-1 with judges</p>
+      </div>
+      <div class="fm-activity">
+        <div class="fm-activity-icon">🎤</div>
+        <h4>Stage Pitches</h4>
+        <p>Top 5 present</p>
+      </div>
+      <div class="fm-activity">
+        <div class="fm-activity-icon">💡</div>
+        <h4>Q&A Sessions</h4>
+        <p>Defend your work</p>
+      </div>
+      <div class="fm-activity">
+        <div class="fm-activity-icon">🤝</div>
+        <h4>Network</h4>
+        <p>Meet peers & judges</p>
+      </div>
+      <div class="fm-activity">
+        <div class="fm-activity-icon">🏆</div>
+        <h4>Awards</h4>
+        <p>Celebrate winners</p>
+      </div>
+    </div>
+    <div style="margin-top: 5rem; padding: 3rem; background: var(--surface); border-radius: 8px; text-align: center;">
+      <p style="color: var(--text); margin-bottom: 2rem; font-size: 1.25rem; font-weight: 500;">See what past competitions looked like</p>
+      <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+        <a href="https://www.finmango.org/kent-state-2024" target="_blank" class="fm-btn fm-btn-primary">📸 2024 Photos</a>
+        <a href="https://www.finmango.org/kent-state-2023" target="_blank" class="fm-btn fm-btn-primary">📸 2023 Photos</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fm-support">
+  <div class="fm-section-header">
+    <div class="fm-section-label">Support</div>
+    <h2 class="fm-section-title">Build With Confidence</h2>
+    <p class="fm-section-subtitle">
+      Resources, AI tools, mentorship, and flexibility to help you create your best innovation.
+    </p>
+  </div>
+  <div class="fm-support-grid">
+    <div class="fm-support-item">
+      <h3>Research Toolkit</h3>
+      <p>Access our library on financial fundamentals and systemic barriers. Examples from past competitions included.</p>
+    </div>
+    <div class="fm-support-item">
+      <h3>AI-Powered Building</h3>
+      <p>Use Claude, ChatGPT, or other AI tools to help prototype apps, analyze data, generate code, or create content. We encourage it.</p>
+    </div>
+    <div class="fm-support-item">
+      <h3>Mentorship</h3>
+      <p>Connect with professionals in your innovation area. Optional workshops available.</p>
+    </div>
+    <div class="fm-support-item">
+      <h3>Any Format</h3>
+      <p>Working prototype, video demo, policy proposal, financial literacy curriculum—submit however you work best.</p>
+    </div>
+  </div>
+</section>
+
+<section class="fm-faq">
+  <div class="fm-section-header">
+    <div class="fm-section-label">Questions</div>
+    <h2 class="fm-section-title">Frequently Asked</h2>
+  </div>
+  <div class="fm-faq-container">
+    <div class="fm-faq-item">
+      <button class="fm-faq-question">
+        <span>Who can participate?</span>
+        <span class="fm-faq-icon">+</span>
+      </button>
+      <div class="fm-faq-answer">
+        <p>High school students from any school. Individual students or groups (groups split prizes). Your school needs to register, then you can form teams.</p>
+      </div>
+    </div>
+    
+    <div class="fm-faq-item">
+      <button class="fm-faq-question">
+        <span>How are stage vs poster assignments decided?</span>
+        <span class="fm-faq-icon">+</span>
+      </button>
+      <div class="fm-faq-answer">
+        <p>We review all submissions and select the top 5 for stage presentations. Everyone else presents via poster gallery. You'll be notified 2 weeks before the event so you have time to prepare your presentation format.</p>
+      </div>
+    </div>
+    
+    <div class="fm-faq-item">
+      <button class="fm-faq-question">
+        <span>What format should my submission be?</span>
+        <span class="fm-faq-icon">+</span>
+      </button>
+      <div class="fm-faq-answer">
+        <p>Any format that demonstrates your research and solution—video demo, working prototype, written proposal, slide deck, policy paper, or creative presentation. Use whatever format best showcases your innovation.</p>
+      </div>
+    </div>
+    
+    <div class="fm-faq-item">
+      <button class="fm-faq-question">
+        <span>Do I need to use AI tools?</span>
+        <span class="fm-faq-icon">+</span>
+      </button>
+      <div class="fm-faq-answer">
+        <p>No, AI tools are optional but encouraged. They can help you prototype apps, analyze data, generate code, or create content faster. Use them however they're helpful for your project.</p>
+      </div>
+    </div>
+    
+    <div class="fm-faq-item">
+      <button class="fm-faq-question">
+        <span>What are the judging criteria?</span>
+        <span class="fm-faq-icon">+</span>
+      </button>
+      <div class="fm-faq-answer">
+        <p>Judges evaluate: depth of barrier research, innovation of solution, feasibility/implementation potential, and quality of presentation. Both stage and poster divisions use the same criteria.</p>
+      </div>
+    </div>
+    
+    <div class="fm-faq-item">
+      <button class="fm-faq-question">
+        <span>Can I submit on multiple tracks?</span>
+        <span class="fm-faq-icon">+</span>
+      </button>
+      <div class="fm-faq-answer">
+        <p>One submission per person or team. Pick the innovation track that resonates most with your community or interests.</p>
+      </div>
+    </div>
+    
+    <div class="fm-faq-item">
+      <button class="fm-faq-question">
+        <span>What support do you provide?</span>
+        <span class="fm-faq-icon">+</span>
+      </button>
+      <div class="fm-faq-answer">
+        <p>Research toolkit, mentorship connections, optional workshops, and examples from past competitions.</p>
+      </div>
+    </div>
+    
+    <div class="fm-faq-item">
+      <button class="fm-faq-question">
+        <span>When is the event?</span>
+        <span class="fm-faq-icon">+</span>
+      </button>
+      <div class="fm-faq-answer">
+        <p>Event date will be announced soon. Submissions are due 3 weeks before the event date. Email competition@finmango.org for the latest timeline.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="register" class="fm-cta">
+  <div class="fm-cta-content">
+    <h2 class="fm-cta-title">Ready to Innovate?</h2>
+    <p class="fm-cta-subtitle">
+      Join hundreds of students building solutions to systemic barriers to financial wellness.
+    </p>
+    <div class="fm-cta-buttons">
+      <a href="mailto:competition@finmango.org?subject=School Registration" class="fm-btn fm-btn-primary">Register Your School</a>
+      <a href="mailto:competition@finmango.org?subject=Sponsorship Inquiry" class="fm-btn">Become a Sponsor</a>
+    </div>
+    <div class="fm-contact-info">
+      Questions? Email <a href="mailto:competition@finmango.org">competition@finmango.org</a>
+    </div>
+  </div>
+</section>
+
+<script>
+// Theme toggle
+(function() {
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    document.body.setAttribute('data-theme', savedTheme);
+  } else {
+    const hour = new Date().getHours();
+    const theme = (hour >= 6 && hour < 18) ? 'light' : 'dark';
+    document.body.setAttribute('data-theme', theme);
+  }
+})();
+
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+  // Navigation scroll effect
+  const nav = document.getElementById('nav');
+  if (nav) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+  }
+
+  // Mobile menu
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('active');
+      mobileMenuBtn.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+});
+
+function toggleTheme() {
+  const currentTheme = document.body.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  document.body.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+
+// Parallax effect
+window.addEventListener('scroll', () => {
+  const scrolled = window.pageYOffset;
+  const grid = document.querySelector('.fm-grid-overlay');
+  if (grid) {
+    grid.style.transform = `translateY(${scrolled * 0.1}px)`;
+  }
+});
+
+// FAQ Accordion
+document.querySelectorAll('.fm-faq-question').forEach(button => {
+  button.addEventListener('click', () => {
+    const faqItem = button.parentElement;
+    const wasActive = faqItem.classList.contains('active');
+    
+    // Close all FAQs
+    document.querySelectorAll('.fm-faq-item').forEach(item => {
+      item.classList.remove('active');
+    });
+    
+    // Open clicked FAQ if it wasn't active
+    if (!wasActive) {
+      faqItem.classList.add('active');
+    }
+  });
+});
+</script>
+
+<footer>
+  <div class="footer-container">
+    <div>
+      <div class="footer-brand">
+        <img src="finmango.png" alt="FinMango" loading="lazy" style="height: 32px; filter: brightness(0) invert(1);">
+      </div>
+      <p class="footer-tagline">
+        A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
+      </p>
+      <p class="footer-tagline" style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem;">
+        EIN: 81-2543425
+      </p>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Our Work</h4>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <a href="advocacy.html">Advocacy</a>
+      <a href="resources.html">Resources</a>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Get Involved</h4>
+      <a href="donate.html">Donate</a>
+      <a href="advocacy.html">Ambassador Program</a>
+      <a href="mailto:hello@finmango.org">Partner With Us</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Connect</h4>
+      <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
+      <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="mailto:hello@finmango.org">Contact</a>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div>© 2025 FinMango. All rights reserved.</div>
+    <div>
+      <a href="#" style="display: inline; margin: 0 1rem; color: #999;">Privacy</a>
+      <a href="#" style="display: inline; margin: 0 1rem; color: #999;">Terms</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
