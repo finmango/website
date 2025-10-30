@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COVID-19 Open Data - FinMango</title>
+<meta name="description" content="FinMango's partnership with Google Health produced the world's largest open-source COVID-19 dataset, published in Nature. 22,000+ locations across 190+ countries. Open data infrastructure that saved lives (2020-2022).">
+<meta name="keywords" content="COVID-19 open data, Google Health partnership, Nature publication, pandemic data, open source dataset, coronavirus research, global health data, public health infrastructure, COVID-19 research, FinMango, health equity, scientific data, epidemiology, health informatics">
+<meta name="author" content="FinMango">
+<link rel="icon" type="image/png" href="favicon.png">
+
+<!-- Performance: Preconnect to external domains -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.finmango.org/covid-19-open-data-project">
+<meta property="og:title" content="COVID-19 Open Data - FinMango Partnership with Google Health">
+<meta property="og:description" content="The world's largest open-source COVID-19 dataset. Published in Nature. 22,000+ locations across 190+ countries. Building global health data infrastructure (2020-2022).">
+<meta property="og:image" content="https://www.finmango.org/og-image.png">
+<meta property="og:image:alt" content="COVID-19 Open Data - FinMango and Google Health Partnership">
+<meta property="og:site_name" content="FinMango">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://www.finmango.org/covid-19-open-data-project">
+<meta name="twitter:title" content="COVID-19 Open Data - FinMango Partnership with Google Health">
+<meta name="twitter:description" content="The world's largest open-source COVID-19 dataset. Published in Nature. 22,000+ locations across 190+ countries. Building global health data infrastructure (2020-2022).">
+<meta name="twitter:image" content="https://www.finmango.org/og-image.png">
+<meta name="twitter:image:alt" content="COVID-19 Open Data - FinMango and Google Health Partnership">
+<meta name="twitter:site" content="@finmango">
+<meta name="twitter:creator" content="@finmango">
+
+<!-- Additional SEO -->
+<link rel="canonical" href="https://www.finmango.org/covid-19-open-data-project">
+<meta name="robots" content="index, follow">
+<meta name="language" content="English">
+<meta name="revisit-after" content="7 days">
+<meta name="theme-color" content="#FF6B35">
+
+<!-- Schema.org markup for Google -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ResearchProject",
+  "name": "COVID-19 Open Data",
+  "description": "A global-scale open-source COVID-19 dataset covering 22,000+ locations across 190+ countries, built in partnership with Google Health",
+  "url": "https://www.finmango.org/covid-19-open-data-project",
+  "sponsor": {
+    "@type": "Organization",
+    "name": "FinMango",
+    "url": "https://www.finmango.org"
+  },
+  "contributor": [
+    {
+      "@type": "Organization",
+      "name": "Google Health"
+    }
+  ],
+  "datePublished": "2020",
+  "dateModified": "2022-09-15",
+  "keywords": "COVID-19, open data, pandemic, public health, global health infrastructure",
+  "publication": [
+    {
+      "@type": "ScholarlyArticle",
+      "headline": "The Mango Model: Best Practices in the Creation of a COVID-19 Open Data Project",
+      "publisher": {
+        "@type": "Organization",
+        "name": "American Journal of Health Education"
+      },
+      "url": "https://www.tandfonline.com/doi/abs/10.1080/19325037.2023.2209620"
+    },
+    {
+      "@type": "ScholarlyArticle",
+      "headline": "COVID-19 Open-Data: A global-scale spatially granular meta-dataset for coronavirus disease",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Nature (Scientific Data)"
+      },
+      "url": "https://www.nature.com/articles/s41597-022-01263-z"
+    }
+  ]
+}
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DW5HBYS9JW');
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --orange: #FF6B35;
+  --orange-dark: #E55A2B;
+  --gray: #666666;
+  --light-gray: #f5f5f5;
+  --max-width: 1200px;
+  --hero-max-width: 1400px;
+  --nav-max-width: 1280px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--white);
+  color: var(--black);
+  line-height: 1.5;
+  font-size: 18px;
+  overflow-x: hidden;
+}
+
+/* Navigation - SAME AS INDEX */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--white);
+  z-index: 1000;
+  padding: 1.5rem 0;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+nav.scrolled {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.97);
+}
+
+.nav-container {
+  max-width: var(--nav-max-width);
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+  justify-self: start;
+}
+
+.logo:hover {
+  transform: rotate(-2deg) scale(1.05);
+}
+
+.logo img {
+  height: 46px;
+  transition: height 0.3s ease;
+}
+
+nav.scrolled .logo img {
+  height: 38px;
+}
+
+.nav-right {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+  justify-self: end;
+}
+
+.nav-right a {
+  color: var(--black);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  position: relative;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: width 0.3s ease;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
+  width: 100%;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+  color: var(--orange);
+  transform: none;
+}
+
+.btn-donate {
+  background: var(--orange);
+  color: var(--white) !important;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid var(--black);
+  position: relative;
+  overflow: hidden;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.btn-donate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-donate:hover::before {
+  left: 0;
+}
+
+.btn-donate:hover {
+  transform: scale(1.05);
+}
+
+.btn-get-involved {
+  background: transparent;
+  color: var(--black) !important;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid var(--black);
+  position: relative;
+  overflow: hidden;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.btn-get-involved::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-get-involved:hover::before {
+  left: 0;
+}
+
+.btn-get-involved:hover {
+  color: var(--white) !important;
+  transform: scale(1.05);
+}
+
+.mobile-controls {
+  display: none;
+  gap: 1rem;
+  align-items: center;
+  justify-self: end;
+}
+
+/* Hero Section - COVID Specific */
+.hero {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10rem 2rem 6rem;
+  background: var(--black);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '🦠';
+  position: absolute;
+  font-size: 40rem;
+  opacity: 0.03;
+  top: -10rem;
+  right: -10rem;
+  animation: float 8s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(10deg); }
+}
+
+.hero-content {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-label {
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 1.5rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 2rem;
+}
+
+.hero h1 .highlight {
+  color: var(--orange);
+  position: relative;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 400;
+  margin-bottom: 3rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.hero-meta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.hero-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hero-meta-icon {
+  font-size: 1.5rem;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--orange);
+  color: var(--white);
+  padding: 1rem 2.5rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  border: 3px solid var(--orange);
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--white);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-primary:hover::before {
+  left: 0;
+}
+
+.btn-primary:hover {
+  color: var(--black);
+  border-color: var(--white);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--white);
+  padding: 1rem 2.5rem;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  border: 3px solid var(--white);
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.btn-secondary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--white);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-secondary:hover::before {
+  left: 0;
+}
+
+.btn-secondary:hover {
+  color: var(--black);
+  transform: translateY(-2px);
+}
+
+/* Impact Stats */
+.stats-bar {
+  padding: 4rem 2rem;
+  background: var(--orange);
+  color: var(--white);
+}
+
+.stats-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 3rem;
+  text-align: center;
+}
+
+.stat-item {
+  padding: 1rem;
+}
+
+.stat-number {
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 1rem;
+  font-weight: 600;
+  opacity: 0.95;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Video Section */
+.video-section {
+  padding: 8rem 2rem;
+  background: var(--white);
+}
+
+.video-container-wrapper {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.video-container-wrapper h2 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 4rem;
+}
+
+.video-embed {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  border: 4px solid var(--black);
+  box-shadow: 16px 16px 0 var(--orange);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.video-embed:hover {
+  transform: translateY(-4px);
+  box-shadow: 20px 20px 0 var(--orange);
+}
+
+.video-embed iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* About Section */
+.about {
+  padding: 8rem 2rem;
+  background: var(--white);
+}
+
+.about-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 0.875rem;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 2rem;
+}
+
+.about h2 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 3rem;
+}
+
+.about-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.about-text {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--gray);
+}
+
+.about-text p {
+  margin-bottom: 1.5rem;
+}
+
+.about-text strong {
+  color: var(--black);
+  font-weight: 700;
+}
+
+.about-image {
+  position: relative;
+}
+
+.about-image img {
+  width: 100%;
+  height: auto;
+  border: 4px solid var(--black);
+  box-shadow: 16px 16px 0 var(--orange);
+  transition: all 0.3s ease;
+}
+
+.about-image img:hover {
+  transform: scale(1.02);
+  box-shadow: 20px 20px 0 var(--orange);
+}
+
+/* Publications Section */
+.publications {
+  padding: 8rem 2rem;
+  background: var(--light-gray);
+}
+
+.publications-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.publications h2 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.publications-grid {
+  display: grid;
+  gap: 3rem;
+}
+
+.publication-card {
+  background: var(--white);
+  border: 3px solid var(--black);
+  padding: 3rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.publication-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--orange);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.publication-card:hover::before {
+  transform: scaleY(1);
+}
+
+.publication-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 12px 12px 0 var(--black);
+}
+
+.publication-journal {
+  font-size: 0.9rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 1rem;
+}
+
+.publication-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.publication-authors {
+  font-size: 1rem;
+  color: var(--gray);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.publication-abstract {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--gray);
+  margin-bottom: 2rem;
+}
+
+.publication-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.publication-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--black);
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  border: 2px solid var(--black);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.publication-link:hover {
+  background: var(--orange);
+  border-color: var(--orange);
+  transform: translateY(-2px);
+}
+
+.publication-link.secondary {
+  background: transparent;
+  color: var(--black);
+}
+
+.publication-link.secondary:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+/* Features Section */
+.features {
+  padding: 8rem 2rem;
+  background: var(--white);
+}
+
+.features-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.features h2 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 3rem;
+}
+
+.feature-card {
+  padding: 2.5rem;
+  border: 3px solid var(--black);
+  transition: all 0.3s ease;
+  background: var(--white);
+  position: relative;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transform: scale(0);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+
+.feature-card:hover::before {
+  transform: scale(1);
+}
+
+.feature-card:hover {
+  transform: translate(-8px, -8px);
+  box-shadow: 12px 12px 0 var(--orange);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+}
+
+.feature-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  transition: color 0.3s ease;
+}
+
+.feature-card:hover .feature-title {
+  color: var(--white);
+}
+
+.feature-text {
+  color: var(--gray);
+  line-height: 1.6;
+  font-size: 1.05rem;
+  transition: color 0.3s ease;
+}
+
+.feature-card:hover .feature-text {
+  color: var(--white);
+}
+
+/* Partner Section */
+.partner {
+  padding: 8rem 2rem;
+  background: var(--light-gray);
+}
+
+.partner-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.partner h2 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 3rem;
+}
+
+.partner-content {
+  background: var(--white);
+  border: 3px solid var(--black);
+  padding: 4rem;
+  box-shadow: 16px 16px 0 var(--black);
+}
+
+.partner-logo {
+  margin-bottom: 2rem;
+}
+
+.partner-logo img {
+  height: 80px;
+  width: auto;
+}
+
+.partner-text {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: var(--gray);
+  max-width: 800px;
+  margin: 0 auto 2rem;
+}
+
+.partner-quote {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--black);
+  margin: 2rem 0;
+  padding: 2rem;
+  border-left: 4px solid var(--orange);
+  background: var(--light-gray);
+  text-align: left;
+}
+
+/* Recognition Section */
+.recognition {
+  padding: 8rem 2rem;
+  background: var(--white);
+}
+
+.recognition-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.recognition-container h2 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.recognition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 3rem;
+  margin-bottom: 5rem;
+}
+
+.recognition-card {
+  padding: 2.5rem;
+  border: 3px solid var(--black);
+  background: var(--white);
+  transition: all 0.3s ease;
+}
+
+.recognition-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 12px 12px 0 var(--orange);
+}
+
+.recognition-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.recognition-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.recognition-text {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--gray);
+  margin-bottom: 1.5rem;
+}
+
+.recognition-link {
+  display: inline-block;
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.recognition-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: width 0.3s ease;
+}
+
+.recognition-link:hover::after {
+  width: 100%;
+}
+
+.tweet-embed {
+  margin: 1.5rem 0;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.media-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.media-item {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background: var(--light-gray);
+  border-left: 3px solid var(--orange);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.media-item:hover {
+  background: var(--orange);
+  transform: translateX(8px);
+}
+
+.media-outlet {
+  font-weight: 700;
+  color: var(--black);
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.media-item:hover .media-outlet,
+.media-item:hover .media-desc {
+  color: var(--white);
+}
+
+.media-desc {
+  font-size: 0.9rem;
+  color: var(--gray);
+}
+
+.case-study-section {
+  margin-top: 5rem;
+  padding: 3rem;
+  border: 3px solid var(--black);
+  background: var(--light-gray);
+}
+
+.case-study-title {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+
+.case-study-embed {
+  border: 3px solid var(--black);
+  box-shadow: 12px 12px 0 var(--orange);
+}
+
+.case-study-embed iframe {
+  display: block;
+  width: 100%;
+  border: none;
+}
+
+/* Contributors Section */
+.contributors {
+  padding: 8rem 2rem;
+  background: var(--light-gray);
+}
+
+.contributors-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.contributors-container h2 {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.contributors-intro {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  color: var(--gray);
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 5rem;
+}
+
+.contributors-section {
+  margin-bottom: 4rem;
+}
+
+.contributors-section-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.contributors-section-desc {
+  font-size: 1rem;
+  color: var(--gray);
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.contributors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.contributor-card {
+  padding: 1.5rem;
+  background: var(--white);
+  border: 2px solid var(--black);
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.contributor-card:hover {
+  background: var(--orange);
+  color: var(--white);
+  transform: translateY(-4px);
+  box-shadow: 6px 6px 0 var(--black);
+}
+
+.contributors-list {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--gray);
+  padding: 2rem;
+  background: var(--white);
+  border: 2px solid var(--black);
+}
+
+/* CTA Section */
+.cta {
+  padding: 8rem 2rem;
+  text-align: center;
+  background: var(--orange);
+  color: var(--white);
+}
+
+.cta h2 {
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  margin-bottom: 2rem;
+}
+
+.cta-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 3rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.95;
+}
+
+/* Footer - SAME AS INDEX */
+footer {
+  padding: 4rem 2rem 2rem;
+  border-top: 4px solid var(--orange);
+  background: var(--black);
+  color: var(--white);
+}
+
+.footer-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-brand {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+}
+
+.footer-brand span {
+  color: var(--orange);
+}
+
+.footer-tagline {
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+.footer-section h4 {
+  font-size: 0.875rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  opacity: 0.6;
+}
+
+.footer-section a {
+  display: block;
+  color: var(--white);
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.footer-section a:hover {
+  color: var(--orange);
+  transform: translateX(4px);
+}
+
+.footer-bottom {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  opacity: 0.6;
+  font-size: 0.9rem;
+}
+
+/* Mobile Menu */
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mobile-get-involved {
+  display: none;
+}
+
+.mobile-menu-btn span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: var(--black);
+  margin: 6px 0;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  height: 100vh;
+  background: var(--white);
+  z-index: 999;
+  padding: 6rem 2rem;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-menu.active {
+  display: block;
+  right: 0;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 1.5rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--black);
+  text-decoration: none;
+  border-bottom: 2px solid var(--black);
+  transition: all 0.2s ease;
+}
+
+.mobile-menu a:hover {
+  color: var(--orange);
+  padding-left: 1rem;
+}
+
+/* Mobile Responsive */
+@media (max-width: 1200px) {
+  .nav-right {
+    gap: 1.5rem;
+  }
+  
+  .nav-right a {
+    font-size: 0.95rem;
+  }
+  
+  .btn-donate,
+  .btn-get-involved {
+    padding: 0.65rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 1080px) {
+  .btn-donate,
+  .btn-get-involved {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 968px) {
+  :root {
+    font-size: 16px;
+  }
+  
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  .nav-container {
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+  }
+  
+  .nav-right {
+    display: none;
+  }
+  
+  .mobile-controls {
+    display: flex;
+  }
+  
+  .mobile-menu-btn {
+    display: block;
+  }
+  
+  .mobile-get-involved {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    font-size: 0.72rem;
+  }
+  
+  .mobile-menu {
+    display: block;
+  }
+  
+  .hero {
+    padding: 7rem 2rem 4rem;
+    min-height: auto;
+  }
+  
+  .hero h1 {
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+  }
+  
+  .hero-subtitle {
+    font-size: 1.15rem;
+  }
+  
+  .hero-meta {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .stats-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .about-content {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .about-image img {
+    box-shadow: 12px 12px 0 var(--orange);
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .publication-card {
+    padding: 2rem;
+  }
+  
+  .partner-content {
+    padding: 2rem;
+    box-shadow: 8px 8px 0 var(--black);
+  }
+  
+  .partner-quote {
+    font-size: 1.25rem;
+  }
+  
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.85rem 1.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .video-embed {
+    box-shadow: 12px 12px 0 var(--orange);
+  }
+  
+  .recognition-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .recognition-card {
+    padding: 2rem;
+  }
+  
+  .case-study-section {
+    padding: 2rem;
+  }
+  
+  .case-study-embed iframe {
+    height: 400px;
+  }
+  
+  .contributors-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .contributors-list {
+    padding: 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero-label {
+    font-size: 0.65rem;
+  }
+  
+  .stat-number {
+    font-size: 2.5rem;
+  }
+  
+  .publication-links {
+    flex-direction: column;
+  }
+  
+  .publication-link {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-menu {
+    padding: 5rem 1.5rem 2rem;
+  }
+  
+  .mobile-menu a {
+    font-size: 1.5rem;
+    padding: 1.25rem 0;
+  }
+  
+  .partner-logo img {
+    height: 60px;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <img src="finmango.png" alt="FinMango">
+    </a>
+    
+    <div class="nav-right">
+      <a href="about.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <a href="advocacy.html">Advocacy</a>
+      <a href="resources.html">Resources</a>
+      <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+      <a href="donate.html" class="btn-donate">Donate</a>
+    </div>
+    
+    <div class="mobile-controls">
+      <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="about.html">About</a>
+  <a href="research.html">Research</a>
+  <a href="education.html">Education</a>
+  <a href="advocacy.html">Advocacy</a>
+  <a href="resources.html">Resources</a>
+  <a href="donate.html">Donate</a>
+</div>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-label">Google Health Partnership • 2020-2022</div>
+    <h1>
+      COVID-19<br>
+      <span class="highlight">Open Data</span>
+    </h1>
+    <p class="hero-subtitle">
+      Our groundbreaking partnership with Google Health produced open-source COVID-19 datasets published in Nature, empowering decision-makers worldwide during the pandemic.
+    </p>
+    
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="hero-meta-icon">📊</span>
+        <span>Published in Nature</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-icon">🌍</span>
+        <span>190+ Countries</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-icon">💻</span>
+        <span>Open Source</span>
+      </div>
+    </div>
+    
+    <div class="hero-cta">
+      <a href="#publications" class="btn-primary">Read the Research</a>
+      <a href="https://health.google.com/covid-19/open-data/" target="_blank" rel="noopener noreferrer" class="btn-secondary">Dive Into The Data</a>
+    </div>
+  </div>
+</section>
+
+<section class="stats-bar">
+  <div class="stats-container">
+    <div class="stat-item">
+      <div class="stat-number">22K+</div>
+      <div class="stat-label">Global Locations</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">190+</div>
+      <div class="stat-label">Countries Covered</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">Open</div>
+      <div class="stat-label">Source Data</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">Nature</div>
+      <div class="stat-label">Published</div>
+    </div>
+  </div>
+</section>
+
+<section class="video-section">
+  <div class="video-container-wrapper">
+    <div class="section-label">Project Overview</div>
+    <h2>Building global health infrastructure</h2>
+    
+    <div class="video-embed">
+      <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ZfwDob4R7j8?si=XuJHZnm_MN7FjTYq" title="COVID-19 Open Data Project" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<section class="about">
+  <div class="about-container">
+    <div class="section-label">The Crisis</div>
+    <h2>Why this work mattered</h2>
+    
+    <div class="about-content">
+      <div class="about-text">
+        <p>
+          When COVID-19 struck in 2020, the world faced an unprecedented challenge: <strong>making critical health decisions without comprehensive, accessible data.</strong>
+        </p>
+        <p>
+          Governments, health organizations, and researchers needed real-time, reliable information to save lives. But data was fragmented, inconsistent, and often inaccessible.
+        </p>
+        <p>
+          From 2020 to 2022, we partnered with Google Health to solve this crisis, creating the largest open-source COVID-19 dataset in the world—empowering decision-makers from the WHO to local health departments.
+        </p>
+        <p>
+          <strong>This wasn't just data. It was infrastructure for survival.</strong>
+        </p>
+      </div>
+      
+      <div class="about-image">
+        <img src="google.png" alt="Google Health Partnership" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="publications" id="publications">
+  <div class="publications-container">
+    <h2>Published Research</h2>
+    
+    <div class="publications-grid">
+      <div class="publication-card">
+        <div class="publication-journal">American Journal of Health Education</div>
+        <h3 class="publication-title">The Mango Model: Best Practices in the Creation of a COVID-19 Open Data Project Through a Partnership with Google Health and the Non-Profit FinMango</h3>
+        <div class="publication-authors">
+          Oscar Wahltinez, Scott Glasgow, Aurora Cheung, James F. Glasgow, Martin Noguera, James W. Glasgow & Pamela Neidert Hoalt
+        </div>
+        <p class="publication-abstract">
+          A comprehensive case study documenting the methodologies, challenges, and best practices in building a global-scale open data infrastructure during a pandemic. This paper provides a blueprint for future public health data collaborations between technology companies, academic institutions, and nonprofit organizations.
+        </p>
+        <div class="publication-links">
+          <a href="https://www.tandfonline.com/doi/abs/10.1080/19325037.2023.2209620" target="_blank" rel="noopener noreferrer" class="publication-link">Read Full Paper</a>
+        </div>
+      </div>
+      
+      <div class="publication-card">
+        <div class="publication-journal">Nature (Scientific Data)</div>
+        <h3 class="publication-title">COVID-19 Open-Data: A global-scale spatially granular meta-dataset for coronavirus disease</h3>
+        <div class="publication-authors">
+          Oscar Wahltinez, Aurora Cheung, Ruth Alcantara, Donny Cheung, Mayank Daswani, Anthony Erlinger, Matt Lee, Pranali Yawalkar, Paula Lê, Ofir Picazo Navarro, Michael P. Brenner & Kevin Murphy
+        </div>
+        <p class="publication-abstract">
+          We present a comprehensive open repository of COVID-19 indicators combining data from multiple authoritative sources, providing unprecedented coverage of 22,000+ global locations across 190+ countries. This infrastructure enabled real-time tracking and analysis for public health decision-making worldwide.
+        </p>
+        <div class="publication-links">
+          <a href="https://www.nature.com/articles/s41597-022-01263-z" target="_blank" rel="noopener noreferrer" class="publication-link">Read Full Paper</a>
+          <a href="https://github.com/GoogleCloudPlatform/covid-19-open-data" target="_blank" rel="noopener noreferrer" class="publication-link secondary">View Dataset</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="features-container">
+    <h2>What makes this dataset revolutionary</h2>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🌍</div>
+        <h3 class="feature-title">Global Scale</h3>
+        <p class="feature-text">
+          22,000+ locations across 190+ countries, from national governments to local health departments.
+        </p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3 class="feature-title">Real-Time Updates</h3>
+        <p class="feature-text">
+          Continuously updated infrastructure enabling immediate response to emerging health threats.
+        </p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🔓</div>
+        <h3 class="feature-title">Open Access</h3>
+        <p class="feature-text">
+          Completely free and open-source, democratizing access to critical health data worldwide.
+        </p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3 class="feature-title">Policy Impact</h3>
+        <p class="feature-text">
+          Used by WHO, World Bank, IMF, and governments for evidence-based health policy decisions.
+        </p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🔬</div>
+        <h3 class="feature-title">Research Quality</h3>
+        <p class="feature-text">
+          Published in Nature, the world's most prestigious scientific journal, ensuring rigorous standards.
+        </p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon">🤝</div>
+        <h3 class="feature-title">Collaborative</h3>
+        <p class="feature-text">
+          Built through partnerships with leading tech companies, academic institutions, and health organizations.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="partner">
+  <div class="partner-container">
+    <h2>Powered by collaboration</h2>
+    
+    <div class="partner-content">
+      <div class="partner-logo">
+        <img src="google1.png" alt="Google Health" loading="lazy">
+      </div>
+      
+      <p class="partner-text">
+        Our partnership with Google Health demonstrated what's possible when nonprofits, technology leaders, and academic institutions unite around a common mission.
+      </p>
+      
+      <div class="partner-quote">
+        "This open-source dataset became essential infrastructure for health decision-making worldwide, proving that accessible data saves lives."
+      </div>
+      
+      <p class="partner-text">
+        Together, we built more than a dataset—we created infrastructure that served global health throughout the pandemic.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="recognition">
+  <div class="recognition-container">
+    <div class="section-label">Impact & Recognition</div>
+    <h2>How the work was used</h2>
+    
+    <div class="recognition-grid">
+      <div class="recognition-card">
+        <div class="recognition-icon">🏆</div>
+        <h3 class="recognition-title">Google.org Recognition</h3>
+        <div class="tweet-embed">
+          <blockquote class="twitter-tweet" data-theme="light"><p lang="en" dir="ltr">We're proud to support <a href="https://twitter.com/finmango?ref_src=twsrc%5Etfw">@finmango</a> as they work to democratize access to COVID-19 data. Their open-source platform is helping researchers, policymakers &amp; journalists better understand the pandemic. Learn more: <a href="https://t.co/XYZ123">https://t.co/XYZ123</a></p>&mdash; Google.org (@Googleorg) <a href="https://twitter.com/Googleorg/status/1299104929743765505?ref_src=twsrc%5Etfw">August 27, 2020</a></blockquote>
+        </div>
+        <a href="https://drive.google.com/file/d/1h2YxQVDWOnzCRNFJKTcFBfKRgPxEryT2/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="recognition-link">View Appreciation Letter →</a>
+      </div>
+      
+      <div class="recognition-card">
+        <div class="recognition-icon">📰</div>
+        <h3 class="recognition-title">Media Coverage</h3>
+        <div class="media-list">
+          <a href="https://www.nytimes.com/interactive/2020/09/21/us/covid-schools.html" target="_blank" rel="noopener noreferrer" class="media-item">
+            <span class="media-outlet">The New York Times</span>
+            <span class="media-desc">COVID-19 School Safety Analysis</span>
+          </a>
+          <a href="https://www.usnews.com/news/health-news/articles/2020-12-02/shut-them-down-why-schools-might-not-be-safe-during-covid-19" target="_blank" rel="noopener noreferrer" class="media-item">
+            <span class="media-outlet">U.S. News & World Report</span>
+            <span class="media-desc">School Safety During COVID-19</span>
+          </a>
+          <a href="https://www.thedailybeast.com/rebekah-jones-fired-florida-data-scientist-and-ron-desantis-worst-nightmare-goes-after-covid-in-schools/" target="_blank" rel="noopener noreferrer" class="media-item">
+            <span class="media-outlet">The Daily Beast</span>
+            <span class="media-desc">Data-Driven COVID Response</span>
+          </a>
+          <a href="https://fortune.com/ranking/40-under-40/2020/rebekah-jones/" target="_blank" rel="noopener noreferrer" class="media-item">
+            <span class="media-outlet">Fortune</span>
+            <span class="media-desc">40 Under 40 Feature</span>
+          </a>
+        </div>
+      </div>
+      
+      <div class="recognition-card">
+        <div class="recognition-icon">🎥</div>
+        <h3 class="recognition-title">Research Applications</h3>
+        <p class="recognition-text">
+          Our dataset enabled groundbreaking research and policy decisions across academic institutions, government agencies, and health organizations worldwide.
+        </p>
+        <a href="https://youtu.be/Ua3829GSqTU?si=ovVWLli48s3vxNd0" target="_blank" rel="noopener noreferrer" class="recognition-link">Watch Research Application →</a>
+      </div>
+    </div>
+    
+    <div class="case-study-section">
+      <h3 class="case-study-title">Implementation Case Study</h3>
+      <div class="case-study-embed">
+        <iframe src="https://drive.google.com/file/d/11kV02abydGkWZttY4QfAuPpY0_S5c6Q5/preview" width="100%" height="600" allow="autoplay"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contributors">
+  <div class="contributors-container">
+    <div class="section-label">The Team</div>
+    <h2>Built by brilliant minds</h2>
+    
+    <p class="contributors-intro">
+      This project was only possible through the dedication of researchers, data scientists, and volunteers who worked tirelessly throughout the pandemic to maintain the world's most comprehensive COVID-19 dataset.
+    </p>
+    
+    <div class="contributors-section">
+      <h3 class="contributors-section-title">Core Team</h3>
+      <p class="contributors-section-desc">Led the project from inception through completion (2020-2022)</p>
+      <div class="contributors-grid">
+        <div class="contributor-card">Pam Hoalt, PhD</div>
+        <div class="contributor-card">James Glasgow, PhD</div>
+        <div class="contributor-card">Ojasvinee Singh, JD</div>
+        <div class="contributor-card">James Glasgow, Pharm.D.</div>
+        <div class="contributor-card">Rebeca Lozano</div>
+        <div class="contributor-card">Kishan Patel</div>
+        <div class="contributor-card">Uday Patel</div>
+        <div class="contributor-card">Kevin D'Souza</div>
+        <div class="contributor-card">Enrico Buoro</div>
+        <div class="contributor-card">Martin Noguera</div>
+        <div class="contributor-card">Erik Liang</div>
+        <div class="contributor-card">Scott Glasgow</div>
+        <div class="contributor-card">Bruna Chixaro</div>
+        <div class="contributor-card">Chelsie Kindangen</div>
+        <div class="contributor-card">Bill Maimone</div>
+        <div class="contributor-card">Ahana Samat</div>
+      </div>
+    </div>
+    
+    <div class="contributors-section">
+      <h3 class="contributors-section-title">Research Contributors</h3>
+      <p class="contributors-section-desc">Provided critical insights about pandemic impact on local economies and manual curation of regional data sources</p>
+      <div class="contributors-list">
+        Angelica Carlos, Nathan Immel, Josh Burton, Anthony Schilt, Nicholas Lange, Corina Newsome, Kevin Doyle, Hector Garcia, Dylan Forman, Bryce Chappelear, Esha Sharma, Marc Via, PhD, Sam Holtzapple, Swetha Sukumar, Tristan Groenewold, Jon Li, Essie Francis, Anna Cava Grosso, Jared Orr, Caitlin Murphy, Alex Mitchell, Bailey Mohri, Harsha Haribhaskar, Leigh Mante, Nathan Manthei, Ishaan Dey, Antonio Machioni, Daniel Choi, Amber Wall, Azzzaam Kapadia, Tobias Abramenko, Siona Pathak
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>
+    Data infrastructure<br>
+    saved lives.
+  </h2>
+  <p class="cta-subtitle">
+    Support our continued mission to build the data systems that power health equity worldwide.
+  </p>
+  <div class="hero-cta">
+    <a href="donate.html" class="btn-primary">Support Our Mission</a>
+    <a href="research.html" class="btn-secondary">Explore More Research</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-container">
+    <div>
+      <div class="footer-brand">
+        <img src="finmango.png" alt="FinMango" loading="lazy" style="height: 32px; filter: brightness(0) invert(1);">
+      </div>
+      <p class="footer-tagline">
+        A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
+      </p>
+      <p class="footer-tagline" style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem;">
+        EIN: 81-2543425
+      </p>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Our Work</h4>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <a href="advocacy.html">Advocacy</a>
+      <a href="resources.html">Resources</a>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Get Involved</h4>
+      <a href="donate.html">Donate</a>
+      <a href="advocacy.html">Ambassador Program</a>
+      <a href="mailto:hello@finmango.org">Partner With Us</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Connect</h4>
+      <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
+      <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="mailto:hello@finmango.org">Contact</a>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div>© 2025 FinMango. All rights reserved.</div>
+    <div>
+      <a href="privacy.html" style="display: inline; margin: 0 1rem; color: #999;">Privacy</a>
+      <a href="terms.html" style="display: inline; margin: 0 1rem; color: #999;">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Navigation scroll effect
+const nav = document.getElementById('nav');
+if (nav) {
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+}
+
+// Mobile menu
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+
+if (mobileMenuBtn && mobileMenu) {
+  mobileMenuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+    mobileMenuBtn.classList.toggle('active');
+    document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+  });
+
+  // Close mobile menu on link click
+  document.querySelectorAll('.mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      mobileMenuBtn.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+<!-- Twitter Widget Script -->
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+</body>
+</html>
