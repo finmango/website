@@ -517,7 +517,7 @@ nav.scrolled .logo img {
   font-weight: 600;
 }
 
-/* Modal */
+/* Modal - AGGRESSIVE RESET */
 .modal {
   display: none;
   position: fixed;
@@ -525,7 +525,7 @@ nav.scrolled .logo img {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.95);
   z-index: 2000;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -603,61 +603,108 @@ nav.scrolled .logo img {
   font-weight: 400;
 }
 
+/* NUCLEAR MODAL BODY RESET */
 .modal-body {
   padding: clamp(2rem, 4vw, 3rem);
 }
 
-.modal-body img {
-  width: 100%;
-  height: auto;
-  margin: 1.5rem 0;
-  border: 3px solid var(--black);
+.modal-body * {
+  font-family: 'Inter', sans-serif !important;
+  color: #333 !important;
+  line-height: 1.7 !important;
 }
 
 .modal-body p {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  margin-bottom: 1.5rem;
-  color: #333333;
+  font-size: 1.05rem !important;
+  margin-bottom: 1.5rem !important;
+  line-height: 1.8 !important;
+}
+
+.modal-body h3 {
+  font-size: 1.6rem !important;
+  font-weight: 700 !important;
+  color: var(--black) !important;
+  margin: 2rem 0 1rem !important;
+  line-height: 1.3 !important;
 }
 
 .modal-body h4 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 2rem 0 1rem;
-  color: var(--black);
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  color: var(--black) !important;
+  margin: 1.5rem 0 1rem !important;
 }
 
+.modal-body h5,
 .modal-body h6 {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--gray);
-  font-style: italic;
-  margin-top: 2rem;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: var(--gray) !important;
+  margin: 1.5rem 0 0.75rem !important;
+  font-style: italic !important;
 }
 
 .modal-body a {
-  color: var(--orange);
-  font-weight: 600;
-  text-decoration: none;
+  color: var(--orange) !important;
+  text-decoration: underline !important;
+  font-weight: 600 !important;
 }
 
 .modal-body a:hover {
-  text-decoration: underline;
+  opacity: 0.7 !important;
 }
 
-.modal-body ol,
-.modal-body ul {
-  margin: 1.5rem 0;
-  padding-left: 2rem;
+.modal-body strong {
+  font-weight: 700 !important;
+  color: var(--black) !important;
+}
+
+.modal-body em {
+  font-style: italic !important;
+}
+
+.modal-body ul,
+.modal-body ol {
+  margin: 1.5rem 0 !important;
+  padding-left: 2rem !important;
 }
 
 .modal-body li {
-  margin-bottom: 0.75rem;
-  line-height: 1.7;
+  margin-bottom: 0.75rem !important;
+  line-height: 1.7 !important;
 }
 
-/* Footer - FROM HOME PAGE */
+.modal-body ul {
+  list-style-type: disc !important;
+}
+
+.modal-body ol {
+  list-style-type: decimal !important;
+}
+
+.modal-body img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  margin: 2rem 0 !important;
+  border: 3px solid var(--black) !important;
+  max-width: 100% !important;
+}
+
+/* Kill all webflow garbage */
+.modal-body figure,
+.modal-body div[id],
+.modal-body [class*="richtext"],
+.modal-body [class*="figure"],
+.modal-body [data-rt-type] {
+  all: unset !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: 100% !important;
+}
+
+/* Footer */
 footer {
   padding: 4rem 2rem 2rem;
   border-top: 4px solid var(--orange);
@@ -674,14 +721,10 @@ footer {
   margin-bottom: 3rem;
 }
 
-.footer-brand {
-  font-size: 2rem;
-  font-weight: 900;
+.footer-brand img {
+  height: 32px;
+  filter: brightness(0) invert(1);
   margin-bottom: 1rem;
-}
-
-.footer-brand span {
-  color: var(--orange);
 }
 
 .footer-tagline {
@@ -1036,11 +1079,44 @@ document.querySelectorAll('.mobile-menu a').forEach(link => {
   });
 });
 
-// Mission logs will be loaded from external JSON
+// Mission logs
 let MISSION_LOGS = [];
-let currentFilter = 'all';
 
-// Load mission logs data
+// Clean HTML - strip all webflow garbage
+function cleanHTML(html) {
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+  
+  // Remove all id, class, style, data attributes
+  temp.querySelectorAll('[id], [class], [style], [data-rt-type], [data-rt-align], [data-rt-max-width]').forEach(el => {
+    el.removeAttribute('id');
+    el.removeAttribute('class');
+    el.removeAttribute('style');
+    el.removeAttribute('data-rt-type');
+    el.removeAttribute('data-rt-align');
+    el.removeAttribute('data-rt-max-width');
+  });
+  
+  // Unwrap figures
+  temp.querySelectorAll('figure').forEach(figure => {
+    while (figure.firstChild) {
+      figure.parentNode.insertBefore(figure.firstChild, figure);
+    }
+    figure.remove();
+  });
+  
+  // Remove empty divs
+  temp.querySelectorAll('div').forEach(div => {
+    if (!div.textContent.trim() && !div.querySelector('img')) {
+      div.remove();
+    } else if (div.querySelector('img') && div.children.length === 1) {
+      div.replaceWith(div.firstChild);
+    }
+  });
+  
+  return temp.innerHTML;
+}
+
 async function loadMissionLogs() {
   try {
     const response = await fetch('mission-logs-data.json');
@@ -1056,7 +1132,6 @@ function renderMissionCards(filterYear = 'all') {
   const grid = document.getElementById('timelineGrid');
   const emptyState = document.getElementById('emptyState');
   
-  // Filter logs
   const filteredLogs = filterYear === 'all' 
     ? MISSION_LOGS 
     : MISSION_LOGS.filter(log => log.year === parseInt(filterYear));
@@ -1070,7 +1145,6 @@ function renderMissionCards(filterYear = 'all') {
   grid.style.display = 'grid';
   emptyState.style.display = 'none';
   
-  // Generate cards
   grid.innerHTML = filteredLogs.map(log => `
     <div class="mission-card" onclick='openModal(${JSON.stringify(log).replace(/'/g, "\\'")})')>
       ${log.image ? `<img src="${log.image}" alt="${log.title}" class="mission-image">` : ''}
@@ -1092,7 +1166,11 @@ function openModal(log) {
   document.getElementById('modalDate').textContent = log.date;
   document.getElementById('modalLocation').textContent = '📍 ' + log.location;
   document.getElementById('modalTitle').textContent = log.title;
-  document.getElementById('modalBody').innerHTML = log.body;
+  
+  // Clean and insert
+  const cleaned = cleanHTML(log.body);
+  document.getElementById('modalBody').innerHTML = cleaned;
+  
   document.body.style.overflow = 'hidden';
 }
 
@@ -1101,38 +1179,24 @@ function closeModal() {
   document.body.style.overflow = 'auto';
 }
 
-// Year filter buttons
 document.addEventListener('DOMContentLoaded', () => {
-  // Load data
   loadMissionLogs();
   
-  // Setup year filter buttons
   const yearButtons = document.querySelectorAll('.year-btn');
   yearButtons.forEach(btn => {
     btn.addEventListener('click', () => {
-      // Remove active class from all
       yearButtons.forEach(b => b.classList.remove('active'));
-      // Add active to clicked
       btn.classList.add('active');
-      // Filter
-      const year = btn.dataset.year;
-      currentFilter = year;
-      renderMissionCards(year);
+      renderMissionCards(btn.dataset.year);
     });
   });
   
-  // Close modal on background click
   document.getElementById('modal').addEventListener('click', (e) => {
-    if (e.target.id === 'modal') {
-      closeModal();
-    }
+    if (e.target.id === 'modal') closeModal();
   });
   
-  // ESC key to close modal
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeModal();
-    }
+    if (e.key === 'Escape') closeModal();
   });
 });
 </script>
