@@ -500,18 +500,30 @@ nav.scrolled .logo img {
   text-decoration: underline;
 }
 
-/* Empty State */
+/* Empty State & Loading */
+.loading-state,
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
   color: var(--gray);
 }
 
+.loading-spinner,
 .empty-state-icon {
   font-size: 4rem;
   margin-bottom: 1rem;
 }
 
+.loading-spinner {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.loading-text,
 .empty-state-text {
   font-size: 1.2rem;
   font-weight: 600;
@@ -975,7 +987,11 @@ footer {
 <!-- Timeline Grid -->
 <section class="timeline">
   <div class="timeline-container">
-    <div class="timeline-grid" id="timelineGrid">
+    <div class="loading-state" id="loadingState">
+      <div class="loading-spinner">⏳</div>
+      <div class="loading-text">Loading mission logs...</div>
+    </div>
+    <div class="timeline-grid" id="timelineGrid" style="display: none;">
       <!-- Mission cards will be inserted here by JavaScript -->
     </div>
     <div class="empty-state" id="emptyState" style="display: none;">
@@ -1082,49 +1098,24 @@ document.querySelectorAll('.mobile-menu a').forEach(link => {
 // Mission logs
 let MISSION_LOGS = [];
 
-// Clean HTML - strip all webflow garbage
-function cleanHTML(html) {
-  const temp = document.createElement('div');
-  temp.innerHTML = html;
-  
-  // Remove all id, class, style, data attributes
-  temp.querySelectorAll('[id], [class], [style], [data-rt-type], [data-rt-align], [data-rt-max-width]').forEach(el => {
-    el.removeAttribute('id');
-    el.removeAttribute('class');
-    el.removeAttribute('style');
-    el.removeAttribute('data-rt-type');
-    el.removeAttribute('data-rt-align');
-    el.removeAttribute('data-rt-max-width');
-  });
-  
-  // Unwrap figures
-  temp.querySelectorAll('figure').forEach(figure => {
-    while (figure.firstChild) {
-      figure.parentNode.insertBefore(figure.firstChild, figure);
-    }
-    figure.remove();
-  });
-  
-  // Remove empty divs
-  temp.querySelectorAll('div').forEach(div => {
-    if (!div.textContent.trim() && !div.querySelector('img')) {
-      div.remove();
-    } else if (div.querySelector('img') && div.children.length === 1) {
-      div.replaceWith(div.firstChild);
-    }
-  });
-  
-  return temp.innerHTML;
-}
-
 async function loadMissionLogs() {
+  const loadingState = document.getElementById('loadingState');
+  const emptyState = document.getElementById('emptyState');
+  
   try {
     const response = await fetch('mission-logs-data.json');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     MISSION_LOGS = await response.json();
+    loadingState.style.display = 'none';
     renderMissionCards();
   } catch (error) {
     console.error('Error loading mission logs:', error);
-    document.getElementById('emptyState').style.display = 'block';
+    loadingState.style.display = 'none';
+    emptyState.style.display = 'block';
+    emptyState.querySelector('.empty-state-text').textContent = 
+      'Failed to load mission logs. Make sure mission-logs-data.json is in the same directory.';
   }
 }
 
@@ -1145,9 +1136,9 @@ function renderMissionCards(filterYear = 'all') {
   grid.style.display = 'grid';
   emptyState.style.display = 'none';
   
-  grid.innerHTML = filteredLogs.map(log => `
-    <div class="mission-card" onclick='openModal(${JSON.stringify(log).replace(/'/g, "\\'")})')>
-      ${log.image ? `<img src="${log.image}" alt="${log.title}" class="mission-image">` : ''}
+  grid.innerHTML = filteredLogs.map((log, index) => `
+    <div class="mission-card" data-log-index="${index}" data-filter-year="${filterYear}">
+      ${log.image ? `<img src="${log.image}" alt="${log.title}" class="mission-image" loading="lazy">` : ''}
       <div class="mission-content">
         <div class="mission-meta">
           <span class="mission-date">${log.date}</span>
@@ -1159,18 +1150,25 @@ function renderMissionCards(filterYear = 'all') {
       </div>
     </div>
   `).join('');
+  
+  // Add click handlers
+  document.querySelectorAll('.mission-card').forEach((card, index) => {
+    card.addEventListener('click', () => {
+      const filteredLogs = filterYear === 'all' 
+        ? MISSION_LOGS 
+        : MISSION_LOGS.filter(log => log.year === parseInt(filterYear));
+      openModal(filteredLogs[index]);
+    });
+  });
 }
 
 function openModal(log) {
-  document.getElementById('modal').classList.add('active');
+  const modal = document.getElementById('modal');
+  modal.classList.add('active');
   document.getElementById('modalDate').textContent = log.date;
   document.getElementById('modalLocation').textContent = '📍 ' + log.location;
   document.getElementById('modalTitle').textContent = log.title;
-  
-  // Clean and insert
-  const cleaned = cleanHTML(log.body);
-  document.getElementById('modalBody').innerHTML = cleaned;
-  
+  document.getElementById('modalBody').innerHTML = log.body;
   document.body.style.overflow = 'hidden';
 }
 
