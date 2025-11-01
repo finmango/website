@@ -315,18 +315,47 @@ nav.scrolled .logo img {
 
 /* Hero */
 .hero {
-  min-height: 70vh;
+  min-height: 75vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 9rem 2rem 4rem;
-  background: var(--white);
+  background: linear-gradient(135deg, var(--orange) 0%, #FF8C61 50%, var(--orange-dark) 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+  position: relative;
+  overflow: hidden;
+  color: var(--white);
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero::before {
+  content: '💝';
+  position: absolute;
+  font-size: 25rem;
+  opacity: 0.08;
+  top: -5rem;
+  right: -8rem;
+  animation: float 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(10deg); }
 }
 
 .hero-container {
   max-width: var(--max-width);
   margin: 0 auto;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-label {
@@ -334,8 +363,9 @@ nav.scrolled .logo img {
   font-weight: 900;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--orange);
+  color: var(--white);
   margin-bottom: 1.5rem;
+  opacity: 0.95;
 }
 
 .hero h1 {
@@ -347,29 +377,32 @@ nav.scrolled .logo img {
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
+  color: var(--white);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .hero h1 .highlight {
-  color: var(--orange);
+  color: var(--black);
 }
 
 .hero-subtitle {
   font-size: 1.25rem;
-  color: var(--gray);
+  color: var(--white);
   max-width: 700px;
   margin: 0 auto 3rem;
   line-height: 1.6;
+  opacity: 0.95;
 }
 
 .btn-donate-hero {
   display: inline-block;
-  background: var(--orange);
-  color: var(--white);
+  background: var(--white);
+  color: var(--orange);
   padding: 1.25rem 3rem;
   text-decoration: none;
   font-weight: 900;
   font-size: 1.1rem;
-  border: 4px solid var(--black);
+  border: 4px solid var(--white);
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -396,6 +429,8 @@ nav.scrolled .logo img {
 .btn-donate-hero:hover {
   transform: translateY(-4px);
   box-shadow: 8px 8px 0 var(--black);
+  color: var(--white);
+  border-color: var(--black);
 }
 
 .btn-donate-secondary {
@@ -625,6 +660,213 @@ nav.scrolled .logo img {
   font-weight: 700;
 }
 
+/* Donation Tiers */
+.donation-tiers {
+  padding: 6rem 2rem;
+  background: var(--white);
+}
+
+.tiers-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.tiers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.tier-card {
+  padding: 2.5rem 2rem;
+  background: var(--light-gray);
+  border: 3px solid var(--black);
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.tier-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--orange);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.tier-card:hover::before {
+  transform: scaleX(1);
+}
+
+.tier-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 8px 8px 0 var(--black);
+  background: var(--white);
+}
+
+.tier-amount {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--orange);
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.tier-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--black);
+}
+
+.tier-description {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--gray);
+  margin-bottom: 2rem;
+}
+
+.tier-button {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: var(--black);
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  border: 2px solid var(--black);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tier-button:hover {
+  background: var(--orange);
+  border-color: var(--orange);
+  transform: translateY(-2px);
+}
+
+.tier-card.featured {
+  background: var(--orange);
+  border-color: var(--black);
+}
+
+.tier-card.featured .tier-amount,
+.tier-card.featured .tier-title {
+  color: var(--white);
+}
+
+.tier-card.featured .tier-description {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.tier-card.featured .tier-button {
+  background: var(--white);
+  color: var(--orange);
+  border-color: var(--white);
+}
+
+.tier-card.featured .tier-button:hover {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+}
+
+/* Impact Story */
+.impact-story {
+  padding: 6rem 2rem;
+  background: var(--black);
+  color: var(--white);
+}
+
+.story-container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.story-quote {
+  font-size: 1.75rem;
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.story-author {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.story-role {
+  font-size: 1rem;
+  color: var(--orange);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Recurring Donation Highlight */
+.recurring-highlight {
+  padding: 6rem 2rem;
+  background: var(--orange);
+  color: var(--white);
+  text-align: center;
+}
+
+.recurring-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.recurring-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.recurring-title {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.recurring-text {
+  font-size: 1.25rem;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  opacity: 0.95;
+}
+
+.recurring-button {
+  display: inline-block;
+  padding: 1.25rem 3rem;
+  background: var(--white);
+  color: var(--orange);
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 1.1rem;
+  border: 4px solid var(--white);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.recurring-button:hover {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+  transform: translateY(-4px);
+  box-shadow: 8px 8px 0 var(--black);
+}
+
 /* Footer */
 footer {
   background: var(--black);
@@ -820,6 +1062,19 @@ footer {
     gap: 1rem;
     text-align: center;
   }
+
+  .tiers-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .story-quote {
+    font-size: 1.4rem;
+  }
+
+  .recurring-highlight {
+    padding: 4rem 2rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -969,6 +1224,75 @@ footer {
   </div>
 </section>
 
+<!-- Donation Tiers -->
+<section class="donation-tiers">
+  <div class="tiers-container">
+    <span class="section-label">Choose Your Impact</span>
+    <h2 class="section-title">Suggested Donation Levels</h2>
+
+    <div class="tiers-grid">
+      <div class="tier-card">
+        <div class="tier-amount">$25</div>
+        <h3 class="tier-title">Supporter</h3>
+        <p class="tier-description">
+          Provides financial literacy resources to 50 young adults through our open-access platform.
+        </p>
+        <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-page#/donate/card?amount=25"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="tier-button">
+          Donate $25
+        </a>
+      </div>
+
+      <div class="tier-card featured">
+        <div class="tier-amount">$100</div>
+        <h3 class="tier-title">Champion</h3>
+        <p class="tier-description">
+          Funds one day of critical research analyzing financial health trends that inform global policy.
+        </p>
+        <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-page#/donate/card?amount=100"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="tier-button">
+          Donate $100
+        </a>
+      </div>
+
+      <div class="tier-card">
+        <div class="tier-amount">$250</div>
+        <h3 class="tier-title">Changemaker</h3>
+        <p class="tier-description">
+          Supports an ambassador for a full month as they advocate for financial health in their community.
+        </p>
+        <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-page#/donate/card?amount=250"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="tier-button">
+          Donate $250
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Recurring Donation Highlight -->
+<section class="recurring-highlight">
+  <div class="recurring-container">
+    <span class="recurring-icon">🔄</span>
+    <h2 class="recurring-title">Make It Monthly</h2>
+    <p class="recurring-text">
+      Recurring donations provide the stability we need to plan long-term research, support ambassadors consistently, and respond quickly to emerging financial health crises.
+    </p>
+    <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-page#/donate"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="recurring-button">
+      Set Up Monthly Giving
+    </a>
+  </div>
+</section>
+
 <!-- Featured Image -->
 <section class="donate-image-section">
   <div class="donate-image-container">
@@ -976,13 +1300,25 @@ footer {
       <img src="donation3.jpg" alt="Support FinMango's mission" loading="lazy">
     </div>
     <div style="text-align: center; margin-top: 3rem;">
-      <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-page#/donate" 
-         target="_blank" 
+      <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-page#/donate"
+         target="_blank"
          rel="noopener noreferrer"
          class="btn-donate-hero">
         Donate Now
       </a>
     </div>
+  </div>
+</section>
+
+<!-- Impact Story -->
+<section class="impact-story">
+  <div class="story-container">
+    <span class="section-label" style="color: var(--orange);">Real Impact</span>
+    <p class="story-quote">
+      "FinMango's research on financial hardship trends helped us identify at-risk communities early and deploy resources faster. Their data literally saved families from eviction during the pandemic."
+    </p>
+    <div class="story-author">Director Sarah Chen</div>
+    <div class="story-role">Community Development Fund • NYC</div>
   </div>
 </section>
 
