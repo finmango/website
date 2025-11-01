@@ -311,18 +311,60 @@ nav.scrolled .logo img {
 
 /* Hero */
 .hero {
-  min-height: 70vh;
+  min-height: 75vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 9rem 2rem 4rem;
-  background: var(--white);
+  background: linear-gradient(135deg, var(--orange) 0%, #FF8C61 50%, var(--orange-dark) 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+  position: relative;
+  overflow: hidden;
+  color: var(--white);
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 500px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(-30px) translateX(20px); }
 }
 
 .hero-content {
   max-width: 900px;
   width: 100%;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-label {
@@ -330,28 +372,76 @@ nav.scrolled .logo img {
   font-weight: 900;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--orange);
+  color: var(--white);
   margin-bottom: 1.5rem;
+  opacity: 0.9;
 }
 
 .hero h1 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 900;
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin-bottom: 2rem;
+  color: var(--white);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .hero h1 .highlight {
-  color: var(--orange);
+  color: var(--black);
+  position: relative;
 }
 
 .hero-subtitle {
   font-size: 1.35rem;
-  color: var(--gray);
+  color: var(--white);
   max-width: 750px;
   line-height: 1.6;
-  margin: 0 auto;
+  margin: 0 auto 2.5rem;
+  opacity: 0.95;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-cta .btn {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 3px solid var(--white);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.hero-cta .btn-primary {
+  background: var(--white);
+  color: var(--orange);
+}
+
+.hero-cta .btn-primary:hover {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+  transform: translateY(-3px);
+  box-shadow: 4px 4px 0 var(--white);
+}
+
+.hero-cta .btn-secondary {
+  background: transparent;
+  color: var(--white);
+}
+
+.hero-cta .btn-secondary:hover {
+  background: var(--white);
+  color: var(--orange);
+  transform: translateY(-3px);
 }
 
 /* Involvement Options Grid */
@@ -421,8 +511,7 @@ nav.scrolled .logo img {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 4rem;
-  font-weight: 900;
+  font-size: 4.5rem;
   color: var(--white);
   position: relative;
   overflow: hidden;
@@ -492,6 +581,167 @@ nav.scrolled .logo img {
 .card-link::after {
   content: '→';
   font-size: 1.2rem;
+}
+
+/* Impact Stats */
+.impact-stats {
+  padding: 6rem 2rem;
+  background: var(--black);
+  color: var(--white);
+}
+
+.stats-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+  text-align: center;
+}
+
+.stat-box {
+  padding: 2rem 1rem;
+}
+
+.stat-number {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--orange);
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+.stat-label {
+  font-size: 1rem;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+/* Quick Wins Section */
+.quick-wins {
+  padding: 6rem 2rem;
+  background: var(--white);
+}
+
+.quick-wins-container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.quick-wins h2 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.quick-wins-subtitle {
+  font-size: 1.1rem;
+  color: var(--gray);
+  margin-bottom: 3rem;
+}
+
+.quick-wins-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.quick-win-card {
+  padding: 2rem 1.5rem;
+  border: 2px solid var(--black);
+  background: var(--light-gray);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.quick-win-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 6px 6px 0 var(--orange);
+}
+
+.quick-win-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.quick-win-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.quick-win-time {
+  font-size: 0.85rem;
+  color: var(--orange);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Testimonials */
+.testimonials {
+  padding: 6rem 2rem;
+  background: var(--light-gray);
+}
+
+.testimonials-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.testimonials h2 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 4rem;
+  letter-spacing: -0.02em;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.testimonial-card {
+  background: var(--white);
+  border: 3px solid var(--black);
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 6px 6px 0 var(--black);
+}
+
+.testimonial-quote {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--gray);
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.testimonial-author {
+  font-weight: 700;
+  color: var(--black);
+  font-size: 0.95rem;
+}
+
+.testimonial-role {
+  font-size: 0.85rem;
+  color: var(--orange);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* Petition Section */
@@ -904,16 +1154,56 @@ footer {
     gap: 1rem;
     text-align: center;
   }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+  }
+
+  .quick-wins {
+    padding: 4rem 1.5rem;
+  }
+
+  .quick-wins-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .testimonials {
+    padding: 4rem 1.5rem;
+  }
+
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
 @media (max-width: 480px) {
   .mobile-menu {
     padding: 5rem 1.5rem 2rem;
   }
-  
+
   .mobile-menu a {
     font-size: 1.5rem;
     padding: 1.25rem 0;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+  }
+
+  .hero-cta .btn {
+    width: 100%;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 </style>
@@ -964,21 +1254,49 @@ footer {
     <p class="hero-subtitle">
       Financial health shouldn't be a privilege. Whether you can volunteer an hour or lead a movement, there's a place for you here.
     </p>
+    <div class="hero-cta">
+      <a href="#involvement" class="btn btn-primary">Start Now</a>
+      <a href="donate.html" class="btn btn-secondary">Support With a Donation</a>
+    </div>
+  </div>
+</section>
+
+<!-- Impact Stats -->
+<section class="impact-stats">
+  <div class="stats-container">
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-number">1M+</div>
+        <div class="stat-label">People Impacted</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">100+</div>
+        <div class="stat-label">Countries Reached</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">500+</div>
+        <div class="stat-label">Active Volunteers</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number">10</div>
+        <div class="stat-label">Years of Impact</div>
+      </div>
+    </div>
   </div>
 </section>
 
 <!-- Involvement Options -->
-<section class="involvement">
+<section class="involvement" id="involvement">
   <div class="involvement-container">
     <span class="section-label">Ways to Contribute</span>
     <h2 class="section-title">Find Your Role</h2>
     <p class="section-subtitle">Every skill matters. Every hour counts. Choose how you want to make an impact.</p>
-    
+
     <div class="involvement-grid">
       <!-- Volunteer -->
       <div class="involvement-card">
         <div class="card-image">
-          <span>V</span>
+          <span>🙌</span>
         </div>
         <div class="card-content">
           <h3 class="card-title">Volunteer</h3>
@@ -990,11 +1308,11 @@ footer {
           </a>
         </div>
       </div>
-      
+
       <!-- Ambassador Program -->
       <div class="involvement-card">
         <div class="card-image">
-          <span>A</span>
+          <span>🌟</span>
         </div>
         <div class="card-content">
           <h3 class="card-title">Become an Ambassador</h3>
@@ -1006,11 +1324,11 @@ footer {
           </a>
         </div>
       </div>
-      
+
       <!-- Partner With Us -->
       <div class="involvement-card">
         <div class="card-image">
-          <span>P</span>
+          <span>🤝</span>
         </div>
         <div class="card-content">
           <h3 class="card-title">Partner With Us</h3>
@@ -1022,11 +1340,11 @@ footer {
           </a>
         </div>
       </div>
-      
+
       <!-- Spread the Word -->
       <div class="involvement-card">
         <div class="card-image">
-          <span>S</span>
+          <span>📢</span>
         </div>
         <div class="card-content">
           <h3 class="card-title">Spread the Word</h3>
@@ -1037,6 +1355,61 @@ footer {
             Follow Us
           </a>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Wins -->
+<section class="quick-wins">
+  <div class="quick-wins-container">
+    <h2>Start Making Impact Today</h2>
+    <p class="quick-wins-subtitle">Quick actions you can take right now</p>
+    <div class="quick-wins-grid">
+      <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" class="quick-win-card" style="text-decoration: none; color: inherit;">
+        <span class="quick-win-icon">💬</span>
+        <div class="quick-win-title">Share on Social</div>
+        <div class="quick-win-time">2 mins</div>
+      </a>
+      <a href="#petition" class="quick-win-card" style="text-decoration: none; color: inherit;">
+        <span class="quick-win-icon">✍️</span>
+        <div class="quick-win-title">Sign the Pledge</div>
+        <div class="quick-win-time">1 min</div>
+      </a>
+      <a href="donate.html" class="quick-win-card" style="text-decoration: none; color: inherit;">
+        <span class="quick-win-icon">💝</span>
+        <div class="quick-win-title">Make a Donation</div>
+        <div class="quick-win-time">3 mins</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+  <div class="testimonials-container">
+    <h2>Voices From Our Community</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-quote">
+          "FinMango gave me the tools to make a difference in my community. The support and training were incredible."
+        </p>
+        <div class="testimonial-author">Sarah M.</div>
+        <div class="testimonial-role">Ambassador • Chicago</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">
+          "Volunteering here connected me with brilliant people working on problems that actually matter. It's been transformative."
+        </p>
+        <div class="testimonial-author">James K.</div>
+        <div class="testimonial-role">Volunteer • London</div>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">
+          "Our partnership with FinMango has helped us reach thousands of young adults with critical financial resources."
+        </p>
+        <div class="testimonial-author">Dr. Maria Santos</div>
+        <div class="testimonial-role">Partner • São Paulo</div>
       </div>
     </div>
   </div>
