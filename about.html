@@ -248,7 +248,17 @@ nav.scrolled .logo img {
   align-items: center;
   justify-content: center;
   padding: 9rem 2rem 4rem;
-  background: var(--white);
+  background: linear-gradient(135deg, #FFF0E8 0%, var(--white) 50%, #FFF5F0 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .hero-content {
@@ -333,8 +343,26 @@ nav.scrolled .logo img {
 /* Mission Section */
 .mission {
   padding: 8rem 2rem;
-  background: var(--orange);
+  background: linear-gradient(135deg, var(--orange) 0%, #FF8C61 100%);
   color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.mission::before {
+  content: '🎯';
+  position: absolute;
+  font-size: 30rem;
+  opacity: 0.06;
+  bottom: -8rem;
+  left: -5rem;
+  animation: float 12s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-30px) rotate(5deg); }
 }
 
 .mission-container {
@@ -344,6 +372,8 @@ nav.scrolled .logo img {
   grid-template-columns: 1.2fr 1fr;
   gap: 6rem;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .mission-content {
@@ -395,6 +425,11 @@ nav.scrolled .logo img {
 
 .mission-stat {
   text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.mission-stat:hover {
+  transform: scale(1.1) rotate(-2deg);
 }
 
 .stat-number {
@@ -403,6 +438,12 @@ nav.scrolled .logo img {
   line-height: 1;
   letter-spacing: -0.02em;
   margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  transition: text-shadow 0.3s ease;
+}
+
+.mission-stat:hover .stat-number {
+  text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
 }
 
 .stat-label {
@@ -441,7 +482,7 @@ nav.scrolled .logo img {
   position: relative;
   padding: 0;
   border: 3px solid var(--black);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   background: var(--white);
   display: flex;
   flex-direction: column;
@@ -450,6 +491,8 @@ nav.scrolled .logo img {
 
 .what-card-content {
   padding: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .what-card-image {
@@ -458,7 +501,7 @@ nav.scrolled .logo img {
   object-fit: cover;
   border: none;
   border-bottom: 3px solid var(--black);
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
 }
 
 .what-card::before {
@@ -468,25 +511,26 @@ nav.scrolled .logo img {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--orange);
-  transform: scale(0);
-  transition: transform 0.3s ease;
-  z-index: -1;
+  background: linear-gradient(135deg, var(--orange) 0%, #FF8C61 100%);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 1;
 }
 
 .what-card:hover::before {
-  transform: scale(1);
+  transform: scaleY(1);
 }
 
 .what-card:hover {
-  transform: translateY(-12px) rotate(1deg);
-  box-shadow: 16px 16px 0 var(--orange);
+  transform: translateY(-16px) rotate(2deg);
+  box-shadow: 20px 20px 0 var(--black);
   color: var(--white);
 }
 
+.what-card:hover .what-title,
 .what-card:hover .what-text {
   color: var(--white);
-  opacity: 0.9;
 }
 
 .what-card:hover .what-link {
@@ -494,7 +538,8 @@ nav.scrolled .logo img {
 }
 
 .what-card:hover .what-card-image {
-  transform: scale(1.05);
+  transform: scale(1.1);
+  filter: brightness(1.1);
 }
 
 .what-icon {
@@ -531,19 +576,23 @@ nav.scrolled .logo img {
 /* Values */
 .values {
   padding: 8rem 2rem;
-  background: linear-gradient(135deg, var(--light-gray) 0%, #fafafa 100%);
+  background: linear-gradient(135deg, #FFF8F5 0%, var(--white) 50%, #FFFAF7 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 20s ease infinite;
   position: relative;
+  overflow: hidden;
 }
 
 .values::before {
-  content: '';
+  content: '✨';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--orange) 50%, transparent 100%);
-  opacity: 0.3;
+  font-size: 25rem;
+  opacity: 0.03;
+  top: 50%;
+  right: -5%;
+  transform: translateY(-50%);
+  animation: float 15s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .values-container {
@@ -562,11 +611,11 @@ nav.scrolled .logo img {
 .value-card {
   text-align: center;
   padding: 1.5rem 1rem;
-  transition: transform 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .value-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-12px) scale(1.05);
 }
 
 .value-icon {
@@ -576,16 +625,18 @@ nav.scrolled .logo img {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--orange);
+  background: linear-gradient(135deg, var(--orange) 0%, #FF8C61 100%);
   color: var(--white);
   font-size: 2rem;
   border-radius: 50%;
-  transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
 }
 
 .value-card:hover .value-icon {
-  transform: rotate(360deg);
-  background: var(--black);
+  transform: rotate(360deg) scale(1.15);
+  background: linear-gradient(135deg, var(--black) 0%, #333 100%);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
 .value-title {
@@ -842,7 +893,22 @@ nav.scrolled .logo img {
 .cta {
   padding: 10rem 2rem;
   text-align: center;
-  background: linear-gradient(135deg, var(--light-gray) 0%, var(--white) 100%);
+  background: linear-gradient(135deg, #FFE8E0 0%, var(--white) 50%, #FFF4F0 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta::before {
+  content: '🚀';
+  position: absolute;
+  font-size: 20rem;
+  opacity: 0.04;
+  bottom: -5rem;
+  right: -5rem;
+  animation: float 10s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .cta h2 {
