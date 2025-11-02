@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paycheck Calculator - FinMango</title>
+<meta name="description" content="Calculate your take-home pay after taxes and deductions. Understand federal, state, and FICA taxes on your paycheck.">
+<meta name="keywords" content="paycheck calculator, salary calculator, take home pay, net pay calculator, tax withholding, FICA tax, federal tax calculator, state tax calculator">
+<meta name="author" content="FinMango">
+<link rel="canonical" href="https://finmango.org/paycheck-calculator">
+<link rel="icon" type="image/png" href="favicon.png">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://finmango.org/paycheck-calculator">
+<meta property="og:title" content="Paycheck Calculator - FinMango">
+<meta property="og:description" content="Calculate your take-home pay after taxes and deductions. Understand federal, state, and FICA taxes on your paycheck.">
+<meta property="og:image" content="https://finmango.org/finmango-og.png">
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://finmango.org/paycheck-calculator">
+<meta property="twitter:title" content="Paycheck Calculator - FinMango">
+<meta property="twitter:description" content="Calculate your take-home pay after taxes and deductions. Understand federal, state, and FICA taxes on your paycheck.">
+<meta property="twitter:image" content="https://finmango.org/finmango-og.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DW5HBYS9JW');
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --orange: #FF6B35;
+  --green: #10B981;
+  --red: #EF4444;
+  --gray: #666666;
+  --light-gray: #f5f5f5;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--white);
+  color: var(--black);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--white);
+  z-index: 1000;
+  padding: 1.5rem 0;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+nav.scrolled {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.97);
+}
+
+.nav-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+  justify-self: start;
+}
+
+.logo:hover {
+  transform: rotate(-2deg) scale(1.05);
+}
+
+.logo img {
+  height: 46px;
+  transition: height 0.3s ease;
+}
+
+nav.scrolled .logo img {
+  height: 38px;
+}
+
+.nav-right {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+  justify-self: end;
+}
+
+.nav-right a {
+  color: var(--black);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  position: relative;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: width 0.3s ease;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
+  width: 100%;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+  color: var(--orange);
+}
+
+.btn-donate {
+  background: var(--orange);
+  color: var(--white) !important;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid var(--black);
+  position: relative;
+  overflow: hidden;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.btn-donate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-donate:hover::before {
+  left: 0;
+}
+
+.btn-donate:hover {
+  transform: scale(1.05);
+}
+
+.btn-get-involved {
+  background: transparent;
+  color: var(--black) !important;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid var(--black);
+  position: relative;
+  overflow: hidden;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.btn-get-involved::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-get-involved:hover::before {
+  left: 0;
+}
+
+.btn-get-involved:hover {
+  color: var(--white) !important;
+  transform: scale(1.05);
+}
+
+/* Mobile Menu */
+.mobile-controls {
+  display: none;
+  gap: 1rem;
+  align-items: center;
+  justify-self: end;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mobile-menu-btn span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: var(--black);
+  margin: 6px 0;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.mobile-get-involved {
+  display: none;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  height: 100vh;
+  background: var(--white);
+  z-index: 999;
+  padding: 6rem 2rem;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-menu.active {
+  display: block;
+  right: 0;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 1.5rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--black);
+  text-decoration: none;
+  border-bottom: 2px solid var(--black);
+  transition: all 0.2s ease;
+}
+
+.mobile-menu a:hover {
+  color: var(--orange);
+  padding-left: 1rem;
+}
+
+/* Hero */
+.hero {
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9rem 2rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--green) 0%, var(--orange) 100%);
+  color: var(--white);
+  position: relative;
+}
+
+.hero-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 600;
+  max-width: 700px;
+  margin: 0 auto;
+  opacity: 0.95;
+}
+
+/* Main Content */
+.main-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.content-section {
+  margin-bottom: 3rem;
+}
+
+.section-text {
+  font-size: 1.1rem;
+  color: var(--gray);
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+/* Calculator Sections */
+.calc-section {
+  border: 3px solid var(--black);
+  margin-bottom: 1.5rem;
+  background: var(--white);
+  overflow: hidden;
+}
+
+.calc-section-header {
+  background: var(--orange);
+  color: var(--white);
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid var(--black);
+}
+
+.calc-section-header:hover {
+  background: var(--black);
+}
+
+.calc-section-title {
+  font-size: 1.3rem;
+  font-weight: 900;
+  margin: 0;
+}
+
+.calc-section-arrow {
+  font-size: 1.5rem;
+  font-weight: 900;
+  transition: transform 0.3s ease;
+}
+
+.calc-section.active .calc-section-arrow {
+  transform: rotate(180deg);
+}
+
+.calc-section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  padding: 0 1.5rem;
+}
+
+.calc-section.active .calc-section-content {
+  max-height: 3000px;
+  padding: 1.5rem;
+}
+
+/* Calculator Box */
+.calculator-box {
+  background: var(--light-gray);
+  border: 3px solid var(--black);
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.input-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--black);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-prefix {
+  position: absolute;
+  left: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--gray);
+}
+
+input[type="number"],
+select {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2rem;
+  font-size: 1rem;
+  border: 2px solid var(--black);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+select {
+  padding-left: 1rem;
+  background: var(--white);
+}
+
+input[type="number"]:focus,
+select:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+/* Paycheck Display */
+.paycheck-display {
+  background: linear-gradient(135deg, var(--green) 0%, var(--orange) 100%);
+  border: 3px solid var(--black);
+  padding: 3rem 2rem;
+  margin: 2rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.paycheck-display::before {
+  content: '💰';
+  position: absolute;
+  font-size: 15rem;
+  opacity: 0.1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.paycheck-label {
+  color: var(--white);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.paycheck-number {
+  color: var(--white);
+  font-size: 4rem;
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.paycheck-sublabel {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Breakdown Cards */
+.breakdown-grid {
+  display: grid;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.breakdown-card {
+  background: var(--white);
+  border: 3px solid var(--black);
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+
+.breakdown-card.deduction {
+  border-color: var(--red);
+}
+
+.breakdown-label {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.breakdown-value {
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-align: right;
+}
+
+.breakdown-card.deduction .breakdown-value {
+  color: var(--red);
+}
+
+/* Footer */
+footer {
+  padding: 0;
+  border-top: 4px solid var(--orange);
+  background: var(--black);
+  color: var(--white);
+}
+
+.footer-newsletter {
+  padding: 3rem 2rem;
+  background: rgba(255, 107, 53, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.footer-newsletter-container {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.footer-newsletter h3 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.footer-newsletter p {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.footer-newsletter-btn {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  background: var(--orange);
+  color: var(--white);
+  text-decoration: none;
+  border: 2px solid var(--orange);
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.footer-newsletter-btn:hover {
+  background: var(--white);
+  color: var(--black);
+  border-color: var(--white);
+  transform: translateY(-2px);
+}
+
+.footer-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 4rem 2rem 0;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.footer-brand img {
+  height: 50px;
+  margin-bottom: 1rem;
+  filter: brightness(0) invert(1);
+}
+
+.footer-tagline {
+  color: #999;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.footer-section h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.footer-section a {
+  display: block;
+  color: #999;
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.footer-section a:hover {
+  color: var(--orange);
+  padding-left: 0.5rem;
+}
+
+.footer-bottom {
+  border-top: 1px solid #333;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .footer-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-right {
+    display: none;
+  }
+  
+  .mobile-controls {
+    display: flex;
+  }
+  
+  .mobile-menu-btn {
+    display: block;
+  }
+  
+  .mobile-get-involved {
+    display: inline-block;
+  }
+  
+  .hero {
+    padding: 7rem 1.5rem 2rem;
+  }
+  
+  .paycheck-number {
+    font-size: 2.5rem;
+  }
+  
+    .footer-newsletter {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .footer-newsletter h3 {
+    font-size: 1.25rem;
+  }
+
+  .footer-newsletter p {
+    font-size: 0.95rem;
+  }
+
+  .footer-newsletter-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+.footer-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <img src="finmango.png" alt="FinMango" loading="eager">
+    </a>
+    <div class="nav-right">
+      <a href="about.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <a href="advocacy.html">Advocacy</a>
+      <a href="resources.html">Resources</a>
+      <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+      <a href="donate.html" class="btn-donate">Donate</a>
+    </div>
+    <div class="mobile-controls">
+      <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="about.html">About</a>
+  <a href="research.html">Research</a>
+  <a href="education.html">Education</a>
+  <a href="advocacy.html">Advocacy</a>
+  <a href="resources.html">Resources</a>
+  <a href="donate.html">Donate</a>
+</div>
+
+<section class="hero">
+  <div class="hero-container">
+    <h1 class="hero-title">Paycheck Calculator 💵</h1>
+    <p class="hero-subtitle">
+      Calculate your take-home pay after taxes and deductions
+    </p>
+  </div>
+</section>
+
+<div class="main-content">
+  <div class="content-section">
+    <p class="section-text">
+      Understanding your paycheck is crucial for financial planning. Your gross pay (what you earn) and net pay (what you take home) can differ significantly due to federal taxes, state taxes, FICA (Social Security and Medicare), and other deductions.
+    </p>
+    <p class="section-text">
+      Use this calculator to estimate your take-home pay and understand where your money goes each pay period.
+    </p>
+  </div>
+
+  <!-- Section 1: Your Income -->
+  <div class="calc-section active">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">1. Your Income</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <div class="calculator-box">
+        <div class="input-grid">
+          <div class="input-group">
+            <label class="input-label">Pay Frequency</label>
+            <select id="payFrequency">
+              <option value="52">Weekly</option>
+              <option value="26" selected>Bi-Weekly (Every 2 weeks)</option>
+              <option value="24">Semi-Monthly (Twice a month)</option>
+              <option value="12">Monthly</option>
+            </select>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Gross Pay Per Paycheck</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              Your pay before any deductions
+            </p>
+            <div class="input-wrapper">
+              <span class="input-prefix">$</span>
+              <input type="number" id="grossPay" value="3000" min="0" step="100">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Tax Information -->
+  <div class="calc-section">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">2. Tax Information</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <p class="section-text">
+        Federal and state taxes are withheld from each paycheck based on your income, filing status, and W-4 withholding elections.
+      </p>
+      
+      <div class="calculator-box">
+        <div class="input-grid">
+          <div class="input-group">
+            <label class="input-label">Filing Status</label>
+            <select id="filingStatus">
+              <option value="single" selected>Single</option>
+              <option value="married">Married Filing Jointly</option>
+              <option value="hoh">Head of Household</option>
+            </select>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">State</label>
+            <select id="state">
+              <option value="0">No State Tax</option>
+              <option value="3">Low Tax State (~3%)</option>
+              <option value="5" selected>Medium Tax State (~5%)</option>
+              <option value="7">High Tax State (~7%)</option>
+              <option value="10">Very High Tax State (~10%)</option>
+            </select>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Federal W-4 Allowances</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              More allowances = less withholding (0-3 is typical)
+            </p>
+            <input type="number" id="allowances" value="1" min="0" max="10" style="padding-left: 1rem;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Deductions -->
+  <div class="calc-section">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">3. Pre-Tax Deductions</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <p class="section-text">
+        Pre-tax deductions reduce your taxable income, lowering your tax bill. Common pre-tax deductions include 401(k) contributions and health insurance premiums.
+      </p>
+      
+      <div class="calculator-box">
+        <div class="input-grid">
+          <div class="input-group">
+            <label class="input-label">401(k) Contribution</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              Per paycheck (reduces taxable income)
+            </p>
+            <div class="input-wrapper">
+              <span class="input-prefix">$</span>
+              <input type="number" id="contribution401k" value="200" min="0" step="50">
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Health Insurance Premium</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              Per paycheck (your share, not employer's)
+            </p>
+            <div class="input-wrapper">
+              <span class="input-prefix">$</span>
+              <input type="number" id="healthInsurance" value="100" min="0" step="10">
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Other Pre-Tax Deductions</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              HSA, FSA, transit, etc. (per paycheck)
+            </p>
+            <div class="input-wrapper">
+              <span class="input-prefix">$</span>
+              <input type="number" id="otherPreTax" value="0" min="0" step="10">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Your Paycheck -->
+  <div class="calc-section active">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">4. Your Take-Home Pay</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <div class="paycheck-display">
+        <div class="paycheck-label">Net Pay (Take-Home)</div>
+        <div class="paycheck-number" id="netPay">$0</div>
+        <div class="paycheck-sublabel" id="payPeriod">Per Paycheck</div>
+      </div>
+      
+      <div class="breakdown-grid">
+        <div class="breakdown-card">
+          <div class="breakdown-label">Gross Pay</div>
+          <div class="breakdown-value" id="displayGross">$0</div>
+        </div>
+        
+        <div class="breakdown-card deduction">
+          <div class="breakdown-label">Federal Tax</div>
+          <div class="breakdown-value" id="federalTax">-$0</div>
+        </div>
+        
+        <div class="breakdown-card deduction">
+          <div class="breakdown-label">State Tax</div>
+          <div class="breakdown-value" id="stateTax">-$0</div>
+        </div>
+        
+        <div class="breakdown-card deduction">
+          <div class="breakdown-label">Social Security (6.2%)</div>
+          <div class="breakdown-value" id="socialSecurity">-$0</div>
+        </div>
+        
+        <div class="breakdown-card deduction">
+          <div class="breakdown-label">Medicare (1.45%)</div>
+          <div class="breakdown-value" id="medicare">-$0</div>
+        </div>
+        
+        <div class="breakdown-card deduction">
+          <div class="breakdown-label">401(k) Contribution</div>
+          <div class="breakdown-value" id="display401k">-$0</div>
+        </div>
+        
+        <div class="breakdown-card deduction">
+          <div class="breakdown-label">Health Insurance</div>
+          <div class="breakdown-value" id="displayHealth">-$0</div>
+        </div>
+        
+        <div class="breakdown-card deduction">
+          <div class="breakdown-label">Other Pre-Tax</div>
+          <div class="breakdown-value" id="displayOther">-$0</div>
+        </div>
+      </div>
+      
+      <div style="margin-top: 2rem; padding: 1.5rem; background: var(--light-gray); border: 3px solid var(--black);">
+        <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 1rem;">Annual Summary</h3>
+        <p style="margin-bottom: 0.5rem;"><strong>Annual Gross:</strong> <span id="annualGross">$0</span></p>
+        <p style="margin-bottom: 0.5rem;"><strong>Annual Take-Home:</strong> <span id="annualNet">$0</span></p>
+        <p><strong>Effective Tax Rate:</strong> <span id="effectiveRate">0%</span></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-newsletter">
+    <div class="footer-newsletter-container">
+      <h3>Stay Updated</h3>
+      <p>Join our newsletter for updates on financial health research, education, and advocacy.</p>
+      <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a>
+    </div>
+  </div>
+
+  <div class="footer-container">
+    <div>
+      <div class="footer-brand">
+        <img src="finmango.png" alt="FinMango" loading="lazy">
+      </div>
+      <p class="footer-tagline">
+        A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
+      </p>
+      <p class="footer-tagline" style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem;">
+        EIN: 81-2543425
+      </p>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Our Work</h4>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <a href="advocacy.html">Advocacy</a>
+      <a href="resources.html">Resources</a>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Get Involved</h4>
+      <a href="donate.html">Donate</a>
+      <a href="advocacy.html">Ambassador Program</a>
+      <a href="mailto:hello@finmango.org">Partner With Us</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Connect</h4>
+      <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
+      <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="mailto:hello@finmango.org">Contact</a>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div>© 2025 FinMango. All rights reserved.</div>
+    <div>
+      <a href="privacy.html" style="display: inline; margin: 0 1rem; color: #999;">Privacy</a>
+      <a href="terms.html" style="display: inline; margin: 0 1rem; color: #999;">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function formatCurrency(value) {
+  return '$' + Math.round(value).toLocaleString();
+}
+
+function calculate() {
+  const grossPay = parseFloat(document.getElementById('grossPay').value) || 0;
+  const payFrequency = parseInt(document.getElementById('payFrequency').value);
+  const filingStatus = document.getElementById('filingStatus').value;
+  const stateRate = parseFloat(document.getElementById('state').value) / 100;
+  const allowances = parseInt(document.getElementById('allowances').value) || 0;
+  const contribution401k = parseFloat(document.getElementById('contribution401k').value) || 0;
+  const healthInsurance = parseFloat(document.getElementById('healthInsurance').value) || 0;
+  const otherPreTax = parseFloat(document.getElementById('otherPreTax').value) || 0;
+  
+  // Annual calculations
+  const annualGrossPay = grossPay * payFrequency;
+  
+  // Pre-tax deductions
+  const totalPreTax = contribution401k + healthInsurance + otherPreTax;
+  const taxableIncome = grossPay - totalPreTax;
+  const annualTaxableIncome = taxableIncome * payFrequency;
+  
+  // FICA (Social Security + Medicare)
+  const socialSecurityMax = 168600; // 2024 limit
+  const socialSecurity = Math.min(taxableIncome, socialSecurityMax / payFrequency) * 0.062;
+  const medicare = taxableIncome * 0.0145;
+  
+  // Federal tax (simplified brackets for 2024)
+  let federalTaxRate = 0.12; // Default
+  if (filingStatus === 'single') {
+    if (annualTaxableIncome <= 11600) federalTaxRate = 0.10;
+    else if (annualTaxableIncome <= 47150) federalTaxRate = 0.12;
+    else if (annualTaxableIncome <= 100525) federalTaxRate = 0.22;
+    else if (annualTaxableIncome <= 191950) federalTaxRate = 0.24;
+    else if (annualTaxableIncome <= 243725) federalTaxRate = 0.32;
+    else federalTaxRate = 0.35;
+  } else if (filingStatus === 'married') {
+    if (annualTaxableIncome <= 23200) federalTaxRate = 0.10;
+    else if (annualTaxableIncome <= 94300) federalTaxRate = 0.12;
+    else if (annualTaxableIncome <= 201050) federalTaxRate = 0.22;
+    else if (annualTaxableIncome <= 383900) federalTaxRate = 0.24;
+    else if (annualTaxableIncome <= 487450) federalTaxRate = 0.32;
+    else federalTaxRate = 0.35;
+  } else { // Head of household
+    if (annualTaxableIncome <= 16550) federalTaxRate = 0.10;
+    else if (annualTaxableIncome <= 63100) federalTaxRate = 0.12;
+    else if (annualTaxableIncome <= 100500) federalTaxRate = 0.22;
+    else if (annualTaxableIncome <= 191950) federalTaxRate = 0.24;
+    else if (annualTaxableIncome <= 243700) federalTaxRate = 0.32;
+    else federalTaxRate = 0.35;
+  }
+  
+  // Adjust for allowances (simplified - each allowance reduces tax by ~$85/paycheck)
+  const federalTax = Math.max(0, (taxableIncome * federalTaxRate) - (allowances * 85));
+  const stateTax = taxableIncome * stateRate;
+  
+  // Net pay
+  const netPay = grossPay - federalTax - stateTax - socialSecurity - medicare - totalPreTax;
+  
+  // Update displays
+  document.getElementById('netPay').textContent = formatCurrency(netPay);
+  document.getElementById('displayGross').textContent = formatCurrency(grossPay);
+  document.getElementById('federalTax').textContent = '-' + formatCurrency(federalTax);
+  document.getElementById('stateTax').textContent = '-' + formatCurrency(stateTax);
+  document.getElementById('socialSecurity').textContent = '-' + formatCurrency(socialSecurity);
+  document.getElementById('medicare').textContent = '-' + formatCurrency(medicare);
+  document.getElementById('display401k').textContent = '-' + formatCurrency(contribution401k);
+  document.getElementById('displayHealth').textContent = '-' + formatCurrency(healthInsurance);
+  document.getElementById('displayOther').textContent = '-' + formatCurrency(otherPreTax);
+  
+  // Pay period label
+  const periodLabels = {
+    52: 'Weekly',
+    26: 'Bi-Weekly',
+    24: 'Semi-Monthly',
+    12: 'Monthly'
+  };
+  document.getElementById('payPeriod').textContent = 'Per ' + periodLabels[payFrequency] + ' Paycheck';
+  
+  // Annual summary
+  const annualNetPay = netPay * payFrequency;
+  const totalTaxes = (federalTax + stateTax + socialSecurity + medicare) * payFrequency;
+  const effectiveRate = (totalTaxes / annualGrossPay) * 100;
+  
+  document.getElementById('annualGross').textContent = formatCurrency(annualGrossPay);
+  document.getElementById('annualNet').textContent = formatCurrency(annualNetPay);
+  document.getElementById('effectiveRate').textContent = effectiveRate.toFixed(1) + '%';
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+  
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  
+  mobileMenuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+    mobileMenuBtn.classList.toggle('active');
+    document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+  });
+  
+  document.querySelectorAll('.mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      mobileMenuBtn.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
+  
+  // Collapsible section handlers
+  document.querySelectorAll('.calc-section-header').forEach(header => {
+    header.addEventListener('click', function() {
+      const section = this.parentElement;
+      section.classList.toggle('active');
+    });
+  });
+  
+  // Input listeners
+  document.getElementById('payFrequency').addEventListener('change', calculate);
+  document.getElementById('grossPay').addEventListener('input', calculate);
+  document.getElementById('filingStatus').addEventListener('change', calculate);
+  document.getElementById('state').addEventListener('change', calculate);
+  document.getElementById('allowances').addEventListener('input', calculate);
+  document.getElementById('contribution401k').addEventListener('input', calculate);
+  document.getElementById('healthInsurance').addEventListener('input', calculate);
+  document.getElementById('otherPreTax').addEventListener('input', calculate);
+  
+  calculate();
+});
+</script>
+
+</body>
+</html>
