@@ -1,0 +1,50 @@
+# Cache Control Headers
+# This file works with Netlify, Cloudflare Pages, and some other hosts
+# For GitHub Pages, you'll need to use Cloudflare as a proxy to apply these headers
+
+# HTML files - Cache for 1 hour, must revalidate
+/*.html
+  Cache-Control: public, max-age=3600, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  X-XSS-Protection: 1; mode=block
+
+# Root index
+/
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# Images - Cache for 1 year (immutable)
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+/*.gif
+  Cache-Control: public, max-age=31536000, immutable
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts - Cache for 1 year
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+/*.eot
+  Cache-Control: public, max-age=31536000, immutable
+
+# JSON data - Cache for 1 hour
+/*.json
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# Security headers for all files
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
