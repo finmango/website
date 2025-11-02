@@ -36,6 +36,15 @@
   --gray: #666666;
   --light-gray: #f5f5f5;
   --max-width: 1200px;
+
+  /* Category colors */
+  --education: #8B5CF6;
+  --retirement: #10B981;
+  --income: #3B82F6;
+  --lifestyle: #F59E0B;
+  --business: #EF4444;
+  --family: #EC4899;
+  --emergencies: #DC2626;
 }
 
 body {
@@ -291,12 +300,66 @@ nav.scrolled .logo img {
   justify-content: center;
   padding: 9rem 2rem 2rem;
   text-align: center;
-  background: var(--white);
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.03) 0%, rgba(255, 107, 53, 0.08) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 20s ease-in-out infinite;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 15s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, 30px) scale(1.1);
+  }
 }
 
 .hero-container {
   max-width: 1000px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-stats {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gray);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.hero-stats .count {
+  color: var(--orange);
+  font-weight: 900;
+  font-size: 1.1rem;
 }
 
 .hero-label {
@@ -325,6 +388,44 @@ nav.scrolled .logo img {
   line-height: 1.6;
 }
 
+/* Search Bar */
+.search-container {
+  max-width: 600px;
+  margin: 2rem auto 0;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1rem 3rem 1rem 1.5rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 3px solid var(--black);
+  background: var(--white);
+  transition: all 0.3s ease;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.search-input:focus {
+  outline: none;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--orange);
+}
+
+.search-input::placeholder {
+  color: var(--gray);
+  opacity: 0.6;
+}
+
+.search-icon {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  pointer-events: none;
+}
+
 /* Filter Pills - now in hero */
 .filters {
   display: flex;
@@ -332,7 +433,7 @@ nav.scrolled .logo img {
   align-items: center;
   gap: 0.6rem;
   flex-wrap: wrap;
-  margin-top: 3rem;
+  margin-top: 2rem;
 }
 
 .filter-btn {
@@ -387,14 +488,58 @@ nav.scrolled .logo img {
   border: 3px solid var(--black);
   padding: 2rem;
   position: relative;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.resource-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 107, 53, 0.05),
+    transparent
+  );
+  transition: left 0.5s ease;
+  z-index: 0;
+}
+
+.resource-card:hover::before {
+  left: 100%;
+}
+
+.resource-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .resource-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 8px 8px 0 var(--orange);
+  transform: translate(-6px, -6px) rotateX(2deg) rotateY(2deg);
+  box-shadow: 10px 10px 0 var(--orange);
+}
+
+.resource-card .resource-link {
+  transition: all 0.3s ease;
+}
+
+.resource-card:hover .resource-link {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 /* Badge */
@@ -422,8 +567,41 @@ nav.scrolled .logo img {
   font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--orange);
   margin-bottom: 1rem;
+  padding: 0.35rem 0.85rem;
+  background: var(--orange);
+  color: var(--white);
+  display: inline-block;
+  border: 2px solid var(--black);
+}
+
+/* Category-specific colors */
+.resource-card[data-category="education"] .resource-category {
+  background: var(--education);
+}
+
+.resource-card[data-category="retirement"] .resource-category {
+  background: var(--retirement);
+}
+
+.resource-card[data-category="income"] .resource-category {
+  background: var(--income);
+}
+
+.resource-card[data-category="lifestyle"] .resource-category {
+  background: var(--lifestyle);
+}
+
+.resource-card[data-category="business"] .resource-category {
+  background: var(--business);
+}
+
+.resource-card[data-category="family"] .resource-category {
+  background: var(--family);
+}
+
+.resource-card[data-category="emergencies"] .resource-category {
+  background: var(--emergencies);
 }
 
 .resource-title {
@@ -458,6 +636,24 @@ nav.scrolled .logo img {
   border: 2px solid var(--black);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.resource-link .icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.resource-card:hover .resource-link .icon {
+  animation: bounce 0.6s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(10deg);
+  }
 }
 
 .resource-link:hover {
@@ -784,6 +980,10 @@ footer {
 
 <section class="hero">
   <div class="hero-container">
+    <div class="hero-stats">
+      <span class="count" id="resourceCount">16</span>
+      <span>Free Tools Available</span>
+    </div>
     <span class="hero-label">Free Tools & Resources</span>
     <h1>
       Build better financial health
@@ -791,7 +991,19 @@ footer {
     <p class="hero-subtitle">
       Interactive calculators, guides, and tools to help you make smarter money decisions. All free. All backed by research.
     </p>
-    
+
+    <!-- Search Bar -->
+    <div class="search-container">
+      <input
+        type="text"
+        class="search-input"
+        id="searchInput"
+        placeholder="Search tools and resources..."
+        autocomplete="off"
+      >
+      <span class="search-icon">🔍</span>
+    </div>
+
     <!-- Filters moved into hero -->
     <div class="filters">
       <button class="filter-btn active" data-category="all">All</button>
@@ -1002,10 +1214,90 @@ const resources = [
   }
 ];
 
+// Search Functionality
+function initializeSearch() {
+  const searchInput = document.getElementById('searchInput');
+  const cards = document.querySelectorAll('.resource-card');
+  const resourceCount = document.getElementById('resourceCount');
+  const filters = document.querySelectorAll('.filter-btn');
+
+  searchInput.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase().trim();
+    let visibleCount = 0;
+    const activeCategory = document.querySelector('.filter-btn.active').dataset.category;
+
+    cards.forEach((card, index) => {
+      const title = card.dataset.title;
+      const description = card.dataset.description;
+      const category = card.dataset.category;
+
+      const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+      const matchesCategory = activeCategory === 'all' || category === activeCategory;
+
+      if (matchesSearch && matchesCategory) {
+        card.style.display = 'flex';
+        card.style.animation = 'none';
+        setTimeout(() => {
+          card.style.animation = `fadeInUp 0.5s ease-out ${index * 0.05}s both`;
+        }, 10);
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    resourceCount.textContent = visibleCount;
+  });
+}
+
+// Update filter system to work with search
+function initializeFilters() {
+  const filters = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.resource-card');
+  const searchInput = document.getElementById('searchInput');
+  const resourceCount = document.getElementById('resourceCount');
+
+  filters.forEach(filter => {
+    filter.addEventListener('click', function() {
+      const category = this.dataset.category;
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      // Update active state
+      filters.forEach(f => f.classList.remove('active'));
+      this.classList.add('active');
+
+      // Filter cards
+      cards.forEach((card, index) => {
+        const cardCategory = card.dataset.category;
+        const title = card.dataset.title;
+        const description = card.dataset.description;
+
+        const matchesCategory = category === 'all' || cardCategory === category;
+        const matchesSearch = !searchTerm || title.includes(searchTerm) || description.includes(searchTerm);
+
+        if (matchesCategory && matchesSearch) {
+          card.style.display = 'flex';
+          card.style.animation = 'none';
+          setTimeout(() => {
+            card.style.animation = `fadeInUp 0.5s ease-out ${index * 0.05}s both`;
+          }, 10);
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      resourceCount.textContent = visibleCount;
+    });
+  });
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
   renderResources();
   initializeFilters();
+  initializeSearch();
   initializeMobileMenu();
 });
 
@@ -1024,11 +1316,13 @@ function createCard(resource, index) {
   const card = document.createElement('div');
   card.className = `resource-card ${resource.featured ? 'featured' : ''}`;
   card.dataset.category = resource.category;
+  card.dataset.title = resource.title.toLowerCase();
+  card.dataset.description = resource.description.toLowerCase();
   card.style.animation = `fadeInUp 0.6s ease-out ${index * 0.05}s both`;
 
-  const badge = resource.featured ? 
-    `<span class="badge">Featured</span>` : 
-    resource.isNew ? 
+  const badge = resource.featured ?
+    `<span class="badge">Featured</span>` :
+    resource.isNew ?
     `<span class="badge new">New</span>` : '';
 
   card.innerHTML = `
@@ -1037,41 +1331,12 @@ function createCard(resource, index) {
     <h3 class="resource-title">${resource.title}</h3>
     <p class="resource-description">${resource.description}</p>
     <a href="${resource.link}" class="resource-link">
-      <span>${resource.icon}</span>
+      <span class="icon">${resource.icon}</span>
       <span>Explore</span>
     </a>
   `;
 
   return card;
-}
-
-// Filter System
-function initializeFilters() {
-  const filters = document.querySelectorAll('.filter-btn');
-  const cards = document.querySelectorAll('.resource-card');
-
-  filters.forEach(filter => {
-    filter.addEventListener('click', function() {
-      const category = this.dataset.category;
-
-      // Update active state
-      filters.forEach(f => f.classList.remove('active'));
-      this.classList.add('active');
-
-      // Filter cards
-      cards.forEach((card, index) => {
-        if (category === 'all' || card.dataset.category === category) {
-          card.style.display = 'flex';
-          card.style.animation = 'none';
-          setTimeout(() => {
-            card.style.animation = `fadeInUp 0.5s ease-out ${index * 0.05}s both`;
-          }, 10);
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
-  });
 }
 
 // Mobile Menu
