@@ -414,11 +414,21 @@ nav.scrolled .logo img {
 
 /* QUOTE SECTION - CONTRARIAN DESIGN */
 .profile-quote {
-  background: var(--black);
+  background: linear-gradient(135deg, #1a1a1a 0%, #000000 50%, #2d1810 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 15s ease infinite;
   color: var(--white);
   padding: 4rem 2rem;
   border-top: 4px solid var(--orange);
   border-bottom: 4px solid var(--orange);
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .profile-quote-container {
@@ -478,18 +488,41 @@ nav.scrolled .logo img {
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 3rem;
   margin-top: 3rem;
+  align-items: start;
 }
 
 .philosophy-card {
   background: var(--white);
   padding: 2.5rem;
   border: 3px solid var(--black);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.philosophy-card:nth-child(even) {
+  margin-top: 3rem;
+}
+
+.philosophy-card::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  background: var(--orange);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
 }
 
 .philosophy-card:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: 8px 8px 0 var(--black);
+  transform: translate(-6px, -6px);
+  box-shadow: 10px 10px 0 var(--black);
+}
+
+.philosophy-card:hover::before {
+  opacity: 0.15;
 }
 
 .philosophy-question {
@@ -508,11 +541,15 @@ nav.scrolled .logo img {
 
 /* GOAL SECTION - BOLD STATEMENT */
 .profile-goal {
-  background: var(--orange);
+  background: linear-gradient(135deg, #FF6B35 0%, #ff8555 50%, #FF6B35 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 12s ease infinite;
   color: var(--white);
   padding: 4rem 2rem;
   border-top: 4px solid var(--black);
   border-bottom: 4px solid var(--black);
+  position: relative;
+  overflow: hidden;
 }
 
 .goal-container {
@@ -881,6 +918,10 @@ footer {
 
   .philosophy-grid {
     grid-template-columns: 1fr;
+  }
+
+  .philosophy-card:nth-child(even) {
+    margin-top: 0;
   }
 
     .footer-newsletter {
