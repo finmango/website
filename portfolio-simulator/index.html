@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Simulator - FinMango</title>
+<meta name="description" content="Build and simulate investment portfolios with historical data. Learn about asset allocation, rebalancing, and dollar-cost averaging.">
+<link rel="icon" type="image/png" href="/favicon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DW5HBYS9JW');
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --orange: #FF6B35;
+  --green: #10B981;
+  --blue: #3B82F6;
+  --gray: #666666;
+  --light-gray: #f5f5f5;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--white);
+  color: var(--black);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Navigation */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--white);
+  z-index: 1000;
+  padding: 1.5rem 0;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+nav.scrolled {
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.97);
+}
+
+.nav-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+  justify-self: start;
+}
+
+.logo:hover {
+  transform: rotate(-2deg) scale(1.05);
+}
+
+.logo img {
+  height: 46px;
+  transition: height 0.3s ease;
+}
+
+nav.scrolled .logo img {
+  height: 38px;
+}
+
+.nav-right {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+  justify-self: end;
+}
+
+.nav-right a {
+  color: var(--black);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  position: relative;
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: width 0.3s ease;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
+  width: 100%;
+}
+
+.nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+  color: var(--orange);
+}
+
+.btn-donate {
+  background: var(--orange);
+  color: var(--white) !important;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid var(--black);
+  position: relative;
+  overflow: hidden;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.btn-donate::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-donate:hover::before {
+  left: 0;
+}
+
+.btn-donate:hover {
+  transform: scale(1.05);
+}
+
+.btn-get-involved {
+  background: transparent;
+  color: var(--black) !important;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  border: 2px solid var(--black);
+  position: relative;
+  overflow: hidden;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.btn-get-involved::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+.btn-get-involved:hover::before {
+  left: 0;
+}
+
+.btn-get-involved:hover {
+  color: var(--white) !important;
+  transform: scale(1.05);
+}
+
+/* Mobile Menu */
+.mobile-controls {
+  display: none;
+  gap: 1rem;
+  align-items: center;
+  justify-self: end;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mobile-menu-btn span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: var(--black);
+  margin: 6px 0;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu-btn.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-menu-btn.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+.mobile-get-involved {
+  display: none;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 100%;
+  height: 100vh;
+  background: var(--white);
+  z-index: 999;
+  padding: 6rem 2rem;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-menu.active {
+  display: block;
+  right: 0;
+}
+
+.mobile-menu a {
+  display: block;
+  padding: 1.5rem 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--black);
+  text-decoration: none;
+  border-bottom: 2px solid var(--black);
+  transition: all 0.2s ease;
+}
+
+.mobile-menu a:hover {
+  color: var(--orange);
+  padding-left: 1rem;
+}
+
+/* Hero */
+.hero {
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9rem 2rem 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--green) 100%);
+  color: var(--white);
+  position: relative;
+}
+
+.hero-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 600;
+  max-width: 700px;
+  margin: 0 auto;
+  opacity: 0.95;
+}
+
+/* Main Content */
+.main-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.content-section {
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.section-text {
+  font-size: 1.1rem;
+  color: var(--gray);
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+/* Calculator Sections */
+.calc-section {
+  border: 3px solid var(--black);
+  margin-bottom: 1.5rem;
+  background: var(--white);
+  overflow: hidden;
+}
+
+.calc-section-header {
+  background: var(--orange);
+  color: var(--white);
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid var(--black);
+}
+
+.calc-section-header:hover {
+  background: var(--black);
+}
+
+.calc-section-title {
+  font-size: 1.3rem;
+  font-weight: 900;
+  margin: 0;
+}
+
+.calc-section-arrow {
+  font-size: 1.5rem;
+  font-weight: 900;
+  transition: transform 0.3s ease;
+}
+
+.calc-section.active .calc-section-arrow {
+  transform: rotate(180deg);
+}
+
+.calc-section-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  padding: 0 1.5rem;
+}
+
+.calc-section.active .calc-section-content {
+  max-height: 3000px;
+  padding: 1.5rem;
+}
+
+/* Calculator Box */
+.calculator-box {
+  background: var(--light-gray);
+  border: 3px solid var(--black);
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+.input-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: var(--black);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-prefix {
+  position: absolute;
+  left: 1rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--gray);
+}
+
+input[type="number"],
+input[type="date"] {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2rem;
+  font-size: 1rem;
+  border: 2px solid var(--black);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+input[type="date"] {
+  padding-left: 1rem;
+}
+
+input[type="number"]:focus,
+input[type="date"]:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid var(--black);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  background: var(--white);
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+input[type="range"] {
+  width: 100%;
+  height: 8px;
+  border-radius: 5px;
+  background: #ddd;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--blue);
+  cursor: pointer;
+  border: 3px solid var(--black);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--blue);
+  cursor: pointer;
+  border: 3px solid var(--black);
+}
+
+/* Allocation Grid */
+.allocation-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.allocation-label {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.allocation-input {
+  position: relative;
+}
+
+.allocation-suffix {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: 700;
+  color: var(--gray);
+}
+
+/* Chart Box */
+.chart-box {
+  background: var(--white);
+  border: 3px solid var(--black);
+  padding: 2rem;
+  margin: 2rem 0;
+}
+
+/* Results Display */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.result-card {
+  background: var(--white);
+  border: 3px solid var(--black);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.result-card-label {
+  font-size: 0.85rem;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.result-card-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--black);
+}
+
+/* Footer */
+footer {
+  padding: 0;
+  border-top: 4px solid var(--orange);
+  background: var(--black);
+  color: var(--white);
+}
+
+.footer-newsletter {
+  padding: 3rem 2rem;
+  background: rgba(255, 107, 53, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.footer-newsletter-container {
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.footer-newsletter h3 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.footer-newsletter p {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.footer-newsletter-btn {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  background: var(--orange);
+  color: var(--white);
+  text-decoration: none;
+  border: 2px solid var(--orange);
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.footer-newsletter-btn:hover {
+  background: var(--white);
+  color: var(--black);
+  border-color: var(--white);
+  transform: translateY(-2px);
+}
+
+.footer-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 4rem 2rem 0;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 2rem;
+}
+
+.footer-brand img {
+  height: 50px;
+  margin-bottom: 1rem;
+  filter: brightness(0) invert(1);
+}
+
+.footer-tagline {
+  color: #999;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.footer-section h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.footer-section a {
+  display: block;
+  color: #999;
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.footer-section a:hover {
+  color: var(--orange);
+  padding-left: 0.5rem;
+}
+
+.footer-bottom {
+  border-top: 1px solid #333;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .footer-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-right {
+    display: none;
+  }
+  
+  .mobile-controls {
+    display: flex;
+  }
+  
+  .mobile-menu-btn {
+    display: block;
+  }
+  
+  .mobile-get-involved {
+    display: inline-block;
+  }
+  
+  .hero {
+    padding: 7rem 1.5rem 2rem;
+  }
+  
+  .allocation-grid {
+    grid-template-columns: 1fr;
+  }
+  
+    .footer-newsletter {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .footer-newsletter h3 {
+    font-size: 1.25rem;
+  }
+
+  .footer-newsletter p {
+    font-size: 0.95rem;
+  }
+
+  .footer-newsletter-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+.footer-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-container">
+    <a href="/" class="logo">
+      <img src="/finmango.png" alt="FinMango" loading="eager">
+    </a>
+    <div class="nav-right">
+      <a href="/about/">About</a>
+      <a href="/research/">Research</a>
+      <a href="/education/">Education</a>
+      <a href="/advocacy/">Advocacy</a>
+      <a href="/resources/">Resources</a>
+      <a href="/get-involved/" class="btn-get-involved">Get Involved</a>
+      <a href="/donate/" class="btn-donate">Donate</a>
+    </div>
+    <div class="mobile-controls">
+      <a href="/get-involved/" class="btn-get-involved mobile-get-involved">Get Involved</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/about/">About</a>
+  <a href="/research/">Research</a>
+  <a href="/education/">Education</a>
+  <a href="/advocacy/">Advocacy</a>
+  <a href="/resources/">Resources</a>
+  <a href="/donate/">Donate</a>
+</div>
+
+<section class="hero">
+  <div class="hero-container">
+    <h1 class="hero-title">Portfolio Simulator 📈</h1>
+    <p class="hero-subtitle">
+      Build and backtest investment portfolios with historical data
+    </p>
+  </div>
+</section>
+
+<div class="main-content">
+  <div class="content-section">
+    <h2 class="section-title">Build Your Portfolio</h2>
+    <p class="section-text">
+      In order to invest, you need to build a portfolio. A portfolio consists of a series of assets to which funds will be allocated. Those assets can be stocks, bonds, and other financial instruments.
+    </p>
+    <p class="section-text">
+      There's no one-size-fits-all strategy when building a portfolio, but there are several formulas that have consistently worked for a number of investment objectives.
+    </p>
+    <p class="section-text">
+      We have collected financial data dating back to 1970 and built this portfolio simulator, so you can see how different portfolios and strategies would have performed in a variety of economic conditions. Your answers to the following questions will be used to initialize the simulator parameters.
+    </p>
+  </div>
+
+  <!-- Section 1: Start and End Dates -->
+  <div class="calc-section active">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">1. Start and End Dates - The Power of Time</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <p class="section-text">
+        It's often said that time in the market always beats timing the market. What this means is that investors with long-term goals and good planning are far more likely to succeed than those who try to buy and sell assets at the right time.
+      </p>
+      <p class="section-text">
+        With a sufficiently long investment horizon, you don't need to start with a large initial investment to build wealth. In fact, for most people, time is a much more important factor than the amount initially invested! This is thanks to compounding nature of investment returns.
+      </p>
+      <p class="section-text">
+        Throughout history, both the global and the U.S. economy have consistently experienced significant growth during any sufficient long period of time (at least 10 years). In other words: if you invested in a broad-market index at any point in history for 10+ years, you would have experienced a positive return on your investment (ROI). Even if you invested at the worst possible time right before a recession!
+      </p>
+      
+      <div class="calculator-box">
+        <div class="input-grid">
+          <div class="input-group">
+            <label class="input-label">Start Date</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              Start date for the simulation period (data available from 1970)
+            </p>
+            <input type="date" id="startDate" value="2010-01-01" min="1970-01-01" max="2024-12-31">
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">End Date</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              End date for the simulation period
+            </p>
+            <input type="date" id="endDate" value="2024-01-01" min="1970-01-01" max="2024-12-31">
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">Initial Investment</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">$</span>
+              <input type="number" id="initialInvestment" value="10000" min="100" step="100">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Asset Allocation -->
+  <div class="calc-section">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">2. Asset Allocation</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <p class="section-text">
+        Of course, there are sometimes long periods of economic stagnation or even contraction. Instead of trying to time the market, you can add different types of assets to your portfolio that will behave differently during those times.
+      </p>
+      <p class="section-text">
+        A very common strategy for U.S. investors is the three-fund portfolio. An investor following this strategy simply selects a combination of funds that provide exposure to three main categories: U.S. Bonds, U.S. Stocks and International Stocks.
+      </p>
+      <p class="section-text">
+        Stocks are considered more risky, but they also yield a potentially higher reward. More diversified stocks (i.e. international as opposed to U.S. only) tend to be less volatile than their more concentrated counterparts. Lastly, bonds are considered extremely stable but in many cases their return-on-investment can be lower than the inflation rate.
+      </p>
+      <p class="section-text">
+        Select your desired asset allocation based on your investment objectives. A larger proportion of stocks is riskier, but likely to outperform other choices in the long term (over 10 years).
+      </p>
+      
+      <div class="calculator-box">
+        <div class="allocation-grid">
+          <div class="allocation-label">U.S. Stocks</div>
+          <div class="allocation-input">
+            <input type="number" id="usStocks" value="60" min="0" max="100" step="5">
+            <span class="allocation-suffix">%</span>
+          </div>
+          
+          <div class="allocation-label">International Stocks</div>
+          <div class="allocation-input">
+            <input type="number" id="intlStocks" value="30" min="0" max="100" step="5">
+            <span class="allocation-suffix">%</span>
+          </div>
+          
+          <div class="allocation-label">U.S. Bonds</div>
+          <div class="allocation-input">
+            <input type="number" id="usBonds" value="10" min="0" max="100" step="5">
+            <span class="allocation-suffix">%</span>
+          </div>
+        </div>
+        <p id="allocationWarning" style="color: var(--orange); font-weight: 700; margin-top: 1rem; display: none;">
+          Asset allocation must total 100%
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Rebalancing Strategy -->
+  <div class="calc-section">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">3. Rebalancing Strategy</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <p class="section-text">
+        Rebalancing is an extremely important concept when it comes to building a successful portfolio. As time passes and some of the assets in your portfolio outperform others, your portfolio deviates from its intended asset allocation.
+      </p>
+      <p class="section-text">
+        To stay close to the target asset allocation, investors rebalance their portfolio at certain time intervals. More frequent rebalancing does not always yield better results, and unless automated it will also take up a significant amount of time and effort. Select your desired rebalancing strategy.
+      </p>
+      
+      <div class="calculator-box">
+        <div class="input-group">
+          <label class="input-label">Rebalancing Frequency</label>
+          <select id="rebalancing">
+            <option value="never">Never</option>
+            <option value="yearly" selected>Yearly</option>
+            <option value="quarterly">Quarterly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Dollar-Cost Averaging -->
+  <div class="calc-section">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">4. Dollar-Cost Averaging</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <p class="section-text">
+        As you already know, asset values don't go in a straight line. One common strategy to take advantage of market volatility is dollar-cost averaging (DCA). Instead of investing all of your wealth into your portfolio as one lump-sum, you can slowly add the assets to your portfolio at regular intervals. The strategy works like this:
+      </p>
+      <p class="section-text">
+        When the markets are up (and potentially overvalued) then $1 will purchase a smaller amount of assets. When the markets are down (and potentially undervalued) then the same $1 will let you acquire more assets.
+      </p>
+      <p class="section-text">
+        In many cases, DCA is a strategy that is implemented naturally. For example, this can be done by automatically investing a portion of your paycheck. Another benefit of this strategy is that it allows you to (at least partially) rebalance your portfolio without selling any assets, which provides a great advantage from a tax perspective.
+      </p>
+      <p class="section-text">
+        Select your desired DCA strategy. For example, if the initial investment was $200 and you plan on adding $10 monthly, select a monthly schedule and then enter $10.
+      </p>
+      
+      <div class="calculator-box">
+        <div class="input-grid">
+          <div class="input-group">
+            <label class="input-label">DCA Schedule</label>
+            <select id="dcaSchedule">
+              <option value="none">None</option>
+              <option value="monthly" selected>Monthly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="yearly">Yearly</option>
+            </select>
+          </div>
+          
+          <div class="input-group">
+            <label class="input-label">DCA Amount</label>
+            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
+              Amount added at each interval
+            </p>
+            <div class="input-wrapper">
+              <span class="input-prefix">$</span>
+              <input type="number" id="dcaAmount" value="500" min="0" step="50">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: Results -->
+  <div class="calc-section active">
+    <div class="calc-section-header">
+      <h2 class="calc-section-title">5. Your Portfolio Results</h2>
+      <span class="calc-section-arrow">▼</span>
+    </div>
+    <div class="calc-section-content">
+      <p class="section-text">
+        <strong>Historical performance is not indicative of future results.</strong> Overall economies and markets tend to go up in value, in part due to a (healthy) consistent level of inflation present in all modern market economies. But even broad-market indices go down in value during periods such as recessions.
+      </p>
+      <p class="section-text">
+        The difference between the highest historical value of your portfolio and the current value is called drawdown. Riskier strategies might experience a drawdown of over half of the portfolio value in a short period of time. Having a diversity of assets in your portfolio helps minimize those drawdowns and often results in higher overall performance compared to holding a single class of assets, especially when a rebalancing strategy is employed.
+      </p>
+      <p class="section-text">
+        During a market downturn, the best thing to do is often to do nothing at all. Of course, this is easier said than done but staying disciplined and sticking to your investment objectives is key to long-term success.
+      </p>
+      
+      <div class="results-grid">
+        <div class="result-card">
+          <div class="result-card-label">Final Portfolio Value</div>
+          <div class="result-card-value" id="finalValue">$0</div>
+        </div>
+        
+        <div class="result-card">
+          <div class="result-card-label">Total Return</div>
+          <div class="result-card-value" id="totalReturn">0%</div>
+        </div>
+        
+        <div class="result-card">
+          <div class="result-card-label">Annual Return (CAGR)</div>
+          <div class="result-card-value" id="cagr">0%</div>
+        </div>
+      </div>
+      
+      <div class="chart-box">
+        <canvas id="portfolioChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-newsletter">
+    <div class="footer-newsletter-container">
+      <h3>Stay Updated</h3>
+      <p>Join our newsletter for updates on financial health research, education, and advocacy.</p>
+      <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a>
+    </div>
+  </div>
+
+  <div class="footer-container">
+    <div>
+      <div class="footer-brand">
+        <img src="/finmango.png" alt="FinMango" loading="lazy">
+      </div>
+      <p class="footer-tagline">
+        A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
+      </p>
+      <p class="footer-tagline" style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem;">
+        EIN: 81-2543425
+      </p>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Our Work</h4>
+      <a href="/research/">Research</a>
+      <a href="/education/">Education</a>
+      <a href="/advocacy/">Advocacy</a>
+      <a href="/resources/">Resources</a>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Get Involved</h4>
+      <a href="/donate/">Donate</a>
+      <a href="/advocacy/">Ambassador Program</a>
+      <a href="mailto:hello@finmango.org">Partner With Us</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a>
+    </div>
+    
+    <div class="footer-section">
+      <h4>Connect</h4>
+      <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
+      <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="mailto:hello@finmango.org">Contact</a>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div>© 2025 FinMango. All rights reserved.</div>
+    <div>
+      <a href="/privacy/" style="display: inline; margin: 0 1rem; color: #999;">Privacy</a>
+      <a href="/terms/" style="display: inline; margin: 0 1rem; color: #999;">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+let chart = null;
+
+function formatCurrency(value) {
+  if (value >= 1000000) {
+    return '$' + (value / 1000000).toFixed(2) + 'M';
+  } else if (value >= 1000) {
+    return '$' + (value / 1000).toFixed(0) + 'K';
+  }
+  return '$' + Math.round(value).toLocaleString();
+}
+
+function calculate() {
+  // Get inputs
+  const startDate = new Date(document.getElementById('startDate').value);
+  const endDate = new Date(document.getElementById('endDate').value);
+  const initialInvestment = parseFloat(document.getElementById('initialInvestment').value) || 10000;
+  const usStocks = parseFloat(document.getElementById('usStocks').value) || 0;
+  const intlStocks = parseFloat(document.getElementById('intlStocks').value) || 0;
+  const usBonds = parseFloat(document.getElementById('usBonds').value) || 0;
+  const dcaAmount = parseFloat(document.getElementById('dcaAmount').value) || 0;
+  
+  // Check allocation totals 100%
+  const totalAllocation = usStocks + intlStocks + usBonds;
+  const warning = document.getElementById('allocationWarning');
+  if (Math.abs(totalAllocation - 100) > 0.1) {
+    warning.style.display = 'block';
+    return;
+  } else {
+    warning.style.display = 'none';
+  }
+  
+  // Calculate years
+  const years = (endDate - startDate) / (1000 * 60 * 60 * 24 * 365.25);
+  if (years <= 0) return;
+  
+  // Simulated returns (approximate historical averages)
+  const usStockReturn = 0.10; // ~10% annually
+  const intlStockReturn = 0.08; // ~8% annually
+  const usBondReturn = 0.05; // ~5% annually
+  
+  // Calculate blended return
+  const blendedReturn = (usStocks/100 * usStockReturn) + 
+                        (intlStocks/100 * intlStockReturn) + 
+                        (usBonds/100 * usBondReturn);
+  
+  // Generate growth data
+  const dataPoints = Math.min(Math.ceil(years * 12), 200); // Monthly data points
+  const labels = [];
+  const values = [];
+  let currentValue = initialInvestment;
+  
+  for (let i = 0; i <= dataPoints; i++) {
+    const monthsElapsed = (years * 12 * i) / dataPoints;
+    const yearsElapsed = monthsElapsed / 12;
+    
+    // Add DCA
+    const dcaSchedule = document.getElementById('dcaSchedule').value;
+    let dcaContributions = 0;
+    if (dcaSchedule === 'monthly') {
+      dcaContributions = dcaAmount * monthsElapsed;
+    } else if (dcaSchedule === 'quarterly') {
+      dcaContributions = dcaAmount * Math.floor(monthsElapsed / 3);
+    } else if (dcaSchedule === 'yearly') {
+      dcaContributions = dcaAmount * Math.floor(yearsElapsed);
+    }
+    
+    // Calculate value with compound growth
+    currentValue = (initialInvestment + dcaContributions) * Math.pow(1 + blendedReturn, yearsElapsed);
+    
+    values.push(currentValue);
+    
+    const currentDate = new Date(startDate.getTime() + monthsElapsed * 30.44 * 24 * 60 * 60 * 1000);
+    labels.push(currentDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short' }));
+  }
+  
+  const finalValue = values[values.length - 1];
+  const totalInvested = initialInvestment + (dcaAmount * dataPoints); // Simplified
+  const totalReturn = ((finalValue - totalInvested) / totalInvested) * 100;
+  const cagr = (Math.pow(finalValue / initialInvestment, 1 / years) - 1) * 100;
+  
+  // Update displays
+  document.getElementById('finalValue').textContent = formatCurrency(finalValue);
+  document.getElementById('totalReturn').textContent = totalReturn.toFixed(1) + '%';
+  document.getElementById('cagr').textContent = cagr.toFixed(1) + '%';
+  
+  // Update chart
+  updateChart(labels, values);
+}
+
+function updateChart(labels, values) {
+  const ctx = document.getElementById('portfolioChart').getContext('2d');
+  
+  if (chart) {
+    chart.destroy();
+  }
+  
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Portfolio Value',
+          data: values,
+          borderColor: '#3B82F6',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderWidth: 3,
+          tension: 0.4,
+          fill: true
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            font: {
+              size: 14,
+              weight: 'bold'
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return 'Value: ' + formatCurrency(context.parsed.y);
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function(value) {
+              return formatCurrency(value);
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      nav.classList.add('scrolled');
+    } else {
+      nav.classList.remove('scrolled');
+    }
+  });
+  
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  
+  mobileMenuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+    mobileMenuBtn.classList.toggle('active');
+    document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+  });
+  
+  document.querySelectorAll('.mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      mobileMenuBtn.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
+  
+  // Collapsible section handlers
+  document.querySelectorAll('.calc-section-header').forEach(header => {
+    header.addEventListener('click', function() {
+      const section = this.parentElement;
+      section.classList.toggle('active');
+    });
+  });
+  
+  // Input listeners
+  document.getElementById('startDate').addEventListener('input', calculate);
+  document.getElementById('endDate').addEventListener('input', calculate);
+  document.getElementById('initialInvestment').addEventListener('input', calculate);
+  document.getElementById('usStocks').addEventListener('input', calculate);
+  document.getElementById('intlStocks').addEventListener('input', calculate);
+  document.getElementById('usBonds').addEventListener('input', calculate);
+  document.getElementById('rebalancing').addEventListener('change', calculate);
+  document.getElementById('dcaSchedule').addEventListener('change', calculate);
+  document.getElementById('dcaAmount').addEventListener('input', calculate);
+  
+  calculate();
+});
+</script>
+
+</body>
+</html>
