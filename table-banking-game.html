@@ -224,6 +224,10 @@ nav.scrolled .logo img {
   display: none;
 }
 
+.mobile-get-involved {
+  display: none;
+}
+
 @media (max-width: 968px) {
   .nav-right {
     display: none;
@@ -231,7 +235,13 @@ nav.scrolled .logo img {
 
   .mobile-controls {
     display: flex;
+    gap: 1rem;
+    align-items: center;
     justify-self: end;
+  }
+
+  .mobile-get-involved {
+    display: inline-block;
   }
 
   .nav-container {
@@ -244,56 +254,33 @@ nav.scrolled .logo img {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0.5rem;
-  z-index: 1001;
+  padding: 0;
 }
 
 .hamburger {
-  width: 30px;
-  height: 20px;
-  position: relative;
-  transform: rotate(0deg);
-  transition: 0.3s ease-in-out;
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .hamburger span {
   display: block;
-  position: absolute;
+  width: 28px;
   height: 3px;
-  width: 100%;
   background: var(--black);
-  opacity: 1;
-  left: 0;
-  transform: rotate(0deg);
-  transition: 0.25s ease-in-out;
+  transition: all 0.3s ease;
 }
 
-.hamburger span:nth-child(1) {
-  top: 0px;
+.mobile-menu-btn.active .hamburger span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
 }
 
-.hamburger span:nth-child(2) {
-  top: 9px;
-}
-
-.hamburger span:nth-child(3) {
-  top: 18px;
-}
-
-.hamburger.active span:nth-child(1) {
-  top: 9px;
-  transform: rotate(135deg);
-}
-
-.hamburger.active span:nth-child(2) {
+.mobile-menu-btn.active .hamburger span:nth-child(2) {
   opacity: 0;
-  left: -60px;
 }
 
-.hamburger.active span:nth-child(3) {
-  top: 9px;
-  transform: rotate(-135deg);
+.mobile-menu-btn.active .hamburger span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
 }
 
 .mobile-menu {
@@ -316,31 +303,34 @@ nav.scrolled .logo img {
 .mobile-menu nav {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 0;
 }
 
 .mobile-menu a {
+  display: block;
+  padding: 1.5rem 0;
+  font-size: 2rem;
+  font-weight: 700;
   color: var(--black);
   text-decoration: none;
-  font-weight: 600;
-  font-size: 1.5rem;
+  border-bottom: 2px solid var(--black);
   transition: all 0.2s ease;
 }
 
 .mobile-menu a:hover {
   color: var(--orange);
-  transform: translateX(10px);
+  padding-left: 1rem;
 }
 
 /* Hero Section */
 .hero {
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
   color: var(--white);
-  padding: 8rem 2rem 4rem;
+  padding: 10rem 2rem 4rem;
   position: relative;
   overflow: hidden;
 }
@@ -421,12 +411,12 @@ nav.scrolled .logo img {
 /* Game Container */
 .game-section {
   min-height: 100vh;
-  padding: 3rem 1.5rem;
+  padding: 6rem 1.5rem 3rem;
   background: var(--light-gray);
 }
 
 .game-container {
-  max-width: 850px;
+  max-width: 750px;
   margin: 0 auto;
 }
 
@@ -961,163 +951,130 @@ nav.scrolled .logo img {
 
 /* Footer */
 footer {
+  padding: 0;
+  border-top: 4px solid var(--orange);
   background: var(--black);
   color: var(--white);
-  padding: 6rem 2rem 2rem;
 }
 
 .footer-newsletter {
-  max-width: 1200px;
-  margin: 0 auto 6rem;
+  padding: 3rem 2rem;
+  background: rgba(255, 107, 53, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
 }
 
-.footer-newsletter h2 {
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 900;
-  margin-bottom: 1rem;
-}
-
-.footer-newsletter p {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-  opacity: 0.8;
-}
-
-.newsletter-form {
-  display: flex;
-  gap: 1rem;
-  max-width: 600px;
+.footer-newsletter-container {
+  max-width: 850px;
   margin: 0 auto;
 }
 
-.newsletter-form input {
-  flex: 1;
-  padding: 1rem 1.5rem;
-  border: 2px solid var(--white);
-  background: transparent;
-  color: var(--white);
+.footer-newsletter h3 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.footer-newsletter p {
   font-size: 1rem;
-  font-family: inherit;
+  opacity: 0.8;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
 }
 
-.newsletter-form input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.newsletter-form button {
+.footer-newsletter-btn {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
   background: var(--orange);
   color: var(--white);
-  border: 2px solid var(--white);
-  padding: 1rem 2rem;
-  font-weight: 700;
-  cursor: pointer;
+  text-decoration: none;
+  border: 2px solid var(--orange);
   transition: all 0.2s ease;
-  font-family: inherit;
-  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
-.newsletter-form button:hover {
+.footer-newsletter-btn:hover {
   background: var(--white);
   color: var(--black);
-}
-
-@media (max-width: 640px) {
-  .newsletter-form {
-    flex-direction: column;
-  }
+  border-color: var(--white);
+  transform: translateY(-2px);
 }
 
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 4rem 2rem 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 3rem;
-  padding-bottom: 3rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 3rem;
 }
 
-.footer-column h3 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
+.footer-brand {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
 }
 
-.footer-column ul {
-  list-style: none;
-}
-
-.footer-column li {
-  margin-bottom: 0.75rem;
-}
-
-.footer-column a {
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.footer-column a:hover {
+.footer-brand span {
   color: var(--orange);
 }
 
-.footer-logo {
-  margin-bottom: 1.5rem;
-}
-
-.footer-logo img {
-  height: 50px;
-}
-
-.footer-description {
-  opacity: 0.8;
+.footer-tagline {
+  opacity: 0.7;
   line-height: 1.6;
+}
+
+.footer-section h4 {
+  font-size: 0.875rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   margin-bottom: 1.5rem;
+  opacity: 0.6;
 }
 
-.social-links {
-  display: flex;
-  gap: 1rem;
-}
-
-.social-links a {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--white);
-  color: var(--black);
-  text-decoration: none;
-  font-weight: 700;
-  transition: all 0.2s ease;
-  border: 2px solid var(--white);
-}
-
-.social-links a:hover {
-  background: var(--orange);
-  border-color: var(--orange);
+.footer-section a {
+  display: block;
   color: var(--white);
-  transform: translateY(-2px);
+  text-decoration: none;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.footer-section a:hover {
+  color: var(--orange);
+  transform: translateX(4px);
 }
 
 .footer-bottom {
   max-width: 1200px;
   margin: 0 auto;
-  padding-top: 2rem;
-  text-align: center;
+  padding: 2rem 2rem;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   opacity: 0.6;
   font-size: 0.9rem;
 }
 
-.footer-bottom a {
-  color: var(--white);
-  margin: 0 0.5rem;
-}
+@media (max-width: 768px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
 
-.footer-bottom a:hover {
-  color: var(--orange);
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
 }
 
 /* Animations */
@@ -1247,6 +1204,7 @@ footer {
     <a href="index.html" class="logo">
       <img src="finmango.png" alt="FinMango">
     </a>
+
     <div class="nav-right">
       <a href="about.html">About</a>
       <a href="research.html">Research</a>
@@ -1256,7 +1214,9 @@ footer {
       <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
       <a href="donate.html" class="btn-donate">Donate</a>
     </div>
+
     <div class="mobile-controls">
+      <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
       <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
         <div class="hamburger">
           <span></span>
@@ -1275,7 +1235,6 @@ footer {
     <a href="education.html">Education</a>
     <a href="advocacy.html">Advocacy</a>
     <a href="resources.html">Resources</a>
-    <a href="get-involved.html">Get Involved</a>
     <a href="donate.html">Donate</a>
   </nav>
 </div>
@@ -1333,59 +1292,57 @@ footer {
 
 <footer>
   <div class="footer-newsletter">
-    <h2>Stay Informed</h2>
-    <p>Get the latest updates on financial literacy and community initiatives</p>
-    <form class="newsletter-form" onsubmit="return false;">
-      <input type="email" placeholder="Enter your email" required>
-      <button type="submit">Subscribe</button>
-    </form>
+    <div class="footer-newsletter-container">
+      <h3>Stay Updated</h3>
+      <p>Join our newsletter for updates on financial health research, education, and advocacy.</p>
+      <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a>
+    </div>
   </div>
 
   <div class="footer-container">
-    <div class="footer-column">
-      <div class="footer-logo">
-        <img src="finmango.png" alt="FinMango">
+    <div>
+      <div class="footer-brand">
+        <img src="finmango.png" alt="FinMango" loading="lazy" style="height: 32px; filter: brightness(0) invert(1);">
       </div>
-      <p class="footer-description">Empowering communities through financial literacy and economic opportunity.</p>
-      <div class="social-links">
-        <a href="https://twitter.com/finmango" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a>
-        <a href="https://linkedin.com/company/finmango" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
-        <a href="https://instagram.com/finmango" target="_blank" rel="noopener" aria-label="Instagram">📷</a>
-      </div>
+      <p class="footer-tagline">
+        A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
+      </p>
+      <p class="footer-tagline" style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem;">
+        EIN: 81-2543425
+      </p>
     </div>
 
-    <div class="footer-column">
-      <h3>Our Work</h3>
-      <ul>
-        <li><a href="research.html">Research</a></li>
-        <li><a href="education.html">Education</a></li>
-        <li><a href="advocacy.html">Advocacy</a></li>
-        <li><a href="resources.html">Resources</a></li>
-      </ul>
+    <div class="footer-section">
+      <h4>Our Work</h4>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <a href="advocacy.html">Advocacy</a>
+      <a href="resources.html">Resources</a>
     </div>
 
-    <div class="footer-column">
-      <h3>Get Involved</h3>
-      <ul>
-        <li><a href="get-involved.html">Join Us</a></li>
-        <li><a href="donate.html">Donate</a></li>
-        <li><a href="about.html#team">Our Team</a></li>
-        <li><a href="mission-logs.html">Mission Logs</a></li>
-      </ul>
+    <div class="footer-section">
+      <h4>Get Involved</h4>
+      <a href="donate.html">Donate</a>
+      <a href="advocacy.html">Ambassador Program</a>
+      <a href="mailto:hello@finmango.org">Partner With Us</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a>
     </div>
 
-    <div class="footer-column">
-      <h3>Connect</h3>
-      <ul>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="mailto:info@finmango.org">Contact</a></li>
-        <li><a href="mango-stories.html">Mango Stories</a></li>
-      </ul>
+    <div class="footer-section">
+      <h4>Connect</h4>
+      <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
+      <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="mailto:hello@finmango.org">Contact</a>
     </div>
   </div>
 
   <div class="footer-bottom">
-    <p>&copy; 2024 FinMango. All rights reserved. | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Service</a></p>
+    <div>© 2025 FinMango. All rights reserved.</div>
+    <div>
+      <a href="privacy.html" style="display: inline; margin: 0 1rem; color: #999;">Privacy</a>
+      <a href="terms.html" style="display: inline; margin: 0 1rem; color: #999;">Terms</a>
+    </div>
   </div>
 </footer>
 
@@ -1403,18 +1360,18 @@ window.addEventListener('scroll', () => {
 // Mobile menu
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
-const hamburger = mobileMenuBtn.querySelector('.hamburger');
 
 mobileMenuBtn.addEventListener('click', () => {
   mobileMenu.classList.toggle('active');
-  hamburger.classList.toggle('active');
+  mobileMenuBtn.classList.toggle('active');
   document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
 });
 
-mobileMenu.querySelectorAll('a').forEach(link => {
+// Close mobile menu on link click
+document.querySelectorAll('.mobile-menu a').forEach(link => {
   link.addEventListener('click', () => {
     mobileMenu.classList.remove('active');
-    hamburger.classList.remove('active');
+    mobileMenuBtn.classList.remove('active');
     document.body.style.overflow = '';
   });
 });
