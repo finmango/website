@@ -426,16 +426,38 @@ nav.scrolled .logo img {
 }
 
 .game-container {
-  max-width: 1100px;
+  max-width: 850px;
   margin: 0 auto;
 }
 
 .game-box {
   background: var(--white);
   border: 3px solid var(--black);
-  padding: 2.5rem;
-  box-shadow: 8px 8px 0 var(--black);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 6px 6px 0 var(--black);
   position: relative;
+  overflow: hidden;
+}
+
+.game-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(255, 107, 53, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.03) 0%, transparent 30%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.game-box > * {
+  position: relative;
+  z-index: 1;
 }
 
 @media (max-width: 640px) {
@@ -447,40 +469,40 @@ nav.scrolled .logo img {
 /* Game Header */
 .game-header {
   text-align: center;
-  margin-bottom: 2.5rem;
-  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
   border-bottom: 3px solid var(--black);
 }
 
 .game-header h2 {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: clamp(1.5rem, 4vw, 1.85rem);
   font-weight: 900;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
   letter-spacing: -0.02em;
   color: var(--black);
 }
 
 .game-progress {
   display: flex;
-  gap: 0.6rem;
+  gap: 0.5rem;
   justify-content: center;
-  margin-top: 1.5rem;
+  margin-top: 1.25rem;
 }
 
 .progress-dot {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--light-gray);
-  border: 3px solid var(--black);
+  border: 2px solid var(--black);
   transition: all 0.3s ease;
   box-shadow: 2px 2px 0 var(--black);
 }
 
 .progress-dot.active {
   background: var(--orange);
-  transform: scale(1.4);
-  box-shadow: 3px 3px 0 var(--black);
+  transform: scale(1.3);
+  box-shadow: 2px 2px 0 var(--black);
 }
 
 .progress-dot.completed {
@@ -491,41 +513,68 @@ nav.scrolled .logo img {
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
-  margin-bottom: 2.5rem;
+  gap: 0.85rem;
+  margin-bottom: 2rem;
 }
 
 @media (max-width: 640px) {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    gap: 0.75rem;
   }
 }
 
 .stat-card {
   background: linear-gradient(135deg, var(--light-gray) 0%, #e8e8e8 100%);
-  padding: 1.5rem 1rem;
-  border: 3px solid var(--black);
+  padding: 1rem 0.75rem;
+  border: 2px solid var(--black);
+  border-radius: 8px;
   text-align: center;
-  transition: all 0.3s ease;
-  box-shadow: 4px 4px 0 var(--black);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 3px 3px 0 var(--black);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s;
+}
+
+.stat-card:hover::before {
+  left: 100%;
 }
 
 .stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 6px 6px 0 var(--black);
+  box-shadow: 4px 4px 0 var(--black);
+}
+
+.stat-card.updated {
+  animation: statUpdate 0.6s ease;
+}
+
+@keyframes statUpdate {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
 .stat-value {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 900;
   color: var(--orange);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
   line-height: 1;
 }
 
 .stat-label {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -534,21 +583,22 @@ nav.scrolled .logo img {
 
 /* Game Content */
 .game-content {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 .game-story {
   background: linear-gradient(135deg, var(--light-gray) 0%, #e8e8e8 100%);
-  padding: 2rem;
-  border: 3px solid var(--black);
-  margin-bottom: 2rem;
-  font-size: 1.05rem;
-  line-height: 1.7;
-  box-shadow: 4px 4px 0 var(--black);
+  padding: 1.5rem;
+  border: 2px solid var(--black);
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  box-shadow: 3px 3px 0 var(--black);
 }
 
 .game-story p {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.65rem;
 }
 
 .game-story p:last-child {
@@ -564,14 +614,14 @@ nav.scrolled .logo img {
 .members-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin: 2rem 0;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
 }
 
 @media (max-width: 768px) {
   .members-grid {
     grid-template-columns: repeat(4, 1fr);
-    gap: 0.75rem;
+    gap: 0.6rem;
   }
 }
 
@@ -583,45 +633,69 @@ nav.scrolled .logo img {
 
 .member-card {
   background: var(--white);
-  border: 3px solid var(--black);
-  padding: 1rem 0.75rem;
+  border: 2px solid var(--black);
+  border-radius: 8px;
+  padding: 0.85rem 0.6rem;
   text-align: center;
-  transition: all 0.3s ease;
-  box-shadow: 3px 3px 0 var(--black);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 2px 2px 0 var(--black);
+  position: relative;
 }
 
 .member-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 5px 5px 0 var(--black);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 4px 4px 0 var(--black);
 }
 
 .member-card.you {
-  background: var(--orange);
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
   color: var(--white);
   border-color: var(--black);
-  box-shadow: 5px 5px 0 var(--black);
+  box-shadow: 3px 3px 0 var(--black);
   transform: scale(1.05);
 }
 
 .member-card.you:hover {
-  transform: scale(1.05) translateY(-2px);
-  box-shadow: 7px 7px 0 var(--black);
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 5px 5px 0 var(--black);
+}
+
+.member-card.contributing {
+  animation: contribute 0.8s ease;
+}
+
+.member-card.borrowing {
+  animation: borrow 0.8s ease;
+}
+
+@keyframes contribute {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(0.95); }
+  50% { transform: scale(1.1); }
+  75% { transform: scale(0.98); }
+}
+
+@keyframes borrow {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  50% { transform: scale(0.95); }
+  75% { transform: scale(1.05); }
 }
 
 .member-icon {
-  font-size: 2.25rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.85rem;
+  margin-bottom: 0.4rem;
 }
 
 .member-name {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.3rem;
   letter-spacing: -0.01em;
 }
 
 .member-amount {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 600;
   opacity: 0.85;
 }
@@ -630,38 +704,55 @@ nav.scrolled .logo img {
 .group-pool {
   background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%);
   color: var(--white);
-  padding: 2rem;
-  border: 3px solid var(--black);
+  padding: 1.5rem;
+  border: 2px solid var(--black);
+  border-radius: 12px;
   text-align: center;
-  margin: 2rem 0;
+  margin: 1.5rem 0;
   position: relative;
   overflow: hidden;
-  box-shadow: 6px 6px 0 var(--black);
+  box-shadow: 4px 4px 0 var(--black);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .group-pool::before {
   content: '💰';
   position: absolute;
-  font-size: 8rem;
+  font-size: 6rem;
   opacity: 0.12;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.group-pool:hover::before {
+  transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
+}
+
+.group-pool.updated {
+  animation: poolUpdate 0.6s ease;
+}
+
+@keyframes poolUpdate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); box-shadow: 6px 6px 0 var(--black); }
+  100% { transform: scale(1); }
 }
 
 .pool-label {
-  font-size: 1rem;
+  font-size: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  margin-bottom: 0.75rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
   position: relative;
   z-index: 1;
   opacity: 0.95;
 }
 
 .pool-amount {
-  font-size: 2.75rem;
+  font-size: 2rem;
   font-weight: 900;
   position: relative;
   z-index: 1;
@@ -671,9 +762,9 @@ nav.scrolled .logo img {
 /* Action Buttons */
 .action-buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.5rem;
 }
 
 @media (max-width: 640px) {
@@ -685,16 +776,17 @@ nav.scrolled .logo img {
 .action-btn {
   background: var(--white);
   color: var(--black);
-  padding: 1.25rem 1.5rem;
-  border: 3px solid var(--black);
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--black);
+  border-radius: 8px;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
   text-align: center;
-  box-shadow: 4px 4px 0 var(--black);
+  box-shadow: 3px 3px 0 var(--black);
 }
 
 .action-btn::before {
@@ -705,7 +797,7 @@ nav.scrolled .logo img {
   width: 100%;
   height: 100%;
   background: var(--orange);
-  transition: left 0.3s ease;
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 0;
 }
 
@@ -715,8 +807,13 @@ nav.scrolled .logo img {
 
 .action-btn:hover {
   color: var(--white);
-  transform: translateY(-2px);
-  box-shadow: 6px 6px 0 var(--black);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 5px 5px 0 var(--black);
+}
+
+.action-btn:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 2px 2px 0 var(--black);
 }
 
 .action-btn span {
@@ -731,7 +828,7 @@ nav.scrolled .logo img {
 
 .action-btn:disabled:hover {
   transform: none;
-  box-shadow: 4px 4px 0 var(--black);
+  box-shadow: 3px 3px 0 var(--black);
 }
 
 .action-btn:disabled::before {
@@ -739,9 +836,9 @@ nav.scrolled .logo img {
 }
 
 .action-btn.primary {
-  background: var(--orange);
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
   color: var(--white);
-  box-shadow: 5px 5px 0 var(--black);
+  box-shadow: 4px 4px 0 var(--black);
 }
 
 .action-btn.primary::before {
@@ -749,23 +846,36 @@ nav.scrolled .logo img {
 }
 
 .action-btn.primary:hover {
-  box-shadow: 7px 7px 0 var(--black);
+  box-shadow: 6px 6px 0 var(--black);
+  transform: translateY(-3px) scale(1.03);
+}
+
+.action-btn.primary:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 2px 2px 0 var(--black);
 }
 
 /* Learning Cards */
 .learning-card {
   background: linear-gradient(135deg, var(--blue) 0%, #2563EB 100%);
   color: var(--white);
-  padding: 2rem;
-  border: 3px solid var(--black);
-  margin: 2rem 0;
+  padding: 1.5rem;
+  border: 2px solid var(--black);
+  border-radius: 10px;
+  margin: 1.5rem 0;
+  box-shadow: 4px 4px 0 var(--black);
+  transition: all 0.3s ease;
+}
+
+.learning-card:hover {
+  transform: translateY(-2px);
   box-shadow: 5px 5px 0 var(--black);
 }
 
 .learning-card h3 {
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   font-weight: 900;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
   letter-spacing: -0.02em;
 }
 
@@ -775,10 +885,11 @@ nav.scrolled .logo img {
 }
 
 .learning-card li {
-  padding-left: 2rem;
-  margin-bottom: 0.85rem;
+  padding-left: 1.75rem;
+  margin-bottom: 0.7rem;
   position: relative;
-  line-height: 1.6;
+  line-height: 1.55;
+  font-size: 0.9rem;
 }
 
 .learning-card li:last-child {
@@ -790,36 +901,44 @@ nav.scrolled .logo img {
   position: absolute;
   left: 0;
   font-weight: 900;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
 }
 
 /* Results Summary */
 .results-summary {
   background: var(--white);
-  padding: 2.5rem;
-  border: 3px solid var(--black);
-  margin-top: 2rem;
+  padding: 2rem;
+  border: 2px solid var(--black);
+  border-radius: 12px;
+  margin-top: 1.5rem;
   text-align: center;
-  box-shadow: 6px 6px 0 var(--black);
+  box-shadow: 4px 4px 0 var(--black);
 }
 
 .results-summary h3 {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 900;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
 }
 
 .result-item {
   background: linear-gradient(135deg, var(--light-gray) 0%, #e8e8e8 100%);
-  padding: 1.25rem 1.5rem;
-  border: 3px solid var(--black);
-  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--black);
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 1.5rem;
+  gap: 1.25rem;
   align-items: center;
   text-align: left;
+  box-shadow: 2px 2px 0 var(--black);
+  transition: all 0.3s ease;
+}
+
+.result-item:hover {
+  transform: translateX(4px);
   box-shadow: 3px 3px 0 var(--black);
 }
 
@@ -829,12 +948,12 @@ nav.scrolled .logo img {
 
 .result-label {
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 0.9rem;
   line-height: 1.4;
 }
 
 .result-value {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 900;
   color: var(--orange);
   line-height: 1;
@@ -1017,6 +1136,21 @@ footer {
   animation: fadeIn 0.5s ease forwards;
 }
 
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
@@ -1027,7 +1161,77 @@ footer {
 }
 
 .pulse {
-  animation: pulse 2s infinite;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes moneyFloat {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.money-particle {
+  position: absolute;
+  font-size: 1.5rem;
+  pointer-events: none;
+  animation: moneyFloat 1.5s ease-out forwards;
+  z-index: 100;
+}
+
+@keyframes celebrate {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-5deg) scale(1.1);
+  }
+  75% {
+    transform: rotate(5deg) scale(1.1);
+  }
+}
+
+.celebrate {
+  animation: celebrate 0.6s ease-in-out;
+}
+
+@keyframes confetti {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  z-index: 1000;
+  animation: confetti 3s ease-out forwards;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
 }
 
 /* Hidden */
@@ -1272,6 +1476,46 @@ function updateStats() {
   document.getElementById('playerMoney').textContent = `$${gameState.playerMoney.toLocaleString()}`;
   document.getElementById('playerSavings').textContent = `$${gameState.playerSavings.toLocaleString()}`;
   document.getElementById('playerLoans').textContent = `$${gameState.playerLoans.toLocaleString()}`;
+
+  // Add update animation to stat cards
+  document.querySelectorAll('.stat-card').forEach(card => {
+    card.classList.remove('updated');
+    void card.offsetWidth; // Trigger reflow
+    card.classList.add('updated');
+  });
+}
+
+// Create money particle effect
+function createMoneyParticle(x, y, emoji = '💵') {
+  const particle = document.createElement('div');
+  particle.className = 'money-particle';
+  particle.textContent = emoji;
+  particle.style.left = x + 'px';
+  particle.style.top = y + 'px';
+  document.body.appendChild(particle);
+
+  setTimeout(() => particle.remove(), 1500);
+}
+
+// Create confetti effect
+function createConfetti() {
+  const colors = ['#FF6B35', '#10B981', '#3B82F6', '#F59E0B', '#EF4444'];
+  const confettiCount = 50;
+
+  for (let i = 0; i < confettiCount; i++) {
+    setTimeout(() => {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      confetti.style.left = Math.random() * window.innerWidth + 'px';
+      confetti.style.top = '-10px';
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.animationDelay = Math.random() * 0.5 + 's';
+      confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      document.body.appendChild(confetti);
+
+      setTimeout(() => confetti.remove(), 5000);
+    }, i * 30);
+  }
 }
 
 function showIntroPhase() {
@@ -1301,7 +1545,7 @@ function showIntroPhase() {
   const buttons = document.getElementById('actionButtons');
   buttons.innerHTML = `
     <button class="action-btn primary" onclick="startRound()">
-      <span>Begin Round 1</span>
+      <span>🚀 Begin Round 1</span>
     </button>
   `;
 }
@@ -1313,6 +1557,12 @@ function startRound() {
   document.getElementById('gameTitle').textContent = `Round ${gameState.round} - Contribution Time`;
 
   const content = document.getElementById('gameContent');
+  content.style.opacity = '0';
+  setTimeout(() => {
+    content.style.opacity = '1';
+    content.style.transition = 'opacity 0.4s ease';
+  }, 50);
+
   content.innerHTML = `
     <div class="game-story fade-in">
       <p>It's time for the monthly chama meeting! All members are gathering to make their contributions.</p>
@@ -1338,10 +1588,10 @@ function startRound() {
   const buttons = document.getElementById('actionButtons');
   buttons.innerHTML = `
     <button class="action-btn primary" onclick="contribute()" ${gameState.playerMoney < gameState.monthlyContribution ? 'disabled' : ''}>
-      <span>Contribute $4</span>
+      <span>💵 Contribute $4</span>
     </button>
     <button class="action-btn" onclick="skipContribution()">
-      <span>Skip This Month</span>
+      <span>⏭️ Skip This Month</span>
     </button>
   `;
 
@@ -1360,16 +1610,37 @@ function contribute() {
   gameState.hasContributed = true;
   gameState.totalContributed += gameState.monthlyContribution;
 
+  // Create money particle effect
+  const gameBox = document.querySelector('.game-box');
+  const rect = gameBox.getBoundingClientRect();
+  createMoneyParticle(rect.left + rect.width / 2, rect.top + rect.height / 3, '💵');
+
+  // Animate group pool
+  const pool = document.querySelector('.group-pool');
+  if (pool) {
+    pool.classList.add('updated');
+    setTimeout(() => pool.classList.remove('updated'), 600);
+  }
+
   // Other members contribute (80% probability)
-  gameState.members.forEach(member => {
+  gameState.members.forEach((member, index) => {
     if (!member.isPlayer && Math.random() > 0.2) {
       member.savings += gameState.monthlyContribution;
       gameState.groupPool += gameState.monthlyContribution;
+
+      // Animate member card
+      setTimeout(() => {
+        const cards = document.querySelectorAll('.member-card');
+        if (cards[index]) {
+          cards[index].classList.add('contributing');
+          setTimeout(() => cards[index].classList.remove('contributing'), 800);
+        }
+      }, index * 100);
     }
   });
 
   updateStats();
-  showLendingPhase();
+  setTimeout(showLendingPhase, 800);
 }
 
 function skipContribution() {
@@ -1390,6 +1661,12 @@ function showLendingPhase() {
   const maxBorrow = Math.min(Math.floor(gameState.groupPool * 0.5), 25);
 
   const content = document.getElementById('gameContent');
+  content.style.opacity = '0';
+  setTimeout(() => {
+    content.style.opacity = '1';
+    content.style.transition = 'opacity 0.4s ease';
+  }, 50);
+
   content.innerHTML = `
     <div class="game-story fade-in">
       <p>Now it's time for lending! Members who need money can borrow from the group pool.</p>
@@ -1416,13 +1693,13 @@ function showLendingPhase() {
   const buttons = document.getElementById('actionButtons');
   buttons.innerHTML = `
     <button class="action-btn primary" onclick="borrowMoney(8)" ${maxBorrow < 8 ? 'disabled' : ''}>
-      <span>Borrow $8</span>
+      <span>💸 Borrow $8</span>
     </button>
     <button class="action-btn primary" onclick="borrowMoney(15)" ${maxBorrow < 15 ? 'disabled' : ''}>
-      <span>Borrow $15</span>
+      <span>💸 Borrow $15</span>
     </button>
     <button class="action-btn" onclick="skipBorrowing()">
-      <span>Don't Borrow</span>
+      <span>👍 Don't Borrow</span>
     </button>
   `;
 
@@ -1442,8 +1719,28 @@ function borrowMoney(amount) {
   gameState.totalBorrowed += amount;
   gameState.hasBorrowed = true;
 
+  // Create money particle effect
+  const gameBox = document.querySelector('.game-box');
+  const rect = gameBox.getBoundingClientRect();
+  for (let i = 0; i < 3; i++) {
+    setTimeout(() => {
+      createMoneyParticle(
+        rect.left + rect.width / 2 + (Math.random() - 0.5) * 100,
+        rect.top + rect.height / 2,
+        '💸'
+      );
+    }, i * 150);
+  }
+
+  // Animate group pool
+  const pool = document.querySelector('.group-pool');
+  if (pool) {
+    pool.classList.add('updated');
+    setTimeout(() => pool.classList.remove('updated'), 600);
+  }
+
   updateStats();
-  showRepaymentPhase();
+  setTimeout(showRepaymentPhase, 600);
 }
 
 function skipBorrowing() {
@@ -1465,6 +1762,11 @@ function showRepaymentPhase() {
   document.getElementById('gameTitle').textContent = `Round ${gameState.round} - Repayment`;
 
   const content = document.getElementById('gameContent');
+  content.style.opacity = '0';
+  setTimeout(() => {
+    content.style.opacity = '1';
+    content.style.transition = 'opacity 0.4s ease';
+  }, 50);
 
   if (gameState.playerLoans > 0) {
     content.innerHTML = `
@@ -1482,10 +1784,10 @@ function showRepaymentPhase() {
     const buttons = document.getElementById('actionButtons');
     buttons.innerHTML = `
       <button class="action-btn primary" onclick="repayLoan()" ${gameState.playerMoney < gameState.playerLoans ? 'disabled' : ''}>
-        <span>Repay Full Loan ($${gameState.playerLoans.toLocaleString()})</span>
+        <span>✅ Repay Full Loan ($${gameState.playerLoans.toLocaleString()})</span>
       </button>
       <button class="action-btn" onclick="endRound()">
-        <span>Repay Later</span>
+        <span>⏭️ Repay Later</span>
       </button>
     `;
   } else {
@@ -1509,7 +1811,7 @@ function showRepaymentPhase() {
     const buttons = document.getElementById('actionButtons');
     buttons.innerHTML = `
       <button class="action-btn primary" onclick="endRound()">
-        <span>Continue to Next Round</span>
+        <span>➡️ Continue to Next Round</span>
       </button>
     `;
   }
@@ -1529,8 +1831,20 @@ function repayLoan() {
   gameState.totalInterestEarned += interest;
   gameState.playerLoans = 0;
 
+  // Create money particle effect
+  const gameBox = document.querySelector('.game-box');
+  const rect = gameBox.getBoundingClientRect();
+  createMoneyParticle(rect.left + rect.width / 2, rect.top + rect.height / 3, '✅');
+
+  // Animate group pool
+  const pool = document.querySelector('.group-pool');
+  if (pool) {
+    pool.classList.add('updated');
+    setTimeout(() => pool.classList.remove('updated'), 600);
+  }
+
   updateStats();
-  endRound();
+  setTimeout(endRound, 600);
 }
 
 function endRound() {
@@ -1544,6 +1858,12 @@ function endRound() {
     gameState.playerMoney += 8;
 
     const content = document.getElementById('gameContent');
+    content.style.opacity = '0';
+    setTimeout(() => {
+      content.style.opacity = '1';
+      content.style.transition = 'opacity 0.4s ease';
+    }, 50);
+
     content.innerHTML = `
       <div class="game-story fade-in">
         <p>Round ${gameState.round - 1} complete! You earned <strong>$8</strong> from your work this month.</p>
@@ -1554,7 +1874,7 @@ function endRound() {
     const buttons = document.getElementById('actionButtons');
     buttons.innerHTML = `
       <button class="action-btn primary" onclick="startRound()">
-        <span>Continue to Round ${gameState.round}</span>
+        <span>➡️ Continue to Round ${gameState.round}</span>
       </button>
     `;
 
@@ -1563,7 +1883,15 @@ function endRound() {
 }
 
 function showGameEnd() {
-  document.getElementById('gameTitle').textContent = 'One Year Complete!';
+  document.getElementById('gameTitle').textContent = 'One Year Complete! 🎉';
+
+  // Create confetti celebration
+  createConfetti();
+
+  // Celebrate animation on game box
+  const gameBox = document.querySelector('.game-box');
+  gameBox.classList.add('celebrate');
+  setTimeout(() => gameBox.classList.remove('celebrate'), 600);
 
   // Calculate dividends from interest earned
   const dividendShare = Math.floor(gameState.totalInterestEarned / gameState.members.length);
@@ -1656,10 +1984,10 @@ function showGameEnd() {
   const buttons = document.getElementById('actionButtons');
   buttons.innerHTML = `
     <button class="action-btn primary" onclick="location.reload()">
-      <span>Play Again</span>
+      <span>🔄 Play Again</span>
     </button>
     <button class="action-btn" onclick="window.location.href='education.html'">
-      <span>Learn More About Financial Literacy</span>
+      <span>📚 Learn More About Financial Literacy</span>
     </button>
   `;
 }
