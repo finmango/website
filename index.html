@@ -2077,34 +2077,71 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// Typing animation effect
+// Typing animation effect with looping phrases
 function initTypingEffect() {
-  const typingElements = document.querySelectorAll('.typing-effect');
+  const typingElement = document.querySelector('.typing-effect');
+  if (!typingElement) return;
 
-  typingElements.forEach((element, index) => {
-    const text = element.textContent;
-    element.textContent = '';
+  // Phrases to cycle through
+  const phrases = [
+    'Right',
+    'a Necessity',
+    'a Need',
+    'is Essential',
+    'a Basic Need'
+  ];
 
-    // Add cursor while typing
-    element.classList.add('typing-cursor');
+  let phraseIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let isPaused = false;
 
-    // Split text into characters and wrap in spans
-    const chars = text.split('');
-    chars.forEach((char, i) => {
-      const span = document.createElement('span');
-      span.className = 'char';
-      span.textContent = char;
-      span.style.animationDelay = `${i * 0.08}s`; // 80ms between chars
-      element.appendChild(span);
-    });
+  // Clear initial content
+  typingElement.textContent = '';
+  typingElement.classList.add('typing-cursor');
 
-    // Remove cursor and mark complete after all characters are typed
-    const totalDuration = chars.length * 80 + 100; // Animation duration + buffer
-    setTimeout(() => {
-      element.classList.remove('typing-cursor');
-      element.classList.add('typing-complete');
-    }, totalDuration);
-  });
+  function type() {
+    const currentPhrase = phrases[phraseIndex];
+
+    if (isPaused) {
+      setTimeout(type, 2000); // Pause for 2 seconds before deleting
+      isPaused = false;
+      isDeleting = true;
+      return;
+    }
+
+    if (isDeleting) {
+      // Remove one character
+      typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+      charIndex--;
+
+      if (charIndex === 0) {
+        // Done deleting, move to next phrase
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        setTimeout(type, 500); // Brief pause before typing next phrase
+        return;
+      }
+    } else {
+      // Add one character
+      typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+      charIndex++;
+
+      if (charIndex === currentPhrase.length) {
+        // Done typing, pause before deleting
+        isPaused = true;
+        setTimeout(type, 2000); // Pause to read the phrase
+        return;
+      }
+    }
+
+    // Continue typing/deleting
+    const speed = isDeleting ? 50 : 100; // Faster when deleting
+    setTimeout(type, speed);
+  }
+
+  // Start typing after a brief delay
+  setTimeout(type, 500);
 }
 
 // Initialize typing effect when page loads
