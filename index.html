@@ -1654,25 +1654,43 @@ footer {
   }
 }
 
-/* Typewriter effect */
-.typewriter-text {
-  overflow: hidden;
-  border-right: 3px solid var(--orange);
-  white-space: nowrap;
-  animation: typing 3.5s steps(40, end), blink 0.75s step-end infinite;
+/* Typing animation effect */
+.typing-effect {
   display: inline-block;
-  line-height: 1.3;
-  padding-bottom: 0.15em;
+  position: relative;
 }
 
-@keyframes typing {
-  from { width: 0; }
-  to { width: 100%; }
+.typing-effect .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(5px);
+  animation: typeIn 0.1s ease forwards;
+}
+
+@keyframes typeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.typing-effect.typing-cursor::after {
+  content: '|';
+  color: var(--orange);
+  animation: blink 0.7s step-end infinite;
+  margin-left: 2px;
+}
+
+.typing-effect.typing-complete::after {
+  animation: fadeOutCursor 0.5s ease forwards;
 }
 
 @keyframes blink {
-  from, to { border-color: transparent; }
-  50% { border-color: var(--orange); }
+  50% { opacity: 0; }
+}
+
+@keyframes fadeOutCursor {
+  to { opacity: 0; }
 }
 </style>
 </head>
@@ -1720,7 +1738,7 @@ footer {
       <div class="hero-label">SINCE 2017</div>
       <h1>
         Financial Health<br>
-        Is A <span class="highlight typewriter-text">Right</span>,<br>
+        Is <span class="highlight typing-effect">a Right</span>,<br>
         Not A Privilege
       </h1>
       <p class="hero-subtitle">
@@ -2057,6 +2075,79 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
+});
+
+// Typing animation effect with looping phrases
+function initTypingEffect() {
+  const typingElement = document.querySelector('.typing-effect');
+  if (!typingElement) return;
+
+  // Phrases to cycle through
+  const phrases = [
+    'a Right',
+    'a Necessity',
+    'a Need',
+    'Essential',
+    'a Basic Need'
+  ];
+
+  let phraseIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let isPaused = false;
+
+  // Clear initial content
+  typingElement.textContent = '';
+  typingElement.classList.add('typing-cursor');
+
+  function type() {
+    const currentPhrase = phrases[phraseIndex];
+
+    if (isPaused) {
+      setTimeout(type, 2000); // Pause for 2 seconds before deleting
+      isPaused = false;
+      isDeleting = true;
+      return;
+    }
+
+    if (isDeleting) {
+      // Remove one character
+      typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
+      charIndex--;
+
+      if (charIndex === 0) {
+        // Done deleting, move to next phrase
+        isDeleting = false;
+        phraseIndex = (phraseIndex + 1) % phrases.length;
+        setTimeout(type, 500); // Brief pause before typing next phrase
+        return;
+      }
+    } else {
+      // Add one character
+      typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
+      charIndex++;
+
+      if (charIndex === currentPhrase.length) {
+        // Done typing, pause before deleting
+        isPaused = true;
+        setTimeout(type, 2000); // Pause to read the phrase
+        return;
+      }
+    }
+
+    // Continue typing/deleting
+    const speed = isDeleting ? 50 : 100; // Faster when deleting
+    setTimeout(type, speed);
+  }
+
+  // Start typing after a brief delay
+  setTimeout(type, 500);
+}
+
+// Initialize typing effect when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  // Small delay so hero is visible first
+  setTimeout(initTypingEffect, 300);
 });
 </script>
 
