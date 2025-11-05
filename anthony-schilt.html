@@ -336,7 +336,32 @@ nav.scrolled .logo img {
   font-size: 1.15rem;
   line-height: 1.7;
   opacity: 0.9;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.profile-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-profile-primary {
+  background: var(--orange);
+  color: var(--white);
+  padding: 0.875rem 2rem;
+  text-decoration: none;
+  font-weight: 700;
+  border: 3px solid var(--orange);
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  display: inline-block;
+}
+
+.btn-profile-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 5px 5px 0 var(--orange);
+  background: var(--orange-dark);
 }
 
 /* Contributions Section */
@@ -360,18 +385,22 @@ nav.scrolled .logo img {
 
 .contributions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  max-width: 900px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
 .contribution-card {
-  background: var(--light-gray);
-  padding: 2rem;
-  border: 3px solid var(--black);
-  transition: all 0.3s ease;
+  background: var(--white);
+  padding: 2.5rem 2rem;
+  border: 4px solid var(--black);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
 }
 
 .contribution-card::before {
@@ -381,48 +410,88 @@ nav.scrolled .logo img {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--orange);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
+  background: linear-gradient(135deg, var(--orange) 0%, #FF8C61 100%);
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   z-index: 0;
 }
 
+.contribution-card:nth-child(2)::before {
+  background: linear-gradient(135deg, #FF6B35 0%, #FF4500 100%);
+}
+
+.contribution-card:nth-child(3)::before {
+  background: linear-gradient(135deg, var(--black) 0%, #333 100%);
+}
+
+.contribution-card:nth-child(4)::before {
+  background: linear-gradient(135deg, #FF8C61 0%, var(--orange) 100%);
+}
+
+.contribution-card:nth-child(5)::before {
+  background: linear-gradient(135deg, #2C3E50 0%, #34495E 100%);
+}
+
 .contribution-card:hover::before {
-  transform: scaleX(1);
+  transform: translateY(0);
 }
 
 .contribution-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 8px 8px 0 var(--black);
+  transform: translateY(-12px) rotate(-1deg);
+  box-shadow: 12px 12px 0 var(--black);
   color: var(--white);
+  border-color: var(--black);
+}
+
+.contribution-card:nth-child(even):hover {
+  transform: translateY(-12px) rotate(1deg);
 }
 
 .contribution-card-content {
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .contribution-icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  display: block;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: grayscale(0.3);
+}
+
+.contribution-card:hover .contribution-icon {
+  transform: scale(1.2) rotate(-10deg);
+  filter: grayscale(0);
 }
 
 .contribution-title {
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   font-weight: 900;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   letter-spacing: -0.02em;
+  transition: all 0.3s ease;
 }
 
 .contribution-text {
   font-size: 1rem;
-  line-height: 1.6;
-  opacity: 0.9;
+  line-height: 1.65;
+  opacity: 0.85;
+  color: var(--gray);
+  transition: all 0.3s ease;
+  flex-grow: 1;
 }
 
 .contribution-card:hover .contribution-text {
   opacity: 1;
+  color: var(--white);
+}
+
+.contribution-card:hover .contribution-title {
+  color: var(--white);
 }
 
 /* CTA Section */
@@ -438,25 +507,6 @@ nav.scrolled .logo img {
   line-height: 1;
   letter-spacing: -0.04em;
   margin-bottom: 3rem;
-}
-
-.btn-profile-primary {
-  background: var(--orange);
-  color: var(--white);
-  padding: 0.875rem 2rem;
-  text-decoration: none;
-  font-weight: 700;
-  border: 3px solid var(--orange);
-  transition: all 0.3s ease;
-  font-size: 0.95rem;
-  letter-spacing: 0.01em;
-  display: inline-block;
-}
-
-.btn-profile-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 5px 5px 0 var(--orange);
-  background: var(--orange-dark);
 }
 
 /* Footer */
@@ -699,6 +749,10 @@ footer {
     text-align: center;
   }
 
+  .profile-cta-buttons {
+    justify-content: center;
+  }
+
   .contributions-section {
     padding: 4rem 2rem;
   }
@@ -784,10 +838,14 @@ footer {
 
     <div class="profile-hero-content">
       <h1>Anthony <span>Schilt</span></h1>
-      <div class="profile-role">Team Member</div>
+      <div class="profile-role">Advisory Board Member</div>
       <p class="profile-bio">
         Connecting communities and driving impact through education, outreach, and innovation. Anthony brings passion for financial health equity to every initiative, from empowering ambassadors to developing curricula that transform lives globally.
       </p>
+
+      <div class="profile-cta-buttons">
+        <a href="https://www.linkedin.com/in/tschilt/" target="_blank" rel="noopener noreferrer" class="btn-profile-primary">Connect on LinkedIn</a>
+      </div>
     </div>
   </div>
 </section>
