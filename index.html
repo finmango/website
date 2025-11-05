@@ -1653,6 +1653,45 @@ footer {
     padding: 1.25rem 0;
   }
 }
+
+/* Typing animation effect */
+.typing-effect {
+  display: inline-block;
+  position: relative;
+}
+
+.typing-effect .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(5px);
+  animation: typeIn 0.1s ease forwards;
+}
+
+@keyframes typeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.typing-effect.typing-cursor::after {
+  content: '|';
+  color: var(--orange);
+  animation: blink 0.7s step-end infinite;
+  margin-left: 2px;
+}
+
+.typing-effect.typing-complete::after {
+  animation: fadeOutCursor 0.5s ease forwards;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@keyframes fadeOutCursor {
+  to { opacity: 0; }
+}
 </style>
 </head>
 <body>
@@ -1699,7 +1738,7 @@ footer {
       <div class="hero-label">SINCE 2017</div>
       <h1>
         Financial Health<br>
-        Is A <span class="highlight">Right</span>,<br>
+        Is A <span class="highlight typing-effect">Right</span>,<br>
         Not A Privilege
       </h1>
       <p class="hero-subtitle">
@@ -2036,6 +2075,42 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
+});
+
+// Typing animation effect
+function initTypingEffect() {
+  const typingElements = document.querySelectorAll('.typing-effect');
+
+  typingElements.forEach((element, index) => {
+    const text = element.textContent;
+    element.textContent = '';
+
+    // Add cursor while typing
+    element.classList.add('typing-cursor');
+
+    // Split text into characters and wrap in spans
+    const chars = text.split('');
+    chars.forEach((char, i) => {
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = char;
+      span.style.animationDelay = `${i * 0.08}s`; // 80ms between chars
+      element.appendChild(span);
+    });
+
+    // Remove cursor and mark complete after all characters are typed
+    const totalDuration = chars.length * 80 + 100; // Animation duration + buffer
+    setTimeout(() => {
+      element.classList.remove('typing-cursor');
+      element.classList.add('typing-complete');
+    }, totalDuration);
+  });
+}
+
+// Initialize typing effect when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  // Small delay so hero is visible first
+  setTimeout(initTypingEffect, 300);
 });
 </script>
 
