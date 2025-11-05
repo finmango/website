@@ -954,6 +954,31 @@ footer {
     height: 350px;
   }
 }
+
+/* Typing animation effect */
+.typing-effect {
+  display: inline-block;
+  position: relative;
+}
+
+.typing-effect.typing-cursor::after {
+  content: '|';
+  color: var(--orange);
+  animation: blink 0.7s step-end infinite;
+  margin-left: 2px;
+}
+
+.typing-effect.typing-complete::after {
+  animation: fadeOutCursor 0.5s ease forwards;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@keyframes fadeOutCursor {
+  to { opacity: 0; }
+}
 </style>
 </head>
 <body>
@@ -998,7 +1023,7 @@ footer {
     <div class="hero-label">Our Approach & Methodology</div>
     <h1>
       We don't just identify problems.<br>
-      We <span class="highlight">transform systems</span>.
+      We <span class="highlight typing-effect">transform systems</span>.
     </h1>
     <p class="hero-subtitle">
       Evidence-based methods and collaborative design to create lasting change in financial health systems worldwide.
@@ -1269,6 +1294,41 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
+});
+
+// One-time typing animation effect
+function initTypingEffect() {
+  const typingElement = document.querySelector('.typing-effect');
+  if (!typingElement) return;
+
+  const text = typingElement.textContent;
+  let charIndex = 0;
+
+  // Clear initial content
+  typingElement.textContent = '';
+  typingElement.classList.add('typing-cursor');
+
+  function type() {
+    if (charIndex < text.length) {
+      typingElement.textContent += text.charAt(charIndex);
+      charIndex++;
+      setTimeout(type, 100); // 100ms between characters
+    } else {
+      // Done typing, fade out cursor
+      setTimeout(() => {
+        typingElement.classList.remove('typing-cursor');
+        typingElement.classList.add('typing-complete');
+      }, 500);
+    }
+  }
+
+  // Start typing after a brief delay
+  setTimeout(type, 500);
+}
+
+// Initialize typing effect when page loads
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(initTypingEffect, 300);
 });
 </script>
 
