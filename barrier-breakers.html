@@ -81,6 +81,49 @@ body {
   box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
 }
 
+/* Scroll progress indicator */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--orange), #ff8c5a, var(--orange));
+  background-size: 200% 100%;
+  animation: progressGradient 2s linear infinite;
+  z-index: 10000;
+  box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+}
+
+@keyframes progressGradient {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Interactive background gradient */
+.interactive-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.interactive-bg-circle {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.3) 0%, transparent 70%);
+  filter: blur(60px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
 /* Navigation */
 nav {
   position: fixed;
@@ -463,6 +506,25 @@ nav.scrolled .logo img {
   margin-bottom: 1.5rem;
 }
 
+/* Typewriter effect */
+.typewriter-text {
+  overflow: hidden;
+  border-right: 3px solid var(--orange);
+  white-space: nowrap;
+  animation: typing 3.5s steps(40, end), blink 0.75s step-end infinite;
+  display: inline-block;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--orange); }
+}
+
 .hero h1 .highlight {
   color: var(--orange);
   position: relative;
@@ -744,6 +806,8 @@ nav.scrolled .logo img {
   position: relative;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .track-card::before {
@@ -953,6 +1017,33 @@ nav.scrolled .logo img {
   z-index: 1;
 }
 
+/* Confetti */
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--orange);
+  position: absolute;
+  animation: confetti-fall 3s linear infinite;
+  opacity: 0;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.confetti:nth-child(2n) { background: #FFD700; }
+.confetti:nth-child(3n) { background: #FF1493; }
+.confetti:nth-child(4n) { background: #00CED1; }
+.confetti:nth-child(5n) { background: #32CD32; }
+
 .prize-pool-desc {
   font-size: 1.125rem;
   color: var(--gray);
@@ -973,6 +1064,8 @@ nav.scrolled .logo img {
   border: 3px solid var(--black);
   transition: all 0.3s ease;
   position: relative;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .division-card::before {
@@ -1116,6 +1209,8 @@ nav.scrolled .logo img {
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(10px);
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .activity-card::before {
@@ -1790,6 +1885,14 @@ footer {
 </head>
 <body>
 
+<!-- Scroll progress indicator -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Interactive background -->
+<div class="interactive-bg">
+  <div class="interactive-bg-circle" id="bgCircle"></div>
+</div>
+
 <nav id="nav">
   <div class="nav-container">
     <a href="index.html" class="logo">
@@ -1831,9 +1934,9 @@ footer {
     <div class="hero-label">Kent State University × FinMango</div>
     <h1>
       <span class="highlight">Barrier Breakers</span><br>
-      Innovation Challenge
+      <span class="typewriter-text">Innovation Challenge</span>
     </h1>
-    <p class="hero-subtitle">
+    <p class="hero-subtitle" id="heroSubtitle" style="opacity: 0;">
       Spend several weeks researching a barrier to financial health and building a solution. Use AI to help prototype. Submit 3 weeks before the event—we'll tell you if you're pitching on stage or presenting via poster.
     </p>
     <div class="hero-prize">
@@ -1930,9 +2033,9 @@ footer {
       We're finalizing our sponsor commitments now. Prize amounts will be announced 6 weeks before the event. Here's what we're building toward:
     </div>
     
-    <div class="prize-pool">
+    <div class="prize-pool" id="prizePool">
       <div class="prize-pool-label">Total Prize Pool</div>
-      <div class="prize-pool-amount">$10,000+</div>
+      <div class="prize-pool-amount">$<span id="prizeCounter" data-target="10000">0</span>+</div>
       <p class="prize-pool-desc">Cash prizes + Kent State scholarships + school grants</p>
     </div>
     
@@ -2419,6 +2522,189 @@ window.addEventListener('scroll', () => {
     // Note: This is a conceptual implementation
   });
 });
+
+// ===== NEW COOL FEATURES =====
+
+// Scroll progress indicator
+window.addEventListener('scroll', () => {
+  const scrollProgress = document.getElementById('scrollProgress');
+  const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const scrolled = (window.pageYOffset / scrollHeight) * 100;
+  scrollProgress.style.width = scrolled + '%';
+});
+
+// Interactive background gradient that follows mouse
+document.addEventListener('mousemove', (e) => {
+  const bgCircle = document.getElementById('bgCircle');
+  const x = e.clientX;
+  const y = e.clientY;
+
+  bgCircle.style.left = (x - 250) + 'px';
+  bgCircle.style.top = (y - 250) + 'px';
+});
+
+// Fade in hero subtitle after typewriter effect
+setTimeout(() => {
+  const heroSubtitle = document.getElementById('heroSubtitle');
+  heroSubtitle.style.transition = 'opacity 1s ease';
+  heroSubtitle.style.opacity = '1';
+}, 3500);
+
+// Animated counter for prize pool
+function animateCounter(element, target, duration) {
+  let start = 0;
+  const increment = target / (duration / 16); // 60fps
+  const timer = setInterval(() => {
+    start += increment;
+    if (start >= target) {
+      element.textContent = target.toLocaleString();
+      clearInterval(timer);
+    } else {
+      element.textContent = Math.floor(start).toLocaleString();
+    }
+  }, 16);
+}
+
+// Trigger counter animation when prize pool is visible
+const prizeCounterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && entry.target.textContent === '0') {
+      const target = parseInt(entry.target.dataset.target);
+      animateCounter(entry.target, target, 2000);
+    }
+  });
+}, { threshold: 0.5 });
+
+const prizeCounter = document.getElementById('prizeCounter');
+if (prizeCounter) {
+  prizeCounterObserver.observe(prizeCounter);
+}
+
+// Create confetti when viewing prize section
+function createConfetti() {
+  const prizePool = document.getElementById('prizePool');
+  if (!prizePool) return;
+
+  const confettiCount = 50;
+  for (let i = 0; i < confettiCount; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = Math.random() * 100 + '%';
+    confetti.style.animationDelay = Math.random() * 3 + 's';
+    confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+    prizePool.appendChild(confetti);
+  }
+}
+
+// Trigger confetti when prize section is visible
+const confettiObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      createConfetti();
+      confettiObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+const prizePool = document.getElementById('prizePool');
+if (prizePool) {
+  confettiObserver.observe(prizePool);
+}
+
+// 3D tilt effect on cards
+function addTiltEffect(cards) {
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = (y - centerY) / 10;
+      const rotateY = (centerX - x) / 10;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateX(15px) translateY(-5px)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+}
+
+// Apply tilt effect to track cards and division cards
+const trackCards = document.querySelectorAll('.track-card');
+const divisionCards = document.querySelectorAll('.division-card');
+const activityCards = document.querySelectorAll('.activity-card');
+
+addTiltEffect(trackCards);
+addTiltEffect(divisionCards);
+addTiltEffect(activityCards);
+
+// Text reveal animation with stagger
+function revealText(element) {
+  const text = element.textContent;
+  element.textContent = '';
+  element.style.opacity = '1';
+
+  const words = text.split(' ');
+  words.forEach((word, index) => {
+    const span = document.createElement('span');
+    span.textContent = word + ' ';
+    span.style.opacity = '0';
+    span.style.display = 'inline-block';
+    span.style.animation = `fadeInUp 0.5s ease forwards ${index * 0.05}s`;
+    element.appendChild(span);
+  });
+}
+
+// Add fadeInUp animation
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+document.head.appendChild(style);
+
+// Apply text reveal to section titles
+const sectionTitles = document.querySelectorAll('.section-title');
+const textRevealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && entry.target.children.length === 0) {
+      revealText(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+sectionTitles.forEach(title => {
+  textRevealObserver.observe(title);
+});
+
+// Enhanced parallax for large emojis
+window.addEventListener('scroll', () => {
+  const scrolled = window.pageYOffset;
+  const hero = document.querySelector('.hero');
+  const tracks = document.querySelector('.tracks');
+  const experience = document.querySelector('.experience');
+
+  if (hero) {
+    const heroOffset = hero.offsetTop;
+    const heroScroll = (scrolled - heroOffset) * 0.3;
+    hero.style.backgroundPosition = `50% ${50 + heroScroll / 10}%`;
+  }
+});
+
+console.log('🚀 Barrier Breakers page enhanced with cool features!');
 </script>
 
 </body>
