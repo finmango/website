@@ -1340,11 +1340,6 @@ footer {
     padding: 1.25rem 0;
   }
 }
-
-/* Typing animation effect */
-.typing-effect {
-  display: inline-block;
-}
 </style>
 </head>
 <body>
@@ -1388,7 +1383,7 @@ footer {
     <div class="hero-text">
       <div class="hero-label">About Us</div>
       <h1>
-        We're building a world where financial health is <span class="typing-effect" style="color: var(--orange);">a right</span>, not a privilege
+        We're building a world where financial health is a <span style="color: var(--orange);">right</span>, not a privilege
       </h1>
       <p class="hero-subtitle">
         Join us in building a world where financial health is accessible to everyone, not just the privileged few.
@@ -1694,78 +1689,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   });
-});
-
-// Typing animation effect with looping phrases
-function initTypingEffect() {
-  const typingElement = document.querySelector('.typing-effect');
-  if (!typingElement) return;
-
-  // Phrases to cycle through
-  const phrases = [
-    'a right',
-    'a necessity',
-    'a need',
-    'essential',
-    'a basic need'
-  ];
-
-  let phraseIndex = 0;
-  let charIndex = 0;
-  let isDeleting = false;
-  let isPaused = false;
-
-  // Clear initial content
-  typingElement.textContent = '';
-
-  function type() {
-    const currentPhrase = phrases[phraseIndex];
-
-    if (isPaused) {
-      setTimeout(type, 2000); // Pause for 2 seconds before deleting
-      isPaused = false;
-      isDeleting = true;
-      return;
-    }
-
-    if (isDeleting) {
-      // Remove one character
-      typingElement.textContent = currentPhrase.substring(0, charIndex - 1);
-      charIndex--;
-
-      if (charIndex === 0) {
-        // Done deleting, move to next phrase
-        isDeleting = false;
-        phraseIndex = (phraseIndex + 1) % phrases.length;
-        setTimeout(type, 500); // Brief pause before typing next phrase
-        return;
-      }
-    } else {
-      // Add one character
-      typingElement.textContent = currentPhrase.substring(0, charIndex + 1);
-      charIndex++;
-
-      if (charIndex === currentPhrase.length) {
-        // Done typing, pause before deleting
-        isPaused = true;
-        setTimeout(type, 2000); // Pause to read the phrase
-        return;
-      }
-    }
-
-    // Continue typing/deleting
-    const speed = isDeleting ? 50 : 100; // Faster when deleting
-    setTimeout(type, speed);
-  }
-
-  // Start typing after a brief delay
-  setTimeout(type, 500);
-}
-
-// Initialize typing effect when page loads
-document.addEventListener('DOMContentLoaded', () => {
-  // Small delay so hero is visible first
-  setTimeout(initTypingEffect, 300);
 });
 </script>
 
