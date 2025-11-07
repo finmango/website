@@ -396,21 +396,34 @@ nav.scrolled .logo img {
 
 /* Hero */
 .hero {
-  min-height: 75vh;
-  display: flex;
+  min-height: 85vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
   align-items: center;
-  justify-content: center;
   padding: 9rem 2rem 4rem;
-  background: var(--white);
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, rgba(255, 140, 97, 0.05) 100%);
   position: relative;
   overflow: hidden;
-  border-left: 8px solid var(--orange);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('education1.jpg') center/cover no-repeat;
+  opacity: 0.08;
+  z-index: 0;
 }
 
 .hero-content {
-  max-width: 900px;
-  width: 100%;
-  text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-label {
@@ -420,46 +433,58 @@ nav.scrolled .logo img {
   text-transform: uppercase;
   color: var(--orange);
   margin-bottom: 1.5rem;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: var(--white);
+  border: 2px solid var(--orange);
 }
 
 .hero h1 {
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 900;
   line-height: 1.1;
   letter-spacing: -0.02em;
-  margin-bottom: 2rem;
-  max-width: 750px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 1.5rem;
 }
 
 .hero h1 .highlight {
   color: var(--orange);
   position: relative;
+  display: inline-block;
+}
+
+.hero h1 .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: var(--orange-light);
+  z-index: -1;
+  transform: skew(-2deg);
 }
 
 .hero-subtitle {
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   color: var(--gray);
-  max-width: 750px;
   line-height: 1.6;
-  margin: 0 auto 2.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .hero-cta {
   display: flex;
   gap: 1rem;
-  justify-content: center;
   flex-wrap: wrap;
 }
 
 .hero-cta .btn {
-  padding: 1rem 2rem;
+  padding: 1.125rem 2.5rem;
   font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  border: 3px solid var(--white);
+  border: 3px solid var(--black);
   text-decoration: none;
   transition: all 0.3s ease;
   display: inline-block;
@@ -473,13 +498,12 @@ nav.scrolled .logo img {
 .hero-cta .btn-primary:hover {
   background: var(--black);
   color: var(--white);
-  border-color: var(--black);
   transform: translateY(-3px);
-  box-shadow: 4px 4px 0 var(--black);
+  box-shadow: 6px 6px 0 var(--orange);
 }
 
 .hero-cta .btn-secondary {
-  background: transparent;
+  background: var(--white);
   color: var(--black);
 }
 
@@ -487,7 +511,43 @@ nav.scrolled .logo img {
   background: var(--black);
   color: var(--white);
   transform: translateY(-3px);
-  box-shadow: 4px 4px 0 var(--orange);
+  box-shadow: 6px 6px 0 var(--orange);
+}
+
+.hero-image {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.hero-image-main {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border: 4px solid var(--black);
+  box-shadow: 12px 12px 0 var(--orange);
+  transition: all 0.3s ease;
+}
+
+.hero-image-main:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 16px 16px 0 var(--orange);
+}
+
+.hero-image-small {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border: 3px solid var(--black);
+  transition: all 0.3s ease;
+}
+
+.hero-image-small:hover {
+  transform: translateY(-5px);
+  box-shadow: 6px 6px 0 var(--black);
 }
 
 /* Involvement Options Grid */
@@ -542,8 +602,9 @@ nav.scrolled .logo img {
   padding: 0;
   transition: all 0.3s ease;
   display: flex;
+  flex-direction: column;
   overflow: hidden;
-  min-height: 280px;
+  position: relative;
 }
 
 .involvement-card:hover {
@@ -551,53 +612,82 @@ nav.scrolled .logo img {
   box-shadow: 8px 8px 0 var(--black);
 }
 
-.card-image {
-  width: 40%;
+.card-badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
   background: var(--orange);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4.5rem;
   color: var(--white);
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 2px solid var(--black);
+  z-index: 10;
+  box-shadow: 3px 3px 0 var(--black);
+}
+
+.card-image {
+  width: 100%;
+  height: 240px;
+  background: var(--orange);
   position: relative;
   overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.involvement-card:hover .card-image img {
+  transform: scale(1.05);
 }
 
 .card-image::after {
   content: '';
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 200%;
-  height: 200%;
-  background: var(--black);
-  transform: translate(-50%, -50%) scale(0);
-  transition: transform 0.5s ease;
-  border-radius: 50%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 100%);
 }
 
-.involvement-card:hover .card-image::after {
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.card-image span {
-  position: relative;
+.card-emoji {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  font-size: 3rem;
   z-index: 1;
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
 }
 
 .card-content {
-  width: 60%;
-  padding: 2.5rem 2rem;
+  width: 100%;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  flex-grow: 1;
 }
 
 .card-title {
   font-size: 1.75rem;
   font-weight: 900;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   letter-spacing: -0.01em;
+}
+
+.card-time {
+  font-size: 0.875rem;
+  color: var(--orange);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .card-description {
@@ -605,23 +695,30 @@ nav.scrolled .logo img {
   line-height: 1.6;
   color: var(--gray);
   margin-bottom: 1.5rem;
+  flex-grow: 1;
 }
 
 .card-link {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   font-weight: 700;
-  color: var(--orange);
+  color: var(--white);
+  background: var(--black);
+  padding: 0.875rem 1.5rem;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  transition: gap 0.3s ease;
+  transition: all 0.3s ease;
+  border: 2px solid var(--black);
 }
 
 .card-link:hover {
-  gap: 1rem;
+  background: var(--orange);
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0 var(--black);
 }
 
 .card-link::after {
@@ -669,13 +766,42 @@ nav.scrolled .logo img {
 /* Quick Wins Section */
 .quick-wins {
   padding: 6rem 2rem;
-  background: var(--white);
+  background: linear-gradient(135deg, var(--orange) 0%, #FF8C61 100%);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.quick-wins::before {
+  content: '⚡';
+  position: absolute;
+  font-size: 20rem;
+  opacity: 0.08;
+  bottom: -4rem;
+  right: -4rem;
+  animation: pulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .quick-wins-container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
   text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.quick-wins .section-label {
+  background: var(--white);
+  color: var(--orange);
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--white);
+  display: inline-block;
 }
 
 .quick-wins h2 {
@@ -683,48 +809,71 @@ nav.scrolled .logo img {
   font-weight: 900;
   margin-bottom: 1rem;
   letter-spacing: -0.02em;
+  color: var(--white);
 }
 
 .quick-wins-subtitle {
-  font-size: 1.1rem;
-  color: var(--gray);
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.95);
   margin-bottom: 3rem;
+  line-height: 1.6;
 }
 
 .quick-wins-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  gap: 2rem;
 }
 
 .quick-win-card {
-  padding: 2rem 1.5rem;
-  border: 2px solid var(--black);
-  background: var(--light-gray);
+  padding: 2.5rem 2rem;
+  border: 3px solid var(--white);
+  background: rgba(255, 255, 255, 0.95);
   transition: all 0.3s ease;
   text-align: center;
+  color: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+
+.quick-win-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--black);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.quick-win-card:hover::before {
+  transform: scaleX(1);
 }
 
 .quick-win-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 6px 6px 0 var(--orange);
+  transform: translateY(-8px);
+  box-shadow: 8px 8px 0 var(--black);
+  background: var(--white);
 }
 
 .quick-win-icon {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: 3rem;
+  margin-bottom: 1.25rem;
   display: block;
 }
 
 .quick-win-title {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--black);
 }
 
 .quick-win-time {
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: var(--orange);
   font-weight: 700;
   text-transform: uppercase;
@@ -788,92 +937,6 @@ nav.scrolled .logo img {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-}
-
-/* Petition Section */
-.petition {
-  padding: 8rem 2rem;
-  background: var(--white);
-}
-
-.petition-container {
-  max-width: 700px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.petition-label {
-  font-size: 0.875rem;
-  font-weight: 900;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--orange);
-  margin-bottom: 1rem;
-}
-
-.petition h2 {
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 900;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-  margin-bottom: 1.5rem;
-}
-
-.petition-description {
-  font-size: 1.2rem;
-  color: var(--gray);
-  line-height: 1.6;
-  margin-bottom: 3rem;
-}
-
-.petition-box {
-  background: var(--light-gray);
-  border: 3px solid var(--black);
-  padding: 3rem;
-  margin-bottom: 2rem;
-}
-
-.petition-count {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  color: var(--gray);
-}
-
-.petition-count .number {
-  font-size: 2.5rem;
-  color: var(--orange);
-  display: block;
-  font-weight: 900;
-  margin-bottom: 0.5rem;
-}
-
-.petition-button {
-  display: inline-block;
-  padding: 1.25rem 3rem;
-  background: var(--orange);
-  color: var(--white);
-  border: 3px solid var(--black);
-  font-size: 1rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Inter', sans-serif;
-  text-decoration: none;
-  margin-top: 1rem;
-}
-
-.petition-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 5px 5px 0 var(--black);
-}
-
-.petition-disclaimer {
-  font-size: 0.9rem;
-  color: var(--gray);
-  line-height: 1.6;
 }
 
 /* Social Section */
@@ -1162,62 +1225,61 @@ footer {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  
+
   .involvement-card {
-    flex-direction: column;
     min-height: auto;
   }
-  
+
   .card-image {
-    width: 100%;
-    height: 120px;
+    height: 200px;
+  }
+
+  .card-emoji {
     font-size: 2.5rem;
   }
-  
+
   .card-content {
-    width: 100%;
     padding: 1.75rem 1.5rem;
   }
-  
+
   .card-title {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
   }
-  
+
+  .card-time {
+    font-size: 0.8rem;
+  }
+
   .card-description {
     font-size: 0.95rem;
   }
-  
-  .petition {
-    padding: 5rem 1.5rem;
+
+  .card-badge {
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
   }
-  
-  .petition h2 {
-    font-size: clamp(1.75rem, 6vw, 2.25rem);
+
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding: 7rem 2rem 3rem;
+    min-height: auto;
   }
-  
-  .petition-description {
-    font-size: 1.05rem;
-    margin-bottom: 2.5rem;
+
+  .hero-image {
+    order: -1;
   }
-  
-  .petition-box {
-    padding: 2rem 1.5rem;
+
+  .hero-image-main {
+    height: 300px;
   }
-  
-  .petition-count {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
+
+  .hero-image-small {
+    height: 150px;
   }
-  
-  .petition-count .number {
-    font-size: 2rem;
-  }
-  
-  .petition-button {
-    padding: 1rem 2rem;
-    font-size: 0.9rem;
-  }
-  
+
   .social {
     padding: 4rem 1.5rem;
   }
@@ -1476,16 +1538,132 @@ select.warning {
 <!-- Hero -->
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-label">Get Involved</div>
+    <div class="hero-label">Join The Movement</div>
     <h1>
-      Be Part of <span class="highlight">Real Change</span>
+      Your Skills Can <span class="highlight">Change Lives</span>
     </h1>
     <p class="hero-subtitle">
-      Financial health shouldn't be a privilege. Whether you can volunteer an hour or lead a movement, there's a place for you here.
+      From volunteering 2 hours a week to leading initiatives in your community—every contribution creates real impact. Find the perfect way to get involved.
     </p>
     <div class="hero-cta">
-      <a href="#involvement" class="btn btn-primary">Start Now</a>
-      <a href="donate.html" class="btn btn-secondary">Support With a Donation</a>
+      <a href="#quick-wins" class="btn btn-primary">Start Today</a>
+      <a href="#involvement" class="btn btn-secondary">Explore Opportunities</a>
+    </div>
+  </div>
+  <div class="hero-image">
+    <img src="education1.jpg" alt="FinMango community members" class="hero-image-main">
+    <img src="education2.jpg" alt="Volunteer work" class="hero-image-small">
+    <img src="ambassadors.jpg" alt="Community impact" class="hero-image-small">
+  </div>
+</section>
+
+<!-- Quick Wins -->
+<section class="quick-wins" id="quick-wins">
+  <div class="quick-wins-container">
+    <span class="section-label">Start Small, Make Impact</span>
+    <h2>Take Action in Minutes</h2>
+    <p class="quick-wins-subtitle">No commitment required—just pick one and start making a difference today</p>
+    <div class="quick-wins-grid">
+      <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" class="quick-win-card" style="text-decoration: none; color: inherit;">
+        <span class="quick-win-icon">💬</span>
+        <div class="quick-win-title">Share Our Mission</div>
+        <div class="quick-win-time">2 mins</div>
+      </a>
+      <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer" class="quick-win-card" style="text-decoration: none; color: inherit;">
+        <span class="quick-win-icon">📰</span>
+        <div class="quick-win-title">Subscribe to Newsletter</div>
+        <div class="quick-win-time">1 min</div>
+      </a>
+      <a href="donate.html" class="quick-win-card" style="text-decoration: none; color: inherit;">
+        <span class="quick-win-icon">💝</span>
+        <div class="quick-win-title">Make a Donation</div>
+        <div class="quick-win-time">3 mins</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Involvement Options -->
+<section class="involvement" id="involvement">
+  <div class="involvement-container">
+    <span class="section-label">Ways to Contribute</span>
+    <h2 class="section-title">Find Your Role</h2>
+    <p class="section-subtitle">Every skill matters. Every hour counts. Choose how you want to make an impact.</p>
+
+    <div class="involvement-grid">
+      <!-- Volunteer -->
+      <div class="involvement-card">
+        <div class="card-badge">Most Needed</div>
+        <div class="card-image">
+          <img src="education3.jpg" alt="Volunteers collaborating">
+          <div class="card-emoji">🙌</div>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Volunteer Your Skills</h3>
+          <div class="card-time">⏱ 2-5 hours/week</div>
+          <p class="card-description">
+            Contribute your expertise in design, research, writing, data analysis, or outreach. Remote and flexible opportunities available.
+          </p>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer" class="card-link">
+            Apply to Volunteer
+          </a>
+        </div>
+      </div>
+
+      <!-- Ambassador Program -->
+      <div class="involvement-card">
+        <div class="card-badge">High Impact</div>
+        <div class="card-image">
+          <img src="ambassadors.jpg" alt="Ambassador leading workshop">
+          <div class="card-emoji">🌟</div>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Become an Ambassador</h3>
+          <div class="card-time">⏱ 10+ hours/month</div>
+          <p class="card-description">
+            Lead financial health initiatives in your community. Get training, resources, and ongoing support to create lasting change.
+          </p>
+          <a href="advocacy.html" class="card-link">
+            Join the Program
+          </a>
+        </div>
+      </div>
+
+      <!-- Partner With Us -->
+      <div class="involvement-card">
+        <div class="card-image">
+          <img src="education5.jpeg" alt="Partnership collaboration">
+          <div class="card-emoji">🤝</div>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Partner With Us</h3>
+          <div class="card-time">⏱ Custom engagement</div>
+          <p class="card-description">
+            Organizations, sponsors, and academic institutions—let's collaborate on research, programs, and systemic change initiatives.
+          </p>
+          <a href="mailto:global@finmango.org?subject=Partnership%20Inquiry" class="card-link">
+            Start Conversation
+          </a>
+        </div>
+      </div>
+
+      <!-- Spread the Word -->
+      <div class="involvement-card">
+        <div class="card-image">
+          <img src="education7.png" alt="Social media advocacy">
+          <div class="card-emoji">📢</div>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Amplify Our Mission</h3>
+          <div class="card-time">⏱ 5 minutes/week</div>
+          <p class="card-description">
+            Share our research, resources, and stories on social media. Help us reach those who need it most with evidence-based insights.
+          </p>
+          <a href="#social" class="card-link">
+            Connect & Share
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1510,106 +1688,6 @@ select.warning {
         <div class="stat-number">10</div>
         <div class="stat-label">Years of Impact</div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- Involvement Options -->
-<section class="involvement" id="involvement">
-  <div class="involvement-container">
-    <span class="section-label">Ways to Contribute</span>
-    <h2 class="section-title">Find Your Role</h2>
-    <p class="section-subtitle">Every skill matters. Every hour counts. Choose how you want to make an impact.</p>
-
-    <div class="involvement-grid">
-      <!-- Volunteer -->
-      <div class="involvement-card">
-        <div class="card-image">
-          <span>🙌</span>
-        </div>
-        <div class="card-content">
-          <h3 class="card-title">Volunteer</h3>
-          <p class="card-description">
-            Lend your skills to our mission. Design, research, writing, or outreach—there's meaningful work waiting.
-          </p>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer" class="card-link">
-            Learn More
-          </a>
-        </div>
-      </div>
-
-      <!-- Ambassador Program -->
-      <div class="involvement-card">
-        <div class="card-image">
-          <span>🌟</span>
-        </div>
-        <div class="card-content">
-          <h3 class="card-title">Become an Ambassador</h3>
-          <p class="card-description">
-            Lead financial health initiatives in your community. Training, resources, and support included.
-          </p>
-          <a href="advocacy.html" class="card-link">
-            Apply Now
-          </a>
-        </div>
-      </div>
-
-      <!-- Partner With Us -->
-      <div class="involvement-card">
-        <div class="card-image">
-          <span>🤝</span>
-        </div>
-        <div class="card-content">
-          <h3 class="card-title">Partner With Us</h3>
-          <p class="card-description">
-            Organizations, sponsors, and academic institutions—let's collaborate to create systemic change.
-          </p>
-          <a href="mailto:global@finmango.org?subject=Partnership%20Inquiry" class="card-link">
-            Get in Touch
-          </a>
-        </div>
-      </div>
-
-      <!-- Spread the Word -->
-      <div class="involvement-card">
-        <div class="card-image">
-          <span>📢</span>
-        </div>
-        <div class="card-content">
-          <h3 class="card-title">Spread the Word</h3>
-          <p class="card-description">
-            Share our research and resources. Follow us on social. Help us reach those who need it most.
-          </p>
-          <a href="#social" class="card-link">
-            Follow Us
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Quick Wins -->
-<section class="quick-wins">
-  <div class="quick-wins-container">
-    <h2>Start Making Impact Today</h2>
-    <p class="quick-wins-subtitle">Quick actions you can take right now</p>
-    <div class="quick-wins-grid">
-      <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" class="quick-win-card" style="text-decoration: none; color: inherit;">
-        <span class="quick-win-icon">💬</span>
-        <div class="quick-win-title">Share on Social</div>
-        <div class="quick-win-time">2 mins</div>
-      </a>
-      <a href="#petition" class="quick-win-card" style="text-decoration: none; color: inherit;">
-        <span class="quick-win-icon">✍️</span>
-        <div class="quick-win-title">Sign the Pledge</div>
-        <div class="quick-win-time">1 min</div>
-      </a>
-      <a href="donate.html" class="quick-win-card" style="text-decoration: none; color: inherit;">
-        <span class="quick-win-icon">💝</span>
-        <div class="quick-win-title">Make a Donation</div>
-        <div class="quick-win-time">3 mins</div>
-      </a>
     </div>
   </div>
 </section>
@@ -1641,29 +1719,6 @@ select.warning {
         <div class="testimonial-role">Partner • São Paulo</div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- Petition Section -->
-<section class="petition" id="petition">
-  <div class="petition-container">
-    <div class="petition-label">Make Your Voice Heard</div>
-    <h2>Sign the Financial Health Pledge</h2>
-    <p class="petition-description">
-      Join thousands demanding that financial health be treated as a fundamental right, not a privilege.
-    </p>
-    <div class="petition-box">
-      <div class="petition-count">
-        <span class="number">1,703</span>
-        people have signed
-      </div>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSc4YoKscrTlZL2SE9-UEOJME6MG5hGHzexuxRVad2fWMiibYQ/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" class="petition-button">
-        Add My Name
-      </a>
-    </div>
-    <p class="petition-disclaimer">
-      We'll keep you updated on our progress and how you can help. Unsubscribe anytime.
-    </p>
   </div>
 </section>
 
