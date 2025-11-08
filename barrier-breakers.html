@@ -404,13 +404,13 @@ nav.scrolled .logo img {
 
 /* Hero Section */
 .hero {
-  min-height: auto;
+  min-height: 85vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6rem 2rem 2rem;
+  padding: 8rem 2rem 4rem;
   position: relative;
-  background: var(--white);
+  background: linear-gradient(135deg, #ffffff 0%, #fff5f1 50%, #ffe8df 100%);
   overflow: hidden;
   border-left: 8px solid var(--orange);
 }
@@ -425,13 +425,43 @@ nav.scrolled .logo img {
 }
 
 .hero-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
+  font-size: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--gray);
-  margin-bottom: 1rem;
+  color: var(--white);
+  margin-bottom: 2rem;
   display: inline-block;
+  background: linear-gradient(135deg, var(--orange) 0%, #ff8c5a 100%);
+  padding: 1rem 2.5rem;
+  border-radius: 100px;
+  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.3);
+  border: 3px solid var(--black);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-label::before {
+  content: '💰';
+  margin-right: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.hero-label::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: rotate(45deg);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
 }
 
 .hero h1 {
@@ -474,7 +504,7 @@ nav.scrolled .logo img {
   text-decoration: none;
   font-weight: 600;
   font-size: 1.05rem;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border: 2px solid var(--black);
   border-radius: 12px;
   position: relative;
@@ -493,18 +523,33 @@ nav.scrolled .logo img {
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg, var(--orange) 0%, #ff8c5a 100%);
-  transition: left 0.3s ease;
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: -1;
+}
+
+.btn-primary::after {
+  content: '→';
+  position: absolute;
+  right: 1.5rem;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-primary:hover::before {
   left: 0;
 }
 
+.btn-primary:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 .btn-primary:hover {
   border-color: var(--orange);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.4);
+  padding-right: 3.5rem;
 }
 
 .btn-secondary {
@@ -514,7 +559,7 @@ nav.scrolled .logo img {
   text-decoration: none;
   font-weight: 600;
   font-size: 1.05rem;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border: 2px solid var(--black);
   border-radius: 12px;
   position: relative;
@@ -532,17 +577,32 @@ nav.scrolled .logo img {
   width: 100%;
   height: 100%;
   background: var(--black);
-  transition: left 0.3s ease;
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: -1;
+}
+
+.btn-secondary::after {
+  content: '✉';
+  position: absolute;
+  right: 1.5rem;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-secondary:hover::before {
   left: 0;
 }
 
+.btn-secondary:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
 .btn-secondary:hover {
   color: var(--white);
-  transform: translateY(-2px);
+  transform: translateY(-4px) scale(1.02);
+  padding-right: 3.5rem;
 }
 
 /* Scroll Animations */
@@ -593,7 +653,7 @@ nav.scrolled .logo img {
 /* Tracks Section */
 .tracks {
   padding: 6rem 2rem;
-  background: var(--white);
+  background: linear-gradient(180deg, var(--white) 0%, #fff9f7 50%, var(--light-gray) 100%);
   color: var(--black);
   position: relative;
   overflow: hidden;
@@ -646,24 +706,21 @@ nav.scrolled .logo img {
 
 .tracks-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
 }
 
-/* First 3 cards span 2 columns each (row 1) */
+/* First 4 cards in 2x2 grid */
 .track-card:nth-child(1),
 .track-card:nth-child(2),
-.track-card:nth-child(3) {
-  grid-column: span 2;
-}
-
-/* Last 2 cards span 2 columns each and are centered (row 2) */
+.track-card:nth-child(3),
 .track-card:nth-child(4) {
-  grid-column: 2 / 4;
+  grid-column: span 1;
 }
 
+/* Last card spans 2 columns and is centered */
 .track-card:nth-child(5) {
-  grid-column: 4 / 6;
+  grid-column: 2 / 4;
 }
 
 .track-card {
@@ -671,17 +728,45 @@ nav.scrolled .logo img {
   background: var(--white);
   border: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+}
+
+.track-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 12px;
+  pointer-events: none;
 }
 
 .track-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-8px) scale(1.02);
   border-color: var(--orange);
-  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.15);
+  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.2);
+}
+
+.track-card:hover::before {
+  opacity: 1;
+}
+
+.track-card:hover .track-icon {
+  transform: scale(1.15) rotate(5deg);
+  filter: drop-shadow(0 4px 8px rgba(255, 107, 53, 0.3));
+}
+
+.track-icon {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .track-number {
@@ -692,6 +777,13 @@ nav.scrolled .logo img {
   color: var(--orange);
   opacity: 0.7;
   letter-spacing: -0.02em;
+}
+
+.track-icon {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  display: block;
+  line-height: 1;
 }
 
 .track-card h3 {
@@ -713,7 +805,19 @@ nav.scrolled .logo img {
 /* Process Section */
 .process {
   padding: 6rem 2rem;
-  background: var(--white);
+  background: linear-gradient(135deg, #fff5f1 0%, var(--white) 50%, #fff5f1 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.process::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(90deg, var(--orange), #ff8c5a, var(--orange));
 }
 
 .process-container {
@@ -752,21 +856,45 @@ nav.scrolled .logo img {
   grid-template-columns: auto 1fr;
   gap: 3rem;
   align-items: start;
+  position: relative;
+}
+
+.process-step:not(:last-child)::after {
+  content: '↓';
+  position: absolute;
+  left: 50px;
+  bottom: -3.5rem;
+  font-size: 2.5rem;
+  color: var(--orange);
+  opacity: 0.5;
+  font-weight: 900;
 }
 
 .step-number {
-  width: 80px;
-  height: 80px;
-  background: var(--orange);
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, var(--orange) 0%, #ff8c5a 100%);
   color: var(--white);
-  border: 2px solid var(--black);
+  border: 4px solid var(--black);
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 900;
   flex-shrink: 0;
   box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+.step-number::before {
+  content: '';
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  border: 3px dashed var(--orange);
+  border-radius: 50%;
+  opacity: 0.3;
 }
 
 .step-content h3 {
@@ -787,7 +915,20 @@ nav.scrolled .logo img {
 /* Prizes Section */
 .prizes {
   padding: 6rem 2rem;
-  background: var(--light-gray);
+  background: linear-gradient(180deg, var(--light-gray) 0%, #fffbf7 50%, var(--light-gray) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.prizes::before {
+  content: '💰';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  font-size: 20rem;
+  opacity: 0.03;
+  transform: rotate(-15deg);
+  pointer-events: none;
 }
 
 .prizes-container {
@@ -826,18 +967,41 @@ nav.scrolled .logo img {
   margin: 0 auto 5rem;
   padding: 3rem 3rem;
   background: var(--white);
-  border: 2px solid var(--orange);
+  border: 3px solid var(--orange);
   border-radius: 24px;
   text-align: center;
   box-shadow: 0 8px 40px rgba(255, 107, 53, 0.15);
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.prize-pool::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
 }
 
 .prize-pool:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 50px rgba(255, 107, 53, 0.2);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 16px 60px rgba(255, 107, 53, 0.3);
+  border-width: 4px;
+}
+
+.prize-pool:hover .prize-pool-amount {
+  transform: scale(1.05);
+  color: #ff8c5a;
 }
 
 .prize-pool-label {
@@ -860,6 +1024,7 @@ nav.scrolled .logo img {
   letter-spacing: -0.03em;
   position: relative;
   z-index: 1;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 
@@ -937,6 +1102,133 @@ nav.scrolled .logo img {
   font-size: 1rem;
 }
 
+/* Past Winners Section */
+.past-winners {
+  padding: 6rem 2rem;
+  background: linear-gradient(135deg, #1a1a1a 0%, var(--black) 50%, #1a1a1a 100%);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.past-winners::before {
+  content: '🏆';
+  position: absolute;
+  bottom: -80px;
+  left: -80px;
+  font-size: 25rem;
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+.past-winners-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.past-winners .section-label {
+  color: var(--orange);
+  text-align: center;
+}
+
+.past-winners .section-title,
+.past-winners .section-subtitle {
+  color: var(--white);
+  text-align: center;
+}
+
+.winners-grid {
+  margin-top: 5rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4rem;
+}
+
+.winner-year-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 3px solid rgba(255, 107, 53, 0.3);
+  border-radius: 20px;
+  padding: 3rem;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.winner-year-card:hover {
+  border-color: var(--orange);
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.3);
+}
+
+.winner-year {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--orange);
+  margin-bottom: 2rem;
+  letter-spacing: -0.03em;
+}
+
+.winner-image-container {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  border: 3px solid var(--orange);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.winner-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.winner-year-card:hover .winner-image-container img {
+  transform: scale(1.05);
+}
+
+.winner-list {
+  list-style: none;
+  margin-top: 2rem;
+}
+
+.winner-item {
+  padding: 1.25rem 0;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.winner-item:last-child {
+  border-bottom: none;
+}
+
+.winner-place {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.winner-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.winner-school {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
 /* Experience Section */
 .experience {
   padding: 6rem 2rem;
@@ -977,16 +1269,39 @@ nav.scrolled .logo img {
   border: 2px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+}
+
+.activity-card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 107, 53, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.activity-card:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .activity-card:hover {
   background: rgba(255, 255, 255, 0.12);
   border-color: var(--orange);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(255, 107, 53, 0.2);
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 12px 40px rgba(255, 107, 53, 0.3);
+}
+
+.activity-card:hover .activity-icon {
+  transform: scale(1.2) rotateY(360deg);
 }
 
 .activity-icon {
@@ -995,6 +1310,7 @@ nav.scrolled .logo img {
   display: block;
   position: relative;
   z-index: 1;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .activity-card h4 {
@@ -1058,7 +1374,8 @@ nav.scrolled .logo img {
 /* Support Section */
 .support {
   padding: 6rem 2rem;
-  background: var(--white);
+  background: linear-gradient(135deg, var(--white) 0%, #fff9f7 100%);
+  position: relative;
 }
 
 .support-container {
@@ -1127,7 +1444,20 @@ nav.scrolled .logo img {
 /* Kent State Collaboration Section */
 .kent-collab {
   padding: 6rem 2rem;
-  background: var(--white);
+  background: linear-gradient(135deg, #e8f4ff 0%, var(--white) 50%, #fff5f1 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.kent-collab::before {
+  content: '🎓';
+  position: absolute;
+  top: 50%;
+  left: -100px;
+  font-size: 15rem;
+  opacity: 0.05;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .kent-collab-container {
@@ -1707,8 +2037,8 @@ footer {
   }
 
   .hero {
-    padding: 5rem 2rem 2rem;
-    min-height: auto;
+    padding: 6rem 2rem 3rem;
+    min-height: 70vh;
   }
 
   .hero::before {
@@ -1804,6 +2134,11 @@ footer {
   
   .activities-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .winners-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
   }
   
   .support-grid {
@@ -2136,30 +2471,35 @@ select.warning {
     
     <div class="tracks-grid">
       <div class="track-card">
+        <div class="track-icon">🚗</div>
         <div class="track-number">01</div>
         <h3>Transportation</h3>
         <p>Car ownership costs, insurance rates, and public transit gaps prevent young adults from accessing stable jobs and building financial security.</p>
       </div>
-      
+
       <div class="track-card">
+        <div class="track-icon">🏠</div>
         <div class="track-number">02</div>
         <h3>Housing Affordability</h3>
         <p>Rent burden, security deposits, and credit requirements block young adults from stable housing and long-term wealth building opportunities.</p>
       </div>
-      
+
       <div class="track-card">
+        <div class="track-icon">🏥</div>
         <div class="track-number">03</div>
         <h3>Healthcare Access</h3>
         <p>Medical debt is a leading cause of bankruptcy. High healthcare costs devastate young adults before their careers even begin.</p>
       </div>
-      
+
       <div class="track-card">
+        <div class="track-icon">🌟</div>
         <div class="track-number">04</div>
         <h3>Community Challenge</h3>
         <p>Identify a unique barrier in your area—childcare costs, mental health access, or another systemic issue affecting financial wellness.</p>
       </div>
 
       <div class="track-card">
+        <div class="track-icon">📚</div>
         <div class="track-number">05</div>
         <h3>Literacy & Investment Access</h3>
         <p>Wealth inequality perpetuates when financial education is limited to privileged families. Barriers to investment accounts, tax-advantaged savings, and compound interest knowledge prevent young adults from building generational wealth.</p>
@@ -2306,6 +2646,68 @@ select.warning {
       <h3>Become a Sponsor</h3>
       <p>Join us in empowering the next generation of financial health innovators. Sponsorship opportunities are available at multiple levels.</p>
       <a href="mailto:competition@finmango.org?subject=Sponsorship Inquiry" class="btn-sponsor">Inquire About Sponsorship</a>
+    </div>
+  </div>
+</section>
+
+<section class="past-winners">
+  <div class="past-winners-container">
+    <div class="section-header">
+      <div class="section-label">Hall of Champions</div>
+      <h2 class="section-title">Past Winners</h2>
+      <p class="section-subtitle">
+        Celebrating the students who tackled barriers to financial health with innovative solutions.
+      </p>
+    </div>
+
+    <div class="winners-grid">
+      <div class="winner-year-card">
+        <div class="winner-year">2025</div>
+        <div class="winner-image-container">
+          <img src="2025-winner.jpg" alt="2025 Competition Winners" loading="lazy">
+        </div>
+        <ul class="winner-list">
+          <li class="winner-item">
+            <div class="winner-place">🥇 1st Place</div>
+            <div class="winner-name">Dylan Quinones</div>
+            <div class="winner-school">Polaris Career Center</div>
+          </li>
+          <li class="winner-item">
+            <div class="winner-place">🥈 2nd Place</div>
+            <div class="winner-name">Rogan Allen</div>
+            <div class="winner-school">Stow-Munroe Falls High</div>
+          </li>
+          <li class="winner-item">
+            <div class="winner-place">🥉 3rd Place</div>
+            <div class="winner-name">Katherine Rosner</div>
+            <div class="winner-school">Chagrin Falls High School</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="winner-year-card">
+        <div class="winner-year">2024</div>
+        <div class="winner-image-container">
+          <img src="2024-winner.jpg" alt="2024 Competition Winners" loading="lazy">
+        </div>
+        <ul class="winner-list">
+          <li class="winner-item">
+            <div class="winner-place">🥇 1st Place</div>
+            <div class="winner-name">Brianna Johnson</div>
+            <div class="winner-school">Stow-Munroe Falls High School</div>
+          </li>
+          <li class="winner-item">
+            <div class="winner-place">🥈 2nd Place</div>
+            <div class="winner-name">Samuel Denys</div>
+            <div class="winner-school">Westlake High School</div>
+          </li>
+          <li class="winner-item">
+            <div class="winner-place">🥉 3rd Place</div>
+            <div class="winner-name">Cullen Rooney</div>
+            <div class="winner-school">Normandy High School</div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
