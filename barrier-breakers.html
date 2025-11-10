@@ -1302,7 +1302,7 @@ nav.scrolled .logo img {
 
 @keyframes shimmerText {
   0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(1.2) drop-shadow(0 0 20px rgba(255, 107, 53, 0.5)); }
+  50% { filter: brightness(0.8) drop-shadow(0 0 30px rgba(0, 0, 0, 0.3)); }
 }
 
 .prize-pool-label {
@@ -1319,7 +1319,7 @@ nav.scrolled .logo img {
 .prize-pool-amount {
   font-size: 5rem;
   font-weight: 900;
-  color: var(--orange);
+  color: var(--black);
   margin-bottom: 1rem;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -1847,12 +1847,27 @@ nav.scrolled .logo img {
 /* Sponsors Section */
 .sponsors {
   padding: 6rem 2rem;
-  background: var(--light-gray);
+  background: linear-gradient(180deg, #fafafa 0%, #ffffff 50%, #fafafa 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.sponsors::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--orange) 50%, transparent 100%);
+  opacity: 0.3;
 }
 
 .sponsors-container {
   max-width: var(--max-width);
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .sponsors .section-label {
@@ -1889,35 +1904,104 @@ nav.scrolled .logo img {
 }
 
 .platinum-sponsor {
-  background: linear-gradient(135deg, #E5E4E2 0%, #BCC6CC 100%);
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 50%, #f5f5f5 100%);
   padding: 4rem;
-  border-radius: 20px;
+  border-radius: 24px;
   margin-bottom: 4rem;
   text-align: center;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  border: 2px solid #C0C0C0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9),
+              inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+  border: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.platinum-sponsor::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(135deg,
+    #E5E4E2 0%,
+    #C0C0C0 25%,
+    #BCC6CC 50%,
+    #C0C0C0 75%,
+    #E5E4E2 100%);
+  background-size: 300% 300%;
+  border-radius: 24px;
+  z-index: -1;
+  animation: platinumShimmer 6s ease-in-out infinite;
+}
+
+.platinum-sponsor::after {
+  content: '✨';
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  font-size: 2rem;
+  opacity: 0.3;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes platinumShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.platinum-sponsor:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12),
+              inset 0 1px 0 rgba(255, 255, 255, 1),
+              inset 0 -1px 0 rgba(0, 0, 0, 0.08);
 }
 
 .platinum-sponsor h3 {
-  color: #4A4A4A;
-  margin-bottom: 2rem;
+  color: #2d2d2d;
+  margin-bottom: 2.5rem;
+  font-size: 1.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: linear-gradient(135deg, #4A4A4A 0%, #2d2d2d 50%, #4A4A4A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .sponsor-logo-large {
-  max-width: 400px;
+  max-width: 450px;
   height: auto;
-  margin: 0 auto 2rem;
+  margin: 0 auto 2.5rem;
   display: block;
   background: white;
-  padding: 2rem;
-  border-radius: 12px;
+  padding: 3rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+.platinum-sponsor:hover .sponsor-logo-large {
+  transform: scale(1.03);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12),
+              inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 .sponsor-amount {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #4A4A4A;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #2d2d2d;
   margin-top: 1rem;
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.03) 0%, rgba(0, 0, 0, 0.06) 100%);
+  border-radius: 100px;
+  display: inline-block;
+  letter-spacing: 0.02em;
 }
 
 .sponsors-grid {
@@ -1932,15 +2016,37 @@ nav.scrolled .logo img {
   padding: 3rem 2rem;
   border-radius: 16px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 2px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.sponsor-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--orange), #ff8c5a, var(--orange));
+  background-size: 200% 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sponsor-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-  border-color: var(--orange);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 16px 50px rgba(255, 107, 53, 0.15),
+              0 0 0 1px rgba(255, 107, 53, 0.1) inset;
+  border-color: rgba(255, 107, 53, 0.3);
+}
+
+.sponsor-card:hover::before {
+  transform: scaleX(1);
+  animation: slideGradient 2s ease-in-out infinite;
 }
 
 .sponsor-logo {
@@ -1948,50 +2054,102 @@ nav.scrolled .logo img {
   height: auto;
   margin: 0 auto;
   display: block;
+  filter: grayscale(100%) opacity(0.7);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sponsor-card:hover .sponsor-logo {
+  filter: grayscale(0%) opacity(1);
+  transform: scale(1.05);
 }
 
 .become-sponsor {
   margin-top: 5rem;
   text-align: center;
   padding: 4rem;
-  background: linear-gradient(135deg, var(--orange) 0%, #ff8c5a 100%);
-  border-radius: 20px;
+  background: linear-gradient(135deg, var(--orange) 0%, #ff8c5a 50%, var(--orange) 100%);
+  background-size: 200% 200%;
+  border-radius: 24px;
   color: var(--white);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+  animation: gradientShift 8s ease infinite;
+}
+
+.become-sponsor::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: rotate 15s linear infinite;
 }
 
 .become-sponsor h3 {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.25rem;
+  font-weight: 800;
   margin-bottom: 1.5rem;
   color: var(--white);
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .become-sponsor p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
+  font-size: 1.25rem;
+  margin-bottom: 2.5rem;
   opacity: 0.95;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 1;
+  line-height: 1.6;
 }
 
 .btn-sponsor {
   display: inline-block;
   background: var(--white);
   color: var(--orange);
-  padding: 1.2rem 2.5rem;
+  padding: 1.3rem 2.75rem;
   text-decoration: none;
   font-weight: 700;
-  font-size: 1rem;
-  border: 2px solid var(--white);
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  font-size: 1.05rem;
+  border: 3px solid var(--white);
+  border-radius: 12px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   text-transform: uppercase;
   letter-spacing: 0.02em;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.btn-sponsor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
 }
 
 .btn-sponsor:hover {
-  background: var(--black);
   color: var(--white);
-  border-color: var(--black);
-  transform: translateY(-2px);
+  border-color: var(--white);
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.btn-sponsor:hover::before {
+  left: 0;
 }
 
 /* FAQ Section */
