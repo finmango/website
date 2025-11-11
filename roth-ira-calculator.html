@@ -368,46 +368,164 @@ nav.scrolled .logo img {
   padding-left: 1rem;
 }
 
-/* Calculator Sections */
+/* Calculator Sections - Card Based */
 .calc-section {
+  display: none;
   border: 3px solid var(--black);
-  margin-bottom: 1.5rem;
   background: var(--white);
-  overflow: hidden;
   box-shadow: 4px 4px 0 var(--black);
   transition: all 0.3s ease;
   position: relative;
-}
-
-.calc-section:hover {
-  transform: translateY(-3px);
-  box-shadow: 6px 6px 0 var(--black);
-}
-
-.calc-section:active {
-  transform: translateY(-1px);
-  box-shadow: 3px 3px 0 var(--black);
+  margin-bottom: 2rem;
+  animation: slideIn 0.4s ease;
 }
 
 .calc-section.active {
-  box-shadow: 5px 5px 0 var(--black);
+  display: block;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .calc-section-header {
   background: var(--orange);
   color: var(--white);
-  padding: 1.25rem 1.5rem;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.3s ease;
+  padding: 1.5rem 2rem;
   border-bottom: 3px solid var(--black);
+}
+
+.calc-section-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin: 0;
+}
+
+.calc-section-content {
+  padding: 2rem;
+}
+
+/* Step Navigator */
+.step-navigator {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.step-card {
+  background: var(--white);
+  border: 3px solid var(--black);
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 3px 3px 0 var(--black);
+  text-align: center;
   position: relative;
   overflow: hidden;
 }
 
-.calc-section-header::before {
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--orange);
+  transition: left 0.3s ease;
+  z-index: 0;
+}
+
+.step-card:hover::before {
+  left: 0;
+}
+
+.step-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 5px 5px 0 var(--black);
+}
+
+.step-card:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 2px 2px 0 var(--black);
+}
+
+.step-card.active {
+  background: var(--orange);
+  color: var(--white);
+  transform: scale(1.05);
+  box-shadow: 4px 4px 0 var(--black);
+}
+
+.step-card.active::before {
+  display: none;
+}
+
+.step-card.completed {
+  background: var(--green);
+  color: var(--white);
+}
+
+.step-card.completed::before {
+  display: none;
+}
+
+.step-number {
+  font-size: 1.5rem;
+  font-weight: 900;
+  display: block;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.step-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 1;
+}
+
+.step-card:hover .step-number,
+.step-card:hover .step-label {
+  color: var(--white);
+}
+
+/* Navigation Buttons */
+.nav-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: space-between;
+}
+
+.nav-btn {
+  background: var(--white);
+  color: var(--black);
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border: 3px solid var(--black);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 3px 3px 0 var(--black);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.nav-btn::before {
   content: '';
   position: absolute;
   top: 0;
@@ -419,44 +537,52 @@ nav.scrolled .logo img {
   z-index: 0;
 }
 
-.calc-section-header:hover::before {
+.nav-btn:hover::before {
   left: 0;
 }
 
-.calc-section-header:hover {
-  transform: scale(1.01);
+.nav-btn:hover {
+  color: var(--white);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 5px 5px 0 var(--black);
 }
 
-.calc-section-title {
-  font-size: 1.3rem;
-  font-weight: 900;
-  margin: 0;
+.nav-btn:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 2px 2px 0 var(--black);
+}
+
+.nav-btn span {
   position: relative;
   z-index: 1;
 }
 
-.calc-section-arrow {
-  font-size: 1.5rem;
-  font-weight: 900;
-  transition: transform 0.3s ease;
-  position: relative;
-  z-index: 1;
+.nav-btn.primary {
+  background: var(--orange);
+  color: var(--white);
+  box-shadow: 4px 4px 0 var(--black);
 }
 
-.calc-section.active .calc-section-arrow {
-  transform: rotate(180deg);
+.nav-btn.primary::before {
+  background: var(--black);
 }
 
-.calc-section-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease, padding 0.4s ease;
-  padding: 0 1.5rem;
+.nav-btn.primary:hover {
+  box-shadow: 6px 6px 0 var(--black);
 }
 
-.calc-section.active .calc-section-content {
-  max-height: 2000px;
-  padding: 1.5rem;
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nav-btn:disabled:hover {
+  transform: none;
+  box-shadow: 3px 3px 0 var(--black);
+}
+
+.nav-btn:disabled::before {
+  display: none;
 }
 
 /* Hero */
@@ -796,7 +922,28 @@ footer {
   .result-value {
     font-size: 2rem;
   }
-  
+
+  .step-navigator {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .step-number {
+    font-size: 1.2rem;
+  }
+
+  .step-label {
+    font-size: 0.75rem;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
+  }
+
+  .nav-btn {
+    width: 100%;
+  }
+
     .footer-newsletter {
     padding: 2.5rem 1.5rem;
   }
@@ -1000,11 +1147,30 @@ select.warning {
     </p>
   </div>
 
+  <!-- Step Navigator -->
+  <div class="step-navigator">
+    <div class="step-card active" data-step="1">
+      <span class="step-number">1</span>
+      <span class="step-label">Age & Income</span>
+    </div>
+    <div class="step-card" data-step="2">
+      <span class="step-number">2</span>
+      <span class="step-label">Contributions</span>
+    </div>
+    <div class="step-card" data-step="3">
+      <span class="step-number">3</span>
+      <span class="step-label">Risk Tolerance</span>
+    </div>
+    <div class="step-card" data-step="4">
+      <span class="step-number">4</span>
+      <span class="step-label">Results</span>
+    </div>
+  </div>
+
   <!-- Section 1: Age & Income -->
-  <div class="calc-section active">
+  <div class="calc-section active" data-section="1">
     <div class="calc-section-header">
       <h2 class="calc-section-title">1. What is your age and income?</h2>
-      <span class="calc-section-arrow">▼</span>
     </div>
     <div class="calc-section-content">
       <p class="section-text">
@@ -1030,14 +1196,18 @@ select.warning {
           </div>
         </div>
       </div>
+
+      <div class="nav-buttons">
+        <button class="nav-btn" disabled><span>← Previous</span></button>
+        <button class="nav-btn primary" onclick="goToStep(2)"><span>Next →</span></button>
+      </div>
     </div>
   </div>
 
   <!-- Section 2: Contributions -->
-  <div class="calc-section">
+  <div class="calc-section" data-section="2">
     <div class="calc-section-header">
       <h2 class="calc-section-title">2. How much will you contribute?</h2>
-      <span class="calc-section-arrow">▼</span>
     </div>
     <div class="calc-section-content">
       <p class="section-text">
@@ -1072,14 +1242,18 @@ select.warning {
           </div>
         </div>
       </div>
+
+      <div class="nav-buttons">
+        <button class="nav-btn" onclick="goToStep(1)"><span>← Previous</span></button>
+        <button class="nav-btn primary" onclick="goToStep(3)"><span>Next →</span></button>
+      </div>
     </div>
   </div>
 
   <!-- Section 3: Risk Tolerance -->
-  <div class="calc-section">
+  <div class="calc-section" data-section="3">
     <div class="calc-section-header">
       <h2 class="calc-section-title">3. What is your risk tolerance?</h2>
-      <span class="calc-section-arrow">▼</span>
     </div>
     <div class="calc-section-content">
       <p class="section-text">
@@ -1106,14 +1280,18 @@ select.warning {
           </div>
         </div>
       </div>
+
+      <div class="nav-buttons">
+        <button class="nav-btn" onclick="goToStep(2)"><span>← Previous</span></button>
+        <button class="nav-btn primary" onclick="goToStep(4)"><span>See Results →</span></button>
+      </div>
     </div>
   </div>
 
   <!-- Section 4: Results -->
-  <div class="calc-section active">
+  <div class="calc-section" data-section="4">
     <div class="calc-section-header">
       <h2 class="calc-section-title">4. See your results!</h2>
-      <span class="calc-section-arrow">▼</span>
     </div>
     <div class="calc-section-content">
       <p class="section-text">
@@ -1127,6 +1305,11 @@ select.warning {
       
       <div class="chart-box">
         <canvas id="rothChart"></canvas>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="nav-btn" onclick="goToStep(3)"><span>← Previous</span></button>
+        <button class="nav-btn primary" onclick="goToStep(1)"><span>🔄 Start Over</span></button>
       </div>
     </div>
   </div>
@@ -1190,6 +1373,41 @@ select.warning {
 
 <script>
 let chart = null;
+let currentStep = 1;
+
+function goToStep(stepNumber) {
+  // Hide all sections
+  document.querySelectorAll('.calc-section').forEach(section => {
+    section.classList.remove('active');
+  });
+
+  // Show the selected section
+  const targetSection = document.querySelector(`[data-section="${stepNumber}"]`);
+  if (targetSection) {
+    targetSection.classList.add('active');
+    currentStep = stepNumber;
+  }
+
+  // Update step cards
+  document.querySelectorAll('.step-card').forEach(card => {
+    const cardStep = parseInt(card.dataset.step);
+    card.classList.remove('active', 'completed');
+
+    if (cardStep === stepNumber) {
+      card.classList.add('active');
+    } else if (cardStep < stepNumber) {
+      card.classList.add('completed');
+    }
+  });
+
+  // Scroll to top of calculator
+  document.querySelector('.main-content').scrollIntoView({ behavior: 'smooth' });
+
+  // Recalculate if on results page
+  if (stepNumber === 4) {
+    calculate();
+  }
+}
 
 function formatCurrency(value) {
   if (value >= 1000000) {
@@ -1332,14 +1550,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // Collapsible section handlers
-  document.querySelectorAll('.calc-section-header').forEach(header => {
-    header.addEventListener('click', function() {
-      const section = this.parentElement;
-      section.classList.toggle('active');
+  // Step navigation
+  document.querySelectorAll('.step-card').forEach(card => {
+    card.addEventListener('click', function() {
+      const stepNumber = parseInt(this.dataset.step);
+      goToStep(stepNumber);
     });
   });
-  
+
   // Input listeners
   document.getElementById('age').addEventListener('input', calculate);
   document.getElementById('income').addEventListener('input', calculate);
