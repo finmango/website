@@ -37,7 +37,7 @@
 }
 
 :root {
-  /* Colors */
+  /* FinMango Brand Colors (for nav/footer) */
   --black: #000000;
   --white: #ffffff;
   --orange: #FF6B35;
@@ -45,82 +45,31 @@
   --orange-soft: #FF8C61;
   --orange-light: rgba(255, 107, 53, 0.1);
   --gray: #6B6560;
-  --gray-medium: #666666;
   --light-gray: #f5f5f5;
 
-  /* Semantic Colors */
-  --success: #10B981;
-  --error: #EF4444;
-  --warning: #F59E0B;
-  --info: #3B82F6;
-  --purple: #8B5CF6;
+  /* Futuristic Palette */
+  --future-dark: #0a0a0f;
+  --future-darker: #050508;
+  --future-blue: #00d4ff;
+  --future-purple: #a855f7;
+  --future-pink: #ec4899;
+  --future-cyan: #06b6d4;
+  --future-gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --future-gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --future-gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --future-gradient-hero: linear-gradient(135deg, #1e1e2e 0%, #2d1b4e 50%, #1a1a2e 100%);
+  --glow-orange: 0 0 20px rgba(255, 107, 53, 0.3);
+  --glow-blue: 0 0 30px rgba(0, 212, 255, 0.4);
+  --glow-purple: 0 0 30px rgba(168, 85, 247, 0.4);
 
-  /* Layout */
-  --max-width: 1200px;
-  --hero-max-width: 1400px;
-  --nav-max-width: 1280px;
-
-  /* Spacing Scale (8px base) */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-6: 1.5rem;
-  --space-8: 2rem;
-  --space-10: 2.5rem;
-  --space-12: 3rem;
-  --space-16: 4rem;
-  --space-20: 5rem;
-  --space-24: 6rem;
-  --space-32: 8rem;
-  --space-40: 10rem;
-
-  /* Typography Scale */
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: 2rem;
-  --text-4xl: 3rem;
-  --text-5xl: 4rem;
-
-  /* Font Weights */
-  --font-normal: 400;
-  --font-medium: 500;
-  --font-semibold: 600;
-  --font-bold: 700;
-  --font-black: 900;
-
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-
-  /* Shadows */
-  --shadow-sm: 4px 4px 0 var(--black);
-  --shadow-md: 8px 8px 0 var(--black);
-  --shadow-lg: 12px 12px 0 var(--black);
-  --shadow-xl: 16px 16px 0 var(--black);
-
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-base: 0.3s ease;
-  --transition-slow: 0.5s ease;
-
-  /* Borders */
-  --border-width-thin: 1px;
-  --border-width-base: 2px;
-  --border-width-thick: 3px;
-  --border-width-heavy: 4px;
+  /* Glass effect */
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
-  max-width: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -136,13 +85,15 @@ html {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: var(--white);
-  color: var(--black);
+  background: var(--future-darker);
+  color: var(--white);
   line-height: 1.6;
   overflow-x: hidden;
 }
 
-/* Navigation */
+/* ============================================
+   NAVIGATION (Keep FinMango Style)
+   ============================================ */
 nav {
   position: fixed;
   top: 0;
@@ -309,154 +260,228 @@ nav.scrolled .logo img {
   display: none;
 }
 
-/* Hero Section */
+/* ============================================
+   FUTURISTIC HERO
+   ============================================ */
 .hero {
   margin-top: 80px;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--future-gradient-hero);
+  position: relative;
+  overflow: hidden;
   padding: 4rem 2rem;
-  background: linear-gradient(135deg, var(--orange-light) 0%, var(--white) 100%);
-  border-bottom: 4px solid var(--orange);
+}
+
+/* Animated gradient background */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 50%);
+  animation: gradientShift 15s ease infinite;
+  z-index: 0;
+}
+
+@keyframes gradientShift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-10%, -10%) rotate(180deg); }
+}
+
+/* Floating orbs */
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  top: 20%;
+  right: 10%;
+  animation: float 8s ease-in-out infinite;
+  filter: blur(40px);
+  z-index: 0;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-20px, -20px) scale(1.1); }
 }
 
 .hero-container {
-  max-width: var(--max-width);
+  max-width: 1200px;
   margin: 0 auto;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-label {
   display: inline-block;
-  background: var(--orange);
-  color: var(--white);
   padding: 0.5rem 1.5rem;
-  font-weight: 900;
-  font-size: var(--text-sm);
-  letter-spacing: 0.05em;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   margin-bottom: 2rem;
-  border: 2px solid var(--black);
-  box-shadow: var(--shadow-sm);
+  color: var(--future-cyan);
+  box-shadow: var(--glow-blue);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 255, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(0, 212, 255, 0.6); }
 }
 
 .hero h1 {
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(3rem, 6vw, 5.5rem);
   font-weight: 900;
   line-height: 1.1;
   margin-bottom: 1.5rem;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #ffffff 0%, #a855f7 50%, #00d4ff 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-flow 8s ease infinite;
+}
+
+@keyframes gradient-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .hero-subtitle {
-  font-size: var(--text-xl);
-  color: var(--gray);
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  color: rgba(255, 255, 255, 0.8);
   max-width: 800px;
   margin: 0 auto 3rem;
-  line-height: 1.6;
+  line-height: 1.7;
+  font-weight: 400;
 }
 
-.hero-stats {
-  display: flex;
-  justify-content: center;
-  gap: 4rem;
-  margin-top: 2rem;
-  flex-wrap: wrap;
-}
-
-.stat-box {
-  text-align: center;
-}
-
-.stat-number {
-  font-size: var(--text-4xl);
-  font-weight: 900;
-  color: var(--orange);
-  display: block;
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: var(--text-sm);
-  color: var(--gray);
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  margin-top: 0.5rem;
-}
-
-/* Current Challenge Banner */
-.challenge-banner {
-  background: var(--black);
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 3rem;
+  background: var(--orange);
   color: var(--white);
-  padding: 3rem 2rem;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 1.125rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 40px rgba(255, 107, 53, 0.4);
+  border: 2px solid transparent;
+  letter-spacing: 0.02em;
+}
+
+.hero-cta:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(255, 107, 53, 0.6);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   CURRENT CHALLENGE SECTION
+   ============================================ */
+.challenge-section {
+  padding: 6rem 2rem;
+  background: var(--future-dark);
+  position: relative;
+}
+
+.challenge-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.challenge-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   position: relative;
   overflow: hidden;
 }
 
-.challenge-banner::before {
+.challenge-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--orange), var(--orange-soft), var(--orange));
+  background: linear-gradient(90deg, var(--orange), var(--future-purple), var(--future-cyan));
   background-size: 200% 100%;
-  animation: shimmer 2s linear infinite;
+  animation: shimmer 3s linear infinite;
 }
 
 @keyframes shimmer {
-  0% { background-position: -100% 0; }
-  100% { background-position: 100% 0; }
-}
-
-.challenge-container {
-  max-width: var(--max-width);
-  margin: 0 auto;
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .challenge-label {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--orange);
-  color: var(--white);
   padding: 0.5rem 1rem;
+  background: rgba(255, 107, 53, 0.2);
+  border: 1px solid var(--orange);
+  border-radius: 50px;
   font-weight: 900;
-  font-size: var(--text-xs);
+  font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--orange);
   margin-bottom: 1.5rem;
-  border: 2px solid var(--white);
 }
 
 .challenge-pulse {
   width: 8px;
   height: 8px;
-  background: var(--white);
+  background: var(--orange);
   border-radius: 50%;
   animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.2); }
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.7); }
+  50% { opacity: 0.8; transform: scale(1.1); box-shadow: 0 0 0 10px rgba(255, 107, 53, 0); }
 }
 
-.challenge-banner h2 {
+.challenge-card h2 {
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 900;
   margin-bottom: 1rem;
   line-height: 1.2;
-}
-
-.challenge-banner h2 .highlight {
-  color: var(--orange);
+  background: linear-gradient(135deg, #ffffff 0%, var(--orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .challenge-description {
-  font-size: var(--text-lg);
-  opacity: 0.9;
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.8);
   margin-bottom: 2rem;
-  max-width: 700px;
+  line-height: 1.7;
 }
 
 .challenge-meta {
@@ -464,170 +489,172 @@ nav.scrolled .logo img {
   gap: 3rem;
   align-items: center;
   flex-wrap: wrap;
-  margin-bottom: 2rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .challenge-prize {
-  font-size: var(--text-2xl);
+  font-size: 2rem;
   font-weight: 900;
   color: var(--orange);
+  text-shadow: var(--glow-orange);
 }
 
 .challenge-deadline {
-  font-size: var(--text-base);
-  opacity: 0.8;
-}
-
-.challenge-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.challenge-stat {
-  text-align: center;
-}
-
-.challenge-stat-number {
-  font-size: var(--text-3xl);
-  font-weight: 900;
-  color: var(--orange);
-  display: block;
-}
-
-.challenge-stat-label {
-  font-size: var(--text-sm);
-  opacity: 0.7;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .challenge-cta {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  background: var(--orange);
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, var(--orange) 0%, #ff8c5a 100%);
   color: var(--white);
-  padding: 1rem 2rem;
-  font-weight: 900;
-  font-size: var(--text-lg);
-  border: 3px solid var(--white);
-  box-shadow: 8px 8px 0 rgba(255, 255, 255, 0.2);
   text-decoration: none;
+  font-weight: 900;
+  font-size: 1.125rem;
+  border-radius: 50px;
   transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
+  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+  margin-top: 2rem;
+  border: 2px solid transparent;
 }
 
 .challenge-cta:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 12px 12px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Section Styles */
-.section {
-  padding: 5rem 2rem;
+/* ============================================
+   HOW IT WORKS SECTION
+   ============================================ */
+.how-section {
+  padding: 6rem 2rem;
+  background: var(--future-darker);
 }
 
-.section-alt {
-  background: var(--light-gray);
-}
-
-.section-container {
-  max-width: var(--max-width);
+.how-container {
+  max-width: 1200px;
   margin: 0 auto;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 4rem;
-}
-
-.section-label {
-  display: inline-block;
-  color: var(--orange);
-  font-weight: 900;
-  font-size: var(--text-sm);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 1rem;
 }
 
 .section-title {
-  font-size: clamp(2rem, 4vw, 3rem);
+  text-align: center;
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
   font-weight: 900;
-  line-height: 1.2;
   margin-bottom: 1rem;
+  background: linear-gradient(135deg, #ffffff 0%, var(--future-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.section-description {
-  font-size: var(--text-lg);
-  color: var(--gray);
+.section-subtitle {
+  text-align: center;
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.7);
   max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.6;
+  margin: 0 auto 4rem;
+  line-height: 1.7;
 }
 
-/* How It Works */
 .steps-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 3rem;
+  gap: 2rem;
   margin-top: 3rem;
 }
 
 .step-card {
-  text-align: center;
-  padding: 2rem;
-  background: var(--white);
-  border: 3px solid var(--black);
-  box-shadow: var(--shadow-md);
-  transition: all 0.3s ease;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.step-card:hover::before {
+  opacity: 1;
 }
 
 .step-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px);
+  border-color: var(--orange);
+  box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
 }
 
 .step-number {
   width: 60px;
   height: 60px;
   margin: 0 auto 1.5rem;
-  background: var(--orange);
-  color: var(--white);
-  border: 3px solid var(--black);
+  background: linear-gradient(135deg, var(--orange) 0%, var(--future-purple) 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--text-2xl);
+  font-size: 1.5rem;
   font-weight: 900;
+  box-shadow: var(--glow-orange);
+  position: relative;
+  z-index: 1;
 }
 
 .step-card h3 {
-  font-size: var(--text-xl);
+  font-size: 1.5rem;
   font-weight: 900;
   margin-bottom: 1rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .step-card p {
-  color: var(--gray);
-  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+  text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
-/* Problem Solver Canvas */
-.canvas-container {
+/* ============================================
+   INTERACTIVE SOLVER CANVAS
+   ============================================ */
+.solver-section {
+  padding: 6rem 2rem;
+  background: var(--future-dark);
+}
+
+.solver-container {
   max-width: 900px;
-  margin: 3rem auto;
-  background: var(--white);
-  border: 4px solid var(--black);
-  box-shadow: var(--shadow-lg);
+  margin: 0 auto;
+}
+
+.canvas-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
   padding: 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
 .canvas-header {
@@ -636,13 +663,18 @@ nav.scrolled .logo img {
 }
 
 .canvas-header h3 {
-  font-size: var(--text-2xl);
+  font-size: 2rem;
   font-weight: 900;
   margin-bottom: 1rem;
+  background: linear-gradient(135deg, #ffffff 0%, var(--future-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .canvas-header p {
-  color: var(--gray);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.125rem;
 }
 
 .canvas-steps {
@@ -652,9 +684,9 @@ nav.scrolled .logo img {
 }
 
 .canvas-step {
-  opacity: 0.5;
+  opacity: 0.4;
   pointer-events: none;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
 }
 
 .canvas-step.active {
@@ -663,7 +695,7 @@ nav.scrolled .logo img {
 }
 
 .canvas-step.completed {
-  opacity: 1;
+  opacity: 0.8;
   pointer-events: auto;
 }
 
@@ -671,34 +703,38 @@ nav.scrolled .logo img {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .canvas-step-number {
   width: 40px;
   height: 40px;
-  background: var(--light-gray);
-  border: 2px solid var(--black);
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 900;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .canvas-step.active .canvas-step-number {
-  background: var(--orange);
-  color: var(--white);
+  background: linear-gradient(135deg, var(--orange) 0%, var(--future-purple) 100%);
+  border-color: transparent;
+  box-shadow: var(--glow-orange);
 }
 
 .canvas-step.completed .canvas-step-number {
-  background: var(--success);
-  color: var(--white);
+  background: var(--future-cyan);
+  border-color: transparent;
+  box-shadow: var(--glow-blue);
 }
 
 .canvas-step.completed .canvas-step-number::after {
   content: '✓';
+  position: absolute;
 }
 
 .canvas-step.completed .canvas-step-number {
@@ -706,39 +742,172 @@ nav.scrolled .logo img {
 }
 
 .canvas-step h4 {
-  font-size: var(--text-lg);
+  font-size: 1.25rem;
   font-weight: 700;
+  color: var(--white);
 }
 
 .canvas-input {
   width: 100%;
   padding: 1rem;
-  border: 2px solid var(--black);
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   font-family: 'Inter', sans-serif;
-  font-size: var(--text-base);
+  font-size: 1rem;
+  color: var(--white);
   transition: all 0.3s ease;
   resize: vertical;
-  min-height: 100px;
+  min-height: 120px;
+}
+
+.canvas-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .canvas-input:focus {
   outline: none;
   border-color: var(--orange);
-  box-shadow: 0 0 0 3px var(--orange-light);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
 }
 
 .canvas-hint {
-  font-size: var(--text-sm);
-  color: var(--gray);
-  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.75rem;
   font-style: italic;
 }
 
-.canvas-prompts {
+/* File upload section */
+.canvas-upload {
+  margin-top: 1.5rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.canvas-upload:hover {
+  border-color: var(--orange);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.upload-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+}
+
+.upload-area {
+  text-align: center;
+  padding: 2rem;
+  cursor: pointer;
+}
+
+.upload-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.upload-text {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.5rem;
+}
+
+.upload-subtext {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.file-input {
+  display: none;
+}
+
+.link-input-group {
+  margin-top: 1.5rem;
+}
+
+.link-input-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+}
+
+.link-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  color: var(--white);
+  transition: all 0.3s ease;
+}
+
+.link-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.link-input:focus {
+  outline: none;
+  border-color: var(--orange);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+}
+
+.file-list {
   margin-top: 1rem;
-  padding: 1rem;
-  background: var(--orange-light);
-  border: 2px solid var(--orange);
+  display: none;
+}
+
+.file-list.visible {
+  display: block;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.file-name {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.95rem;
+}
+
+.file-remove {
+  background: none;
+  border: none;
+  color: var(--orange);
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 0.25rem 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.file-remove:hover {
+  color: #ff4444;
+}
+
+/* AI Prompts section */
+.canvas-prompts {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(168, 85, 247, 0.1);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 12px;
   display: none;
 }
 
@@ -747,12 +916,12 @@ nav.scrolled .logo img {
 }
 
 .canvas-prompts h5 {
-  font-size: var(--text-sm);
+  font-size: 0.875rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 0.75rem;
-  color: var(--orange-dark);
+  margin-bottom: 1rem;
+  color: var(--future-purple);
 }
 
 .canvas-prompts ul {
@@ -761,39 +930,47 @@ nav.scrolled .logo img {
 }
 
 .canvas-prompts li {
-  padding: 0.5rem 0;
-  color: var(--gray);
-  font-size: var(--text-sm);
+  padding: 0.75rem 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 .canvas-prompts li::before {
   content: '→ ';
-  color: var(--orange);
+  color: var(--future-purple);
   font-weight: 900;
   margin-right: 0.5rem;
 }
 
+/* Canvas Navigation */
 .canvas-nav {
   display: flex;
   gap: 1rem;
-  margin-top: 2rem;
+  margin-top: 3rem;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .btn-canvas {
-  padding: 0.75rem 1.5rem;
+  padding: 0.875rem 1.75rem;
   font-weight: 700;
-  font-size: var(--text-base);
-  border: 2px solid var(--black);
-  background: var(--white);
+  font-size: 1rem;
+  border-radius: 50px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--white);
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Inter', sans-serif;
+  backdrop-filter: blur(10px);
 }
 
 .btn-canvas:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-sm);
+  border-color: var(--orange);
+  background: rgba(255, 107, 53, 0.2);
+  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
 }
 
 .btn-canvas:disabled {
@@ -802,17 +979,20 @@ nav.scrolled .logo img {
 }
 
 .btn-canvas-primary {
-  background: var(--orange);
-  color: var(--white);
+  background: linear-gradient(135deg, var(--orange) 0%, #ff8c5a 100%);
+  border-color: transparent;
+  box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
 }
 
 .btn-canvas-primary:hover:not(:disabled) {
-  background: var(--orange-dark);
+  box-shadow: 0 15px 40px rgba(255, 107, 53, 0.6);
+  background: linear-gradient(135deg, #ff8c5a 0%, var(--orange) 100%);
 }
 
+/* Progress dots */
 .canvas-progress {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.75rem;
   justify-content: center;
   margin-top: 2rem;
 }
@@ -820,26 +1000,30 @@ nav.scrolled .logo img {
 .progress-dot {
   width: 12px;
   height: 12px;
-  background: var(--light-gray);
-  border: 2px solid var(--black);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   transition: all 0.3s ease;
 }
 
 .progress-dot.active {
   background: var(--orange);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+  transform: scale(1.3);
 }
 
 .progress-dot.completed {
-  background: var(--success);
+  background: var(--future-cyan);
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
 }
 
+/* Summary */
 .canvas-summary {
   display: none;
-  margin-top: 2rem;
+  margin-top: 3rem;
   padding: 2rem;
-  background: var(--light-gray);
-  border: 3px solid var(--black);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
 }
 
 .canvas-summary.visible {
@@ -847,149 +1031,104 @@ nav.scrolled .logo img {
 }
 
 .canvas-summary h4 {
-  font-size: var(--text-xl);
+  font-size: 1.75rem;
   font-weight: 900;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  background: linear-gradient(135deg, #ffffff 0%, var(--future-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .summary-item {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-item:last-of-type {
+  border-bottom: none;
 }
 
 .summary-item h5 {
-  font-size: var(--text-sm);
+  font-size: 0.875rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--orange);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .summary-item p {
-  color: var(--gray);
-  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.7;
+  font-size: 1rem;
 }
 
-/* Solution Cards */
-.solutions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
+/* ============================================
+   BRAIN CHECK SECTION
+   ============================================ */
+.brain-section {
+  padding: 6rem 2rem;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+  position: relative;
 }
 
-.solution-card {
-  background: var(--white);
-  border: 3px solid var(--black);
-  box-shadow: var(--shadow-md);
-  padding: 2rem;
-  transition: all 0.3s ease;
-}
-
-.solution-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-
-.solution-category {
-  display: inline-block;
-  background: var(--orange-light);
-  color: var(--orange-dark);
-  padding: 0.25rem 0.75rem;
-  font-size: var(--text-xs);
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 1rem;
-  border: 2px solid var(--orange);
-}
-
-.solution-card h3 {
-  font-size: var(--text-xl);
-  font-weight: 900;
-  margin-bottom: 1rem;
-  line-height: 1.3;
-}
-
-.solution-impact {
-  font-size: var(--text-2xl);
-  font-weight: 900;
-  color: var(--success);
-  margin-bottom: 1rem;
-}
-
-.solution-description {
-  color: var(--gray);
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.solution-meta {
-  display: flex;
-  gap: 1rem;
-  font-size: var(--text-sm);
-  color: var(--gray);
-  padding-top: 1rem;
-  border-top: 2px solid var(--light-gray);
-}
-
-.solution-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--orange);
-  text-decoration: none;
-  font-weight: 700;
-  margin-top: 1rem;
-  transition: all 0.3s ease;
-}
-
-.solution-link:hover {
-  gap: 1rem;
-}
-
-/* Brain Check */
-.brain-check {
-  background: var(--purple);
-  color: var(--white);
-  padding: 4rem 2rem;
-  margin-top: 5rem;
-}
-
-.brain-check-container {
-  max-width: var(--max-width);
+.brain-container {
+  max-width: 1200px;
   margin: 0 auto;
   text-align: center;
 }
 
-.brain-check h2 {
-  font-size: clamp(2rem, 4vw, 3rem);
+.brain-section h2 {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
   font-weight: 900;
   margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #ffffff 0%, var(--future-purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.brain-check p {
-  font-size: var(--text-lg);
-  opacity: 0.9;
+.brain-section > .brain-container > p {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.8);
   max-width: 700px;
   margin: 0 auto 3rem;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
-.brain-checklist {
+.brain-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   text-align: left;
 }
 
+.brain-column {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2.5rem;
+}
+
 .brain-column h3 {
-  font-size: var(--text-xl);
+  font-size: 1.5rem;
   font-weight: 900;
   margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+.brain-column.enhance h3 {
+  color: var(--future-cyan);
+}
+
+.brain-column.avoid h3 {
+  color: #ff4444;
 }
 
 .brain-column ul {
@@ -998,28 +1137,35 @@ nav.scrolled .logo img {
 }
 
 .brain-column li {
-  padding: 0.75rem 0;
-  opacity: 0.9;
-  line-height: 1.5;
+  padding: 0.875rem 0;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.brain-column li:last-child {
+  border-bottom: none;
 }
 
 .brain-column.enhance li::before {
   content: '✓ ';
-  color: var(--success);
+  color: var(--future-cyan);
   font-weight: 900;
-  margin-right: 0.5rem;
-  font-size: var(--text-lg);
+  margin-right: 0.75rem;
+  font-size: 1.125rem;
 }
 
 .brain-column.avoid li::before {
   content: '✗ ';
-  color: var(--error);
+  color: #ff4444;
   font-weight: 900;
-  margin-right: 0.5rem;
-  font-size: var(--text-lg);
+  margin-right: 0.75rem;
+  font-size: 1.125rem;
 }
 
-/* Footer */
+/* ============================================
+   FOOTER (Keep FinMango Style)
+   ============================================ */
 footer {
   padding: 0;
   border-top: 4px solid var(--orange);
@@ -1076,7 +1222,7 @@ footer {
 }
 
 .footer-container {
-  max-width: var(--max-width);
+  max-width: 1200px;
   margin: 0 auto;
   padding: 4rem 2rem 0;
   display: grid;
@@ -1129,7 +1275,9 @@ footer {
   opacity: 0.6;
 }
 
-/* Responsive */
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media (max-width: 768px) {
   .nav-right {
     display: none;
@@ -1190,12 +1338,16 @@ footer {
     color: var(--orange);
   }
 
+  .hero {
+    min-height: 70vh;
+  }
+
   .hero h1 {
     font-size: 2.5rem;
   }
 
-  .challenge-banner h2 {
-    font-size: 2rem;
+  .challenge-card {
+    padding: 2rem;
   }
 
   .challenge-meta {
@@ -1208,11 +1360,11 @@ footer {
     grid-template-columns: 1fr;
   }
 
-  .solutions-grid {
-    grid-template-columns: 1fr;
+  .canvas-card {
+    padding: 2rem;
   }
 
-  .brain-checklist {
+  .brain-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1223,10 +1375,6 @@ footer {
   .footer-bottom {
     flex-direction: column;
     gap: 1rem;
-  }
-
-  .canvas-container {
-    padding: 1.5rem;
   }
 
   .canvas-nav {
@@ -1278,120 +1426,92 @@ footer {
   <div class="hero-container">
     <span class="hero-label">Affordability Lab</span>
     <h1>
-      Use AI to <span style="color: var(--orange);">solve</span> real affordability problems
+      Solve Real Problems<br>Using AI
     </h1>
     <p class="hero-subtitle">
-      Not another AI course. A community using AI as a thinking partner to tackle systemic barriers young adults face—housing, healthcare, education, and more.
+      Not another AI course. A quarterly challenge where you use AI as a thinking partner to tackle systemic affordability barriers—housing, healthcare, education, and more. Win $500. Make real impact.
     </p>
-    <div class="hero-stats">
-      <div class="stat-box">
-        <span class="stat-number">$500</span>
-        <span class="stat-label">Quarterly Prize</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-number" id="solutionsCount">0</span>
-        <span class="stat-label">Solutions Submitted</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-number">$<span id="moneySaved">0</span></span>
-        <span class="stat-label">Community Savings</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Current Challenge Banner -->
-<section class="challenge-banner">
-  <div class="challenge-container">
-    <div class="challenge-label">
-      <span class="challenge-pulse"></span>
-      Q1 2025 Challenge
-    </div>
-    <h2>
-      The <span class="highlight">Housing Affordability</span> Challenge
-    </h2>
-    <p class="challenge-description">
-      Can you use AI to find or create housing solutions under $800/month? Young adults are spending 50%+ of income on rent. Help us discover real, actionable solutions.
-    </p>
-    <div class="challenge-meta">
-      <div class="challenge-prize">$500 Prize Pool</div>
-      <div class="challenge-deadline">⏰ Submissions close: March 31, 2025</div>
-    </div>
-    <div class="challenge-stats">
-      <div class="challenge-stat">
-        <span class="challenge-stat-number" id="participants">0</span>
-        <span class="challenge-stat-label">Participants</span>
-      </div>
-      <div class="challenge-stat">
-        <span class="challenge-stat-number" id="submittedSolutions">0</span>
-        <span class="challenge-stat-label">Solutions</span>
-      </div>
-      <div class="challenge-stat">
-        <span class="challenge-stat-number">$<span id="challengeSavings">0</span></span>
-        <span class="challenge-stat-label">Total Saved</span>
-      </div>
-    </div>
-    <a href="#solver-canvas" class="challenge-cta">
-      Start Solving
+    <a href="#challenge" class="hero-cta">
+      Join the Challenge
       <span>→</span>
     </a>
   </div>
 </section>
 
-<!-- How It Works -->
-<section class="section">
-  <div class="section-container">
-    <div class="section-header">
-      <span class="section-label">How It Works</span>
-      <h2 class="section-title">AI + Your Brain = Real Solutions</h2>
-      <p class="section-description">
-        We're not teaching AI literacy. We're solving real problems. Here's how our quarterly challenges work.
+<!-- Current Challenge Section -->
+<section class="challenge-section" id="challenge">
+  <div class="challenge-container">
+    <div class="challenge-card">
+      <div class="challenge-label">
+        <span class="challenge-pulse"></span>
+        Q1 2025 Challenge
+      </div>
+      <h2>
+        The Housing Affordability Challenge
+      </h2>
+      <p class="challenge-description">
+        Young adults are spending 50%+ of their income on housing. Can you use AI to discover or create housing solutions under $800/month? We're looking for real, actionable solutions that others can implement.
       </p>
+      <div class="challenge-meta">
+        <div class="challenge-prize">$500 Prize Pool</div>
+        <div class="challenge-deadline">⏰ Submissions close: March 31, 2025</div>
+      </div>
+      <a href="#solver" class="challenge-cta">
+        Start Building Your Solution
+        <span>→</span>
+      </a>
     </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-section">
+  <div class="how-container">
+    <h2 class="section-title">How It Works</h2>
+    <p class="section-subtitle">
+      Four simple steps to create solutions that actually work
+    </p>
 
     <div class="steps-grid">
       <div class="step-card">
         <div class="step-number">1</div>
-        <h3>Pick a Challenge</h3>
-        <p>Each quarter, we focus on one systemic affordability barrier: housing, healthcare, education, food, or transportation.</p>
+        <h3>Define the Problem</h3>
+        <p>Start with a specific affordability challenge you or someone you know is facing. The more specific, the better.</p>
       </div>
 
       <div class="step-card">
         <div class="step-number">2</div>
-        <h3>Use AI to Research</h3>
-        <p>Use free AI tools (ChatGPT, Claude, Gemini) as a thinking partner to explore solutions, not just get answers.</p>
+        <h3>Research with AI</h3>
+        <p>Use free AI tools (ChatGPT, Claude, Gemini) to explore solutions, discover options, and ask better questions.</p>
       </div>
 
       <div class="step-card">
         <div class="step-number">3</div>
-        <h3>Submit Your Solution</h3>
-        <p>Share what you discovered: the problem, your research process, the solution, and real results or projections.</p>
+        <h3>Build & Document</h3>
+        <p>Create your solution, test it if possible, and document everything—your process, findings, and results.</p>
       </div>
 
       <div class="step-card">
         <div class="step-number">4</div>
-        <h3>Win & Help Others</h3>
-        <p>Best solutions win $500. All solutions are shared publicly so the entire community can implement them.</p>
+        <h3>Submit & Share</h3>
+        <p>Submit your solution for the $500 prize. Winning solutions are shared publicly to help the entire community.</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- Problem Solver Canvas -->
-<section class="section section-alt" id="solver-canvas">
-  <div class="section-container">
-    <div class="section-header">
-      <span class="section-label">Problem Solver Canvas</span>
-      <h2 class="section-title">Build Your Solution</h2>
-      <p class="section-description">
-        Use this interactive tool to develop your solution using AI as a thinking partner. We'll guide you through the process.
-      </p>
-    </div>
+<section class="solver-section" id="solver">
+  <div class="solver-container">
+    <h2 class="section-title">Solution Builder</h2>
+    <p class="section-subtitle">
+      Use this interactive tool to develop your solution step-by-step
+    </p>
 
-    <div class="canvas-container">
+    <div class="canvas-card">
       <div class="canvas-header">
-        <h3>🧠 Your AI-Powered Solution Canvas</h3>
-        <p>Answer each step thoughtfully. AI prompts will help guide your research.</p>
+        <h3>🧠 Your Solution Canvas</h3>
+        <p>Complete each step. AI prompts will guide your research.</p>
       </div>
 
       <div class="canvas-steps">
@@ -1404,7 +1524,7 @@ footer {
           <textarea
             class="canvas-input"
             id="problem"
-            placeholder="Example: I'm paying $1,200/month for a studio apartment, which is 60% of my income. I need to find housing under $800/month in a safe area with public transit access."
+            placeholder="Example: I'm paying $1,200/month for a studio apartment, which is 60% of my income. I need housing under $800/month in a safe area with public transit access."
           ></textarea>
           <p class="canvas-hint">Be specific. Include numbers, location, and constraints.</p>
           <div class="canvas-prompts" id="prompts-1">
@@ -1426,7 +1546,7 @@ footer {
           <textarea
             class="canvas-input"
             id="research"
-            placeholder="Example: I used ChatGPT to research co-living spaces, house-hacking strategies, and rental assistance programs. I discovered there are 3 co-living communities within 5 miles offering private rooms for $650-750/month with utilities included. I also found a city rental assistance program I qualified for but didn't know existed."
+            placeholder="Example: I used ChatGPT to research co-living spaces, house-hacking strategies, and rental assistance programs. I discovered 3 co-living communities within 5 miles offering rooms for $650-750/month with utilities included..."
           ></textarea>
           <p class="canvas-hint">Document what you learned and which AI tools you used.</p>
           <div class="canvas-prompts" id="prompts-2">
@@ -1434,7 +1554,7 @@ footer {
             <ul>
               <li>"What government assistance programs exist for housing in [your city] for someone earning $[income]?"</li>
               <li>"How do I calculate the true cost of different housing options including utilities, commute, etc.?"</li>
-              <li>"What questions should I ask when evaluating alternative housing arrangements for safety and legitimacy?"</li>
+              <li>"What questions should I ask when evaluating alternative housing arrangements?"</li>
             </ul>
           </div>
         </div>
@@ -1448,9 +1568,33 @@ footer {
           <textarea
             class="canvas-input"
             id="solution"
-            placeholder="Example: I'm moving into a co-living space that costs $700/month (down from $1,200). Steps: 1) Applied to 3 co-living communities, 2) Visited and vetted each location, 3) Signed 6-month lease. This saves me $500/month ($6,000/year). I can now save 20% of income instead of living paycheck to paycheck."
+            placeholder="Example: I'm moving into a co-living space for $700/month (down from $1,200). Steps: 1) Applied to 3 co-living communities, 2) Visited each location, 3) Signed 6-month lease. This saves me $500/month ($6,000/year)."
           ></textarea>
           <p class="canvas-hint">Include specific steps and measurable outcomes (money saved, time saved, etc.).</p>
+
+          <!-- File Upload Section -->
+          <div class="canvas-upload">
+            <span class="upload-label">📎 Attach Supporting Documents (Optional)</span>
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+              <div class="upload-icon">📄</div>
+              <div class="upload-text">Click to upload files</div>
+              <div class="upload-subtext">PDFs, images, spreadsheets, or prototypes</div>
+            </div>
+            <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg">
+            <div class="file-list" id="fileList"></div>
+          </div>
+
+          <!-- Link/Prototype Input -->
+          <div class="link-input-group">
+            <label for="prototypeLink">🔗 Link to Prototype or Additional Resources (Optional)</label>
+            <input
+              type="url"
+              id="prototypeLink"
+              class="link-input"
+              placeholder="https://example.com/my-prototype"
+            >
+          </div>
+
           <div class="canvas-prompts" id="prompts-3">
             <h5>Try these AI prompts:</h5>
             <ul>
@@ -1470,7 +1614,7 @@ footer {
           <textarea
             class="canvas-input"
             id="braincheck"
-            placeholder="Example: AI helped me discover options I didn't know existed (co-living, rental assistance). I learned how to evaluate housing costs holistically. I can now teach this process to friends and apply the same research method to other affordability problems. I didn't just copy AI's answers—I used it to ask better questions."
+            placeholder="Example: AI helped me discover options I didn't know existed (co-living, rental assistance). I learned how to evaluate housing costs holistically. I can now teach this process to friends and apply it to other problems..."
           ></textarea>
           <p class="canvas-hint">Reflect: Did you learn something new? Can you replicate this without AI next time?</p>
         </div>
@@ -1493,7 +1637,7 @@ footer {
 
       <!-- Summary -->
       <div class="canvas-summary" id="summary">
-        <h4>Your Solution Summary</h4>
+        <h4>📋 Your Solution Summary</h4>
         <div class="summary-item">
           <h5>Problem</h5>
           <p id="summaryProblem"></p>
@@ -1507,10 +1651,14 @@ footer {
           <p id="summarySolution"></p>
         </div>
         <div class="summary-item">
+          <h5>Prototype/Links</h5>
+          <p id="summaryLinks"></p>
+        </div>
+        <div class="summary-item">
           <h5>Brain Check</h5>
           <p id="summaryBrainCheck"></p>
         </div>
-        <button class="btn-canvas btn-canvas-primary" onclick="window.location.href='mailto:hello@finmango.org?subject=Affordability Lab Solution Submission&body=' + encodeURIComponent(document.getElementById('summaryProblem').textContent + '\n\n' + document.getElementById('summaryResearch').textContent + '\n\n' + document.getElementById('summarySolution').textContent + '\n\n' + document.getElementById('summaryBrainCheck').textContent)">
+        <button class="btn-canvas btn-canvas-primary" id="btnSubmit">
           Submit Your Solution →
         </button>
       </div>
@@ -1518,74 +1666,17 @@ footer {
   </div>
 </section>
 
-<!-- Solution Spotlight -->
-<section class="section">
-  <div class="section-container">
-    <div class="section-header">
-      <span class="section-label">Solution Spotlight</span>
-      <h2 class="section-title">Real Solutions from Our Community</h2>
-      <p class="section-description">
-        These solutions were discovered and tested by real people using AI. Try them yourself.
-      </p>
-    </div>
-
-    <div class="solutions-grid">
-      <div class="solution-card">
-        <span class="solution-category">Housing</span>
-        <h3>Co-Living Discovery Method</h3>
-        <div class="solution-impact">$6,000/year saved</div>
-        <p class="solution-description">
-          Used ChatGPT to discover co-living spaces that traditional apartment searches missed. Reduced rent from $1,200 to $700/month while gaining community.
-        </p>
-        <div class="solution-meta">
-          <span>📍 Columbus, OH</span>
-          <span>⏱️ 2 weeks to implement</span>
-        </div>
-        <a href="#" class="solution-link">View Full Solution →</a>
-      </div>
-
-      <div class="solution-card">
-        <span class="solution-category">Healthcare</span>
-        <h3>Medical Bill Negotiation Script</h3>
-        <div class="solution-impact">$4,200 reduced</div>
-        <p class="solution-description">
-          Used AI to research medical billing laws and create negotiation scripts. Reduced a $6,000 ER bill to $1,800 through payment plan and hardship programs.
-        </p>
-        <div class="solution-meta">
-          <span>📍 Cleveland, OH</span>
-          <span>⏱️ 1 month process</span>
-        </div>
-        <a href="#" class="solution-link">View Full Solution →</a>
-      </div>
-
-      <div class="solution-card">
-        <span class="solution-category">Education</span>
-        <h3>Free Textbook Alternatives</h3>
-        <div class="solution-impact">$800/semester saved</div>
-        <p class="solution-description">
-          AI helped find open-source textbooks, library resources, and legal free alternatives for every required textbook. Went from $800/semester to $0.
-        </p>
-        <div class="solution-meta">
-          <span>📍 Kent, OH</span>
-          <span>⏱️ 1 week research</span>
-        </div>
-        <a href="#" class="solution-link">View Full Solution →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- Brain Check Section -->
-<section class="brain-check">
-  <div class="brain-check-container">
+<section class="brain-section">
+  <div class="brain-container">
     <h2>🧠 The Brain Check</h2>
     <p>
       AI can either enhance your thinking or replace it. Here's how to tell the difference.
     </p>
 
-    <div class="brain-checklist">
+    <div class="brain-grid">
       <div class="brain-column enhance">
-        <h3>✓ Brain-Enhancing Uses</h3>
+        <h3>✓ Brain-Enhancing</h3>
         <ul>
           <li>Used AI to research options I didn't know existed</li>
           <li>AI helped me ask better questions</li>
@@ -1597,7 +1688,7 @@ footer {
       </div>
 
       <div class="brain-column avoid">
-        <h3>✗ Brain-Atrophying Uses</h3>
+        <h3>✗ Brain-Atrophying</h3>
         <ul>
           <li>Just copied AI's answer without understanding</li>
           <li>Can't explain the solution to someone else</li>
@@ -1688,6 +1779,36 @@ if (mobileMenuBtn) {
   });
 }
 
+// File upload handling
+const fileInput = document.getElementById('fileInput');
+const fileList = document.getElementById('fileList');
+let selectedFiles = [];
+
+fileInput.addEventListener('change', (e) => {
+  selectedFiles = Array.from(e.target.files);
+  displayFiles();
+});
+
+function displayFiles() {
+  if (selectedFiles.length === 0) {
+    fileList.classList.remove('visible');
+    return;
+  }
+
+  fileList.classList.add('visible');
+  fileList.innerHTML = selectedFiles.map((file, index) => `
+    <div class="file-item">
+      <span class="file-name">📄 ${file.name}</span>
+      <button class="file-remove" onclick="removeFile(${index})">×</button>
+    </div>
+  `).join('');
+}
+
+function removeFile(index) {
+  selectedFiles.splice(index, 1);
+  displayFiles();
+}
+
 // Problem Solver Canvas Logic
 let currentStep = 1;
 const totalSteps = 4;
@@ -1695,6 +1816,7 @@ const totalSteps = 4;
 const btnPrev = document.getElementById('btnPrev');
 const btnNext = document.getElementById('btnNext');
 const btnShowPrompts = document.getElementById('btnShowPrompts');
+const btnSubmit = document.getElementById('btnSubmit');
 
 // Update UI based on current step
 function updateCanvas() {
@@ -1733,6 +1855,7 @@ function updateCanvas() {
 
   // Hide all prompts
   document.querySelectorAll('.canvas-prompts').forEach(p => p.classList.remove('visible'));
+  btnShowPrompts.textContent = 'Show AI Prompts';
 }
 
 // Next button
@@ -1740,10 +1863,8 @@ btnNext.addEventListener('click', () => {
   if (currentStep < totalSteps) {
     currentStep++;
     updateCanvas();
-    // Scroll to top of canvas
-    document.getElementById('solver-canvas').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('solver').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } else {
-    // Show summary
     showSummary();
   }
 });
@@ -1753,7 +1874,7 @@ btnPrev.addEventListener('click', () => {
   if (currentStep > 1) {
     currentStep--;
     updateCanvas();
-    document.getElementById('solver-canvas').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('solver').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 });
 
@@ -1775,41 +1896,41 @@ function showSummary() {
   const problem = document.getElementById('problem').value;
   const research = document.getElementById('research').value;
   const solution = document.getElementById('solution').value;
+  const prototypeLink = document.getElementById('prototypeLink').value;
   const braincheck = document.getElementById('braincheck').value;
 
   document.getElementById('summaryProblem').textContent = problem || 'Not provided';
   document.getElementById('summaryResearch').textContent = research || 'Not provided';
   document.getElementById('summarySolution').textContent = solution || 'Not provided';
+
+  let linksText = '';
+  if (prototypeLink) linksText += `Link: ${prototypeLink}\n`;
+  if (selectedFiles.length > 0) linksText += `Files attached: ${selectedFiles.map(f => f.name).join(', ')}`;
+  document.getElementById('summaryLinks').textContent = linksText || 'None provided';
+
   document.getElementById('summaryBrainCheck').textContent = braincheck || 'Not provided';
 
   document.getElementById('summary').classList.add('visible');
   document.getElementById('summary').scrollIntoView({ behavior: 'smooth' });
 }
 
-// Animate counters on page load
-function animateCounter(id, target, suffix = '') {
-  let current = 0;
-  const increment = target / 50;
-  const element = document.getElementById(id);
+// Submit button
+btnSubmit.addEventListener('click', () => {
+  const problem = document.getElementById('problem').value;
+  const research = document.getElementById('research').value;
+  const solution = document.getElementById('solution').value;
+  const prototypeLink = document.getElementById('prototypeLink').value;
+  const braincheck = document.getElementById('braincheck').value;
 
-  const timer = setInterval(() => {
-    current += increment;
-    if (current >= target) {
-      element.textContent = Math.floor(target) + suffix;
-      clearInterval(timer);
-    } else {
-      element.textContent = Math.floor(current) + suffix;
-    }
-  }, 30);
-}
+  let emailBody = `AFFORDABILITY LAB SOLUTION SUBMISSION\n\n`;
+  emailBody += `PROBLEM:\n${problem}\n\n`;
+  emailBody += `RESEARCH:\n${research}\n\n`;
+  emailBody += `SOLUTION:\n${solution}\n\n`;
+  if (prototypeLink) emailBody += `PROTOTYPE LINK:\n${prototypeLink}\n\n`;
+  if (selectedFiles.length > 0) emailBody += `FILES ATTACHED:\n${selectedFiles.map(f => f.name).join(', ')}\n\n`;
+  emailBody += `BRAIN CHECK:\n${braincheck}\n\n`;
 
-// Initialize counters (these would be dynamic in production)
-window.addEventListener('load', () => {
-  animateCounter('solutionsCount', 23);
-  animateCounter('moneySaved', 47200);
-  animateCounter('participants', 127);
-  animateCounter('submittedSolutions', 23);
-  animateCounter('challengeSavings', 18400);
+  window.location.href = `mailto:hello@finmango.org?subject=Affordability Lab Solution Submission - Q1 2025&body=${encodeURIComponent(emailBody)}`;
 });
 
 // Initialize canvas
