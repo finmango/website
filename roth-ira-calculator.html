@@ -374,6 +374,23 @@ nav.scrolled .logo img {
   margin-bottom: 1.5rem;
   background: var(--white);
   overflow: hidden;
+  box-shadow: 4px 4px 0 var(--black);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.calc-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 6px 6px 0 var(--black);
+}
+
+.calc-section:active {
+  transform: translateY(-1px);
+  box-shadow: 3px 3px 0 var(--black);
+}
+
+.calc-section.active {
+  box-shadow: 5px 5px 0 var(--black);
 }
 
 .calc-section-header {
@@ -386,22 +403,44 @@ nav.scrolled .logo img {
   align-items: center;
   transition: all 0.3s ease;
   border-bottom: 3px solid var(--black);
+  position: relative;
+  overflow: hidden;
+}
+
+.calc-section-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: var(--black);
+  transition: left 0.3s ease;
+  z-index: 0;
+}
+
+.calc-section-header:hover::before {
+  left: 0;
 }
 
 .calc-section-header:hover {
-  background: var(--black);
+  transform: scale(1.01);
 }
 
 .calc-section-title {
   font-size: 1.3rem;
   font-weight: 900;
   margin: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .calc-section-arrow {
   font-size: 1.5rem;
   font-weight: 900;
   transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
 }
 
 .calc-section.active .calc-section-arrow {
@@ -411,7 +450,7 @@ nav.scrolled .logo img {
 .calc-section-content {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.4s ease;
+  transition: max-height 0.4s ease, padding 0.4s ease;
   padding: 0 1.5rem;
 }
 
