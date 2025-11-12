@@ -1176,6 +1176,7 @@ nav.scrolled .logo img {
   gap: 2rem;
   justify-content: center;
   margin-top: 2rem;
+  margin-bottom: 2rem;
   flex-wrap: wrap;
 }
 
@@ -1220,12 +1221,9 @@ nav.scrolled .logo img {
 
 .why-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 2rem;
   margin-top: 3rem;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .why-card {
@@ -1298,17 +1296,31 @@ nav.scrolled .logo img {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
+.faq-item.open {
+  border-color: var(--orange);
+}
+
 .faq-question {
   font-size: 1.25rem;
   font-weight: 900;
   color: var(--white);
-  margin-bottom: 1rem;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.faq-question-text {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex: 1;
 }
 
-.faq-question::before {
+.faq-question-text::before {
   content: 'Q:';
   color: var(--orange);
   font-size: 1rem;
@@ -1320,10 +1332,36 @@ nav.scrolled .logo img {
   flex-shrink: 0;
 }
 
+.faq-toggle {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.faq-item.open .faq-toggle {
+  background: var(--orange);
+  transform: rotate(180deg);
+}
+
 .faq-answer {
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.7;
   font-size: 1rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, margin-top 0.3s ease;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 1000px;
+  margin-top: 1.5rem;
 }
 
 .faq-answer p {
@@ -1577,10 +1615,19 @@ footer {
 
   .why-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .why-card {
+    padding: 2rem;
   }
 
   .faq-question {
     font-size: 1.125rem;
+  }
+
+  .faq-question-text {
+    font-size: 1rem;
   }
 
   .footer-container {
@@ -1964,7 +2011,10 @@ footer {
 
     <div class="faq-grid">
       <div class="faq-item">
-        <div class="faq-question">How will solutions be judged?</div>
+        <div class="faq-question">
+          <div class="faq-question-text">How will solutions be judged?</div>
+          <div class="faq-toggle">▼</div>
+        </div>
         <div class="faq-answer">
           <p><strong>We evaluate three things:</strong></p>
           <ul>
@@ -1977,49 +2027,70 @@ footer {
       </div>
 
       <div class="faq-item">
-        <div class="faq-question">Who can participate?</div>
+        <div class="faq-question">
+          <div class="faq-question-text">Who can participate?</div>
+          <div class="faq-toggle">▼</div>
+        </div>
         <div class="faq-answer">
           <p>Young adults ages 18-29. You don't need to be a student—anyone facing affordability challenges can participate. We encourage submissions from people actually experiencing these problems.</p>
         </div>
       </div>
 
       <div class="faq-item">
-        <div class="faq-question">Can I submit as a team?</div>
+        <div class="faq-question">
+          <div class="faq-question-text">Can I submit as a team?</div>
+          <div class="faq-toggle">▼</div>
+        </div>
         <div class="faq-answer">
           <p>Yes! Teams of up to 3 people can collaborate. The $1,000 prize would be split among team members. All team members must be 18-29.</p>
         </div>
       </div>
 
       <div class="faq-item">
-        <div class="faq-question">What AI tools can I use?</div>
+        <div class="faq-question">
+          <div class="faq-question-text">What AI tools can I use?</div>
+          <div class="faq-toggle">▼</div>
+        </div>
         <div class="faq-answer">
           <p>Any free AI tools: ChatGPT (free tier), Claude, Google Gemini, Perplexity, or others. We focus on free tools so everyone can participate regardless of budget.</p>
         </div>
       </div>
 
       <div class="faq-item">
-        <div class="faq-question">What happens to winning solutions?</div>
+        <div class="faq-question">
+          <div class="faq-question-text">What happens to winning solutions?</div>
+          <div class="faq-toggle">▼</div>
+        </div>
         <div class="faq-answer">
           <p>We publish them publicly (with your permission) so others can benefit. You retain ownership of your work. We may feature winners on our blog and social media. Think of it as building your public portfolio.</p>
         </div>
       </div>
 
       <div class="faq-item">
-        <div class="faq-question">Do I get proof of my work for employers?</div>
+        <div class="faq-question">
+          <div class="faq-question-text">Do I get proof of my work for employers?</div>
+          <div class="faq-toggle">▼</div>
+        </div>
         <div class="faq-answer">
           <p>Yes! All participants receive a certificate of completion. Winners receive a certificate of achievement. Both demonstrate AI problem-solving skills and critical thinking to potential employers.</p>
         </div>
       </div>
 
       <div class="faq-item">
-        <div class="faq-question">What if my solution doesn't work perfectly?</div>
+        <div class="faq-question">
+          <div class="faq-question-text">What if my solution doesn't work perfectly?</div>
+          <div class="faq-toggle">▼</div>
+        </div>
         <div class="faq-answer">
           <p>That's okay! We value honest documentation of what you tried, what worked, what didn't, and what you learned. Real problem-solving includes failures and iterations.</p>
         </div>
       </div>
 
       <div class="faq-item">
-        <div class="faq-question">How many solutions can I submit?</div>
+        <div class="faq-question">
+          <div class="faq-question-text">How many solutions can I submit?</div>
+          <div class="faq-toggle">▼</div>
+        </div>
         <div class="faq-answer">
           <p>One per person per quarter. We want quality over quantity. Focus on creating one well-researched, thoughtful solution.</p>
         </div>
@@ -2316,6 +2387,24 @@ document.addEventListener('click', (e) => {
       document.getElementById('solver').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
+});
+
+// FAQ Accordion
+document.querySelectorAll('.faq-question').forEach(question => {
+  question.addEventListener('click', () => {
+    const faqItem = question.closest('.faq-item');
+    const isOpen = faqItem.classList.contains('open');
+
+    // Close all other FAQ items
+    document.querySelectorAll('.faq-item').forEach(item => {
+      item.classList.remove('open');
+    });
+
+    // Toggle current item
+    if (!isOpen) {
+      faqItem.classList.add('open');
+    }
+  });
 });
 
 // Initialize canvas
