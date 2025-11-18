@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Particle Animation - FinMango</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            overflow-x: hidden;
+            background: #fff;
+        }
+
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        /* Particle canvas */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Hero content */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 1.25rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero-section">
+        <canvas id="particle-canvas"></canvas>
+        <div class="hero-content">
+            <h1>Interactive Particle Effect</h1>
+            <p>Move your mouse around to interact with the floating particles in the background</p>
+        </div>
+    </section>
+
+    <script>
+        // Canvas setup
+        const canvas = document.getElementById('particle-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+
+            // Set canvas size
+            let previousMobileState = window.innerWidth <= 768;
+            function resizeCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+
+                // Reinitialize particles if switching between mobile/desktop
+                const currentMobileState = window.innerWidth <= 768;
+                if (currentMobileState !== previousMobileState) {
+                    init();
+                    previousMobileState = currentMobileState;
+                }
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // Mouse position
+            const mouse = {
+                x: null,
+                y: null,
+                radius: 150
+            };
+
+            window.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+
+            window.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            // Particle class
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 3 + 1;
+                    this.baseX = this.x;
+                    this.baseY = this.y;
+                    this.density = Math.random() * 30 + 1;
+                    this.speedX = Math.random() * 0.5 - 0.25;
+                    this.speedY = Math.random() * 0.5 - 0.25;
+
+                    // FinMango orange color variations - more subtle on mobile
+                    const isMobile = window.innerWidth <= 768;
+                    const orangeShades = isMobile ? [
+                        'rgba(255, 107, 53, 0.3)',    // Primary orange - more subtle
+                        'rgba(255, 140, 97, 0.25)',   // Orange soft
+                        'rgba(229, 90, 43, 0.2)',     // Orange dark
+                        'rgba(255, 107, 53, 0.15)'    // Light orange
+                    ] : [
+                        'rgba(255, 107, 53, 0.6)',    // Primary orange
+                        'rgba(255, 140, 97, 0.5)',    // Orange soft
+                        'rgba(229, 90, 43, 0.4)',     // Orange dark
+                        'rgba(255, 107, 53, 0.3)'     // Light orange
+                    ];
+                    this.color = orangeShades[Math.floor(Math.random() * orangeShades.length)];
+                }
+
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+
+                update() {
+                    // Gentle floating movement (subtle random drift)
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+
+                    // Keep particles within bounds with wrapping
+                    if (this.x > canvas.width) this.x = 0;
+                    if (this.x < 0) this.x = canvas.width;
+                    if (this.y > canvas.height) this.y = 0;
+                    if (this.y < 0) this.y = canvas.height;
+
+                    // Mouse interaction - particles move away from mouse
+                    if (mouse.x != null && mouse.y != null) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const maxDistance = mouse.radius;
+                        const force = (maxDistance - distance) / maxDistance;
+
+                        if (distance < mouse.radius) {
+                            // Particles move away from mouse
+                            const directionX = forceDirectionX * force * this.density * 0.5;
+                            const directionY = forceDirectionY * force * this.density * 0.5;
+                            this.x -= directionX;
+                            this.y -= directionY;
+                        }
+                    }
+                }
+            }
+
+            // Create particle array - 40 on mobile, 100+ on desktop
+            const isMobile = () => window.innerWidth <= 768;
+            const particlesArray = [];
+
+            function init() {
+                particlesArray.length = 0;
+                const particleCount = isMobile() ? 40 : 120;
+                for (let i = 0; i < particleCount; i++) {
+                    particlesArray.push(new Particle());
+                }
+            }
+
+            // Connect particles with semi-transparent lines
+            function connect() {
+                const lineOpacity = isMobile() ? 0.1 : 0.2;
+                for (let a = 0; a < particlesArray.length; a++) {
+                    for (let b = a + 1; b < particlesArray.length; b++) {
+                        const dx = particlesArray[a].x - particlesArray[b].x;
+                        const dy = particlesArray[a].y - particlesArray[b].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < 120) {
+                            const opacity = 1 - distance / 120;
+                            // Use FinMango orange for connection lines
+                            ctx.strokeStyle = `rgba(255, 107, 53, ${opacity * lineOpacity})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                            ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            // Animation loop - runs at 60fps with requestAnimationFrame
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particlesArray.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+
+                connect();
+                requestAnimationFrame(animate);
+            }
+
+            init();
+            animate();
+        }
+    </script>
+</body>
+</html>
