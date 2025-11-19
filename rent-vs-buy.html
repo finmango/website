@@ -358,6 +358,91 @@
       margin-top: 2rem;
     }
 
+    /* Monthly Payment Comparison */
+    .payment-comparison {
+      background: var(--light-gray);
+      border: 2px solid var(--black);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .payment-comparison h4 {
+      font-size: 0.9rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .payment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .payment-column {
+      background: var(--white);
+      padding: 1rem;
+      border: 2px solid var(--black);
+    }
+
+    .payment-column h5 {
+      font-size: 0.85rem;
+      font-weight: 900;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+
+    .payment-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .payment-line:last-child {
+      border-bottom: none;
+    }
+
+    .payment-line.total {
+      font-weight: 900;
+      font-size: 0.95rem;
+      border-top: 2px solid var(--black);
+      padding-top: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .payment-line.subtotal {
+      font-weight: 700;
+      border-top: 1px solid var(--gray);
+      padding-top: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .payment-line.tax-savings {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .payment-difference {
+      background: var(--black);
+      color: var(--white);
+      padding: 1rem;
+      text-align: center;
+      margin-top: 1rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .payment-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+
     /* Educational Section */
     .edu-section {
       margin-top: 4rem;
@@ -623,6 +708,16 @@
           </div>
 
           <div class="input-group">
+            <label>Mortgage Term</label>
+            <div class="input-wrapper">
+              <select id="mortgageTerm">
+                <option value="30">30 Years</option>
+                <option value="15">15 Years</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="input-group">
             <label>How long will you stay?</label>
             <div class="input-wrapper">
               <input type="number" id="years" value="7">
@@ -728,6 +823,28 @@
                 </div>
                 <small style="color: var(--gray); font-size: 0.75rem;">Return on saved cash.</small>
               </div>
+
+              <div class="section-title">Tax Assumptions</div>
+
+              <div class="input-group">
+                <label>Tax Bracket</label>
+                <div class="input-wrapper">
+                  <input type="number" id="taxBracket" value="24" step="1" min="0" max="37">
+                  <span class="symbol">%</span>
+                </div>
+                <small style="color: var(--gray); font-size: 0.75rem;">Your marginal tax rate.</small>
+              </div>
+
+              <div class="input-group">
+                <label>Filing Status</label>
+                <div class="input-wrapper">
+                  <select id="filingStatus">
+                    <option value="single">Single</option>
+                    <option value="married" selected>Married Filing Jointly</option>
+                  </select>
+                </div>
+                <small style="color: var(--gray); font-size: 0.75rem;">Affects standard deduction threshold.</small>
+              </div>
             </div>
           </div>
         </div>
@@ -742,6 +859,67 @@
               Investments)</p>
           </div>
 
+          <!-- Monthly Payment Comparison -->
+          <div class="payment-comparison">
+            <h4>Monthly Payment Breakdown (Year 1)</h4>
+            <div class="payment-grid">
+              <div class="payment-column">
+                <h5>Buying</h5>
+                <div class="payment-line">
+                  <span>Mortgage (P&I)</span>
+                  <span id="mortgagePI">$0</span>
+                </div>
+                <div class="payment-line">
+                  <span>Property Tax</span>
+                  <span id="propertyTaxMonthly">$0</span>
+                </div>
+                <div class="payment-line">
+                  <span>Home Insurance</span>
+                  <span id="homeInsMonthly">$0</span>
+                </div>
+                <div class="payment-line">
+                  <span>Maintenance</span>
+                  <span id="maintenanceMonthly">$0</span>
+                </div>
+                <div class="payment-line">
+                  <span>HOA</span>
+                  <span id="hoaMonthly">$0</span>
+                </div>
+                <div class="payment-line subtotal">
+                  <span>Subtotal</span>
+                  <span id="buySubtotal">$0</span>
+                </div>
+                <div class="payment-line tax-savings">
+                  <span>Tax Savings</span>
+                  <span id="taxSavings">$0</span>
+                </div>
+                <div class="payment-line total">
+                  <span>Effective Cost</span>
+                  <span id="buyTotal">$0</span>
+                </div>
+              </div>
+
+              <div class="payment-column">
+                <h5>Renting</h5>
+                <div class="payment-line">
+                  <span>Monthly Rent</span>
+                  <span id="rentMonthly">$0</span>
+                </div>
+                <div class="payment-line">
+                  <span>Renter's Insurance</span>
+                  <span id="rentInsMonthly">$0</span>
+                </div>
+                <div class="payment-line total">
+                  <span>Total Cost</span>
+                  <span id="rentTotal">$0</span>
+                </div>
+              </div>
+            </div>
+            <div class="payment-difference" id="paymentDifference">
+              Renting is $500/mo cheaper
+            </div>
+          </div>
+
           <div class="chart-container">
             <canvas id="wealthChart"></canvas>
           </div>
@@ -753,6 +931,8 @@
                 (6%).</li>
               <li><strong>Renting Wealth:</strong> Initial Down Payment + Closing Costs invested, plus any
                 monthly savings invested at <span id="returnLabel">7%</span>.</li>
+              <li><strong>Tax Benefits:</strong> Mortgage interest and property tax deductions (if itemizing exceeds
+                standard deduction).</li>
             </ul>
           </div>
         </div>
@@ -791,6 +971,19 @@
               have grown in the stock market.</p>
             <p>If the market returns 7% and your home appreciates 3%, your equity is working harder in the
               market than in your walls.</p>
+          </div>
+
+          <div class="edu-card">
+            <span class="highlight-badge">Tax Benefits</span>
+            <h3>The Tax Advantage (Sometimes)</h3>
+            <p>Homeowners can deduct <strong>mortgage interest</strong> and <strong>property taxes</strong> from their
+              taxable income—but only if they itemize deductions and exceed the standard deduction ($14,600 single /
+              $29,200 married).</p>
+            <p><strong>The catch:</strong> Property tax deductions are capped at $10,000/year (SALT cap), and mortgage
+              interest is only deductible on the first $750,000 of debt. Plus, as you pay down your mortgage, the
+              interest portion decreases, making the benefit smaller over time.</p>
+            <p>Many homeowners don't actually benefit because their standard deduction is higher than their itemized
+              deductions.</p>
           </div>
         </div>
       </div>
@@ -894,6 +1087,7 @@
       const monthlyRent = parseFloat(document.getElementById('monthlyRent').value) || 0;
       const downPaymentPercent = parseFloat(document.getElementById('downPaymentPercent').value) / 100;
       const interestRate = parseFloat(document.getElementById('interestRate').value) / 100;
+      const mortgageTerm = parseInt(document.getElementById('mortgageTerm').value) || 30;
       const years = parseInt(document.getElementById('years').value) || 1;
 
       // Advanced Inputs
@@ -910,15 +1104,19 @@
       const appreciation = parseFloat(document.getElementById('appreciation').value) / 100;
       const investmentReturn = parseFloat(document.getElementById('investmentReturn').value) / 100;
 
+      // Tax Inputs
+      const taxBracket = parseFloat(document.getElementById('taxBracket').value) / 100;
+      const filingStatus = document.getElementById('filingStatus').value;
+      const standardDeduction = filingStatus === 'married' ? 29200 : 14600; // 2024 values
+
       // Initial Calculations
       const downPayment = homePrice * downPaymentPercent;
       const loanAmount = homePrice - downPayment;
       const monthlyRate = interestRate / 12;
-      const numPayments = 30 * 12; // 30 Year Fixed
+      const numPayments = mortgageTerm * 12;
       const monthlyMortgage = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
 
       // Initial Wealth Positions
-      // We assume the person has (DownPayment + BuyingClosingCosts) in cash to start.
       const buyingClosingCosts = homePrice * buyingClosingCostsPercent;
       const initialCash = downPayment + buyingClosingCosts;
 
@@ -935,18 +1133,42 @@
       const rentWealthData = [];
       const labels = [];
 
+      // Track first year values for monthly comparison display
+      let firstYearMortgagePI = monthlyMortgage;
+      let firstYearPropertyTax = (homePrice * propertyTaxRate) / 12;
+      let firstYearMaintenance = (homePrice * maintenanceRate) / 12;
+      let firstYearHomeIns = homeInsurance / 12;
+      let firstYearTaxSavings = 0;
+
       // Simulation Loop
       for (let i = 1; i <= years; i++) {
+        let yearlyMortgageInterest = 0;
+        let yearlyPropertyTax = currentHomeValue * propertyTaxRate;
+
         for (let m = 0; m < 12; m++) {
           // Buy Cashflow
           const interestPayment = currentLoan * monthlyRate;
           const principalPayment = monthlyMortgage - interestPayment;
           currentLoan -= principalPayment;
+          yearlyMortgageInterest += interestPayment;
 
           const monthlyTax = (currentHomeValue * propertyTaxRate) / 12;
           const monthlyMaint = (currentHomeValue * maintenanceRate) / 12;
           const monthlyHomeIns = homeInsurance / 12;
-          const costBuy = monthlyMortgage + monthlyTax + monthlyMaint + hoa + monthlyHomeIns;
+
+          // Calculate tax savings
+          // Property tax deduction is capped at $10,000/year (SALT cap)
+          const cappedPropertyTax = Math.min(yearlyPropertyTax, 10000);
+          const totalItemizedDeductions = yearlyMortgageInterest + cappedPropertyTax;
+          const monthlyTaxSavings = totalItemizedDeductions > standardDeduction
+            ? ((totalItemizedDeductions - standardDeduction) * taxBracket) / 12
+            : 0;
+
+          if (i === 1 && m === 0) {
+            firstYearTaxSavings = monthlyTaxSavings;
+          }
+
+          const costBuy = monthlyMortgage + monthlyTax + monthlyMaint + hoa + monthlyHomeIns - monthlyTaxSavings;
 
           // Rent Cashflow
           const costRent = currentRent + rentInsurance;
@@ -977,6 +1199,30 @@
         rentWealthData.push(totalRentWealth);
         labels.push(`Year ${i}`);
       }
+
+      // Update Monthly Payment Comparison Display
+      const buySubtotal = firstYearMortgagePI + firstYearPropertyTax + firstYearHomeIns + firstYearMaintenance + hoa;
+      const buyEffective = buySubtotal - firstYearTaxSavings;
+      const rentTotal = monthlyRent + rentInsurance;
+
+      document.getElementById('mortgagePI').textContent = formatCurrency(firstYearMortgagePI);
+      document.getElementById('propertyTaxMonthly').textContent = formatCurrency(firstYearPropertyTax);
+      document.getElementById('homeInsMonthly').textContent = formatCurrency(firstYearHomeIns);
+      document.getElementById('maintenanceMonthly').textContent = formatCurrency(firstYearMaintenance);
+      document.getElementById('hoaMonthly').textContent = formatCurrency(hoa);
+      document.getElementById('buySubtotal').textContent = formatCurrency(buySubtotal);
+      document.getElementById('taxSavings').textContent = firstYearTaxSavings > 0 ? '-' + formatCurrency(firstYearTaxSavings) : '$0';
+      document.getElementById('buyTotal').textContent = formatCurrency(buyEffective);
+
+      document.getElementById('rentMonthly').textContent = formatCurrency(monthlyRent);
+      document.getElementById('rentInsMonthly').textContent = formatCurrency(rentInsurance);
+      document.getElementById('rentTotal').textContent = formatCurrency(rentTotal);
+
+      const monthlyDiff = Math.abs(buyEffective - rentTotal);
+      const diffText = buyEffective > rentTotal
+        ? `Renting is ${formatCurrency(monthlyDiff)}/mo cheaper`
+        : `Buying is ${formatCurrency(monthlyDiff)}/mo cheaper`;
+      document.getElementById('paymentDifference').textContent = diffText;
 
       // Final Verdict
       const finalBuy = buyWealthData[years - 1];
@@ -1068,6 +1314,11 @@
     const inputs = document.querySelectorAll('input');
     inputs.forEach(input => {
       input.addEventListener('input', calculate);
+    });
+
+    const selects = document.querySelectorAll('select');
+    selects.forEach(select => {
+      select.addEventListener('change', calculate);
     });
 
     // Init
