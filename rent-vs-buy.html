@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rent vs. Buy Calculator - FinMango</title>
   <meta name="description"
-    content="Should you rent or buy? Use our interactive calculator to compare the total cost of renting versus buying a home over time.">
+    content="Should you rent or buy? Compare the total cost of ownership and net wealth over time to make the right housing decision.">
   <link rel="icon" type="image/png" href="favicon.png">
 
   <!-- Preconnect -->
@@ -35,39 +35,15 @@
   <style>
     /* Core Styles */
     :root {
-      /* Colors */
       --black: #000000;
       --white: #ffffff;
       --orange: #FF6B35;
-      --orange-dark: #E55A2B;
-      --orange-soft: #FF8C61;
-      --orange-light: rgba(255, 107, 53, 0.1);
       --gray: #6B6560;
-      --gray-medium: #666666;
       --light-gray: #f5f5f5;
-
-      /* Semantic Colors */
       --success: #10B981;
       --error: #EF4444;
-      --warning: #F59E0B;
       --info: #3B82F6;
-
-      /* Layout */
       --max-width: 1200px;
-      --hero-max-width: 1400px;
-      --nav-max-width: 1280px;
-
-      /* Spacing Scale (8px base) */
-      --space-1: 0.25rem;
-      --space-2: 0.5rem;
-      --space-3: 0.75rem;
-      --space-4: 1rem;
-      --space-6: 1.5rem;
-      --space-8: 2rem;
-      --space-12: 3rem;
-
-      /* Transitions */
-      --transition-base: 0.3s ease;
     }
 
     * {
@@ -81,10 +57,9 @@
       background: var(--white);
       color: var(--black);
       line-height: 1.6;
-      overflow-x: hidden;
     }
 
-    /* Navigation */
+    /* Nav */
     nav {
       position: fixed;
       top: 0;
@@ -92,9 +67,8 @@
       background: var(--white);
       z-index: 1000;
       padding: 1.5rem 0;
-      transition: all 0.3s ease;
       border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s ease;
     }
 
     nav.scrolled {
@@ -109,22 +83,9 @@
       max-width: 1280px;
       margin: 0 auto;
       padding: 0 2rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .logo {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      text-decoration: none;
-      transition: transform 0.3s ease;
-      justify-self: start;
-    }
-
-    .logo:hover {
-      transform: rotate(-2deg) scale(1.05);
     }
 
     .logo img {
@@ -140,7 +101,6 @@
       display: flex;
       gap: 1.75rem;
       align-items: center;
-      justify-self: end;
     }
 
     .nav-right a {
@@ -148,64 +108,14 @@
       text-decoration: none;
       font-weight: 600;
       font-size: 1rem;
-      transition: all 0.2s ease;
-      position: relative;
-      white-space: nowrap;
-      letter-spacing: -0.01em;
-    }
-
-    .nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--orange);
-      transition: width 0.3s ease;
-    }
-
-    .nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
-      width: 100%;
-    }
-
-    .nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
-      color: var(--orange);
     }
 
     .btn-donate {
       background: var(--orange);
       color: var(--white) !important;
       padding: 0.5rem 1rem;
-      text-decoration: none;
-      font-weight: 700;
-      transition: all 0.2s ease;
       border: 2px solid var(--black);
-      position: relative;
-      overflow: hidden;
-      font-size: 0.85rem;
-      white-space: nowrap;
-      letter-spacing: 0.01em;
-    }
-
-    .btn-donate::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: var(--black);
-      transition: left 0.3s ease;
-      z-index: -1;
-    }
-
-    .btn-donate:hover::before {
-      left: 0;
-    }
-
-    .btn-donate:hover {
-      transform: scale(1.05);
+      font-weight: 700;
     }
 
     .btn-get-involved {
@@ -214,34 +124,7 @@
       padding: 0.5rem 1rem;
       text-decoration: none;
       font-weight: 700;
-      transition: all 0.2s ease;
       border: 2px solid var(--black);
-      position: relative;
-      overflow: hidden;
-      font-size: 0.85rem;
-      white-space: nowrap;
-      letter-spacing: 0.01em;
-    }
-
-    .btn-get-involved::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: var(--black);
-      transition: left 0.3s ease;
-      z-index: -1;
-    }
-
-    .btn-get-involved:hover::before {
-      left: 0;
-    }
-
-    .btn-get-involved:hover {
-      color: var(--white) !important;
-      transform: scale(1.05);
     }
 
     /* Mobile Menu */
@@ -249,7 +132,6 @@
       display: none;
       gap: 1rem;
       align-items: center;
-      justify-self: end;
     }
 
     .mobile-menu-btn {
@@ -281,10 +163,6 @@
       transform: rotate(-45deg) translate(7px, -6px);
     }
 
-    .mobile-get-involved {
-      display: none;
-    }
-
     .mobile-menu {
       display: none;
       position: fixed;
@@ -297,7 +175,6 @@
       padding: 6rem 2rem;
       transition: right 0.3s ease;
       overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
     }
 
     .mobile-menu.active {
@@ -313,263 +190,13 @@
       color: var(--black);
       text-decoration: none;
       border-bottom: 2px solid var(--black);
-      transition: all 0.2s ease;
-    }
-
-    .mobile-menu a:hover {
-      color: var(--orange);
-      padding-left: 1rem;
-    }
-
-    /* Footer */
-    footer {
-      padding: 0;
-      border-top: 4px solid var(--orange);
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .footer-newsletter {
-      padding: 3rem 2rem;
-      background: rgba(255, 107, 53, 0.1);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      text-align: center;
-    }
-
-    .footer-newsletter-container {
-      max-width: 850px;
-      margin: 0 auto;
-    }
-
-    .footer-newsletter h3 {
-      font-size: 1.5rem;
-      font-weight: 900;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.02em;
-    }
-
-    .footer-newsletter p {
-      font-size: 1rem;
-      opacity: 0.8;
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-    }
-
-    .footer-newsletter-btn {
-      display: inline-block;
-      padding: 0.85rem 2rem;
-      font-size: 1rem;
-      font-weight: 700;
-      background: var(--orange);
-      color: var(--white);
-      text-decoration: none;
-      border: 2px solid var(--orange);
-      transition: all 0.2s ease;
-      font-family: 'Inter', sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-    }
-
-    .footer-newsletter-btn:hover {
-      background: var(--white);
-      color: var(--black);
-      border-color: var(--white);
-      transform: translateY(-2px);
-    }
-
-    .footer-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 4rem 2rem 0;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-
-    .footer-brand img {
-      height: 32px;
-      margin-bottom: 1rem;
-      filter: brightness(0) invert(1);
-    }
-
-    .footer-tagline {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    .footer-tagline {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
-
-    .footer-section h4 {
-      font-size: 1rem;
-      font-weight: 900;
-      margin-bottom: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .footer-section a {
-      display: block;
-      color: rgba(255, 255, 255, 0.7);
-      text-decoration: none;
-      margin-bottom: 0.75rem;
-      transition: color 0.2s ease;
-      font-size: 0.95rem;
-    }
-
-    .footer-section a:hover {
-      color: var(--orange);
-    }
-
-    .footer-bottom {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 2rem 2rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.9rem;
-    }
-
-    /* Responsive */
-    @media (max-width: 1200px) {
-      .nav-right {
-        gap: 1.5rem;
-      }
-
-      .nav-right a {
-        font-size: 0.95rem;
-      }
-
-      .btn-donate,
-      .btn-get-involved {
-        padding: 0.65rem 1.5rem;
-        font-size: 0.9rem;
-      }
-    }
-
-    @media (max-width: 1080px) {
-      nav {
-        padding: 1.25rem 0;
-      }
-
-      nav.scrolled {
-        padding: 0.875rem 0;
-      }
-
-      .logo img {
-        height: 36px;
-      }
-
-      nav.scrolled .logo img {
-        height: 36px;
-      }
-
-      .nav-right {
-        gap: 1.25rem;
-      }
-
-      .nav-right a {
-        font-size: 0.9rem;
-      }
-
-      .btn-donate,
-      .btn-get-involved {
-        padding: 0.6rem 1.25rem;
-        font-size: 0.85rem;
-      }
-    }
-
-    @media (max-width: 968px) {
-      :root {
-        font-size: 16px;
-      }
-
-      body {
-        overflow-x: hidden;
-        max-width: 100vw;
-      }
-
-      .nav-right {
-        display: none;
-      }
-
-      .mobile-controls {
-        display: flex;
-      }
-
-      .mobile-menu-btn {
-        display: block;
-      }
-
-      .mobile-get-involved {
-        display: inline-block;
-        padding: 0.35rem 0.85rem;
-        font-size: 0.72rem;
-      }
-
-      .mobile-menu {
-        display: block;
-      }
-
-      .footer-newsletter {
-        padding: 2.5rem 1.5rem;
-      }
-
-      .footer-newsletter h3 {
-        font-size: 1.25rem;
-      }
-
-      .footer-newsletter p {
-        font-size: 0.95rem;
-      }
-
-      .footer-newsletter-btn {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.9rem;
-      }
-
-      .footer-container {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .footer-bottom {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
-
-      .calc-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .results-card {
-        position: static;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .mobile-menu {
-        padding: 5rem 1.5rem 2rem;
-      }
-
-      .mobile-menu a {
-        font-size: 1.5rem;
-        padding: 1.25rem 0;
-      }
     }
 
     /* Calculator Specific Styles */
     .calculator-section {
       padding: 8rem 2rem 4rem;
+      background: var(--light-gray);
+      min-height: 100vh;
     }
 
     .container {
@@ -623,13 +250,15 @@
       position: relative;
     }
 
-    .input-wrapper input {
+    .input-wrapper input,
+    .input-wrapper select {
       width: 100%;
       padding: 0.75rem;
       border: 2px solid var(--black);
       font-family: inherit;
       font-size: 1rem;
       border-radius: 0;
+      background: var(--white);
     }
 
     .input-wrapper .symbol {
@@ -639,70 +268,272 @@
       transform: translateY(-50%);
       color: var(--gray);
       font-weight: 600;
+      pointer-events: none;
     }
 
-    .results-card {
-      position: sticky;
-      top: 100px;
+    /* Advanced Section */
+    .advanced-toggle {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      font-weight: 700;
+      color: var(--gray);
+      cursor: pointer;
+      padding: 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-top: 1px solid #eee;
+      margin-top: 1rem;
     }
 
-    .verdict {
-      background: var(--black);
-      color: var(--white);
-      padding: 1.5rem;
-      margin: -2rem -2rem 2rem -2rem;
-      text-align: center;
+    .advanced-toggle:hover {
+      color: var(--black);
     }
 
-    .verdict h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
+    .advanced-content {
+      display: none;
+      padding-top: 1rem;
+      animation: fadeIn 0.3s ease;
     }
 
-    .verdict-sub {
-      font-size: 0.9rem;
-      opacity: 0.9;
+    .advanced-content.open {
+      display: block;
     }
 
-    .chart-container {
-      margin-top: 2rem;
-      height: 300px;
-    }
-
-    .breakdown {
-      margin-top: 2rem;
+    .advanced-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
     }
 
-    .breakdown-item {
-      text-align: center;
-      padding: 1rem;
-      background: rgba(0, 0, 0, 0.03);
-      border: 1px solid rgba(0, 0, 0, 0.1);
-    }
-
-    .breakdown-label {
-      font-size: 0.8rem;
+    .section-title {
+      font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      font-weight: 700;
-      color: var(--gray);
+      font-weight: 900;
+      color: var(--orange);
+      margin: 1.5rem 0 1rem;
+      grid-column: span 2;
+    }
+
+    /* Results */
+    .results-card {
+      position: sticky;
+      top: 100px;
+    }
+
+    .verdict-box {
+      background: var(--black);
+      color: var(--white);
+      padding: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .verdict-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .verdict-winner {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--success);
+      line-height: 1.1;
       margin-bottom: 0.5rem;
     }
 
-    .breakdown-value {
-      font-size: 1.25rem;
-      font-weight: 900;
+    .verdict-diff {
+      font-size: 1.1rem;
+      font-weight: 600;
     }
 
-    .value-rent {
+    .chart-container {
+      height: 300px;
+      margin-top: 2rem;
+    }
+
+    /* Educational Section */
+    .edu-section {
+      margin-top: 4rem;
+      padding-top: 4rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .edu-card {
+      background: var(--white);
+      padding: 2rem;
+      border-left: 4px solid var(--orange);
+    }
+
+    .edu-card h3 {
+      font-size: 1.25rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+
+    .edu-card p {
+      font-size: 0.95rem;
+      color: var(--gray);
+      margin-bottom: 1rem;
+    }
+
+    .highlight-badge {
+      display: inline-block;
+      background: rgba(255, 107, 53, 0.1);
+      color: var(--orange);
+      padding: 0.25rem 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--black);
+      color: var(--white);
+      padding: 0;
+      border-top: 4px solid var(--orange);
+    }
+
+    .footer-newsletter {
+      padding: 3rem 2rem;
+      background: rgba(255, 107, 53, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .footer-newsletter-container {
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    .footer-newsletter h3 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-newsletter-btn {
+      display: inline-block;
+      padding: 0.85rem 2rem;
+      font-size: 1rem;
+      font-weight: 700;
+      background: var(--orange);
+      color: var(--white);
+      text-decoration: none;
+      border: 2px solid var(--orange);
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+    }
+
+    .footer-newsletter-btn:hover {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--white);
+    }
+
+    .footer-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 4rem 2rem 0;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .footer-brand img {
+      height: 32px;
+      margin-bottom: 1rem;
+      filter: brightness(0) invert(1);
+    }
+
+    .footer-section h4 {
+      font-size: 1rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .footer-section a {
+      display: block;
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-section a:hover {
       color: var(--orange);
     }
 
-    .value-buy {
-      color: var(--success);
+    .footer-bottom {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 2rem 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 968px) {
+      .calc-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .results-card {
+        position: static;
+      }
+
+      .nav-right {
+        display: none;
+      }
+
+      .mobile-controls {
+        display: flex;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .footer-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -726,7 +557,8 @@
       </div>
 
       <div class="mobile-controls">
-        <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+        <a href="get-involved.html" class="btn-get-involved mobile-get-involved"
+          style="display: inline-block; padding: 0.35rem 0.85rem; font-size: 0.72rem;">Get Involved</a>
         <button class="mobile-menu-btn" id="mobileMenuBtn">
           <span></span>
           <span></span>
@@ -749,18 +581,19 @@
     <div class="container">
       <div class="header-content">
         <h1>Rent vs. Buy Calculator</h1>
-        <p>Find out if you're better off renting or buying based on your financial situation and market conditions.</p>
+        <p>Make the right move. Compare the true cost of homeownership against renting and investing the
+          difference.</p>
       </div>
 
       <div class="calc-grid">
         <!-- Inputs -->
         <div class="card">
-          <h3 style="margin-bottom: 1.5rem; font-weight: 900;">Your Scenario</h3>
+          <h3 style="margin-bottom: 1.5rem; font-weight: 900;">The Basics</h3>
 
           <div class="input-group">
             <label>Target Home Price</label>
             <div class="input-wrapper">
-              <input type="number" id="homePrice" value="300000">
+              <input type="number" id="homePrice" value="350000">
               <span class="symbol">$</span>
             </div>
           </div>
@@ -768,7 +601,7 @@
           <div class="input-group">
             <label>Monthly Rent (Comparable)</label>
             <div class="input-wrapper">
-              <input type="number" id="monthlyRent" value="1800">
+              <input type="number" id="monthlyRent" value="2000">
               <span class="symbol">$</span>
             </div>
           </div>
@@ -784,7 +617,7 @@
           <div class="input-group">
             <label>Mortgage Interest Rate</label>
             <div class="input-wrapper">
-              <input type="number" id="interestRate" value="6.5" step="0.1">
+              <input type="number" id="interestRate" value="6.8" step="0.1">
               <span class="symbol">%</span>
             </div>
           </div>
@@ -797,25 +630,35 @@
             </div>
           </div>
 
-          <details style="margin-top: 1rem; cursor: pointer;">
-            <summary style="font-weight: 700; color: var(--gray);">Advanced Settings</summary>
-            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #eee;">
+          <button class="advanced-toggle" onclick="toggleAdvanced()">
+            <span>⚙️ Advanced Settings (Hidden Costs)</span>
+            <span id="arrow">▼</span>
+          </button>
+
+          <div class="advanced-content" id="advancedContent">
+            <div class="advanced-grid">
+              <div class="section-title">Buying Costs</div>
+
               <div class="input-group">
-                <label>Home Appreciation (Yearly)</label>
+                <label>Buying Closing Costs</label>
                 <div class="input-wrapper">
-                  <input type="number" id="appreciation" value="3" step="0.1">
+                  <input type="number" id="buyingClosingCosts" value="3" step="0.1">
                   <span class="symbol">%</span>
                 </div>
+                <small style="color: var(--gray); font-size: 0.75rem;">Origination fees, title,
+                  appraisal.</small>
               </div>
+
               <div class="input-group">
-                <label>Investment Return (Yearly)</label>
+                <label>Selling Costs</label>
                 <div class="input-wrapper">
-                  <input type="number" id="investmentReturn" value="6" step="0.1">
+                  <input type="number" id="sellingClosingCosts" value="6" step="0.1">
                   <span class="symbol">%</span>
                 </div>
-                <small style="display: block; margin-top: 0.25rem; color: var(--gray); font-size: 0.8rem;">Return on
-                  cash if you rented instead of paying down payment.</small>
+                <small style="color: var(--gray); font-size: 0.75rem;">Agent commissions (usually
+                  6%).</small>
               </div>
+
               <div class="input-group">
                 <label>Property Tax (Yearly)</label>
                 <div class="input-wrapper">
@@ -823,43 +666,132 @@
                   <span class="symbol">%</span>
                 </div>
               </div>
+
               <div class="input-group">
-                <label>Maintenance Cost (Yearly)</label>
+                <label>Maintenance (Yearly)</label>
                 <div class="input-wrapper">
-                  <input type="number" id="maintenance" value="1" step="0.1">
+                  <input type="number" id="maintenance" value="1.0" step="0.1">
+                  <span class="symbol">%</span>
+                </div>
+                <small style="color: var(--gray); font-size: 0.75rem;">1% rule is standard.</small>
+              </div>
+
+              <div class="input-group">
+                <label>HOA (Monthly)</label>
+                <div class="input-wrapper">
+                  <input type="number" id="hoa" value="0">
+                  <span class="symbol">$</span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label>Home Insurance (Yearly)</label>
+                <div class="input-wrapper">
+                  <input type="number" id="homeInsurance" value="1200">
+                  <span class="symbol">$</span>
+                </div>
+              </div>
+
+              <div class="section-title">Renting Costs</div>
+
+              <div class="input-group">
+                <label>Rent Insurance (Monthly)</label>
+                <div class="input-wrapper">
+                  <input type="number" id="rentInsurance" value="15">
+                  <span class="symbol">$</span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label>Rent Inflation (Yearly)</label>
+                <div class="input-wrapper">
+                  <input type="number" id="rentInflation" value="3.0" step="0.1">
                   <span class="symbol">%</span>
                 </div>
               </div>
+
+              <div class="section-title">Market Assumptions</div>
+
+              <div class="input-group">
+                <label>Home Appreciation</label>
+                <div class="input-wrapper">
+                  <input type="number" id="appreciation" value="3.0" step="0.1">
+                  <span class="symbol">%</span>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label>Investment Return</label>
+                <div class="input-wrapper">
+                  <input type="number" id="investmentReturn" value="7.0" step="0.1">
+                  <span class="symbol">%</span>
+                </div>
+                <small style="color: var(--gray); font-size: 0.75rem;">Return on saved cash.</small>
+              </div>
             </div>
-          </details>
+          </div>
         </div>
 
         <!-- Results -->
         <div class="card results-card">
-          <div class="verdict">
-            <h2 id="verdictTitle">Calculating...</h2>
-            <div class="verdict-sub" id="verdictText">Enter your details to see the comparison.</div>
+          <div class="verdict-box">
+            <div class="verdict-label">After <span id="yearsLabel">7</span> Years</div>
+            <div class="verdict-winner" id="verdictWinner">Buying Wins</div>
+            <div class="verdict-diff" id="verdictDiff">by $12,450</div>
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.8;">Based on Net Wealth (Equity vs.
+              Investments)</p>
           </div>
 
           <div class="chart-container">
-            <canvas id="comparisonChart"></canvas>
+            <canvas id="wealthChart"></canvas>
           </div>
 
-          <div class="breakdown">
-            <div class="breakdown-item">
-              <div class="breakdown-label">Net Cost to Buy</div>
-              <div class="breakdown-value value-buy" id="costBuy">-</div>
-            </div>
-            <div class="breakdown-item">
-              <div class="breakdown-label">Net Cost to Rent</div>
-              <div class="breakdown-value value-rent" id="costRent">-</div>
-            </div>
+          <div style="margin-top: 2rem; font-size: 0.85rem; color: var(--gray);">
+            <p style="margin-bottom: 0.5rem;"><strong>How we calculate this:</strong></p>
+            <ul style="padding-left: 1.2rem; line-height: 1.5;">
+              <li><strong>Buying Wealth:</strong> Home Value minus Mortgage Balance, minus Selling Costs
+                (6%).</li>
+              <li><strong>Renting Wealth:</strong> Initial Down Payment + Closing Costs invested, plus any
+                monthly savings invested at <span id="returnLabel">7%</span>.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Educational Section -->
+      <div class="edu-section">
+        <div class="header-content">
+          <h2>The Hidden Costs of Buying</h2>
+          <p>Most calculators only look at the mortgage payment. We look at everything.</p>
+        </div>
+
+        <div class="edu-grid">
+          <div class="edu-card">
+            <span class="highlight-badge">Closing Costs</span>
+            <h3>The "1% Fee" & More</h3>
+            <p>When you buy, you don't just pay the down payment. You pay <strong>3-4%</strong> of the home
+              price in "Closing Costs". This includes appraisal fees, title insurance, and yes, often a
+              <strong>1% origination fee</strong> just to the lender for processing the loan.
+            </p>
+            <p>On a $350k home, that's <strong>$10,500+</strong> gone immediately.</p>
           </div>
 
-          <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--gray); line-height: 1.5;">
-            * <strong>Net Cost</strong> includes all unrecoverable costs (interest, taxes, maintenance, rent) minus any
-            equity gained or investment returns. Lower is better.
-          </p>
+          <div class="edu-card">
+            <span class="highlight-badge">Maintenance</span>
+            <h3>The 1% Rule</h3>
+            <p>Renters call the landlord when the fridge breaks. Owners write a check. A good rule of thumb
+              is to budget <strong>1% of your home's value</strong> every year for maintenance.</p>
+            <p>New roof? HVAC? Water heater? It's not "if", it's "when".</p>
+          </div>
+
+          <div class="edu-card">
+            <span class="highlight-badge">Opportunity Cost</span>
+            <h3>Money Making Money</h3>
+            <p>The biggest hidden cost is the money you <em>didn't</em> invest. That $70k down payment could
+              have grown in the stock market.</p>
+            <p>If the market returns 7% and your home appreciates 3%, your equity is working harder in the
+              market than in your walls.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -880,10 +812,10 @@
         <div class="footer-brand">
           <img src="finmango.png" alt="FinMango" loading="lazy">
         </div>
-        <p class="footer-tagline">
+        <p style="color: rgba(255,255,255,0.7); font-size: 0.95rem; line-height: 1.6;">
           A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
         </p>
-        <p class="footer-tagline" style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem;">
+        <p style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem; color: rgba(255,255,255,0.7);">
           EIN: 81-2543425
         </p>
       </div>
@@ -946,164 +878,128 @@
       }
     });
 
+    // Advanced Toggle
+    function toggleAdvanced() {
+      const content = document.getElementById('advancedContent');
+      const arrow = document.getElementById('arrow');
+      content.classList.toggle('open');
+      arrow.textContent = content.classList.contains('open') ? '▲' : '▼';
+    }
+
     let chart;
 
     function calculate() {
       // Inputs
-      const homePrice = parseFloat(document.getElementById('homePrice').value);
-      const monthlyRent = parseFloat(document.getElementById('monthlyRent').value);
+      const homePrice = parseFloat(document.getElementById('homePrice').value) || 0;
+      const monthlyRent = parseFloat(document.getElementById('monthlyRent').value) || 0;
       const downPaymentPercent = parseFloat(document.getElementById('downPaymentPercent').value) / 100;
       const interestRate = parseFloat(document.getElementById('interestRate').value) / 100;
-      const years = parseInt(document.getElementById('years').value);
+      const years = parseInt(document.getElementById('years').value) || 1;
+
+      // Advanced Inputs
+      const buyingClosingCostsPercent = parseFloat(document.getElementById('buyingClosingCosts').value) / 100;
+      const sellingClosingCostsPercent = parseFloat(document.getElementById('sellingClosingCosts').value) / 100;
+      const propertyTaxRate = parseFloat(document.getElementById('propertyTax').value) / 100;
+      const maintenanceRate = parseFloat(document.getElementById('maintenance').value) / 100;
+      const hoa = parseFloat(document.getElementById('hoa').value) || 0;
+      const homeInsurance = parseFloat(document.getElementById('homeInsurance').value) || 0;
+
+      const rentInsurance = parseFloat(document.getElementById('rentInsurance').value) || 0;
+      const rentInflation = parseFloat(document.getElementById('rentInflation').value) / 100;
+
       const appreciation = parseFloat(document.getElementById('appreciation').value) / 100;
       const investmentReturn = parseFloat(document.getElementById('investmentReturn').value) / 100;
-      const propertyTax = parseFloat(document.getElementById('propertyTax').value) / 100;
-      const maintenance = parseFloat(document.getElementById('maintenance').value) / 100;
 
-      // Buying Calculations
+      // Initial Calculations
       const downPayment = homePrice * downPaymentPercent;
       const loanAmount = homePrice - downPayment;
       const monthlyRate = interestRate / 12;
-      const numPayments = 30 * 12; // Assuming 30 year fixed
-
-      // Monthly Mortgage Payment (Principal + Interest)
+      const numPayments = 30 * 12; // 30 Year Fixed
       const monthlyMortgage = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
 
-      let totalUnrecoverableBuy = 0;
-      let homeValue = homePrice;
-      let remainingLoan = loanAmount;
+      // Initial Wealth Positions
+      // We assume the person has (DownPayment + BuyingClosingCosts) in cash to start.
+      const buyingClosingCosts = homePrice * buyingClosingCostsPercent;
+      const initialCash = downPayment + buyingClosingCosts;
 
-      // Buying Costs (Closing costs approx 3%)
-      totalUnrecoverableBuy += homePrice * 0.03;
+      // Buy Scenario: Cash is gone. Asset is Home (Value) - Liability (Loan).
+      // Rent Scenario: Cash is invested.
+      let buyerPortfolio = 0;
+      let renterPortfolio = initialCash;
 
-      // Renting Calculations
+      let currentHomeValue = homePrice;
+      let currentLoan = loanAmount;
       let currentRent = monthlyRent;
-      let totalUnrecoverableRent = 0;
-      let investmentPortfolio = downPayment; // Initial investment is the down payment you didn't pay
 
-      // Arrays for Chart
-      const buyCostsData = [];
-      const rentCostsData = [];
+      const buyWealthData = [];
+      const rentWealthData = [];
       const labels = [];
 
+      // Simulation Loop
       for (let i = 1; i <= years; i++) {
-        // Yearly Loop
-        let yearlyInterest = 0;
-        let yearlyPrincipal = 0;
-        let yearlyTaxes = 0;
-        let yearlyMaintenance = 0;
-
-        // Buying Loop (Monthly)
         for (let m = 0; m < 12; m++) {
-          const interestPayment = remainingLoan * monthlyRate;
+          // Buy Cashflow
+          const interestPayment = currentLoan * monthlyRate;
           const principalPayment = monthlyMortgage - interestPayment;
+          currentLoan -= principalPayment;
 
-          yearlyInterest += interestPayment;
-          yearlyPrincipal += principalPayment;
-          remainingLoan -= principalPayment;
+          const monthlyTax = (currentHomeValue * propertyTaxRate) / 12;
+          const monthlyMaint = (currentHomeValue * maintenanceRate) / 12;
+          const monthlyHomeIns = homeInsurance / 12;
+          const costBuy = monthlyMortgage + monthlyTax + monthlyMaint + hoa + monthlyHomeIns;
+
+          // Rent Cashflow
+          const costRent = currentRent + rentInsurance;
+
+          // Difference
+          const diff = costRent - costBuy;
+
+          if (diff > 0) {
+            buyerPortfolio += diff;
+          } else {
+            renterPortfolio += Math.abs(diff);
+          }
+
+          // Growth
+          renterPortfolio *= (1 + (investmentReturn / 12));
+          buyerPortfolio *= (1 + (investmentReturn / 12));
         }
 
-        yearlyTaxes = homeValue * propertyTax;
-        yearlyMaintenance = homeValue * maintenance;
+        currentHomeValue *= (1 + appreciation);
+        currentRent *= (1 + rentInflation);
 
-        // Unrecoverable Buy Costs this year: Interest + Taxes + Maintenance
-        totalUnrecoverableBuy += yearlyInterest + yearlyTaxes + yearlyMaintenance;
+        // Snapshot
+        const sellingCosts = currentHomeValue * sellingClosingCostsPercent;
+        const totalBuyWealth = (currentHomeValue - currentLoan - sellingCosts) + buyerPortfolio;
+        const totalRentWealth = renterPortfolio;
 
-        // Home Appreciation
-        homeValue = homeValue * (1 + appreciation);
-
-        // Renting Loop
-        const yearlyRent = currentRent * 12;
-        totalUnrecoverableRent += yearlyRent;
-
-        // Rent increases (approx 3% inflation)
-        currentRent = currentRent * 1.03;
-
-        // Investment Growth (Opportunity Cost)
-        // The difference between (Mortgage+Tax+Maint) and (Rent) could also be invested/divested
-        // For simplicity, we just grow the initial downpayment portfolio
-        // A more complex model would invest the monthly difference.
-        // Let's add the monthly difference to investment if Rent < BuyCost, or subtract if Rent > BuyCost
-        const yearlyCostToBuyCash = (monthlyMortgage * 12) + yearlyTaxes + yearlyMaintenance;
-        const yearlyCostToRentCash = yearlyRent;
-        const cashDifference = yearlyCostToBuyCash - yearlyCostToRentCash;
-
-        // If Buying costs more cashflow, Renter invests that difference.
-        // If Renting costs more, Renter withdraws from portfolio.
-        // FIX: Only apply investment return if portfolio is positive (don't earn returns on debt)
-        const growth = investmentPortfolio > 0 ? (investmentPortfolio * investmentReturn) : 0;
-        investmentPortfolio = investmentPortfolio + growth + cashDifference;
-
-        // Calculate Net Positions
-        // Net Cost Buy = Total Unrecoverable + (Selling Costs approx 6%) - (Appreciation Gain is handled by looking at Equity?)
-        // Let's stick to "Net Worth" approach for the chart, but invert it to "Net Cost" for simplicity?
-        // Actually, let's just track "Total Sunk Costs" adjusted for Equity.
-
-        // Simplified Net Cost at Year i:
-        // Buy: Total Out of Pocket - Equity
-        // Equity = HomeValue - RemainingLoan
-        // Total Out of Pocket = DownPayment + Sum(MonthlyPayments + Taxes + Maint + BuyingCosts)
-        // This is getting complex.
-
-        // Let's use the "Unrecoverable Cost" method.
-        // Buy Unrecoverable: Interest + Taxes + Maint + Buying/Selling Costs - Appreciation
-        // Rent Unrecoverable: Rent - Investment Returns on Downpayment
-
-        const sellingCost = homeValue * 0.06;
-        const appreciationGain = homeValue - homePrice;
-        const netCostBuy = totalUnrecoverableBuy + sellingCost - appreciationGain;
-
-        const investmentGain = investmentPortfolio - downPayment - (i * cashDifference); // Rough approx of gain
-        // Actually simpler:
-        // Rent Unrecoverable = Total Rent Paid - (Investment Value - Total Cash Invested)
-        // Total Cash Invested = DownPayment + Sum(CashDifference)
-        // This is tricky because CashDifference changes.
-
-        // Let's stick to a simpler metric for the chart: "Net Wealth Position"
-        // Wealth Buy = Home Equity (Value - Loan) - Selling Costs
-        // Wealth Rent = Investment Portfolio
-
-        // But we want to show "Cost". So:
-        // Cost Buy = Initial Wealth - Current Wealth Buy
-        // Cost Rent = Initial Wealth - Current Wealth Rent
-        // Initial Wealth = DownPayment (assuming you have it)
-
-        const equity = homeValue - remainingLoan;
-        const wealthBuy = equity - sellingCost;
-        const wealthRent = investmentPortfolio;
-
-        // We want to plot "Net Cost" so users see which bar is lower (better)
-        // Net Cost = Initial Wealth (DownPayment) - Ending Wealth
-        // If Wealth > DownPayment, Cost is negative (Profit)
-
-        buyCostsData.push(downPayment - wealthBuy);
-        rentCostsData.push(downPayment - wealthRent);
+        buyWealthData.push(totalBuyWealth);
+        rentWealthData.push(totalRentWealth);
         labels.push(`Year ${i}`);
       }
 
-      // Final Values
-      const finalCostBuy = buyCostsData[years - 1];
-      const finalCostRent = rentCostsData[years - 1];
+      // Final Verdict
+      const finalBuy = buyWealthData[years - 1];
+      const finalRent = rentWealthData[years - 1];
+      const diffVal = Math.abs(finalBuy - finalRent);
 
-      // Update UI
-      document.getElementById('costBuy').textContent = formatCurrency(finalCostBuy);
-      document.getElementById('costRent').textContent = formatCurrency(finalCostRent);
+      document.getElementById('yearsLabel').textContent = years;
+      document.getElementById('returnLabel').textContent = (investmentReturn * 100).toFixed(1) + '%';
 
-      const diff = Math.abs(finalCostBuy - finalCostRent);
-      const verdictTitle = document.getElementById('verdictTitle');
-      const verdictText = document.getElementById('verdictText');
+      const winnerEl = document.getElementById('verdictWinner');
+      const diffEl = document.getElementById('verdictDiff');
 
-      if (finalCostBuy < finalCostRent) {
-        verdictTitle.textContent = "Buying is Cheaper";
-        verdictTitle.style.color = "#10B981";
-        verdictText.textContent = `You save ${formatCurrency(diff)} by buying over ${years} years.`;
+      if (finalBuy > finalRent) {
+        winnerEl.textContent = "Buying Wins";
+        winnerEl.style.color = "var(--success)";
+        diffEl.textContent = `by ${formatCurrency(diffVal)}`;
       } else {
-        verdictTitle.textContent = "Renting is Cheaper";
-        verdictTitle.style.color = "#FF6B35";
-        verdictText.textContent = `You save ${formatCurrency(diff)} by renting over ${years} years.`;
+        winnerEl.textContent = "Renting Wins";
+        winnerEl.style.color = "var(--orange)";
+        diffEl.textContent = `by ${formatCurrency(diffVal)}`;
       }
 
-      updateChart(labels, buyCostsData, rentCostsData);
+      updateChart(labels, buyWealthData, rentWealthData);
     }
 
     function formatCurrency(num) {
@@ -1111,7 +1007,7 @@
     }
 
     function updateChart(labels, buyData, rentData) {
-      const ctx = document.getElementById('comparisonChart').getContext('2d');
+      const ctx = document.getElementById('wealthChart').getContext('2d');
 
       if (chart) chart.destroy();
 
@@ -1121,28 +1017,32 @@
           labels: labels,
           datasets: [
             {
-              label: 'Net Cost of Buying',
+              label: 'Net Wealth (Buying)',
               data: buyData,
               borderColor: '#10B981',
               backgroundColor: 'rgba(16, 185, 129, 0.1)',
               borderWidth: 3,
               tension: 0.3,
-              fill: false
+              fill: true
             },
             {
-              label: 'Net Cost of Renting',
+              label: 'Net Wealth (Renting)',
               data: rentData,
               borderColor: '#FF6B35',
               backgroundColor: 'rgba(255, 107, 53, 0.1)',
               borderWidth: 3,
               tension: 0.3,
-              fill: false
+              fill: true
             }
           ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
           plugins: {
             legend: { position: 'bottom' },
             tooltip: {
@@ -1157,8 +1057,7 @@
             y: {
               ticks: {
                 callback: function (value) { return formatCurrency(value); }
-              },
-              title: { display: true, text: 'Net Cost (Lower is Better)' }
+              }
             }
           }
         }
@@ -1171,7 +1070,7 @@
       input.addEventListener('input', calculate);
     });
 
-    // Initial Run
+    // Init
     calculate();
 
   </script>
