@@ -845,6 +845,18 @@
                 </div>
                 <small style="color: var(--gray); font-size: 0.75rem;">Affects standard deduction threshold.</small>
               </div>
+
+              <div class="section-title">Behavioral Assumptions</div>
+
+              <div class="input-group">
+                <label>Savings Discipline</label>
+                <div class="input-wrapper">
+                  <input type="number" id="savingsDiscipline" value="100" step="5" min="0" max="100">
+                  <span class="symbol">%</span>
+                </div>
+                <small style="color: var(--gray); font-size: 0.75rem;">What % of rent savings will you actually invest?
+                  Be honest.</small>
+              </div>
             </div>
           </div>
         </div>
@@ -985,6 +997,20 @@
             <p>Many homeowners don't actually benefit because their standard deduction is higher than their itemized
               deductions.</p>
           </div>
+
+          <div class="edu-card">
+            <span class="highlight-badge">Behavioral Finance</span>
+            <h3>The Discipline Gap</h3>
+            <p><strong>The math assumes perfect discipline.</strong> This calculator assumes that if renting is cheaper,
+              you'll invest 100% of the difference every single month. But will you?</p>
+            <p>Homeownership acts as <strong>forced savings</strong>—your mortgage payment builds equity whether you
+              feel like it or not. Renters need to manually invest their savings, and life gets in the way: vacations,
+              dining out, that new gadget you "need."</p>
+            <p><strong>Be honest with yourself:</strong> Use the "Savings Discipline" slider in advanced settings. If
+              you'll only invest 50% of your rent savings, the math changes dramatically. A home might be the better
+              choice not because of the numbers, but because it forces you to save.</p>
+            <p>This is why buying often wins in practice, even when renting wins on paper.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1109,6 +1135,9 @@
       const filingStatus = document.getElementById('filingStatus').value;
       const standardDeduction = filingStatus === 'married' ? 29200 : 14600; // 2024 values
 
+      // Behavioral Inputs
+      const savingsDiscipline = parseFloat(document.getElementById('savingsDiscipline').value) / 100;
+
       // Initial Calculations
       const downPayment = homePrice * downPaymentPercent;
       const loanAmount = homePrice - downPayment;
@@ -1176,10 +1205,13 @@
           // Difference
           const diff = costRent - costBuy;
 
+          // Apply savings discipline: Only a % of savings actually gets invested
           if (diff > 0) {
-            buyerPortfolio += diff;
+            // Renting is cheaper - buyer invests the difference (with discipline)
+            buyerPortfolio += diff * savingsDiscipline;
           } else {
-            renterPortfolio += Math.abs(diff);
+            // Buying is cheaper - renter invests the difference (with discipline)
+            renterPortfolio += Math.abs(diff) * savingsDiscipline;
           }
 
           // Growth
