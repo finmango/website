@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Minimum Payment Trap - FinMango</title>
+    <meta name="description"
+        content="See the shocking truth about credit card minimum payments. Calculate how much interest you'll really pay and how long it will take to be debt-free.">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap">
+    </noscript>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <style>
+        /* Core Styles */
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --orange: #FF6B35;
+            --gray: #6B6560;
+            --light-gray: #f5f5f5;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            --max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 46px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+        }
+
+        .nav-right a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .btn-donate {
+            background: var(--orange);
+            color: var(--white) !important;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--black);
+            font-weight: 700;
+        }
+
+        /* Calculator Specific Styles */
+        .calculator-section {
+            padding: 8rem 2rem 4rem;
+            background: var(--light-gray);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .header-content {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header-content h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .header-content p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .card {
+            background: var(--white);
+            border: 3px solid var(--black);
+            padding: 2rem;
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input,
+        .input-wrapper select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--black);
+            font-family: inherit;
+            font-size: 1rem;
+            border-radius: 0;
+            background: var(--white);
+        }
+
+        .input-wrapper .symbol {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        /* Results */
+        .results-card {
+            position: sticky;
+            top: 100px;
+        }
+
+        .shock-box {
+            background: #FEF2F2;
+            border: 2px solid var(--error);
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .shock-title {
+            color: #991B1B;
+            font-weight: 900;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .shock-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--error);
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+        }
+
+        .shock-desc {
+            color: #7F1D1D;
+            font-size: 0.9rem;
+        }
+
+        .comparison-section {
+            margin-top: 2rem;
+        }
+
+        .better-path {
+            background: #ECFDF5;
+            border: 2px solid var(--success);
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .better-path h4 {
+            color: #065F46;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .better-path p {
+            color: #047857;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .slider-container {
+            margin-top: 1rem;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        input[type=range] {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .chart-container {
+            height: 200px;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 968px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-card {
+                position: static;
+            }
+
+            .nav-right {
+                display: none;
+            }
+        }
+
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
+            <div class="nav-right">
+                <a href="resources.html">Back to Resources</a>
+                <a href="donate.html" class="btn-donate">Donate</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="calculator-section">
+        <div class="container">
+            <div class="header-content">
+                <h1>The Minimum Payment Trap</h1>
+                <p>Credit card minimum payments are designed to keep you in debt for years. See the math behind the
+                    trap.</p>
+            </div>
+
+            <div class="calc-grid">
+                <!-- Inputs -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem; font-weight: 900;">Your Debt Details</h3>
+
+                    <div class="input-group">
+                        <label>Credit Card Balance</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="balance" value="5000">
+                            <span class="symbol">$</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Interest Rate (APR)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="rate" value="19.9" step="0.1">
+                            <span class="symbol">%</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Minimum Payment Calculation</label>
+                        <div class="input-wrapper">
+                            <select id="minPayMethod">
+                                <option value="percent">Percentage of Balance (Typical: 2-3%)</option>
+                                <option value="interestPlus">Interest + 1% of Balance</option>
+                                <option value="fixed">Fixed Amount</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group" id="minPayPercentGroup">
+                        <label>Minimum Payment %</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="minPayPercent" value="2" step="0.5">
+                            <span class="symbol">%</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group" id="minPayFixedGroup" style="display: none;">
+                        <label>Fixed Minimum Amount</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="minPayFixed" value="100">
+                            <span class="symbol">$</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Minimum Payment Floor</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="minFloor" value="25">
+                            <span class="symbol">$</span>
+                        </div>
+                        <small style="display: block; margin-top: 0.25rem; color: var(--gray); font-size: 0.8rem;">Banks
+                            usually won't let the minimum drop below $25-$35.</small>
+                    </div>
+
+                </div>
+
+                <!-- Results -->
+                <div class="card results-card">
+                    <div class="shock-box">
+                        <div class="shock-title">Time to Debt Free</div>
+                        <div class="shock-value" id="timeToPayoff">15 Years</div>
+                        <div class="shock-desc">If you only pay the minimum.</div>
+                    </div>
+
+                    <div class="shock-box" style="background: #FFFBEB; border-color: var(--warning);">
+                        <div class="shock-title" style="color: #92400E;">Total Interest Paid</div>
+                        <div class="shock-value" id="totalInterest" style="color: #D97706;">$8,200</div>
+                        <div class="shock-desc">That's <span id="interestRatio">1.6x</span> your original debt!</div>
+                    </div>
+
+                    <div class="better-path">
+                        <h4>Escape the Trap</h4>
+                        <p>Pay a little more each month to save thousands.</p>
+
+                        <div class="slider-container">
+                            <div class="slider-label">
+                                <span>Monthly Payment</span>
+                                <span id="sliderValue">$150</span>
+                            </div>
+                            <input type="range" id="paymentSlider" min="0" max="500" step="10">
+                        </div>
+
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 700;">
+                            <span>New Time: <span id="newTime" style="color: var(--success);">3 Years</span></span>
+                            <span>Savings: <span id="savings" style="color: var(--success);">$5,000</span></span>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 FinMango. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let chart;
+
+        function calculate() {
+            const balance = parseFloat(document.getElementById('balance').value);
+            const rate = parseFloat(document.getElementById('rate').value) / 100;
+            const method = document.getElementById('minPayMethod').value;
+            const minFloor = parseFloat(document.getElementById('minFloor').value);
+
+            let minPayPercent = 0.02;
+            let minPayFixed = 0;
+
+            if (method === 'percent') {
+                minPayPercent = parseFloat(document.getElementById('minPayPercent').value) / 100;
+            } else if (method === 'fixed') {
+                minPayFixed = parseFloat(document.getElementById('minPayFixed').value);
+            }
+
+            // Calculate Minimum Pay Scenario
+            const minPayResults = simulatePayoff(balance, rate, method, minPayPercent, minPayFixed, minFloor);
+
+            // Update UI for Min Pay
+            document.getElementById('timeToPayoff').textContent = formatTime(minPayResults.months);
+            document.getElementById('totalInterest').textContent = formatCurrency(minPayResults.totalInterest);
+            document.getElementById('interestRatio').textContent = (minPayResults.totalInterest / balance).toFixed(1) + 'x';
+
+            // Setup Slider
+            const slider = document.getElementById('paymentSlider');
+            const initialMinPay = minPayResults.initialPayment;
+
+            // Set slider min to the initial minimum payment
+            slider.min = Math.ceil(initialMinPay);
+            slider.max = Math.ceil(initialMinPay * 4); // Allow up to 4x payment
+
+            // If slider hasn't been touched (or is invalid), set it to something reasonable (e.g. +$50)
+            if (slider.value < slider.min) {
+                slider.value = Math.ceil(initialMinPay) + 50;
+            }
+
+            const userPayment = parseFloat(slider.value);
+            document.getElementById('sliderValue').textContent = formatCurrency(userPayment);
+
+            // Calculate User Scenario (Fixed Payment)
+            const userResults = simulatePayoff(balance, rate, 'fixed', 0, userPayment, minFloor);
+
+            document.getElementById('newTime').textContent = formatTime(userResults.months);
+            const savings = minPayResults.totalInterest - userResults.totalInterest;
+            document.getElementById('savings').textContent = formatCurrency(Math.max(0, savings));
+
+            updateChart(minPayResults.totalInterest, userResults.totalInterest);
+        }
+
+        function simulatePayoff(startBalance, rate, method, minPercent, fixedAmount, floor) {
+            let balance = startBalance;
+            let totalInterest = 0;
+            let months = 0;
+            let monthlyRate = rate / 12;
+            let initialPayment = 0;
+
+            while (balance > 0 && months < 1200) { // Cap at 100 years
+                months++;
+                let interest = balance * monthlyRate;
+                totalInterest += interest;
+                balance += interest;
+
+                let payment = 0;
+
+                if (method === 'percent') {
+                    payment = Math.max(balance * minPercent, floor);
+                } else if (method === 'interestPlus') {
+                    payment = Math.max(interest + (balance * 0.01), floor);
+                } else if (method === 'fixed') {
+                    payment = fixedAmount;
+                }
+
+                if (months === 1) initialPayment = payment;
+
+                if (balance < payment) {
+                    payment = balance;
+                }
+
+                balance -= payment;
+            }
+
+            return { months, totalInterest, initialPayment };
+        }
+
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function formatTime(months) {
+            if (months >= 1200) return "Forever";
+            const y = Math.floor(months / 12);
+            const m = months % 12;
+            if (y > 0) return `${y} Years ${m} Mo`;
+            return `${m} Months`;
+        }
+
+        function updateChart(minInterest, userInterest) {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Minimum Payment', 'Your Plan'],
+                    datasets: [{
+                        label: 'Total Interest Paid',
+                        data: [minInterest, userInterest],
+                        backgroundColor: ['#EF4444', '#10B981'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => formatCurrency(context.raw)
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { callback: (val) => formatCurrency(val) }
+                        }
+                    }
+                }
+            });
+        }
+
+        // UI Logic for Dropdown
+        document.getElementById('minPayMethod').addEventListener('change', function () {
+            const method = this.value;
+            document.getElementById('minPayPercentGroup').style.display = method === 'percent' ? 'block' : 'none';
+            document.getElementById('minPayFixedGroup').style.display = method === 'fixed' ? 'block' : 'none';
+            calculate();
+        });
+
+        // Event Listeners
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('input', calculate);
+        });
+
+        // Init
+        calculate();
+
+    </script>
+
+</body>
+
+</html>

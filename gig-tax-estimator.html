@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gig Economy Tax Estimator - FinMango</title>
+    <meta name="description"
+        content="Freelancer or gig worker? Estimate your self-employment and income taxes so you don't get hit with a surprise bill.">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap">
+    </noscript>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <style>
+        /* Core Styles */
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --orange: #FF6B35;
+            --gray: #6B6560;
+            --light-gray: #f5f5f5;
+            --success: #10B981;
+            --error: #EF4444;
+            --info: #3B82F6;
+            --max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 46px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+        }
+
+        .nav-right a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .btn-donate {
+            background: var(--orange);
+            color: var(--white) !important;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--black);
+            font-weight: 700;
+        }
+
+        /* Calculator Specific Styles */
+        .calculator-section {
+            padding: 8rem 2rem 4rem;
+            background: var(--light-gray);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .header-content {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header-content h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .header-content p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .card {
+            background: var(--white);
+            border: 3px solid var(--black);
+            padding: 2rem;
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input,
+        .input-wrapper select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--black);
+            font-family: inherit;
+            font-size: 1rem;
+            border-radius: 0;
+            background: var(--white);
+        }
+
+        .input-wrapper .symbol {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        /* Results */
+        .results-card {
+            position: sticky;
+            top: 100px;
+        }
+
+        .total-save-box {
+            background: var(--black);
+            color: var(--white);
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .total-save-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .total-save-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--orange);
+            line-height: 1.1;
+        }
+
+        .breakdown-list {
+            margin-bottom: 2rem;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95rem;
+        }
+
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .breakdown-label {
+            font-weight: 600;
+            color: var(--gray);
+        }
+
+        .breakdown-amount {
+            font-weight: 900;
+        }
+
+        .chart-container {
+            height: 250px;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 968px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-card {
+                position: static;
+            }
+
+            .nav-right {
+                display: none;
+            }
+        }
+
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
+            <div class="nav-right">
+                <a href="resources.html">Back to Resources</a>
+                <a href="donate.html" class="btn-donate">Donate</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="calculator-section">
+        <div class="container">
+            <div class="header-content">
+                <h1>Gig Economy Tax Estimator</h1>
+                <p>Don't let tax season surprise you. Estimate how much of your freelance income you need to set aside.
+                </p>
+            </div>
+
+            <div class="calc-grid">
+                <!-- Inputs -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem; font-weight: 900;">Income & Expenses</h3>
+
+                    <div class="input-group">
+                        <label>Annual Gig Income (Gross)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="income" value="45000">
+                            <span class="symbol">$</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Business Expenses</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="expenses" value="5000">
+                            <span class="symbol">$</span>
+                        </div>
+                        <small
+                            style="display: block; margin-top: 0.25rem; color: var(--gray); font-size: 0.8rem;">Mileage,
+                            supplies, software, etc.</small>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Other W-2 Income</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="w2Income" value="0">
+                            <span class="symbol">$</span>
+                        </div>
+                        <small style="display: block; margin-top: 0.25rem; color: var(--gray); font-size: 0.8rem;">Helps
+                            determine your tax bracket.</small>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Filing Status</label>
+                        <div class="input-wrapper">
+                            <select id="filingStatus">
+                                <option value="single">Single</option>
+                                <option value="married">Married Filing Jointly</option>
+                                <option value="head">Head of Household</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>State Tax Rate (Estimate)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="stateRate" value="5" step="0.1">
+                            <span class="symbol">%</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Results -->
+                <div class="card results-card">
+                    <div class="total-save-box">
+                        <div class="total-save-label">You Should Save Approx.</div>
+                        <div class="total-save-value" id="totalTax">$0</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+                            (<span id="effectiveRate">0%</span> of your profit)
+                        </div>
+                    </div>
+
+                    <div class="breakdown-list">
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Net Profit</span>
+                            <span class="breakdown-amount" id="netProfit">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Self-Employment Tax</span>
+                            <span class="breakdown-amount" id="seTax">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Federal Income Tax</span>
+                            <span class="breakdown-amount" id="fedTax">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">State Tax</span>
+                            <span class="breakdown-amount" id="stateTax">$0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span class="breakdown-label">Keep</span>
+                            <span class="breakdown-amount" id="keepAmount" style="color: var(--success);">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="taxChart"></canvas>
+                    </div>
+
+                    <p style="margin-top: 1.5rem; font-size: 0.8rem; color: var(--gray); text-align: center;">
+                        * This is an estimation for planning purposes only. Consult a tax professional for official
+                        advice.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 FinMango. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let chart;
+
+        // Simplified 2024 Tax Brackets (Standard Deduction included in logic)
+        const STANDARD_DEDUCTION = {
+            single: 14600,
+            married: 29200,
+            head: 21900
+        };
+
+        const BRACKETS = {
+            single: [
+                { limit: 11600, rate: 0.10 },
+                { limit: 47150, rate: 0.12 },
+                { limit: 100525, rate: 0.22 },
+                { limit: 191950, rate: 0.24 },
+                { limit: 243725, rate: 0.32 },
+                { limit: 609350, rate: 0.35 },
+                { limit: Infinity, rate: 0.37 }
+            ],
+            married: [
+                { limit: 23200, rate: 0.10 },
+                { limit: 94300, rate: 0.12 },
+                { limit: 201050, rate: 0.22 },
+                { limit: 383900, rate: 0.24 },
+                { limit: 487450, rate: 0.32 },
+                { limit: 731200, rate: 0.35 },
+                { limit: Infinity, rate: 0.37 }
+            ],
+            head: [
+                { limit: 16550, rate: 0.10 },
+                { limit: 63100, rate: 0.12 },
+                { limit: 100500, rate: 0.22 },
+                { limit: 191950, rate: 0.24 },
+                { limit: 243700, rate: 0.32 },
+                { limit: 609350, rate: 0.35 },
+                { limit: Infinity, rate: 0.37 }
+            ]
+        };
+
+        function calculateTax(taxableIncome, status) {
+            let tax = 0;
+            let previousLimit = 0;
+            const brackets = BRACKETS[status];
+
+            for (const bracket of brackets) {
+                if (taxableIncome > previousLimit) {
+                    const incomeInBracket = Math.min(taxableIncome, bracket.limit) - previousLimit;
+                    tax += incomeInBracket * bracket.rate;
+                    previousLimit = bracket.limit;
+                } else {
+                    break;
+                }
+            }
+            return tax;
+        }
+
+        function calculate() {
+            const income = parseFloat(document.getElementById('income').value) || 0;
+            const expenses = parseFloat(document.getElementById('expenses').value) || 0;
+            const w2Income = parseFloat(document.getElementById('w2Income').value) || 0;
+            const status = document.getElementById('filingStatus').value;
+            const stateRate = parseFloat(document.getElementById('stateRate').value) / 100;
+
+            const netProfit = Math.max(0, income - expenses);
+
+            // Self-Employment Tax
+            // 92.35% of net earnings are subject to SE tax
+            // 15.3% rate (12.4% SS + 2.9% Medicare)
+            const taxableSE = netProfit * 0.9235;
+            const seTax = taxableSE * 0.153;
+
+            // Federal Income Tax
+            // SE Tax Deduction (50% of SE tax is deductible)
+            const seTaxDeduction = seTax * 0.5;
+
+            // Qualified Business Income Deduction (QBI) - approx 20% of net profit
+            // Simplified: We'll assume 20% deduction on profit
+            const qbiDeduction = netProfit * 0.2;
+
+            const adjustedGrossIncome = w2Income + netProfit - seTaxDeduction;
+            const taxableIncome = Math.max(0, adjustedGrossIncome - STANDARD_DEDUCTION[status] - qbiDeduction);
+
+            // Calculate total tax on ALL income
+            const totalFedTax = calculateTax(taxableIncome, status);
+
+            // Calculate tax on JUST W-2 income (to subtract it out)
+            // This is a rough estimation of "marginal" tax caused by gig work
+            // But simpler: just show total tax liability attributable to the gig work?
+            // Let's do: Total Tax with Gig - Total Tax without Gig
+
+            const w2Taxable = Math.max(0, w2Income - STANDARD_DEDUCTION[status]);
+            const w2FedTax = calculateTax(w2Taxable, status);
+
+            const gigFedTax = Math.max(0, totalFedTax - w2FedTax);
+
+            // State Tax (Simplified flat rate on net profit)
+            const stateTax = netProfit * stateRate;
+
+            const totalTax = seTax + gigFedTax + stateTax;
+            const keep = netProfit - totalTax;
+
+            // Update UI
+            document.getElementById('netProfit').textContent = formatCurrency(netProfit);
+            document.getElementById('seTax').textContent = formatCurrency(seTax);
+            document.getElementById('fedTax').textContent = formatCurrency(gigFedTax);
+            document.getElementById('stateTax').textContent = formatCurrency(stateTax);
+            document.getElementById('totalTax').textContent = formatCurrency(totalTax);
+            document.getElementById('keepAmount').textContent = formatCurrency(keep);
+
+            const effectiveRate = netProfit > 0 ? (totalTax / netProfit) * 100 : 0;
+            document.getElementById('effectiveRate').textContent = effectiveRate.toFixed(1) + '%';
+
+            updateChart(keep, seTax, gigFedTax, stateTax);
+        }
+
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function updateChart(keep, se, fed, state) {
+            const ctx = document.getElementById('taxChart').getContext('2d');
+
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Keep', 'SE Tax', 'Federal Tax', 'State Tax'],
+                    datasets: [{
+                        data: [keep, se, fed, state],
+                        backgroundColor: ['#10B981', '#FF6B35', '#3B82F6', '#F59E0B'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    const val = context.raw;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const pct = ((val / total) * 100).toFixed(1) + '%';
+                                    return `${context.label}: ${formatCurrency(val)} (${pct})`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Event Listeners
+        const inputs = document.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('input', calculate);
+        });
+
+        // Init
+        calculate();
+
+    </script>
+
+</body>
+
+</html>

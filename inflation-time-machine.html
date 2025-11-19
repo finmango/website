@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inflation Time Machine - FinMango</title>
+    <meta name="description"
+        content="Travel through time to see how inflation eats your money. Calculate future prices and purchasing power.">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap">
+    </noscript>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <style>
+        /* Core Styles */
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --orange: #FF6B35;
+            --gray: #6B6560;
+            --light-gray: #f5f5f5;
+            --success: #10B981;
+            --error: #EF4444;
+            --info: #3B82F6;
+            --max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 46px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+        }
+
+        .nav-right a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .btn-donate {
+            background: var(--orange);
+            color: var(--white) !important;
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--black);
+            font-weight: 700;
+        }
+
+        /* Calculator Specific Styles */
+        .calculator-section {
+            padding: 8rem 2rem 4rem;
+            background: var(--light-gray);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .header-content {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header-content h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .header-content p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .card {
+            background: var(--white);
+            border: 3px solid var(--black);
+            padding: 2rem;
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--black);
+            font-family: inherit;
+            font-size: 1rem;
+            border-radius: 0;
+            background: var(--white);
+        }
+
+        .input-wrapper .symbol {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        /* Results */
+        .results-card {
+            position: sticky;
+            top: 100px;
+        }
+
+        .future-box {
+            background: var(--black);
+            color: var(--white);
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .future-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        .future-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--orange);
+            line-height: 1.1;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .example-item {
+            background: var(--light-gray);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .example-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .example-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--gray);
+            display: block;
+        }
+
+        .example-price {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--black);
+            display: block;
+            margin-top: 0.25rem;
+        }
+
+        .chart-container {
+            height: 250px;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 968px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-card {
+                position: static;
+            }
+
+            .nav-right {
+                display: none;
+            }
+        }
+
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
+            <div class="nav-right">
+                <a href="resources.html">Back to Resources</a>
+                <a href="donate.html" class="btn-donate">Donate</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="calculator-section">
+        <div class="container">
+            <div class="header-content">
+                <h1>Inflation Time Machine</h1>
+                <p>See how the value of your money changes over time. What will a dollar buy in the future?</p>
+            </div>
+
+            <div class="calc-grid">
+                <!-- Inputs -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem; font-weight: 900;">Time Travel Settings</h3>
+
+                    <div class="input-group">
+                        <label>Starting Amount</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="amount" value="100">
+                            <span class="symbol">$</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Current Year</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="startYear" value="2025">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Target Year</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="endYear" value="2055">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Inflation Rate (Avg)</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="inflationRate" value="3.0" step="0.1">
+                            <span class="symbol">%</span>
+                        </div>
+                        <small
+                            style="display: block; margin-top: 0.25rem; color: var(--gray); font-size: 0.8rem;">Historical
+                            average is about 3%.</small>
+                    </div>
+
+                </div>
+
+                <!-- Results -->
+                <div class="card results-card">
+                    <div class="future-box">
+                        <div class="future-label">In <span id="targetYearLabel">2055</span>, you need</div>
+                        <div class="future-value" id="futureValue">$242</div>
+                        <div style="margin-top: 0.5rem; font-size: 0.9rem; opacity: 0.8;">
+                            to buy what <span id="startAmountLabel">$100</span> buys today.
+                        </div>
+                    </div>
+
+                    <h4
+                        style="font-weight: 900; margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; color: var(--gray);">
+                        Future Prices</h4>
+                    <div class="examples-grid">
+                        <div class="example-item">
+                            <span class="example-icon">☕️</span>
+                            <span class="example-name">Coffee ($5 today)</span>
+                            <span class="example-price" id="priceCoffee">$12.14</span>
+                        </div>
+                        <div class="example-item">
+                            <span class="example-icon">🍔</span>
+                            <span class="example-name">Burger ($12 today)</span>
+                            <span class="example-price" id="priceBurger">$29.13</span>
+                        </div>
+                        <div class="example-item">
+                            <span class="example-icon">👟</span>
+                            <span class="example-name">Shoes ($100 today)</span>
+                            <span class="example-price" id="priceShoes">$242.73</span>
+                        </div>
+                        <div class="example-item">
+                            <span class="example-icon">🚗</span>
+                            <span class="example-name">Car ($35k today)</span>
+                            <span class="example-price" id="priceCar">$84,955</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="inflationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 FinMango. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let chart;
+
+        function calculate() {
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const startYear = parseInt(document.getElementById('startYear').value) || 2025;
+            const endYear = parseInt(document.getElementById('endYear').value) || 2055;
+            const rate = parseFloat(document.getElementById('inflationRate').value) / 100;
+
+            const years = endYear - startYear;
+
+            if (years < 0) {
+                // Handle reverse time travel (Deflation/Past value)
+                // For simplicity, let's just support forward for now or basic math
+            }
+
+            const futureVal = amount * Math.pow(1 + rate, years);
+            const multiplier = Math.pow(1 + rate, years);
+
+            // Update UI
+            document.getElementById('targetYearLabel').textContent = endYear;
+            document.getElementById('startAmountLabel').textContent = formatCurrency(amount);
+            document.getElementById('futureValue').textContent = formatCurrency(futureVal);
+
+            // Examples
+            document.getElementById('priceCoffee').textContent = formatCurrency(5 * multiplier);
+            document.getElementById('priceBurger').textContent = formatCurrency(12 * multiplier);
+            document.getElementById('priceShoes').textContent = formatCurrency(100 * multiplier);
+            document.getElementById('priceCar').textContent = formatCurrency(35000 * multiplier);
+
+            updateChart(startYear, endYear, amount, rate);
+        }
+
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function updateChart(start, end, amount, rate) {
+            const ctx = document.getElementById('inflationChart').getContext('2d');
+
+            const labels = [];
+            const data = [];
+            const purchasingPower = [];
+
+            const years = end - start;
+            // Limit data points if range is huge
+            const step = years > 50 ? 5 : 1;
+
+            for (let i = 0; i <= years; i += step) {
+                const year = start + i;
+                labels.push(year);
+
+                // Nominal Cost (How much cash you need)
+                data.push(amount * Math.pow(1 + rate, i));
+
+                // Purchasing Power (What your original $100 is worth in future dollars)
+                // purchasingPower.push(amount / Math.pow(1 + rate, i));
+            }
+
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Cost to Buy Same Items',
+                            data: data,
+                            borderColor: '#FF6B35',
+                            backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => formatCurrency(context.raw)
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { callback: (val) => formatCurrency(val) }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Event Listeners
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('input', calculate);
+        });
+
+        // Init
+        calculate();
+
+    </script>
+
+</body>
+
+</html>
