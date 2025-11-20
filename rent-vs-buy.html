@@ -571,6 +571,86 @@
       }
     }
 
+    /* Tooltips */
+    .input-label-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .input-label-wrapper label {
+      margin-bottom: 0;
+    }
+
+    .info-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--gray);
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: bold;
+      cursor: help;
+      position: relative;
+    }
+
+    .tooltip-text {
+      visibility: hidden;
+      width: 250px;
+      background-color: var(--black);
+      color: var(--white);
+      text-align: center;
+      border-radius: 6px;
+      padding: 0.75rem;
+      position: absolute;
+      z-index: 10;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.8rem;
+      font-weight: normal;
+      line-height: 1.4;
+      pointer-events: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .tooltip-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--black) transparent transparent transparent;
+    }
+
+    .info-icon:hover .tooltip-text,
+    .info-icon:focus .tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .tooltip-text {
+        width: 200px;
+        left: auto;
+        right: -10px;
+        transform: none;
+      }
+
+      .tooltip-text::after {
+        left: auto;
+        right: 15px;
+      }
+    }
+
     /* Educational Section */
     .edu-section {
       margin-top: 4rem;
@@ -932,7 +1012,13 @@
               </div>
 
               <div class="input-group">
-                <label>Maintenance (Yearly)</label>
+                <div class="input-label-wrapper">
+                  <label>Maintenance (Yearly)</label>
+                  <div class="info-icon">i
+                    <span class="tooltip-text">The '1% Rule' suggests saving 1% of your home's value annually for
+                      repairs. Older homes may need more.</span>
+                  </div>
+                </div>
                 <div class="input-wrapper">
                   <input type="number" id="maintenance" value="1.0" step="0.1">
                   <span class="symbol">%</span>
@@ -977,7 +1063,13 @@
               <div class="section-title">Market Assumptions</div>
 
               <div class="input-group">
-                <label>Home Appreciation</label>
+                <div class="input-label-wrapper">
+                  <label>Home Appreciation</label>
+                  <div class="info-icon">i
+                    <span class="tooltip-text">National average is around 3-4%. Hot markets may be 5-7%+, while slower
+                      markets may be 1-2%. Location matters!</span>
+                  </div>
+                </div>
                 <div class="input-wrapper">
                   <input type="number" id="appreciation" value="3.0" step="0.1">
                   <span class="symbol">%</span>
@@ -996,7 +1088,13 @@
               <div class="section-title">Tax Assumptions</div>
 
               <div class="input-group">
-                <label>Tax Bracket</label>
+                <div class="input-label-wrapper">
+                  <label>Tax Bracket</label>
+                  <div class="info-icon">i
+                    <span class="tooltip-text">The tax rate applied to your *last* dollar earned. Used to calculate tax
+                      deduction benefits.</span>
+                  </div>
+                </div>
                 <div class="input-wrapper">
                   <input type="number" id="taxBracket" value="24" step="1" min="0" max="37">
                   <span class="symbol">%</span>
@@ -1018,9 +1116,15 @@
               <div class="section-title">Behavioral Assumptions</div>
 
               <div class="input-group">
-                <label>Savings Discipline</label>
+                <div class="input-label-wrapper">
+                  <label>Savings Discipline</label>
+                  <div class="info-icon">i
+                    <span class="tooltip-text">If renting is cheaper, what % of the monthly savings will you *actually*
+                      invest? Be honest! (Default: 50%)</span>
+                  </div>
+                </div>
                 <div class="input-wrapper">
-                  <input type="number" id="savingsDiscipline" value="100" step="5" min="0" max="100">
+                  <input type="number" id="savingsDiscipline" value="50" step="5" min="0" max="100">
                   <span class="symbol">%</span>
                 </div>
                 <small style="color: var(--gray); font-size: 0.75rem;">What % of rent savings will you actually invest?
