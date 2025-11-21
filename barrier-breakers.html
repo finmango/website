@@ -145,67 +145,274 @@
       --border-width-base: 2px;
       --border-width-thick: 3px;
       --border-width-heavy: 4px;
+    }
 
-      /* Neo-Brutalist Specifics */
-      --border-thick: 3px solid var(--black);
-      --border-thin: 1px solid var(--black);
-      --shadow-hard: 6px 6px 0px var(--black);
-      --shadow-hover: 10px 10px 0px var(--black);
-      --radius: 0px;
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      max-width: 100%;
+    }
+
+    /* Accessibility: Reduced Motion Support */
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Performance Optimizations */
+    .track-card,
+    .division-card,
+    .activity-card,
+    .winner-card,
+    .support-card,
+    .btn-primary,
+    .btn-secondary,
+    .prize-pool {
+      will-change: transform;
+    }
+
+    .track-card:not(:hover),
+    .division-card:not(:hover),
+    .activity-card:not(:hover),
+    .winner-card:not(:hover),
+    .support-card:not(:hover),
+    .btn-primary:not(:hover),
+    .btn-secondary:not(:hover),
+    .prize-pool:not(:hover) {
+      will-change: auto;
+    }
+
+    /* GPU Acceleration for smooth animations */
+    .track-card,
+    .division-card,
+    .btn-primary,
+    .btn-secondary,
+    .prize-pool,
+    .track-icon {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      perspective: 1000px;
     }
 
     body {
-      font-family: var(--font-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       background: var(--white);
       color: var(--black);
-      line-height: 1.4;
-      font-size: 18px;
+      line-height: 1.5;
+      font-size: 16px;
       overflow-x: hidden;
+      max-width: 100vw;
+      cursor: default;
     }
 
-    /* Utilities */
-    .btn-primary {
-      display: inline-block;
-      background: var(--black);
-      color: var(--white);
-      padding: 1.2rem 2.5rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      text-decoration: none;
-      border: none;
-      font-size: 1.1rem;
-      transition: all 0.2s ease;
-      box-shadow: var(--shadow-hard);
+    /* Scroll progress indicator */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--orange), #ff8c5a, var(--orange));
+      background-size: 200% 100%;
+      animation: progressGradient 2s linear infinite;
+      z-index: 10000;
+      box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
     }
 
-    .btn-primary:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: var(--shadow-hover);
-      background: var(--orange);
-      color: var(--white);
+    @keyframes progressGradient {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      100% {
+        background-position: 200% 50%;
+      }
     }
 
-    .btn-secondary {
-      display: inline-block;
+    /* Decorative Section Dividers */
+    .section-divider {
+      position: relative;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 4rem 0;
+      overflow: hidden;
+    }
+
+    .section-divider::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, var(--orange) 20%, var(--orange) 80%, transparent 100%);
+      animation: slideGradient 3s ease-in-out infinite;
+    }
+
+    .section-divider::after {
+      content: '◆';
+      color: var(--orange);
+      font-size: 1.5rem;
       background: var(--white);
-      color: var(--black);
-      padding: 1.2rem 2.5rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      text-decoration: none;
-      border: var(--border-thick);
-      font-size: 1.1rem;
-      transition: all 0.2s ease;
-      box-shadow: var(--shadow-hard);
+      padding: 0 2rem;
+      position: relative;
+      z-index: 1;
+      animation: pulse 2s ease-in-out infinite;
     }
 
-    .btn-secondary:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: var(--shadow-hover);
-      background: var(--light-gray);
+    @keyframes slideGradient {
+
+      0%,
+      100% {
+        transform: translateX(-20%);
+      }
+
+      50% {
+        transform: translateX(20%);
+      }
     }
 
-    /* Navigation - UPDATED */
+    /* Floating Animation for Emojis */
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      25% {
+        transform: translateY(-10px) rotate(5deg);
+      }
+
+      75% {
+        transform: translateY(-5px) rotate(-5deg);
+      }
+    }
+
+    .float-animation {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* Gradient Text Effect */
+    .gradient-text {
+      background: linear-gradient(135deg, var(--orange) 0%, #ff8c5a 50%, var(--orange) 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s ease infinite;
+    }
+
+    @keyframes gradientShift {
+
+      0%,
+      100% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    /* Geometric Background Patterns */
+    .geometric-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: 0.08;
+    }
+
+    .geometric-bg::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(45deg, var(--orange) 25%, transparent 25%, transparent 75%, var(--orange) 75%),
+        linear-gradient(45deg, var(--orange) 25%, transparent 25%, transparent 75%, var(--orange) 75%);
+      background-size: 60px 60px;
+      background-position: 0 0, 30px 30px;
+      top: -200px;
+      right: -200px;
+      border-radius: 50%;
+      animation: rotate 20s linear infinite;
+    }
+
+    .geometric-bg::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: linear-gradient(45deg, var(--orange) 25%, transparent 25%, transparent 75%, var(--orange) 75%),
+        linear-gradient(45deg, var(--orange) 25%, transparent 25%, transparent 75%, var(--orange) 75%);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+      bottom: -150px;
+      left: -150px;
+      border-radius: 50%;
+      animation: rotate 15s linear infinite reverse;
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Texture Overlay */
+    .texture-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.05"/%3E%3C/svg%3E');
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
+    /* Ripple Effect for Buttons */
+    .btn-ripple {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-ripple::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-ripple:active::after {
+      width: 300px;
+      height: 300px;
+    }
+
+
+    /* Navigation */
     nav {
       position: fixed;
       top: 0;
@@ -222,7 +429,6 @@
       padding: 1rem 0;
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-      -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
       background: rgba(255, 255, 255, 0.97);
     }
@@ -293,7 +499,16 @@
 
     .nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
       color: var(--orange);
-      transform: none;
+    }
+
+    .nav-right a:not(.btn-donate):not(.btn-get-involved):focus {
+      outline: 2px solid rgba(255, 107, 53, 0.5);
+      outline-offset: 4px;
+      border-radius: 4px;
+    }
+
+    .nav-right a:not(.btn-donate):not(.btn-get-involved):focus:not(:focus-visible) {
+      outline: none;
     }
 
     .btn-donate {
@@ -329,6 +544,15 @@
 
     .btn-donate:hover {
       transform: scale(1.05);
+    }
+
+    .btn-donate:focus {
+      outline: 3px solid rgba(255, 107, 53, 0.6);
+      outline-offset: 3px;
+    }
+
+    .btn-donate:focus:not(:focus-visible) {
+      outline: none;
     }
 
     .btn-get-involved {
@@ -367,7 +591,15 @@
       transform: scale(1.05);
     }
 
-    /* Mobile controls container - UPDATED */
+    .btn-get-involved:focus {
+      outline: 3px solid rgba(0, 0, 0, 0.3);
+      outline-offset: 3px;
+    }
+
+    .btn-get-involved:focus:not(:focus-visible) {
+      outline: none;
+    }
+
     .mobile-controls {
       display: none;
       gap: 1rem;
@@ -375,13 +607,33 @@
       justify-self: end;
     }
 
-    /* Mobile Menu Styles */
     .mobile-menu-btn {
       display: none;
       background: none;
       border: none;
       cursor: pointer;
-      padding: 0;
+      padding: 0.5rem;
+      min-width: 48px;
+      min-height: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .mobile-menu-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .mobile-menu-btn:active {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-menu-btn:focus {
+      outline: 2px solid rgba(255, 107, 53, 0.5);
+      outline-offset: 2px;
     }
 
     .mobile-get-involved {
@@ -393,8 +645,9 @@
       width: 28px;
       height: 3px;
       background: var(--black);
-      margin: 6px 0;
+      margin: 3px 0;
       transition: all 0.3s ease;
+      border-radius: 2px;
     }
 
     .mobile-menu-btn.active span:nth-child(1) {
@@ -421,7 +674,6 @@
       padding: 6rem 2rem;
       transition: right 0.3s ease;
       overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
     }
 
     .mobile-menu.active {
@@ -445,165 +697,238 @@
       padding-left: 1rem;
     }
 
-    /* Mobile Styles */
-    @media (max-width: 1200px) {
-      .nav-right {
-        gap: 1.5rem;
-      }
-
-      .nav-right a {
-        font-size: 0.95rem;
-      }
-
-      .btn-donate,
-      .btn-get-involved {
-        padding: 0.65rem 1.5rem;
-        font-size: 0.9rem;
-      }
-    }
-
-    @media (max-width: 1080px) {
-      nav {
-        padding: 1.25rem 0;
-      }
-
-      nav.scrolled {
-        padding: 0.875rem 0;
-      }
-
-      .logo img {
-        height: 42px;
-      }
-
-      nav.scrolled .logo img {
-        height: 36px;
-      }
-
-      .nav-right {
-        gap: 1.25rem;
-      }
-
-      .nav-right a {
-        font-size: 0.9rem;
-      }
-
-      .btn-donate,
-      .btn-get-involved {
-        padding: 0.6rem 1.25rem;
-        font-size: 0.85rem;
-        text-transform: none;
-      }
-    }
-
-    @media (max-width: 968px) {
-      .nav-container {
-        grid-template-columns: 1fr auto;
-        gap: 1rem;
-      }
-
-      .nav-right {
-        display: none;
-      }
-
-      .mobile-controls {
-        display: flex;
-      }
-
-      .mobile-menu-btn {
-        display: block;
-      }
-
-      .mobile-get-involved {
-        display: inline-block;
-        padding: 0.35rem 0.85rem;
-        font-size: 0.72rem;
-      }
-
-      .mobile-menu {
-        display: block;
-      }
-    }
-
-    /* HERO SECTION */
+    /* Hero Section */
     .hero {
-      min-height: 90vh;
+      min-height: 85vh;
       display: flex;
       align-items: center;
+      justify-content: center;
       padding: 8rem 2rem 4rem;
-      background: var(--white);
       position: relative;
+      background: linear-gradient(135deg, #fff5f1 0%, #ffe8df 25%, #ffd4c4 50%, #ffe8df 75%, #fff5f1 100%);
+      background-size: 400% 400%;
+      animation: gradientWave 15s ease infinite;
       overflow: hidden;
+      border-left: 8px solid var(--orange);
     }
 
-    /* Big typographic background element */
-    .hero::before {
-      content: 'INNOVATE';
-      position: absolute;
-      top: -5%;
-      right: -10%;
-      font-size: 25vw;
-      font-weight: 900;
-      color: var(--light-gray);
-      z-index: 0;
-      pointer-events: none;
-      line-height: 0.8;
+    @keyframes gradientWave {
+
+      0%,
+      100% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
     }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 107, 53, 0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -20%;
+      left: -5%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255, 140, 97, 0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float 15s ease-in-out infinite reverse;
+    }
+
 
     .hero-content {
       max-width: var(--max-width);
       width: 100%;
-      margin: 0 auto;
+      text-align: center;
       position: relative;
       z-index: 2;
-      display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .hero-text {
-      text-align: left;
     }
 
     .hero-label {
-      display: inline-block;
-      background: var(--orange);
-      color: var(--white);
-      font-weight: 800;
+      font-size: 0.875rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
-      padding: 0.5rem 1rem;
-      font-size: 0.9rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 4px 4px 0 var(--black);
-      border: 2px solid var(--black);
+      color: var(--orange);
+      margin-bottom: 2rem;
+      display: inline-block;
+      background: rgba(255, 107, 53, 0.1);
+      padding: 0.5rem 1.25rem;
+      border-radius: 100px;
+      border: 1px solid rgba(255, 107, 53, 0.3);
+      position: relative;
+    }
+
+    .hero-label::before {
+      content: '';
+      margin-right: 0;
+      font-size: 0;
+    }
+
+    .hero-label::after {
+      content: '';
+      display: none;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+      }
+
+      100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+      }
     }
 
     .hero h1 {
-      font-size: clamp(3.5rem, 6vw, 5.5rem);
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
       font-weight: 900;
-      line-height: 0.95;
-      letter-spacing: -0.04em;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
       margin-bottom: 1.5rem;
-      color: var(--black);
     }
 
     .hero h1 .highlight {
       color: var(--orange);
-      display: block;
+      position: relative;
+      display: inline-block;
     }
 
     .hero-subtitle {
-      font-size: 1.25rem;
+      font-size: 1.35rem;
+      font-weight: 400;
+      margin-bottom: 1.5rem;
+      max-width: 950px;
+      line-height: 1.65;
       color: var(--gray);
-      margin-bottom: 2.5rem;
-      max-width: 90%;
-      font-weight: 500;
+      margin-left: auto;
+      margin-right: auto;
+      letter-spacing: -0.01em;
     }
 
     .hero-cta {
       display: flex;
       gap: 1.5rem;
+      justify-content: center;
       flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--black);
+      color: var(--white);
+      padding: 1.3rem 2.75rem;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.05rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid var(--black);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-primary>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--orange) 0%, #ff8c5a 100%);
+      transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 0;
+    }
+
+    .btn-primary::after {
+      content: '→';
+      position: absolute;
+      right: 1.5rem;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1;
+    }
+
+    .btn-primary:hover::before {
+      left: 0;
+    }
+
+    .btn-primary:hover::after {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .btn-primary:hover {
+      border-color: var(--orange);
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 12px 40px rgba(255, 107, 53, 0.5),
+        0 0 30px rgba(255, 107, 53, 0.2);
+      padding-right: 3.5rem;
+    }
+
+    .btn-primary:active {
+      transform: translateY(-2px) scale(1.01);
+    }
+
+    .btn-primary:focus {
+      outline: 3px solid rgba(255, 107, 53, 0.5);
+      outline-offset: 4px;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--black);
+      padding: 1.3rem 2.75rem;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.05rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid var(--black);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+    }
+
+    .btn-secondary>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-secondary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--black);
+      transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 0;
     }
 
     .btn-secondary::after {
@@ -616,9 +941,29 @@
       z-index: 1;
     }
 
+    .btn-secondary:hover::before {
+      left: 0;
+    }
+
     .btn-secondary:hover::after {
       opacity: 1;
       transform: translateX(0);
+    }
+
+    .btn-secondary:hover {
+      color: var(--white);
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+      padding-right: 3.5rem;
+    }
+
+    .btn-secondary:active {
+      transform: translateY(-2px) scale(1.01);
+    }
+
+    .btn-secondary:focus {
+      outline: 3px solid rgba(0, 0, 0, 0.3);
+      outline-offset: 4px;
     }
 
     /* Scroll Animations */
@@ -3192,162 +3537,98 @@
   <section class="tracks">
     <div class="tracks-container">
       <div class="section-header">
-        <div class="section-label">Focus Areas</div>
-        <h2 class="section-title">Five Tracks</h2>
+        <div class="section-label">Pick Your Focus</div>
+        <h2 class="section-title">Five Innovation Tracks</h2>
+        <p class="section-subtitle">
+          Choose one challenge. Research why it's a barrier to financial health. Build a solution.
+          <br><strong>Compete for $25,000+ in prizes and scholarships.</strong>
+        </p>
       </div>
 
       <div class="tracks-grid">
         <div class="track-card">
+          <div class="track-icon">🚗</div>
           <div class="track-number">01</div>
           <h3>Transportation</h3>
           <p>Car costs and transit gaps block access to jobs.</p>
         </div>
 
         <div class="track-card">
+          <div class="track-icon">🏠</div>
           <div class="track-number">02</div>
-          <h3>Housing</h3>
+          <h3>Housing Affordability</h3>
           <p>High rent and deposits prevent long-term wealth building.</p>
         </div>
 
         <div class="track-card">
+          <div class="track-icon">🏥</div>
           <div class="track-number">03</div>
-          <h3>Healthcare</h3>
+          <h3>Healthcare Access</h3>
           <p>Medical debt and costs devastate young adults' finances.</p>
         </div>
 
         <div class="track-card">
+          <div class="track-icon">🌟</div>
           <div class="track-number">04</div>
-          <h3>Community</h3>
+          <h3>Community Challenge</h3>
           <p>Identify a unique barrier in your local area.</p>
         </div>
 
         <div class="track-card">
+          <div class="track-icon">📚</div>
           <div class="track-number">05</div>
-          <h3>Investing</h3>
+          <h3>Literacy & Investing</h3>
           <p>Lack of investment knowledge perpetuates wealth inequality.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <style>
-    .tracks {
-      padding: 6rem 2rem;
-      background: var(--white);
-      border-bottom: var(--border-thin);
-    }
-
-    .tracks-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .section-header {
-      margin-bottom: 4rem;
-      text-align: left;
-    }
-
-    .section-label {
-      font-weight: 800;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: 1rem;
-      display: block;
-      font-size: 0.9rem;
-    }
-
-    .section-title {
-      font-size: 3.5rem;
-      font-weight: 900;
-      color: var(--black);
-      line-height: 1;
-      text-transform: uppercase;
-    }
-
-    .tracks-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-
-    .track-card {
-      background: var(--white);
-      border: var(--border-thick);
-      padding: 2rem;
-      box-shadow: var(--shadow-hard);
-      transition: all 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 250px;
-    }
-
-    .track-card:hover {
-      transform: translate(-4px, -4px);
-      box-shadow: var(--shadow-hover);
-      background: var(--black);
-    }
-
-    .track-card:hover h3,
-    .track-card:hover p,
-    .track-card:hover .track-number {
-      color: var(--white);
-    }
-
-    .track-number {
-      font-size: 4rem;
-      font-weight: 900;
-      color: var(--light-gray);
-      line-height: 1;
-      margin-bottom: auto;
-      transition: color 0.2s ease;
-    }
-
-    .track-card h3 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-      color: var(--black);
-      text-transform: uppercase;
-    }
-
-    .track-card p {
-      font-size: 1.1rem;
-      color: var(--gray);
-      line-height: 1.4;
-    }
-  </style>
-
   <section class="challenge-timeline" id="timeline">
     <div class="timeline-container">
       <div class="section-header">
-        <div class="section-label">Timeline</div>
+        <div class="section-label">The Process</div>
         <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">
+          Work on your own schedule. Use AI to move fast. Submit when you're ready.
+        </p>
       </div>
 
       <div class="timeline-steps">
+        <!-- Step 1 -->
         <div class="timeline-step">
-          <div class="step-number">1</div>
-          <h3>Register</h3>
-          <p>Sign up solo or as a team (max 3). Pick a track.</p>
+          <div class="step-icon">🚀</div>
+          <div class="step-content">
+            <h3>1. Register</h3>
+            <p>Sign up solo or as a team (max 3). Pick a track.</p>
+          </div>
         </div>
 
+        <!-- Step 2 -->
         <div class="timeline-step">
-          <div class="step-number">2</div>
-          <h3>Build</h3>
-          <p>Use <strong>Google Gemini</strong> & Labs to research and prototype.</p>
+          <div class="step-icon">🤖</div>
+          <div class="step-content">
+            <h3>2. Build</h3>
+            <p>Use <strong>Google Gemini</strong> & Labs to research and prototype.</p>
+          </div>
         </div>
 
+        <!-- Step 3 -->
         <div class="timeline-step">
-          <div class="step-number">3</div>
-          <h3>Submit</h3>
-          <p>Upload your project by Jan 20.</p>
+          <div class="step-icon">📅</div>
+          <div class="step-content">
+            <h3>3. Submit</h3>
+            <p>Upload your project by Jan 20.</p>
+          </div>
         </div>
 
+        <!-- Step 4 -->
         <div class="timeline-step">
-          <div class="step-number">4</div>
-          <h3>Compete</h3>
-          <p>Feb 6 at Kent State. Pitch or present.</p>
+          <div class="step-icon">🏆</div>
+          <div class="step-content">
+            <h3>4. Compete</h3>
+            <p>Feb 6 at Kent State. Pitch or present.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -3356,47 +3637,70 @@
   <style>
     .challenge-timeline {
       padding: 6rem 2rem;
-      background: var(--light-gray);
-      border-bottom: var(--border-thin);
+      background: #F3F4F6;
     }
 
     .timeline-container {
-      max-width: var(--max-width);
+      max-width: 1000px;
       margin: 0 auto;
     }
 
     .timeline-steps {
+      margin-top: 4rem;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 2rem;
+      position: relative;
+    }
+
+    .timeline-steps::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: 50px;
+      right: 50px;
+      height: 2px;
+      background: #E5E7EB;
+      z-index: 0;
     }
 
     .timeline-step {
       position: relative;
-      padding-top: 2rem;
-      border-top: var(--border-thick);
+      z-index: 1;
+      text-align: center;
     }
 
-    .step-number {
-      font-size: 3rem;
-      font-weight: 900;
-      color: var(--orange);
-      margin-bottom: 1rem;
-      line-height: 1;
+    .step-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--white);
+      border: 2px solid var(--black);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 1.5rem;
+      box-shadow: 4px 4px 0 var(--orange);
+      transition: all 0.3s ease;
     }
 
-    .timeline-step h3 {
-      font-size: 1.5rem;
+    .timeline-step:hover .step-icon {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 6px 6px 0 var(--orange);
+    }
+
+    .step-content h3 {
+      font-size: 1.25rem;
       font-weight: 800;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
       color: var(--black);
-      text-transform: uppercase;
     }
 
-    .timeline-step p {
-      font-size: 1rem;
+    .step-content p {
+      font-size: 0.95rem;
       color: var(--gray);
-      line-height: 1.4;
+      line-height: 1.5;
     }
 
     @media (max-width: 900px) {
@@ -3405,41 +3709,56 @@
         gap: 3rem;
       }
 
+      .timeline-steps::before {
+        display: none;
+      }
+
       .timeline-step {
-        border-top: none;
-        border-left: var(--border-thick);
-        padding-top: 0;
-        padding-left: 2rem;
+        display: flex;
+        align-items: center;
+        text-align: left;
+        gap: 1.5rem;
+      }
+
+      .step-icon {
+        margin: 0;
+        flex-shrink: 0;
       }
     }
   </style>
 
   <section class="teacher-promo" id="teacher-promo">
     <div class="promo-container">
-      <div class="promo-ticket">
-        <div class="ticket-header">
-          <h2>For Teachers</h2>
-          <div class="ticket-stub">ADMIT ONE CLASS</div>
-        </div>
-        <div class="ticket-content">
-          <h3>Support Your Students</h3>
-          <p>This is an <strong>independent challenge</strong>. Your role is simple: promote it. If you want to do more,
-            bring them to the event.</p>
+      <div class="promo-content">
+        <div class="promo-text">
+          <div class="section-label">For Teachers</div>
+          <h2>Support Your Students</h2>
+          <p>This is an <strong>independent challenge</strong>, but your support makes a difference. Promote it to your
+            students, and if you choose, help them succeed.</p>
 
-          <div class="promo-options">
-            <div class="option">
-              <span class="icon">📣</span>
-              <strong>Promote</strong>
-              <span>Use our posters & emails.</span>
-            </div>
-            <div class="option">
-              <span class="icon">🚌</span>
-              <strong>Field Trip</strong>
-              <span>Bring the class Feb 6th.</span>
-            </div>
+          <div class="support-options">
+            <h3>How You Can Help (Optional)</h3>
+            <ul class="promo-list">
+              <li>📣 <strong>Promote:</strong> Use our posters and email templates to spread the word.</li>
+              <li>🕐 <strong>Provide Time:</strong> Let interested students work on it during class (if it fits your
+                curriculum).</li>
+              <li>🚌 <strong>Field Trip:</strong> Bring your <strong>entire class</strong> to Kent State on Feb 6th.
+                Students can compete, or just explore the Innovation Gallery.</li>
+            </ul>
           </div>
 
-          <a href="teacher-promo-kit.zip" class="btn-primary">Download Promo Kit</a>
+          <a href="#" class="btn-primary">Download Promo Kit (ZIP)</a>
+        </div>
+        <div class="promo-image">
+          <div class="promo-card">
+            <div class="file-icon">📣</div>
+            <div class="file-name">Classroom_Poster.pdf</div>
+          </div>
+          <div class="promo-card"
+            style="transform: rotate(5deg); margin-top: -20px; margin-left: 20px; background: #FFF5F1;">
+            <div class="file-icon">📧</div>
+            <div class="file-name">Email_Template.txt</div>
+          </div>
         </div>
       </div>
     </div>
@@ -3449,101 +3768,97 @@
     .teacher-promo {
       padding: 6rem 2rem;
       background: var(--white);
-      border-bottom: var(--border-thin);
+      border-bottom: 1px solid #eee;
     }
 
     .promo-container {
-      max-width: 900px;
+      max-width: var(--max-width);
       margin: 0 auto;
     }
 
-    .promo-ticket {
-      border: var(--border-thick);
-      background: var(--white);
-      box-shadow: var(--shadow-hard);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .ticket-header {
-      background: var(--black);
-      color: var(--white);
-      padding: 2rem;
-      display: flex;
-      justify-content: space-between;
+    .promo-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
       align-items: center;
-      border-bottom: var(--border-thick);
     }
 
-    .ticket-header h2 {
-      font-size: 2rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      margin: 0;
-    }
-
-    .ticket-stub {
-      border: 2px dashed var(--white);
-      padding: 0.5rem 1rem;
-      font-weight: 700;
-      font-family: monospace;
-      text-transform: uppercase;
-    }
-
-    .ticket-content {
-      padding: 3rem;
-    }
-
-    .ticket-content h3 {
+    .promo-text h2 {
       font-size: 2.5rem;
       font-weight: 800;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       color: var(--black);
     }
 
-    .ticket-content p {
+    .promo-text p {
       font-size: 1.2rem;
       color: var(--gray);
+      margin-bottom: 2rem;
+    }
+
+    .support-options {
       margin-bottom: 2.5rem;
-      max-width: 600px;
     }
 
-    .promo-options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin-bottom: 3rem;
+    .support-options h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 1rem;
     }
 
-    .option {
+    .promo-list {
+      list-style: none;
+      margin-bottom: 0;
+    }
+
+    .promo-list li {
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: start;
+      gap: 1rem;
+    }
+
+    .promo-image {
+      position: relative;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      padding: 1.5rem;
-      border: var(--border-thin);
-      background: var(--light-gray);
+      align-items: center;
+      justify-content: center;
     }
 
-    .option .icon {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+    .promo-card {
+      background: var(--white);
+      border: 2px solid var(--black);
+      border-radius: 12px;
+      padding: 2rem;
+      width: 250px;
+      box-shadow: 8px 8px 0 var(--orange);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.3s ease;
     }
 
-    .option strong {
-      font-size: 1.2rem;
-      font-weight: 800;
-      text-transform: uppercase;
+    .promo-card:hover {
+      transform: translateY(-5px) rotate(-2deg) !important;
+      box-shadow: 12px 12px 0 var(--orange);
     }
 
-    @media (max-width: 600px) {
-      .ticket-header {
-        flex-direction: column;
-        gap: 1rem;
+    @media (max-width: 900px) {
+      .promo-content {
+        grid-template-columns: 1fr;
         text-align: center;
       }
 
-      .promo-options {
-        grid-template-columns: 1fr;
+      .promo-list li {
+        justify-content: center;
+        text-align: left;
+      }
+
+      .promo-image {
+        margin-top: 3rem;
       }
     }
   </style>
@@ -3552,153 +3867,57 @@
     <div class="prizes-container">
       <div class="section-header">
         <div class="section-label">Rewards</div>
-        <h2 class="section-title">The Prize Pool</h2>
+        <h2 class="section-title">Two Ways to Win</h2>
       </div>
 
-      <div class="prize-display">
-        <div class="total-pool">
-          <span class="label">Total Value</span>
-          <span class="amount">$25,000+</span>
-          <span class="sub">Cash • Scholarships • Grants</span>
+      <div class="prize-pool" id="prizePool">
+        <div class="prize-pool-label">Total Prize Pool</div>
+        <div class="prize-pool-amount">$<span id="prizeCounter" data-target="25000">0</span>+</div>
+        <p class="prize-pool-desc">Cash prizes + Kent State scholarships + school grants</p>
+      </div>
+
+      <div class="prize-intro" style="margin-top: 3rem;">
+        <em style="font-size: 0.95rem; opacity: 0.8;">Awards will increase as additional sponsors join. Team cash prizes
+          are split equally among members (up to 3 per team).</em>
+      </div>
+
+      <div class="prize-divisions">
+        <div class="division-card">
+          <h3>🎤 Stage Presentation</h3>
+          <p class="division-desc">Top 5 teams pitch on stage (7 min). All finalists win cash prizes & scholarships.</p>
+          <ul class="prize-list">
+            <li class="prize-item"><strong>1st - 3rd:</strong> Cash + Scholarship + School Grant</li>
+            <li class="prize-item"><strong>4th - 5th:</strong> Cash Prize</li>
+          </ul>
         </div>
 
-        <div class="prize-grid">
-          <div class="prize-card">
-            <h3>🎤 Stage Finalists</h3>
-            <p class="desc">Top 5 teams pitch on stage.</p>
-            <ul>
-              <li><strong>1st - 3rd:</strong> Cash + Scholarship + Grant</li>
-              <li><strong>4th - 5th:</strong> Cash Prize</li>
-            </ul>
-          </div>
-          <div class="prize-card">
-            <h3>📊 Innovation Gallery</h3>
-            <p class="desc">All other teams present 1-on-1.</p>
-            <ul>
-              <li><strong>Category Awards</strong></li>
-              <li><strong>People's Choice</strong></li>
-            </ul>
-          </div>
+        <div class="division-card">
+          <h3>📊 Innovation Gallery</h3>
+          <p class="division-desc">All other teams present 1-on-1 to judges. Win category awards.</p>
+          <ul class="prize-list">
+            <li class="prize-item"><strong>Top Projects:</strong> Category Awards</li>
+            <li class="prize-item"><strong>People's Choice:</strong> Attendee Vote</li>
+          </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <style>
-    .prizes {
-      padding: 6rem 2rem;
-      background: var(--white);
-      border-bottom: var(--border-thin);
-    }
-
-    .prizes-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .prize-display {
-      display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .total-pool {
-      background: var(--black);
-      color: var(--white);
-      padding: 3rem;
-      text-align: center;
-      box-shadow: var(--shadow-hard);
-    }
-
-    .total-pool .label {
-      display: block;
-      font-size: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 1rem;
-      opacity: 0.8;
-    }
-
-    .total-pool .amount {
-      display: block;
-      font-size: 5rem;
-      font-weight: 900;
-      line-height: 1;
-      margin-bottom: 1rem;
-      color: var(--orange);
-    }
-
-    .total-pool .sub {
-      display: block;
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-
-    .prize-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-    }
-
-    .prize-card {
-      border: var(--border-thick);
-      padding: 2rem;
-      background: var(--white);
-    }
-
-    .prize-card h3 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-    }
-
-    .prize-card .desc {
-      font-size: 1rem;
-      color: var(--gray);
-      margin-bottom: 1.5rem;
-      font-style: italic;
-    }
-
-    .prize-card ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .prize-card li {
-      margin-bottom: 0.5rem;
-      font-size: 1.1rem;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 0.5rem;
-    }
-
-    .prize-card li:last-child {
-      border-bottom: none;
-    }
-
-    @media (max-width: 900px) {
-      .prize-display {
-        grid-template-columns: 1fr;
-      }
-
-      .total-pool .amount {
-        font-size: 4rem;
-      }
-    }
-  </style>
-
   <section class="sponsors">
     <div class="sponsors-container">
       <div class="section-header">
-        <div class="section-label">Partners</div>
+        <div class="section-label">Thank You</div>
         <h2 class="section-title">2026 Sponsors</h2>
+        <p class="section-subtitle">
+          These organizations are making it possible for students to compete for life-changing prizes and scholarships.
+        </p>
       </div>
 
       <div class="sponsor-tier">
         <div class="platinum-sponsor">
-          <div class="sponsor-label">💎 Platinum Sponsor</div>
+          <h3>💎 Platinum Sponsor</h3>
           <img src="valmark.svg" alt="Valmark Financial Group" class="sponsor-logo-large">
+          <p class="sponsor-amount">$25,000 Commitment</p>
         </div>
       </div>
 
@@ -3708,451 +3927,319 @@
           <div class="sponsor-card">
             <img src="1stday.png" alt="1st Day School Supplies" class="sponsor-logo">
           </div>
+          <!-- More sponsors will be added here -->
         </div>
       </div>
 
       <div class="become-sponsor">
-        <h3>Want to support student innovation?</h3>
-        <a href="mailto:competition@finmango.org?subject=Sponsorship Inquiry" class="btn-secondary">Become a Sponsor</a>
+        <h3>Become a Sponsor</h3>
+        <p>Join us in empowering the next generation of financial health innovators. Sponsorship opportunities are
+          available at multiple levels.</p>
+        <a href="mailto:competition@finmango.org?subject=Sponsorship Inquiry" class="btn-sponsor">Inquire About
+          Sponsorship</a>
       </div>
     </div>
   </section>
-
-  <style>
-    .sponsors {
-      padding: 6rem 2rem;
-      background: var(--white);
-      border-bottom: var(--border-thin);
-      text-align: center;
-    }
-
-    .sponsors-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .platinum-sponsor {
-      border: var(--border-thick);
-      padding: 4rem;
-      margin-bottom: 4rem;
-      position: relative;
-      background: var(--white);
-      box-shadow: var(--shadow-hard);
-    }
-
-    .sponsor-label {
-      position: absolute;
-      top: -1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--black);
-      color: var(--white);
-      padding: 0.5rem 1.5rem;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-
-    .sponsor-logo-large {
-      max-width: 300px;
-      width: 100%;
-      height: auto;
-    }
-
-    .sponsors-grid {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .sponsor-card {
-      border: var(--border-thin);
-      padding: 2rem;
-      width: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .sponsor-logo {
-      max-width: 100%;
-      height: auto;
-    }
-
-    .become-sponsor {
-      margin-top: 6rem;
-    }
-
-    .become-sponsor h3 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 1.5rem;
-    }
-  </style>
 
   <section class="past-winners">
     <div class="past-winners-container">
       <div class="section-header">
-        <div class="section-label">Hall of Fame</div>
-        <h2 class="section-title">Past Winners</h2>
+        <div class="section-label">Past Champions</div>
+        <h2 class="section-title">Previous Winners</h2>
+        <p class="section-subtitle">
+          Celebrating the students who tackled barriers to financial health with innovative solutions.
+        </p>
       </div>
 
-      <div class="winners-grid">
-        <div class="winner-year">
-          <h3 class="year-title">2025 Champions</h3>
-          <div class="winner-card">
-            <div class="place">1st</div>
-            <div class="details">
-              <strong>Dylan Quinones</strong>
-              <span>Polaris Career Center</span>
-            </div>
+      <div class="winners-years">
+        <div class="winner-year-section">
+          <div class="winner-year-header">
+            <span class="winner-year">2025</span>
+            <span class="winner-year-label">Competition Winners</span>
           </div>
-          <div class="winner-card">
-            <div class="place">2nd</div>
-            <div class="details">
-              <strong>Rogan Allen</strong>
-              <span>Stow-Munroe Falls</span>
+          <div class="winner-year-content">
+            <div class="winner-image-container">
+              <img src="2025-winner.jpg" alt="2025 Competition Winners" loading="lazy">
             </div>
-          </div>
-          <div class="winner-card">
-            <div class="place">3rd</div>
-            <div class="details">
-              <strong>Katherine Rosner</strong>
-              <span>Chagrin Falls</span>
+            <div class="winners-list">
+              <div class="winner-card">
+                <span class="winner-place">🥇</span>
+                <div class="winner-info">
+                  <span class="winner-place-text">1st Place</span>
+                  <div class="winner-name">Dylan Quinones</div>
+                  <div class="winner-school">Polaris Career Center</div>
+                </div>
+              </div>
+              <div class="winner-card">
+                <span class="winner-place">🥈</span>
+                <div class="winner-info">
+                  <span class="winner-place-text">2nd Place</span>
+                  <div class="winner-name">Rogan Allen</div>
+                  <div class="winner-school">Stow-Munroe Falls High</div>
+                </div>
+              </div>
+              <div class="winner-card">
+                <span class="winner-place">🥉</span>
+                <div class="winner-info">
+                  <span class="winner-place-text">3rd Place</span>
+                  <div class="winner-name">Katherine Rosner</div>
+                  <div class="winner-school">Chagrin Falls High School</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="winner-year">
-          <h3 class="year-title">2024 Champions</h3>
-          <div class="winner-card">
-            <div class="place">1st</div>
-            <div class="details">
-              <strong>Brianna Johnson</strong>
-              <span>Stow-Munroe Falls</span>
-            </div>
+        <div class="winner-year-section">
+          <div class="winner-year-header">
+            <span class="winner-year">2024</span>
+            <span class="winner-year-label">Competition Winners</span>
           </div>
-          <div class="winner-card">
-            <div class="place">2nd</div>
-            <div class="details">
-              <strong>Samuel Denys</strong>
-              <span>Westlake High</span>
+          <div class="winner-year-content">
+            <div class="winner-image-container">
+              <img src="2024-winner.jpg" alt="2024 Competition Winners" loading="lazy">
             </div>
-          </div>
-          <div class="winner-card">
-            <div class="place">3rd</div>
-            <div class="details">
-              <strong>Cullen Rooney</strong>
-              <span>Normandy High</span>
+            <div class="winners-list">
+              <div class="winner-card">
+                <span class="winner-place">🥇</span>
+                <div class="winner-info">
+                  <span class="winner-place-text">1st Place</span>
+                  <div class="winner-name">Brianna Johnson</div>
+                  <div class="winner-school">Stow-Munroe Falls High School</div>
+                </div>
+              </div>
+              <div class="winner-card">
+                <span class="winner-place">🥈</span>
+                <div class="winner-info">
+                  <span class="winner-place-text">2nd Place</span>
+                  <div class="winner-name">Samuel Denys</div>
+                  <div class="winner-school">Westlake High School</div>
+                </div>
+              </div>
+              <div class="winner-card">
+                <span class="winner-place">🥉</span>
+                <div class="winner-info">
+                  <span class="winner-place-text">3rd Place</span>
+                  <div class="winner-name">Cullen Rooney</div>
+                  <div class="winner-school">Normandy High School</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
-
-  <style>
-    .past-winners {
-      padding: 6rem 2rem;
-      background: var(--light-gray);
-      border-bottom: var(--border-thin);
-    }
-
-    .past-winners-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .winners-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-    }
-
-    .year-title {
-      font-size: 2rem;
-      font-weight: 900;
-      margin-bottom: 2rem;
-      border-bottom: var(--border-thick);
-      padding-bottom: 1rem;
-    }
-
-    .winner-card {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-      background: var(--white);
-      padding: 1.5rem;
-      border: var(--border-thin);
-      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.05);
-    }
-
-    .place {
-      font-size: 1.5rem;
-      font-weight: 900;
-      color: var(--orange);
-      width: 3rem;
-    }
-
-    .details {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .details strong {
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
-
-    .details span {
-      font-size: 0.9rem;
-      color: var(--gray);
-    }
-
-    @media (max-width: 900px) {
-      .winners-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
 
   <section class="experience">
     <div class="experience-container">
       <div class="section-header">
         <div class="section-label">Event Day</div>
         <h2 class="section-title">Your Day at Kent State</h2>
-        <p class="section-subtitle">Feb 6th at Kent State University.</p>
+        <p class="section-subtitle">
+          Campus tours, food, Innovation Gallery presentations, stage pitches, networking, and awards celebration
+          throughout the day.
+        </p>
       </div>
 
       <div class="activities-grid">
         <div class="activity-card">
-          <div class="icon">🎓</div>
+          <div class="activity-icon">🎓</div>
           <h4>Campus Tours</h4>
+          <p>Explore Kent State</p>
         </div>
+
         <div class="activity-card">
-          <div class="icon">🍽️</div>
+          <div class="activity-icon">🍽️</div>
           <h4>Food Provided</h4>
+          <p>Meals throughout day</p>
         </div>
+
         <div class="activity-card">
-          <div class="icon">🎤</div>
-          <h4>Live Pitches</h4>
+          <div class="activity-icon">📊</div>
+          <h4>Innovation Gallery</h4>
+          <p>Present your way</p>
         </div>
+
         <div class="activity-card">
-          <div class="icon">🤝</div>
+          <div class="activity-icon">🎤</div>
+          <h4>Stage Pitches</h4>
+          <p>Top 5 entries present</p>
+        </div>
+
+        <div class="activity-card">
+          <div class="activity-icon">🤝</div>
           <h4>Networking</h4>
+          <p>Connect with peers</p>
+        </div>
+
+        <div class="activity-card">
+          <div class="activity-icon">🏆</div>
+          <h4>Awards</h4>
+          <p>Winners announced</p>
+        </div>
+      </div>
+
+      <div class="past-events">
+        <p>See what past competitions looked like</p>
+        <div class="past-events-links">
+          <a href="https://www.finmango.org/kent-state-2024" target="_blank" rel="noopener noreferrer"
+            class="btn-past">📸 2025 Photos</a>
+          <a href="https://www.finmango.org/kent-state-2023" target="_blank" rel="noopener noreferrer"
+            class="btn-past">📸 2024 Photos</a>
         </div>
       </div>
     </div>
   </section>
 
-  <style>
-    .experience {
-      padding: 6rem 2rem;
-      background: var(--white);
-      border-bottom: var(--border-thin);
-    }
-
-    .experience-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .activities-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2rem;
-    }
-
-    .activity-card {
-      text-align: center;
-      padding: 2rem;
-      border: var(--border-thin);
-      background: var(--white);
-      transition: all 0.2s ease;
-    }
-
-    .activity-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-hard);
-    }
-
-    .activity-card .icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-
-    .activity-card h4 {
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-
-    @media (max-width: 900px) {
-      .activities-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-  </style>
-
   <section class="support">
     <div class="support-container">
       <div class="section-header">
-        <div class="section-label">Resources</div>
+        <div class="section-label">Support</div>
         <h2 class="section-title">Build with Confidence</h2>
+        <p class="section-subtitle">
+          Resources, AI tools, mentorship, and flexibility to help you create your best innovation.
+        </p>
       </div>
 
       <div class="support-grid">
         <div class="support-card">
           <h3>Research Toolkit</h3>
-          <p>Access our library on financial fundamentals and systemic barriers.</p>
+          <p>Access our library on financial fundamentals and systemic barriers. Examples from past competitions
+            included.</p>
         </div>
+
         <div class="support-card">
-          <h3>🤖 AI Encouraged</h3>
-          <p>Use Gemini, ChatGPT, or Claude to research and prototype faster.</p>
+          <h3>🤖 AI-Powered Building</h3>
+          <p><strong>We strongly encourage using AI!</strong> Leverage Claude, ChatGPT, or other AI tools to help
+            prototype apps, analyze data, generate code, or create content. Use AI to your advantage and build faster.
+          </p>
         </div>
+
         <div class="support-card">
           <h3>Mentorship</h3>
-          <p>Connect with professionals in your innovation area.</p>
+          <p>Connect with professionals in your innovation area. Optional workshops available.</p>
         </div>
+
         <div class="support-card">
           <h3>Any Format</h3>
-          <p>Submit a prototype, video, policy paper, or deck.</p>
+          <p>Working prototype, video demo, policy proposal, financial literacy curriculum—submit however you work best.
+          </p>
         </div>
       </div>
     </div>
   </section>
-
-  <style>
-    .support {
-      padding: 6rem 2rem;
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .support-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .support .section-title {
-      color: var(--white);
-    }
-
-    .support-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-    }
-
-    .support-card {
-      border: 2px solid var(--white);
-      padding: 2.5rem;
-      transition: all 0.2s ease;
-    }
-
-    .support-card:hover {
-      background: var(--white);
-      color: var(--black);
-    }
-
-    .support-card h3 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-      text-transform: uppercase;
-    }
-
-    .support-card p {
-      font-size: 1.1rem;
-      opacity: 0.9;
-    }
-
-    @media (max-width: 900px) {
-      .support-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
 
   <section class="faq">
     <div class="faq-container">
       <div class="section-header">
-        <div class="section-label">Q&A</div>
-        <h2 class="section-title">Questions?</h2>
+        <div class="section-label">Questions</div>
+        <h2 class="section-title">Frequently Asked</h2>
       </div>
 
-      <div class="faq-grid">
-        <div class="faq-item">
-          <button class="faq-question">Who can participate?</button>
-          <div class="faq-answer">High school students from Northeast Ohio. Solo or teams of up to 3.</div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Who can participate?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>High school students from Northeast Ohio schools. You can compete individually or form teams of up to 3
+            people. Teams split cash prizes equally among all members. Your school or teacher will coordinate
+            registration, and you'll decide whether to work solo or as a team.</p>
         </div>
-        <div class="faq-item">
-          <button class="faq-question">How many teams per school?</button>
-          <div class="faq-answer">Up to 10 teams per school.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>How many teams can our school enter?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Each school can register up to 10 teams (individuals or groups). This allows teachers to integrate the
+            competition into multiple classes or programs while keeping the event manageable. We encourage schools to
+            support as many students as possible!</p>
         </div>
-        <div class="faq-item">
-          <button class="faq-question">Should I use AI?</button>
-          <div class="faq-answer">Yes! We strongly encourage using AI tools to accelerate your work.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>How are stage vs gallery assignments decided?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>We review all submissions and select the top 5 for stage presentations. Everyone else presents in the
+            Innovation Gallery. You'll be notified 2 weeks before the event so you have time to prepare. Gallery
+            presenters can use any format—poster, laptop, phone, or whatever works best for your solution.</p>
         </div>
-        <div class="faq-item">
-          <button class="faq-question">What's the format?</button>
-          <div class="faq-answer">Any format: video, prototype, paper, deck. Whatever showcases your idea best.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>What format should my submission be?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Any format that demonstrates your research and solution—video demo, working prototype, written proposal,
+            slide deck, policy paper, or creative presentation. Use whatever format best showcases your innovation.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Should I use AI tools?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p><strong>Yes! We strongly encourage it.</strong> AI tools like Claude, ChatGPT, and others can help you
+            prototype apps, analyze data, generate code, or create content faster. Embrace AI and use it to your
+            advantage—it's a powerful tool to bring your ideas to life quickly.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>What are the judging criteria?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Judges evaluate: depth of barrier research, innovation of solution, feasibility/implementation potential,
+            and quality of presentation. Both stage and gallery divisions use the same criteria.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Can I submit on multiple tracks?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>One submission per person or team. Pick the innovation track that resonates most with your community or
+            interests.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>What support do you provide?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Research toolkit, mentorship connections, optional workshops, and examples from past competitions.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>When is the event?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Event date will be announced soon. Submissions are due 3 weeks before the event date. Email
+            competition@finmango.org for the latest timeline.</p>
         </div>
       </div>
     </div>
   </section>
-
-  <style>
-    .faq {
-      padding: 6rem 2rem;
-      background: var(--white);
-    }
-
-    .faq-container {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .faq-item {
-      border-bottom: var(--border-thick);
-      margin-bottom: 1rem;
-    }
-
-    .faq-question {
-      width: 100%;
-      text-align: left;
-      background: none;
-      border: none;
-      padding: 1.5rem 0;
-      font-size: 1.25rem;
-      font-weight: 800;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .faq-question::after {
-      content: '+';
-      font-size: 1.5rem;
-    }
-
-    .faq-item.active .faq-question::after {
-      content: '-';
-    }
-
-    .faq-answer {
-      display: none;
-      padding-bottom: 1.5rem;
-      font-size: 1.1rem;
-      color: var(--gray);
-      line-height: 1.5;
-    }
-
-    .faq-item.active .faq-answer {
-      display: block;
-    }
-  </style>
 
   <section id="register" class="cta">
     <div class="cta-content">
@@ -4171,70 +4258,6 @@
       </div>
     </div>
   </section>
-
-  <style>
-    .cta {
-      padding: 8rem 2rem;
-      background: var(--orange);
-      text-align: center;
-      border-top: var(--border-thick);
-      border-bottom: var(--border-thick);
-    }
-
-    .cta-title {
-      font-size: clamp(3rem, 6vw, 5rem);
-      font-weight: 900;
-      color: var(--white);
-      line-height: 1;
-      margin-bottom: 1rem;
-      text-shadow: 4px 4px 0 var(--black);
-    }
-
-    .cta-subtitle {
-      font-size: 1.5rem;
-      color: var(--black);
-      font-weight: 700;
-      margin-bottom: 3rem;
-    }
-
-    .btn-cta-primary {
-      display: inline-block;
-      background: var(--black);
-      color: var(--white);
-      padding: 1.5rem 4rem;
-      font-size: 1.5rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      text-decoration: none;
-      box-shadow: 8px 8px 0 var(--white);
-      transition: all 0.2s ease;
-      margin: 1rem;
-    }
-
-    .btn-cta-primary:hover {
-      transform: translate(-4px, -4px);
-      box-shadow: 12px 12px 0 var(--white);
-    }
-
-    .btn-cta-secondary {
-      display: inline-block;
-      background: var(--white);
-      color: var(--black);
-      padding: 1.5rem 4rem;
-      font-size: 1.5rem;
-      font-weight: 900;
-      text-transform: uppercase;
-      text-decoration: none;
-      box-shadow: 8px 8px 0 var(--black);
-      transition: all 0.2s ease;
-      margin: 1rem;
-    }
-
-    .btn-cta-secondary:hover {
-      transform: translate(-4px, -4px);
-      box-shadow: 12px 12px 0 var(--black);
-    }
-  </style>
 
   <footer>
     <div class="footer-newsletter">
@@ -4293,136 +4316,6 @@
       </div>
     </div>
   </footer>
-
-  <style>
-    /* Footer */
-    footer {
-      padding: 0;
-      border-top: 4px solid var(--orange);
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .footer-newsletter {
-      padding: 3rem 2rem;
-      background: rgba(255, 107, 53, 0.1);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      text-align: center;
-    }
-
-    .footer-newsletter-container {
-      max-width: 850px;
-      margin: 0 auto;
-    }
-
-    .footer-newsletter h3 {
-      font-size: 1.5rem;
-      font-weight: 900;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.02em;
-    }
-
-    .footer-newsletter p {
-      font-size: 1rem;
-      opacity: 0.8;
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-    }
-
-    .footer-newsletter-btn {
-      display: inline-block;
-      padding: 0.85rem 2rem;
-      font-size: 1rem;
-      font-weight: 700;
-      background: var(--orange);
-      color: var(--white);
-      text-decoration: none;
-      border: 2px solid var(--orange);
-      transition: all 0.2s ease;
-      font-family: 'Inter', sans-serif;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-    }
-
-    .footer-newsletter-btn:hover {
-      background: var(--white);
-      color: var(--black);
-      border-color: var(--white);
-      transform: translateY(-2px);
-    }
-
-    .footer-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 4rem 2rem 0;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-
-    .footer-brand {
-      font-size: 2rem;
-      font-weight: 900;
-      margin-bottom: 1rem;
-    }
-
-    .footer-brand span {
-      color: var(--orange);
-    }
-
-    .footer-tagline {
-      opacity: 0.7;
-      line-height: 1.6;
-    }
-
-    .footer-section h4 {
-      font-size: 0.875rem;
-      font-weight: 900;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-      opacity: 0.6;
-    }
-
-    .footer-section a {
-      display: block;
-      color: var(--white);
-      text-decoration: none;
-      margin-bottom: 0.75rem;
-      transition: all 0.2s ease;
-    }
-
-    .footer-section a:hover {
-      color: var(--orange);
-      transform: translateX(4px);
-    }
-
-    .footer-bottom {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 2rem 2rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      opacity: 0.6;
-      font-size: 0.9rem;
-    }
-
-    @media (max-width: 600px) {
-      .footer-container {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .footer-bottom {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
-    }
-  </style>
 
   <script>
     // Navigation scroll effect
