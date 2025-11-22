@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Medical Maze - FinMango</title>
+    <meta name="description"
+        content="Navigate a medical emergency in the US healthcare system. Can you survive without going into debt?">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap">
+    </noscript>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <style>
+        /* Core Styles */
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --orange: #FF6B35;
+            --gray: #6B6560;
+            --light-gray: #f5f5f5;
+            --success: #10B981;
+            --error: #EF4444;
+            --info: #3B82F6;
+            --max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        nav.scrolled {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.97);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            justify-self: start;
+        }
+
+        .logo:hover {
+            transform: rotate(-2deg) scale(1.05);
+        }
+
+        .logo img {
+            height: 46px;
+            transition: height 0.3s ease;
+        }
+
+        nav.scrolled .logo img {
+            height: 38px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .nav-right a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
+            width: 100%;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+            color: var(--orange);
+            transform: none;
+        }
+
+        .btn-donate {
+            background: var(--orange);
+            color: var(--white) !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--black);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-donate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-donate:hover::before {
+            left: 0;
+        }
+
+        .btn-donate:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-get-involved {
+            background: transparent;
+            color: var(--black) !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--black);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-get-involved::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-get-involved:hover::before {
+            left: 0;
+        }
+
+        .btn-get-involved:hover {
+            color: var(--white) !important;
+            transform: scale(1.05);
+        }
+
+        /* Mobile controls container */
+        .mobile-controls {
+            display: none;
+            gap: 1rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .mobile-get-involved {
+            display: none;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: var(--black);
+            margin: 6px 0;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--white);
+            z-index: 999;
+            padding: 6rem 2rem;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            display: block;
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 1.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--black);
+            text-decoration: none;
+            border-bottom: 2px solid var(--black);
+        }
+
+        @media (max-width: 968px) {
+            .nav-container {
+                grid-template-columns: 1fr auto;
+                gap: 1rem;
+            }
+
+            .nav-right {
+                display: none;
+            }
+
+            .mobile-controls {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .mobile-get-involved {
+                display: inline-block;
+                padding: 0.35rem 0.85rem;
+                font-size: 0.72rem;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        /* Game Specific Styles */
+        .game-section {
+            padding: 10rem 2rem 4rem;
+            background: var(--light-gray);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .header-content {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header-content h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .header-content p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            border: 4px solid var(--black);
+            box-shadow: 12px 12px 0 var(--black);
+            overflow: hidden;
+        }
+
+        .game-header {
+            background: var(--black);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .health-bar {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .wallet-display {
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .game-content {
+            padding: 2rem;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .scenario-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .choices-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .choice-btn {
+            background: var(--light-gray);
+            border: 2px solid var(--black);
+            padding: 1.5rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .choice-btn:hover {
+            background: var(--black);
+            color: var(--white);
+            transform: translateX(10px);
+        }
+
+        .outcome-box {
+            background: #fee2e2;
+            border-left: 4px solid var(--error);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .outcome-title {
+            font-weight: 900;
+            color: #991b1b;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .restart-btn {
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            font-weight: 900;
+            cursor: pointer;
+            display: none;
+            margin-top: 1rem;
+        }
+
+        /* Educational Section */
+        .edu-section {
+            margin-top: 4rem;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .edu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .edu-card {
+            background: var(--white);
+            padding: 2rem;
+            border-left: 4px solid var(--orange);
+        }
+
+        .edu-card h3 {
+            font-size: 1.25rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .edu-card p {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .highlight-badge {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--orange);
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding-top: 4rem;
+        }
+
+        .footer-newsletter {
+            background: var(--orange);
+            padding: 4rem 2rem;
+            margin-bottom: 4rem;
+            color: var(--white);
+        }
+
+        .footer-newsletter-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-newsletter h3 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-newsletter p {
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin-right: auto;
+        }
+
+        .footer-newsletter-btn {
+            background: var(--black);
+            color: var(--white);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 3px solid var(--black);
+            white-space: nowrap;
+        }
+
+        .footer-newsletter-btn:hover {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .footer-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-brand img {
+            height: 40px;
+        }
+
+        .footer-brand span {
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .footer-tagline {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-section a {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--orange);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        @media (max-width: 640px) {
+            .footer-newsletter {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .footer-newsletter h3 {
+                font-size: 1.25rem;
+            }
+
+            .footer-newsletter p {
+                font-size: 0.95rem;
+            }
+
+            .footer-newsletter-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
+
+            <div class="nav-right">
+                <a href="about.html">About</a>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+                <a href="ambassadors.html">Ambassadors</a>
+                <a href="resources.html">Resources</a>
+                <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+                <a href="donate.html" class="btn-donate">Donate</a>
+            </div>
+
+            <div class="mobile-controls">
+                <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="about.html">About</a>
+        <a href="research.html">Research</a>
+        <a href="education.html">Education</a>
+        <a href="ambassadors.html">Ambassadors</a>
+        <a href="resources.html">Resources</a>
+        <a href="donate.html">Donate</a>
+    </div>
+
+    <section class="game-section">
+        <div class="container">
+            <div class="header-content">
+                <h1>The Medical Maze</h1>
+                <p>You have insurance. You have savings. Can you survive a medical emergency without debt?</p>
+            </div>
+
+            <div class="game-container">
+                <div class="game-header">
+                    <div class="health-bar">
+                        <span>❤️ Health:</span>
+                        <span id="healthDisplay">100%</span>
+                    </div>
+                    <div class="wallet-display" id="walletDisplay">$2,000</div>
+                </div>
+
+                <div class="game-content">
+                    <div class="outcome-box" id="outcomeBox">
+                        <div class="outcome-title" id="outcomeTitle">Outcome</div>
+                        <p id="outcomeText"></p>
+                    </div>
+
+                    <div class="scenario-text" id="scenarioText">
+                        It's Tuesday night. You feel a sharp pain in your side. It's getting worse. You have a $2,000
+                        emergency fund and "good" insurance. What do you do?
+                    </div>
+
+                    <div class="choices-grid" id="choicesGrid">
+                        <!-- Choices populated by JS -->
+                    </div>
+
+                    <button class="restart-btn" id="restartBtn" onclick="startGame()">Try Again</button>
+                </div>
+            </div>
+
+            <!-- Educational Section -->
+            <div class="edu-section">
+                <div class="header-content">
+                    <h2>The System is Broken</h2>
+                    <p>Why "financial literacy" can't fix medical debt.</p>
+                </div>
+
+                <div class="edu-grid">
+                    <div class="edu-card">
+                        <span class="highlight-badge">Surprise Billing</span>
+                        <h3>The Network Trap</h3>
+                        <p>You can go to an in-network hospital but be treated by an out-of-network doctor. You have no
+                            control over this, but you get the bill.</p>
+                    </div>
+
+                    <div class="edu-card">
+                        <span class="highlight-badge">Deductibles</span>
+                        <h3>High Costs</h3>
+                        <p>The average deductible is over $1,700. Most Americans don't have that in savings. One
+                            emergency wipes out years of saving.</p>
+                    </div>
+
+                    <div class="edu-card">
+                        <span class="highlight-badge">Bankruptcy</span>
+                        <h3>#1 Cause</h3>
+                        <p>Medical bills are the leading cause of bankruptcy in the US. 66.5% of bankruptcies are tied
+                            to medical issues.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-newsletter">
+            <div class="footer-newsletter-container">
+                <h3>Stay Updated</h3>
+                <p>Join our newsletter for updates on financial health research, education, and advocacy.</p>
+                <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank"
+                    rel="noopener noreferrer">Subscribe</a>
+            </div>
+        </div>
+
+        <div class="footer-container">
+            <div>
+                <div class="footer-brand">
+                    <img src="finmango.png" alt="FinMango" loading="lazy"
+                        style="height: 32px; filter: brightness(0) invert(1);">
+                </div>
+                <p class="footer-tagline">
+                    A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
+                </p>
+                <p class="footer-tagline" style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem;">
+                    EIN: 81-2543425
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Our Work</h4>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+                <a href="ambassadors.html">Ambassadors</a>
+                <a href="resources.html">Resources</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Get Involved</h4>
+                <a href="donate.html">Donate</a>
+                <a href="ambassadors.html">Ambassador Program</a>
+                <a href="mailto:hello@finmango.org">Partner With Us</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform"
+                    target="_blank" rel="noopener noreferrer">Volunteer</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <a href="https://www.linkedin.com/company/finmango/" target="_blank"
+                    rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
+                <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="mailto:hello@finmango.org">Contact</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>© 2025 FinMango. All rights reserved.</div>
+            <div>
+                <a href="privacy.html" style="display: inline; margin: 0 1rem; color: #999;">Privacy</a>
+                <a href="terms.html" style="display: inline; margin: 0 1rem; color: #999;">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenuBtn.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+        }
+
+        // Navigation scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Game Logic
+        const SCENARIOS = {
+            start: {
+                text: "It's Tuesday night. You feel a sharp pain in your side. It's getting worse. You have a $2,000 emergency fund and 'good' insurance. What do you do?",
+                choices: [
+                    { text: "Go to the ER immediately", next: "er_visit" },
+                    { text: "Wait until morning for Urgent Care", next: "urgent_care" },
+                    { text: "Google symptoms and take Advil", next: "worse_pain" }
+                ]
+            },
+            er_visit: {
+                text: "You rush to the ER. The intake nurse asks for your insurance. You provide it. They run tests, CT scans, and give you pain meds. It's appendicitis. You need surgery.",
+                choices: [
+                    { text: "Agree to surgery", next: "surgery_bill" },
+                    { text: "Ask if the surgeon is in-network", next: "surgeon_check" }
+                ]
+            },
+            urgent_care: {
+                text: "You wait in agony until 8 AM. Urgent Care says it's too serious for them. They call an ambulance to take you to the ER.",
+                choices: [
+                    { text: "Take the ambulance", next: "ambulance_bill" },
+                    { text: "Refuse and drive yourself", next: "er_visit" }
+                ]
+            },
+            worse_pain: {
+                text: "The pain becomes unbearable. You pass out. Your roommate calls 911.",
+                choices: [
+                    { text: "Wake up in hospital", next: "ambulance_bill" }
+                ]
+            },
+            surgeon_check: {
+                text: "The nurse says 'The hospital is in-network, but the on-call surgeon is a contractor. We don't know their status.' You are in critical condition.",
+                choices: [
+                    { text: "Have the surgery anyway", next: "surgery_bill" }
+                ]
+            },
+            surgery_bill: {
+                text: "Surgery is successful! You are alive. 3 weeks later, you get the bill. The hospital was in-network ($500 copay), but the anesthesiologist was out-of-network.",
+                bill: 3500,
+                outcome: "You owe $3,500. Your savings cover $2,000. You are now $1,500 in debt despite having insurance."
+            },
+            ambulance_bill: {
+                text: "The ambulance ride was 4 miles. You get a bill for $2,800 because the ambulance company is private and out-of-network.",
+                bill: 2800,
+                outcome: "You owe $2,800 for a 10-minute ride. Your savings are gone, and you have $800 in debt."
+            }
+        };
+
+        let wallet = 2000;
+
+        function startGame() {
+            wallet = 2000;
+            updateWallet();
+            showScenario('start');
+            document.getElementById('outcomeBox').style.display = 'none';
+            document.getElementById('restartBtn').style.display = 'none';
+            document.getElementById('choicesGrid').style.display = 'grid';
+        }
+
+        function showScenario(id) {
+            const scene = SCENARIOS[id];
+            document.getElementById('scenarioText').textContent = scene.text;
+
+            const choicesDiv = document.getElementById('choicesGrid');
+            choicesDiv.innerHTML = '';
+
+            if (scene.choices) {
+                scene.choices.forEach(choice => {
+                    const btn = document.createElement('div');
+                    btn.className = 'choice-btn';
+                    btn.textContent = choice.text;
+                    btn.onclick = () => showScenario(choice.next);
+                    choicesDiv.appendChild(btn);
+                });
+            } else {
+                // End game
+                endGame(scene);
+            }
+        }
+
+        function endGame(scene) {
+            document.getElementById('choicesGrid').style.display = 'none';
+            document.getElementById('outcomeBox').style.display = 'block';
+            document.getElementById('outcomeText').textContent = scene.outcome;
+
+            wallet = wallet - scene.bill;
+            updateWallet();
+
+            document.getElementById('restartBtn').style.display = 'block';
+        }
+
+        function updateWallet() {
+            const el = document.getElementById('walletDisplay');
+            el.textContent = formatCurrency(wallet);
+            if (wallet < 0) {
+                el.style.color = 'var(--error)';
+            } else {
+                el.style.color = 'var(--success)';
+            }
+        }
+
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(num);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', startGame);
+
+    </script>
+</body>
+
+</html>

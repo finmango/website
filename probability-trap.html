@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Probability Trap - FinMango</title>
+    <meta name="description"
+        content="Simulate the math behind sports betting parlays. See why the house always wins and how 'sure things' drain your wallet.">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap">
+    </noscript>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <style>
+        /* Core Styles */
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --orange: #FF6B35;
+            --gray: #6B6560;
+            --light-gray: #f5f5f5;
+            --success: #10B981;
+            --error: #EF4444;
+            --info: #3B82F6;
+            --max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        nav.scrolled {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.97);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            justify-self: start;
+        }
+
+        .logo:hover {
+            transform: rotate(-2deg) scale(1.05);
+        }
+
+        .logo img {
+            height: 46px;
+            transition: height 0.3s ease;
+        }
+
+        nav.scrolled .logo img {
+            height: 38px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .nav-right a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
+            width: 100%;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+            color: var(--orange);
+            transform: none;
+        }
+
+        .btn-donate {
+            background: var(--orange);
+            color: var(--white) !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--black);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-donate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-donate:hover::before {
+            left: 0;
+        }
+
+        .btn-donate:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-get-involved {
+            background: transparent;
+            color: var(--black) !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--black);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-get-involved::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-get-involved:hover::before {
+            left: 0;
+        }
+
+        .btn-get-involved:hover {
+            color: var(--white) !important;
+            transform: scale(1.05);
+        }
+
+        /* Mobile controls container */
+        .mobile-controls {
+            display: none;
+            gap: 1rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .mobile-get-involved {
+            display: none;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: var(--black);
+            margin: 6px 0;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--white);
+            z-index: 999;
+            padding: 6rem 2rem;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            display: block;
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 1.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--black);
+            text-decoration: none;
+            border-bottom: 2px solid var(--black);
+        }
+
+        @media (max-width: 968px) {
+            .nav-container {
+                grid-template-columns: 1fr auto;
+                gap: 1rem;
+            }
+
+            .nav-right {
+                display: none;
+            }
+
+            .mobile-controls {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .mobile-get-involved {
+                display: inline-block;
+                padding: 0.35rem 0.85rem;
+                font-size: 0.72rem;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        /* Game Specific Styles */
+        .game-section {
+            padding: 10rem 2rem 4rem;
+            background: var(--light-gray);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .header-content {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header-content h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .header-content p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .card {
+            background: var(--white);
+            border: 3px solid var(--black);
+            padding: 2rem;
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        /* Betting Interface */
+        .bet-builder {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .leg-selector {
+            background: var(--light-gray);
+            padding: 1rem;
+            border: 2px solid #ddd;
+        }
+
+        .leg-selector h4 {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .odds-display {
+            font-family: monospace;
+            font-weight: 700;
+            color: var(--info);
+            float: right;
+        }
+
+        .sim-btn {
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            padding: 1rem;
+            font-weight: 900;
+            font-size: 1.1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: transform 0.1s;
+            width: 100%;
+        }
+
+        .sim-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .sim-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Results */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 1rem;
+            background: var(--light-gray);
+            border: 2px solid var(--black);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 900;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--gray);
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        .verdict-message {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #fee2e2;
+            border-left: 4px solid var(--error);
+            color: #991b1b;
+            font-weight: 600;
+            display: none;
+        }
+
+        @media (max-width: 968px) {
+            .game-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Educational Section */
+        .edu-section {
+            margin-top: 4rem;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .edu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .edu-card {
+            background: var(--white);
+            padding: 2rem;
+            border-left: 4px solid var(--orange);
+        }
+
+        .edu-card h3 {
+            font-size: 1.25rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .edu-card p {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .highlight-badge {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--orange);
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding-top: 4rem;
+        }
+
+        .footer-newsletter {
+            background: var(--orange);
+            padding: 4rem 2rem;
+            margin-bottom: 4rem;
+            color: var(--white);
+        }
+
+        .footer-newsletter-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-newsletter h3 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-newsletter p {
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin-right: auto;
+        }
+
+        .footer-newsletter-btn {
+            background: var(--black);
+            color: var(--white);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 3px solid var(--black);
+            white-space: nowrap;
+        }
+
+        .footer-newsletter-btn:hover {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .footer-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-brand img {
+            height: 40px;
+        }
+
+        .footer-brand span {
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .footer-tagline {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-section a {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--orange);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        @media (max-width: 640px) {
+            .footer-newsletter {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .footer-newsletter h3 {
+                font-size: 1.25rem;
+            }
+
+            .footer-newsletter p {
+                font-size: 0.95rem;
+            }
+
+            .footer-newsletter-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
+
+            <div class="nav-right">
+                <a href="about.html">About</a>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+                <a href="ambassadors.html">Ambassadors</a>
+                <a href="resources.html">Resources</a>
+                <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+                <a href="donate.html" class="btn-donate">Donate</a>
+            </div>
+
+            <div class="mobile-controls">
+                <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="about.html">About</a>
+        <a href="research.html">Research</a>
+        <a href="education.html">Education</a>
+        <a href="ambassadors.html">Ambassadors</a>
+        <a href="resources.html">Resources</a>
+        <a href="donate.html">Donate</a>
+    </div>
+
+    <section class="game-section">
+        <div class="container">
+            <div class="header-content">
+                <h1>The Probability Trap</h1>
+                <p>Why the "House Always Wins." Simulate a year of sports betting and see the math behind the losses.
+                </p>
+            </div>
+
+            <div class="game-grid">
+                <!-- Betting Controls -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem; font-weight: 900;">Build Your Parlay</h3>
+
+                    <div class="bet-builder">
+                        <div class="leg-selector">
+                            <span class="odds-display">-110</span>
+                            <h4>Leg 1: The "Sure Thing"</h4>
+                            <p style="font-size: 0.85rem; color: var(--gray);">Team A to win (52.4% chance)</p>
+                        </div>
+
+                        <div class="leg-selector">
+                            <span class="odds-display">-110</span>
+                            <h4>Leg 2: The "Lock"</h4>
+                            <p style="font-size: 0.85rem; color: var(--gray);">Player B over 20 points (52.4% chance)
+                            </p>
+                        </div>
+
+                        <div class="leg-selector">
+                            <span class="odds-display">-110</span>
+                            <h4>Leg 3: The "Bonus"</h4>
+                            <p style="font-size: 0.85rem; color: var(--gray);">Team C spread -3.5 (52.4% chance)</p>
+                        </div>
+
+                        <div style="padding: 1rem; background: #eef2ff; border: 2px solid var(--info);">
+                            <div style="display: flex; justify-content: space-between; font-weight: 700;">
+                                <span>Wager:</span>
+                                <span>$20.00</span>
+                            </div>
+                            <div
+                                style="display: flex; justify-content: space-between; font-weight: 700; color: var(--success); margin-top: 0.5rem;">
+                                <span>Potential Payout:</span>
+                                <span>$119.16</span>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--gray); margin-top: 0.5rem; text-align: center;">
+                                Implied Probability: 14.3%
+                            </div>
+                        </div>
+
+                        <button class="sim-btn" onclick="runSimulation()">Simulate 1 Year (52 Weeks)</button>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem; font-weight: 900;">Simulation Results</h3>
+
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span class="stat-value" id="totalWagered">$0</span>
+                            <span class="stat-label">Total Wagered</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-value" id="netProfit">$0</span>
+                            <span class="stat-label">Net Profit/Loss</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-value" id="wins">0</span>
+                            <span class="stat-label">Wins</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-value" id="losses">0</span>
+                            <span class="stat-label">Losses</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="profitChart"></canvas>
+                    </div>
+
+                    <div class="verdict-message" id="verdictMessage">
+                        📉 You lost money. Even with a few big wins, the "vig" (house edge) and low probability of
+                        hitting all 3 legs drained your bankroll over time.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Educational Section -->
+            <div class="edu-section">
+                <div class="header-content">
+                    <h2>The Math of Losing</h2>
+                    <p>Why sports betting is wealth extraction, not investing.</p>
+                </div>
+
+                <div class="edu-grid">
+                    <div class="edu-card">
+                        <span class="highlight-badge">The Vig</span>
+                        <h3>The House Edge</h3>
+                        <p>Sportsbooks charge a fee (vig) on every bet. To break even on -110 bets, you need to win
+                            52.4% of the time. Most people hit 50% long-term.</p>
+                    </div>
+
+                    <div class="edu-card">
+                        <span class="highlight-badge">Parlays</span>
+                        <h3>The Sucker Bet</h3>
+                        <p>Parlays multiply your risk. Hitting three 50/50 outcomes in a row only happens 12.5% of the
+                            time, but the payout rarely reflects the true risk.</p>
+                    </div>
+
+                    <div class="edu-card">
+                        <span class="highlight-badge">Systemic Issue</span>
+                        <h3>Targeting Desperation</h3>
+                        <p>Betting apps target young adults with "risk-free" bets to get them hooked. It's selling false
+                            hope to people who need real money.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-newsletter">
+            <div class="footer-newsletter-container">
+                <h3>Stay Updated</h3>
+                <p>Join our newsletter for updates on financial health research, education, and advocacy.</p>
+                <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank"
+                    rel="noopener noreferrer">Subscribe</a>
+            </div>
+        </div>
+
+        <div class="footer-container">
+            <div>
+                <div class="footer-brand">
+                    <img src="finmango.png" alt="FinMango" loading="lazy"
+                        style="height: 32px; filter: brightness(0) invert(1);">
+                </div>
+                <p class="footer-tagline">
+                    A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
+                </p>
+                <p class="footer-tagline" style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem;">
+                    EIN: 81-2543425
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Our Work</h4>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+                <a href="ambassadors.html">Ambassadors</a>
+                <a href="resources.html">Resources</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Get Involved</h4>
+                <a href="donate.html">Donate</a>
+                <a href="ambassadors.html">Ambassador Program</a>
+                <a href="mailto:hello@finmango.org">Partner With Us</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform"
+                    target="_blank" rel="noopener noreferrer">Volunteer</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <a href="https://www.linkedin.com/company/finmango/" target="_blank"
+                    rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
+                <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="mailto:hello@finmango.org">Contact</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>© 2025 FinMango. All rights reserved.</div>
+            <div>
+                <a href="privacy.html" style="display: inline; margin: 0 1rem; color: #999;">Privacy</a>
+                <a href="terms.html" style="display: inline; margin: 0 1rem; color: #999;">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenuBtn.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+        }
+
+        // Navigation scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Simulation Logic
+        let chart;
+        const WEEKS = 52;
+        const BET_AMOUNT = 20;
+        const PAYOUT = 119.16; // Approx 6-1 payout for 3-leg parlay
+        const TRUE_WIN_PROB = 0.125; // 0.5 * 0.5 * 0.5 (Assuming fair coin flip for outcomes, ignoring vig for simplicity of "true odds" vs payout)
+        // Actually, let's model it realistically. 
+        // 3 legs at -110. Win prob per leg approx 50% (house edge comes from payout being less than true odds).
+        // Payout for $20 bet on +595 odds (typical 3-leg parlay) is ~$119 profit + $20 stake = $139 total.
+        // Win probability is 0.5^3 = 0.125 (12.5%).
+
+        function runSimulation() {
+            let balance = 0;
+            const history = [0];
+            let wins = 0;
+            let losses = 0;
+            let totalWagered = 0;
+
+            for (let i = 0; i < WEEKS; i++) {
+                totalWagered += BET_AMOUNT;
+                // Simulate bet
+                if (Math.random() < TRUE_WIN_PROB) {
+                    // Win
+                    balance += (PAYOUT - BET_AMOUNT); // Net profit
+                    wins++;
+                } else {
+                    // Loss
+                    balance -= BET_AMOUNT;
+                    losses++;
+                }
+                history.push(balance);
+            }
+
+            // Update UI
+            document.getElementById('totalWagered').textContent = formatCurrency(totalWagered);
+            document.getElementById('netProfit').textContent = formatCurrency(balance);
+            document.getElementById('netProfit').style.color = balance >= 0 ? 'var(--success)' : 'var(--error)';
+            document.getElementById('wins').textContent = wins;
+            document.getElementById('losses').textContent = losses;
+
+            document.getElementById('verdictMessage').style.display = 'block';
+
+            updateChart(history);
+        }
+
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
+        }
+
+        function updateChart(data) {
+            const ctx = document.getElementById('profitChart').getContext('2d');
+
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: data.length }, (_, i) => `Week ${i}`),
+                    datasets: [{
+                        label: 'Net Profit/Loss',
+                        data: data,
+                        borderColor: '#000',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.1,
+                        fill: {
+                            target: 'origin',
+                            above: 'rgba(16, 185, 129, 0.1)',   // Area will be green above the origin
+                            below: 'rgba(239, 68, 68, 0.1)'    // And red below the origin
+                        }
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: (context) => context.tick.value === 0 ? '#000' : '#ddd',
+                                lineWidth: (context) => context.tick.value === 0 ? 2 : 1
+                            }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { maxTicksLimit: 10 }
+                        }
+                    }
+                }
+            });
+        }
+
+    </script>
+</body>
+
+</html>
