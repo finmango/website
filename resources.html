@@ -1719,81 +1719,15 @@
       }
     ];
 
-              }, 10);
-    visibleCount++;
-            } else {
-      card.style.display = 'none';
-    }
-          });
-
-    resourceCount.textContent = visibleCount;
-        });
-      });
-    }
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', function () {
-      renderResources();
-      initializeFilters();
-      initializeSearch();
-      initializeMobileMenu();
-    });
-
-    // Render Resources
-    function renderResources() {
-      const grid = document.getElementById('resourcesGrid');
-      if (!grid) return;
-
-      resources.forEach((resource, index) => {
-        const card = createCard(resource, index);
-        grid.appendChild(card);
-      });
-    }
-
-    function createCard(resource, index) {
-      const card = document.createElement('div');
-      card.className = `resource-card ${resource.featured ? 'featured' : ''}`;
-      card.dataset.category = resource.category;
-      card.dataset.title = resource.title.toLowerCase();
-      card.dataset.description = resource.description.toLowerCase();
-      card.style.animation = `fadeInUp 0.6s ease-out ${index * 0.05}s both`;
-
-      const badge = resource.featured ?
-        `<span class="badge">Featured</span>` :
-        resource.isNew ?
-          `<span class="badge new">New</span>` : '';
-
-      card.innerHTML = `
-    ${badge}
-    <div class="resource-category">${resource.category}</div>
-    <h3 class="resource-title">${resource.title}</h3>
-    <p class="resource-description">${resource.description}</p>
-    <a href="${resource.link}" class="resource-link">
-      <span class="icon">${resource.icon}</span>
-      <span>Explore</span>
-    </a>
-  `;
-
-      return card;
-    }
-
     // Mobile Menu
-    function initializeMobileMenu() {
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
 
+    if (mobileMenuBtn) {
       mobileMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
         mobileMenuBtn.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
         document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-      });
-
-      document.querySelectorAll('.mobile-menu a').forEach(link => {
-        link.addEventListener('click', () => {
-          mobileMenu.classList.remove('active');
-          mobileMenuBtn.classList.remove('active');
-          document.body.style.overflow = '';
-        });
       });
     }
   </script>
