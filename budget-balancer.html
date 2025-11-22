@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Budget Balancer Game - FinMango</title>
+    <meta name="description"
+        content="Master the 50/30/20 rule with this interactive budgeting game. Balance your needs, wants, and savings to win financial freedom.">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap">
+    </noscript>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <style>
+        /* Core Styles */
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --orange: #FF6B35;
+            --gray: #6B6560;
+            --light-gray: #f5f5f5;
+            --success: #10B981;
+            --error: #EF4444;
+            --info: #3B82F6;
+            --max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        nav.scrolled {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.97);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            justify-self: start;
+        }
+
+        .logo:hover {
+            transform: rotate(-2deg) scale(1.05);
+        }
+
+        .logo img {
+            height: 46px;
+            transition: height 0.3s ease;
+        }
+
+        nav.scrolled .logo img {
+            height: 38px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .nav-right a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
+            width: 100%;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+            color: var(--orange);
+            transform: none;
+        }
+
+        .btn-donate {
+            background: var(--orange);
+            color: var(--white) !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--black);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-donate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-donate:hover::before {
+            left: 0;
+        }
+
+        .btn-donate:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-get-involved {
+            background: transparent;
+            color: var(--black) !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--black);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-get-involved::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-get-involved:hover::before {
+            left: 0;
+        }
+
+        .btn-get-involved:hover {
+            color: var(--white) !important;
+            transform: scale(1.05);
+        }
+
+        /* Mobile controls container */
+        .mobile-controls {
+            display: none;
+            gap: 1rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .mobile-get-involved {
+            display: none;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: var(--black);
+            margin: 6px 0;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--white);
+            z-index: 999;
+            padding: 6rem 2rem;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            display: block;
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 1.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--black);
+            text-decoration: none;
+            border-bottom: 2px solid var(--black);
+        }
+
+        @media (max-width: 968px) {
+            .nav-container {
+                grid-template-columns: 1fr auto;
+                gap: 1rem;
+            }
+
+            .nav-right {
+                display: none;
+            }
+
+            .mobile-controls {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .mobile-get-involved {
+                display: inline-block;
+                padding: 0.35rem 0.85rem;
+                font-size: 0.72rem;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        /* Game Specific Styles */
+        .game-section {
+            padding: 10rem 2rem 4rem;
+            background: var(--light-gray);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .header-content {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header-content h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .header-content p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Game Board */
+        .game-board {
+            background: var(--white);
+            border: 4px solid var(--black);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 12px 12px 0 var(--black);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            font-weight: 900;
+            font-size: 1.2rem;
+            border-bottom: 2px solid var(--light-gray);
+            padding-bottom: 1rem;
+        }
+
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 2rem;
+            min-height: 400px;
+        }
+
+        /* Source Pile */
+        .source-pile {
+            background: #eef2ff;
+            border: 2px dashed var(--info);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .source-label {
+            font-weight: 700;
+            color: var(--info);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.9rem;
+        }
+
+        .coin {
+            width: 60px;
+            height: 60px;
+            background: var(--orange);
+            border: 2px solid var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: var(--white);
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.1s;
+            box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .coin:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+        }
+
+        .coin.dragging {
+            opacity: 0.5;
+        }
+
+        /* Buckets */
+        .buckets-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .bucket {
+            background: var(--light-gray);
+            border: 3px solid var(--black);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .bucket.drag-over {
+            background: #dbeafe;
+            border-color: var(--info);
+            transform: scale(1.02);
+        }
+
+        .bucket-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .bucket-title {
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .bucket-target {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .bucket-content {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 5px;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 4px;
+            min-height: 150px;
+        }
+
+        .bucket-total {
+            margin-top: 1rem;
+            font-weight: 900;
+            font-size: 1.2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.over {
+            background: var(--error);
+        }
+
+        /* Event Modal */
+        .event-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--white);
+            border: 4px solid var(--black);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            display: none;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .event-modal.active {
+            display: block;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .event-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .event-btn {
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .event-btn:hover {
+            background: var(--orange);
+        }
+
+        @media (max-width: 768px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+
+            .buckets-container {
+                grid-template-columns: 1fr;
+            }
+
+            .source-pile {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Educational Section */
+        .edu-section {
+            margin-top: 4rem;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .edu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .edu-card {
+            background: var(--white);
+            padding: 2rem;
+            border-left: 4px solid var(--orange);
+        }
+
+        .edu-card h3 {
+            font-size: 1.25rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .edu-card p {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .highlight-badge {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--orange);
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding-top: 4rem;
+        }
+
+        .footer-newsletter {
+            background: var(--orange);
+            padding: 4rem 2rem;
+            margin-bottom: 4rem;
+            color: var(--white);
+        }
+
+        .footer-newsletter-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-newsletter h3 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-newsletter p {
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin-right: auto;
+        }
+
+        .footer-newsletter-btn {
+            background: var(--black);
+            color: var(--white);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 3px solid var(--black);
+            white-space: nowrap;
+        }
+
+        .footer-newsletter-btn:hover {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .footer-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-brand img {
+            height: 40px;
+        }
+
+        .footer-brand span {
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .footer-tagline {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-section a {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--orange);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        @media (max-width: 640px) {
+            .footer-newsletter {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .footer-newsletter h3 {
+                font-size: 1.25rem;
+            }
+
+            .footer-newsletter p {
+                font-size: 0.95rem;
+            }
+
+            .footer-newsletter-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
+
+            <div class="nav-right">
+                <a href="about.html">About</a>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+                <a href="ambassadors.html">Ambassadors</a>
+                <a href="resources.html">Resources</a>
+                <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+                <a href="donate.html" class="btn-donate">Donate</a>
+            </div>
+
+            <div class="mobile-controls">
+                <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="about.html">About</a>
+        <a href="research.html">Research</a>
+        <a href="education.html">Education</a>
+        <a href="ambassadors.html">Ambassadors</a>
+        <a href="resources.html">Resources</a>
+        <a href="donate.html">Donate</a>
+    </div>
+
+    <section class="game-section">
+        <div class="container">
+            <div class="header-content">
+                <h1>Budget Balancer</h1>
+                <p>Can you master the 50/30/20 rule? Drag your income into the right buckets to win.</p>
+            </div>
+
+            <div class="game-board">
+                <div class="game-stats">
+                    <div>Income: <span id="totalIncome">$3,000</span></div>
+                    <div>Remaining: <span id="remaining">$3,000</span></div>
+                </div>
+
+                <div class="game-area">
+                    <div class="source-pile" id="sourcePile">
+                        <div class="source-label">Paycheck</div>
+                        <!-- Coins will be generated here -->
+                    </div>
+
+                    <div class="buckets-container">
+                        <!-- Needs Bucket -->
+                        <div class="bucket" data-type="needs" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <div class="bucket-icon">🏠</div>
+                            <div class="bucket-title">Needs</div>
+                            <div class="bucket-target">Target: 50% ($1,500)</div>
+                            <div class="bucket-content" id="needsContent"></div>
+                            <div class="bucket-total" id="needsTotal">$0</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="needsProgress"></div>
+                            </div>
+                        </div>
+
+                        <!-- Wants Bucket -->
+                        <div class="bucket" data-type="wants" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <div class="bucket-icon">🎮</div>
+                            <div class="bucket-title">Wants</div>
+                            <div class="bucket-target">Target: 30% ($900)</div>
+                            <div class="bucket-content" id="wantsContent"></div>
+                            <div class="bucket-total" id="wantsTotal">$0</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="wantsProgress"></div>
+                            </div>
+                        </div>
+
+                        <!-- Savings Bucket -->
+                        <div class="bucket" data-type="savings" ondrop="drop(event)" ondragover="allowDrop(event)">
+                            <div class="bucket-icon">🐷</div>
+                            <div class="bucket-title">Savings</div>
+                            <div class="bucket-target">Target: 20% ($600)</div>
+                            <div class="bucket-content" id="savingsContent"></div>
+                            <div class="bucket-total" id="savingsTotal">$0</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="savingsProgress"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event Modal -->
+            <div class="event-modal" id="eventModal">
+                <span class="event-icon">⚠️</span>
+                <h3 id="eventTitle">Unexpected Expense!</h3>
+                <p id="eventDesc">Your car broke down. You need to pay $200.</p>
+                <button class="event-btn" onclick="closeEvent()">Okay</button>
+            </div>
+
+            <!-- Educational Section -->
+            <div class="edu-section">
+                <div class="header-content">
+                    <h2>The 50/30/20 Rule</h2>
+                    <p>A simple framework for financial stability.</p>
+                </div>
+
+                <div class="edu-grid">
+                    <div class="edu-card">
+                        <span class="highlight-badge">50% Needs</span>
+                        <h3>Essentials</h3>
+                        <p>Housing, groceries, utilities, and transportation. These are the bills you
+                            <strong>must</strong> pay to survive and work.</p>
+                    </div>
+
+                    <div class="edu-card">
+                        <span class="highlight-badge">30% Wants</span>
+                        <h3>Lifestyle</h3>
+                        <p>Dining out, hobbies, subscriptions, and travel. This is the fun stuff that makes life
+                            enjoyable.</p>
+                    </div>
+
+                    <div class="edu-card">
+                        <span class="highlight-badge">20% Savings</span>
+                        <h3>Future You</h3>
+                        <p>Emergency fund, retirement investing, and debt repayment. Pay yourself first!</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-newsletter">
+            <div class="footer-newsletter-container">
+                <h3>Stay Updated</h3>
+                <p>Join our newsletter for updates on financial health research, education, and advocacy.</p>
+                <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank"
+                    rel="noopener noreferrer">Subscribe</a>
+            </div>
+        </div>
+
+        <div class="footer-container">
+            <div>
+                <div class="footer-brand">
+                    <img src="finmango.png" alt="FinMango" loading="lazy"
+                        style="height: 32px; filter: brightness(0) invert(1);">
+                </div>
+                <p class="footer-tagline">
+                    A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
+                </p>
+                <p class="footer-tagline" style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem;">
+                    EIN: 81-2543425
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Our Work</h4>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+                <a href="ambassadors.html">Ambassadors</a>
+                <a href="resources.html">Resources</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Get Involved</h4>
+                <a href="donate.html">Donate</a>
+                <a href="ambassadors.html">Ambassador Program</a>
+                <a href="mailto:hello@finmango.org">Partner With Us</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform"
+                    target="_blank" rel="noopener noreferrer">Volunteer</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <a href="https://www.linkedin.com/company/finmango/" target="_blank"
+                    rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
+                <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="mailto:hello@finmango.org">Contact</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>© 2025 FinMango. All rights reserved.</div>
+            <div>
+                <a href="privacy.html" style="display: inline; margin: 0 1rem; color: #999;">Privacy</a>
+                <a href="terms.html" style="display: inline; margin: 0 1rem; color: #999;">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenuBtn.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+        }
+
+        // Navigation scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Game Logic
+        const TOTAL_INCOME = 3000;
+        const COIN_VALUE = 100;
+        let currentTotals = { needs: 0, wants: 0, savings: 0 };
+        let remaining = TOTAL_INCOME;
+
+        function initGame() {
+            const sourcePile = document.getElementById('sourcePile');
+            const coinCount = TOTAL_INCOME / COIN_VALUE;
+
+            for (let i = 0; i < coinCount; i++) {
+                const coin = document.createElement('div');
+                coin.className = 'coin';
+                coin.textContent = '$100';
+                coin.draggable = true;
+                coin.id = `coin-${i}`;
+                coin.addEventListener('dragstart', drag);
+
+                // Mobile Touch Support
+                coin.addEventListener('touchstart', handleTouchStart, { passive: false });
+                coin.addEventListener('touchmove', handleTouchMove, { passive: false });
+                coin.addEventListener('touchend', handleTouchEnd);
+
+                sourcePile.appendChild(coin);
+            }
+
+            updateStats();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+            ev.target.classList.add('dragging');
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.currentTarget.classList.add('drag-over');
+        }
+
+        // Remove drag-over style when leaving
+        document.querySelectorAll('.bucket').forEach(bucket => {
+            bucket.addEventListener('dragleave', (ev) => {
+                ev.currentTarget.classList.remove('drag-over');
+            });
+        });
+
+        function drop(ev) {
+            ev.preventDefault();
+            const bucket = ev.currentTarget;
+            bucket.classList.remove('drag-over');
+
+            const data = ev.dataTransfer.getData("text");
+            const coin = document.getElementById(data);
+
+            if (coin) {
+                moveCoinToBucket(coin, bucket);
+            }
+        }
+
+        function moveCoinToBucket(coin, bucket) {
+            const bucketType = bucket.dataset.type;
+            const bucketContent = document.getElementById(`${bucketType}Content`);
+
+            // If coin was already in a bucket, subtract from that bucket
+            const parentBucket = coin.closest('.bucket');
+            if (parentBucket) {
+                const parentType = parentBucket.dataset.type;
+                currentTotals[parentType] -= COIN_VALUE;
+            } else {
+                // Coming from source pile
+                remaining -= COIN_VALUE;
+            }
+
+            bucketContent.appendChild(coin);
+            currentTotals[bucketType] += COIN_VALUE;
+            coin.classList.remove('dragging');
+
+            updateStats();
+            checkEvents();
+        }
+
+        function updateStats() {
+            document.getElementById('remaining').textContent = formatCurrency(remaining);
+
+            updateBucketStat('needs', 0.5);
+            updateBucketStat('wants', 0.3);
+            updateBucketStat('savings', 0.2);
+        }
+
+        function updateBucketStat(type, targetPct) {
+            const total = currentTotals[type];
+            const target = TOTAL_INCOME * targetPct;
+            const pct = (total / target) * 100;
+
+            document.getElementById(`${type}Total`).textContent = formatCurrency(total);
+
+            const progressBar = document.getElementById(`${type}Progress`);
+            progressBar.style.width = `${Math.min(pct, 100)}%`;
+
+            if (total > target) {
+                progressBar.classList.add('over');
+            } else {
+                progressBar.classList.remove('over');
+            }
+        }
+
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(num);
+        }
+
+        // Random Events
+        let eventTriggered = false;
+        function checkEvents() {
+            // Trigger event when ~50% of money is distributed
+            if (!eventTriggered && remaining <= TOTAL_INCOME / 2) {
+                setTimeout(triggerEvent, 500);
+                eventTriggered = true;
+            }
+        }
+
+        function triggerEvent() {
+            const modal = document.getElementById('eventModal');
+            modal.classList.add('active');
+
+            // Simple logic: Remove 2 coins from a random bucket or source
+            // For simplicity, let's just say "Flat Tire" and remove $200 from remaining if available, or force user to take from buckets.
+            // Let's make it visual: "Pay $200".
+            // Actually, let's just deduct from remaining for now to keep it simple.
+            remaining -= 200;
+            updateStats();
+        }
+
+        function closeEvent() {
+            document.getElementById('eventModal').classList.remove('active');
+        }
+
+        // Touch Support Logic
+        let activeCoin = null;
+        let touchOffsetX = 0;
+        let touchOffsetY = 0;
+
+        function handleTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            activeCoin = e.target;
+
+            const rect = activeCoin.getBoundingClientRect();
+            touchOffsetX = touch.clientX - rect.left;
+            touchOffsetY = touch.clientY - rect.top;
+
+            activeCoin.style.position = 'fixed';
+            activeCoin.style.zIndex = 1000;
+            activeCoin.style.width = rect.width + 'px';
+            activeCoin.style.height = rect.height + 'px';
+
+            moveAt(touch.clientX, touch.clientY);
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            if (!activeCoin) return;
+            const touch = e.touches[0];
+            moveAt(touch.clientX, touch.clientY);
+        }
+
+        function moveAt(pageX, pageY) {
+            activeCoin.style.left = pageX - touchOffsetX + 'px';
+            activeCoin.style.top = pageY - touchOffsetY + 'px';
+        }
+
+        function handleTouchEnd(e) {
+            if (!activeCoin) return;
+
+            activeCoin.style.display = 'none'; // Hide to find element below
+            const elemBelow = document.elementFromPoint(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+            activeCoin.style.display = 'flex'; // Show again
+
+            const bucket = elemBelow ? elemBelow.closest('.bucket') : null;
+
+            if (bucket) {
+                activeCoin.style.position = 'static';
+                activeCoin.style.zIndex = '10';
+                moveCoinToBucket(activeCoin, bucket);
+            } else {
+                // Return to source or previous location?
+                // For simplicity, snap back to source if dropped nowhere
+                activeCoin.style.position = 'static';
+                // If it was already in a bucket, it stays there? Or goes back to source?
+                // Let's put it back in source if dropped in void
+                if (!activeCoin.closest('.bucket')) {
+                    document.getElementById('sourcePile').appendChild(activeCoin);
+                }
+            }
+
+            activeCoin = null;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', initGame);
+
+    </script>
+</body>
+
+</html>

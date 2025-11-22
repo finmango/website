@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Score Simulator - FinMango</title>
+    <meta name="description"
+        content="See how different financial decisions impact your credit score. Learn what hurts and helps your credit.">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap">
+    </noscript>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <style>
+        /* Core Styles */
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --orange: #FF6B35;
+            --gray: #6B6560;
+            --light-gray: #f5f5f5;
+            --success: #10B981;
+            --error: #EF4444;
+            --info: #3B82F6;
+            --max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        nav.scrolled {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.97);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            justify-self: start;
+        }
+
+        .logo:hover {
+            transform: rotate(-2deg) scale(1.05);
+        }
+
+        .logo img {
+            height: 46px;
+            transition: height 0.3s ease;
+        }
+
+        nav.scrolled .logo img {
+            height: 38px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .nav-right a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
+            width: 100%;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+            color: var(--orange);
+            transform: none;
+        }
+
+        .btn-donate {
+            background: var(--orange);
+            color: var(--white) !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--black);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-donate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-donate:hover::before {
+            left: 0;
+        }
+
+        .btn-donate:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-get-involved {
+            background: transparent;
+            color: var(--black) !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--black);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-get-involved::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-get-involved:hover::before {
+            left: 0;
+        }
+
+        .btn-get-involved:hover {
+            color: var(--white) !important;
+            transform: scale(1.05);
+        }
+
+        /* Mobile controls container */
+        .mobile-controls {
+            display: none;
+            gap: 1rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .mobile-get-involved {
+            display: none;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: var(--black);
+            margin: 6px 0;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--white);
+            z-index: 999;
+            padding: 6rem 2rem;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            display: block;
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 1.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--black);
+            text-decoration: none;
+            border-bottom: 2px solid var(--black);
+        }
+
+        @media (max-width: 968px) {
+            .nav-container {
+                grid-template-columns: 1fr auto;
+                gap: 1rem;
+            }
+
+            .nav-right {
+                display: none;
+            }
+
+            .mobile-controls {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .mobile-get-involved {
+                display: inline-block;
+                padding: 0.35rem 0.85rem;
+                font-size: 0.72rem;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        /* Simulator Specific Styles */
+        .simulator-section {
+            padding: 10rem 2rem 4rem;
+            background: var(--light-gray);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .header-content {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header-content h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .header-content p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .card {
+            background: var(--white);
+            border: 3px solid var(--black);
+            padding: 2rem;
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        /* Gauge */
+        .gauge-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .score-display {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .score-value {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .score-label {
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--gray);
+        }
+
+        .score-change {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .score-change.positive {
+            color: var(--success);
+        }
+
+        .score-change.negative {
+            color: var(--error);
+        }
+
+        /* Actions */
+        .actions-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            background: var(--white);
+            border: 2px solid var(--black);
+            padding: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .action-btn:hover {
+            background: var(--light-gray);
+            transform: translateX(5px);
+        }
+
+        .action-btn.active {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        .action-icon {
+            font-size: 1.5rem;
+        }
+
+        .action-info {
+            flex: 1;
+        }
+
+        .action-title {
+            font-weight: 700;
+            display: block;
+        }
+
+        .action-desc {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #eef2ff;
+            border-left: 4px solid var(--info);
+            display: none;
+        }
+
+        .explanation-box.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Educational Section */
+        .edu-section {
+            margin-top: 4rem;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .edu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .edu-card {
+            background: var(--white);
+            padding: 2rem;
+            border-left: 4px solid var(--orange);
+        }
+
+        .edu-card h3 {
+            font-size: 1.25rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .edu-card p {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .highlight-badge {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--orange);
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding-top: 4rem;
+        }
+
+        .footer-newsletter {
+            background: var(--orange);
+            padding: 4rem 2rem;
+            margin-bottom: 4rem;
+            color: var(--white);
+        }
+
+        .footer-newsletter-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-newsletter h3 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-newsletter p {
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin-right: auto;
+        }
+
+        .footer-newsletter-btn {
+            background: var(--black);
+            color: var(--white);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 3px solid var(--black);
+            white-space: nowrap;
+        }
+
+        .footer-newsletter-btn:hover {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .footer-container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .footer-brand {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-brand img {
+            height: 40px;
+        }
+
+        .footer-brand span {
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .footer-tagline {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .footer-section h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-section a {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--orange);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        @media (max-width: 640px) {
+            .footer-newsletter {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .footer-newsletter h3 {
+                font-size: 1.25rem;
+            }
+
+            .footer-newsletter p {
+                font-size: 0.95rem;
+            }
+
+            .footer-newsletter-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
+
+            <div class="nav-right">
+                <a href="about.html">About</a>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+                <a href="ambassadors.html">Ambassadors</a>
+                <a href="resources.html">Resources</a>
+                <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+                <a href="donate.html" class="btn-donate">Donate</a>
+            </div>
+
+            <div class="mobile-controls">
+                <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="about.html">About</a>
+        <a href="research.html">Research</a>
+        <a href="education.html">Education</a>
+        <a href="ambassadors.html">Ambassadors</a>
+        <a href="resources.html">Resources</a>
+        <a href="donate.html">Donate</a>
+    </div>
+
+    <section class="simulator-section">
+        <div class="container">
+            <div class="header-content">
+                <h1>Credit Score Simulator</h1>
+                <p>What happens if you miss a payment? Or pay off a card? Find out risk-free.</p>
+            </div>
+
+            <div class="sim-grid">
+                <!-- Simulator Controls -->
+                <div class="card">
+                    <h3 style="margin-bottom: 1.5rem; font-weight: 900;">Simulate Actions</h3>
+
+                    <div class="actions-grid">
+                        <button class="action-btn" onclick="simulate('missedPayment', this)">
+                            <span class="action-icon">📅</span>
+                            <div class="action-info">
+                                <span class="action-title">Miss a Payment (30 Days)</span>
+                                <span class="action-desc">Late on credit card or loan</span>
+                            </div>
+                        </button>
+
+                        <button class="action-btn" onclick="simulate('highUtilization', this)">
+                            <span class="action-icon">💳</span>
+                            <div class="action-info">
+                                <span class="action-title">Max Out Credit Card</span>
+                                <span class="action-desc">90%+ Utilization</span>
+                            </div>
+                        </button>
+
+                        <button class="action-btn" onclick="simulate('payOffDebt', this)">
+                            <span class="action-icon">📉</span>
+                            <div class="action-info">
+                                <span class="action-title">Pay Off $1,000 Debt</span>
+                                <span class="action-desc">Lower utilization</span>
+                            </div>
+                        </button>
+
+                        <button class="action-btn" onclick="simulate('newCard', this)">
+                            <span class="action-icon">🆕</span>
+                            <div class="action-info">
+                                <span class="action-title">Open New Credit Card</span>
+                                <span class="action-desc">Hard inquiry + lower avg age</span>
+                            </div>
+                        </button>
+
+                        <button class="action-btn" onclick="simulate('limitIncrease', this)">
+                            <span class="action-icon">📈</span>
+                            <div class="action-info">
+                                <span class="action-title">Credit Limit Increase</span>
+                                <span class="action-desc">Lower utilization ratio</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <button onclick="resetSim()"
+                        style="margin-top: 2rem; background: none; border: none; text-decoration: underline; cursor: pointer; font-weight: 600;">Reset
+                        Simulator</button>
+                </div>
+
+                <!-- Results -->
+                <div class="card">
+                    <div class="gauge-container">
+                        <canvas id="scoreGauge"></canvas>
+                        <div class="score-display">
+                            <div class="score-value" id="currentScore">720</div>
+                            <div class="score-label" id="scoreLabel">Good</div>
+                            <div class="score-change" id="scoreChange">+0 pts</div>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box" id="explanationBox">
+                        <h4 style="font-weight: 900; margin-bottom: 0.5rem;">Why did it change?</h4>
+                        <p id="explanationText"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Educational Section -->
+            <div class="edu-section">
+                <div class="header-content">
+                    <h2>Credit Score Factors</h2>
+                    <p>FICO® Score Breakdown</p>
+                </div>
+
+                <div class="edu-grid">
+                    <div class="edu-card">
+                        <span class="highlight-badge">35% Payment History</span>
+                        <h3>Pay on Time</h3>
+                        <p>The single biggest factor. Even one missed payment can drop your score by 50-100 points.</p>
+                    </div>
+
+                    <div class="edu-card">
+                        <span class="highlight-badge">30% Amounts Owed</span>
+                        <h3>Credit Utilization</h3>
+                        <p>Try to keep your balance below 30% of your limit. Lower is better.</p>
+                    </div>
+
+                    <div class="edu-card">
+                        <span class="highlight-badge">15% Length of History</span>
+                        <h3>Keep Accounts Open</h3>
+                        <p>Longer credit history is better. Avoid closing your oldest credit cards.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-newsletter">
+            <div class="footer-newsletter-container">
+                <h3>Stay Updated</h3>
+                <p>Join our newsletter for updates on financial health research, education, and advocacy.</p>
+                <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank"
+                    rel="noopener noreferrer">Subscribe</a>
+            </div>
+        </div>
+
+        <div class="footer-container">
+            <div>
+                <div class="footer-brand">
+                    <img src="finmango.png" alt="FinMango" loading="lazy"
+                        style="height: 32px; filter: brightness(0) invert(1);">
+                </div>
+                <p class="footer-tagline">
+                    A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
+                </p>
+                <p class="footer-tagline" style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem;">
+                    EIN: 81-2543425
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Our Work</h4>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+                <a href="ambassadors.html">Ambassadors</a>
+                <a href="resources.html">Resources</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Get Involved</h4>
+                <a href="donate.html">Donate</a>
+                <a href="ambassadors.html">Ambassador Program</a>
+                <a href="mailto:hello@finmango.org">Partner With Us</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform"
+                    target="_blank" rel="noopener noreferrer">Volunteer</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <a href="https://www.linkedin.com/company/finmango/" target="_blank"
+                    rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
+                <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="mailto:hello@finmango.org">Contact</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>© 2025 FinMango. All rights reserved.</div>
+            <div>
+                <a href="privacy.html" style="display: inline; margin: 0 1rem; color: #999;">Privacy</a>
+                <a href="terms.html" style="display: inline; margin: 0 1rem; color: #999;">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenuBtn.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+        }
+
+        // Navigation scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Simulator Logic
+        const BASE_SCORE = 720;
+        let currentScore = BASE_SCORE;
+        let chart;
+
+        const SCENARIOS = {
+            missedPayment: {
+                change: -80,
+                text: "Payment history is 35% of your score. A single missed payment can stay on your report for 7 years."
+            },
+            highUtilization: {
+                change: -45,
+                text: "Using more than 30% of your limit signals risk to lenders. Maxing out a card hurts significantly."
+            },
+            payOffDebt: {
+                change: 25,
+                text: "lowering your utilization ratio is one of the fastest ways to boost your score."
+            },
+            newCard: {
+                change: -5,
+                text: "Opening a new account causes a 'hard inquiry' (small drop) and lowers your average account age."
+            },
+            limitIncrease: {
+                change: 15,
+                text: "Increasing your limit lowers your utilization ratio, assuming you don't spend more!"
+            }
+        };
+
+        function initChart() {
+            const ctx = document.getElementById('scoreGauge').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Score', 'Remaining'],
+                    datasets: [{
+                        data: [BASE_SCORE, 850 - BASE_SCORE],
+                        backgroundColor: [getColor(BASE_SCORE), '#eee'],
+                        borderWidth: 0,
+                        circumference: 180,
+                        rotation: 270
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '80%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                    }
+                }
+            });
+        }
+
+        function simulate(scenarioKey, btn) {
+            // Reset active states
+            document.querySelectorAll('.action-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const scenario = SCENARIOS[scenarioKey];
+            const newScore = Math.min(850, Math.max(300, BASE_SCORE + scenario.change));
+
+            animateScore(currentScore, newScore);
+            currentScore = newScore;
+
+            // Update UI
+            const changeEl = document.getElementById('scoreChange');
+            changeEl.textContent = (scenario.change > 0 ? '+' : '') + scenario.change + ' pts';
+            changeEl.className = 'score-change ' + (scenario.change > 0 ? 'positive' : 'negative');
+            changeEl.style.opacity = 1;
+
+            const expBox = document.getElementById('explanationBox');
+            document.getElementById('explanationText').textContent = scenario.text;
+            expBox.classList.add('visible');
+        }
+
+        function animateScore(start, end) {
+            const duration = 1000;
+            const startTime = performance.now();
+
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3); // Cubic ease out
+
+                const current = Math.round(start + (end - start) * ease);
+
+                document.getElementById('currentScore').textContent = current;
+                document.getElementById('scoreLabel').textContent = getLabel(current);
+
+                // Update Chart Color
+                chart.data.datasets[0].backgroundColor[0] = getColor(current);
+                chart.data.datasets[0].data[0] = current;
+                chart.data.datasets[0].data[1] = 850 - current;
+                chart.update();
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+
+            requestAnimationFrame(update);
+        }
+
+        function getColor(score) {
+            if (score >= 800) return '#10B981'; // Excellent
+            if (score >= 740) return '#3B82F6'; // Very Good
+            if (score >= 670) return '#FF6B35'; // Good
+            if (score >= 580) return '#F59E0B'; // Fair
+            return '#EF4444'; // Poor
+        }
+
+        function getLabel(score) {
+            if (score >= 800) return 'Excellent';
+            if (score >= 740) return 'Very Good';
+            if (score >= 670) return 'Good';
+            if (score >= 580) return 'Fair';
+            return 'Poor';
+        }
+
+        function resetSim() {
+            document.querySelectorAll('.action-btn').forEach(b => b.classList.remove('active'));
+            animateScore(currentScore, BASE_SCORE);
+            currentScore = BASE_SCORE;
+            document.getElementById('scoreChange').style.opacity = 0;
+            document.getElementById('explanationBox').classList.remove('visible');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', initChart);
+
+    </script>
+</body>
+
+</html>
