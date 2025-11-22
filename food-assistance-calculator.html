@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Assistance Calculator - FinMango</title>
+  <meta name="description"
+    content="Estimate your eligibility for SNAP and other food assistance programs. Find nearby resources and get personalized tips.">
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-DW5HBYS9JW');
+  </script>
+
+  <style>
+    :root {
+      /* Colors */
+      --black: #000000;
+      --white: #ffffff;
+      --orange: #FF6B35;
+      --orange-dark: #E55A2B;
+      --gray: #6B6560;
+      --gray-light: #f3f4f6;
+      --gray-border: #e5e7eb;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --info: #3B82F6;
+
+      /* Spacing */
+      --container-width: 800px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--black);
+      background-color: #f9fafb;
+      line-height: 1.6;
+    }
+
+    /* Navigation (Simplified for this tool) */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-border);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-weight: 900;
+      font-size: 1.5rem;
+      text-decoration: none;
+      color: var(--black);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .nav-logo img {
+      height: 32px;
+    }
+
+    .nav-back {
+      text-decoration: none;
+      color: var(--gray);
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .nav-back:hover {
+      color: var(--orange);
+    }
+
+    /* Main Layout */
+    main {
+      max-width: var(--container-width);
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero p {
+      color: var(--gray);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Calculator Card */
+    .calculator-card {
+      background: var(--white);
+      border: 1px solid var(--gray-border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      background: var(--gray-light);
+      height: 6px;
+      width: 100%;
+    }
+
+    .progress-bar {
+      background: var(--orange);
+      height: 100%;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Form Sections */
+    .form-section {
+      padding: 2.5rem;
+      display: none; /* Hidden by default */
+    }
+
+    .form-section.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-icon {
+      background: rgba(255, 107, 53, 0.1);
+      color: var(--orange);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    /* Form Groups */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .form-hint {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-bottom: 0.5rem;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--gray-border);
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--orange);
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .input-prefix {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .form-input.has-prefix {
+      padding-left: 2rem;
+    }
+
+    /* Radio Cards */
+    .radio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+    }
+
+    .radio-card {
+      position: relative;
+    }
+
+    .radio-card input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .radio-card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      border: 2px solid var(--gray-border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      height: 100%;
+    }
+
+    .radio-card input:checked + .radio-card-content {
+      border-color: var(--orange);
+      background-color: rgba(255, 107, 53, 0.05);
+      color: var(--orange-dark);
+      font-weight: 600;
+    }
+
+    .radio-card-content:hover {
+      border-color: var(--gray);
+    }
+
+    /* Range Slider */
+    .range-container {
+      margin-top: 1rem;
+    }
+    
+    .range-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-top: 0.5rem;
+    }
+
+    input[type=range] {
+      width: 100%;
+      accent-color: var(--orange);
+    }
+
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--gray-border);
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--orange-dark);
+    }
+
+    .btn-secondary {
+      background: var(--gray-light);
+      color: var(--black);
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    /* Results Section */
+    .results-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--gray-border);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-likely { background: #d1fae5; color: #065f46; }
+    .status-maybe { background: #fef3c7; color: #92400e; }
+    .status-unlikely { background: #f3f4f6; color: #374151; }
+
+    .benefit-estimate {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--black);
+      margin: 0.5rem 0;
+    }
+
+    .benefit-label {
+      color: var(--gray);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .results-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .result-card {
+      background: var(--gray-light);
+      padding: 1.5rem;
+      border-radius: var(--radius-md);
+    }
+
+    .result-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .place-item {
+      background: var(--white);
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--gray-border);
+    }
+
+    .place-name {
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .place-meta {
+      font-size: 0.85rem;
+      color: var(--gray);
+      margin-top: 0.25rem;
+    }
+
+    .place-tags {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.4rem;
+      background: #e0f2fe;
+      color: #0369a1;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .tag-wic {
+      background: #fce7f3;
+      color: #be185d;
+    }
+
+    .checklist-item {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .checklist-icon {
+      color: var(--success);
+      flex-shrink: 0;
+    }
+
+    .cta-button {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      background: var(--black);
+      color: var(--white);
+      text-align: center;
+      text-decoration: none;
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      margin-top: 1.5rem;
+      transition: transform 0.2s;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      background: var(--orange);
+    }
+
+    .disclaimer {
+      font-size: 0.8rem;
+      color: var(--gray);
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--gray-border);
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <img src="finmango.png" alt="FinMango Logo">
+      FinMango
+    </a>
+    <a href="resources.html" class="nav-back">
+      ← Back to Resources
+    </a>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <h1>Food Assistance Calculator</h1>
+      <p>Find out if you might be eligible for SNAP (food stamps) and discover resources near you. It takes less than 2 minutes.</p>
+    </div>
+
+    <div class="calculator-card">
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <form id="calcForm" onsubmit="return false;">
+        
+        <!-- Step 1: Location & Language -->
+        <div class="form-section active" id="step1">
+          <div class="section-title">
+            <div class="section-icon">📍</div>
+            Location & Language
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Language Preference</label>
+            <div class="radio-grid">
+              <label class="radio-card">
+                <input type="radio" name="language" value="en" checked>
+                <div class="radio-card-content">English</div>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="language" value="es">
+                <div class="radio-card-content">Español</div>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="language" value="other">
+                <div class="radio-card-content">Other</div>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ZIP Code</label>
+            <div class="form-hint">Used to find resources near you.</div>
+            <input type="text" class="form-input" name="zip" placeholder="e.g. 44240" maxlength="5" pattern="[0-9]*">
+          </div>
+
+          <div class="btn-group" style="justify-content: flex-end;">
+            <button class="btn btn-primary" onclick="nextStep(2)">Next Step →</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Household -->
+        <div class="form-section" id="step2">
+          <div class="section-title">
+            <div class="section-icon">🏠</div>
+            Household Members
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Total Household Size</label>
+            <div class="form-hint">People who live with you and purchase/prepare food together.</div>
+            <input type="number" class="form-input" name="householdSize" value="1" min="1" max="20">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Children under 5</label>
+            <input type="number" class="form-input" name="childrenUnder5" value="0" min="0">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Adults 60+ or with disabilities?</label>
+            <div class="radio-grid">
+              <label class="radio-card">
+                <input type="radio" name="seniorDisabled" value="yes">
+                <div class="radio-card-content">Yes</div>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="seniorDisabled" value="no" checked>
+                <div class="radio-card-content">No</div>
+              </label>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-secondary" onclick="prevStep(1)">← Back</button>
+            <button class="btn btn-primary" onclick="nextStep(3)">Next Step →</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Income & Expenses -->
+        <div class="form-section" id="step3">
+          <div class="section-title">
+            <div class="section-icon">💰</div>
+            Income & Expenses
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Gross Monthly Income (Before Taxes)</label>
+            <div class="form-hint">Include wages, social security, unemployment, etc.</div>
+            <div class="input-group">
+              <span class="input-prefix">$</span>
+              <input type="number" class="form-input has-prefix" name="income" placeholder="0">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Monthly Rent or Mortgage</label>
+            <div class="input-group">
+              <span class="input-prefix">$</span>
+              <input type="number" class="form-input has-prefix" name="rent" placeholder="0">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Monthly Childcare / Dependent Care</label>
+            <div class="input-group">
+              <span class="input-prefix">$</span>
+              <input type="number" class="form-input has-prefix" name="childcare" placeholder="0">
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-secondary" onclick="prevStep(2)">← Back</button>
+            <button class="btn btn-primary" onclick="calculateResults()">See Results</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Results -->
+        <div class="form-section" id="results">
+          <div class="results-header">
+            <div id="statusBadge" class="status-badge status-maybe">Calculating...</div>
+            <h2 id="resultTitle">You may be eligible for SNAP</h2>
+            <div class="benefit-estimate" id="benefitAmount">$0 - $0</div>
+            <div class="benefit-label">Estimated Monthly Benefit</div>
+            <p style="margin-top: 1rem; color: var(--gray);" id="resultExplanation">
+              Based on your household size and income.
+            </p>
+          </div>
+
+          <div class="results-grid">
+            <!-- Resources Column -->
+            <div class="result-card">
+              <h3>🛒 Places Nearby</h3>
+              <div id="placesList">
+                <!-- Mock Data will go here -->
+              </div>
+              <a href="#" class="cta-button" style="background: var(--white); color: var(--black); border: 2px solid var(--black);">View Full Map</a>
+            </div>
+
+            <!-- Next Steps Column -->
+            <div class="result-card">
+              <h3>📝 Next Steps</h3>
+              <div id="nextSteps">
+                <!-- Dynamic steps -->
+              </div>
+              
+              <div id="wicAlert" style="display:none; margin-top: 1.5rem; background: #fdf2f8; padding: 1rem; border-radius: 8px; border: 1px solid #fbcfe8;">
+                <strong style="color: #be185d;">👶 You may also qualify for WIC</strong>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;">Since you have children under 5, check out the Women, Infants, and Children program.</p>
+              </div>
+
+              <a href="https://www.fns.usda.gov/snap/state-directory" target="_blank" class="cta-button">Apply for SNAP Now</a>
+            </div>
+          </div>
+
+          <div class="disclaimer">
+            <strong>Disclaimer:</strong> This calculator provides an estimate only and is not an official application. Final eligibility is determined by your state agency. Income limits and deduction rules vary by state.
+          </div>
+          
+          <div class="btn-group">
+            <button class="btn btn-secondary" onclick="location.reload()">Start Over</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <script>
+    let currentStep = 1;
+    const totalSteps = 3;
+
+    function updateProgress() {
+      const progress = ((currentStep - 1) / totalSteps) * 100;
+      document.getElementById('progressBar').style.width = `${progress}%`;
+    }
+
+    function nextStep(step) {
+      document.querySelector('.form-section.active').classList.remove('active');
+      document.getElementById(`step${step}`).classList.add('active');
+      currentStep = step;
+      updateProgress();
+      window.scrollTo(0, 0);
+    }
+
+    function prevStep(step) {
+      document.querySelector('.form-section.active').classList.remove('active');
+      document.getElementById(`step${step}`).classList.add('active');
+      currentStep = step;
+      updateProgress();
+      window.scrollTo(0, 0);
+    }
+
+    function calculateResults() {
+      // Get values
+      const form = document.getElementById('calcForm');
+      const income = parseFloat(form.income.value) || 0;
+      const rent = parseFloat(form.rent.value) || 0;
+      const childcare = parseFloat(form.childcare.value) || 0;
+      const householdSize = parseInt(form.householdSize.value) || 1;
+      const childrenUnder5 = parseInt(form.childrenUnder5.value) || 0;
+      const zip = form.zip.value || "00000";
+
+      // --- Simplified Logic (Federal 130% Poverty Line 2024 approx) ---
+      // Household Size: 1 -> $1580, 2 -> $2137, 3 -> $2694, +$557 each addl
+      const baseLimit = 1580;
+      const perPerson = 557;
+      const grossLimit = baseLimit + ((householdSize - 1) * perPerson);
+
+      // Deductions logic (Simplified)
+      // We'll subtract rent/childcare from income to get a "net-like" figure for better estimation
+      // This is NOT the official formula but helps with "Borderline" logic
+      const adjustedIncome = Math.max(0, income - (rent * 0.5) - childcare);
+
+      let status = 'unlikely';
+      let minBenefit = 0;
+      let maxBenefit = 0;
+
+      // Max allotment approx (2024)
+      // 1 -> $291, 2 -> $535, 3 -> $766, 4 -> $973
+      const maxAllotmentBase = 291;
+      const maxAllotmentAdd = 244; // approx avg increment
+      const maxAllotment = maxAllotmentBase + ((householdSize - 1) * maxAllotmentAdd);
+
+      if (income < grossLimit) {
+        status = 'likely';
+        // Rough estimate: Benefit = Max Allotment - (30% of Net Income)
+        // We use adjustedIncome as a proxy for Net Income
+        const deduction = adjustedIncome * 0.3;
+        const estimated = Math.max(23, maxAllotment - deduction); // $23 min benefit
+        minBenefit = Math.floor(estimated * 0.8);
+        maxBenefit = Math.ceil(estimated * 1.1);
+        if (maxBenefit > maxAllotment) maxBenefit = maxAllotment;
+      } else if (adjustedIncome < grossLimit) {
+        status = 'maybe'; // Income high, but expenses high
+        minBenefit = 23;
+        maxBenefit = 150;
+      } else {
+        status = 'unlikely';
+      }
+
+      // --- Render Results ---
+      const statusBadge = document.getElementById('statusBadge');
+      const resultTitle = document.getElementById('resultTitle');
+      const benefitAmount = document.getElementById('benefitAmount');
+      const resultExplanation = document.getElementById('resultExplanation');
+      const nextSteps = document.getElementById('nextSteps');
+
+      if (status === 'likely') {
+        statusBadge.className = 'status-badge status-likely';
+        statusBadge.innerText = 'Likely Eligible';
+        resultTitle.innerText = 'You are likely eligible for SNAP';
+        benefitAmount.innerText = `$${minBenefit} - $${maxBenefit}`;
+        resultExplanation.innerText = `For a household of ${householdSize} with your income, you appear to meet the gross income guidelines.`;
+        
+        nextSteps.innerHTML = `
+          <div class="checklist-item"><span class="checklist-icon">✓</span> Start your online application</div>
+          <div class="checklist-item"><span class="checklist-icon">✓</span> Gather ID and proof of address</div>
+          <div class="checklist-item"><span class="checklist-icon">✓</span> Prepare recent pay stubs</div>
+        `;
+      } else if (status === 'maybe') {
+        statusBadge.className = 'status-badge status-maybe';
+        statusBadge.innerText = 'Borderline';
+        resultTitle.innerText = 'You might be eligible';
+        benefitAmount.innerText = `$${minBenefit} - $${maxBenefit}*`;
+        resultExplanation.innerText = `Your income is near the limit, but your high housing/care costs might help you qualify. It's worth applying.`;
+        
+        nextSteps.innerHTML = `
+          <div class="checklist-item"><span class="checklist-icon">?</span> Contact your local SNAP office</div>
+          <div class="checklist-item"><span class="checklist-icon">✓</span> Gather proof of rent/childcare costs</div>
+        `;
+      } else {
+        statusBadge.className = 'status-badge status-unlikely';
+        statusBadge.innerText = 'Likely Not Eligible';
+        resultTitle.innerText = 'You may not be eligible';
+        benefitAmount.innerText = '$0';
+        resultExplanation.innerText = `Your income appears to be above the limit for a household of ${householdSize}.`;
+        
+        nextSteps.innerHTML = `
+          <div class="checklist-item"><span class="checklist-icon">→</span> Check local food pantries</div>
+          <div class="checklist-item"><span class="checklist-icon">→</span> Look for community food banks</div>
+        `;
+      }
+
+      // WIC Check
+      if (childrenUnder5 > 0) {
+        document.getElementById('wicAlert').style.display = 'block';
+      } else {
+        document.getElementById('wicAlert').style.display = 'none';
+      }
+
+      // Mock Places Data
+      renderMockPlaces(zip);
+
+      // Show Results
+      document.querySelector('.form-section.active').classList.remove('active');
+      document.getElementById('results').classList.add('active');
+      document.getElementById('progressBar').style.width = '100%';
+      window.scrollTo(0, 0);
+    }
+
+    function renderMockPlaces(zip) {
+      const placesList = document.getElementById('placesList');
+      // Deterministic-ish mock data based on ZIP parity
+      const isEven = parseInt(zip) % 2 === 0;
+      
+      let html = '';
+      
+      if (isEven) {
+        html += `
+          <div class="place-item">
+            <div class="place-name"><span>Giant Eagle</span> <span>0.4 mi</span></div>
+            <div class="place-meta">Supermarket • ${zip} Main St</div>
+            <div class="place-tags"><span class="tag">SNAP</span><span class="tag tag-wic">WIC</span></div>
+          </div>
+          <div class="place-item">
+            <div class="place-name"><span>Community Market</span> <span>1.2 mi</span></div>
+            <div class="place-meta">Farmers Market • ${zip} Park Ave</div>
+            <div class="place-tags"><span class="tag">SNAP</span><span class="tag">Double Bucks</span></div>
+          </div>
+        `;
+      } else {
+        html += `
+          <div class="place-item">
+            <div class="place-name"><span>Aldi</span> <span>0.8 mi</span></div>
+            <div class="place-meta">Grocery • ${zip} Broad St</div>
+            <div class="place-tags"><span class="tag">SNAP</span></div>
+          </div>
+          <div class="place-item">
+            <div class="place-name"><span>CVS Pharmacy</span> <span>1.5 mi</span></div>
+            <div class="place-meta">Pharmacy • ${zip} Center Rd</div>
+            <div class="place-tags"><span class="tag">SNAP (Limited)</span></div>
+          </div>
+        `;
+      }
+      
+      placesList.innerHTML = html;
+    }
+  </script>
+</body>
+</html>
