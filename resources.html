@@ -565,6 +565,25 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
       gap: 2rem;
+      margin-bottom: 6rem;
+    }
+
+    .section-header {
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--black);
+      padding-bottom: 1rem;
+    }
+
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-header p {
+      color: var(--gray);
+      font-size: 1.1rem;
+      max-width: 800px;
     }
 
     /* Resource Card */
@@ -1303,26 +1322,42 @@
           autocomplete="off">
         <span class="search-icon">🔍</span>
       </div>
-
-      <!-- Filters moved into hero -->
-      <div class="filters">
-        <button class="filter-btn active" data-category="all">All</button>
-        <button class="filter-btn" data-category="education">Education</button>
-        <button class="filter-btn" data-category="retirement">Retirement</button>
-        <button class="filter-btn" data-category="income">Income</button>
-        <button class="filter-btn" data-category="lifestyle">Lifestyle</button>
-        <button class="filter-btn" data-category="business">Business</button>
-        <button class="filter-btn" data-category="family">Family</button>
-        <button class="filter-btn" data-category="emergencies">Emergencies</button>
-      </div>
     </div>
   </section>
 
   <section class="resources-section">
     <div class="resources-container">
-      <div class="resources-grid" id="resourcesGrid">
-        <!-- Cards will be inserted here by JavaScript -->
+
+      <!-- Section 1: Systemic Barrier Games -->
+      <div class="section-header">
+        <h2>Systemic Barrier Games</h2>
+        <p>Understand the structural forces that shape financial outcomes. These games illustrate why individual choices
+          are often constrained by systemic realities.</p>
       </div>
+      <div class="resources-grid" id="systemicGrid"></div>
+
+      <!-- Section 2: Interactive Simulators -->
+      <div class="section-header">
+        <h2>Interactive Simulators</h2>
+        <p>Learn by doing. These simulators allow you to experiment with financial decisions in a risk-free environment.
+        </p>
+      </div>
+      <div class="resources-grid" id="simulatorsGrid"></div>
+
+      <!-- Section 3: Financial Calculators -->
+      <div class="section-header">
+        <h2>Financial Calculators</h2>
+        <p>Crunch the numbers. Use these tools to make informed decisions about debt, investing, housing, and more.</p>
+      </div>
+      <div class="resources-grid" id="calculatorsGrid"></div>
+
+      <!-- Section 4: Guides & Resources -->
+      <div class="section-header">
+        <h2>Guides & Resources</h2>
+        <p>Deep dives into essential financial topics. Read, plan, and build your financial knowledge.</p>
+      </div>
+      <div class="resources-grid" id="educationGrid"></div>
+
     </div>
   </section>
 
@@ -1397,237 +1432,18 @@
 
     // Resources Data
     const resources = [
+      // Systemic Barrier Games
       {
-        category: 'education',
-        title: 'Mango Stories',
-        description: 'Real-life financial stories and lessons that inspire better money decisions. Learn from others\' experiences with debt, investing, saving, and building wealth.',
-        link: 'mango-stories.html',
-        icon: '📚',
-        featured: true
-      },
-      {
-        category: 'lifestyle',
-        title: 'Sports Betting Simulator',
-        description: 'Experience the reality of sports betting through interactive simulation, showing how it impacts stress, time, sleep, and financial well-being over time.',
-        link: 'sports-betting.html',
-        icon: '🏀',
-        featured: true
-      },
-      {
-        category: 'retirement',
-        title: 'Battle of the IRAs',
-        description: 'Compare Traditional and Roth IRAs to find the best retirement investment strategy for your situation.',
-        link: 'ira-battle.html',
-        icon: '⚔️',
-        featured: true
-      },
-      {
-        category: 'emergencies',
-        title: 'Disaster Desk',
-        description: 'Get personalized disaster recovery resources in 3 simple steps. Access financial aid, housing assistance, and essential services to rebuild after emergencies.',
-        link: 'disaster-desk.html',
-        icon: '🆘',
-        isNew: true
-      },
-      {
-        category: 'income',
-        title: 'Food Assistance Calculator',
-        description: 'Estimate your eligibility for SNAP (food stamps) and find nearby food resources. Get personalized tips and application guidance in under 2 minutes.',
-        link: 'food-assistance-calculator.html',
-        icon: '🍎',
-        isNew: true
-      },
-      {
-        category: 'retirement',
-        title: 'The Compound Interest Time Machine',
-        description: 'Discover the power of compound interest and watch your money grow exponentially over time. Calculate future values with regular contributions.',
-        link: 'compound-interest.html',
-        icon: '💹',
-        isNew: true
-      },
-      {
-        category: 'family',
-        title: 'Family Financial Planning',
-        description: 'Evaluate your financial trajectory over 15 years, considering income, career breaks, childcare, and retirement savings.',
-        link: 'family-planning.html',
-        icon: '👨‍👩‍👧‍👦',
-        isNew: true
-      },
-      {
-        category: 'retirement',
-        title: 'Roth IRA Calculator',
-        description: 'Build tax-free wealth for retirement with a ROTH IRA. See how your contributions grow over time and start planning at any age.',
-        link: 'roth-ira.html',
-        icon: '📈'
-      },
-      {
-        category: 'income',
-        title: 'Paycheck Calculator',
-        description: 'Estimate your take-home pay after taxes and deductions in different cities across the United States.',
-        link: 'paycheck-calculator.html',
-        icon: '💸'
-      },
-      {
-        category: 'retirement',
-        title: 'FIRE Calculator',
-        description: 'Plan your path to Financial Independence and Early Retirement. Live within your means and aggressively save for freedom.',
-        link: 'fire-calculator.html',
-        icon: '🔥'
-      },
-      {
-        category: 'lifestyle',
-        title: 'What\'s Money Calculator',
-        description: 'Track frivolous spending habits and discover how rich you\'d be if you invested that money instead.',
-        link: 'whats-money.html',
-        icon: '💰'
-      },
-      {
-        category: 'business',
-        title: 'Startup Calculator',
-        description: 'Estimate startup costs and initial operating expenses for your new business venture.',
-        link: 'startup-calculator.html',
-        icon: '💼'
-      },
-      {
-        category: 'income',
-        title: 'Mexico Paycheck Calculator',
-        description: 'Calculate your take-home pay after taxes and deductions in different cities across Mexico.',
-        link: 'mexico-paycheck-calculator.html',
-        icon: '🇲🇽'
-      },
-      {
-        category: 'income',
-        title: 'Company Benefits Guide',
-        description: 'Understand and maximize your employee benefits package with this comprehensive guide.',
-        link: 'company-benefits-guide.html',
-        icon: '📑'
-      },
-      {
-        category: 'retirement',
-        title: 'Portfolio Simulator',
-        description: 'Test different investment strategies with financial data dating back to 1970 across various economic conditions.',
-        link: 'portfolio-simulator.html',
-        icon: '📊'
-      },
-      {
-        category: 'retirement',
-        title: 'Rule of 72 Calculator',
-        description: 'Calculate how long it takes for your investments to double using the Rule of 72.',
-        link: 'rule-of-72.html',
-        icon: '⏱'
-      },
-      {
-        category: 'business',
-        title: 'Small Business Digital Guide',
-        description: 'A comprehensive resource for small business owners to efficiently bring their business to the digital era.',
-        link: 'small-business-guide.html',
-        icon: '💻'
-      },
-      {
-        category: 'education',
-        title: 'Table Banking Game',
-        description: 'Experience how Kenyan table banking works through an interactive game. Learn about community savings, lending, and financial cooperation.',
-        link: 'table-banking-game.html',
-        icon: '🤝',
-        isNew: true
-      },
-      {
-        category: 'lifestyle',
-        title: 'Rent vs. Buy Calculator',
-        description: 'Should you rent or buy? Compare the total cost of ownership over time to make the right housing decision.',
-        link: 'rent-vs-buy.html',
-        icon: '🏠',
-        isNew: true
-      },
-      {
-        category: 'income',
-        title: 'Debt Destroyer',
-        description: 'Snowball or Avalanche? Compare payoff strategies to see which one saves you more time and interest.',
-        link: 'debt-destroyer.html',
-        icon: '💣',
-        isNew: true
-      },
-      {
-        category: 'lifestyle',
-        title: 'The Minimum Payment Trap',
-        description: 'See the shocking truth about credit card minimum payments. Calculate how much interest you\'ll really pay.',
-        link: 'minimum-payment-trap.html',
-        icon: '💳',
-        isNew: true
-      },
-      {
-        category: 'income',
-        title: 'Gig Economy Tax Estimator',
-        description: 'Freelancer or gig worker? Estimate your self-employment and income taxes so you don\'t get hit with a surprise bill.',
-        link: 'gig-tax-estimator.html',
-        icon: '🚕',
-        isNew: true
-      },
-      {
-        category: 'education',
-        title: 'Inflation Time Machine',
-        description: 'Travel through time to see how inflation eats your money. Calculate future prices and purchasing power.',
-        link: 'inflation-time-machine.html',
-        icon: '⏳',
-        isNew: true
-      },
-      {
-        category: 'lifestyle',
-        title: 'New vs. Used Car Calculator',
-        description: 'Compare the total cost of ownership between a new and used car, including depreciation, insurance, and fuel.',
-        link: 'new-vs-used-car-calculator.html',
-        icon: '🚗',
-        isNew: true
-      },
-      {
-        category: 'education',
-        title: 'Student Loan Simulator',
-        description: 'Visualize how extra payments can save you thousands in interest and shave years off your student loans.',
-        link: 'student-loan-simulator.html',
-        icon: '🎓',
-        isNew: true
-      },
-      {
-        category: 'lifestyle',
-        title: 'Budget Balancer Game',
-        description: 'Master the 50/30/20 rule with this interactive budgeting game. Balance your needs, wants, and savings to win financial freedom.',
-        link: 'budget-balancer.html',
-        icon: '⚖️',
-        isNew: true
-      },
-      {
-        category: 'lifestyle',
-        title: 'Credit Score Simulator',
-        description: 'See how different financial decisions impact your credit score. Learn what hurts and helps your credit.',
-        link: 'credit-score-simulator.html',
-        icon: '💳',
-        isNew: true
-      },
-      {
-        category: 'lifestyle',
-        title: 'Cost of Living Comparator',
-        description: 'Thinking of moving? Compare the cost of living between cities to see how far your salary will go.',
-        link: 'cost-of-living.html',
-        icon: '🏙️',
-        isNew: true
-      },
-      {
-        category: 'lifestyle',
-        title: 'Inflation Shopping Spree',
-        description: 'Travel through time and see how inflation eats your money. Can you fill your cart in 2025 with a 1990 budget?',
-        link: 'inflation-shopping-spree.html',
-        icon: '🛒',
-        isNew: true
-      },
-      {
+        section: 'systemic',
         category: 'lifestyle',
         title: 'The Probability Trap',
-        description: 'Simulate the math behind sports betting parlays. See why the house always wins and how "sure things" drain your wallet.',
+        description: 'Experience the math behind sports betting. See why the "vig" and probability ensure the house always wins in the long run.',
         link: 'probability-trap.html',
         icon: '🎲',
         isNew: true
       },
       {
+        section: 'systemic',
         category: 'lifestyle',
         title: 'The Medical Maze',
         description: 'Navigate a medical emergency in the US healthcare system. Can you survive without going into debt?',
@@ -1636,90 +1452,281 @@
         isNew: true
       },
       {
+        section: 'systemic',
         category: 'lifestyle',
         title: 'The Commute Calculation',
         description: 'Is that cheaper house really cheaper? Calculate the true cost of your commute, including time, gas, and depreciation.',
         link: 'commute-calc.html',
         icon: '🚗',
         isNew: true
+      },
+
+      // Interactive Simulators
+      {
+        section: 'simulators',
+        category: 'lifestyle',
+        title: 'Sports Betting Simulator',
+        description: 'Experience the reality of sports betting through interactive simulation, showing how it impacts stress, time, sleep, and financial well-being over time.',
+        link: 'sports-betting.html',
+        icon: '🏀',
+        featured: true
+      },
+      {
+        section: 'simulators',
+        category: 'lifestyle',
+        title: 'Budget Balancer Game',
+        description: 'Master the 50/30/20 rule with this interactive budgeting game. Balance your needs, wants, and savings to win financial freedom.',
+        link: 'budget-balancer.html',
+        icon: '⚖️',
+        isNew: true
+      },
+      {
+        section: 'simulators',
+        category: 'lifestyle',
+        title: 'Credit Score Simulator',
+        description: 'See how different actions impact your credit score. Simulate payments, inquiries, and utilization changes in real-time.',
+        link: 'credit-score-simulator.html',
+        icon: '💯',
+        isNew: true
+      },
+      {
+        section: 'simulators',
+        category: 'education',
+        title: 'Inflation Shopping Spree',
+        description: 'Race against rising prices! See how inflation erodes your purchasing power in this fast-paced shopping game.',
+        link: 'inflation-shopping-spree.html',
+        icon: '🛒',
+        isNew: true
+      },
+      {
+        section: 'simulators',
+        category: 'lifestyle',
+        title: 'Cost of Living Comparator',
+        description: 'Thinking of moving? Compare the true cost of living between two cities, including housing, food, and transportation.',
+        link: 'cost-of-living.html',
+        icon: '🏙️',
+        isNew: true
+      },
+      {
+        section: 'simulators',
+        category: 'retirement',
+        title: 'Portfolio Simulator',
+        description: 'Test different investment strategies with financial data dating back to 1970 across various economic conditions.',
+        link: 'portfolio-simulator.html',
+        icon: '📊'
+      },
+      {
+        section: 'simulators',
+        category: 'education',
+        title: 'Table Banking Game',
+        description: 'Experience how Kenyan table banking works through an interactive game. Learn about community savings, lending, and financial cooperation.',
+        link: 'table-banking-game.html',
+        icon: '🤝',
+        isNew: true
+      },
+      {
+        section: 'simulators',
+        category: 'education',
+        title: 'Inflation Time Machine',
+        description: 'Travel through time to see how inflation eats your money. Calculate future prices and purchasing power.',
+        link: 'inflation-time-machine.html',
+        icon: '⏳',
+        isNew: true
+      },
+      {
+        section: 'simulators',
+        category: 'education',
+        title: 'Student Loan Simulator',
+        description: 'Visualize how extra payments can save you thousands in interest and shave years off your student loans.',
+        link: 'student-loan-simulator.html',
+        icon: '🎓',
+        isNew: true
+      },
+
+      // Financial Calculators
+      {
+        section: 'calculators',
+        category: 'lifestyle',
+        title: 'Rent vs. Buy Calculator',
+        description: 'Should you rent or buy? Compare the total cost of ownership over time to make the right housing decision.',
+        link: 'rent-vs-buy.html',
+        icon: '🏠',
+        isNew: true
+      },
+      {
+        section: 'calculators',
+        category: 'income',
+        title: 'Debt Destroyer',
+        description: 'Snowball or Avalanche? Compare payoff strategies to see which one saves you more time and interest.',
+        link: 'debt-destroyer.html',
+        icon: '💣',
+        isNew: true
+      },
+      {
+        section: 'calculators',
+        category: 'lifestyle',
+        title: 'The Minimum Payment Trap',
+        description: 'See the shocking truth about credit card minimum payments. Calculate how much interest you\'ll really pay.',
+        link: 'minimum-payment-trap.html',
+        icon: '💳',
+        isNew: true
+      },
+      {
+        section: 'calculators',
+        category: 'income',
+        title: 'Gig Economy Tax Estimator',
+        description: 'Freelancer or gig worker? Estimate your self-employment and income taxes so you don\'t get hit with a surprise bill.',
+        link: 'gig-tax-estimator.html',
+        icon: '🚕',
+        isNew: true
+      },
+      {
+        section: 'calculators',
+        category: 'lifestyle',
+        title: 'New vs. Used Car Calculator',
+        description: 'Compare the total cost of ownership between a new and used car, including depreciation, insurance, and fuel.',
+        link: 'new-vs-used-car-calculator.html',
+        icon: '🚗',
+        isNew: true
+      },
+      {
+        section: 'calculators',
+        category: 'retirement',
+        title: 'Battle of the IRAs',
+        description: 'Compare Traditional and Roth IRAs to find the best retirement investment strategy for your situation.',
+        link: 'ira-battle.html',
+        icon: '⚔️',
+        featured: true
+      },
+      {
+        section: 'calculators',
+        category: 'retirement',
+        title: 'Roth IRA Calculator',
+        description: 'Build tax-free wealth for retirement with a ROTH IRA. See how your contributions grow over time and start planning at any age.',
+        link: 'roth-ira.html',
+        icon: '📈'
+      },
+      {
+        section: 'calculators',
+        category: 'income',
+        title: 'Paycheck Calculator',
+        description: 'Estimate your take-home pay after taxes and deductions in different cities across the United States.',
+        link: 'paycheck-calculator.html',
+        icon: '💸'
+      },
+      {
+        section: 'calculators',
+        category: 'retirement',
+        title: 'FIRE Calculator',
+        description: 'Plan your path to Financial Independence and Early Retirement. Live within your means and aggressively save for freedom.',
+        link: 'fire-calculator.html',
+        icon: '🔥'
+      },
+      {
+        section: 'calculators',
+        category: 'lifestyle',
+        title: 'What\'s Money Calculator',
+        description: 'Track frivolous spending habits and discover how rich you\'d be if you invested that money instead.',
+        link: 'whats-money.html',
+        icon: '💰'
+      },
+      {
+        section: 'calculators',
+        category: 'business',
+        title: 'Startup Calculator',
+        description: 'Estimate startup costs and initial operating expenses for your new business venture.',
+        link: 'startup-calculator.html',
+        icon: '💼'
+      },
+      {
+        section: 'calculators',
+        category: 'income',
+        title: 'Mexico Paycheck Calculator',
+        description: 'Calculate your take-home pay after taxes and deductions in different cities across Mexico.',
+        link: 'mexico-paycheck-calculator.html',
+        icon: '🇲🇽'
+      },
+      {
+        section: 'calculators',
+        category: 'retirement',
+        title: 'Rule of 72 Calculator',
+        description: 'Calculate how long it takes for your investments to double using the Rule of 72.',
+        link: 'rule-of-72.html',
+        icon: '⏱'
+      },
+      {
+        section: 'calculators',
+        category: 'retirement',
+        title: 'The Compound Interest Time Machine',
+        description: 'Discover the power of compound interest and watch your money grow exponentially over time. Calculate future values with regular contributions.',
+        link: 'compound-interest.html',
+        icon: '💹',
+        isNew: true
+      },
+      {
+        section: 'calculators',
+        category: 'income',
+        title: 'Food Assistance Calculator',
+        description: 'Estimate your eligibility for SNAP (food stamps) and find nearby food resources. Get personalized tips and application guidance in under 2 minutes.',
+        link: 'food-assistance-calculator.html',
+        icon: '🍎',
+        isNew: true
+      },
+
+      // Guides & Resources
+      {
+        section: 'education',
+        category: 'education',
+        title: 'Mango Stories',
+        description: 'Real-life financial stories and lessons that inspire better money decisions. Learn from others\' experiences with debt, investing, saving, and building wealth.',
+        link: 'mango-stories.html',
+        icon: '📚',
+        featured: true
+      },
+      {
+        section: 'education',
+        category: 'emergencies',
+        title: 'Disaster Desk',
+        description: 'Get personalized disaster recovery resources in 3 simple steps. Access financial aid, housing assistance, and essential services to rebuild after emergencies.',
+        link: 'disaster-desk.html',
+        icon: '🆘',
+        isNew: true
+      },
+      {
+        section: 'education',
+        category: 'family',
+        title: 'Family Financial Planning',
+        description: 'Evaluate your financial trajectory over 15 years, considering income, career breaks, childcare, and retirement savings.',
+        link: 'family-planning.html',
+        icon: '👨‍👩‍👧‍👦',
+        isNew: true
+      },
+      {
+        section: 'education',
+        category: 'income',
+        title: 'Company Benefits Guide',
+        description: 'Understand and maximize your employee benefits package with this comprehensive guide.',
+        link: 'company-benefits-guide.html',
+        icon: '📑'
+      },
+      {
+        section: 'education',
+        category: 'business',
+        title: 'Small Business Digital Guide',
+        description: 'A comprehensive resource for small business owners to efficiently bring their business to the digital era.',
+        link: 'small-business-guide.html',
+        icon: '💻'
       }
     ];
 
-    // Search Functionality
-    function initializeSearch() {
-      const searchInput = document.getElementById('searchInput');
-      const cards = document.querySelectorAll('.resource-card');
-      const resourceCount = document.getElementById('resourceCount');
-      const filters = document.querySelectorAll('.filter-btn');
-
-      searchInput.addEventListener('input', function () {
-        const searchTerm = this.value.toLowerCase().trim();
-        let visibleCount = 0;
-        const activeCategory = document.querySelector('.filter-btn.active').dataset.category;
-
-        cards.forEach((card, index) => {
-          const title = card.dataset.title;
-          const description = card.dataset.description;
-          const category = card.dataset.category;
-
-          const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
-          const matchesCategory = activeCategory === 'all' || category === activeCategory;
-
-          if (matchesSearch && matchesCategory) {
-            card.style.display = 'flex';
-            card.style.animation = 'none';
-            setTimeout(() => {
-              card.style.animation = `fadeInUp 0.5s ease-out ${index * 0.05}s both`;
-            }, 10);
-            visibleCount++;
-          } else {
-            card.style.display = 'none';
-          }
-        });
-
-        resourceCount.textContent = visibleCount;
-      });
-    }
-
-    // Update filter system to work with search
-    function initializeFilters() {
-      const filters = document.querySelectorAll('.filter-btn');
-      const cards = document.querySelectorAll('.resource-card');
-      const searchInput = document.getElementById('searchInput');
-      const resourceCount = document.getElementById('resourceCount');
-
-      filters.forEach(filter => {
-        filter.addEventListener('click', function () {
-          const category = this.dataset.category;
-          const searchTerm = searchInput.value.toLowerCase().trim();
-          let visibleCount = 0;
-
-          // Update active state
-          filters.forEach(f => f.classList.remove('active'));
-          this.classList.add('active');
-
-          // Filter cards
-          cards.forEach((card, index) => {
-            const cardCategory = card.dataset.category;
-            const title = card.dataset.title;
-            const description = card.dataset.description;
-
-            const matchesCategory = category === 'all' || cardCategory === category;
-            const matchesSearch = !searchTerm || title.includes(searchTerm) || description.includes(searchTerm);
-
-            if (matchesCategory && matchesSearch) {
-              card.style.display = 'flex';
-              card.style.animation = 'none';
-              setTimeout(() => {
-                card.style.animation = `fadeInUp 0.5s ease-out ${index * 0.05}s both`;
               }, 10);
-              visibleCount++;
+    visibleCount++;
             } else {
-              card.style.display = 'none';
-            }
+      card.style.display = 'none';
+    }
           });
 
-          resourceCount.textContent = visibleCount;
+    resourceCount.textContent = visibleCount;
         });
       });
     }
