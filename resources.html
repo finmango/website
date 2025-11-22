@@ -1388,6 +1388,18 @@
           autocomplete="off">
         <span class="search-icon">🔍</span>
       </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <button class="filter-btn active" data-category="all">All</button>
+        <button class="filter-btn" data-category="education">Education</button>
+        <button class="filter-btn" data-category="retirement">Retirement</button>
+        <button class="filter-btn" data-category="income">Income</button>
+        <button class="filter-btn" data-category="lifestyle">Lifestyle</button>
+        <button class="filter-btn" data-category="business">Business</button>
+        <button class="filter-btn" data-category="family">Family</button>
+        <button class="filter-btn" data-category="emergencies">Emergencies</button>
+      </div>
     </div>
   </section>
 
@@ -1793,9 +1805,26 @@
       const searchInput = document.getElementById('searchInput');
       if (searchInput) {
         searchInput.addEventListener('input', (e) => {
-          renderResources('all', e.target.value);
+          const activeBtn = document.querySelector('.filter-btn.active');
+          const category = activeBtn ? activeBtn.getAttribute('data-category') : 'all';
+          renderResources(category, e.target.value);
         });
       }
+
+      // Filter Events
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all
+          filterBtns.forEach(b => b.classList.remove('active'));
+          // Add active class to clicked
+          btn.classList.add('active');
+
+          const category = btn.getAttribute('data-category');
+          const searchTerm = searchInput ? searchInput.value : '';
+          renderResources(category, searchTerm);
+        });
+      });
     });
 
     // Render Resources
@@ -1817,10 +1846,11 @@
 
       resources.forEach((resource, index) => {
         // Filter Logic
+        const matchesCategory = category === 'all' || resource.category === category;
         const matchesSearch = resource.title.toLowerCase().includes(term) ||
           resource.description.toLowerCase().includes(term);
 
-        if (matchesSearch) {
+        if (matchesCategory && matchesSearch) {
           const cardHTML = createCardHTML(resource, index);
 
           // Append to correct section
