@@ -3082,6 +3082,7 @@
   </div>
 
   <section class="hero">
+    <canvas id="particle-canvas"></canvas>
     <div class="hero-content">
       <div class="hero-label">$25,000+ in prizes</div>
       <h1>
@@ -3399,25 +3400,7 @@
     </div>
   </section>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <canvas id="particle-canvas"></canvas>
-    <div class="hero-content">
-      <div class="hero-label">FINMANGO INNOVATION CHALLENGE</div>
-      <h1>
-        Barrier Breakers
-        <span class="highlight">2026</span>
-      </h1>
-      <p class="hero-subtitle">
-        Join high school students from across the nation to solve systemic barriers to financial health.
-        Build solutions using AI, research, and innovation.
-      </p>
-      <div class="hero-cta">
-        <a href="#apply" class="btn-primary">Register Now</a>
-        <a href="#tracks" class="btn-secondary">Explore Tracks</a>
-      </div>
-    </div>
-  </section>
+
 
   <section class="past-winners">
     <div class="past-winners-container">
@@ -3958,96 +3941,94 @@
       scrollProgress.style.width = scrolled + '%';
     });
 
-    // Animated counter for prize pool
-    function animateCounter(element, target, duration) {
-      // Antigravity Particle Animation
-      const canvas = document.getElementById('particle-canvas');
-      const ctx = canvas.getContext('2d');
+    // Antigravity Particle Animation
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
 
-      let particlesArray;
+    let particlesArray;
 
-      // Set canvas size
+    // Set canvas size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2 + 0.5; // Small specks
+        this.speedY = Math.random() * 0.5 + 0.1; // Slow upward movement
+        this.speedX = Math.random() * 0.2 - 0.1; // Slight horizontal drift
+        this.color = 'rgba(32, 33, 36, ' + (Math.random() * 0.3 + 0.1) + ')'; // Dark grey, varying opacity
+      }
+
+      update() {
+        this.y -= this.speedY;
+        this.x += this.speedX;
+
+        // Wrap around screen
+        if (this.y < 0) {
+          this.y = canvas.height;
+          this.x = Math.random() * canvas.width;
+        }
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+      }
+
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      particlesArray = [];
+      const numberOfParticles = (canvas.width * canvas.height) / 9000; // Density
+      for (let i = 0; i < numberOfParticles; i++) {
+        particlesArray.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+      }
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-
-      class Particle {
-        constructor() {
-          this.x = Math.random() * canvas.width;
-          this.y = Math.random() * canvas.height;
-          this.size = Math.random() * 2 + 0.5; // Small specks
-          this.speedY = Math.random() * 0.5 + 0.1; // Slow upward movement
-          this.speedX = Math.random() * 0.2 - 0.1; // Slight horizontal drift
-          this.color = 'rgba(32, 33, 36, ' + (Math.random() * 0.3 + 0.1) + ')'; // Dark grey, varying opacity
-        }
-
-        update() {
-          this.y -= this.speedY;
-          this.x += this.speedX;
-
-          // Wrap around screen
-          if (this.y < 0) {
-            this.y = canvas.height;
-            this.x = Math.random() * canvas.width;
-          }
-          if (this.x > canvas.width) this.x = 0;
-          if (this.x < 0) this.x = canvas.width;
-        }
-
-        draw() {
-          ctx.fillStyle = this.color;
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-
-      function init() {
-        particlesArray = [];
-        const numberOfParticles = (canvas.width * canvas.height) / 9000; // Density
-        for (let i = 0; i < numberOfParticles; i++) {
-          particlesArray.push(new Particle());
-        }
-      }
-
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < particlesArray.length; i++) {
-          particlesArray[i].update();
-          particlesArray[i].draw();
-        }
-        requestAnimationFrame(animate);
-      }
-
-      window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        init();
-      });
-
       init();
-      animate();
+    });
 
-      // Text reveal animation with stagger
-      function revealText(element) {
-        const text = element.textContent;
-        element.textContent = '';
-        element.style.opacity = '1';
+    init();
+    animate();
 
-        const words = text.split(' ');
-        words.forEach((word, index) => {
-          const span = document.createElement('span');
-          span.textContent = word;
-          span.style.opacity = '0';
-          span.style.display = 'inline-block';
-          span.style.marginRight = '0.25em';
-          span.style.animation = `fadeInUp 0.5s ease forwards ${index * 0.05}s`;
-          element.appendChild(span);
-        });
-      }
+    // Text reveal animation with stagger
+    function revealText(element) {
+      const text = element.textContent;
+      element.textContent = '';
+      element.style.opacity = '1';
 
-      // Add fadeInUp animation
-      const style = document.createElement('style');
-      style.textContent = `
+      const words = text.split(' ');
+      words.forEach((word, index) => {
+        const span = document.createElement('span');
+        span.textContent = word;
+        span.style.opacity = '0';
+        span.style.display = 'inline-block';
+        span.style.marginRight = '0.25em';
+        span.style.animation = `fadeInUp 0.5s ease forwards ${index * 0.05}s`;
+        element.appendChild(span);
+      });
+    }
+
+    // Add fadeInUp animation
+    const style = document.createElement('style');
+    style.textContent = `
   @keyframes fadeInUp {
     from {
       opacity: 0;
@@ -4059,21 +4040,21 @@
     }
   }
 `;
-      document.head.appendChild(style);
+    document.head.appendChild(style);
 
-      // Apply text reveal to section titles
-      const sectionTitles = document.querySelectorAll('.section-title');
-      const textRevealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting && entry.target.children.length === 0) {
-            revealText(entry.target);
-          }
-        });
-      }, { threshold: 0.5 });
-
-      sectionTitles.forEach(title => {
-        textRevealObserver.observe(title);
+    // Apply text reveal to section titles
+    const sectionTitles = document.querySelectorAll('.section-title');
+    const textRevealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.target.children.length === 0) {
+          revealText(entry.target);
+        }
       });
+    }, { threshold: 0.5 });
+
+    sectionTitles.forEach(title => {
+      textRevealObserver.observe(title);
+    });
   </script>
 </body>
 
