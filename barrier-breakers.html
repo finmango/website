@@ -1318,15 +1318,25 @@
 
     .prize-divisions {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap: 1.5rem;
     }
 
-    /* Center the third card (Knowledge Track) on its own row */
+    /* Demo Day takes full height of left column */
+    .division-card:nth-child(1) {
+      grid-row: 1 / 3;
+    }
+
+    /* Innovation Gallery in top right */
+    .division-card:nth-child(2) {
+      grid-row: 1 / 2;
+    }
+
+    /* Knowledge Track in bottom right */
     .division-card:nth-child(3) {
-      grid-column: 1 / -1;
-      max-width: 600px;
-      margin: 0 auto;
+      grid-row: 2 / 3;
+      max-width: none;
+      margin: 0;
       width: 100%;
     }
 
@@ -2929,7 +2939,8 @@
       }
 
       .hero-subtitle {
-        font-size: 1.25rem;
+        font-size: 1rem;
+        line-height: 1.5;
       }
 
       .hero-label {
@@ -2938,13 +2949,17 @@
 
       .btn-primary,
       .btn-secondary {
-        padding: 1rem 1.75rem;
-        font-size: 0.95rem;
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
         white-space: nowrap;
-        min-height: 48px;
+        min-height: 42px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+      }
+
+      .hero-cta {
+        gap: 0.75rem;
       }
 
       .kent-collab-content p {
@@ -2999,10 +3014,19 @@
         font-size: 1.1rem;
       }
 
-      .process-step {
+      .process-steps {
         grid-template-columns: 1fr;
+      }
+
+      .process-step {
         text-align: center;
-        gap: 2rem;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      .experience .section-subtitle {
+        font-size: 0.95rem;
+        line-height: 1.6;
       }
 
       .step-number {
@@ -3014,8 +3038,11 @@
         gap: 2rem;
       }
 
-      /* Reset centered layout on mobile */
+      /* Reset grid positioning on mobile */
+      .division-card:nth-child(1),
+      .division-card:nth-child(2),
       .division-card:nth-child(3) {
+        grid-row: auto;
         max-width: none;
       }
 
@@ -3485,7 +3512,7 @@
         Gallery, or test your financial literacy knowledge.
       </p>
       <p class="hero-date">
-        <strong>Three ways to compete</strong> at Kent State on <strong>February 6, 2026</strong>
+        <strong>Three ways to compete</strong> at Kent State on <strong>March 20, 2026</strong>
       </p>
       <div class="hero-cta">
         <a href="#apply" class="btn-primary"><span>Apply as a Team</span></a>
@@ -3503,7 +3530,7 @@
 
       <div class="timeline-grid">
         <div class="timeline-item">
-          <div class="timeline-date">Jan 23</div>
+          <div class="timeline-date">Feb 27</div>
           <div class="timeline-content">
             <div class="timeline-title">Applications Due</div>
             <p>Submit team application</p>
@@ -3519,7 +3546,7 @@
         </div>
 
         <div class="timeline-item timeline-item-featured">
-          <div class="timeline-date">Feb 6</div>
+          <div class="timeline-date">Mar 20</div>
           <div class="timeline-content">
             <div class="timeline-title">Competition Day</div>
             <p>Present at Kent State</p>
@@ -3533,7 +3560,7 @@
     <div class="tracks-container">
       <div class="section-header">
         <div class="section-label">Pick Your Focus</div>
-        <h2 class="section-title">Five Innovation Tracks</h2>
+        <h2 class="section-title">Innovation Tracks</h2>
         <p class="section-subtitle">
           Choose one challenge. Research why it's a barrier to financial health and wealth building. Build a
           solution—policy proposal, app prototype, financial literacy tool, community program, or anything else that
@@ -3546,41 +3573,50 @@
           <div class="track-icon">🚗</div>
           <div class="track-number">01</div>
           <h3>Transportation</h3>
-          <p>Car ownership costs, insurance rates, and public transit gaps prevent young adults from accessing stable
-            jobs and building financial security.</p>
+          <p>High car costs, insurance rates, and transit gaps prevent young adults from accessing stable jobs and
+            building wealth.</p>
         </div>
 
         <div class="track-card">
           <div class="track-icon">🏠</div>
           <div class="track-number">02</div>
           <h3>Housing Affordability</h3>
-          <p>Rent burden, security deposits, and credit requirements block young adults from stable housing and
-            long-term wealth building opportunities.</p>
+          <p>Rent burden, security deposits, and credit barriers block young adults from stable housing and wealth
+            building.</p>
         </div>
 
         <div class="track-card">
           <div class="track-icon">🏥</div>
           <div class="track-number">03</div>
           <h3>Healthcare Access</h3>
-          <p>Medical debt is a leading cause of bankruptcy. High healthcare costs devastate young adults before their
-            careers even begin.</p>
+          <p>Medical debt drives bankruptcy. High healthcare costs devastate young adults before careers even begin.</p>
         </div>
 
         <div class="track-card">
           <div class="track-icon">🌟</div>
           <div class="track-number">04</div>
           <h3>Community Challenge</h3>
-          <p>Identify a unique barrier in your area—childcare costs, mental health access, or another systemic issue
-            affecting financial wellness.</p>
+          <p>Identify a unique local barrier—childcare costs, mental health access, or another issue affecting financial
+            wellness.</p>
         </div>
 
         <div class="track-card">
           <div class="track-icon">📚</div>
           <div class="track-number">05</div>
           <h3>Literacy & Investment Access</h3>
-          <p>Wealth inequality perpetuates when financial education is limited to privileged families. Barriers to
-            investment accounts, tax-advantaged savings, and compound interest knowledge prevent young adults from
-            building generational wealth.</p>
+          <p>Limited financial education and investment access prevent young adults from building generational wealth.
+          </p>
+        </div>
+
+        <div class="track-card"
+          style="background: linear-gradient(135deg, var(--orange-lighter) 0%, var(--white) 100%); border: 2px solid var(--orange);">
+          <div class="track-icon">🚀</div>
+          <div class="track-number">06</div>
+          <h3>Ready to Compete?</h3>
+          <p>Pick your track, build your solution, and compete for $25,000+ in prizes at Kent State University.</p>
+          <a href="#apply" class="btn-primary"
+            style="margin-top: 1rem; display: inline-block; background: var(--orange); color: var(--white); padding: 0.75rem 1.5rem; text-decoration: none; font-weight: 700; border: 2px solid var(--black); transition: all 0.2s ease;">Apply
+            Now</a>
         </div>
       </div>
     </div>
@@ -3598,10 +3634,10 @@
           <div class="step-number">1</div>
           <div class="step-content">
             <h3>Apply as a Team</h3>
-            <p>Form a team (1-3 students) and submit your application by <strong>January 23, 2026</strong>. Tell us
-              about your team, which track you're tackling, and why this problem matters to you. Optional: Include a
-              60-90 second video introducing your team. <strong>Any number of teams from your school can
-                apply</strong>—we review all applications and select the strongest teams to compete.</p>
+            <p>Form a team of 1-3 students and submit your application by <strong>February 27, 2026</strong>. We will
+              review
+              every submission and select the strongest teams from each school to move forward and compete at Kent
+              State.</p>
           </div>
         </div>
 
@@ -3609,10 +3645,9 @@
           <div class="step-number">2</div>
           <div class="step-content">
             <h3>Get Selected & Build</h3>
-            <p>We'll review applications and select teams for the competition. Selected teams spend several weeks
-              researching the barrier and building their solution. <strong>Leverage AI tools</strong> like Claude,
-              ChatGPT, or others to help prototype apps, analyze data, or create content. Any format works—video demo,
-              working prototype, policy proposal, presentation.</p>
+            <p>Selected teams will spend several weeks researching their chosen barrier and building a solution. Use AI
+              tools like Google Gemini, Claude, or ChatGPT to prototype apps, analyze data, or create compelling content
+              in any format you choose.</p>
           </div>
         </div>
 
@@ -3620,11 +3655,9 @@
           <div class="step-number">3</div>
           <div class="step-content">
             <h3>Present & Compete</h3>
-            <p>On <strong>February 6, 2026</strong>, compete at Kent State University. We select the <strong>top team
-                from each of the 5 innovation tracks</strong> for Demo Day presentations (7 min + Q&A). All other teams
-              present in the Innovation Gallery (1-on-1 with judges). Both divisions offer cash prizes, KSU
-              scholarships, and school grants. Present your solution however works best—poster, laptop, phone, or any
-              format.</p>
+            <p>On <strong>March 20, 2026</strong>, you will compete at Kent State University in either Demo Day or the
+              Innovation Gallery. Both divisions offer cash prizes, KSU scholarships, and school grants for winning
+              teams.</p>
           </div>
         </div>
       </div>
@@ -3652,8 +3685,8 @@
       <div class="prize-divisions">
         <div class="division-card">
           <h3>🚀 Demo Day Presentations</h3>
-          <p class="division-desc">The top team from each innovation track (5 total) presents at Demo Day. 7-minute
-            pitch + 3-minute Q&A. All finalists receive cash prizes, KSU scholarships, and school grants.</p>
+          <p class="division-desc">Top teams from each track (5 total) present at Demo Day. 7-minute pitch + 3-minute
+            Q&A.</p>
           <ul class="prize-list">
             <li class="prize-item">
               <strong>1st Place</strong>
@@ -3685,8 +3718,7 @@
 
         <div class="division-card">
           <h3>📊 Innovation Gallery</h3>
-          <p class="division-desc">All other submissions. Present your solution 1-on-1 with judges (poster, laptop,
-            phone, or any format).</p>
+          <p class="division-desc">All other submissions. Present your solution 1-on-1 with judges in any format.</p>
           <ul class="prize-list">
             <li class="prize-item">
               <strong>1st Place</strong>
@@ -3700,18 +3732,14 @@
               <strong>3rd Place</strong>
               <span>To Be Determined</span>
             </li>
-            <li class="prize-item">
-              <strong>People's Choice</strong>
-              <span>To Be Determined (Attendee Vote)</span>
-            </li>
+
           </ul>
         </div>
 
         <div class="division-card">
           <h3>🧠 Knowledge Track</h3>
-          <p class="division-desc">Test your financial literacy! Open to all students attending on February 6th. Take a
-            20-30 minute multiple-choice test on your phone in a proctored room. No application required—just show up
-            and compete!</p>
+          <p class="division-desc">Test your financial literacy! Open to all attendees. 20-30 minute multiple-choice
+            test on your phone.</p>
           <ul class="prize-list">
             <li class="prize-item">
               <strong>1st Place</strong>
@@ -3726,9 +3754,7 @@
               <span>$100 Cash</span>
             </li>
           </ul>
-          <p style="font-size: 0.85rem; margin-top: 1.5rem; opacity: 0.8; font-style: italic;">Perfect for field trip
-            students or anyone who wants to participate without building a solution. Winners announced at the awards
-            ceremony.</p>
+
         </div>
       </div>
     </div>
@@ -3955,7 +3981,7 @@
         <div class="section-label">Support</div>
         <h2 class="section-title">Build with Confidence</h2>
         <p class="section-subtitle">
-          Resources, AI tools, mentorship, and flexibility to help you create your best innovation.
+          Resources, Google Gemini, mentorship, and flexibility to help you create your best innovation.
         </p>
       </div>
 
@@ -3968,7 +3994,8 @@
 
         <div class="support-card">
           <h3>🤖 AI-Powered Building</h3>
-          <p><strong>We strongly encourage using AI!</strong> Leverage Claude, ChatGPT, or other AI tools to help
+          <p><strong>We strongly encourage using AI!</strong> Leverage Google Gemini, Claude, ChatGPT, or other AI tools
+            to help
             prototype apps, analyze data, generate code, or create content. Use AI to your advantage and build faster.
           </p>
         </div>
@@ -4049,7 +4076,8 @@
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-          <p><strong>Yes! We strongly encourage it.</strong> AI tools like Claude, ChatGPT, and others can help you
+          <p><strong>Yes! We strongly encourage it.</strong> AI tools like Google Gemini, Claude, ChatGPT, and others
+            can help you
             prototype apps, analyze data, generate code, or create content faster. Embrace AI and use it to your
             advantage—it's a powerful tool to bring your ideas to life quickly.</p>
         </div>
@@ -4093,7 +4121,7 @@
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-          <p><strong>February 6, 2026</strong> at Kent State University. Applications are due <strong>January 23,
+          <p><strong>March 20, 2026</strong> at Kent State University. Applications are due <strong>February 27,
               2026</strong> (2 weeks before the event). This gives semester-based schools time to prepare after winter
             break.</p>
         </div>
@@ -4105,7 +4133,7 @@
           <span class="faq-icon">+</span>
         </button>
         <div class="faq-answer">
-          <p><strong>Absolutely! Everyone is welcome.</strong> Teachers can make February 6th a field trip day and bring
+          <p><strong>Absolutely! Everyone is welcome.</strong> Teachers can make March 20th a field trip day and bring
             non-competing students. <strong>Families and parents are also encouraged to attend</strong> to support their
             students and watch the presentations. Experience Demo Day, explore the Innovation Gallery, tour Kent State's
             campus, and see innovation in action. Please email <a
@@ -4121,7 +4149,7 @@
         </button>
         <div class="faq-answer">
           <p>The <strong>Knowledge Track</strong> is a financial literacy test open to all students attending on
-            February 6th. It's a 20-30 minute multiple-choice test taken on your phone in a proctored room at Kent
+            March 20th. It's a 20-30 minute multiple-choice test taken on your phone in a proctored room at Kent
             State. Test your knowledge of personal finance, barriers to financial health, budgeting, credit, and
             investing basics. Compete for cash prizes: <strong>$250 (1st), $150 (2nd), $100 (3rd)</strong>. No
             application or prior registration required—just show up and take the test! Perfect for field trip students
@@ -4137,7 +4165,7 @@
       <h2 class="cta-title">Ready to Compete?</h2>
       <p class="cta-subtitle">
         Three ways to win: Build a solution (Demo Day or Gallery), or test your financial literacy (Knowledge Track).
-        Apply by January 23, 2026 or just show up for the Knowledge Track! Family, friends, and non-competing students
+        Apply by February 27, 2026 or just show up for the Knowledge Track! Family, friends, and non-competing students
         welcome to attend.
       </p>
       <div class="cta-buttons">
