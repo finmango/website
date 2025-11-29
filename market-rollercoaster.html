@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Rollercoaster - FinMango</title>
+    <meta name="description"
+        content="Experience the emotional highs and lows of the stock market. Can you time the market, or will you learn why time in the market is better?">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap">
+    </noscript>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <style>
+        /* Core Styles (Copied from resources.html/index.css) */
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --orange: #FF6B35;
+            --gray: #6B6560;
+            --light-gray: #f5f5f5;
+            --success: #10B981;
+            --error: #EF4444;
+            --info: #3B82F6;
+            --max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        nav.scrolled {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.97);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            justify-self: start;
+        }
+
+        .logo:hover {
+            transform: rotate(-2deg) scale(1.05);
+        }
+
+        .logo img {
+            height: 46px;
+            transition: height 0.3s ease;
+        }
+
+        nav.scrolled .logo img {
+            height: 38px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .nav-right a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
+            width: 100%;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+            color: var(--orange);
+        }
+
+        .btn-donate,
+        .btn-get-involved {
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--black);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-donate {
+            background: var(--orange);
+            color: var(--white) !important;
+        }
+
+        .btn-get-involved {
+            background: transparent;
+            color: var(--black) !important;
+        }
+
+        .btn-donate:hover,
+        .btn-get-involved:hover {
+            transform: scale(1.05);
+        }
+
+        /* Mobile Menu (Simplified) */
+        .mobile-controls {
+            display: none;
+            gap: 1rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: var(--black);
+            margin: 6px 0;
+        }
+
+        @media (max-width: 968px) {
+            .nav-container {
+                grid-template-columns: 1fr auto;
+            }
+
+            .nav-right {
+                display: none;
+            }
+
+            .mobile-controls,
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        /* Game Section */
+        .game-section {
+            padding: 8rem 2rem 4rem;
+            background: var(--light-gray);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .header-content {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header-content h1 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+        }
+
+        .header-content p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Game Board */
+        .game-board {
+            background: var(--white);
+            border: 4px solid var(--black);
+            border-radius: 12px;
+            box-shadow: 12px 12px 0 var(--black);
+            overflow: hidden;
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .game-header {
+            padding: 1.5rem;
+            background: var(--black);
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timer {
+            font-family: monospace;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--orange);
+        }
+
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 1rem;
+            gap: 1rem;
+            background: #f8f9fa;
+            border-bottom: 2px solid var(--black);
+            text-align: center;
+        }
+
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--gray);
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 900;
+            font-family: monospace;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            background: #fff;
+            cursor: crosshair;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .controls {
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            border-top: 2px solid var(--black);
+            background: #f8f9fa;
+        }
+
+        .btn-game {
+            padding: 1rem 3rem;
+            font-size: 1.25rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            border: 3px solid var(--black);
+            cursor: pointer;
+            transition: all 0.1s;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .btn-buy {
+            background: var(--success);
+            color: var(--white);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .btn-buy:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 var(--black);
+        }
+
+        .btn-sell {
+            background: var(--error);
+            color: var(--white);
+            box-shadow: 4px 4px 0 var(--black);
+        }
+
+        .btn-sell:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 var(--black);
+        }
+
+        .btn-start {
+            background: var(--info);
+            color: var(--white);
+            box-shadow: 4px 4px 0 var(--black);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            padding: 1.5rem 4rem;
+            font-size: 1.5rem;
+        }
+
+        .btn-start:hover {
+            transform: translate(-50%, -52%);
+        }
+
+        /* Emotional Popups */
+        .emotion-popup {
+            position: absolute;
+            font-weight: 900;
+            font-size: 1.2rem;
+            padding: 0.5rem 1rem;
+            background: var(--black);
+            color: var(--white);
+            border-radius: 4px;
+            pointer-events: none;
+            animation: floatUp 1.5s forwards;
+            z-index: 5;
+            white-space: nowrap;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.8);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-50px) scale(1.1);
+            }
+        }
+
+        /* Results Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border: 4px solid var(--black);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 12px 12px 0 var(--orange);
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            font-weight: 600;
+        }
+
+        .result-row.highlight {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid var(--success);
+            margin: 0.5rem 0;
+        }
+
+        .result-label {
+            color: var(--gray);
+        }
+
+        .result-value {
+            font-weight: 900;
+        }
+
+        .btn-restart {
+            margin-top: 2rem;
+            background: var(--black);
+            color: var(--white);
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 900;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* Education Section */
+        .edu-section {
+            margin-top: 4rem;
+            padding-top: 4rem;
+            border-top: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .edu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .edu-card {
+            background: var(--white);
+            padding: 2rem;
+            border-left: 6px solid var(--orange);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .edu-card h3 {
+            font-size: 1.25rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .edu-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Footer (Copied) */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
+            <div class="nav-right">
+                <a href="about.html">About</a>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+                <a href="resources.html">Resources</a>
+                <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+                <a href="donate.html" class="btn-donate">Donate</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="game-section">
+        <div class="container">
+            <div class="header-content">
+                <h1>Market Rollercoaster</h1>
+                <p>Try to time the market! Buy low, sell high. You have 60 seconds.</p>
+            </div>
+
+            <div class="game-board">
+                <div class="game-header">
+                    <div>MARKET SIMULATION</div>
+                    <div class="timer" id="timer">01:00</div>
+                </div>
+
+                <div class="game-stats">
+                    <div class="stat-box">
+                        <span class="stat-label">Cash</span>
+                        <span class="stat-value" id="cashDisplay">$10,000</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Stocks</span>
+                        <span class="stat-value" id="stockDisplay">$0</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Net Worth</span>
+                        <span class="stat-value" id="netWorthDisplay">$10,000</span>
+                    </div>
+                </div>
+
+                <div class="chart-container" id="chartContainer">
+                    <canvas id="marketChart"></canvas>
+                    <button class="btn-game btn-start" id="startBtn">START GAME</button>
+                    <!-- Emotional popups will be injected here -->
+                </div>
+
+                <div class="controls">
+                    <button class="btn-game btn-buy" id="buyBtn" disabled>BUY</button>
+                    <button class="btn-game btn-sell" id="sellBtn" disabled>SELL</button>
+                </div>
+            </div>
+
+            <div class="edu-section">
+                <div class="header-content">
+                    <h2>The Cycle of Market Emotions</h2>
+                    <p>Why is it so hard to beat the market?</p>
+                </div>
+
+                <div class="edu-grid">
+                    <div class="edu-card">
+                        <h3>😰 Fear & Greed</h3>
+                        <p>Investors often buy when they feel confident (prices are high) and sell when they feel fear
+                            (prices are low). This is the exact opposite of "Buy Low, Sell High."</p>
+                    </div>
+                    <div class="edu-card">
+                        <h3>📈 Dollar Cost Averaging (DCA)</h3>
+                        <p>Instead of guessing, invest a fixed amount regularly (e.g., $500 every month). This way, you
+                            buy more shares when prices are low and fewer when they are high, automatically.</p>
+                    </div>
+                    <div class="edu-card">
+                        <h3>⏳ Time in the Market</h3>
+                        <p>Missing just the 10 best days in the market can cut your returns in half. Staying invested
+                            long-term is historically the most reliable way to build wealth.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 FinMango. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Results Modal -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal-content">
+            <h2 class="modal-title">Game Over!</h2>
+
+            <div class="result-row">
+                <span class="result-label">Your Return</span>
+                <span class="result-value" id="userReturn">0%</span>
+            </div>
+
+            <div class="result-row highlight">
+                <span class="result-label">Buy & Hold Strategy</span>
+                <span class="result-value" id="holdReturn">0%</span>
+            </div>
+
+            <div class="result-row">
+                <span class="result-label">DCA Strategy</span>
+                <span class="result-value" id="dcaReturn">0%</span>
+            </div>
+
+            <p style="margin-top: 1.5rem; color: var(--gray); font-size: 0.9rem; line-height: 1.4;">
+                <span id="resultMessage">Most active traders underperform the market average over time.</span>
+            </p>
+
+            <button class="btn-restart" onclick="location.reload()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        const CONFIG = {
+            duration: 60, // seconds
+            initialCash: 10000,
+            tickRate: 100, // ms per update
+            volatility: 0.02, // price change variance
+            trend: 0.0005, // slight upward bias
+            dcaAmount: 10000 / 60, // DCA equivalent per second (roughly)
+        };
+
+        let state = {
+            isPlaying: false,
+            timeLeft: CONFIG.duration,
+            cash: CONFIG.initialCash,
+            shares: 0,
+            price: 100,
+            history: [], // {time, price}
+            dcaShares: 0,
+            dcaCash: CONFIG.initialCash,
+            holdShares: 0, // Calculated at start
+            startTime: 0
+        };
+
+        // DOM Elements
+        const canvas = document.getElementById('marketChart');
+        const ctx = canvas.getContext('2d');
+        const startBtn = document.getElementById('startBtn');
+        const buyBtn = document.getElementById('buyBtn');
+        const sellBtn = document.getElementById('sellBtn');
+        const chartContainer = document.getElementById('chartContainer');
+        const modal = document.getElementById('resultModal');
+
+        // Resize Canvas
+        function resizeCanvas() {
+            canvas.width = chartContainer.offsetWidth;
+            canvas.height = chartContainer.offsetHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Game Loop
+        let gameInterval;
+        let drawInterval;
+
+        startBtn.addEventListener('click', startGame);
+        buyBtn.addEventListener('click', buyStock);
+        sellBtn.addEventListener('click', sellStock);
+
+        function startGame() {
+            state.isPlaying = true;
+            state.startTime = Date.now();
+            state.price = 100;
+            state.history = [{ time: 0, price: 100 }];
+
+            // Setup comparison strategies
+            state.holdShares = CONFIG.initialCash / state.price;
+
+            startBtn.style.display = 'none';
+            buyBtn.disabled = false;
+            sellBtn.disabled = false;
+
+            gameInterval = setInterval(updateGame, CONFIG.tickRate);
+            drawInterval = requestAnimationFrame(drawLoop);
+        }
+
+        function updateGame() {
+            if (state.timeLeft <= 0) {
+                endGame();
+                return;
+            }
+
+            // Update Time
+            state.timeLeft -= (CONFIG.tickRate / 1000);
+            document.getElementById('timer').textContent = `00:${Math.ceil(state.timeLeft).toString().padStart(2, '0')}`;
+
+            // Update Price (Random Walk)
+            const change = (Math.random() - 0.5 + CONFIG.trend) * state.price * CONFIG.volatility;
+            state.price += change;
+            if (state.price < 1) state.price = 1; // Minimum price
+
+            state.history.push({
+                time: CONFIG.duration - state.timeLeft,
+                price: state.price
+            });
+
+            // Simulate DCA (Buying small amount every second)
+            // We'll do this roughly every 10 ticks (1 second)
+            if (Math.floor(state.timeLeft * 10) % 10 === 0) {
+                const dcaInvest = CONFIG.initialCash / CONFIG.duration;
+                if (state.dcaCash >= dcaInvest) {
+                    state.dcaShares += dcaInvest / state.price;
+                    state.dcaCash -= dcaInvest;
+                }
+            }
+
+            // Trigger Emotions
+            triggerEmotion(change);
+
+            updateUI();
+        }
+
+        function triggerEmotion(change) {
+            const percentChange = (change / state.price) * 100;
+
+            if (percentChange > 1.5) {
+                showPopup("To the Moon! 🚀", "var(--success)");
+            } else if (percentChange < -1.5) {
+                showPopup("Crash! 😱", "var(--error)");
+            }
+        }
+
+        function showPopup(text, color) {
+            const popup = document.createElement('div');
+            popup.className = 'emotion-popup';
+            popup.textContent = text;
+            popup.style.backgroundColor = color;
+
+            // Random position
+            const x = Math.random() * (canvas.width - 100);
+            const y = Math.random() * (canvas.height / 2) + (canvas.height / 4);
+
+            popup.style.left = `${x}px`;
+            popup.style.top = `${y}px`;
+
+            chartContainer.appendChild(popup);
+
+            setTimeout(() => popup.remove(), 1500);
+        }
+
+        function buyStock() {
+            if (state.cash > 0) {
+                const amountToBuy = state.cash;
+                const sharesBought = amountToBuy / state.price;
+                state.shares += sharesBought;
+                state.cash = 0;
+                createTransactionMarker('BUY');
+                updateUI();
+            }
+        }
+
+        function sellStock() {
+            if (state.shares > 0) {
+                const amountToSell = state.shares * state.price;
+                state.cash += amountToSell;
+                state.shares = 0;
+                createTransactionMarker('SELL');
+                updateUI();
+            }
+        }
+
+        function createTransactionMarker(type) {
+            // Visual feedback on chart could be added here
+        }
+
+        function updateUI() {
+            const netWorth = state.cash + (state.shares * state.price);
+
+            document.getElementById('cashDisplay').textContent = formatMoney(state.cash);
+            document.getElementById('stockDisplay').textContent = formatMoney(state.shares * state.price);
+            document.getElementById('netWorthDisplay').textContent = formatMoney(netWorth);
+
+            // Color net worth
+            const nwEl = document.getElementById('netWorthDisplay');
+            if (netWorth > CONFIG.initialCash) nwEl.style.color = 'var(--success)';
+            else if (netWorth < CONFIG.initialCash) nwEl.style.color = 'var(--error)';
+            else nwEl.style.color = 'var(--black)';
+        }
+
+        function drawLoop() {
+            if (!state.isPlaying) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Grid
+            drawGrid();
+
+            // Draw Line
+            ctx.beginPath();
+            ctx.strokeStyle = 'var(--info)'; // Blue line
+            ctx.lineWidth = 3;
+            ctx.lineJoin = 'round';
+
+            const maxPrice = Math.max(...state.history.map(p => p.price)) * 1.1;
+            const minPrice = Math.min(...state.history.map(p => p.price)) * 0.9;
+            const priceRange = maxPrice - minPrice;
+
+            state.history.forEach((point, index) => {
+                const x = (point.time / CONFIG.duration) * canvas.width;
+                const y = canvas.height - ((point.price - minPrice) / priceRange) * canvas.height;
+
+                if (index === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+
+            ctx.stroke();
+
+            // Draw Current Price Dot
+            const lastPoint = state.history[state.history.length - 1];
+            if (lastPoint) {
+                const x = (lastPoint.time / CONFIG.duration) * canvas.width;
+                const y = canvas.height - ((lastPoint.price - minPrice) / priceRange) * canvas.height;
+
+                ctx.beginPath();
+                ctx.fillStyle = 'var(--orange)';
+                ctx.arc(x, y, 6, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            requestAnimationFrame(drawLoop);
+        }
+
+        function drawGrid() {
+            ctx.strokeStyle = '#eee';
+            ctx.lineWidth = 1;
+
+            // Vertical lines
+            for (let i = 0; i <= 10; i++) {
+                const x = (i / 10) * canvas.width;
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+
+            // Horizontal lines
+            for (let i = 0; i <= 5; i++) {
+                const y = (i / 5) * canvas.height;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+        }
+
+        function endGame() {
+            clearInterval(gameInterval);
+            state.isPlaying = false;
+
+            // Calculate Returns
+            const finalPrice = state.price;
+
+            // User
+            const userFinal = state.cash + (state.shares * finalPrice);
+            const userReturn = ((userFinal - CONFIG.initialCash) / CONFIG.initialCash) * 100;
+
+            // Buy & Hold
+            const holdFinal = state.holdShares * finalPrice;
+            const holdReturn = ((holdFinal - CONFIG.initialCash) / CONFIG.initialCash) * 100;
+
+            // DCA (Remaining cash + shares value)
+            const dcaFinal = state.dcaCash + (state.dcaShares * finalPrice);
+            const dcaReturn = ((dcaFinal - CONFIG.initialCash) / CONFIG.initialCash) * 100;
+
+            // Display Results
+            document.getElementById('userReturn').textContent = `${userReturn.toFixed(2)}%`;
+            document.getElementById('holdReturn').textContent = `${holdReturn.toFixed(2)}%`;
+            document.getElementById('dcaReturn').textContent = `${dcaReturn.toFixed(2)}%`;
+
+            // Color coding
+            document.getElementById('userReturn').style.color = userReturn >= 0 ? 'var(--success)' : 'var(--error)';
+            document.getElementById('holdReturn').style.color = holdReturn >= 0 ? 'var(--success)' : 'var(--error)';
+            document.getElementById('dcaReturn').style.color = dcaReturn >= 0 ? 'var(--success)' : 'var(--error)';
+
+            // Custom Message
+            const msgEl = document.getElementById('resultMessage');
+            if (userReturn > holdReturn) {
+                msgEl.textContent = "Wow! You actually beat the market! That's extremely rare. Can you do it twice in a row?";
+            } else {
+                msgEl.textContent = "Like most active traders, you underperformed the simple Buy & Hold strategy. Market timing is hard!";
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function formatMoney(amount) {
+            return '$' + amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+    </script>
+</body>
+
+</html>
