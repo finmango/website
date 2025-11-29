@@ -194,7 +194,7 @@
             transform: scale(1.05);
         }
 
-        .expense-item.essential {
+        .expense-item.need {
             background: var(--success);
             color: var(--white);
         }
@@ -316,14 +316,14 @@
     <section class="game-section">
         <div class="header-content">
             <h1>Expense Avalanche</h1>
-            <p>Click expenses to pay them. Avoid traps. Don't run out of money!</p>
+            <p>Budget your $3,000 paycheck wisely. Pay needs, enjoy wants, and save!</p>
         </div>
 
         <div class="game-board">
             <div class="game-header">
                 <div class="timer">Time: <span id="timer">60</span>s</div>
                 <div class="paycheck-bar-container">
-                    <div class="paycheck-label">Paycheck</div>
+                    <div class="paycheck-label">Money Remaining</div>
                     <div class="paycheck-bar">
                         <div class="paycheck-fill" id="paycheckFill"></div>
                         <div class="paycheck-amount" id="paycheckAmount">$3,000</div>
@@ -338,16 +338,16 @@
             <div class="overlay" id="startScreen">
                 <h2 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">Ready to Budget?</h2>
                 <p style="color: var(--gray); max-width: 400px; margin-bottom: 1rem;">
-                    Click expenses to pay them with your $3,000 paycheck. Survive 60 seconds!
+                    You have $3,000. Budget: 50% Needs ($1,500), 30% Wants ($900), 20% Savings ($600).
                 </p>
                 <div class="legend">
                     <div class="legend-item">
                         <div class="legend-box" style="background: var(--success);"></div>
-                        <span>Essentials (MUST pay)</span>
+                        <span>Needs (MUST pay)</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-box" style="background: var(--info);"></div>
-                        <span>Wants (Optional)</span>
+                        <span>Wants (OK to enjoy!)</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-box" style="background: var(--error);"></div>
@@ -361,7 +361,7 @@
                 <h2 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;" id="gameOverTitle">Game Over!</h2>
                 <p id="gameOverMessage" style="font-size: 1.1rem; margin-bottom: 1rem;"></p>
                 <p style="color: var(--gray); max-width: 400px; margin-bottom: 2rem;">
-                    Budgeting is about prioritizing essentials and avoiding financial traps.
+                    Smart budgeting means covering needs, enjoying wants responsibly, and saving for the future.
                 </p>
                 <button class="btn-start" onclick="startGame()">TRY AGAIN</button>
             </div>
@@ -374,33 +374,37 @@
 
     <script>
         const EXPENSES = [
-            // Essentials
-            { name: "Rent", amount: 1200, type: "essential" },
-            { name: "Groceries", amount: 400, type: "essential" },
-            { name: "Utilities", amount: 150, type: "essential" },
-            { name: "Car Insurance", amount: 120, type: "essential" },
-            { name: "Gas", amount: 80, type: "essential" },
+            // Needs (50% = $1,500)
+            { name: "Rent", amount: 1200, type: "need", bucket: "needs" },
+            { name: "Groceries", amount: 300, type: "need", bucket: "needs" },
+            { name: "Utilities", amount: 100, type: "need", bucket: "needs" },
+            { name: "Transportation", amount: 150, type: "need", bucket: "needs" },
+            { name: "Insurance", amount: 120, type: "need", bucket: "needs" },
 
-            // Wants
-            { name: "Concert Tickets", amount: 80, type: "want" },
-            { name: "New Shoes", amount: 120, type: "want" },
-            { name: "Dining Out", amount: 60, type: "want" },
-            { name: "Streaming Service", amount: 15, type: "want" },
-            { name: "Coffee Shop", amount: 25, type: "want" },
+            // Wants (30% = $900)
+            { name: "Dining Out", amount: 60, type: "want", bucket: "wants" },
+            { name: "Coffee", amount: 25, type: "want", bucket: "wants" },
+            { name: "Streaming", amount: 15, type: "want", bucket: "wants" },
+            { name: "New Shoes", amount: 80, type: "want", bucket: "wants" },
+            { name: "Concert", amount: 100, type: "want", bucket: "wants" },
+            { name: "Hobby Supplies", amount: 50, type: "want", bucket: "wants" },
 
-            // Traps
-            { name: "Payday Loan", amount: 500, type: "trap" },
-            { name: "Buy Now Pay Later", amount: 300, type: "trap" },
-            { name: "Cash Advance", amount: 200, type: "trap" }
+            // Traps (avoid!)
+            { name: "Payday Loan", amount: 500, type: "trap", bucket: null },
+            { name: "Buy Now Pay Later", amount: 300, type: "trap", bucket: null },
+            { name: "Cash Advance", amount: 200, type: "trap", bucket: null }
         ];
 
         let state = {
             isPlaying: false,
-            paycheck: 3000,
-            maxPaycheck: 3000,
+            budgets: {
+                needs: { max: 1500, spent: 0 },
+                wants: { max: 900, spent: 0 },
+                savings: { max: 600, spent: 0 }
+            },
             timeLeft: 60,
             activeExpenses: [],
-            spawnRate: 1500,
+            spawnRate: 1800,
             lastSpawn: 0,
             essentialsPaid: new Set(),
             timerInterval: null,
@@ -417,11 +421,14 @@
         function startGame() {
             state = {
                 isPlaying: true,
-                paycheck: 3000,
-                maxPaycheck: 3000,
+                budgets: {
+                    needs: { max: 1500, spent: 0 },
+                    wants: { max: 900, spent: 0 },
+                    savings: { max: 600, spent: 0 }
+                },
                 timeLeft: 60,
                 activeExpenses: [],
-                spawnRate: 1500,
+                spawnRate: 1800,
                 lastSpawn: 0,
                 essentialsPaid: new Set(),
                 timerInterval: null,
@@ -431,7 +438,7 @@
             startScreen.style.display = 'none';
             gameOverScreen.style.display = 'none';
             playArea.innerHTML = '';
-            updatePaycheckBar();
+            updateBudgetBars();
 
             // Timer
             state.timerInterval = setInterval(() => {
@@ -456,19 +463,19 @@
                 state.lastSpawn = timestamp;
 
                 // Speed up over time
-                if (state.spawnRate > 800) state.spawnRate -= 10;
+                if (state.spawnRate > 1000) state.spawnRate -= 15;
             }
 
             // Move expenses
             state.activeExpenses.forEach((expense, index) => {
-                const speed = 1 + (60 - state.timeLeft) / 30; // Speed increases over time
+                const speed = 1 + (60 - state.timeLeft) / 40;
                 expense.y += speed;
                 expense.element.style.top = expense.y + 'px';
 
                 // Remove if off screen
                 if (expense.y > playArea.offsetHeight) {
-                    if (expense.data.type === 'essential') {
-                        endGame('You missed an essential expense!', false);
+                    if (expense.data.type === 'need') {
+                        endGame('You missed a necessary expense!', false);
                     }
                     expense.element.remove();
                     state.activeExpenses.splice(index, 1);
@@ -506,14 +513,29 @@
                 return;
             }
 
-            // Pay expense
-            state.paycheck -= data.amount;
-            updatePaycheckBar();
+            const bucket = data.bucket;
 
-            // Track essentials
-            if (data.type === 'essential') {
+            // Check if over budget
+            if (state.budgets[bucket].spent + data.amount > state.budgets[bucket].max) {
+                // Overspending - take from savings
+                const overage = (state.budgets[bucket].spent + data.amount) - state.budgets[bucket].max;
+                state.budgets.savings.spent += overage;
+                state.budgets[bucket].spent = state.budgets[bucket].max;
+
+                if (state.budgets.savings.spent > state.budgets.savings.max) {
+                    endGame('You overspent and depleted your savings!', false);
+                    return;
+                }
+            } else {
+                state.budgets[bucket].spent += data.amount;
+            }
+
+            // Track needs
+            if (data.type === 'need') {
                 state.essentialsPaid.add(data.name);
             }
+
+            updateBudgetBars();
 
             // Remove element
             element.classList.add('paid');
@@ -522,17 +544,15 @@
             // Remove from active
             const index = state.activeExpenses.findIndex(e => e.element === element);
             if (index > -1) state.activeExpenses.splice(index, 1);
-
-            // Check if out of money
-            if (state.paycheck < 0) {
-                endGame('You ran out of money!', false);
-            }
         }
 
-        function updatePaycheckBar() {
-            const percentage = (state.paycheck / state.maxPaycheck) * 100;
+        function updateBudgetBars() {
+            const totalSpent = state.budgets.needs.spent + state.budgets.wants.spent + state.budgets.savings.spent;
+            const totalBudget = 3000;
+            const percentage = ((totalBudget - totalSpent) / totalBudget) * 100;
+
             paycheckFill.style.width = Math.max(0, percentage) + '%';
-            paycheckAmount.textContent = '$' + Math.max(0, state.paycheck);
+            paycheckAmount.textContent = '$' + Math.max(0, totalBudget - totalSpent);
 
             if (percentage < 20) {
                 paycheckFill.className = 'paycheck-fill critical';
@@ -544,13 +564,19 @@
         }
 
         function checkWinCondition() {
-            const essentials = EXPENSES.filter(e => e.type === 'essential');
-            const allPaid = essentials.every(e => state.essentialsPaid.has(e.name));
+            const needs = EXPENSES.filter(e => e.type === 'need');
+            const allPaid = needs.every(e => state.essentialsPaid.has(e.name));
 
-            if (allPaid && state.paycheck >= 0) {
-                endGame(`You survived! Remaining: $${state.paycheck}`, true);
+            const savingsLeft = state.budgets.savings.max - state.budgets.savings.spent;
+            const totalRemaining = 3000 - (state.budgets.needs.spent + state.budgets.wants.spent + state.budgets.savings.spent);
+
+            if (allPaid && totalRemaining >= 0) {
+                const message = savingsLeft > 0
+                    ? `Success! You saved $${savingsLeft} and have $${totalRemaining} left over!`
+                    : `You survived! Remaining: $${totalRemaining}`;
+                endGame(message, true);
             } else {
-                endGame('You didn\'t pay all your essential expenses!', false);
+                endGame('You didn\'t pay all your necessary expenses!', false);
             }
         }
 
@@ -559,7 +585,7 @@
             clearInterval(state.timerInterval);
             cancelAnimationFrame(state.gameLoopId);
 
-            document.getElementById('gameOverTitle').textContent = isWin ? 'Success!' : 'Game Over!';
+            document.getElementById('gameOverTitle').textContent = isWin ? 'Budget Complete!' : 'Budget Failed!';
             document.getElementById('gameOverMessage').textContent = message;
             gameOverScreen.style.display = 'flex';
         }
