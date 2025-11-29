@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paycheck Puzzle - FinMango</title>
+    <meta name="description"
+        content="Can you fit all your expenses into your monthly income? Play this puzzle game to master budgeting logic.">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap">
+    </noscript>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <style>
+        /* Core Styles */
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --orange: #FF6B35;
+            --gray: #6B6560;
+            --light-gray: #f5f5f5;
+            --success: #10B981;
+            --error: #EF4444;
+            --info: #3B82F6;
+            --max-width: 1200px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Nav (Copied) */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 46px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+        }
+
+        .nav-right a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Game Section */
+        .game-section {
+            padding: 8rem 2rem 4rem;
+            background: var(--light-gray);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-content {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header-content h1 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Game Board */
+        .game-container {
+            display: flex;
+            gap: 2rem;
+            max-width: 800px;
+            width: 100%;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .game-board {
+            background: var(--white);
+            border: 4px solid var(--black);
+            box-shadow: 12px 12px 0 var(--black);
+            position: relative;
+        }
+
+        canvas {
+            display: block;
+            background-color: #f0f9ff;
+        }
+
+        .sidebar {
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .stat-box {
+            background: var(--white);
+            border: 3px solid var(--black);
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--gray);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--black);
+        }
+
+        .controls-hint {
+            background: var(--black);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .controls-hint div {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Start/Game Over Overlay */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .btn-start {
+            background: var(--orange);
+            color: var(--white);
+            border: 3px solid var(--black);
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 900;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            box-shadow: 6px 6px 0 var(--black);
+            transition: all 0.2s;
+        }
+
+        .btn-start:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        /* Mobile Controls */
+        .mobile-controls {
+            display: none;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .btn-control {
+            background: var(--white);
+            border: 3px solid var(--black);
+            padding: 1rem;
+            font-size: 1.5rem;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-control:active {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .controls-hint {
+                display: none;
+            }
+
+            .mobile-controls {
+                display: grid;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+            width: 100%;
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
+            <div class="nav-right">
+                <a href="resources.html">Back to Resources</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="game-section">
+        <div class="header-content">
+            <h1>Paycheck Puzzle</h1>
+            <p>Fit your expenses into your monthly income grid. Don't run out of space!</p>
+        </div>
+
+        <div class="game-container">
+            <div class="game-board">
+                <canvas id="gameCanvas" width="300" height="600"></canvas>
+
+                <div class="overlay" id="startScreen">
+                    <h2 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">Budget Tetris</h2>
+                    <p style="color: var(--gray); margin-bottom: 1rem;">
+                        Blocks are expenses. Rows are savings.
+                    </p>
+                    <button class="btn-start" onclick="startGame()">START BUDGETING</button>
+                </div>
+
+                <div class="overlay" id="gameOverScreen" style="display: none;">
+                    <h2 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">Budget Busted!</h2>
+                    <p style="font-size: 1.1rem;">Savings: <span id="finalScore"
+                            style="color: var(--success); font-weight: 900;">$0</span></p>
+                    <button class="btn-start" onclick="startGame()">TRY AGAIN</button>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="stat-box">
+                    <span class="stat-label">Savings</span>
+                    <span class="stat-value" id="score">$0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Level</span>
+                    <span class="stat-value" id="level">1</span>
+                </div>
+                <div class="controls-hint">
+                    <div>⬅️ ➡️ Move</div>
+                    <div>⬆️ Rotate</div>
+                    <div>⬇️ Drop</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mobile-controls">
+            <button class="btn-control" onclick="input('left')">⬅️</button>
+            <button class="btn-control" onclick="input('rotate')">🔄</button>
+            <button class="btn-control" onclick="input('right')">➡️</button>
+            <button class="btn-control" style="grid-column: 1 / -1;" onclick="input('drop')">⬇️ DROP</button>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 FinMango. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const levelEl = document.getElementById('level');
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+
+        const COLS = 10;
+        const ROWS = 20;
+        const BLOCK_SIZE = 30;
+        const COLORS = [
+            null,
+            '#FF6B35', // Orange (FinMango)
+            '#10B981', // Green (Success)
+            '#3B82F6', // Blue (Info)
+            '#8B5CF6', // Purple
+            '#F59E0B', // Yellow
+            '#EF4444', // Red
+            '#EC4899'  // Pink
+        ];
+
+        // Shapes (Standard Tetrominoes)
+        const SHAPES = [
+            [],
+            [[1, 1, 1, 1]], // I
+            [[1, 1], [1, 1]], // O
+            [[0, 1, 0], [1, 1, 1]], // T
+            [[1, 0, 0], [1, 1, 1]], // L
+            [[0, 0, 1], [1, 1, 1]], // J
+            [[0, 1, 1], [1, 1, 0]], // S
+            [[1, 1, 0], [0, 1, 1]]  // Z
+        ];
+
+        let board = [];
+        let score = 0;
+        let level = 1;
+        let dropCounter = 0;
+        let dropInterval = 1000;
+        let lastTime = 0;
+        let isPlaying = false;
+
+        let player = {
+            pos: { x: 0, y: 0 },
+            matrix: null,
+            color: 0
+        };
+
+        function initBoard() {
+            board = Array(ROWS).fill().map(() => Array(COLS).fill(0));
+        }
+
+        function createPiece(type) {
+            return SHAPES[type];
+        }
+
+        function playerReset() {
+            const pieces = '1234567';
+            const type = parseInt(pieces[pieces.length * Math.random() | 0]);
+            player.matrix = createPiece(type);
+            player.color = type;
+            player.pos.y = 0;
+            player.pos.x = (board[0].length / 2 | 0) - (player.matrix[0].length / 2 | 0);
+
+            if (collide(board, player)) {
+                gameOver();
+            }
+        }
+
+        function collide(arena, player) {
+            const [m, o] = [player.matrix, player.pos];
+            for (let y = 0; y < m.length; ++y) {
+                for (let x = 0; x < m[y].length; ++x) {
+                    if (m[y][x] !== 0 &&
+                        (arena[y + o.y] && arena[y + o.y][x + o.x]) !== 0) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function drawMatrix(matrix, offset) {
+            matrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) {
+                        ctx.fillStyle = COLORS[value];
+                        ctx.fillRect((x + offset.x) * BLOCK_SIZE,
+                            (y + offset.y) * BLOCK_SIZE,
+                            BLOCK_SIZE - 1, BLOCK_SIZE - 1);
+
+                        // Add border
+                        ctx.strokeStyle = 'rgba(0,0,0,0.2)';
+                        ctx.lineWidth = 2;
+                        ctx.strokeRect((x + offset.x) * BLOCK_SIZE,
+                            (y + offset.y) * BLOCK_SIZE,
+                            BLOCK_SIZE - 1, BLOCK_SIZE - 1);
+                    }
+                });
+            });
+        }
+
+        function draw() {
+            ctx.fillStyle = '#f0f9ff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            drawMatrix(board, { x: 0, y: 0 });
+            drawMatrix(player.matrix, player.pos);
+        }
+
+        function merge(arena, player) {
+            player.matrix.forEach((row, y) => {
+                row.forEach((value, x) => {
+                    if (value !== 0) {
+                        arena[y + player.pos.y][x + player.pos.x] = player.color;
+                    }
+                });
+            });
+        }
+
+        function rotate(matrix, dir) {
+            for (let y = 0; y < matrix.length; ++y) {
+                for (let x = 0; x < y; ++x) {
+                    [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
+                }
+            }
+            if (dir > 0) {
+                matrix.forEach(row => row.reverse());
+            } else {
+                matrix.reverse();
+            }
+        }
+
+        function playerDrop() {
+            player.pos.y++;
+            if (collide(board, player)) {
+                player.pos.y--;
+                merge(board, player);
+                playerReset();
+                arenaSweep();
+                updateScore();
+            }
+            dropCounter = 0;
+        }
+
+        function playerMove(dir) {
+            player.pos.x += dir;
+            if (collide(board, player)) {
+                player.pos.x -= dir;
+            }
+        }
+
+        function playerRotate(dir) {
+            const pos = player.pos.x;
+            let offset = 1;
+            rotate(player.matrix, dir);
+            while (collide(board, player)) {
+                player.pos.x += offset;
+                offset = -(offset + (offset > 0 ? 1 : -1));
+                if (offset > player.matrix[0].length) {
+                    rotate(player.matrix, -dir);
+                    player.pos.x = pos;
+                    return;
+                }
+            }
+        }
+
+        function arenaSweep() {
+            let rowCount = 1;
+            outer: for (let y = board.length - 1; y > 0; --y) {
+                for (let x = 0; x < board[y].length; ++x) {
+                    if (board[y][x] === 0) {
+                        continue outer;
+                    }
+                }
+
+                const row = board.splice(y, 1)[0].fill(0);
+                board.unshift(row);
+                ++y;
+
+                score += rowCount * 100;
+                rowCount *= 2;
+            }
+        }
+
+        function updateScore() {
+            scoreEl.innerText = '$' + score;
+            // Level up every 500
+            const newLevel = Math.floor(score / 500) + 1;
+            if (newLevel > level) {
+                level = newLevel;
+                levelEl.innerText = level;
+                dropInterval = Math.max(100, 1000 - (level * 100)); // Speed up
+            }
+        }
+
+        function update(time = 0) {
+            if (!isPlaying) return;
+
+            const deltaTime = time - lastTime;
+            lastTime = time;
+
+            dropCounter += deltaTime;
+            if (dropCounter > dropInterval) {
+                playerDrop();
+            }
+
+            draw();
+            requestAnimationFrame(update);
+        }
+
+        function input(action) {
+            if (!isPlaying) return;
+            if (action === 'left') playerMove(-1);
+            if (action === 'right') playerMove(1);
+            if (action === 'rotate') playerRotate(1);
+            if (action === 'drop') playerDrop();
+        }
+
+        document.addEventListener('keydown', event => {
+            if (!isPlaying) return;
+            if (event.keyCode === 37) playerMove(-1);
+            else if (event.keyCode === 39) playerMove(1);
+            else if (event.keyCode === 40) playerDrop();
+            else if (event.keyCode === 38) playerRotate(1);
+        });
+
+        function startGame() {
+            initBoard();
+            score = 0;
+            level = 1;
+            dropInterval = 1000;
+            updateScore();
+            playerReset();
+            isPlaying = true;
+            startScreen.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            update();
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            document.getElementById('finalScore').innerText = '$' + score;
+            gameOverScreen.style.display = 'flex';
+        }
+    </script>
+</body>
+
+</html>
