@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Trap - FinMango</title>
+    <meta name="description"
+        content="Cancel wasteful subscriptions before they drain your budget! A whack-a-mole game that teaches smart subscription management.">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap">
+    </noscript>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <style>
+        :root {
+            --black: #000000;
+            --white: #ffffff;
+            --orange: #FF6B35;
+            --gray: #6B6560;
+            --light-gray: #f5f5f5;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 46px;
+        }
+
+        .nav-right a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .game-section {
+            padding: 8rem 2rem 4rem;
+            background: var(--light-gray);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header-content {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header-content h1 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .game-board {
+            background: var(--white);
+            border: 4px solid var(--black);
+            box-shadow: 12px 12px 0 var(--black);
+            width: 100%;
+            max-width: 600px;
+            padding: 2rem;
+        }
+
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--black);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--gray);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--black);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .subscription-slot {
+            aspect-ratio: 1;
+            border: 3px solid var(--black);
+            border-radius: 8px;
+            background: var(--light-gray);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .subscription-slot.active {
+            background: var(--white);
+        }
+
+        .subscription-slot.active.wasteful {
+            background: var(--error);
+            color: var(--white);
+            animation: popUp 0.3s;
+        }
+
+        .subscription-slot.active.essential {
+            background: var(--success);
+            color: var(--white);
+            animation: popUp 0.3s;
+        }
+
+        @keyframes popUp {
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .subscription-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        .sub-name {
+            font-weight: 900;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .sub-price {
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .subscription-slot.clicked {
+            animation: shrink 0.3s forwards;
+        }
+
+        @keyframes shrink {
+            to {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .btn-start {
+            background: var(--orange);
+            color: var(--white);
+            border: 3px solid var(--black);
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 900;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            box-shadow: 6px 6px 0 var(--black);
+            transition: all 0.2s;
+        }
+
+        .btn-start:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0 var(--black);
+        }
+
+        .savings-display {
+            background: var(--success);
+            color: var(--white);
+            padding: 1.5rem;
+            border: 3px solid var(--black);
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .savings-amount {
+            font-size: 2.5rem;
+            font-weight: 900;
+        }
+
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 4rem 2rem;
+            text-align: center;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
+            <div class="nav-right">
+                <a href="resources.html">Back to Resources</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="game-section">
+        <div class="header-content">
+            <h1>Subscription Trap</h1>
+            <p>Cancel wasteful subscriptions. Keep the essentials!</p>
+        </div>
+
+        <div class="game-board">
+            <div class="game-header">
+                <div class="stat">
+                    <div class="stat-label">Time</div>
+                    <div class="stat-value"><span id="timer">30</span>s</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Savings</div>
+                    <div class="stat-value">$<span id="savings">0</span>/mo</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Lives</div>
+                    <div class="stat-value">❤️ <span id="lives">3</span></div>
+                </div>
+            </div>
+
+            <div class="grid" id="grid">
+                <!-- 9 slots -->
+                <div class="subscription-slot"></div>
+                <div class="subscription-slot"></div>
+                <div class="subscription-slot"></div>
+                <div class="subscription-slot"></div>
+                <div class="subscription-slot"></div>
+                <div class="subscription-slot"></div>
+                <div class="subscription-slot"></div>
+                <div class="subscription-slot"></div>
+                <div class="subscription-slot"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="overlay" id="startScreen">
+        <h2 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">Ready to Cut Costs?</h2>
+        <p style="color: var(--gray); max-width: 400px; margin-bottom: 1rem;">
+            Subscriptions will pop up. Click to cancel wasteful ones. Don't cancel essentials!
+        </p>
+        <div style="display: flex; gap: 2rem; margin-bottom: 1rem;">
+            <div style="color: var(--error); font-weight: 700;">🚫 Cancel Wasteful</div>
+            <div style="color: var(--success); font-weight: 700;">✅ Keep Essential</div>
+        </div>
+        <button class="btn-start" onclick="startGame()">START</button>
+    </div>
+
+    <div class="overlay" id="gameOverScreen" style="display: none;">
+        <h2 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 1rem;">Results</h2>
+        <div class="savings-display">
+            <div style="font-size: 1rem; margin-bottom: 0.5rem;">Monthly Savings</div>
+            <div class="savings-amount">$<span id="finalSavings">0</span></div>
+            <div style="font-size: 1.2rem; margin-top: 0.5rem;">= $<span id="yearlySavings">0</span>/year</div>
+        </div>
+        <p style="color: var(--gray); max-width: 400px; margin-bottom: 2rem;">
+            Small monthly subscriptions add up fast. Audit yours regularly!
+        </p>
+        <button class="btn-start" onclick="startGame()">PLAY AGAIN</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 FinMango. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const SUBSCRIPTIONS = [
+            // Essential
+            { name: "Health Insurance", price: 300, type: "essential" },
+            { name: "Car Insurance", price: 120, type: "essential" },
+            { name: "Internet", price: 60, type: "essential" },
+
+            // Wasteful
+            { name: "Netflix", price: 15, type: "wasteful" },
+            { name: "Hulu", price: 12, type: "wasteful" },
+            { name: "Disney+", price: 11, type: "wasteful" },
+            { name: "HBO Max", price: 15, type: "wasteful" },
+            { name: "Spotify Premium", price: 10, type: "wasteful" },
+            { name: "Unused Gym", price: 50, type: "wasteful" },
+            { name: "Premium App", price: 5, type: "wasteful" },
+            { name: "Cloud Storage", price: 10, type: "wasteful" },
+            { name: "Gaming Pass", price: 15, type: "wasteful" },
+            { name: "Meal Kit", price: 60, type: "wasteful" },
+            { name: "Magazine Sub", price: 8, type: "wasteful" }
+        ];
+
+        let state = {
+            isPlaying: false,
+            timeLeft: 30,
+            savings: 0,
+            lives: 3,
+            spawnInterval: null,
+            timerInterval: null,
+            usedSubscriptions: []
+        };
+
+        const slots = document.querySelectorAll('.subscription-slot');
+        const timerEl = document.getElementById('timer');
+        const savingsEl = document.getElementById('savings');
+        const livesEl = document.getElementById('lives');
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+
+        function startGame() {
+            state = {
+                isPlaying: true,
+                timeLeft: 30,
+                savings: 0,
+                lives: 3,
+                spawnInterval: null,
+                timerInterval: null,
+                usedSubscriptions: []
+            };
+
+            startScreen.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+
+            // Clear slots
+            slots.forEach(slot => {
+                slot.className = 'subscription-slot';
+                slot.innerHTML = '';
+                slot.onclick = null;
+            });
+
+            updateUI();
+
+            // Timer
+            state.timerInterval = setInterval(() => {
+                state.timeLeft--;
+                timerEl.textContent = state.timeLeft;
+
+                if (state.timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+
+            // Spawn subscriptions
+            spawnSubscription();
+            state.spawnInterval = setInterval(spawnSubscription, 1500);
+        }
+
+        function spawnSubscription() {
+            if (!state.isPlaying) return;
+
+            // Find empty slot
+            const emptySlots = Array.from(slots).filter(s => !s.classList.contains('active'));
+            if (emptySlots.length === 0) return;
+
+            const slot = emptySlots[Math.floor(Math.random() * emptySlots.length)];
+
+            // Pick subscription
+            const availableSubs = SUBSCRIPTIONS.filter(s => !state.usedSubscriptions.includes(s.name));
+            if (availableSubs.length === 0) return;
+
+            const sub = availableSubs[Math.floor(Math.random() * availableSubs.length)];
+            state.usedSubscriptions.push(sub.name);
+
+            // Display
+            slot.classList.add('active', sub.type);
+            slot.innerHTML = `
+                <div class="subscription-content">
+                    <div class="sub-name">${sub.name}</div>
+                    <div class="sub-price">$${sub.price}/mo</div>
+                </div>
+            `;
+
+            slot.onclick = () => handleClick(slot, sub);
+
+            // Auto-hide after 2 seconds
+            setTimeout(() => {
+                if (slot.classList.contains('active')) {
+                    slot.classList.remove('active', sub.type);
+                    slot.innerHTML = '';
+                    slot.onclick = null;
+                }
+            }, 2000);
+        }
+
+        function handleClick(slot, sub) {
+            if (!state.isPlaying) return;
+
+            slot.classList.add('clicked');
+
+            if (sub.type === 'wasteful') {
+                // Correct! Cancel wasteful
+                state.savings += sub.price;
+                updateUI();
+            } else {
+                // Wrong! Canceled essential
+                state.lives--;
+                livesEl.textContent = state.lives;
+
+                if (state.lives <= 0) {
+                    endGame();
+                }
+            }
+
+            setTimeout(() => {
+                slot.classList.remove('active', 'clicked', sub.type);
+                slot.innerHTML = '';
+                slot.onclick = null;
+            }, 300);
+        }
+
+        function updateUI() {
+            savingsEl.textContent = state.savings;
+        }
+
+        function endGame() {
+            state.isPlaying = false;
+            clearInterval(state.timerInterval);
+            clearInterval(state.spawnInterval);
+
+            document.getElementById('finalSavings').textContent = state.savings;
+            document.getElementById('yearlySavings').textContent = state.savings * 12;
+            gameOverScreen.style.display = 'flex';
+        }
+    </script>
+</body>
+
+</html>
