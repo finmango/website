@@ -1,2542 +1,1461 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Affordability Lab - Solve Real Problems with AI | FinMango</title>
-<meta name="description" content="Join our quarterly challenges to solve real affordability problems using AI. $3,000 prizes. Real solutions. Real impact for young adults.">
-<link rel="icon" type="image/png" href="favicon.png">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<!-- Load fonts asynchronously (non-blocking) -->
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"></noscript>
-
-<!-- Open Graph -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="Affordability Lab - Solve Real Problems with AI">
-<meta property="og:description" content="Join our quarterly challenges to solve real affordability problems using AI. $3,000 prizes. Real solutions. Real impact.">
-<meta property="og:image" content="https://www.finmango.org/affordability-lab-og.png">
-
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-DW5HBYS9JW');
-</script>
-
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  /* FinMango Brand Colors */
-  --black: #000000;
-  --white: #ffffff;
-  --orange: #FF6B35;
-  --orange-dark: #E55A2B;
-  --orange-soft: #FF8C61;
-  --orange-light: rgba(255, 107, 53, 0.1);
-  --gray: #6B6560;
-  --light-gray: #f5f5f5;
-
-  /* Shadows */
-  --shadow-sm: 4px 4px 0 var(--black);
-  --shadow-md: 8px 8px 0 var(--black);
-  --shadow-lg: 12px 12px 0 var(--black);
-}
-
-html {
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: var(--white);
-  color: var(--black);
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-/* ============================================
-   NAVIGATION (Keep FinMango Style)
-   ============================================ */
-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: var(--white);
-  z-index: 1000;
-  padding: 1.5rem 0;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-nav.scrolled {
-  padding: 1rem 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.97);
-}
-
-.nav-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  transition: transform 0.3s ease;
-  justify-self: start;
-}
-
-.logo:hover {
-  transform: rotate(-2deg) scale(1.05);
-}
-
-.logo img {
-  height: 46px;
-  transition: height 0.3s ease;
-}
-
-nav.scrolled .logo img {
-  height: 38px;
-}
-
-.nav-right {
-  display: flex;
-  gap: 1.75rem;
-  align-items: center;
-  justify-self: end;
-}
-
-.nav-right a {
-  color: var(--black);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-  position: relative;
-  white-space: nowrap;
-  letter-spacing: -0.01em;
-}
-
-.nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--orange);
-  transition: width 0.3s ease;
-}
-
-.nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
-  width: 100%;
-}
-
-.nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
-  color: var(--orange);
-}
-
-.btn-donate {
-  background: var(--orange);
-  color: var(--white) !important;
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  font-weight: 700;
-  transition: all 0.2s ease;
-  border: 2px solid var(--black);
-  position: relative;
-  overflow: hidden;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
-}
-
-.btn-donate::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--black);
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.btn-donate:hover::before {
-  left: 0;
-}
-
-.btn-donate:hover {
-  transform: scale(1.05);
-}
-
-.btn-get-involved {
-  background: transparent;
-  color: var(--black) !important;
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  font-weight: 700;
-  transition: all 0.2s ease;
-  border: 2px solid var(--black);
-  position: relative;
-  overflow: hidden;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
-}
-
-.btn-get-involved::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--black);
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.btn-get-involved:hover::before {
-  left: 0;
-}
-
-.btn-get-involved:hover {
-  color: var(--white) !important;
-}
-
-.mobile-controls {
-  display: none;
-}
-
-.mobile-menu {
-  display: none;
-}
-
-/* ============================================
-   HERO SECTION
-   ============================================ */
-.hero {
-  margin-top: 80px;
-  min-height: 85vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #FFF5F1 0%, #FFFBF8 50%, #FFF5F1 100%);
-  position: relative;
-  overflow: hidden;
-  padding: 4rem 2rem;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.05"/%3E%3C/svg%3E');
-  pointer-events: none;
-  opacity: 0.4;
-  z-index: 0;
-}
-
-.hero-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.hero-label {
-  display: inline-block;
-  padding: 0.5rem 1.5rem;
-  background: rgba(255, 107, 53, 0.1);
-  border: 2px solid rgba(255, 107, 53, 0.3);
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.875rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 2rem;
-  color: var(--orange);
-}
-
-.hero h1 {
-  font-size: clamp(3rem, 6vw, 5.5rem);
-  font-weight: 900;
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.03em;
-  color: var(--black);
-}
-
-.hero-subtitle {
-  font-size: clamp(1.125rem, 2vw, 1.5rem);
-  color: var(--gray);
-  max-width: 800px;
-  margin: 0 auto 3rem;
-  line-height: 1.7;
-  font-weight: 400;
-}
-
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1.25rem 3rem;
-  background: var(--orange);
-  color: var(--white);
-  text-decoration: none;
-  font-weight: 900;
-  font-size: 1.125rem;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-md);
-  border: 3px solid var(--black);
-  letter-spacing: 0.02em;
-}
-
-.hero-cta:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: 12px 12px 0 var(--black);
-}
-
-/* ============================================
-   CURRENT CHALLENGE SECTION
-   ============================================ */
-.challenge-section {
-  padding: 6rem 2rem;
-  background: var(--white);
-  position: relative;
-}
-
-.challenge-container {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.challenge-card {
-  background: linear-gradient(135deg, #FFF5F1 0%, #FFFFFF 100%);
-  border: 3px solid var(--orange);
-  border-radius: 12px;
-  padding: 3rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  position: relative;
-  transition: all 0.4s ease;
-}
-
-.challenge-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 40px rgba(255, 107, 53, 0.2);
-}
-
-.challenge-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: rgba(255, 107, 53, 0.1);
-  border: 2px solid var(--orange);
-  border-radius: 50px;
-  font-weight: 900;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--orange);
-  margin-bottom: 1.5rem;
-}
-
-.challenge-pulse {
-  width: 8px;
-  height: 8px;
-  background: var(--orange);
-  border-radius: 50%;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.2); }
-}
-
-.challenge-card h2 {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 900;
-  margin-bottom: 1rem;
-  line-height: 1.2;
-  color: var(--black);
-}
-
-.challenge-description {
-  font-size: 1.125rem;
-  color: var(--gray);
-  margin-bottom: 2rem;
-  line-height: 1.7;
-}
-
-.challenge-meta {
-  display: flex;
-  gap: 3rem;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 2rem 0;
-  border-top: 2px solid rgba(0, 0, 0, 0.1);
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-}
-
-.challenge-prize {
-  font-size: 2rem;
-  font-weight: 900;
-  color: var(--orange);
-}
-
-.challenge-deadline {
-  font-size: 1rem;
-  color: var(--gray);
-}
-
-.challenge-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 2.5rem;
-  background: var(--orange);
-  color: var(--white);
-  text-decoration: none;
-  font-weight: 900;
-  font-size: 1.125rem;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-md);
-  margin-top: 2rem;
-  border: 3px solid var(--black);
-}
-
-.challenge-cta:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: 12px 12px 0 var(--black);
-}
-
-/* ============================================
-   HOW IT WORKS SECTION
-   ============================================ */
-.how-section {
-  padding: 6rem 2rem;
-  background: linear-gradient(135deg, #e8f4ff 0%, #f0e8ff 25%, #ffe8f0 50%, #f0e8ff 75%, #e8f4ff 100%);
-  background-size: 400% 400%;
-  animation: gradientWave 25s ease infinite;
-}
-
-@keyframes gradientWave {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.how-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.section-title {
-  text-align: center;
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
-  font-weight: 900;
-  margin-bottom: 1rem;
-  color: var(--black);
-}
-
-.section-subtitle {
-  text-align: center;
-  font-size: 1.25rem;
-  color: var(--gray);
-  max-width: 700px;
-  margin: 0 auto 4rem;
-  line-height: 1.7;
-}
-
-.steps-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
-}
-
-.step-card {
-  background: var(--white);
-  border: 3px solid rgba(255, 107, 53, 0.2);
-  border-radius: 12px;
-  padding: 2.5rem 2rem;
-  transition: all 0.4s ease;
-  position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.step-card:nth-child(1) {
-  border-color: #FF6B35;
-  background: linear-gradient(135deg, #FFF5F1 0%, #FFFFFF 100%);
-}
-
-.step-card:nth-child(2) {
-  border-color: #6B35FF;
-  background: linear-gradient(135deg, #F5F1FF 0%, #FFFFFF 100%);
-}
-
-.step-card:nth-child(3) {
-  border-color: #35FF6B;
-  background: linear-gradient(135deg, #F1FFF5 0%, #FFFFFF 100%);
-}
-
-.step-card:nth-child(4) {
-  border-color: #FF35B0;
-  background: linear-gradient(135deg, #FFF1FA 0%, #FFFFFF 100%);
-}
-
-.step-card:hover {
-  transform: translateY(-12px) scale(1.03);
-  border-color: var(--orange);
-  box-shadow: 0 20px 60px rgba(255, 107, 53, 0.25);
-}
-
-.step-number {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, var(--orange) 0%, #ff8c5a 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: 900;
-  color: var(--white);
-  border: 4px solid var(--black);
-  box-shadow: 0 8px 24px rgba(255, 107, 53, 0.4), var(--shadow-md);
-}
-
-.step-card h3 {
-  font-size: 1.5rem;
-  font-weight: 900;
-  margin-bottom: 1rem;
-  text-align: center;
-  color: var(--black);
-}
-
-.step-card p {
-  color: var(--gray);
-  line-height: 1.7;
-  text-align: center;
-}
-
-/* ============================================
-   INTERACTIVE SOLVER CANVAS
-   ============================================ */
-.solver-section {
-  padding: 6rem 2rem;
-  background: var(--white);
-}
-
-.solver-container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.canvas-card {
-  background: linear-gradient(135deg, #FFFBF8 0%, #FFFFFF 100%);
-  border: 3px solid var(--orange);
-  border-radius: 16px;
-  padding: 3rem;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
-}
-
-.canvas-header {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.canvas-header h3 {
-  font-size: 2rem;
-  font-weight: 900;
-  margin-bottom: 1rem;
-  color: var(--black);
-}
-
-.canvas-header p {
-  color: var(--gray);
-  font-size: 1.125rem;
-}
-
-.canvas-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.canvas-step {
-  opacity: 0.4;
-  pointer-events: none;
-  transition: all 0.4s ease;
-}
-
-.canvas-step.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.canvas-step.completed {
-  opacity: 0.8;
-  pointer-events: auto;
-}
-
-.canvas-step-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.canvas-step-number {
-  width: 40px;
-  height: 40px;
-  background: var(--light-gray);
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-  color: var(--gray);
-}
-
-.canvas-step.active .canvas-step-number {
-  background: linear-gradient(135deg, var(--orange) 0%, #ff8c5a 100%);
-  border-color: var(--black);
-  border-width: 3px;
-  color: var(--white);
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
-}
-
-.canvas-step.completed .canvas-step-number {
-  background: var(--orange);
-  border-color: var(--black);
-  border-width: 3px;
-  color: var(--white);
-}
-
-.canvas-step.completed .canvas-step-number::after {
-  content: '✓';
-  position: absolute;
-}
-
-.canvas-step.completed .canvas-step-number {
-  font-size: 0;
-}
-
-.canvas-step h4 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--black);
-}
-
-.canvas-input {
-  width: 100%;
-  padding: 1rem;
-  background: var(--white);
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  color: var(--black);
-  transition: all 0.3s ease;
-  resize: vertical;
-  min-height: 120px;
-}
-
-.canvas-input::placeholder {
-  color: var(--gray);
-}
-
-.canvas-input:focus {
-  outline: none;
-  border-color: var(--orange);
-  border-width: 3px;
-  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-}
-
-.canvas-hint {
-  font-size: 0.875rem;
-  color: var(--gray);
-  margin-top: 0.75rem;
-  font-style: italic;
-}
-
-/* File upload section */
-.canvas-upload {
-  margin-top: 1.5rem;
-  padding: 2rem;
-  background: var(--light-gray);
-  border: 2px dashed rgba(0, 0, 0, 0.2);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.canvas-upload:hover {
-  border-color: var(--orange);
-  background: rgba(255, 107, 53, 0.05);
-}
-
-.upload-label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--black);
-  font-size: 0.95rem;
-}
-
-.upload-area {
-  text-align: center;
-  padding: 2rem;
-  cursor: pointer;
-}
-
-.upload-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
-}
-
-.upload-text {
-  color: var(--black);
-  margin-bottom: 0.5rem;
-}
-
-.upload-subtext {
-  font-size: 0.875rem;
-  color: var(--gray);
-}
-
-.file-input {
-  display: none;
-}
-
-.link-input-group {
-  margin-top: 1.5rem;
-}
-
-.link-input-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  color: var(--black);
-  font-size: 0.95rem;
-}
-
-.link-input {
-  width: 100%;
-  padding: 0.875rem 1rem;
-  background: var(--white);
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  font-family: 'Inter', sans-serif;
-  font-size: 1rem;
-  color: var(--black);
-  transition: all 0.3s ease;
-}
-
-.link-input::placeholder {
-  color: var(--gray);
-}
-
-.link-input:focus {
-  outline: none;
-  border-color: var(--orange);
-  border-width: 3px;
-  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-}
-
-.file-list {
-  margin-top: 1rem;
-  display: none;
-}
-
-.file-list.visible {
-  display: block;
-}
-
-.file-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1rem;
-  background: var(--light-gray);
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.file-name {
-  color: var(--black);
-  font-size: 0.95rem;
-}
-
-.file-remove {
-  background: none;
-  border: none;
-  color: var(--orange);
-  cursor: pointer;
-  font-size: 1.25rem;
-  padding: 0.25rem 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.file-remove:hover {
-  color: #ff4444;
-}
-
-/* AI Prompts section */
-.canvas-prompts {
-  margin-top: 1.5rem;
-  padding: 1.5rem;
-  background: rgba(255, 107, 53, 0.05);
-  border: 2px solid rgba(255, 107, 53, 0.2);
-  border-radius: 12px;
-  display: none;
-}
-
-.canvas-prompts.visible {
-  display: block;
-}
-
-.canvas-prompts h5 {
-  font-size: 0.875rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 1rem;
-  color: var(--orange);
-}
-
-.canvas-prompts ul {
-  list-style: none;
-  margin-left: 0;
-}
-
-.canvas-prompts li {
-  padding: 0.75rem 0;
-  color: var(--black);
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.canvas-prompts li::before {
-  content: '→ ';
-  color: var(--orange);
-  font-weight: 900;
-  margin-right: 0.5rem;
-}
-
-/* Step Navigation (inline with each step) */
-.step-navigation {
-  display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-}
-
-/* Canvas Navigation */
-.canvas-nav {
-  display: none; /* Using inline step navigation instead */
-}
-
-.btn-canvas {
-  padding: 0.875rem 1.75rem;
-  font-weight: 700;
-  font-size: 1rem;
-  border-radius: 4px;
-  border: 2px solid var(--black);
-  background: var(--white);
-  color: var(--black);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Inter', sans-serif;
-}
-
-.btn-canvas:hover:not(:disabled) {
-  transform: translate(-2px, -2px);
-  box-shadow: 4px 4px 0 var(--black);
-}
-
-.btn-canvas:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.btn-canvas-primary {
-  background: var(--orange);
-  border-color: var(--black);
-  color: var(--white);
-  box-shadow: var(--shadow-sm);
-}
-
-.btn-canvas-primary:hover:not(:disabled) {
-  transform: translate(-4px, -4px);
-  box-shadow: 8px 8px 0 var(--black);
-}
-
-/* Progress dots */
-.canvas-progress {
-  display: flex;
-  gap: 0.75rem;
-  justify-content: center;
-  margin-top: 2rem;
-}
-
-.progress-dot {
-  width: 12px;
-  height: 12px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-}
-
-.progress-dot.active {
-  background: var(--orange);
-  border-color: var(--black);
-  transform: scale(1.3);
-}
-
-.progress-dot.completed {
-  background: var(--orange);
-  border-color: var(--black);
-}
-
-/* Summary */
-.canvas-summary {
-  display: none;
-  margin-top: 3rem;
-  padding: 2rem;
-  background: var(--light-gray);
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  border-radius: 16px;
-}
-
-.canvas-summary.visible {
-  display: block;
-}
-
-.canvas-summary h4 {
-  font-size: 1.75rem;
-  font-weight: 900;
-  margin-bottom: 2rem;
-  text-align: center;
-  color: var(--black);
-}
-
-.summary-item {
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-}
-
-.summary-item:last-of-type {
-  border-bottom: none;
-}
-
-.summary-item h5 {
-  font-size: 0.875rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--orange);
-  margin-bottom: 0.75rem;
-}
-
-.summary-item p {
-  color: var(--black);
-  line-height: 1.7;
-  font-size: 1rem;
-}
-
-/* ============================================
-   BRAIN CHECK SECTION
-   ============================================ */
-.brain-section {
-  padding: 6rem 2rem;
-  background: linear-gradient(135deg, #F5F1FF 0%, #FFF1FA 50%, #F1FFF5 100%);
-  position: relative;
-}
-
-.brain-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.brain-section h2 {
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
-  font-weight: 900;
-  margin-bottom: 1.5rem;
-  color: var(--black);
-}
-
-.brain-section > .brain-container > p {
-  font-size: 1.25rem;
-  color: var(--gray);
-  max-width: 700px;
-  margin: 0 auto 3rem;
-  line-height: 1.7;
-}
-
-.brain-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  text-align: left;
-}
-
-.brain-column {
-  background: var(--white);
-  border: 3px solid rgba(0, 0, 0, 0.1);
-  border-radius: 16px;
-  padding: 2.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.brain-column h3 {
-  font-size: 1.5rem;
-  font-weight: 900;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.brain-column.enhance {
-  border-color: #35FF6B;
-  background: linear-gradient(135deg, #F1FFF5 0%, #FFFFFF 100%);
-}
-
-.brain-column.enhance h3 {
-  color: #35FF6B;
-}
-
-.brain-column.avoid {
-  border-color: #ff4444;
-  background: linear-gradient(135deg, #FFF1F1 0%, #FFFFFF 100%);
-}
-
-.brain-column.avoid h3 {
-  color: #ff4444;
-}
-
-.brain-column ul {
-  list-style: none;
-  margin-left: 0;
-}
-
-.brain-column li {
-  padding: 0.875rem 0;
-  color: var(--black);
-  line-height: 1.6;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.brain-column li:last-child {
-  border-bottom: none;
-}
-
-.brain-column.enhance li::before {
-  content: '✓ ';
-  color: #35FF6B;
-  font-weight: 900;
-  margin-right: 0.75rem;
-  font-size: 1.125rem;
-}
-
-.brain-column.avoid li::before {
-  content: '✗ ';
-  color: #ff4444;
-  font-weight: 900;
-  margin-right: 0.75rem;
-  font-size: 1.125rem;
-}
-
-/* ============================================
-   WHY THIS MATTERS SECTION
-   ============================================ */
-.why-section {
-  padding: 6rem 2rem;
-  background: var(--white);
-  position: relative;
-}
-
-.why-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.why-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  margin-top: 3rem;
-}
-
-.why-card {
-  background: var(--white);
-  border: 3px solid rgba(0, 0, 0, 0.1);
-  border-radius: 16px;
-  padding: 2.5rem;
-  transition: all 0.4s ease;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.why-card:nth-child(1) {
-  border-color: #FF6B35;
-  background: linear-gradient(135deg, #FFF5F1 0%, #FFFFFF 100%);
-}
-
-.why-card:nth-child(2) {
-  border-color: #6B35FF;
-  background: linear-gradient(135deg, #F5F1FF 0%, #FFFFFF 100%);
-}
-
-.why-card:nth-child(3) {
-  border-color: #35FF6B;
-  background: linear-gradient(135deg, #F1FFF5 0%, #FFFFFF 100%);
-}
-
-.why-card:nth-child(4) {
-  border-color: #FF35B0;
-  background: linear-gradient(135deg, #FFF1FA 0%, #FFFFFF 100%);
-}
-
-.why-card:hover {
-  transform: translateY(-12px) scale(1.03);
-  border-color: var(--orange);
-  box-shadow: 0 20px 60px rgba(255, 107, 53, 0.25);
-}
-
-.why-icon {
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
-  display: inline-block;
-}
-
-.why-card h3 {
-  font-size: 1.5rem;
-  font-weight: 900;
-  margin-bottom: 1rem;
-  color: var(--black);
-}
-
-.why-card p {
-  color: var(--gray);
-  line-height: 1.7;
-  font-size: 1rem;
-}
-
-/* ============================================
-   FAQ SECTION
-   ============================================ */
-.faq-section {
-  padding: 6rem 2rem;
-  background: var(--light-gray);
-}
-
-.faq-container {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.faq-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 3rem;
-}
-
-.faq-item {
-  background: var(--white);
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  border-radius: 16px;
-  padding: 2rem;
-  transition: all 0.3s ease;
-}
-
-.faq-item:hover {
-  border-color: rgba(255, 107, 53, 0.5);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-}
-
-.faq-item.open {
-  border-color: var(--orange);
-  border-width: 3px;
-}
-
-.faq-question {
-  font-size: 1.25rem;
-  font-weight: 900;
-  color: var(--black);
-  margin-bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  cursor: pointer;
-  user-select: none;
-}
-
-.faq-question-text {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  flex: 1;
-}
-
-.faq-question-text::before {
-  content: 'Q:';
-  color: var(--orange);
-  font-size: 1rem;
-  font-weight: 900;
-  padding: 0.25rem 0.75rem;
-  background: rgba(255, 107, 53, 0.2);
-  border: 1px solid var(--orange);
-  border-radius: 6px;
-  flex-shrink: 0;
-}
-
-.faq-toggle {
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--light-gray);
-  border-radius: 50%;
-  font-size: 1.25rem;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-  color: var(--black);
-  border: 2px solid rgba(0, 0, 0, 0.1);
-}
-
-.faq-item.open .faq-toggle {
-  background: var(--orange);
-  transform: rotate(180deg);
-  color: var(--white);
-  border-color: var(--black);
-}
-
-.faq-answer {
-  color: var(--gray);
-  line-height: 1.7;
-  font-size: 1rem;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease, margin-top 0.3s ease;
-}
-
-.faq-item.open .faq-answer {
-  max-height: 1000px;
-  margin-top: 1.5rem;
-}
-
-.faq-answer p {
-  margin-bottom: 1rem;
-}
-
-.faq-answer p:last-child {
-  margin-bottom: 0;
-}
-
-.faq-answer ul {
-  margin: 1rem 0 1rem 1.5rem;
-  list-style: none;
-}
-
-.faq-answer li {
-  padding: 0.5rem 0;
-  position: relative;
-  padding-left: 1.5rem;
-}
-
-.faq-answer li::before {
-  content: '→';
-  position: absolute;
-  left: 0;
-  color: var(--orange);
-  font-weight: 900;
-}
-
-.faq-answer strong {
-  color: var(--black);
-  font-weight: 700;
-}
-
-/* ============================================
-   FOOTER (Keep FinMango Style)
-   ============================================ */
-footer {
-  padding: 0;
-  border-top: 4px solid var(--orange);
-  background: var(--black);
-  color: var(--white);
-}
-
-.footer-newsletter {
-  padding: 3rem 2rem;
-  background: rgba(255, 107, 53, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: center;
-}
-
-.footer-newsletter-container {
-  max-width: 850px;
-  margin: 0 auto;
-}
-
-.footer-newsletter h3 {
-  font-size: 1.5rem;
-  font-weight: 900;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.02em;
-}
-
-.footer-newsletter p {
-  font-size: 1rem;
-  opacity: 0.8;
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-}
-
-.footer-newsletter-btn {
-  display: inline-block;
-  padding: 0.85rem 2rem;
-  font-size: 1rem;
-  font-weight: 700;
-  background: var(--orange);
-  color: var(--white);
-  text-decoration: none;
-  border: 2px solid var(--orange);
-  transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.footer-newsletter-btn:hover {
-  background: var(--white);
-  color: var(--black);
-  border-color: var(--white);
-  transform: translateY(-2px);
-}
-
-.footer-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 4rem 2rem 0;
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 3rem;
-  margin-bottom: 3rem;
-}
-
-.footer-brand img {
-  height: 32px;
-  margin-bottom: 1rem;
-}
-
-.footer-tagline {
-  opacity: 0.8;
-  line-height: 1.5;
-  font-size: 0.95rem;
-}
-
-.footer-section h4 {
-  font-weight: 700;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-}
-
-.footer-section a {
-  display: block;
-  color: var(--white);
-  text-decoration: none;
-  opacity: 0.7;
-  margin-bottom: 0.75rem;
-  transition: all 0.2s ease;
-  font-size: 0.95rem;
-}
-
-.footer-section a:hover {
-  opacity: 1;
-  color: var(--orange);
-  transform: translateX(4px);
-}
-
-.footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 2rem;
-  text-align: center;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.875rem;
-  opacity: 0.6;
-}
-
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-@media (max-width: 768px) {
-  .nav-right {
-    display: none;
-  }
-
-  .mobile-controls {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    justify-self: end;
-  }
-
-  .mobile-menu-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .mobile-menu-btn span {
-    width: 25px;
-    height: 3px;
-    background: var(--black);
-    transition: all 0.3s ease;
-  }
-
-  .mobile-menu {
-    display: none;
-    position: fixed;
-    top: 80px;
-    left: 0;
-    right: 0;
-    background: var(--white);
-    border-bottom: 2px solid var(--black);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 999;
-  }
-
-  .mobile-menu.active {
-    display: block;
-  }
-
-  .mobile-menu a {
-    display: block;
-    padding: 1rem 2rem;
-    color: var(--black);
-    text-decoration: none;
-    font-weight: 600;
-    border-bottom: 1px solid var(--light-gray);
-    transition: all 0.2s ease;
-  }
-
-  .mobile-menu a:hover {
-    background: var(--orange-light);
-    color: var(--orange);
-  }
-
-  .hero {
-    min-height: 70vh;
-    padding: 3rem 1rem;
-  }
-
-  .hero-label {
-    font-size: 0.75rem;
-    padding: 0.4rem 1.25rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .hero h1 {
-    font-size: 2.25rem;
-    line-height: 1.2;
-  }
-
-  .hero-subtitle {
-    font-size: 1rem;
-    margin-bottom: 2rem;
-  }
-
-  .hero-value-props {
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-    gap: 0.75rem;
-  }
-
-  .value-prop {
-    padding: 0.5rem 1rem;
-    font-size: 0.85rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .value-icon {
-    font-size: 1rem;
-  }
-
-  .challenge-card {
-    padding: 2rem;
-  }
-
-  .challenge-meta {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  .steps-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .canvas-card {
-    padding: 2rem;
-  }
-
-  .brain-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .why-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .why-card {
-    padding: 2rem;
-  }
-
-  .faq-question {
-    font-size: 1.125rem;
-  }
-
-  .faq-question-text {
-    font-size: 1rem;
-  }
-
-  .footer-container {
-    grid-template-columns: 1fr;
-  }
-
-  .footer-bottom {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .canvas-nav {
-    flex-direction: column;
-  }
-
-  .step-navigation {
-    flex-direction: column;
-  }
-
-  .step-navigation .btn-canvas {
-    width: 100%;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affordability Lab - Solve Real Problems with AI | FinMango</title>
+    <meta name="description"
+        content="Join our quarterly challenges to solve real affordability problems using AI. $3,000 prizes. Real solutions. Real impact for young adults.">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Load fonts asynchronously (non-blocking) -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+    </noscript>
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Affordability Lab - Solve Real Problems with AI">
+    <meta property="og:description"
+        content="Join our quarterly challenges to solve real affordability problems using AI. $3,000 prizes. Real solutions. Real impact.">
+    <meta property="og:image" content="https://www.finmango.org/affordability-lab-og.png">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <style>
+        :root {
+            --bg-color: #fafafa;
+            --text-color: #1a1a1a;
+            --text-muted: #666;
+            --surface-color: #f0f0f0;
+            --accent-color: #FF6B35;
+            --accent-light: #ff8c5a;
+            --transport-color: #4A90D9;
+            --housing-color: #7C9BE4;
+            --health-color: #E47C7C;
+            --community-color: #9B7CE4;
+            --literacy-color: #4ABFA0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(250, 250, 250, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-color);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        nav.scrolled {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+            background: rgba(250, 250, 250, 0.97);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            justify-self: start;
+        }
+
+        .logo:hover {
+            transform: rotate(-2deg) scale(1.05);
+        }
+
+        .logo img {
+            height: 46px;
+            transition: height 0.3s ease;
+        }
+
+        nav.scrolled .logo img {
+            height: 38px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .nav-right a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
+            width: 100%;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+            color: var(--accent-color);
+        }
+
+        .btn-donate {
+            background: var(--accent-color);
+            color: white !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--text-color);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-donate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--text-color);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-donate:hover::before {
+            left: 0;
+        }
+
+        .btn-donate:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-get-involved {
+            background: transparent;
+            color: var(--text-color) !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--text-color);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-get-involved::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--text-color);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-get-involved:hover::before {
+            left: 0;
+        }
+
+        .btn-get-involved:hover {
+            color: white !important;
+            transform: scale(1.05);
+        }
+
+        /* Mobile Menu */
+        .mobile-controls {
+            display: none;
+            gap: 1rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            min-width: 48px;
+            min-height: 48px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: var(--text-color);
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg-color);
+            z-index: 999;
+            padding: 6rem 2rem;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            display: block;
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 1.5rem 0;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+            border-bottom: 2px solid var(--text-color);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent-color);
+            padding-left: 1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 14px 28px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--text-color);
+            color: white !important;
+        }
+
+        .btn-primary:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .btn-accent {
+            background: var(--accent-color);
+            color: white !important;
+        }
+
+        .btn-accent:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-color);
+            border: 2px solid var(--text-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--text-color);
+            color: white;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            padding-top: 72px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--accent-color);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .hero-text h1 span {
+            color: var(--accent-color);
+        }
+
+        .hero-text p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            max-width: 500px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 32px;
+        }
+
+        /* Physics Area */
+        .physics-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #constellation-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .node {
+            position: absolute;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: grab;
+            user-select: none;
+            transition: box-shadow 0.2s, transform 0.2s;
+            pointer-events: auto;
+            text-align: center;
+            line-height: 1.2;
+            padding: 8px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid transparent;
+            font-size: 0.85rem;
+            z-index: 1;
+        }
+
+        .node:active {
+            cursor: grabbing;
+            transform: scale(1.1);
+        }
+
+        .node:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .node.housing {
+            border-color: var(--housing-color);
+            color: var(--housing-color);
+        }
+
+        .node.transport {
+            border-color: var(--transport-color);
+            color: var(--transport-color);
+        }
+
+        .node.health {
+            border-color: var(--health-color);
+            color: var(--health-color);
+        }
+
+        .node.food {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .node.tech {
+            border-color: var(--community-color);
+            color: var(--community-color);
+        }
+
+        .node.solution {
+            background: var(--text-color);
+            color: white;
+            border-color: var(--text-color);
+            z-index: 5;
+        }
+
+        /* Hint */
+        .physics-hint {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 1;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+
+        .physics-hint.hidden {
+            opacity: 0;
+        }
+
+        .physics-hint svg {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* Control buttons */
+        .physics-controls {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            display: flex;
+            gap: 12px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+        }
+
+        .physics-controls.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .physics-btn {
+            background: var(--text-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .physics-btn:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .physics-btn.solve-active {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+        }
+
+        /* Sections */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-label {
+            display: inline-block;
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--accent-color);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 20px;
+        }
+
+        section h2 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            line-height: 1.15;
+        }
+
+        section p {
+            color: var(--text-muted);
+            max-width: 700px;
+            margin-bottom: 16px;
+        }
+
+        /* Challenge Cards */
+        .challenge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .challenge-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .challenge-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .challenge-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        /* Steps */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+            margin-top: 48px;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 0;
+            border-top: 4px solid var(--accent-color);
+            background: var(--text-color);
+            color: white;
+        }
+
+        .footer-newsletter {
+            padding: 3rem 2rem;
+            background: rgba(255, 107, 53, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .footer-newsletter-container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .footer-newsletter h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .footer-newsletter p {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            max-width: none;
+        }
+
+        .footer-newsletter-btn {
+            display: inline-block;
+            padding: 0.85rem 2rem;
+            font-size: 1rem;
+            font-weight: 700;
+            background: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            border: 2px solid var(--accent-color);
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .footer-newsletter-btn:hover {
+            background: white;
+            color: var(--text-color);
+            border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem 0;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand img {
+            height: 32px;
+            filter: brightness(0) invert(1);
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            opacity: 0.7;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            max-width: 300px;
+        }
+
+        .footer-ein {
+            margin-top: 0.5rem;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        .footer-section h4 {
+            font-size: 0.875rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            opacity: 0.6;
+        }
+
+        .footer-section a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent-color);
+            transform: translateX(4px);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            margin-left: 1rem;
+        }
+
+        .footer-bottom a:hover {
+            color: var(--accent-color);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1200px) {
+            .nav-right {
+                gap: 1.5rem;
+            }
+
+            .nav-right a {
+                font-size: 0.95rem;
+            }
+
+            .btn-donate,
+            .btn-get-involved {
+                padding: 0.65rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 1080px) {
+            nav {
+                padding: 1.25rem 0;
+            }
+
+            nav.scrolled {
+                padding: 0.875rem 0;
+            }
+
+            .logo img {
+                height: 42px;
+            }
+
+            nav.scrolled .logo img {
+                height: 36px;
+            }
+
+            .nav-right {
+                gap: 1.25rem;
+            }
+
+            .btn-donate,
+            .btn-get-involved {
+                padding: 0.6rem 1.25rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .nav-container {
+                grid-template-columns: 1fr auto;
+                gap: 1rem;
+            }
+
+            .nav-right {
+                display: none;
+            }
+
+            .mobile-controls {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
 </head>
+
 <body>
+    <nav id="nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
 
-<nav id="nav">
-  <div class="nav-container">
-    <a href="index.html" class="logo">
-      <img src="finmango.png" alt="FinMango">
-    </a>
+            <div class="nav-right">
+                <a href="about.html">About</a>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+                <a href="ambassadors.html">Ambassadors</a>
+                <a href="resources.html">Resources</a>
+                <a href="https://www.finmango.org/barrier-breakers-apply" class="btn-get-involved"
+                    style="background: var(--accent-color); color: white !important; border-color: var(--accent-color);">Apply
+                    Now</a>
+                <a href="donate.html" class="btn-donate">Donate</a>
+            </div>
 
-    <div class="nav-right">
-      <a href="about.html">About</a>
-      <a href="research.html">Research</a>
-      <a href="education.html">Education</a>
-      <a href="ambassadors.html">Ambassadors</a>
-      <a href="resources.html">Resources</a>
-      <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
-      <a href="donate.html" class="btn-donate">Donate</a>
+            <div class="mobile-controls">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="about.html">About</a>
+        <a href="research.html">Research</a>
+        <a href="education.html">Education</a>
+        <a href="ambassadors.html">Ambassadors</a>
+        <a href="resources.html">Resources</a>
+        <a href="donate.html">Donate</a>
     </div>
 
-    <div class="mobile-controls">
-      <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
-      <button class="mobile-menu-btn" id="mobileMenuBtn">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-  </div>
-</nav>
+    <main>
+        <section class="hero" id="hero-section">
+            <canvas id="constellation-canvas"></canvas>
+            <div class="physics-area" id="physics-area"></div>
 
-<div class="mobile-menu" id="mobileMenu">
-  <a href="about.html">About</a>
-  <a href="research.html">Research</a>
-  <a href="education.html">Education</a>
-  <a href="ambassadors.html">Ambassadors</a>
-  <a href="resources.html">Resources</a>
-  <a href="donate.html">Donate</a>
-</div>
-
-<!-- Hero Section -->
-<section class="hero">
-  <div class="hero-container">
-    <span class="hero-label">Affordability Lab • DRAFT CONCEPT</span>
-    <h1>
-      Solve Real Problems<br>Using AI
-    </h1>
-    <p class="hero-subtitle">
-      Not another AI course. A quarterly challenge where you use AI as a thinking partner to tackle systemic affordability barriers—housing, healthcare, education, and more. Win $3,000. Build skills employers are looking for. Make real impact.
-    </p>
-    <a href="#challenge" class="hero-cta">
-      Join the Challenge
-      <span>→</span>
-    </a>
-  </div>
-</section>
-
-<!-- Current Challenge Section -->
-<section class="challenge-section" id="challenge">
-  <div class="challenge-container">
-    <div class="challenge-card">
-      <div class="challenge-label">
-        <span class="challenge-pulse"></span>
-        Q1 2026 Challenge
-      </div>
-      <h2>
-        The Housing Affordability Challenge
-      </h2>
-      <p class="challenge-description">
-        Young adults are spending 50%+ of their income on housing. Can you use AI to discover or create housing solutions under $800/month? We're looking for real, actionable solutions that others can implement.
-      </p>
-      <div class="challenge-meta">
-        <div class="challenge-prize">$3,000 Prize Pool</div>
-        <div class="challenge-deadline">⏰ Submissions close: March 31, 2026</div>
-      </div>
-      <a href="#solver" class="challenge-cta">
-        Start Building Your Solution
-        <span>→</span>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- How It Works -->
-<section class="how-section">
-  <div class="how-container">
-    <h2 class="section-title">How It Works</h2>
-    <p class="section-subtitle">
-      Four simple steps to create solutions that actually work
-    </p>
-
-    <div class="steps-grid">
-      <div class="step-card">
-        <div class="step-number">1</div>
-        <h3>Define the Problem</h3>
-        <p>Start with a specific affordability challenge you or someone you know is facing. The more specific, the better.</p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">2</div>
-        <h3>Research with AI</h3>
-        <p>Use free AI tools (ChatGPT, Claude, Gemini) to explore solutions, discover options, and ask better questions.</p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">3</div>
-        <h3>Build & Document</h3>
-        <p>Create your solution, test it if possible, and document everything—your process, findings, and results.</p>
-      </div>
-
-      <div class="step-card">
-        <div class="step-number">4</div>
-        <h3>Submit & Share</h3>
-        <p>Submit your solution for the $1,000 prize. Winning solutions are shared publicly to help the entire community.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Problem Solver Canvas -->
-<section class="solver-section" id="solver">
-  <div class="solver-container">
-    <h2 class="section-title">Solution Builder</h2>
-    <p class="section-subtitle">
-      Use this interactive tool to develop your solution step-by-step
-    </p>
-
-    <div class="canvas-card">
-      <div class="canvas-header">
-        <h3>🧠 Your Solution Canvas</h3>
-        <p>Complete each step. AI prompts will guide your research.</p>
-      </div>
-
-      <div class="canvas-steps">
-        <!-- Step 1: Define Problem -->
-        <div class="canvas-step active" data-step="1">
-          <div class="canvas-step-header">
-            <div class="canvas-step-number">1</div>
-            <h4>Define Your Specific Problem</h4>
-          </div>
-          <textarea
-            class="canvas-input"
-            id="problem"
-            placeholder="Example: I'm paying $1,200/month for a studio apartment, which is 60% of my income. I need housing under $800/month in a safe area with public transit access."
-          ></textarea>
-          <p class="canvas-hint">Be specific. Include numbers, location, and constraints.</p>
-          <div class="canvas-prompts" id="prompts-1">
-            <h5>Try these AI prompts:</h5>
-            <ul>
-              <li>"What are 10 unconventional housing options that cost under $800/month in [your city]?"</li>
-              <li>"What percentage of income should go toward housing? What are the financial risks of paying more?"</li>
-              <li>"What are creative housing arrangements used in other countries that could work in the US?"</li>
-            </ul>
-          </div>
-          <div class="step-navigation">
-            <button class="btn-canvas" onclick="document.getElementById('btnShowPrompts').click()">💡 Show AI Prompts</button>
-            <button class="btn-canvas btn-canvas-primary step-next" data-next="2">Next Step →</button>
-          </div>
-        </div>
-
-        <!-- Step 2: Research with AI -->
-        <div class="canvas-step" data-step="2">
-          <div class="canvas-step-header">
-            <div class="canvas-step-number">2</div>
-            <h4>What Did You Discover Using AI?</h4>
-          </div>
-          <textarea
-            class="canvas-input"
-            id="research"
-            placeholder="Example: I used ChatGPT to research co-living spaces, house-hacking strategies, and rental assistance programs. I discovered 3 co-living communities within 5 miles offering rooms for $650-750/month with utilities included..."
-          ></textarea>
-          <p class="canvas-hint">Document what you learned and which AI tools you used.</p>
-          <div class="canvas-prompts" id="prompts-2">
-            <h5>Try these AI prompts:</h5>
-            <ul>
-              <li>"What government assistance programs exist for housing in [your city] for someone earning $[income]?"</li>
-              <li>"How do I calculate the true cost of different housing options including utilities, commute, etc.?"</li>
-              <li>"What questions should I ask when evaluating alternative housing arrangements?"</li>
-            </ul>
-          </div>
-          <div class="step-navigation">
-            <button class="btn-canvas step-prev" data-prev="1">← Previous</button>
-            <button class="btn-canvas" onclick="document.getElementById('btnShowPrompts').click()">💡 Show AI Prompts</button>
-            <button class="btn-canvas btn-canvas-primary step-next" data-next="3">Next Step →</button>
-          </div>
-        </div>
-
-        <!-- Step 3: Solution -->
-        <div class="canvas-step" data-step="3">
-          <div class="canvas-step-header">
-            <div class="canvas-step-number">3</div>
-            <h4>Your Solution & Action Plan</h4>
-          </div>
-          <textarea
-            class="canvas-input"
-            id="solution"
-            placeholder="Example: I'm moving into a co-living space for $700/month (down from $1,200). Steps: 1) Applied to 3 co-living communities, 2) Visited each location, 3) Signed 6-month lease. This saves me $500/month ($6,000/year)."
-          ></textarea>
-          <p class="canvas-hint">Include specific steps and measurable outcomes (money saved, time saved, etc.).</p>
-
-          <!-- File Upload Section -->
-          <div class="canvas-upload">
-            <span class="upload-label">📎 Attach Supporting Documents (Optional)</span>
-            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-              <div class="upload-icon">📄</div>
-              <div class="upload-text">Click to upload files</div>
-              <div class="upload-subtext">PDFs, images, spreadsheets, or prototypes</div>
-            </div>
-            <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg">
-            <div class="file-list" id="fileList"></div>
-          </div>
-
-          <!-- Link/Prototype Input -->
-          <div class="link-input-group">
-            <label for="prototypeLink">🔗 Link to Prototype or Additional Resources (Optional)</label>
-            <input
-              type="url"
-              id="prototypeLink"
-              class="link-input"
-              placeholder="https://example.com/my-prototype"
-            >
-          </div>
-
-          <div class="canvas-prompts" id="prompts-3">
-            <h5>Try these AI prompts:</h5>
-            <ul>
-              <li>"What are the potential risks of [your solution] and how can I mitigate them?"</li>
-              <li>"Create a checklist for implementing [your solution] step-by-step"</li>
-              <li>"What are signs that [your solution] is legitimate vs. a scam?"</li>
-            </ul>
-          </div>
-          <div class="step-navigation">
-            <button class="btn-canvas step-prev" data-prev="2">← Previous</button>
-            <button class="btn-canvas" onclick="document.getElementById('btnShowPrompts').click()">💡 Show AI Prompts</button>
-            <button class="btn-canvas btn-canvas-primary step-next" data-next="4">Next Step →</button>
-          </div>
-        </div>
-
-        <!-- Step 4: Brain Check -->
-        <div class="canvas-step" data-step="4">
-          <div class="canvas-step-header">
-            <div class="canvas-step-number">4</div>
-            <h4>Brain Check: How Did AI Help?</h4>
-          </div>
-          <textarea
-            class="canvas-input"
-            id="braincheck"
-            placeholder="Example: AI helped me discover options I didn't know existed (co-living, rental assistance). I learned how to evaluate housing costs holistically. I can now teach this process to friends and apply it to other problems..."
-          ></textarea>
-          <p class="canvas-hint">Reflect: Did you learn something new? Can you replicate this without AI next time?</p>
-          <div class="step-navigation">
-            <button class="btn-canvas step-prev" data-prev="3">← Previous</button>
-            <button class="btn-canvas btn-canvas-primary step-next" data-next="5">Next Step →</button>
-          </div>
-        </div>
-
-        <!-- Step 5: Personal Information -->
-        <div class="canvas-step" data-step="5">
-          <div class="canvas-step-header">
-            <div class="canvas-step-number">5</div>
-            <h4>About You</h4>
-          </div>
-          <p class="canvas-hint" style="margin-top: 0; margin-bottom: 2rem;">Help us understand who you are and why you're the right person for this challenge.</p>
-
-          <div style="display: grid; gap: 1.5rem;">
-            <div>
-              <label for="fullName" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--black);">Full Name *</label>
-              <input
-                type="text"
-                id="fullName"
-                class="link-input"
-                placeholder="Jane Doe"
-                required
-              >
-            </div>
-
-            <div>
-              <label for="email" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--black);">Email Address *</label>
-              <input
-                type="email"
-                id="email"
-                class="link-input"
-                placeholder="jane@example.com"
-                required
-              >
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-              <div>
-                <label for="age" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--black);">Age *</label>
-                <input
-                  type="number"
-                  id="age"
-                  class="link-input"
-                  placeholder="25"
-                  min="18"
-                  max="29"
-                  required
-                >
-                <p class="canvas-hint">Must be 18-29</p>
-              </div>
-
-              <div>
-                <label for="city" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--black);">City/Location *</label>
-                <input
-                  type="text"
-                  id="city"
-                  class="link-input"
-                  placeholder="San Francisco, CA"
-                  required
-                >
-              </div>
-            </div>
-
-            <div>
-              <label for="whyYou" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--black);">Why are you the right person for this challenge? *</label>
-              <textarea
-                class="canvas-input"
-                id="whyYou"
-                placeholder="Share your background, experience with affordability challenges, motivation, and what makes you uniquely qualified..."
-                style="min-height: 100px;"
-                required
-              ></textarea>
-            </div>
-
-            <div>
-              <label for="aiExperience" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--black);">Have you used AI tools before? Which ones? *</label>
-              <textarea
-                class="canvas-input"
-                id="aiExperience"
-                placeholder="Example: I've used ChatGPT for research and Claude for writing. I'm comfortable with prompt engineering..."
-                style="min-height: 80px;"
-                required
-              ></textarea>
-            </div>
-
-            <div>
-              <label style="display: block; font-weight: 600; margin-bottom: 1rem; color: var(--black);">Social & Professional Links</label>
-
-              <div style="display: grid; gap: 1rem;">
-                <div>
-                  <label for="linkedin" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--gray); font-size: 0.9rem;">LinkedIn Profile *</label>
-                  <input
-                    type="url"
-                    id="linkedin"
-                    class="link-input"
-                    placeholder="https://linkedin.com/in/yourprofile"
-                    required
-                  >
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <div class="hero-badge">AI + Social Impact</div>
+                        <h1><span>Affordability Lab</span> Innovation Challenge</h1>
+                        <p>
+                            Connect the dots. Solve real problems. Join our quarterly challenges to tackle affordability
+                            crises using AI and data.
+                        </p>
+                        <div class="hero-actions">
+                            <a href="#challenges" class="btn btn-primary">View Challenges</a>
+                            <a href="#how-it-works" class="btn btn-outline">How it Works</a>
+                        </div>
+                    </div>
                 </div>
-
-                <div>
-                  <label for="instagram" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--gray); font-size: 0.9rem;">Instagram (optional)</label>
-                  <input
-                    type="url"
-                    id="instagram"
-                    class="link-input"
-                    placeholder="https://instagram.com/yourhandle"
-                  >
-                </div>
-
-                <div>
-                  <label for="twitter" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--gray); font-size: 0.9rem;">Twitter/X (optional)</label>
-                  <input
-                    type="url"
-                    id="twitter"
-                    class="link-input"
-                    placeholder="https://twitter.com/yourhandle"
-                  >
-                </div>
-
-                <div>
-                  <label for="github" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--gray); font-size: 0.9rem;">GitHub (optional)</label>
-                  <input
-                    type="url"
-                    id="github"
-                    class="link-input"
-                    placeholder="https://github.com/yourusername"
-                  >
-                </div>
-
-                <div>
-                  <label for="portfolio" style="display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--gray); font-size: 0.9rem;">Personal Website/Portfolio (optional)</label>
-                  <input
-                    type="url"
-                    id="portfolio"
-                    class="link-input"
-                    placeholder="https://yourwebsite.com"
-                  >
-                </div>
-              </div>
             </div>
-          </div>
 
-          <div class="step-navigation">
-            <button class="btn-canvas step-prev" data-prev="4">← Previous</button>
-            <button class="btn-canvas btn-canvas-primary" onclick="showSummary()">Review Summary →</button>
-          </div>
-        </div>
-      </div>
+            <div class="physics-hint" id="physics-hint">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+                Move mouse to connect nodes
+            </div>
+        </section>
 
-      <!-- Navigation -->
-      <div class="canvas-nav">
-        <button class="btn-canvas" id="btnPrev" disabled>← Previous</button>
-        <button class="btn-canvas" id="btnShowPrompts">Show AI Prompts</button>
-        <button class="btn-canvas btn-canvas-primary" id="btnNext">Next →</button>
-      </div>
+        <section id="challenges" style="background: var(--surface-color);">
+            <div class="container">
+                <div class="section-label">Current Focus</div>
+                <h2>Active Challenges</h2>
+                <p>Pick a problem area and start building solutions.</p>
 
-      <!-- Progress Dots -->
-      <div class="canvas-progress">
-        <div class="progress-dot active" data-dot="1"></div>
-        <div class="progress-dot" data-dot="2"></div>
-        <div class="progress-dot" data-dot="3"></div>
-        <div class="progress-dot" data-dot="4"></div>
-        <div class="progress-dot" data-dot="5"></div>
-      </div>
+                <div class="challenge-grid">
+                    <div class="challenge-card">
+                        <div class="challenge-icon">🏠</div>
+                        <h3>Housing Crisis</h3>
+                        <p>Analyze rent burdens and propose policy changes or tools to help young adults find affordable
+                            housing.</p>
+                    </div>
+                    <div class="challenge-card">
+                        <div class="challenge-icon">🚗</div>
+                        <h3>Transport Costs</h3>
+                        <p>Address the rising costs of vehicle ownership and insurance for new drivers.</p>
+                    </div>
+                    <div class="challenge-card">
+                        <div class="challenge-icon">🥗</div>
+                        <h3>Food Security</h3>
+                        <p>Map food deserts and design logistics solutions to bring healthy food to underserved areas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      <!-- Summary -->
-      <div class="canvas-summary" id="summary">
-        <h4>📋 Your Solution Summary</h4>
-        <div class="summary-item">
-          <h5>Problem</h5>
-          <p id="summaryProblem"></p>
+        <section id="how-it-works">
+            <div class="container">
+                <div class="section-label">Process</div>
+                <h2>How to Participate</h2>
+
+                <div class="steps-grid">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Select a Challenge</h3>
+                        <p>Choose a problem area that matters to you and your community.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Build with AI</h3>
+                        <p>Use tools like Google Gemini to analyze data and prototype solutions.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Submit & Win</h3>
+                        <p>Present your findings for a chance to win cash prizes and funding.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-newsletter">
+            <div class="footer-newsletter-container">
+                <h3>Stay Updated</h3>
+                <p>Join our newsletter for updates on financial health research, education, and advocacy.</p>
+                <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank"
+                    rel="noopener noreferrer">Subscribe</a>
+            </div>
         </div>
-        <div class="summary-item">
-          <h5>Research</h5>
-          <p id="summaryResearch"></p>
+
+        <div class="footer-container">
+            <div>
+                <div class="footer-brand">
+                    <img src="finmango.png" alt="FinMango" loading="lazy">
+                </div>
+                <p class="footer-tagline">
+                    A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
+                </p>
+                <p class="footer-ein">
+                    EIN: 81-2543425
+                </p>
+            </div>
+
+            <div class="footer-section">
+                <h4>Our Work</h4>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+                <a href="ambassadors.html">Ambassadors</a>
+                <a href="resources.html">Resources</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Get Involved</h4>
+                <a href="donate.html">Donate</a>
+                <a href="ambassadors.html">Ambassador Program</a>
+                <a href="mailto:hello@finmango.org">Partner With Us</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <a href="https://www.linkedin.com/company/finmango/" target="_blank"
+                    rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
+                <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="mailto:hello@finmango.org">Contact</a>
+            </div>
         </div>
-        <div class="summary-item">
-          <h5>Solution</h5>
-          <p id="summarySolution"></p>
+
+        <div class="footer-bottom">
+            <div>© 2025 FinMango. All rights reserved.</div>
+            <div>
+                <a href="privacy.html">Privacy</a>
+                <a href="terms.html">Terms</a>
+            </div>
         </div>
-        <div class="summary-item">
-          <h5>Prototype/Links</h5>
-          <p id="summaryLinks"></p>
-        </div>
-        <div class="summary-item">
-          <h5>Brain Check</h5>
-          <p id="summaryBrainCheck"></p>
-        </div>
-        <div class="summary-item">
-          <h5>Personal Information</h5>
-          <p id="summaryPersonal"></p>
-        </div>
-        <button class="btn-canvas btn-canvas-primary" id="btnSubmit">
-          Submit Your Solution →
+    </footer>
+
+    <div class="physics-controls" id="physics-controls">
+        <button class="physics-btn" id="solve-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
+            <span>Align Nodes</span>
         </button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Why This Matters Section -->
-<section class="why-section">
-  <div class="why-container">
-    <h2 class="section-title">Why This Matters for Your Future</h2>
-    <p class="section-subtitle">
-      AI fluency isn't optional—it's the difference between thriving and struggling in tomorrow's economy
-    </p>
-
-    <div class="why-grid">
-      <div class="why-card">
-        <div class="why-icon">💼</div>
-        <h3>Employers Want Critical Thinkers</h3>
-        <p>85% of employers now require AI literacy. But they don't want people who just copy AI outputs—they want problem-solvers who use AI as a thinking partner.</p>
-      </div>
-
-      <div class="why-card">
-        <div class="why-icon">📈</div>
-        <h3>Higher Earning Potential</h3>
-        <p>Workers with demonstrated AI problem-solving skills earn 25-40% more. This challenge proves you can think critically with AI, not just use it.</p>
-      </div>
-
-      <div class="why-card">
-        <div class="why-icon">🎯</div>
-        <h3>Portfolio-Ready Work</h3>
-        <p>Your solution becomes proof of your skills. Show employers you can tackle real problems, document your thinking, and create actionable solutions.</p>
-      </div>
-
-      <div class="why-card">
-        <div class="why-icon">🚀</div>
-        <h3>Future-Proof Your Career</h3>
-        <p>AI will transform every industry. Learning to leverage AI while maintaining critical thinking ensures you'll adapt to whatever comes next.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ Section -->
-<section class="faq-section">
-  <div class="faq-container">
-    <h2 class="section-title">Frequently Asked Questions</h2>
-
-    <div class="faq-grid">
-      <div class="faq-item">
-        <div class="faq-question">
-          <div class="faq-question-text">How will solutions be judged?</div>
-          <div class="faq-toggle">▼</div>
-        </div>
-        <div class="faq-answer">
-          <p><strong>We evaluate three things:</strong></p>
-          <ul>
-            <li><strong>Thinking Process (40%):</strong> Did you use AI to enhance your thinking? Can you explain your research process? Did you evaluate options critically?</li>
-            <li><strong>Solution Quality (40%):</strong> Is it actionable? Can others implement it? Does it actually solve the problem? Is there measurable impact?</li>
-            <li><strong>Documentation (20%):</strong> Is your process clear? Can someone learn from your approach? Does it pass the "Brain Check"?</li>
-          </ul>
-          <p>We're not looking for perfect solutions—we're looking for critical thinking and real problem-solving.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">
-          <div class="faq-question-text">Who can participate?</div>
-          <div class="faq-toggle">▼</div>
-        </div>
-        <div class="faq-answer">
-          <p>Young adults ages 18-29. You don't need to be a student—anyone facing affordability challenges can participate. We encourage submissions from people actually experiencing these problems.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">
-          <div class="faq-question-text">Can I submit as a team?</div>
-          <div class="faq-toggle">▼</div>
-        </div>
-        <div class="faq-answer">
-          <p>No, this challenge is for individual submissions only. We want to see your personal thinking process and how you use AI as your thinking partner. You can certainly discuss ideas with others or get feedback, but the final submission must be your own work.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">
-          <div class="faq-question-text">What AI tools can I use?</div>
-          <div class="faq-toggle">▼</div>
-        </div>
-        <div class="faq-answer">
-          <p>Any free AI tools: ChatGPT (free tier), Claude, Google Gemini, Perplexity, or others. We focus on free tools so everyone can participate regardless of budget.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">
-          <div class="faq-question-text">What happens to winning solutions?</div>
-          <div class="faq-toggle">▼</div>
-        </div>
-        <div class="faq-answer">
-          <p>We publish them publicly (with your permission) so others can benefit. You retain ownership of your work. We may feature winners on our blog and social media. Think of it as building your public portfolio.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">
-          <div class="faq-question-text">Do I get proof of my work for employers?</div>
-          <div class="faq-toggle">▼</div>
-        </div>
-        <div class="faq-answer">
-          <p>Yes! All participants receive a certificate of completion. Winners receive a certificate of achievement. Both demonstrate AI problem-solving skills and critical thinking to potential employers.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">
-          <div class="faq-question-text">What if my solution doesn't work perfectly?</div>
-          <div class="faq-toggle">▼</div>
-        </div>
-        <div class="faq-answer">
-          <p>That's okay! We value honest documentation of what you tried, what worked, what didn't, and what you learned. Real problem-solving includes failures and iterations.</p>
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">
-          <div class="faq-question-text">How many solutions can I submit?</div>
-          <div class="faq-toggle">▼</div>
-        </div>
-        <div class="faq-answer">
-          <p>One per person per quarter. We want quality over quantity. Focus on creating one well-researched, thoughtful solution.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Brain Check Section -->
-<section class="brain-section">
-  <div class="brain-container">
-    <h2>🧠 The Brain Check</h2>
-    <p>
-      AI can either enhance your thinking or replace it. Here's how to tell the difference.
-    </p>
-
-    <div class="brain-grid">
-      <div class="brain-column enhance">
-        <h3>✓ Brain-Enhancing</h3>
-        <ul>
-          <li>Used AI to research options I didn't know existed</li>
-          <li>AI helped me ask better questions</li>
-          <li>I learned something I can teach others</li>
-          <li>I can solve similar problems without AI now</li>
-          <li>I evaluated AI's suggestions critically</li>
-          <li>I tested solutions in real life</li>
-        </ul>
-      </div>
-
-      <div class="brain-column avoid">
-        <h3>✗ Brain-Atrophying</h3>
-        <ul>
-          <li>Just copied AI's answer without understanding</li>
-          <li>Can't explain the solution to someone else</li>
-          <li>Wouldn't know how to do it again</li>
-          <li>Didn't verify AI's information</li>
-          <li>Created dependency instead of knowledge</li>
-          <li>Skipped the critical thinking process</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="footer-newsletter">
-    <div class="footer-newsletter-container">
-      <h3>Stay Updated</h3>
-      <p>Get notified about new quarterly challenges and winning solutions.</p>
-      <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a>
-    </div>
-  </div>
-
-  <div class="footer-container">
-    <div>
-      <div class="footer-brand">
-        <img src="finmango.png" alt="FinMango" loading="lazy">
-      </div>
-      <p class="footer-tagline">
-        A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
-      </p>
-      <p class="footer-tagline" style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem;">
-        EIN: 81-2543425
-      </p>
+        <button class="physics-btn" id="reset-btn">Reset</button>
     </div>
 
-    <div class="footer-section">
-      <h4>Our Work</h4>
-      <a href="research.html">Research</a>
-      <a href="education.html">Education</a>
-      <a href="ambassadors.html">Ambassadors</a>
-      <a href="resources.html">Resources</a>
-    </div>
+    <script>
+        // Mobile Menu
+        (function () {
+            var mobileMenuBtn = document.getElementById("mobileMenuBtn");
+            var mobileMenu = document.getElementById("mobileMenu");
 
-    <div class="footer-section">
-      <h4>Get Involved</h4>
-      <a href="donate.html">Donate</a>
-      <a href="ambassadors.html">Ambassador Program</a>
-      <a href="mailto:hello@finmango.org">Partner With Us</a>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a>
-    </div>
+            mobileMenuBtn.addEventListener('click', function () {
+                mobileMenu.classList.toggle('active');
+                mobileMenuBtn.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
 
-    <div class="footer-section">
-      <h4>Connect</h4>
-      <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
-      <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
-      <a href="mailto:hello@finmango.org">Contact</a>
-    </div>
-  </div>
+            document.querySelectorAll('.mobile-menu a').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    mobileMenu.classList.remove('active');
+                    mobileMenuBtn.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        })();
 
-  <div class="footer-bottom">
-    <div>© 2026 FinMango. All rights reserved.</div>
-    <div>
-      <a href="privacy.html" style="display: inline; margin: 0 1rem; color: #999;">Privacy</a>
-      <a href="terms.html" style="display: inline; margin: 0 1rem; color: #999;">Terms</a>
-    </div>
-  </div>
-</footer>
+        // Navigation scroll effect
+        (function () {
+            var nav = document.getElementById('nav');
+            window.addEventListener('scroll', function () {
+                if (window.scrollY > 50) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+        })();
 
-<script>
-// Navigation scroll effect
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 50) {
-    nav.classList.add('scrolled');
-  } else {
-    nav.classList.remove('scrolled');
-  }
-});
+        // Magnetic Constellation Physics
+        (function () {
+            var area = document.getElementById("physics-area");
+            var canvas = document.getElementById("constellation-canvas");
+            var ctx = canvas.getContext("2d");
+            var hint = document.getElementById("physics-hint");
+            var controls = document.getElementById("physics-controls");
+            var resetBtn = document.getElementById("reset-btn");
+            var solveBtn = document.getElementById("solve-btn");
 
-// Mobile menu toggle
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const mobileMenu = document.getElementById('mobileMenu');
+            var nodes = [];
+            var mouse = { x: -1000, y: -1000 };
+            var hasInteracted = false;
+            var animationId = null;
+            var solveMode = false;
 
-if (mobileMenuBtn) {
-  mobileMenuBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('active');
-  });
-}
+            var nodeData = [
+                { label: "Housing", type: "housing", size: 90 },
+                { label: "Transport", type: "transport", size: 85 },
+                { label: "Health", type: "health", size: 80 },
+                { label: "Food", type: "food", size: 75 },
+                { label: "Tech", type: "tech", size: 70 },
+                { label: "Rent", type: "housing", size: 60 },
+                { label: "Gas", type: "transport", size: 55 },
+                { label: "Meds", type: "health", size: 50 },
+                { label: "Groceries", type: "food", size: 65 },
+                { label: "Wifi", type: "tech", size: 50 },
+                { label: "Insurance", type: "transport", size: 60 },
+                { label: "Utilities", type: "housing", size: 55 }
+            ];
 
-// File upload handling
-const fileInput = document.getElementById('fileInput');
-const fileList = document.getElementById('fileList');
-let selectedFiles = [];
+            function resizeCanvas() {
+                canvas.width = area.offsetWidth;
+                canvas.height = area.offsetHeight;
+            }
 
-fileInput.addEventListener('change', (e) => {
-  selectedFiles = Array.from(e.target.files);
-  displayFiles();
-});
+            function createNodes() {
+                area.innerHTML = "";
+                nodes = [];
+                resizeCanvas();
 
-function displayFiles() {
-  if (selectedFiles.length === 0) {
-    fileList.classList.remove('visible');
-    return;
-  }
+                var width = area.offsetWidth;
+                var height = area.offsetHeight;
+                var isMobile = window.innerWidth < 768;
 
-  fileList.classList.add('visible');
-  fileList.innerHTML = selectedFiles.map((file, index) => `
-    <div class="file-item">
-      <span class="file-name">📄 ${file.name}</span>
-      <button class="file-remove" onclick="removeFile(${index})">×</button>
-    </div>
-  `).join('');
-}
+                for (var i = 0; i < nodeData.length; i++) {
+                    var data = nodeData[i];
+                    var size = isMobile ? data.size * 0.7 : data.size;
+                    // Spread them out initially to avoid immediate overlap
+                    var x = Math.random() * (width - size);
+                    var y = Math.random() * (height - size);
 
-function removeFile(index) {
-  selectedFiles.splice(index, 1);
-  displayFiles();
-}
+                    var el = document.createElement("div");
+                    el.className = "node " + data.type;
+                    el.style.width = size + "px";
+                    el.style.height = size + "px";
+                    el.textContent = data.label;
+                    area.appendChild(el);
 
-// Problem Solver Canvas Logic
-let currentStep = 1;
-const totalSteps = 5;
+                    var node = {
+                        el: el,
+                        x: x,
+                        y: y,
+                        vx: (Math.random() - 0.5) * 1.5,
+                        vy: (Math.random() - 0.5) * 1.5,
+                        size: size,
+                        dragging: false,
+                        targetX: null,
+                        targetY: null
+                    };
 
-const btnPrev = document.getElementById('btnPrev');
-const btnNext = document.getElementById('btnNext');
-const btnShowPrompts = document.getElementById('btnShowPrompts');
-const btnSubmit = document.getElementById('btnSubmit');
+                    nodes.push(node);
+                    setupDrag(node);
+                }
+            }
 
-// Update UI based on current step
-function updateCanvas() {
-  // Update step visibility
-  document.querySelectorAll('.canvas-step').forEach(step => {
-    const stepNum = parseInt(step.dataset.step);
-    step.classList.remove('active', 'completed');
+            function setupDrag(node) {
+                var offsetX = 0;
+                var offsetY = 0;
 
-    if (stepNum === currentStep) {
-      step.classList.add('active');
-    } else if (stepNum < currentStep) {
-      step.classList.add('completed');
-    }
-  });
+                function onStart(e) {
+                    e.preventDefault();
+                    node.dragging = true;
+                    // Note: We do NOT cancel solveMode here anymore.
+                    // This allows dragging while keeping others aligned.
 
-  // Update progress dots
-  document.querySelectorAll('.progress-dot').forEach(dot => {
-    const dotNum = parseInt(dot.dataset.dot);
-    dot.classList.remove('active', 'completed');
+                    var touch = e.touches ? e.touches[0] : e;
+                    var rect = area.getBoundingClientRect();
+                    offsetX = touch.clientX - rect.left - node.x;
+                    offsetY = touch.clientY - rect.top - node.y;
 
-    if (dotNum === currentStep) {
-      dot.classList.add('active');
-    } else if (dotNum < currentStep) {
-      dot.classList.add('completed');
-    }
-  });
+                    if (!hasInteracted) {
+                        hasInteracted = true;
+                        hint.classList.add("hidden");
+                        controls.classList.add("visible");
+                    }
 
-  // Update buttons
-  btnPrev.disabled = currentStep === 1;
+                    document.addEventListener("mousemove", onMove);
+                    document.addEventListener("mouseup", onEnd);
+                    document.addEventListener("touchmove", onMove, { passive: false });
+                    document.addEventListener("touchend", onEnd);
+                }
 
-  if (currentStep === totalSteps) {
-    btnNext.textContent = 'View Summary →';
-  } else {
-    btnNext.textContent = 'Next →';
-  }
+                function onMove(e) {
+                    if (!node.dragging) return;
+                    e.preventDefault();
 
-  // Hide all prompts
-  document.querySelectorAll('.canvas-prompts').forEach(p => p.classList.remove('visible'));
-  btnShowPrompts.textContent = 'Show AI Prompts';
-}
+                    var touch = e.touches ? e.touches[0] : e;
+                    var rect = area.getBoundingClientRect();
+                    node.x = touch.clientX - rect.left - offsetX;
+                    node.y = touch.clientY - rect.top - offsetY;
+                    node.vx = 0;
+                    node.vy = 0;
+                }
 
-// Next button
-btnNext.addEventListener('click', () => {
-  if (currentStep < totalSteps) {
-    currentStep++;
-    updateCanvas();
-    document.getElementById('solver').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  } else {
-    showSummary();
-  }
-});
+                function onEnd() {
+                    node.dragging = false;
+                    document.removeEventListener("mousemove", onMove);
+                    document.removeEventListener("mouseup", onEnd);
+                    document.removeEventListener("touchmove", onMove);
+                    document.removeEventListener("touchend", onEnd);
+                }
 
-// Previous button
-btnPrev.addEventListener('click', () => {
-  if (currentStep > 1) {
-    currentStep--;
-    updateCanvas();
-    document.getElementById('solver').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-});
+                node.el.addEventListener("mousedown", onStart);
+                node.el.addEventListener("touchstart", onStart, { passive: false });
+            }
 
-// Show prompts button
-btnShowPrompts.addEventListener('click', () => {
-  const currentPrompts = document.getElementById(`prompts-${currentStep}`);
-  if (currentPrompts) {
-    currentPrompts.classList.toggle('visible');
-    if (currentPrompts.classList.contains('visible')) {
-      btnShowPrompts.textContent = 'Hide AI Prompts';
-    } else {
-      btnShowPrompts.textContent = 'Show AI Prompts';
-    }
-  }
-});
+            function update() {
+                var width = area.offsetWidth;
+                var height = area.offsetHeight;
 
-// Show summary
-function showSummary() {
-  const problem = document.getElementById('problem').value;
-  const research = document.getElementById('research').value;
-  const solution = document.getElementById('solution').value;
-  const prototypeLink = document.getElementById('prototypeLink').value;
-  const braincheck = document.getElementById('braincheck').value;
+                ctx.clearRect(0, 0, width, height);
+                ctx.lineWidth = 2;
 
-  // Personal information
-  const fullName = document.getElementById('fullName').value;
-  const email = document.getElementById('email').value;
-  const age = document.getElementById('age').value;
-  const city = document.getElementById('city').value;
-  const whyYou = document.getElementById('whyYou').value;
-  const aiExperience = document.getElementById('aiExperience').value;
-  const linkedin = document.getElementById('linkedin').value;
-  const instagram = document.getElementById('instagram').value;
-  const twitter = document.getElementById('twitter').value;
-  const github = document.getElementById('github').value;
-  const portfolio = document.getElementById('portfolio').value;
+                for (var i = 0; i < nodes.length; i++) {
+                    var node = nodes[i];
 
-  document.getElementById('summaryProblem').textContent = problem || 'Not provided';
-  document.getElementById('summaryResearch').textContent = research || 'Not provided';
-  document.getElementById('summarySolution').textContent = solution || 'Not provided';
+                    if (!node.dragging) {
+                        if (solveMode) {
+                            // Move towards target
+                            var dx = node.targetX - node.x;
+                            var dy = node.targetY - node.y;
+                            // Stronger pull to target
+                            node.x += dx * 0.08;
+                            node.y += dy * 0.08;
+                        } else {
+                            // Normal physics
+                            node.x += node.vx;
+                            node.y += node.vy;
 
-  let linksText = '';
-  if (prototypeLink) linksText += `Link: ${prototypeLink}\n`;
-  if (selectedFiles.length > 0) linksText += `Files attached: ${selectedFiles.map(f => f.name).join(', ')}`;
-  document.getElementById('summaryLinks').textContent = linksText || 'None provided';
+                            // Bounce off walls
+                            if (node.x < 0) { node.x = 0; node.vx *= -1; }
+                            if (node.x + node.size > width) { node.x = width - node.size; node.vx *= -1; }
+                            if (node.y < 0) { node.y = 0; node.vy *= -1; }
+                            if (node.y + node.size > height) { node.y = height - node.size; node.vy *= -1; }
 
-  document.getElementById('summaryBrainCheck').textContent = braincheck || 'Not provided';
+                            // Mouse attraction
+                            var dx = mouse.x - (node.x + node.size / 2);
+                            var dy = mouse.y - (node.y + node.size / 2);
+                            var dist = Math.sqrt(dx * dx + dy * dy);
 
-  // Personal information summary
-  let personalText = '';
-  personalText += `Name: ${fullName || 'Not provided'}\n`;
-  personalText += `Email: ${email || 'Not provided'}\n`;
-  personalText += `Age: ${age || 'Not provided'}\n`;
-  personalText += `Location: ${city || 'Not provided'}\n\n`;
-  personalText += `Why You: ${whyYou || 'Not provided'}\n\n`;
-  personalText += `AI Experience: ${aiExperience || 'Not provided'}\n\n`;
-  personalText += `LinkedIn: ${linkedin || 'Not provided'}\n`;
-  if (instagram) personalText += `Instagram: ${instagram}\n`;
-  if (twitter) personalText += `Twitter: ${twitter}\n`;
-  if (github) personalText += `GitHub: ${github}\n`;
-  if (portfolio) personalText += `Portfolio: ${portfolio}\n`;
-  document.getElementById('summaryPersonal').textContent = personalText;
+                            if (dist < 300) {
+                                node.vx += dx * 0.0005;
+                                node.vy += dy * 0.0005;
+                            }
 
-  document.getElementById('summary').classList.add('visible');
-  document.getElementById('summary').scrollIntoView({ behavior: 'smooth' });
-}
+                            // Friction
+                            node.vx *= 0.99;
+                            node.vy *= 0.99;
+                        }
+                    }
 
-// Submit button
-btnSubmit.addEventListener('click', () => {
-  const problem = document.getElementById('problem').value;
-  const research = document.getElementById('research').value;
-  const solution = document.getElementById('solution').value;
-  const prototypeLink = document.getElementById('prototypeLink').value;
-  const braincheck = document.getElementById('braincheck').value;
+                    // Collision Detection (prevent overlap)
+                    for (var j = i + 1; j < nodes.length; j++) {
+                        var other = nodes[j];
+                        var dx = (other.x + other.size / 2) - (node.x + node.size / 2);
+                        var dy = (other.y + other.size / 2) - (node.y + node.size / 2);
+                        var dist = Math.sqrt(dx * dx + dy * dy);
+                        var minDist = (node.size + other.size) / 2;
 
-  // Personal information
-  const fullName = document.getElementById('fullName').value;
-  const email = document.getElementById('email').value;
-  const age = document.getElementById('age').value;
-  const city = document.getElementById('city').value;
-  const whyYou = document.getElementById('whyYou').value;
-  const aiExperience = document.getElementById('aiExperience').value;
-  const linkedin = document.getElementById('linkedin').value;
-  const instagram = document.getElementById('instagram').value;
-  const twitter = document.getElementById('twitter').value;
-  const github = document.getElementById('github').value;
-  const portfolio = document.getElementById('portfolio').value;
+                        if (dist < minDist) {
+                            // Push apart
+                            var angle = Math.atan2(dy, dx);
+                            var tx = Math.cos(angle) * 1; // push amount
+                            var ty = Math.sin(angle) * 1;
 
-  let emailBody = `AFFORDABILITY LAB SOLUTION SUBMISSION\n\n`;
+                            if (!node.dragging) {
+                                node.x -= tx;
+                                node.y -= ty;
+                                if (!solveMode) {
+                                    node.vx -= tx * 0.05;
+                                    node.vy -= ty * 0.05;
+                                }
+                            }
+                            if (!other.dragging) {
+                                other.x += tx;
+                                other.y += ty;
+                                if (!solveMode) {
+                                    other.vx += tx * 0.05;
+                                    other.vy += ty * 0.05;
+                                }
+                            }
+                        }
+                    }
 
-  emailBody += `=== PERSONAL INFORMATION ===\n`;
-  emailBody += `Name: ${fullName}\n`;
-  emailBody += `Email: ${email}\n`;
-  emailBody += `Age: ${age}\n`;
-  emailBody += `Location: ${city}\n\n`;
-  emailBody += `Why I'm the right person:\n${whyYou}\n\n`;
-  emailBody += `AI Experience:\n${aiExperience}\n\n`;
-  emailBody += `LinkedIn: ${linkedin}\n`;
-  if (instagram) emailBody += `Instagram: ${instagram}\n`;
-  if (twitter) emailBody += `Twitter: ${twitter}\n`;
-  if (github) emailBody += `GitHub: ${github}\n`;
-  if (portfolio) emailBody += `Portfolio: ${portfolio}\n`;
-  emailBody += `\n`;
+                    // Keep in bounds (final check)
+                    if (node.x < 0) node.x = 0;
+                    if (node.x + node.size > width) node.x = width - node.size;
+                    if (node.y < 0) node.y = 0;
+                    if (node.y + node.size > height) node.y = height - node.size;
 
-  emailBody += `=== SOLUTION ===\n\n`;
-  emailBody += `PROBLEM:\n${problem}\n\n`;
-  emailBody += `RESEARCH:\n${research}\n\n`;
-  emailBody += `SOLUTION:\n${solution}\n\n`;
-  if (prototypeLink) emailBody += `PROTOTYPE LINK:\n${prototypeLink}\n\n`;
-  if (selectedFiles.length > 0) emailBody += `FILES ATTACHED:\n${selectedFiles.map(f => f.name).join(', ')}\n\n`;
-  emailBody += `BRAIN CHECK:\n${braincheck}\n\n`;
+                    node.el.style.left = node.x + "px";
+                    node.el.style.top = node.y + "px";
 
-  window.location.href = `mailto:hello@finmango.org?subject=Affordability Lab Solution Submission - Q1 2026&body=${encodeURIComponent(emailBody)}`;
-});
+                    // Draw connections
+                    for (var j = i + 1; j < nodes.length; j++) {
+                        var other = nodes[j];
+                        var dx = (node.x + node.size / 2) - (other.x + other.size / 2);
+                        var dy = (node.y + node.size / 2) - (other.y + other.size / 2);
+                        var dist = Math.sqrt(dx * dx + dy * dy);
 
-// Handle inline step navigation
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('step-next') || e.target.closest('.step-next')) {
-    const btn = e.target.classList.contains('step-next') ? e.target : e.target.closest('.step-next');
-    const nextStep = parseInt(btn.dataset.next);
-    if (nextStep) {
-      currentStep = nextStep;
-      updateCanvas();
-      document.getElementById('solver').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
+                        if (dist < 250) {
+                            var opacity = 1 - (dist / 250);
+                            ctx.beginPath();
+                            ctx.strokeStyle = "rgba(255, 107, 53, " + (opacity * 0.4) + ")";
+                            ctx.moveTo(node.x + node.size / 2, node.y + node.size / 2);
+                            ctx.lineTo(other.x + other.size / 2, other.y + other.size / 2);
+                            ctx.stroke();
+                        }
+                    }
+                }
 
-  if (e.target.classList.contains('step-prev') || e.target.closest('.step-prev')) {
-    const btn = e.target.classList.contains('step-prev') ? e.target : e.target.closest('.step-prev');
-    const prevStep = parseInt(btn.dataset.prev);
-    if (prevStep) {
-      currentStep = prevStep;
-      updateCanvas();
-      document.getElementById('solver').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-});
+                animationId = requestAnimationFrame(update);
+            }
 
-// FAQ Accordion
-document.querySelectorAll('.faq-question').forEach(question => {
-  question.addEventListener('click', () => {
-    const faqItem = question.closest('.faq-item');
-    const isOpen = faqItem.classList.contains('open');
+            function toggleSolve() {
+                solveMode = !solveMode;
+                var width = area.offsetWidth;
+                var height = area.offsetHeight;
+                var centerX = width / 2;
+                var centerY = height / 2;
 
-    // Close all other FAQ items
-    document.querySelectorAll('.faq-item').forEach(item => {
-      item.classList.remove('open');
-    });
+                if (solveMode) {
+                    solveBtn.classList.add("solve-active");
+                    solveBtn.querySelector("span").textContent = "Release";
 
-    // Toggle current item
-    if (!isOpen) {
-      faqItem.classList.add('open');
-    }
-  });
-});
+                    // Calculate grid/circle positions
+                    var radius = Math.min(width, height) * 0.35;
+                    for (var i = 0; i < nodes.length; i++) {
+                        var angle = (i / nodes.length) * Math.PI * 2;
+                        nodes[i].targetX = centerX + Math.cos(angle) * radius - nodes[i].size / 2;
+                        nodes[i].targetY = centerY + Math.sin(angle) * radius - nodes[i].size / 2;
+                    }
+                } else {
+                    solveBtn.classList.remove("solve-active");
+                    solveBtn.querySelector("span").textContent = "Align Nodes";
+                    // Give random velocity on release
+                    for (var i = 0; i < nodes.length; i++) {
+                        nodes[i].vx = (Math.random() - 0.5) * 2;
+                        nodes[i].vy = (Math.random() - 0.5) * 2;
+                    }
+                }
 
-// Initialize canvas
-updateCanvas();
-</script>
+                if (!hasInteracted) {
+                    hasInteracted = true;
+                    hint.classList.add("hidden");
+                    controls.classList.add("visible");
+                }
+            }
 
+            function reset() {
+                solveMode = false;
+                solveBtn.classList.remove("solve-active");
+                solveBtn.querySelector("span").textContent = "Align Nodes";
+                hasInteracted = false;
+                hint.classList.remove("hidden");
+                controls.classList.remove("visible");
+                createNodes();
+            }
+
+            // Mouse tracking
+            area.addEventListener("mousemove", function (e) {
+                var rect = area.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+
+                if (!hasInteracted) {
+                    hasInteracted = true;
+                    hint.classList.add("hidden");
+                    controls.classList.add("visible");
+                }
+            });
+
+            area.addEventListener("mouseleave", function () {
+                mouse.x = -1000;
+                mouse.y = -1000;
+            });
+
+            resetBtn.addEventListener("click", reset);
+            solveBtn.addEventListener("click", toggleSolve);
+            window.addEventListener("resize", function () {
+                resizeCanvas();
+                createNodes();
+            });
+
+            // Init
+            createNodes();
+            animationId = requestAnimationFrame(update);
+        })();
+    </script>
 </body>
+
 </html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barrier Breakers Flyer - FinMango</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-color: #FF6B35;
+            --text-color: #1a1a1a;
+            --bg-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-color);
+            background: #f5f5f5;
+            line-height: 1.5;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .flyer-container {
+            max-width: 800px;
+            /* Approx A4 width */
+            margin: 40px auto;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .flyer-header {
+            background: var(--text-color);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flyer-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), transparent);
+            z-index: 1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        .details-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .flyer-image {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .flyer-body {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 3px solid var(--accent-color);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .flyer-text p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            color: #444;
+        }
+
+        .highlight-box {
+            background: #fff5f0;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+        }
+
+        .highlight-box h3 {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .tracks-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tracks-list li {
+            padding-left: 20px;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .tracks-list li::before {
+            content: '•';
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .flyer-footer {
+            background: #f9f9f9;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .cta-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .qr-placeholder {
+            width: 100px;
+            height: 100px;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+        }
+
+        /* QR Code generation via Google Charts API for simplicity */
+        .qr-code {
+            width: 100px;
+            height: 100px;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .flyer-container {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="flyer-container">
+        <header class="flyer-header">
+            <div class="header-content">
+                <div class="logo">Fin<span>Mango</span></div>
+                <h1>Barrier Breakers</h1>
+                <div class="subtitle">Financial Health Innovation Challenge</div>
+
+                <div class="details-bar">
+                    <div class="detail-item">📅 March 20, 2026</div>
+                    <div class="detail-item">📍 Kent State University</div>
+                    <div class="detail-item">💰 $20,000+ Prizes</div>
+                </div>
+            </div>
+        </header>
+
+        <img src="kent2024.jpg" alt="Students at Barrier Breakers" class="flyer-image">
+
+        <div class="flyer-body">
+            <div class="flyer-column">
+                <h2 class="section-title">The Challenge</h2>
+                <div class="flyer-text">
+                    <p><strong>High school students</strong> are invited to solve systemic barriers to financial health.
+                        Compete in teams or individually to build solutions that matter.</p>
+                    <p>Whether it's an app, a policy proposal, or a community program—if it breaks a barrier, we want to
+                        see it.</p>
+                    <p><strong>No coding experience required.</strong> Use AI tools, research, and creativity to build
+                        your vision.</p>
+                </div>
+            </div>
+
+            <div class="flyer-column">
+                <div class="highlight-box">
+                    <h3>5 Tracks</h3>
+                    <ul class="tracks-list">
+                        <li>Transport</li>
+                        <li>Housing</li>
+                        <li>Health</li>
+                        <li>Community</li>
+                        <li>Literacy</li>
+                    </ul>
+                </div>
+                <br>
+                <p><strong>Teachers:</strong> Make it a field trip! Bring your class for a day of innovation, campus
+                    tours, and inspiration.</p>
+            </div>
+        </div>
+
+        <footer class="flyer-footer">
+            <div>
+                <div class="cta-text">Apply or RSVP by Feb 27</div>
+                <a href="https://www.finmango.org/barrier-breakers" class="cta-link">finmango.org/barrier-breakers</a>
+            </div>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.finmango.org/barrier-breakers"
+                alt="QR Code" class="qr-code">
+        </footer>
+    </div>
+
+</body>
+
+</html>
