@@ -945,6 +945,12 @@
             </div>
           </div>
 
+          <div class="form-group">
+            <label class="form-label">Work-Eligible Adults (Ages 18-59)</label>
+            <div class="form-hint">Adults who are able to work and not disabled. This may affect SNAP work requirements.</div>
+            <input type="number" class="form-input" name="workEligibleAdults" value="0" min="0">
+          </div>
+
           <div class="btn-group">
             <button class="btn btn-tool-secondary" onclick="prevStep(1)">← Back</button>
             <button class="btn btn-tool-primary" onclick="nextStep(3)">Next Step →</button>
@@ -1024,6 +1030,18 @@
                 <strong style="color: #be185d;">👶 You may also qualify for WIC</strong>
                 <p style="font-size: 0.9rem; margin-top: 0.5rem;">Since you have children under 5, check out the Women,
                   Infants, and Children program.</p>
+              </div>
+
+              <div id="localHelpAlert"
+                style="display:none; margin-top: 1.5rem; background: #eff6ff; padding: 1rem; border-radius: 8px; border: 1px solid #bfdbfe;">
+                <strong style="color: #1d4ed8;">🤝 Get Free Help Applying</strong>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem;" id="localHelpText">
+                  Local organizations can help you complete your SNAP application for free.
+                </p>
+                <a id="localHelpLink" href="#" target="_blank" rel="noopener noreferrer"
+                  style="display: inline-block; margin-top: 0.75rem; color: #1d4ed8; font-weight: 600; text-decoration: underline;">
+                  Get Application Assistance →
+                </a>
               </div>
 
               <a href="https://www.fns.usda.gov/snap/state-directory" target="_blank" class="cta-button">Apply for SNAP
@@ -1251,6 +1269,9 @@
         document.getElementById('wicAlert').style.display = 'none';
       }
 
+      // Local SNAP Application Help
+      renderLocalHelp(zip);
+
       // Mock Places Data
       renderMockPlaces(zip);
 
@@ -1304,6 +1325,51 @@
       }
 
       placesList.innerHTML = html;
+    }
+
+    function renderLocalHelp(zip) {
+      const localHelpAlert = document.getElementById('localHelpAlert');
+      const localHelpText = document.getElementById('localHelpText');
+      const localHelpLink = document.getElementById('localHelpLink');
+
+      // Database of local SNAP application assistance resources by ZIP code prefix
+      const localResources = {
+        // Chicago area (606xx, 607xx, 608xx ZIP codes)
+        '606': {
+          name: 'Greater Chicago Food Depository',
+          text: 'The Greater Chicago Food Depository offers free assistance to help you complete your SNAP application.',
+          url: 'https://www.chicagosfoodbank.org/get-help/benefits-outreach/snap-referral/'
+        },
+        '607': {
+          name: 'Greater Chicago Food Depository',
+          text: 'The Greater Chicago Food Depository offers free assistance to help you complete your SNAP application.',
+          url: 'https://www.chicagosfoodbank.org/get-help/benefits-outreach/snap-referral/'
+        },
+        '608': {
+          name: 'Greater Chicago Food Depository',
+          text: 'The Greater Chicago Food Depository offers free assistance to help you complete your SNAP application.',
+          url: 'https://www.chicagosfoodbank.org/get-help/benefits-outreach/snap-referral/'
+        }
+        // Add more regions here as needed:
+        // '100': { name: 'NYC resource', text: '...', url: '...' },
+      };
+
+      // Check if user's ZIP code prefix has a local resource
+      const zipPrefix = zip.substring(0, 3);
+      const resource = localResources[zipPrefix];
+
+      if (resource) {
+        localHelpText.innerText = resource.text;
+        localHelpLink.href = resource.url;
+        localHelpLink.innerText = `Contact ${resource.name} →`;
+        localHelpAlert.style.display = 'block';
+      } else {
+        // Show generic help for finding local assistance
+        localHelpText.innerText = 'Many local food banks and community organizations offer free help with SNAP applications.';
+        localHelpLink.href = 'https://www.feedingamerica.org/find-your-local-foodbank';
+        localHelpLink.innerText = 'Find Your Local Food Bank →';
+        localHelpAlert.style.display = 'block';
+      }
     }
   </script>
 </body>
