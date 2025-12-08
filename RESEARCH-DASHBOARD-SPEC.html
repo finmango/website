@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinMango Research Dashboard — Complete Specification</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a1a1a;
+      max-width: 8.5in;
+      margin: 0 auto;
+      padding: 0.5in;
+      background: #fff;
+    }
+
+    h1 {
+      font-size: 24pt;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #000;
+      border-bottom: 4px solid #FF6B35;
+      padding-bottom: 12px;
+    }
+
+    h2 {
+      font-size: 16pt;
+      font-weight: 700;
+      margin-top: 28px;
+      margin-bottom: 12px;
+      color: #FF6B35;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      font-size: 13pt;
+      font-weight: 700;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    h4 {
+      font-size: 11pt;
+      font-weight: 700;
+      margin-top: 16px;
+      margin-bottom: 6px;
+      color: #555;
+    }
+
+    p {
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 12pt;
+      color: #666;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+
+    .highlight-box {
+      background: #FFF8F5;
+      border: 2px solid #FF6B35;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .highlight-box h4 {
+      color: #FF6B35;
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #f5f5f5;
+      font-weight: 700;
+      color: #333;
+    }
+
+    tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    code {
+      font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9.5pt;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+      font-size: 9pt;
+      line-height: 1.5;
+      margin: 16px 0;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+
+    ul, ol {
+      margin: 12px 0;
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .indicator-card {
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .indicator-card h4 {
+      margin-top: 0;
+      color: #FF6B35;
+    }
+
+    .ascii-box {
+      font-family: 'SF Mono', 'Consolas', monospace;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 16px;
+      overflow-x: auto;
+      white-space: pre;
+      margin: 16px 0;
+    }
+
+    .page-break {
+      page-break-before: always;
+      margin-top: 40px;
+    }
+
+    .toc {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 24px 0;
+    }
+
+    .toc h3 {
+      margin-top: 0;
+    }
+
+    .toc ol {
+      columns: 2;
+      column-gap: 40px;
+    }
+
+    .meta {
+      font-size: 9pt;
+      color: #888;
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid #ddd;
+    }
+
+    @media print {
+      body { padding: 0; }
+      .page-break { page-break-before: always; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>FinMango Research Dashboard</h1>
+<p class="subtitle">Complete Technical Specification — December 2024</p>
+
+<div class="highlight-box">
+  <h4>Executive Summary</h4>
+  <p>A live US financial health intelligence dashboard tracking four core indicators across all 50 states + DC, powered by the Google Health Trends API, updated daily. Open source, researcher-friendly, and designed for policy impact.</p>
+</div>
+
+<div class="toc">
+  <h3>Table of Contents</h3>
+  <ol>
+    <li>Overview &amp; Mission</li>
+    <li>Google Health Trends API</li>
+    <li>Four Core Indicators</li>
+    <li>Index Calculation</li>
+    <li>Data Pipeline</li>
+    <li>Data Schema</li>
+    <li>Dashboard UI</li>
+    <li>Tech Stack</li>
+    <li>File Structure</li>
+    <li>GitHub Actions Automation</li>
+    <li>Citation &amp; License</li>
+  </ol>
+</div>
+
+<!-- ============================================ -->
+<h2>1. Overview &amp; Mission</h2>
+
+<h3>Purpose</h3>
+<p>Create an open-source, real-time dashboard that monitors the financial health pulse of America using search behavior data as a proxy for economic stress.</p>
+
+<h3>Why It Matters</h3>
+<ul>
+  <li>Financial anxiety is invisible until it becomes a crisis</li>
+  <li>Search behavior reveals what people are actually experiencing</li>
+  <li>Real-time data enables proactive policy responses</li>
+  <li>Open source ensures transparency and reproducibility</li>
+</ul>
+
+<h3>Target Users</h3>
+<ul>
+  <li>Academic researchers</li>
+  <li>Policymakers (WHO, World Bank, IMF)</li>
+  <li>Journalists covering economic issues</li>
+  <li>Nonprofit organizations</li>
+  <li>General public</li>
+</ul>
+
+<!-- ============================================ -->
+<h2>2. Google Health Trends API</h2>
+
+<h3>API Configuration</h3>
+<table>
+  <tr><th>Field</th><th>Value</th></tr>
+  <tr><td>Service</td><td><code>trends.googleapis.com</code></td></tr>
+  <tr><td>API Key</td><td><code>AIzaSyDA69jVBXP5ga4op9OC_RK8m64rFNLBrmo</code></td></tr>
+  <tr><td>Base URL</td><td><code>https://trends.googleapis.com/v1/health/trends</code></td></tr>
+  <tr><td>Auth Method</td><td>API key as query parameter or header</td></tr>
+</table>
+
+<h3>Request Format</h3>
+<pre><code>GET https://trends.googleapis.com/v1/health/trends?
+  terms=debt+help,bankruptcy,payday+loan
+  &time=2024-01-01+2024-12-01
+  &geo=US-OH
+  &key=YOUR_API_KEY</code></pre>
+
+<h3>Response Format</h3>
+<pre><code>{
+  "results": [
+    {
+      "term": "debt help",
+      "points": [
+        {"date": "2024-01-07", "value": 142},
+        {"date": "2024-01-14", "value": 156}
+      ]
+    }
+  ]
+}</code></pre>
+
+<h3>Understanding the Values</h3>
+<p>The API returns <strong>conditional probability values</strong>, not normalized 0-100 scores:</p>
+<pre><code>Value = P(term | time AND geography) × 10,000,000</code></pre>
+
+<p><strong>Example:</strong> A value of <code>142</code> means 142 searches per 10 million search sessions.</p>
+
+<div class="highlight-box">
+  <h4>Why This Data Is Special</h4>
+  <ul>
+    <li>Values are directly comparable across terms</li>
+    <li>Values are directly comparable across time periods</li>
+    <li>Values are directly comparable across geographies</li>
+    <li>Enables mathematically rigorous analysis</li>
+    <li>This is what makes FinMango's data unique vs. public Google Trends</li>
+  </ul>
+</div>
+
+<h3>Geographic Codes</h3>
+<table>
+  <tr><th>Level</th><th>Format</th><th>Example</th></tr>
+  <tr><td>National</td><td><code>US</code></td><td>United States</td></tr>
+  <tr><td>State</td><td><code>US-XX</code></td><td><code>US-CA</code> (California), <code>US-OH</code> (Ohio)</td></tr>
+  <tr><td>DMA</td><td>Numeric code</td><td><code>506</code> (Boston), <code>501</code> (New York)</td></tr>
+</table>
+
+<!-- ============================================ -->
+<h2 class="page-break">3. Four Core Indicators</h2>
+
+<div class="indicator-card">
+  <h4>1. Financial Anxiety Index</h4>
+  <p><strong>What it measures:</strong> Economic stress, fear, and financial desperation</p>
+  <table>
+    <tr><th>Search Term</th><th>Weight</th><th>Rationale</th></tr>
+    <tr><td><code>debt help</code></td><td>1.0</td><td>General debt concern</td></tr>
+    <tr><td><code>bankruptcy</code></td><td>1.5</td><td>Severe financial distress</td></tr>
+    <tr><td><code>payday loan</code></td><td>1.2</td><td>Desperate short-term borrowing</td></tr>
+    <tr><td><code>can't pay rent</code></td><td>1.8</td><td>Immediate housing threat</td></tr>
+    <tr><td><code>debt relief</code></td><td>1.0</td><td>Seeking debt solutions</td></tr>
+    <tr><td><code>debt collector</code></td><td>1.3</td><td>Active collection pressure</td></tr>
+  </table>
+</div>
+
+<div class="indicator-card">
+  <h4>2. Food Insecurity Signal</h4>
+  <p><strong>What it measures:</strong> Hunger, food access challenges, and reliance on assistance</p>
+  <table>
+    <tr><th>Search Term</th><th>Weight</th><th>Rationale</th></tr>
+    <tr><td><code>food stamps</code></td><td>1.0</td><td>SNAP program interest</td></tr>
+    <tr><td><code>food bank near me</code></td><td>1.4</td><td>Immediate food need</td></tr>
+    <tr><td><code>SNAP benefits</code></td><td>1.0</td><td>Government assistance</td></tr>
+    <tr><td><code>free food</code></td><td>1.3</td><td>Urgent food need</td></tr>
+    <tr><td><code>food pantry</code></td><td>1.2</td><td>Community food resources</td></tr>
+    <tr><td><code>EBT balance</code></td><td>0.8</td><td>Managing existing benefits</td></tr>
+  </table>
+</div>
+
+<div class="indicator-card">
+  <h4>3. Housing Stress Indicator</h4>
+  <p><strong>What it measures:</strong> Housing instability, eviction risk, and rental assistance needs</p>
+  <table>
+    <tr><th>Search Term</th><th>Weight</th><th>Rationale</th></tr>
+    <tr><td><code>eviction help</code></td><td>1.8</td><td>Facing eviction</td></tr>
+    <tr><td><code>rent assistance</code></td><td>1.2</td><td>Seeking rental help</td></tr>
+    <tr><td><code>housing assistance</code></td><td>1.0</td><td>General housing support</td></tr>
+    <tr><td><code>facing eviction</code></td><td>2.0</td><td>Imminent eviction</td></tr>
+    <tr><td><code>tenant rights</code></td><td>1.0</td><td>Legal protection seeking</td></tr>
+    <tr><td><code>behind on rent</code></td><td>1.5</td><td>Payment delinquency</td></tr>
+  </table>
+</div>
+
+<div class="indicator-card">
+  <h4>4. Affordability Index</h4>
+  <p><strong>What it measures:</strong> Cost of living pressure and general economic squeeze</p>
+  <table>
+    <tr><th>Search Term</th><th>Weight</th><th>Rationale</th></tr>
+    <tr><td><code>cost of living</code></td><td>1.0</td><td>General affordability concern</td></tr>
+    <tr><td><code>prices too high</code></td><td>1.3</td><td>Inflation frustration</td></tr>
+    <tr><td><code>can't afford</code></td><td>1.5</td><td>Direct affordability crisis</td></tr>
+    <tr><td><code>inflation help</code></td><td>1.2</td><td>Seeking inflation relief</td></tr>
+    <tr><td><code>cheap groceries</code></td><td>0.8</td><td>Budget food shopping</td></tr>
+    <tr><td><code>budget tips</code></td><td>0.7</td><td>Financial coping strategies</td></tr>
+  </table>
+</div>
+
+<!-- ============================================ -->
+<h2 class="page-break">4. Index Calculation</h2>
+
+<h3>Formula</h3>
+<p>For each indicator, calculate a weighted average:</p>
+<pre><code>Index = Σ(value × weight) / Σ(weight)</code></pre>
+
+<h3>JavaScript Implementation</h3>
+<pre><code>const weights = {
+  // Financial Anxiety
+  "debt help": 1.0,
+  "bankruptcy": 1.5,
+  "payday loan": 1.2,
+  "can't pay rent": 1.8,
+  "debt relief": 1.0,
+  "debt collector": 1.3,
+
+  // Food Insecurity
+  "food stamps": 1.0,
+  "food bank near me": 1.4,
+  "SNAP benefits": 1.0,
+  "free food": 1.3,
+  "food pantry": 1.2,
+  "EBT balance": 0.8,
+
+  // Housing Stress
+  "eviction help": 1.8,
+  "rent assistance": 1.2,
+  "housing assistance": 1.0,
+  "facing eviction": 2.0,
+  "tenant rights": 1.0,
+  "behind on rent": 1.5,
+
+  // Affordability
+  "cost of living": 1.0,
+  "prices too high": 1.3,
+  "can't afford": 1.5,
+  "inflation help": 1.2,
+  "cheap groceries": 0.8,
+  "budget tips": 0.7
+};
+
+function calculateIndex(termValues, indicatorTerms) {
+  let sum = 0;
+  let totalWeight = 0;
+
+  for (const term of indicatorTerms) {
+    const value = termValues[term] || 0;
+    const weight = weights[term];
+    sum += value * weight;
+    totalWeight += weight;
+  }
+
+  return totalWeight > 0 ? sum / totalWeight : 0;
+}
+
+function calculateChange(currentValue, previousValue) {
+  if (previousValue === 0) return 0;
+  return ((currentValue - previousValue) / previousValue) * 100;
+}</code></pre>
+
+<!-- ============================================ -->
+<h2>5. Data Pipeline</h2>
+
+<h3>Daily Update Flow</h3>
+<div class="ascii-box">STEP 1: FETCH DATA (Daily at midnight UTC)
+─────────────────────────────────────────────
+For each of 51 regions (50 states + DC):
+  • Fetch 6 Financial Anxiety terms
+  • Fetch 6 Food Insecurity terms
+  • Fetch 6 Housing Stress terms
+  • Fetch 6 Affordability terms
+
+Total API calls: 51 regions × 4 indicators = 204/day
+                    ↓
+STEP 2: CALCULATE INDICES
+─────────────────────────────────────────────
+For each state:
+  • Calculate weighted index for each indicator
+  • Calculate week-over-week change
+  • Determine national ranking
+
+For national level:
+  • Calculate population-weighted national average
+  • Calculate overall change
+                    ↓
+STEP 3: SAVE DATA
+─────────────────────────────────────────────
+  • Save to: /data/financial-health-YYYY-MM-DD.json
+  • Update: /data/latest.json
+  • Append to: /data/timeseries.json
+                    ↓
+STEP 4: COMMIT & DEPLOY
+─────────────────────────────────────────────
+  • Git commit with date
+  • Push to repository
+  • Static site auto-rebuilds</div>
+
+<!-- ============================================ -->
+<h2 class="page-break">6. Data Schema</h2>
+
+<h3>latest.json Structure</h3>
+<pre><code>{
+  "meta": {
+    "generated": "2024-12-08T00:00:00Z",
+    "version": "1.0",
+    "source": "Google Health Trends API",
+    "methodology": "https://finmango.org/research-dashboard#methodology",
+    "terms_per_indicator": 6,
+    "update_frequency": "daily"
+  },
+
+  "national": {
+    "financial_anxiety": {
+      "value": 127.3,
+      "change": 3.2,
+      "trend": "up"
+    },
+    "food_insecurity": {
+      "value": 89.4,
+      "change": -1.8,
+      "trend": "down"
+    },
+    "housing_stress": {
+      "value": 156.7,
+      "change": 5.4,
+      "trend": "up"
+    },
+    "affordability": {
+      "value": 112.1,
+      "change": 2.1,
+      "trend": "up"
+    }
+  },
+
+  "states": {
+    "US-AL": {
+      "name": "Alabama",
+      "abbr": "AL",
+      "financial_anxiety": { "value": 142.1, "change": 4.1, "rank": 12 },
+      "food_insecurity": { "value": 95.2, "change": -0.5, "rank": 18 },
+      "housing_stress": { "value": 134.8, "change": 2.3, "rank": 24 },
+      "affordability": { "value": 98.7, "change": 1.2, "rank": 31 }
+    }
+  },
+
+  "timeseries": {
+    "national": {
+      "financial_anxiety": [
+        {"date": "2024-11-01", "value": 118.2},
+        {"date": "2024-11-08", "value": 121.5},
+        {"date": "2024-12-08", "value": 127.3}
+      ]
+    }
+  }
+}</code></pre>
+
+<!-- ============================================ -->
+<h2>7. Dashboard UI</h2>
+
+<div class="ascii-box">┌─────────────────────────────────────────────────────────────────┐
+│  HEADER                                                         │
+│  "Financial Health Pulse of America"                            │
+│  Last updated: Dec 8, 2024 • [LIVE] indicator                   │
+└─────────────────────────────────────────────────────────────────┘
+
+┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐
+│ FINANCIAL  │ │    FOOD    │ │  HOUSING   │ │AFFORDABIL- │
+│  ANXIETY   │ │ INSECURITY │ │   STRESS   │ │    ITY     │
+│   127.3    │ │    89.4    │ │   156.7    │ │   112.1    │
+│   ↑ 3.2%   │ │   ↓ 1.8%   │ │   ↑ 5.4%   │ │   ↑ 2.1%   │
+└────────────┘ └────────────┘ └────────────┘ └────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  US MAP (Interactive SVG)                                       │
+│  • States color-coded by selected indicator (heat map)          │
+│  • Red = high stress, Green = low stress                        │
+│  • Click state → show detail panel                              │
+│  • Hover → tooltip with quick stats                             │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  TIME SERIES CHART (Chart.js)                                   │
+│  • 12-month trend                                               │
+│  • Multi-state comparison (select up to 5)                      │
+│  • National average baseline                                    │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  STATE RANKINGS TABLE                                           │
+│  Rank | State | Anxiety | Food | Housing | Affordability        │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  RESEARCHER TOOLS                                               │
+│  [Download CSV] [Download JSON] [API Docs] [Copy Citation]      │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  METHODOLOGY                                                    │
+│  • Data source explanation                                      │
+│  • Index calculation details                                    │
+│  • Limitations & caveats                                        │
+└─────────────────────────────────────────────────────────────────┘</div>
+
+<!-- ============================================ -->
+<h2 class="page-break">8. Tech Stack</h2>
+
+<table>
+  <tr><th>Component</th><th>Technology</th><th>Rationale</th></tr>
+  <tr><td>Frontend</td><td>Static HTML + Vanilla JS</td><td>Matches existing site, no build process</td></tr>
+  <tr><td>Styling</td><td>CSS (inline)</td><td>Consistent with FinMango site architecture</td></tr>
+  <tr><td>Charts</td><td>Chart.js</td><td>Already used on site, no new dependency</td></tr>
+  <tr><td>US Map</td><td>Inline SVG</td><td>No external library, full control</td></tr>
+  <tr><td>Data Storage</td><td>JSON files</td><td>Simple, versionable, no database needed</td></tr>
+  <tr><td>Automation</td><td>GitHub Actions</td><td>Free, reliable, easy to maintain</td></tr>
+  <tr><td>API Script</td><td>Node.js</td><td>JavaScript consistency</td></tr>
+  <tr><td>Hosting</td><td>Existing static host</td><td>No infrastructure changes</td></tr>
+</table>
+
+<!-- ============================================ -->
+<h2>9. File Structure</h2>
+
+<pre><code>/website
+│
+├── research-dashboard.html          # Main dashboard page
+│
+├── /data
+│   ├── latest.json                  # Current data (updated daily)
+│   ├── financial-health-2024-12-08.json
+│   └── /historical
+│       └── 2024-Q4.json             # Quarterly archives
+│
+├── /scripts
+│   ├── fetch-trends.js              # API fetch script
+│   ├── calculate-indices.js         # Index calculation
+│   └── generate-exports.js          # CSV/JSON export generator
+│
+└── /.github
+    └── /workflows
+        └── daily-update.yml         # GitHub Actions cron job</code></pre>
+
+<!-- ============================================ -->
+<h2>10. GitHub Actions Automation</h2>
+
+<h3>daily-update.yml</h3>
+<pre><code>name: Update Financial Health Data
+
+on:
+  schedule:
+    - cron: '0 5 * * *'  # 5 AM UTC daily (midnight EST)
+  workflow_dispatch:      # Allow manual trigger
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install node-fetch
+
+      - name: Fetch new data from Google Trends API
+        env:
+          GOOGLE_TRENDS_API_KEY: ${{ secrets.GOOGLE_TRENDS_API_KEY }}
+        run: node scripts/fetch-trends.js
+
+      - name: Calculate indices
+        run: node scripts/calculate-indices.js
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git commit -m "Update data $(date +%Y-%m-%d)" || exit 0
+          git push</code></pre>
+
+<h3>Setting Up API Key Secret</h3>
+<ol>
+  <li>Go to GitHub repository Settings</li>
+  <li>Secrets and variables → Actions</li>
+  <li>Click "New repository secret"</li>
+  <li>Name: <code>GOOGLE_TRENDS_API_KEY</code></li>
+  <li>Value: <code>AIzaSyDA69jVBXP5ga4op9OC_RK8m64rFNLBrmo</code></li>
+</ol>
+
+<!-- ============================================ -->
+<h2 class="page-break">11. Citation &amp; License</h2>
+
+<h3>Citation Format (BibTeX)</h3>
+<pre><code>@misc{finmango2024pulse,
+  title     = {Financial Health Pulse: Real-Time US Economic Stress Indicators},
+  author    = {{FinMango Research Team}},
+  year      = {2024},
+  url       = {https://finmango.org/research-dashboard},
+  note      = {Data sourced from Google Health Trends API. Updated daily.},
+  publisher = {FinMango}
+}</code></pre>
+
+<h3>Citation Format (APA)</h3>
+<p>FinMango Research Team. (2024). <em>Financial Health Pulse: Real-Time US Economic Stress Indicators</em>. FinMango. https://finmango.org/research-dashboard</p>
+
+<h3>License</h3>
+<ul>
+  <li><strong>Code:</strong> MIT License — free to use, modify, and redistribute</li>
+  <li><strong>Data:</strong> CC BY 4.0 — free to use with attribution</li>
+</ul>
+
+<!-- ============================================ -->
+<h2>Contact</h2>
+
+<table>
+  <tr><td>Website</td><td>https://finmango.org</td></tr>
+  <tr><td>Research Repository</td><td>https://github.com/finmango/research</td></tr>
+  <tr><td>Email</td><td>hello@finmango.org</td></tr>
+  <tr><td>Twitter</td><td>@finmango</td></tr>
+</table>
+
+<div class="meta">
+  <p><strong>Document Version:</strong> 1.0 | <strong>Last Updated:</strong> December 2024 | <strong>Organization:</strong> FinMango (501(c)(3) nonprofit)</p>
+</div>
+
+</body>
+</html>
