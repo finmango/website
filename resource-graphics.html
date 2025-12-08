@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Graphics Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f0f0;
+            padding: 40px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .graphic-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* The actual graphic card */
+        .graphic {
+            width: 1080px;
+            height: 1920px;
+            background: white;
+            position: relative;
+            overflow: hidden;
+            /* Scale down for preview */
+            transform-origin: top left;
+            transform: scale(0.25);
+            margin-bottom: -1440px;
+            /* Compensate for scale (1920 * 0.75) */
+            margin-right: -810px;
+            /* Compensate for scale (1080 * 0.75) */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 80px;
+            background: #FF6B35;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .logo {
+            width: 300px;
+            filter: brightness(0) invert(1);
+        }
+
+        .resource-tag {
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .photo-container {
+            flex: 1;
+            position: relative;
+            margin: 60px;
+            border: 12px solid black;
+            box-shadow: 40px 40px 0 #FF6B35;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f8f8;
+        }
+
+        .main-icon {
+            font-size: 400px;
+            line-height: 1;
+        }
+
+        .content {
+            padding: 0 80px 120px;
+        }
+
+        .title {
+            font-size: 80px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            color: black;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .meta {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            font-size: 48px;
+            font-weight: 700;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .category-pill {
+            background: black;
+            color: white;
+            padding: 10px 30px;
+            border-radius: 100px;
+            font-size: 36px;
+        }
+
+        .footer-bar {
+            height: 40px;
+            background: black;
+            margin-top: auto;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="controls">
+        <p><strong>Instructions:</strong></p>
+        <p>Zoom in your browser to 100%.</p>
+        <p>Right click > Inspect Element on a card.</p>
+        <p>Take a screenshot of the node.</p>
+    </div>
+
+    <div class="gallery" id="gallery">
+        <!-- Cards will be injected here -->
+    </div>
+
+    <script>
+        const resources = [
+            {
+                section: 'systemic',
+                category: 'lifestyle',
+                title: 'The Probability Trap',
+                description: 'Experience the math behind sports betting. See why the "vig" and probability ensure the house always wins in the long run.',
+                link: 'probability-trap.html',
+                icon: '🎲',
+                isNew: true
+            },
+            {
+                section: 'systemic',
+                category: 'lifestyle',
+                title: 'The Commute Calculation',
+                description: 'Is that cheaper house really cheaper? Calculate the true cost of your commute, including time, gas, and depreciation.',
+                link: 'commute-calc.html',
+                icon: '🚗',
+                isNew: true
+            },
+            {
+                section: 'simulators',
+                category: 'lifestyle',
+                title: 'Sports Betting Simulator',
+                description: 'Experience the reality of sports betting through interactive simulation, showing how it impacts stress, time, sleep, and financial well-being over time.',
+                link: 'sports-betting.html',
+                icon: '🏀',
+                featured: true
+            },
+            {
+                section: 'simulators',
+                category: 'lifestyle',
+                title: 'Budget Balancer Game',
+                description: 'Master the 50/30/20 rule with this interactive budgeting game. Balance your needs, wants, and savings to win financial freedom.',
+                link: 'budget-balancer.html',
+                icon: '⚖️',
+                isNew: true
+            },
+            {
+                section: 'simulators',
+                category: 'lifestyle',
+                title: 'Credit Score Simulator',
+                description: 'See how different actions impact your credit score. Simulate payments, inquiries, and utilization changes in real-time.',
+                link: 'credit-score-simulator.html',
+                icon: '💯',
+                isNew: true
+            },
+            {
+                section: 'simulators',
+                category: 'education',
+                title: 'Inflation Shopping Spree',
+                description: 'Race against rising prices! See how inflation erodes your purchasing power in this fast-paced shopping game.',
+                link: 'inflation-shopping-spree.html',
+                icon: '🛒',
+                isNew: true
+            },
+            {
+                section: 'simulators',
+                category: 'education',
+                title: 'Market Rollercoaster',
+                description: 'Ride the emotional highs and lows of the stock market. Can you time the market, or will you learn why time in the market is better?',
+                link: 'market-rollercoaster.html',
+                icon: '🎢',
+                isNew: true,
+                featured: true
+            },
+            {
+                section: 'simulators',
+                category: 'lifestyle',
+                title: 'Cost of Living Comparator',
+                description: 'Thinking of moving? Compare the true cost of living between two cities, including housing, food, and transportation.',
+                link: 'cost-of-living.html',
+                icon: '🏙️',
+                isNew: true
+            },
+            {
+                section: 'simulators',
+                category: 'retirement',
+                title: 'Portfolio Simulator',
+                description: 'Test different investment strategies with financial data dating back to 1970 across various economic conditions.',
+                link: 'portfolio-simulator.html',
+                icon: '📊'
+            },
+            {
+                section: 'simulators',
+                category: 'education',
+                title: 'Table Banking Game',
+                description: 'Experience how Kenyan table banking works through an interactive game. Learn about community savings, lending, and financial cooperation.',
+                link: 'table-banking-game.html',
+                icon: '🤝',
+                isNew: true
+            },
+            {
+                section: 'simulators',
+                category: 'education',
+                title: 'Inflation Time Machine',
+                description: 'Travel through time to see how inflation eats your money. Calculate future prices and purchasing power.',
+                link: 'inflation-time-machine.html',
+                icon: '⏳',
+                isNew: true
+            },
+            {
+                section: 'simulators',
+                category: 'education',
+                title: 'Student Loan Simulator',
+                description: 'Visualize how extra payments can save you thousands in interest and shave years off your student loans.',
+                link: 'student-loan-simulator.html',
+                icon: '🎓',
+                isNew: true
+            },
+            {
+                section: 'calculators',
+                category: 'lifestyle',
+                title: 'Rent vs. Buy Calculator',
+                description: 'Should you rent or buy? Compare the total cost of ownership over time to make the right housing decision.',
+                link: 'rent-vs-buy.html',
+                icon: '🏠',
+                isNew: true,
+                featured: true
+            },
+            {
+                section: 'calculators',
+                category: 'income',
+                title: 'Debt Destroyer',
+                description: 'Snowball or Avalanche? Compare payoff strategies to see which one saves you more time and interest.',
+                link: 'debt-destroyer.html',
+                icon: '💣',
+                isNew: true
+            },
+            {
+                section: 'calculators',
+                category: 'lifestyle',
+                title: 'The Minimum Payment Trap',
+                description: 'See the shocking truth about credit card minimum payments. Calculate how much interest you\'ll really pay.',
+                link: 'minimum-payment-trap.html',
+                icon: '💳',
+                isNew: true
+            },
+            {
+                section: 'calculators',
+                category: 'income',
+                title: 'Gig Economy Tax Estimator',
+                description: 'Freelancer or gig worker? Estimate your self-employment and income taxes so you don\'t get hit with a surprise bill.',
+                link: 'gig-tax-estimator.html',
+                icon: '🚕',
+                isNew: true
+            },
+            {
+                section: 'calculators',
+                category: 'lifestyle',
+                title: 'New vs. Used Car Calculator',
+                description: 'Compare the total cost of ownership between a new and used car, including depreciation, insurance, and fuel.',
+                link: 'new-vs-used-car-calculator.html',
+                icon: '🚗',
+                isNew: true
+            },
+            {
+                section: 'calculators',
+                category: 'retirement',
+                title: 'Battle of the IRAs',
+                description: 'Compare Traditional and Roth IRAs to find the best retirement investment strategy for your situation.',
+                link: 'ira-battle.html',
+                icon: '⚔️',
+                featured: true
+            },
+            {
+                section: 'calculators',
+                category: 'retirement',
+                title: 'Roth IRA Calculator',
+                description: 'Build tax-free wealth for retirement with a ROTH IRA. See how your contributions grow over time and start planning at any age.',
+                link: 'roth-ira.html',
+                icon: '📈'
+            },
+            {
+                section: 'calculators',
+                category: 'income',
+                title: 'Paycheck Calculator',
+                description: 'Estimate your take-home pay after taxes and deductions in different cities across the United States.',
+                link: 'paycheck-calculator.html',
+                icon: '💸'
+            },
+            {
+                section: 'calculators',
+                category: 'retirement',
+                title: 'FIRE Calculator',
+                description: 'Plan your path to Financial Independence and Early Retirement. Live within your means and aggressively save for freedom.',
+                link: 'fire-calculator.html',
+                icon: '🔥'
+            },
+            {
+                section: 'calculators',
+                category: 'lifestyle',
+                title: 'What\'s Money Calculator',
+                description: 'Track frivolous spending habits and discover how rich you\'d be if you invested that money instead.',
+                link: 'whats-money.html',
+                icon: '💰'
+            },
+            {
+                section: 'calculators',
+                category: 'business',
+                title: 'Startup Calculator',
+                description: 'Estimate startup costs and initial operating expenses for your new business venture.',
+                link: 'startup-calculator.html',
+                icon: '💼'
+            },
+            {
+                section: 'calculators',
+                category: 'income',
+                title: 'Mexico Paycheck Calculator',
+                description: 'Calculate your take-home pay after taxes and deductions in different cities across Mexico.',
+                link: 'mexico-paycheck-calculator.html',
+                icon: '🇲🇽'
+            },
+            {
+                section: 'calculators',
+                category: 'retirement',
+                title: 'Rule of 72 Calculator',
+                description: 'Calculate how long it takes for your investments to double using the Rule of 72.',
+                link: 'rule-of-72.html',
+                icon: '⏱'
+            },
+            {
+                section: 'calculators',
+                category: 'retirement',
+                title: 'The Compound Interest Time Machine',
+                description: 'Discover the power of compound interest and watch your money grow exponentially over time. Calculate future values with regular contributions.',
+                link: 'compound-interest.html',
+                icon: '💹',
+                isNew: true
+            },
+            {
+                section: 'calculators',
+                category: 'income',
+                title: 'Food Assistance Calculator',
+                description: 'Estimate your eligibility for SNAP (food stamps) and find nearby food resources. Get personalized tips and application guidance in under 2 minutes.',
+                link: 'food-assistance-calculator.html',
+                icon: '🍎',
+                isNew: true
+            },
+            {
+                section: 'education',
+                category: 'education',
+                title: 'Mango Stories',
+                description: 'Real-life financial stories and lessons that inspire better money decisions. Learn from others\' experiences with debt, investing, saving, and building wealth.',
+                link: 'mango-stories.html',
+                icon: '📚',
+                featured: true
+            },
+            {
+                section: 'education',
+                category: 'emergencies',
+                title: 'Disaster Desk',
+                description: 'Get personalized disaster recovery resources in 3 simple steps. Access financial aid, housing assistance, and essential services to rebuild after emergencies.',
+                link: 'disaster-desk.html',
+                icon: '🆘',
+                isNew: true
+            },
+            {
+                section: 'education',
+                category: 'family',
+                title: 'Family Financial Planning',
+                description: 'Evaluate your financial trajectory over 15 years, considering income, career breaks, childcare, and retirement savings.',
+                link: 'family-planning.html',
+                icon: '👨‍👩‍👧‍👦',
+                isNew: true,
+                featured: true
+            },
+            {
+                section: 'education',
+                category: 'income',
+                title: 'Company Benefits Guide',
+                description: 'Understand and maximize your employee benefits package with this comprehensive guide.',
+                link: 'company-benefits-guide.html',
+                icon: '📑'
+            },
+            {
+                section: 'education',
+                category: 'business',
+                title: 'Small Business Digital Guide',
+                description: 'A comprehensive resource for small business owners to efficiently bring their business to the digital era.',
+                link: 'small-business-guide.html',
+                icon: '💻'
+            }
+        ];
+
+        const gallery = document.getElementById('gallery');
+
+        resources.forEach(resource => {
+            const card = document.createElement('div');
+            card.className = 'graphic-container';
+            card.innerHTML = `
+                <div class="graphic">
+                    <div class="header">
+                        <img src="finmango.png" alt="FinMango" class="logo">
+                        <div class="resource-tag">Free Resource</div>
+                    </div>
+                    <div class="photo-container">
+                        <div class="main-icon">${resource.icon}</div>
+                    </div>
+                    <div class="content">
+                        <div class="title">${resource.title}</div>
+                        <div class="meta">
+                            <span class="category-pill">${resource.category}</span>
+                        </div>
+                    </div>
+                    <div class="footer-bar"></div>
+                </div>
+            `;
+            gallery.appendChild(card);
+        });
+    </script>
+</body>
+
+</html>
