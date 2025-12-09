@@ -21,10 +21,22 @@ const REGIONS = [
 ];
 
 const INDICATOR_TERMS = {
-    financial_anxiety: ["debt help", "bankruptcy", "payday loan", "can't pay rent", "debt relief", "debt collector"],
-    food_insecurity: ["food stamps", "food bank near me", "SNAP benefits", "free food", "food pantry", "EBT balance"],
-    housing_stress: ["eviction help", "rent assistance", "housing assistance", "facing eviction", "tenant rights", "behind on rent"],
-    affordability: ["cost of living", "prices too high", "can't afford", "inflation help", "cheap groceries", "budget tips"]
+    financial_anxiety: [
+        "debt help", "bankruptcy", "payday loan", "can't pay rent", "debt relief", "debt collector",
+        "credit card debt", "student loan forgiveness", "borrow money", "pawn shop", "overdraft fees"
+    ],
+    food_insecurity: [
+        "food stamps", "food bank near me", "SNAP benefits", "free food", "food pantry", "EBT balance",
+        "apply for food stamps", "WIC program", "cheap meals", "grocery assistance"
+    ],
+    housing_stress: [
+        "eviction help", "rent assistance", "housing assistance", "facing eviction", "tenant rights", "behind on rent",
+        "homeless shelter", "emergency housing", "section 8 application", "unable to pay rent"
+    ],
+    affordability: [
+        "cost of living", "prices too high", "can't afford", "inflation help", "cheap groceries", "budget tips",
+        "gas prices", "utility bill help", "electricity bill assistance", "save money on groceries"
+    ]
 };
 
 // Returns the last value (most recent)

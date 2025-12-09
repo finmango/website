@@ -8,39 +8,55 @@ const path = require('path');
 
 // Configuration
 // Must match raw data structure
-const INDICATOR_WEIGHTS = {
-    financial_anxiety: {
-        "debt help": 1.0,
+financial_anxiety: {
+    "debt help": 1.0,
         "bankruptcy": 1.5,
-        "payday loan": 1.2,
-        "can't pay rent": 1.8,
-        "debt relief": 1.0,
-        "debt collector": 1.3
-    },
-    food_insecurity: {
-        "food stamps": 1.0,
+            "payday loan": 1.2,
+                "can't pay rent": 1.8,
+                    "debt relief": 1.0,
+                        "debt collector": 1.3,
+                            "credit card debt": 1.5,
+                                "student loan forgiveness": 1.2,
+                                    "borrow money": 1.6,
+                                        "pawn shop": 1.8,
+                                            "overdraft fees": 1.4
+},
+food_insecurity: {
+    "food stamps": 1.0,
         "food bank near me": 1.4,
-        "SNAP benefits": 1.0,
-        "free food": 1.3,
-        "food pantry": 1.2,
-        "EBT balance": 0.8
-    },
-    housing_stress: {
-        "eviction help": 1.8,
+            "SNAP benefits": 1.0,
+                "free food": 1.3,
+                    "food pantry": 1.2,
+                        "EBT balance": 0.8,
+                            "apply for food stamps": 1.8,
+                                "WIC program": 1.0,
+                                    "cheap meals": 1.0,
+                                        "grocery assistance": 1.5
+},
+housing_stress: {
+    "eviction help": 1.8,
         "rent assistance": 1.2,
-        "housing assistance": 1.0,
-        "facing eviction": 2.0,
-        "tenant rights": 1.0,
-        "behind on rent": 1.5
-    },
-    affordability: {
-        "cost of living": 1.0,
+            "housing assistance": 1.0,
+                "facing eviction": 2.0,
+                    "tenant rights": 1.0,
+                        "behind on rent": 1.5,
+                            "homeless shelter": 2.0,
+                                "emergency housing": 1.9,
+                                    "section 8 application": 1.4,
+                                        "unable to pay rent": 1.9
+},
+affordability: {
+    "cost of living": 1.0,
         "prices too high": 1.3,
-        "can't afford": 1.5,
-        "inflation help": 1.2,
-        "cheap groceries": 0.8,
-        "budget tips": 0.7
-    }
+            "can't afford": 1.5,
+                "inflation help": 1.2,
+                    "cheap groceries": 0.8,
+                        "budget tips": 0.7,
+                            "gas prices": 1.0,
+                                "utility bill help": 1.5,
+                                    "electricity bill assistance": 1.5,
+                                        "save money on groceries": 1.1
+}
 };
 
 const STATE_NAMES = {
