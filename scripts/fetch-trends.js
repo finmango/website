@@ -7,7 +7,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const API_KEY = process.env.GOOGLE_TRENDS_API_KEY || 'AIzaSyDA69jVBXP5ga4op9OC_RK8m64rFNLBrmo';
+// Ensure API key is present
+const API_KEY = process.env.GOOGLE_TRENDS_API_KEY;
+if (!API_KEY) {
+    console.error("FATAL: GOOGLE_TRENDS_API_KEY environment variable is missing.");
+    process.exit(1);
+}
+
 const BASE_URL = 'https://www.googleapis.com/trends/v1beta/graph';
 
 // US States + DC
@@ -39,14 +45,11 @@ const INDICATOR_TERMS = {
     ]
 };
 
-// Returns the last value (most recent)
-async function fetchRegionData(region, term) {
-    // We want recent data. Let's ask for last 12 months to ensure we get a "line".
-    // API param format: YYYY-MM
-    // To be safe and get "Pulse", we can ask for specific range, but 'graph' often quantizes to months.
-    // Let's try without start/end first to see default (2004-now), but that's heavy.
-    // Specifying restrictions.startDate is better.
+// Sleep helper
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+// Returns the last value (most recent) with Retry Logic
+async function fetchRegionData(region, term, retries = 3) {
     // Calculate 3 months ago YYYY-MM
     const d = new Date();
     d.setMonth(d.getMonth() - 3);
@@ -54,26 +57,38 @@ async function fetchRegionData(region, term) {
 
     const url = `${BASE_URL}?terms=${encodeURIComponent(term)}&restrictions.geo=${region}&restrictions.startDate=${startDate}&key=${API_KEY}`;
 
-    try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`API Error: ${res.status} ${res.statusText}`);
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            const res = await fetch(url);
 
-        const data = await res.json();
+            if (res.status === 429) {
+                // Rate limited - wait longer (exponential backoff)
+                const waitTime = 1000 * Math.pow(2, attempt);
+                console.warn(`Rate limit hit for ${term} in ${region}. Waiting ${waitTime}ms...`);
+                await sleep(waitTime);
+                continue;
+            }
 
-        // Structure: { lines: [ { points: [ { value: 50, date: "..." } ] } ] }
-        if (data.lines && data.lines.length > 0 && data.lines[0].points) {
-            const points = data.lines[0].points;
-            const lastPoint = points[points.length - 1];
-            return lastPoint ? lastPoint.value : 0;
+            if (!res.ok) throw new Error(`API Error: ${res.status} ${res.statusText}`);
+
+            const data = await res.json();
+
+            // Structure: { lines: [ { points: [ { value: 50, date: "..." } ] } ] }
+            if (data.lines && data.lines.length > 0 && data.lines[0].points) {
+                const points = data.lines[0].points;
+                const lastPoint = points[points.length - 1];
+                return lastPoint ? lastPoint.value : 0;
+            }
+            return 0; // No data returned
+
+        } catch (e) {
+            if (attempt === retries) {
+                console.error(`Failed to fetch ${term} for ${region} after ${retries} attempts:`, e.message);
+                return 0; // Return 0 on final failure to allow pipeline to continue
+            }
         }
-        return 0; // No data returned
-
-    } catch (e) {
-        console.error(`Failed to fetch ${term} for ${region}:`, e.message);
-        // Fallback or retry logic could go here.
-        // For dashboard integrity, returning 0 or previous value is safer than crashing.
-        return 0;
     }
+    return 0;
 }
 
 async function main() {
@@ -81,6 +96,7 @@ async function main() {
 
     const timestamp = new Date().toISOString().split('T')[0];
     const rawData = {};
+    let errorCount = 0;
 
     // Use serial execution to be polite to the API rate limits
     for (const region of REGIONS) {
@@ -90,10 +106,13 @@ async function main() {
         for (const [indicator, terms] of Object.entries(INDICATOR_TERMS)) {
             rawData[region][indicator] = {};
             for (const term of terms) {
-                // Throttle: 200ms
-                await new Promise(r => setTimeout(r, 200));
+                // Base throttle: 400ms (more conservative than 200ms)
+                await sleep(400);
+
                 const val = await fetchRegionData(region, term);
                 rawData[region][indicator][term] = val;
+
+                // Track "soft" failures (if 0 is strictly due to error, tough to distinguish from actual 0, but catching exceptions helps)
             }
         }
     }
@@ -102,14 +121,15 @@ async function main() {
     const rawDir = path.join(__dirname, '../data/raw');
     if (!fs.existsSync(rawDir)) fs.mkdirSync(rawDir, { recursive: true });
 
-    fs.writeFileSync(
-        path.join(rawDir, `raw-${timestamp}.json`),
-        JSON.stringify(rawData, null, 2)
-    );
+    const outputFile = path.join(rawDir, `raw-${timestamp}.json`);
+    fs.writeFileSync(outputFile, JSON.stringify(rawData, null, 2));
 
-    console.log('Fetch complete. Saved raw data.');
+    console.log(`Fetch complete. Saved raw data to ${outputFile}`);
 }
 
 if (require.main === module) {
-    main().catch(console.error);
+    main().catch(error => {
+        console.error("Critical failure in main execution:", error);
+        process.exit(1);
+    });
 }
