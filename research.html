@@ -1559,24 +1559,38 @@
         Real-time tracking of financial stress across America. Powered by Google Health Trends API.
       </p>
 
+      <!-- Indicator Tabs -->
+      <div id="indicator-tabs"
+        style="display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+        <button class="indicator-tab active" data-indicator="financial_anxiety"
+          style="padding: 0.6rem 1.25rem; border: 2px solid var(--black); background: var(--orange); color: white; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease;">Financial
+          Anxiety</button>
+        <button class="indicator-tab" data-indicator="food_insecurity"
+          style="padding: 0.6rem 1.25rem; border: 2px solid var(--black); background: white; color: var(--black); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease;">Food
+          Insecurity</button>
+        <button class="indicator-tab" data-indicator="housing_stress"
+          style="padding: 0.6rem 1.25rem; border: 2px solid var(--black); background: white; color: var(--black); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease;">Housing
+          Stress</button>
+        <button class="indicator-tab" data-indicator="affordability"
+          style="padding: 0.6rem 1.25rem; border: 2px solid var(--black); background: white; color: var(--black); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s ease;">Affordability</button>
+      </div>
+
       <!-- Interactive Map Preview -->
       <div id="barometer-map-container"
-        style="max-width: 900px; margin: 0 auto 2rem; cursor: pointer; position: relative; border: 2px solid rgba(0,0,0,0.1); border-radius: 12px; background: #fff; padding: 1.5rem; transition: all 0.3s ease;"
-        onclick="window.location.href='barometer.html'">
+        style="max-width: 900px; margin: 0 auto 2rem; position: relative; border: 2px solid rgba(0,0,0,0.1); border-radius: 12px; background: #fff; padding: 1.5rem; transition: all 0.3s ease;">
         <svg id="barometer-preview-map" viewBox="0 0 959 593" preserveAspectRatio="xMidYMid meet"
           style="width: 100%; height: auto;"></svg>
 
-        <!-- Hover Overlay -->
-        <div id="map-overlay"
-          style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); opacity: 0; transition: opacity 0.3s ease; display: flex; align-items: center; justify-content: center; border-radius: 12px; pointer-events: none;">
-          <span
-            style="color: white; font-size: 1.25rem; font-weight: 700; background: var(--orange); padding: 0.75rem 1.5rem; border-radius: 100px;">Explore
-            Full Barometer →</span>
+        <!-- State Tooltip -->
+        <div id="preview-tooltip"
+          style="position: fixed; background: #1a1a1a; color: white; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.875rem; pointer-events: none; z-index: 1000; opacity: 0; transition: opacity 0.15s ease; white-space: nowrap; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+          <div id="tooltip-state" style="font-weight: 700; margin-bottom: 0.25rem;"></div>
+          <div id="tooltip-value" style="color: #FF6B35; font-weight: 600;"></div>
         </div>
 
         <!-- Legend -->
         <div
-          style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; font-size: 0.75rem; color: #666;">
+          style="display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; font-size: 0.75rem; color: #666; flex-wrap: wrap;">
           <div style="display: flex; align-items: center; gap: 0.5rem;">
             <div style="width: 16px; height: 8px; background: #10B981; border-radius: 2px;"></div> Low (&lt;90)
           </div>
@@ -1599,52 +1613,137 @@
   </section>
 
   <script>
-    // Load the barometer map preview
+    // Barometer Preview with full interactivity
     (async function () {
+      const stateNames = {
+        'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas', 'CA': 'California',
+        'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware', 'FL': 'Florida', 'GA': 'Georgia',
+        'HI': 'Hawaii', 'ID': 'Idaho', 'IL': 'Illinois', 'IN': 'Indiana', 'IA': 'Iowa',
+        'KS': 'Kansas', 'KY': 'Kentucky', 'LA': 'Louisiana', 'ME': 'Maine', 'MD': 'Maryland',
+        'MA': 'Massachusetts', 'MI': 'Michigan', 'MN': 'Minnesota', 'MS': 'Mississippi', 'MO': 'Missouri',
+        'MT': 'Montana', 'NE': 'Nebraska', 'NV': 'Nevada', 'NH': 'New Hampshire', 'NJ': 'New Jersey',
+        'NM': 'New Mexico', 'NY': 'New York', 'NC': 'North Carolina', 'ND': 'North Dakota', 'OH': 'Ohio',
+        'OK': 'Oklahoma', 'OR': 'Oregon', 'PA': 'Pennsylvania', 'RI': 'Rhode Island', 'SC': 'South Carolina',
+        'SD': 'South Dakota', 'TN': 'Tennessee', 'TX': 'Texas', 'UT': 'Utah', 'VT': 'Vermont',
+        'VA': 'Virginia', 'WA': 'Washington', 'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming', 'DC': 'Washington DC'
+      };
+
+      // Mock data for each indicator
+      const indicatorData = {
+        financial_anxiety: {
+          'AL': 132, 'AK': 78, 'AZ': 115, 'AR': 158, 'CA': 112, 'CO': 85, 'CT': 118, 'DE': 105, 'FL': 128, 'GA': 135,
+          'HI': 82, 'ID': 88, 'IL': 110, 'IN': 108, 'IA': 72, 'KS': 98, 'KY': 165, 'LA': 172, 'ME': 95, 'MD': 102,
+          'MA': 78, 'MI': 115, 'MN': 68, 'MS': 178, 'MO': 125, 'MT': 75, 'NE': 82, 'NV': 138, 'NH': 72, 'NJ': 108,
+          'NM': 155, 'NY': 118, 'NC': 112, 'ND': 65, 'OH': 128, 'OK': 162, 'OR': 105, 'PA': 110, 'RI': 102, 'SC': 132,
+          'SD': 68, 'TN': 158, 'TX': 115, 'UT': 78, 'VT': 62, 'VA': 98, 'WA': 85, 'WV': 175, 'WI': 82, 'WY': 72, 'DC': 125
+        },
+        food_insecurity: {
+          'AL': 145, 'AK': 88, 'AZ': 125, 'AR': 168, 'CA': 118, 'CO': 78, 'CT': 95, 'DE': 102, 'FL': 135, 'GA': 148,
+          'HI': 92, 'ID': 85, 'IL': 118, 'IN': 112, 'IA': 75, 'KS': 102, 'KY': 155, 'LA': 178, 'ME': 88, 'MD': 95,
+          'MA': 72, 'MI': 125, 'MN': 65, 'MS': 185, 'MO': 132, 'MT': 78, 'NE': 75, 'NV': 128, 'NH': 68, 'NJ': 98,
+          'NM': 162, 'NY': 108, 'NC': 118, 'ND': 62, 'OH': 122, 'OK': 172, 'OR': 98, 'PA': 105, 'RI': 95, 'SC': 142,
+          'SD': 72, 'TN': 165, 'TX': 128, 'UT': 82, 'VT': 58, 'VA': 95, 'WA': 78, 'WV': 182, 'WI': 78, 'WY': 75, 'DC': 118
+        },
+        housing_stress: {
+          'AL': 118, 'AK': 95, 'AZ': 142, 'AR': 112, 'CA': 185, 'CO': 155, 'CT': 138, 'DE': 118, 'FL': 165, 'GA': 128,
+          'HI': 195, 'ID': 132, 'IL': 125, 'IN': 95, 'IA': 72, 'KS': 88, 'KY': 105, 'LA': 118, 'ME': 128, 'MD': 145,
+          'MA': 172, 'MI': 95, 'MN': 108, 'MS': 98, 'MO': 102, 'MT': 125, 'NE': 78, 'NV': 178, 'NH': 142, 'NJ': 168,
+          'NM': 115, 'NY': 182, 'NC': 125, 'ND': 75, 'OH': 98, 'OK': 88, 'OR': 165, 'PA': 118, 'RI': 148, 'SC': 122,
+          'SD': 82, 'TN': 118, 'TX': 132, 'UT': 145, 'VT': 138, 'VA': 135, 'WA': 172, 'WV': 85, 'WI': 92, 'WY': 88, 'DC': 195
+        },
+        affordability: {
+          'AL': 125, 'AK': 145, 'AZ': 138, 'AR': 115, 'CA': 178, 'CO': 152, 'CT': 145, 'DE': 122, 'FL': 155, 'GA': 132,
+          'HI': 198, 'ID': 128, 'IL': 132, 'IN': 98, 'IA': 78, 'KS': 92, 'KY': 108, 'LA': 125, 'ME': 122, 'MD': 148,
+          'MA': 168, 'MI': 102, 'MN': 115, 'MS': 105, 'MO': 108, 'MT': 118, 'NE': 85, 'NV': 165, 'NH': 135, 'NJ': 162,
+          'NM': 118, 'NY': 175, 'NC': 128, 'ND': 82, 'OH': 105, 'OK': 98, 'OR': 158, 'PA': 122, 'RI': 142, 'SC': 128,
+          'SD': 88, 'TN': 122, 'TX': 135, 'UT': 142, 'VT': 132, 'VA': 138, 'WA': 168, 'WV': 92, 'WI': 98, 'WY': 95, 'DC': 188
+        }
+      };
+
+      let currentIndicator = 'financial_anxiety';
+      const tooltip = document.getElementById('preview-tooltip');
+      const tooltipState = document.getElementById('tooltip-state');
+      const tooltipValue = document.getElementById('tooltip-value');
+
+      function getColorForValue(val) {
+        if (val < 90) return '#10B981';
+        if (val < 120) return '#F59E0B';
+        if (val < 150) return '#F97316';
+        return '#EF4444';
+      }
+
+      function updateMapColors(indicator) {
+        const data = indicatorData[indicator];
+        document.querySelectorAll('#barometer-preview-map path[data-id]').forEach(path => {
+          const stateId = path.getAttribute('data-id').toUpperCase();
+          if (data[stateId]) {
+            path.style.fill = getColorForValue(data[stateId]);
+          }
+        });
+      }
+
       try {
         const response = await fetch('us-map.svg');
         const svgText = await response.text();
         document.getElementById('barometer-preview-map').innerHTML = svgText.replace(/<\/?svg[^>]*>/g, '');
 
-        // Color the states based on mock data
-        const stateColors = {
-          'AL': '#F97316', 'AK': '#10B981', 'AZ': '#F59E0B', 'AR': '#EF4444', 'CA': '#F59E0B',
-          'CO': '#10B981', 'CT': '#F59E0B', 'DE': '#F59E0B', 'FL': '#F97316', 'GA': '#F97316',
-          'HI': '#10B981', 'ID': '#10B981', 'IL': '#F59E0B', 'IN': '#F59E0B', 'IA': '#10B981',
-          'KS': '#F59E0B', 'KY': '#EF4444', 'LA': '#EF4444', 'ME': '#F59E0B', 'MD': '#F59E0B',
-          'MA': '#10B981', 'MI': '#F59E0B', 'MN': '#10B981', 'MS': '#EF4444', 'MO': '#F97316',
-          'MT': '#10B981', 'NE': '#10B981', 'NV': '#F97316', 'NH': '#10B981', 'NJ': '#F59E0B',
-          'NM': '#EF4444', 'NY': '#F59E0B', 'NC': '#F59E0B', 'ND': '#10B981', 'OH': '#F97316',
-          'OK': '#EF4444', 'OR': '#F59E0B', 'PA': '#F59E0B', 'RI': '#F59E0B', 'SC': '#F97316',
-          'SD': '#10B981', 'TN': '#EF4444', 'TX': '#F59E0B', 'UT': '#10B981', 'VT': '#10B981',
-          'VA': '#F59E0B', 'WA': '#10B981', 'WV': '#EF4444', 'WI': '#10B981', 'WY': '#10B981', 'DC': '#F97316'
-        };
-
+        // Style and add interactivity to states
         document.querySelectorAll('#barometer-preview-map path[data-id]').forEach(path => {
           const stateId = path.getAttribute('data-id').toUpperCase();
-          if (stateColors[stateId]) {
-            path.style.fill = stateColors[stateId];
-            path.style.stroke = '#fff';
+          path.style.stroke = '#fff';
+          path.style.strokeWidth = '1';
+          path.style.cursor = 'pointer';
+          path.style.transition = 'all 0.2s ease';
+
+          // Hover events
+          path.addEventListener('mouseenter', (e) => {
+            path.style.opacity = '0.8';
+            path.style.strokeWidth = '2';
+            const val = indicatorData[currentIndicator][stateId];
+            tooltipState.textContent = stateNames[stateId] || stateId;
+            tooltipValue.textContent = val ? `Score: ${val}` : 'No data';
+            tooltip.style.opacity = '1';
+          });
+
+          path.addEventListener('mousemove', (e) => {
+            tooltip.style.left = (e.clientX + 15) + 'px';
+            tooltip.style.top = (e.clientY + 15) + 'px';
+          });
+
+          path.addEventListener('mouseleave', () => {
+            path.style.opacity = '1';
             path.style.strokeWidth = '1';
-            path.style.transition = 'all 0.2s ease';
-          }
+            tooltip.style.opacity = '0';
+          });
+
+          // Click to go to barometer
+          path.addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.location.href = 'barometer.html';
+          });
         });
 
-        // Hover effect for container
-        const container = document.getElementById('barometer-map-container');
-        const overlay = document.getElementById('map-overlay');
-        container.addEventListener('mouseenter', () => {
-          overlay.style.opacity = '1';
-          container.style.transform = 'translateY(-4px)';
-          container.style.boxShadow = '0 12px 40px rgba(0,0,0,0.1)';
+        // Initial color
+        updateMapColors(currentIndicator);
+
+        // Indicator tab clicks
+        document.querySelectorAll('.indicator-tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+            document.querySelectorAll('.indicator-tab').forEach(t => {
+              t.style.background = 'white';
+              t.style.color = 'var(--black)';
+              t.classList.remove('active');
+            });
+            tab.style.background = 'var(--orange)';
+            tab.style.color = 'white';
+            tab.classList.add('active');
+            currentIndicator = tab.dataset.indicator;
+            updateMapColors(currentIndicator);
+          });
         });
-        container.addEventListener('mouseleave', () => {
-          overlay.style.opacity = '0';
-          container.style.transform = 'translateY(0)';
-          container.style.boxShadow = 'none';
-        });
+
       } catch (e) {
-        console.log('Could not load map preview');
+        console.log('Could not load map preview:', e);
       }
     })();
   </script>
