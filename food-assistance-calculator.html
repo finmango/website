@@ -21,7 +21,16 @@
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-DW5HBYS9JW');
+    gtag('config', 'G-DW5HBYS9JW');
   </script>
+
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({ pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript"
+    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <style>
     /* --- Standard Styles from index.html --- */
@@ -821,6 +830,21 @@
       padding-top: 1rem;
       border-top: 1px solid var(--gray-border);
     }
+
+    /* Google Translate Styling */
+    #google_translate_element {
+      margin-top: 1rem;
+      display: none;
+      /* Hidden by default, shown when 'Other' is picked */
+    }
+
+    .goog-te-gadget-simple {
+      background-color: #fff !important;
+      border: 1px solid #e5e7eb !important;
+      padding: 4px 8px !important;
+      border-radius: 4px !important;
+      font-family: 'Inter', sans-serif !important;
+    }
   </style>
 </head>
 
@@ -898,20 +922,10 @@
               </label>
               <label class="radio-card">
                 <input type="radio" name="language" value="other">
-                <div class="radio-card-content">Other</div>
+                <div class="radio-card-content">More / Más</div>
               </label>
             </div>
-            <div id="otherLangMsg"
-              style="display:none; margin-top: 0.75rem; background: #eff6ff; padding: 0.75rem; border-radius: 4px; border: 1px solid #bfdbfe; font-size: 0.9rem; color: #1e40af;">
-              <strong data-i18n="other_title">Need another language?</strong>
-              <div style="margin-top: 0.25rem;">
-                <span data-i18n="other_desc">We currently support English and Spanish. For other languages, please visit
-                  the USDA website.</span>
-                <a href="https://www.fns.usda.gov/snap/recipient/eligibility" target="_blank"
-                  style="color: #1d4ed8; text-decoration: underline; margin-left: 0.25rem;" data-i18n="other_link">USDA
-                  SNAP Info</a>
-              </div>
-            </div>
+            <div id="google_translate_element"></div>
           </div>
 
           <div class="form-group">
@@ -1291,28 +1305,34 @@
     };
 
     function setLanguage(lang) {
+      const googleTranslate = document.getElementById('google_translate_element');
+
       if (lang === 'other') {
-        document.getElementById('otherLangMsg').style.display = 'block';
-        // Keep UI in English generally, or previous language?
-        // Let's default to English for the UI if Other is picked, or allow them to stay?
-        // Requirement says "Spanish and 'other' languages currently don't work".
-        // The simplest is to treat 'other' as English UI but show the message.
-        // Or just show message and keep current lang?
-        // Let's set currentLang to 'en' so the UI is readable, but show the message.
-        currentLang = 'en';
+        googleTranslate.style.display = 'block';
+        // We keep the UI in English but show the translate gadget
+        // The user uses the gadget to pick their language.
+        // We don't force 'en' here manually if they already translated it, 
+        // but proper Google Translate integration often works best if we let it control.
+        // For now, we just reveal the dropdown.
       } else {
-        document.getElementById('otherLangMsg').style.display = 'none';
+        googleTranslate.style.display = 'none';
         currentLang = lang;
+
+        // If we want to "turn off" Google Translate when they pick EN/ES manually:
+        // There isn't a simple API to "reset" it without reloading or using cookies.
+        // But usually just hiding it is okay, and we manually overwrite the DOM with our safe translations below.
       }
 
       const t = translations[currentLang];
 
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (t[key]) {
-          el.innerText = t[key];
-        }
-      });
+      if (lang !== 'other') {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (t[key]) {
+            el.innerText = t[key];
+          }
+        });
+      }
     }
 
     // Initialize Radio Listeners
