@@ -332,9 +332,10 @@ function resetDashboard() {
 }
 
 // --- Event Listeners ---
-const msg = userInput.value.trim();
-if (msg) processUserMessage(msg);
-    });
+sendBtn.addEventListener('click', () => {
+    const msg = userInput.value.trim();
+    if (msg) processUserMessage(msg);
+});
 
 userInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
