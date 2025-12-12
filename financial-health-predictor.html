@@ -554,27 +554,29 @@
         .chat-section {
             display: flex;
             flex-direction: column;
-            border: 2px solid var(--black);
-            border-radius: 12px;
+            border: none;
+            border-radius: 20px;
             overflow: hidden;
             height: 700px;
             max-height: 80vh;
-            box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         .chat-header {
-            background: var(--black);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: var(--white);
-            padding: 1.5rem;
+            padding: 1.25rem 1.5rem;
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .chat-header h1 {
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 600;
             margin: 0;
+            letter-spacing: -0.02em;
         }
 
         .chat-messages {
@@ -588,34 +590,49 @@
         }
 
         .message {
-            max-width: 80%;
+            max-width: 85%;
             padding: 1rem 1.25rem;
-            border-radius: 12px;
-            font-size: 1rem;
-            line-height: 1.5;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.6;
             position: relative;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message.bot {
             background: var(--white);
-            border: 1px solid #e5e5e5;
-            border-bottom-left-radius: 2px;
+            border: none;
+            border-radius: 18px 18px 18px 4px;
             align-self: flex-start;
             margin-right: auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
         .message.user {
-            background: var(--orange);
+            background: linear-gradient(135deg, #FF6B35 0%, #E55A2B 100%);
             color: var(--white);
-            border-bottom-right-radius: 2px;
+            border-radius: 18px 18px 4px 18px;
             align-self: flex-end;
             margin-left: auto;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
         }
 
         .message-time {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             margin-top: 0.5rem;
-            opacity: 0.7;
+            opacity: 0.6;
         }
 
         .typing-indicator {
@@ -660,11 +677,11 @@
         }
 
         .chat-input-area {
-            padding: 1.5rem;
+            padding: 1.25rem;
             background: var(--white);
-            border-top: 1px solid #e5e5e5;
+            border-top: none;
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         #user-input {
@@ -685,40 +702,43 @@
         }
 
         #send-btn {
-            background: var(--black);
+            background: linear-gradient(135deg, #FF6B35 0%, #E55A2B 100%);
             color: var(--white);
             border: none;
-            padding: 0 1.5rem;
-            border-radius: 8px;
+            padding: 0 1.75rem;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.1s;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
         }
 
         #send-btn:hover {
-            background: var(--orange);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
         }
 
         #send-btn:active {
-            transform: scale(0.98);
+            transform: translateY(0);
         }
 
         /* Dashboard Panel */
         .dashboard-panel {
-            background: var(--white);
-            border: 2px solid var(--black);
-            border-radius: 12px;
-            padding: 1.5rem;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+            border: none;
+            border-radius: 20px;
+            padding: 1.75rem;
             height: fit-content;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         }
 
         .dashboard-title {
-            font-size: 1.1rem;
+            font-size: 0.75rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--gray);
+            letter-spacing: 0.1em;
+            color: #94a3b8;
         }
 
         .health-score {
@@ -728,24 +748,26 @@
         }
 
         .score-circle {
-            width: 150px;
-            height: 150px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
-            background: conic-gradient(var(--success) 0deg, var(--warning) 180deg, var(--error) 360deg);
+            background: conic-gradient(#e5e7eb 0deg, #e5e7eb 360deg);
             margin: 0 auto 1rem;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            transition: background 0.5s ease;
         }
 
         .score-circle::before {
             content: '';
-            width: 120px;
-            height: 120px;
-            background: var(--white);
+            width: 110px;
+            height: 110px;
+            background: white;
             border-radius: 50%;
             position: absolute;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
         .score-value {
@@ -768,9 +790,16 @@
         }
 
         .metric-item {
-            background: var(--light-gray);
+            background: white;
             padding: 1rem;
-            border-radius: 8px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .metric-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         .metric-header {
@@ -842,13 +871,15 @@
             <div class="chat-messages" id="chat-messages">
                 <!-- Welcome Message -->
                 <div class="message bot">
-                    Hello! I'm your Financial Health Assistant. I can help you evaluate financial decisions or check
-                    your financial health.
+                    👋 <strong>Welcome!</strong> I'm your Financial Health Assistant.
                     <br><br>
-                    Try saying:
-                    <br>• "I want to buy a car"
-                    <br>• "Am I saving enough?"
-                    <br>• "What is my financial health score?"
+                    I can help you:
+                    <br>• Check your <strong>financial health score</strong>
+                    <br>• Explain terms like <strong>50/30/20</strong> or <strong>compound interest</strong>
+                    <br>• Give tips on <strong>saving</strong>, <strong>budgeting</strong>, or
+                    <strong>investing</strong>
+                    <br><br>
+                    Just type anything to get started!
                     <div class="message-time">Just now</div>
                 </div>
             </div>
@@ -959,7 +990,7 @@
         </div>
     </footer>
 
-    <script src="scripts/financial-predictor.js?v=2"></script>
+    <script src="scripts/financial-predictor.js?v=3"></script>
     <script>
         // Navigation scroll effect
         const nav = document.getElementById('nav');
