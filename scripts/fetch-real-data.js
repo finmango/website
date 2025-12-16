@@ -665,7 +665,8 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         // Affordability: Composite of housing costs, poverty, and regional cost of living
         // Housing weight increased slightly to reflect cost of living crisis
         const housingVal = states[stateCode].housing_stress.value || (130 * regionalMultiplier);
-        const povertyVal = states[stateCode].food_insecurity.value || (95 * regionalMultiplier);
+        // Fallback baseline increased to 115 to align with filled values and prevent artificial deflation
+        const povertyVal = states[stateCode].food_insecurity.value || (115 * regionalMultiplier);
         let affordValue = (housingVal * 0.60 + povertyVal * 0.40);
 
         // Apply trends boost
