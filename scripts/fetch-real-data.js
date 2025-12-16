@@ -474,6 +474,15 @@ function calculateIndices(unemployment, housing, poverty, rent = null, trends = 
             affordValue += (trends.affordability[abbr] / 10);
         }
 
+        // Store raw metrics for transparency/export
+        states[stateCode].metrics = {
+            unemployment_rate: unemployment?.[abbr]?.value || null,
+            poverty_rate: poverty?.[abbr]?.povertyRate || null,
+            median_rent: rent?.[abbr] || null,
+            housing_price_change: housing?.[abbr]?.change || null,
+            regional_stress_multiplier: regionalMultiplier
+        };
+
         states[stateCode].affordability = {
             value: Math.round(Math.max(80, Math.min(200, affordValue))),
             change: parseFloat((Math.random() * 6 + 3).toFixed(1)), // Slight upward trend

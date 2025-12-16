@@ -485,16 +485,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         els.chartIndicatorSelect.addEventListener('change', updateChart);
         els.chartPeriodSelect.addEventListener('change', updateChart);
 
-        // Researcher Tools
-        document.getElementById('download-csv').addEventListener('click', () => alert('Downloading CSV...'));
-        document.getElementById('download-json').addEventListener('click', () => {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(DASHBOARD_DATA));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", "finmango_research_data.json");
-            document.body.appendChild(downloadAnchorNode); // required for firefox
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
+        // Tools
+        // Download CSV
+        els.downloadCsv.addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.href = 'data/finmango-financial-health-latest.csv';
+            link.download = `finmango-barometer-data-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+
+        // Download JSON
+        els.downloadJson.addEventListener('click', () => {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(DASHBOARD_DATA, null, 2));
+            const link = document.createElement('a');
+            link.href = dataStr;
+            link.download = `finmango-barometer-data-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         });
         document.getElementById('copy-citation').addEventListener('click', () => {
             navigator.clipboard.writeText('FinMango Research Team (2024). Financial Health Pulse: Real-Time US Economic Stress Indicators. https://finmango.org/research-dashboard');
