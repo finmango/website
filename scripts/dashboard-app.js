@@ -3,11 +3,21 @@
  * Handles map interaction, data visualization, animations, and UI updates
  */
 
-console.log('[dashboard-app.js] Script file loaded successfully');
-alert('DEBUG: dashboard-app.js is loading!'); // TEMP: Remove after debugging
+// Debug status helper - shows status on page for troubleshooting
+function showDebugStatus(message) {
+    let statusDiv = document.getElementById('debug-status');
+    if (!statusDiv) {
+        statusDiv = document.createElement('div');
+        statusDiv.id = 'debug-status';
+        statusDiv.style.cssText = 'position:fixed;top:10px;left:10px;background:rgba(0,0,0,0.8);color:lime;padding:10px;font-family:monospace;font-size:12px;z-index:9999;max-width:400px;border-radius:8px;';
+        document.body.appendChild(statusDiv);
+    }
+    statusDiv.innerHTML += message + '<br>';
+    console.log('[DEBUG]', message);
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('[dashboard-app.js] DOMContentLoaded fired');
+    showDebugStatus('DOMContentLoaded fired');
     // --- State Management ---
     const APP_STATE = {
         currentIndicator: 'financial_anxiety',
@@ -48,16 +58,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Initialization ---
     async function init() {
-        console.log('Initializing Dashboard...');
+        showDebugStatus('init() started');
 
         // Load Map SVG
         await loadMapSVG();
+        showDebugStatus('loadMapSVG() completed');
 
         // Check if data is loaded
         if (typeof DASHBOARD_DATA === 'undefined') {
-            console.error('Data not loaded');
+            showDebugStatus('ERROR: DASHBOARD_DATA is undefined!');
             return;
         }
+        showDebugStatus('DASHBOARD_DATA loaded OK');
+
+        // Count states in data
+        const stateCount = Object.keys(DASHBOARD_DATA.states || {}).length;
+        showDebugStatus('States in data: ' + stateCount);
 
         // Initialize UI
         updateHeader();
@@ -68,8 +84,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         setupEventListeners();
 
         // Initial View Update
+        showDebugStatus('Calling updateMapView...');
         updateMapView(APP_STATE.currentIndicator);
         updateRankingsTable();
+        showDebugStatus('init() completed!');
     }
 
     // --- Data & Helpers ---
