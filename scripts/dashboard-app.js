@@ -3,21 +3,7 @@
  * Handles map interaction, data visualization, animations, and UI updates
  */
 
-// Debug status helper - shows status on page for troubleshooting
-function showDebugStatus(message) {
-    let statusDiv = document.getElementById('debug-status');
-    if (!statusDiv) {
-        statusDiv = document.createElement('div');
-        statusDiv.id = 'debug-status';
-        statusDiv.style.cssText = 'position:fixed;top:10px;left:10px;background:rgba(0,0,0,0.8);color:lime;padding:10px;font-family:monospace;font-size:12px;z-index:9999;max-width:400px;border-radius:8px;';
-        document.body.appendChild(statusDiv);
-    }
-    statusDiv.innerHTML += message + '<br>';
-    console.log('[DEBUG]', message);
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
-    showDebugStatus('DOMContentLoaded fired');
     // --- State Management ---
     const APP_STATE = {
         currentIndicator: 'financial_anxiety',
@@ -53,7 +39,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         prevBtn: document.getElementById('prev-btn'),
         nextBtn: document.getElementById('next-btn'),
         pageStart: document.getElementById('page-start'),
-        pageEnd: document.getElementById('page-end')
+        pageEnd: document.getElementById('page-end'),
+        downloadCsv: document.getElementById('download-csv'),
+        downloadJson: document.getElementById('download-json'),
+        copyCitation: document.getElementById('copy-citation')
     };
 
     // --- Initialization ---
@@ -66,47 +55,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Check if data is loaded
         if (typeof DASHBOARD_DATA === 'undefined') {
-            showDebugStatus('ERROR: DASHBOARD_DATA is undefined!');
+            console.error('DASHBOARD_DATA not loaded');
             return;
         }
-        showDebugStatus('DASHBOARD_DATA loaded OK');
 
-        // Count states in data
-        const stateCount = Object.keys(DASHBOARD_DATA.states || {}).length;
-        showDebugStatus('States in data: ' + stateCount);
-
-        // Initialize UI with error handling for each function
-        try { updateHeader(); showDebugStatus('updateHeader OK'); }
-        catch (e) { showDebugStatus('ERROR in updateHeader: ' + e.message); }
-
-        try { updateIndicatorCards(); showDebugStatus('updateIndicatorCards OK'); }
-        catch (e) { showDebugStatus('ERROR in updateIndicatorCards: ' + e.message); }
-
-        try { initMapInteraction(); showDebugStatus('initMapInteraction OK'); }
-        catch (e) { showDebugStatus('ERROR in initMapInteraction: ' + e.message); }
-
-        try { initChart(); showDebugStatus('initChart OK'); }
-        catch (e) { showDebugStatus('ERROR in initChart: ' + e.message); }
-
-        try { initRankings(); showDebugStatus('initRankings OK'); }
-        catch (e) { showDebugStatus('ERROR in initRankings: ' + e.message); }
-
-        try { setupEventListeners(); showDebugStatus('setupEventListeners OK'); }
-        catch (e) { showDebugStatus('ERROR in setupEventListeners: ' + e.message); }
+        // Initialize UI
+        updateHeader();
+        updateIndicatorCards();
+        initMapInteraction();
+        initChart();
+        initRankings();
+        setupEventListeners();
 
         // Initial View Update
-        showDebugStatus('Calling updateMapView...');
-        try {
-            updateMapView(APP_STATE.currentIndicator);
-            showDebugStatus('updateMapView OK');
-        } catch (e) {
-            showDebugStatus('ERROR in updateMapView: ' + e.message);
-        }
+        updateMapView(APP_STATE.currentIndicator);
+        updateRankingsTable();
 
-        try { updateRankingsTable(); showDebugStatus('updateRankingsTable OK'); }
-        catch (e) { showDebugStatus('ERROR in updateRankingsTable: ' + e.message); }
-
-        showDebugStatus('init() completed!');
+        console.log('Dashboard initialized successfully');
     }
 
     // --- Data & Helpers ---
@@ -531,31 +496,39 @@ document.addEventListener('DOMContentLoaded', async () => {
         els.chartIndicatorSelect.addEventListener('change', updateChart);
         els.chartPeriodSelect.addEventListener('change', updateChart);
 
-        // Tools
+        // Tools (with null checks for optional elements)
         // Download CSV
-        els.downloadCsv.addEventListener('click', () => {
-            const link = document.createElement('a');
-            link.href = 'data/finmango-financial-health-latest.csv';
-            link.download = `finmango-barometer-data-${new Date().toISOString().split('T')[0]}.csv`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
+        if (els.downloadCsv) {
+            els.downloadCsv.addEventListener('click', () => {
+                const link = document.createElement('a');
+                link.href = 'data/finmango-financial-health-latest.csv';
+                link.download = `finmango-barometer-data-${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        }
 
         // Download JSON
-        els.downloadJson.addEventListener('click', () => {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(DASHBOARD_DATA, null, 2));
-            const link = document.createElement('a');
-            link.href = dataStr;
-            link.download = `finmango-barometer-data-${new Date().toISOString().split('T')[0]}.json`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        });
-        document.getElementById('copy-citation').addEventListener('click', () => {
-            navigator.clipboard.writeText('FinMango Research Team (2024). Financial Health Pulse: Real-Time US Economic Stress Indicators. https://finmango.org/research-dashboard');
-            alert('Citation copied to clipboard!');
-        });
+        if (els.downloadJson) {
+            els.downloadJson.addEventListener('click', () => {
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(DASHBOARD_DATA, null, 2));
+                const link = document.createElement('a');
+                link.href = dataStr;
+                link.download = `finmango-barometer-data-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        }
+
+        // Copy Citation
+        if (els.copyCitation) {
+            els.copyCitation.addEventListener('click', () => {
+                navigator.clipboard.writeText('FinMango Research Team (2024). Financial Health Pulse: Real-Time US Economic Stress Indicators. https://finmango.org/research-dashboard');
+                alert('Citation copied to clipboard!');
+            });
+        }
     }
 
     // Run
