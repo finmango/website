@@ -5,10 +5,14 @@
  * - BLS API v1.0 (No key required) - State unemployment rates
  * - FRED API (Free key) - Housing price indices, delinquency rates
  * - Census SAIPE API (Free key) - Poverty rates by state
+ * - Census ACS API (Free key) - Rent burden percentages
+ * - HUD FMR API (Free key) - Fair Market Rents by state
+ * - Harvard JCHS 2025 Reference (Static) - Authoritative cost burden calibration
  * 
  * Environment Variables:
  * - FRED_API_KEY: Get free at https://fred.stlouisfed.org/docs/api/api_key.html
  * - CENSUS_API_KEY: Get free at https://api.census.gov/data/key_signup.html
+ * - HUD_API_KEY: Get free at https://www.huduser.gov/hudapi/public/register
  */
 
 const fs = require('fs');
@@ -70,6 +74,24 @@ async function fetchWithRetry(url, options = {}, retries = 3) {
             if (i < retries - 1) await delay(2000);
             else throw error;
         }
+    }
+}
+
+/**
+ * Load Harvard JCHS Reference Data
+ * Authoritative housing cost burden data for calibration
+ * Source: The State of the Nation's Housing 2025
+ */
+function loadJCHSReferenceData() {
+    console.log('📚 Loading Harvard JCHS 2025 reference data...');
+    try {
+        const jchsPath = path.join(__dirname, '..', 'data', 'jchs-reference-2025.json');
+        const data = JSON.parse(fs.readFileSync(jchsPath, 'utf8'));
+        console.log(`  ✓ Loaded JCHS reference data for ${Object.keys(data.states).length} states`);
+        return data;
+    } catch (error) {
+        console.warn(`  ⚠️ Could not load JCHS reference: ${error.message}`);
+        return null;
     }
 }
 
@@ -318,24 +340,164 @@ async function fetchCensusPoverty() {
 }
 
 /**
+ * Fetch Fair Market Rents from HUD API
+ * Requires HUD_API_KEY environment variable
+ * Returns FY2025 2-bedroom FMR by state (industry standard for comparisons)
+ */
+async function fetchHUDFairMarketRents() {
+    const apiKey = process.env.HUD_API_KEY;
+    if (!apiKey) {
+        console.log('⚠️  HUD_API_KEY not set - skipping Fair Market Rent data');
+        console.log('   Get a free key at: https://www.huduser.gov/hudapi/public/register');
+        return null;
+    }
+
+    console.log('🏠 Fetching Fair Market Rents from HUD...');
+    const results = {};
+
+    // HUD uses state abbreviations directly
+    const states = Object.keys(STATE_FIPS);
+
+    for (const abbr of states) {
+        try {
+            const url = `https://www.huduser.gov/hudapi/public/fmr/statedata/${abbr}`;
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Accept': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // Get state-level FMR data (use 2-bedroom as standard)
+                if (data && data.data) {
+                    // HUD returns county-level data, we need state average
+                    // Take the median of all county 2-BR FMRs for the state
+                    const fmrs = [];
+                    if (Array.isArray(data.data)) {
+                        for (const county of data.data) {
+                            if (county.fmr_2) {
+                                fmrs.push(parseFloat(county.fmr_2));
+                            }
+                        }
+                    }
+
+                    if (fmrs.length > 0) {
+                        // Calculate median FMR for state
+                        fmrs.sort((a, b) => a - b);
+                        const mid = Math.floor(fmrs.length / 2);
+                        const medianFMR = fmrs.length % 2 !== 0
+                            ? fmrs[mid]
+                            : (fmrs[mid - 1] + fmrs[mid]) / 2;
+
+                        results[abbr] = {
+                            fmr_2br: Math.round(medianFMR),
+                            county_count: fmrs.length
+                        };
+                    }
+                }
+            }
+
+            await delay(100); // Rate limiting
+        } catch (error) {
+            console.warn(`  Could not fetch FMR for ${abbr}: ${error.message}`);
+        }
+    }
+
+    console.log(`  ✓ Retrieved Fair Market Rent data for ${Object.keys(results).length} states`);
+    return Object.keys(results).length > 0 ? results : null;
+}
+
+/**
+ * Fetch Rent Burden data from Census ACS API
+ * Table B25071: Median Gross Rent as Percentage of Household Income
+ * Requires CENSUS_API_KEY environment variable
+ */
+async function fetchCensusRentBurden() {
+    const apiKey = process.env.CENSUS_API_KEY;
+    if (!apiKey) {
+        console.log('⚠️  CENSUS_API_KEY not set - skipping rent burden data');
+        return null;
+    }
+
+    console.log('📊 Fetching rent burden data from Census ACS...');
+    const results = {};
+
+    // Try recent years (ACS 1-year estimates)
+    const currentYear = new Date().getFullYear();
+
+    for (let year = currentYear - 1; year >= currentYear - 3; year--) {
+        try {
+            // B25071_001E = Median gross rent as percentage of household income
+            const url = `https://api.census.gov/data/${year}/acs/acs1?get=NAME,B25071_001E&for=state:*&key=${apiKey}`;
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                continue;
+            }
+
+            const data = await response.json();
+
+            if (data && data.length > 1) {
+                // Skip header row [NAME, B25071_001E, state]
+                for (let i = 1; i < data.length; i++) {
+                    const [name, rentBurden, stateCode] = data[i];
+
+                    // Find state abbreviation from FIPS
+                    const abbr = Object.entries(STATE_FIPS).find(([a, f]) => f === stateCode.padStart(2, '0'))?.[0];
+
+                    if (abbr && rentBurden && rentBurden !== 'null') {
+                        results[abbr] = {
+                            medianRentBurden: parseFloat(rentBurden),
+                            year: year,
+                            // 30%+ is cost-burdened, 50%+ is severely cost-burdened
+                            isCostBurdened: parseFloat(rentBurden) >= 30,
+                            isSeverelyCostBurdened: parseFloat(rentBurden) >= 50
+                        };
+                    }
+                }
+
+                console.log(`  ✓ Retrieved rent burden data for ${Object.keys(results).length} states (${year})`);
+                break;
+            }
+        } catch (error) {
+            console.log(`  Year ${year} not available, trying earlier...`);
+        }
+    }
+
+    return Object.keys(results).length > 0 ? results : null;
+}
+
+/**
  * Calculate composite indices from real data
  * Scaling adjusted to produce crisis-level visualization similar to mock data
  * while still reflecting real relative differences between states
  * @param {Object} unemployment - BLS unemployment data
  * @param {Object} housing - FRED housing price data
  * @param {Object} poverty - Census poverty data (SAIPE)
- * @param {Object} rent - Census median rent data (ACS)
+ * @param {Object} rentBurden - Census ACS rent burden data (B25071)
+ * @param {Object} fmr - HUD Fair Market Rents data
+ * @param {Object} jchs - Harvard JCHS 2025 reference data (calibration)
  * @param {Object} trends - Google Trends data (optional boost)
  */
-function calculateIndices(unemployment, housing, poverty, rent = null, trends = null) {
+function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr = null, jchs = null, trends = null) {
     const states = {};
     const stateAbbrs = Object.keys(STATE_FIPS);
 
-    // Calculate national average rent for dynamic threshold
-    let nationalAvgRent = 1200; // Fallback
-    if (rent) {
-        const rents = Object.values(rent);
-        nationalAvgRent = rents.reduce((a, b) => a + b, 0) / rents.length;
+    // Calculate national averages for relative comparisons
+    let nationalAvgRentBurden = 27; // National baseline (healthy is ~25%)
+    let nationalAvgFMR = 1400; // National 2-BR FMR baseline
+
+    if (rentBurden) {
+        const burdens = Object.values(rentBurden).map(r => r.medianRentBurden);
+        nationalAvgRentBurden = burdens.reduce((a, b) => a + b, 0) / burdens.length;
+    }
+
+    if (fmr) {
+        const fmrs = Object.values(fmr).map(f => f.fmr_2br);
+        nationalAvgFMR = fmrs.reduce((a, b) => a + b, 0) / fmrs.length;
     }
 
     // Regional stress multipliers based on economic research
@@ -418,73 +580,84 @@ function calculateIndices(unemployment, housing, poverty, rent = null, trends = 
             };
         }
 
-        // Housing Stress: Based on housing price changes + cost of living
-        if (housing?.[abbr]) {
-            const hpi = housing[abbr];
+        // Housing Stress: Based on housing price changes + rent burden + FMR
+        // DATA-DRIVEN FORMULA using Census ACS + Harvard JCHS calibration
+        const hpi = housing?.[abbr];
+        const stateRentBurden = rentBurden?.[abbr];
+        const stateFMR = fmr?.[abbr];
+        const jchsState = jchs?.states?.[abbr];
 
-            // "High Rent" States Boost (Tiered Rent Burden Logic - Data Backed)
-            // Tiers: Crisis (>125%), Severe (>110%), Elevated (>100%)
-            // Penalties tuned so high-cost states like CA/NY show as red
-            let rentPenalty = 0;
+        // Calculate rent burden score from actual Census data or JCHS reference
+        // Base 25% is considered healthy; each % above adds to stress
+        let rentBurdenScore = 0;
+        let rentBurdenSource = 'default';
 
-            if (rent && rent[abbr]) {
-                const stateRent = rent[abbr];
-
-                if (stateRent > nationalAvgRent * 1.25) {
-                    rentPenalty = 25; // Crisis (CA, NY, HI) - enough to push to red zone
-                } else if (stateRent > nationalAvgRent * 1.10) {
-                    rentPenalty = 15; // Severe (FL, CO, WA)
-                } else if (stateRent > nationalAvgRent) {
-                    rentPenalty = 5; // Elevated (TX, AZ, NV)
-                }
-            } else {
-                // Fallback list logic if API fails - housing COST crisis states
-                // These states have the most severe rent burden relative to income
-                const TIER1 = ['CA', 'NY', 'MA', 'HI', 'DC', 'NJ']; // +45 (crisis - extreme rent burden)
-                const TIER2 = ['WA', 'CO', 'FL', 'MD', 'MN', 'CT', 'OR']; // +25 (severe)
-                const TIER3 = ['NH', 'VA', 'AZ', 'NV', 'TX', 'IL', 'RI', 'VT', 'AK']; // +15 (elevated)
-
-                if (TIER1.includes(abbr)) rentPenalty = 45;
-                else if (TIER2.includes(abbr)) rentPenalty = 25;
-                else if (TIER3.includes(abbr)) rentPenalty = 15;
-            }
-
-            // ADJUSTED: Base 100 (down from 135) + price change (3x, down from 6x) + rent penalty
-            const rawValue = 100 + (hpi.change || 5) * 3 + rentPenalty;
-            let stressValue = rawValue * regionalMultiplier;
-
-            // Apply trends boost
-            if (trends?.housing_stress?.[abbr]) {
-                stressValue += (trends.housing_stress[abbr] / 8);
-            }
-
-            states[stateCode].housing_stress = {
-                value: Math.round(Math.max(80, Math.min(200, stressValue))), // Cap at 200 instead of 250
-                change: parseFloat((hpi.change || 5).toFixed(1)),
-                rank: null
-            };
+        if (stateRentBurden) {
+            // Primary source: Census ACS B25071 (median gross rent as % of income)
+            rentBurdenScore = (stateRentBurden.medianRentBurden - 25) * 3;
+            rentBurdenSource = 'census_acs';
+        } else if (jchsState) {
+            // Secondary source: Harvard JCHS 2025 (authoritative research)
+            // Use renter cost burden % directly (already accounts for 30%+ threshold)
+            // Convert to same scale: JCHS reports % of renters burdened, not median %
+            // National avg is ~50% renters burdened → calibrate to ~27% median
+            const jchsBurden = jchsState.renters_cost_burdened || 50;
+            const calibratedMedian = 25 + ((jchsBurden - 50) / 10); // Rough calibration
+            rentBurdenScore = (calibratedMedian - 25) * 3;
+            rentBurdenSource = 'jchs_2025';
         } else {
-            // Fallback when FRED housing data is not available
-            // Apply rent penalty based on known high-cost states
-            let rentPenalty = 0;
-            const TIER1 = ['CA', 'NY', 'MA', 'HI', 'DC', 'NJ']; // +45 (crisis)
-            const TIER2 = ['WA', 'CO', 'FL', 'MD', 'MN', 'CT', 'OR']; // +25 (severe)
-            const TIER3 = ['NH', 'VA', 'AZ', 'NV', 'TX', 'IL', 'RI', 'VT', 'AK']; // +15 (elevated)
+            // Fallback: use tier-based estimates if no data available
+            const TIER1 = ['CA', 'NY', 'MA', 'HI', 'DC', 'NJ']; // ~32%+ rent burden
+            const TIER2 = ['WA', 'CO', 'FL', 'MD', 'MN', 'CT', 'OR']; // ~29-31%
+            const TIER3 = ['NH', 'VA', 'AZ', 'NV', 'TX', 'IL', 'RI', 'VT', 'AK']; // ~27-29%
 
-            if (TIER1.includes(abbr)) rentPenalty = 45;
-            else if (TIER2.includes(abbr)) rentPenalty = 25;
-            else if (TIER3.includes(abbr)) rentPenalty = 15;
-
-            // Use baseline: 100 + estimated 5% HPI change + rent penalty
-            const rawValue = 100 + 15 + rentPenalty; // 15 = 5 * 3 (estimated average HPI change)
-            let stressValue = rawValue * regionalMultiplier;
-
-            states[stateCode].housing_stress = {
-                value: Math.round(Math.max(80, Math.min(200, stressValue))),
-                change: parseFloat((Math.random() * 6 + 2).toFixed(1)), // Estimated positive change
-                rank: null
-            };
+            if (TIER1.includes(abbr)) rentBurdenScore = 21; // (32-25)*3
+            else if (TIER2.includes(abbr)) rentBurdenScore = 12; // (29-25)*3
+            else if (TIER3.includes(abbr)) rentBurdenScore = 6; // (27-25)*3
+            rentBurdenSource = 'tier_estimate';
         }
+
+        // Calculate FMR score (relative cost compared to national average)
+        let fmrScore = 0;
+        let fmrSource = 'default';
+
+        if (stateFMR) {
+            // Primary source: HUD Fair Market Rents API
+            const fmrRatio = stateFMR.fmr_2br / nationalAvgFMR;
+            fmrScore = (fmrRatio - 1) * 40; // +40 points per 100% above average
+            fmrSource = 'hud_fmr';
+        } else if (jchsState && jchsState.median_rent) {
+            // Secondary source: JCHS median rent by state
+            const nationalAvgJCHS = 1200; // Approximate national median from JCHS
+            const fmrRatio = jchsState.median_rent / nationalAvgJCHS;
+            fmrScore = (fmrRatio - 1) * 40;
+            fmrSource = 'jchs_2025';
+        } else {
+            // Fallback: known high-cost states
+            const HIGH_COST = ['CA', 'NY', 'MA', 'HI', 'DC', 'NJ', 'WA', 'CO', 'MD', 'CT'];
+            if (HIGH_COST.includes(abbr)) fmrScore = 15;
+            fmrSource = 'tier_estimate';
+        }
+
+        // Housing price change impact (from FRED HPI)
+        const hpiChange = hpi?.change || 5; // Default 5% if unavailable
+        const hpiScore = hpiChange * 2; // Each 1% HPI change adds 2 points
+
+        // Combine all factors into housing stress score
+        // BASE 100 + rent burden impact + FMR impact + HPI impact
+        const rawHousingStress = 100 + rentBurdenScore + fmrScore + hpiScore;
+        let stressValue = rawHousingStress * regionalMultiplier;
+
+        // Apply trends boost if available
+        if (trends?.housing_stress?.[abbr]) {
+            stressValue += (trends.housing_stress[abbr] / 8);
+        }
+
+        states[stateCode].housing_stress = {
+            value: Math.round(Math.max(80, Math.min(200, stressValue))),
+            change: parseFloat(hpiChange.toFixed(1)),
+            rank: null
+        };
 
         // Affordability: Composite of housing costs, poverty, and regional cost of living
         // Housing weight increased slightly to reflect cost of living crisis
@@ -501,9 +674,16 @@ function calculateIndices(unemployment, housing, poverty, rent = null, trends = 
         states[stateCode].metrics = {
             unemployment_rate: unemployment?.[abbr]?.value || null,
             poverty_rate: poverty?.[abbr]?.povertyRate || null,
-            median_rent: rent?.[abbr] || null,
+            rent_burden_pct: rentBurden?.[abbr]?.medianRentBurden || jchsState?.renters_cost_burdened || null,
+            rent_burden_source: rentBurdenSource,
+            fair_market_rent_2br: fmr?.[abbr]?.fmr_2br || jchsState?.median_rent || null,
+            fmr_source: fmrSource,
             housing_price_change: housing?.[abbr]?.change || null,
-            regional_stress_multiplier: regionalMultiplier
+            regional_stress_multiplier: regionalMultiplier,
+            // JCHS reference data (authoritative calibration)
+            jchs_renters_cost_burdened: jchsState?.renters_cost_burdened || null,
+            jchs_renters_severely_burdened: jchsState?.renters_severely_burdened || null,
+            jchs_median_rent: jchsState?.median_rent || null
         };
 
         states[stateCode].affordability = {
@@ -602,11 +782,16 @@ async function main() {
     console.log('🚀 Starting real data fetch for Financial Health Barometer');
     console.log('━'.repeat(50));
 
-    // Fetch data from all sources (Google Trends last to avoid quota issues affecting other fetches)
-    const [unemployment, housing, poverty] = await Promise.all([
+    // Load JCHS reference data (static, authoritative calibration source)
+    const jchs = loadJCHSReferenceData();
+
+    // Fetch data from all sources in parallel
+    const [unemployment, housing, poverty, rentBurden, fmr] = await Promise.all([
         fetchBLSUnemployment(),
         fetchFREDHousingPrices(),
-        fetchCensusPoverty()
+        fetchCensusPoverty(),
+        fetchCensusRentBurden(),
+        fetchHUDFairMarketRents()
     ]);
 
     // Fetch Google Trends separately (with quota protection)
@@ -614,22 +799,25 @@ async function main() {
 
     console.log('━'.repeat(50));
 
-    // Calculate indices with all data sources
+    // Calculate indices with all data sources including JCHS calibration
     console.log('🔢 Calculating composite indices...');
-    const states = calculateIndices(unemployment, housing, poverty, trends);
+    const states = calculateIndices(unemployment, housing, poverty, rentBurden, fmr, jchs, trends);
     const national = calculateNational(states);
 
     // Build output
     const output = {
         meta: {
             generated: new Date().toISOString(),
-            version: '2.2',
-            source: 'BLS, FRED, Census Bureau, Google Trends APIs',
+            version: '2.4',
+            source: 'BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs',
             update_frequency: 'daily',
             data_sources: {
                 unemployment: unemployment ? 'BLS LAUS' : 'estimated',
-                housing: housing ? 'FRED HPI' : 'estimated',
+                housing_prices: housing ? 'FRED HPI' : 'estimated',
                 poverty: poverty ? 'Census SAIPE' : 'estimated',
+                rent_burden: rentBurden ? 'Census ACS B25071' : (jchs ? 'Harvard JCHS 2025' : 'estimated'),
+                fair_market_rent: fmr ? 'HUD FMR API' : (jchs ? 'Harvard JCHS 2025' : 'estimated'),
+                jchs_calibration: jchs ? 'Harvard JCHS State of the Nation\'s Housing 2025' : 'not loaded',
                 trends: trends ? 'Google Trends' : 'not used'
             }
         },
@@ -639,6 +827,7 @@ async function main() {
             national: generateTimeseries(national)
         }
     };
+
 
 
     // Write outputs

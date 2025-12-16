@@ -23,12 +23,13 @@ jobs:
           GOOGLE_TRENDS_API_KEY: ${{ secrets.GOOGLE_TRENDS_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+          HUD_API_KEY: ${{ secrets.HUD_API_KEY }}
         run: |
           # Create data directories if missing
           mkdir -p data/raw
           
-          # Fetch real economic data from BLS, FRED, Census APIs
-          # (BLS works without key, FRED/Census need keys in secrets)
+          # Fetch real economic data from BLS, FRED, Census, HUD APIs
+          # Note: JCHS reference data is loaded from data/jchs-reference-2025.json
           node scripts/fetch-real-data.js
           
           # Fallback: If real data fetch had issues, run legacy pipeline

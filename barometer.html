@@ -1091,10 +1091,16 @@
                                 <td>Primary driver for <em>Financial Anxiety</em>. Baseline set at 3.5%.</td>
                             </tr>
                             <tr>
-                                <td><strong>Median Gross Rent</strong></td>
+                                <td><strong>Rent Burden %</strong></td>
                                 <td>Census Bureau</td>
-                                <td>ACS 1-Year Estimates (Variable B25064_001E) / Annual</td>
-                                <td>Used for <em>Housing Stress</em> "Rent Burden" tiers.</td>
+                                <td>ACS 1-Year Estimates (Table B25071) / Annual</td>
+                                <td>Primary driver for <em>Housing Stress</em>. 30%+ = cost-burdened.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fair Market Rent</strong></td>
+                                <td>HUD (Dept. of Housing)</td>
+                                <td>FMR API (2-BR median) / Annual</td>
+                                <td>Used for relative cost comparison in <em>Housing Stress</em>.</td>
                             </tr>
                             <tr>
                                 <td><strong>Poverty Rate</strong></td>
@@ -1119,17 +1125,21 @@
                 </div>
 
                 <div class="methodology-item">
-                    <h4>Housing Stress Calculation (Deep Dive)</h4>
-                    <p>To accurately reflect the housing crisis, we apply a <strong>Tiered Rent Burden</strong> penalty
-                        based on how much a state's median rent exceeds the national average:</p>
+                    <h4>Housing Stress Calculation (Data-Driven)</h4>
+                    <p>Housing Stress is calculated using three data-driven components:</p>
                     <ul>
-                        <li>🔴 <strong>Crisis Tier (+30 pts):</strong> Rent > 125% of National Avg (e.g., CA, NY, HI)
+                        <li><strong>Rent Burden Score:</strong> (State Rent Burden % - 25%) × 3<br>
+                            <em>Based on Census ACS B25071. 25% is the healthy baseline; 30%+ is cost-burdened.</em>
                         </li>
-                        <li>🟠 <strong>Severe Tier (+20 pts):</strong> Rent > 110% of National Avg (e.g., FL, WA, CO)
+                        <li><strong>FMR Score:</strong> (State FMR / National Avg FMR - 1) × 40<br>
+                            <em>Measures relative housing costs using HUD Fair Market Rents.</em>
                         </li>
-                        <li>🟡 <strong>Elevated Tier (+10 pts):</strong> Rent > 100% of National Avg (e.g., TX, AZ, NV)
+                        <li><strong>HPI Score:</strong> Housing Price Change % × 2<br>
+                            <em>Year-over-year home price appreciation from FRED.</em>
                         </li>
                     </ul>
+                    <p><strong>Formula:</strong> Housing Stress = (100 + Rent Burden Score + FMR Score + HPI Score) ×
+                        Regional Multiplier</p>
                 </div>
 
                 <div class="methodology-item">
