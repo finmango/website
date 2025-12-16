@@ -599,10 +599,13 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         } else if (jchsState) {
             // Secondary source: Harvard JCHS 2025 (authoritative research)
             // Use renter cost burden % directly (already accounts for 30%+ threshold)
-            // Convert to same scale: JCHS reports % of renters burdened, not median %
-            // National avg is ~50% renters burdened → calibrate to ~27% median
+            // CALIBRATION: If 50% of renters are cost burdened (paying >30%), 
+            // the median rent burden is exactly 30%.
+            // Logic: Map 50% JCHS Burden -> 30% Median Rent Burden equivalent
             const jchsBurden = jchsState.renters_cost_burdened || 50;
-            const calibratedMedian = 25 + ((jchsBurden - 50) / 10); // Rough calibration
+            // Base 30% median + 0.5% for every 1% increase in burden
+            const calibratedMedian = 30 + ((jchsBurden - 50) * 0.5);
+
             rentBurdenScore = (calibratedMedian - 25) * 3;
             rentBurdenSource = 'jchs_2025';
         } else {
