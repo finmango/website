@@ -85,18 +85,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function getColorForValue(value, indicator) {
-        // Simplified quantile logic for demo. 
-        // Real logic would calculate dynamically based on distribution.
+        // Standardized Scale: Matches Map Legend & Methodology
+        // < 90      : Low       (Green)
+        // 90 - 120  : Moderate  (Yellow)
+        // 120 - 150 : Elevated  (Orange)
+        // > 150     : High      (Red)
 
-        // Special lower thresholds for Housing Stress to emphasize crisis
-        if (indicator === 'housing_stress') {
-            if (value < 90) return '#10B981'; // Green (Low)
-            if (value < 110) return '#F59E0B'; // Yellow (Moderate) - Lowered from 120
-            if (value < 135) return '#F97316'; // Orange (Elevated) - Lowered from 150
-            return '#EF4444'; // Red (High) - Now triggers at > 135
-        }
-
-        // Standard thresholds for other indicators
         if (value < 90) return '#10B981'; // Green (Low)
         if (value < 120) return '#F59E0B'; // Yellow (Moderate)
         if (value < 150) return '#F97316'; // Orange (Elevated)

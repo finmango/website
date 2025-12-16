@@ -113,11 +113,12 @@ When Harvard JCHS data is used:
 
 ## Index Scaling
 
-All indices are bounded to 80-200:
-- **80:** Theoretical minimum (excellent conditions)
-- **100:** Baseline (national average conditions)
-- **120-140:** Elevated stress
-- **160+:** Crisis level
+Indices are relative measures of economic stress, scaled 80-200 to maximize volatility visibility:
+
+- **< 90 (Green):** Low Stress / Stable (Healthy Baseline)
+- **90 - 120 (Yellow):** Moderate Stress
+- **120 - 150 (Orange):** Elevated Stress - Warning Signs
+- **> 150 (Red):** Crisis Level - Immediate Attention Needed
 
 ## Update Frequency
 
