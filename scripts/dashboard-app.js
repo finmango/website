@@ -47,11 +47,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Initialization ---
     async function init() {
-        showDebugStatus('init() started');
-
         // Load Map SVG
         await loadMapSVG();
-        showDebugStatus('loadMapSVG() completed');
 
         // Check if data is loaded
         if (typeof DASHBOARD_DATA === 'undefined') {
