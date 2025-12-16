@@ -75,18 +75,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         const stateCount = Object.keys(DASHBOARD_DATA.states || {}).length;
         showDebugStatus('States in data: ' + stateCount);
 
-        // Initialize UI
-        updateHeader();
-        updateIndicatorCards();
-        initMapInteraction();
-        initChart();
-        initRankings();
-        setupEventListeners();
+        // Initialize UI with error handling for each function
+        try { updateHeader(); showDebugStatus('updateHeader OK'); }
+        catch (e) { showDebugStatus('ERROR in updateHeader: ' + e.message); }
+
+        try { updateIndicatorCards(); showDebugStatus('updateIndicatorCards OK'); }
+        catch (e) { showDebugStatus('ERROR in updateIndicatorCards: ' + e.message); }
+
+        try { initMapInteraction(); showDebugStatus('initMapInteraction OK'); }
+        catch (e) { showDebugStatus('ERROR in initMapInteraction: ' + e.message); }
+
+        try { initChart(); showDebugStatus('initChart OK'); }
+        catch (e) { showDebugStatus('ERROR in initChart: ' + e.message); }
+
+        try { initRankings(); showDebugStatus('initRankings OK'); }
+        catch (e) { showDebugStatus('ERROR in initRankings: ' + e.message); }
+
+        try { setupEventListeners(); showDebugStatus('setupEventListeners OK'); }
+        catch (e) { showDebugStatus('ERROR in setupEventListeners: ' + e.message); }
 
         // Initial View Update
         showDebugStatus('Calling updateMapView...');
-        updateMapView(APP_STATE.currentIndicator);
-        updateRankingsTable();
+        try {
+            updateMapView(APP_STATE.currentIndicator);
+            showDebugStatus('updateMapView OK');
+        } catch (e) {
+            showDebugStatus('ERROR in updateMapView: ' + e.message);
+        }
+
+        try { updateRankingsTable(); showDebugStatus('updateRankingsTable OK'); }
+        catch (e) { showDebugStatus('ERROR in updateRankingsTable: ' + e.message); }
+
         showDebugStatus('init() completed!');
     }
 
