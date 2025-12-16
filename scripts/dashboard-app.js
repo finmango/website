@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Method 1: Try fetch (works on http/https)
         try {
-            const response = await fetch('us-map.svg');
+            const response = await fetch('us-map-v2.svg');
             if (response.ok) {
                 svgText = await response.text();
             }
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             try {
                 svgText = await new Promise((resolve, reject) => {
                     const xhr = new XMLHttpRequest();
-                    xhr.open('GET', 'us-map.svg', true);
+                    xhr.open('GET', 'us-map-v2.svg', true);
                     xhr.onload = () => {
                         if (xhr.status === 200 || xhr.status === 0) { // status 0 for file://
                             resolve(xhr.responseText);
