@@ -3,7 +3,10 @@
  * Handles map interaction, data visualization, animations, and UI updates
  */
 
+console.log('[dashboard-app.js] Script file loaded successfully');
+
 document.addEventListener('DOMContentLoaded', async () => {
+    console.log('[dashboard-app.js] DOMContentLoaded fired');
     // --- State Management ---
     const APP_STATE = {
         currentIndicator: 'financial_anxiety',
