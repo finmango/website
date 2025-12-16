@@ -46,7 +46,7 @@ Each of the four key indices is constructed from a weighted mix of structural da
 *Measures the burden of shelter costs relative to income.*
 *   **Primary Inputs:**
     *   **Rent Burden:** Census ACS (Median Gross Rent as % of Income).
-    *   **Market Price:** HUD Fair Market Rents (FMR) - 40th percentile rents.
+    *   **Market Price:** HUD Fair Market Rents (FMR). *Calculation:* State-level FMR is derived from the **median of all county-level 2-Bedroom FMRs** (FY2025 data).
     *   **Calibration:** Harvard JCHS 2025 Cost Burden data.
 *   **Behavioral Signal (Search Terms):**
     *   `"eviction help"` (Displacement risk)
