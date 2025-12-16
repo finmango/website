@@ -491,9 +491,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Download CSV
         if (els.downloadCsv) {
             els.downloadCsv.addEventListener('click', () => {
+                // Generate CSV from DASHBOARD_DATA
+                const headers = ['State', 'Financial Anxiety', 'Food Insecurity', 'Housing Stress', 'Affordability'];
+                let csvContent = headers.join(',') + '\n';
+
+                Object.values(DASHBOARD_DATA.states).forEach(state => {
+                    const row = [
+                        `"${state.name}"`,
+                        state.financial_anxiety.value.toFixed(1),
+                        state.food_insecurity.value.toFixed(1),
+                        state.housing_stress.value.toFixed(1),
+                        state.affordability.value.toFixed(1)
+                    ];
+                    csvContent += row.join(',') + '\n';
+                });
+
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
-                link.href = 'data/finmango-financial-health-latest.csv';
-                link.download = `finmango-barometer-data-${new Date().toISOString().split('T')[0]}.csv`;
+                link.setAttribute('href', url);
+                link.setAttribute('download', `finmango-barometer-data-${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = 'hidden';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
