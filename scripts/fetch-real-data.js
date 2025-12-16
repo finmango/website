@@ -508,7 +508,7 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         'KY': 1.18, 'TN': 1.12, 'SC': 1.15, 'GA': 1.10, 'NC': 1.08,
         'OK': 1.15, 'NM': 1.18, 'AZ': 1.10,
         // High cost of living states - different type of stress
-        'CA': 1.12, 'NY': 1.10, 'HI': 1.20, 'FL': 1.15, 'NV': 1.12,
+        'CA': 1.12, 'NY': 1.15, 'HI': 1.20, 'FL': 1.15, 'NV': 1.12,
         'NJ': 1.05, 'MA': 1.02, 'CT': 1.02, 'DC': 1.18,
         // Mountain/Midwest - moderate stress
         'TX': 1.05, 'CO': 1.02, 'OR': 1.05, 'WA': 1.02, 'ID': 1.05,
