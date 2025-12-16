@@ -351,11 +351,11 @@ function calculateIndices(unemployment, housing, poverty, rent = null, trends = 
         // Mountain/Midwest - moderate stress
         'TX': 1.05, 'CO': 1.02, 'OR': 1.05, 'WA': 1.02, 'ID': 1.05,
         'MT': 1.00, 'WY': 0.95, 'UT': 1.02, 'AK': 1.08,
-        // Industrial Midwest - moderate to elevated
+        // Industrial Midwest - includes MN (Twin Cities crisis)
         'MI': 1.08, 'OH': 1.06, 'IN': 1.04, 'IL': 1.05, 'PA': 1.02,
-        'MO': 1.05, 'KS': 1.00, 'NE': 0.95, 'IA': 0.92,
+        'MO': 1.05, 'KS': 1.00, 'NE': 0.95, 'IA': 0.92, 'MN': 1.12,
         // New England/Upper Midwest - lower stress
-        'VT': 0.92, 'NH': 0.88, 'ME': 0.95, 'MN': 0.90, 'WI': 0.95,
+        'VT': 0.92, 'NH': 0.88, 'ME': 0.95, 'WI': 0.95,
         'ND': 0.85, 'SD': 0.88, 'RI': 0.98, 'DE': 1.00, 'MD': 1.00,
         'VA': 0.98
     };
@@ -440,8 +440,8 @@ function calculateIndices(unemployment, housing, poverty, rent = null, trends = 
             } else {
                 // Fallback list logic if API fails - these are known housing crisis states
                 const TIER1 = ['CA', 'NY', 'MA', 'HI', 'DC']; // +25 (crisis level)
-                const TIER2 = ['NJ', 'WA', 'CO', 'FL', 'MD']; // +15 (severe)
-                const TIER3 = ['OR', 'NH', 'CT', 'VA', 'AZ', 'NV', 'TX']; // +5 (elevated)
+                const TIER2 = ['NJ', 'WA', 'CO', 'FL', 'MD', 'MN']; // +15 (severe) - MN has Twin Cities crisis
+                const TIER3 = ['OR', 'NH', 'CT', 'VA', 'AZ', 'NV', 'TX', 'IL']; // +5 (elevated)
 
                 if (TIER1.includes(abbr)) rentPenalty = 25;
                 else if (TIER2.includes(abbr)) rentPenalty = 15;
