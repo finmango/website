@@ -4,6 +4,7 @@
  */
 
 console.log('[dashboard-app.js] Script file loaded successfully');
+alert('DEBUG: dashboard-app.js is loading!'); // TEMP: Remove after debugging
 
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('[dashboard-app.js] DOMContentLoaded fired');
