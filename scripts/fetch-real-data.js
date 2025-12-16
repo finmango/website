@@ -424,31 +424,32 @@ function calculateIndices(unemployment, housing, poverty, rent = null, trends = 
 
             // "High Rent" States Boost (Tiered Rent Burden Logic - Data Backed)
             // Tiers: Crisis (>125%), Severe (>110%), Elevated (>100%)
+            // REDUCED penalties to avoid all states hitting the cap
             let rentPenalty = 0;
 
             if (rent && rent[abbr]) {
                 const stateRent = rent[abbr];
 
                 if (stateRent > nationalAvgRent * 1.25) {
-                    rentPenalty = 30; // Crisis (CA, NY, HI)
+                    rentPenalty = 15; // Crisis (CA, NY, HI) - reduced from 30
                 } else if (stateRent > nationalAvgRent * 1.10) {
-                    rentPenalty = 20; // Severe (FL, CO, WA)
+                    rentPenalty = 10; // Severe (FL, CO, WA) - reduced from 20
                 } else if (stateRent > nationalAvgRent) {
-                    rentPenalty = 10; // Elevated (TX, AZ, NV)
+                    rentPenalty = 5; // Elevated (TX, AZ, NV) - reduced from 10
                 }
             } else {
                 // Fallback list logic if API fails
-                const TIER1 = ['CA', 'NY', 'MA', 'HI', 'DC']; // +30
-                const TIER2 = ['NJ', 'WA', 'CO', 'FL', 'MD']; // +20
-                const TIER3 = ['OR', 'NH', 'CT', 'VA', 'AZ', 'NV', 'TX']; // +10
+                const TIER1 = ['CA', 'NY', 'MA', 'HI', 'DC']; // +15
+                const TIER2 = ['NJ', 'WA', 'CO', 'FL', 'MD']; // +10
+                const TIER3 = ['OR', 'NH', 'CT', 'VA', 'AZ', 'NV', 'TX']; // +5
 
-                if (TIER1.includes(abbr)) rentPenalty = 30;
-                else if (TIER2.includes(abbr)) rentPenalty = 20;
-                else if (TIER3.includes(abbr)) rentPenalty = 10;
+                if (TIER1.includes(abbr)) rentPenalty = 15;
+                else if (TIER2.includes(abbr)) rentPenalty = 10;
+                else if (TIER3.includes(abbr)) rentPenalty = 5;
             }
 
-            // Start at 135 (higher baseline) + price change impact (6x multiplier) + rent penalty
-            const rawValue = 135 + (hpi.change || 5) * 6 + rentPenalty;
+            // ADJUSTED: Base 100 (down from 135) + price change (3x, down from 6x) + rent penalty
+            const rawValue = 100 + (hpi.change || 5) * 3 + rentPenalty;
             let stressValue = rawValue * regionalMultiplier;
 
             // Apply trends boost
@@ -457,7 +458,7 @@ function calculateIndices(unemployment, housing, poverty, rent = null, trends = 
             }
 
             states[stateCode].housing_stress = {
-                value: Math.round(Math.max(100, Math.min(250, stressValue))),
+                value: Math.round(Math.max(80, Math.min(200, stressValue))), // Cap at 200 instead of 250
                 change: parseFloat((hpi.change || 5).toFixed(1)),
                 rank: null
             };
