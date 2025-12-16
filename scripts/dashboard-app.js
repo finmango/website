@@ -492,15 +492,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (els.downloadCsv) {
             els.downloadCsv.addEventListener('click', () => {
                 // Generate CSV from DASHBOARD_DATA
-                const headers = ['State', 'Financial Anxiety', 'Food Insecurity', 'Housing Stress', 'Affordability'];
+                const headers = [
+                    'State',
+                    'Financial Anxiety Index', 'Unemployment Rate (%)',
+                    'Food Insecurity Index', 'Poverty Rate (%)',
+                    'Housing Stress Index', 'Rent Burden (%)', 'Fair Market Rent ($)',
+                    'Affordability Index'
+                ];
                 let csvContent = headers.join(',') + '\n';
 
                 Object.values(DASHBOARD_DATA.states).forEach(state => {
+                    const m = state.metrics || {};
                     const row = [
                         `"${state.name}"`,
                         state.financial_anxiety.value.toFixed(1),
+                        m.unemployment_rate ? m.unemployment_rate.toFixed(1) : '',
                         state.food_insecurity.value.toFixed(1),
+                        m.poverty_rate ? m.poverty_rate.toFixed(1) : '',
                         state.housing_stress.value.toFixed(1),
+                        m.rent_burden_pct ? m.rent_burden_pct.toFixed(1) : '',
+                        m.fair_market_rent_2br ? m.fair_market_rent_2br : '',
                         state.affordability.value.toFixed(1)
                     ];
                     csvContent += row.join(',') + '\n';
