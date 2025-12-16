@@ -230,14 +230,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     function updateMapView(indicator) {
         // Colorize States
         const paths = els.usMap.querySelectorAll('path');
+        console.log(`[updateMapView] Found ${paths.length} paths. Indicator: ${indicator}`);
+        let coloredCount = 0;
         paths.forEach(path => {
             const stateCode = path.id;
             const stateData = DASHBOARD_DATA.states[stateCode];
             if (stateData) {
                 const val = stateData[indicator].value;
-                path.style.fill = getColorForValue(val, indicator);
+                const color = getColorForValue(val, indicator);
+                path.style.fill = color;
+                coloredCount++;
             }
         });
+        console.log(`[updateMapView] Colored ${coloredCount} states with data-driven colors.`);
     }
 
 
