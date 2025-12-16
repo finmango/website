@@ -572,6 +572,48 @@ function calculateRanks(states) {
 }
 
 /**
+ * Apply Z-Score normalization to all indicators
+ * Transforms raw values to z-scores then scales to display range (50-200, centered at 100)
+ * This provides statistical rigor while preserving relative rankings
+ */
+function applyZScoreNormalization(states) {
+    const indicators = ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability'];
+
+    for (const indicator of indicators) {
+        // Collect all values for this indicator
+        const values = Object.values(states).map(s => s[indicator].value);
+
+        // Calculate mean and standard deviation
+        const n = values.length;
+        const mean = values.reduce((a, b) => a + b, 0) / n;
+        const variance = values.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / n;
+        const stdDev = Math.sqrt(variance);
+
+        // Store stats for reference (optional: could add to output)
+        console.log(`[Z-Score] ${indicator}: mean=${mean.toFixed(1)}, stdDev=${stdDev.toFixed(1)}`);
+
+        // Apply z-score transformation + scaling
+        // z-score = (value - mean) / stdDev
+        // scaled = 100 + (z-score * 30)  => centers at 100, ±1 stdDev = ±30 points
+        for (const stateCode of Object.keys(states)) {
+            const originalValue = states[stateCode][indicator].value;
+
+            if (stdDev > 0) {
+                const zScore = (originalValue - mean) / stdDev;
+                // Scale: 100 is average, each stdDev adds/removes 30 points
+                // Clamp to 50-200 range
+                const scaledValue = Math.round(100 + (zScore * 30));
+                states[stateCode][indicator].value = Math.max(50, Math.min(200, scaledValue));
+
+                // Store original for transparency
+                states[stateCode][indicator].raw_value = originalValue;
+                states[stateCode][indicator].z_score = parseFloat(zScore.toFixed(2));
+            }
+        }
+    }
+}
+
+/**
  * Calculate national aggregates
  */
 function calculateNational(states) {
@@ -617,15 +659,22 @@ async function main() {
     // Calculate indices with all data sources
     console.log('🔢 Calculating composite indices...');
     const states = calculateIndices(unemployment, housing, poverty, trends);
+
+    // Apply z-score normalization for statistical rigor
+    console.log('📊 Applying z-score normalization...');
+    applyZScoreNormalization(states);
+
+    // Calculate national aggregates (after normalization)
     const national = calculateNational(states);
 
     // Build output
     const output = {
         meta: {
             generated: new Date().toISOString(),
-            version: '2.2',
+            version: '2.3',  // Updated for z-score normalization
             source: 'BLS, FRED, Census Bureau, Google Trends APIs',
             update_frequency: 'daily',
+            methodology: 'z-score normalized composite index',
             data_sources: {
                 unemployment: unemployment ? 'BLS LAUS' : 'estimated',
                 housing: housing ? 'FRED HPI' : 'estimated',
