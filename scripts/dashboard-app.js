@@ -172,7 +172,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 // The SVG uses data-id="XX" format, we need to add id="US-XX" for our data lookup
                 els.usMap.querySelectorAll('path[data-id]').forEach(path => {
-                    path.style.fill = '#e5e7eb'; // Set default light grey immediately to prevent dark flash
                     const stateAbbr = path.getAttribute('data-id');
                     if (stateAbbr && stateAbbr.length === 2) {
                         path.id = 'US-' + stateAbbr.toUpperCase();
