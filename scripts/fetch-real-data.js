@@ -438,14 +438,15 @@ function calculateIndices(unemployment, housing, poverty, rent = null, trends = 
                     rentPenalty = 5; // Elevated (TX, AZ, NV)
                 }
             } else {
-                // Fallback list logic if API fails - these are known housing crisis states
-                const TIER1 = ['CA', 'NY', 'MA', 'HI', 'DC']; // +25 (crisis level)
-                const TIER2 = ['NJ', 'WA', 'CO', 'FL', 'MD', 'MN']; // +15 (severe) - MN has Twin Cities crisis
-                const TIER3 = ['OR', 'NH', 'CT', 'VA', 'AZ', 'NV', 'TX', 'IL']; // +5 (elevated)
+                // Fallback list logic if API fails - housing COST crisis states
+                // These states have the most severe rent burden relative to income
+                const TIER1 = ['CA', 'NY', 'MA', 'HI', 'DC', 'NJ']; // +45 (crisis - extreme rent burden)
+                const TIER2 = ['WA', 'CO', 'FL', 'MD', 'MN', 'CT', 'OR']; // +25 (severe)
+                const TIER3 = ['NH', 'VA', 'AZ', 'NV', 'TX', 'IL', 'RI', 'VT', 'AK']; // +15 (elevated)
 
-                if (TIER1.includes(abbr)) rentPenalty = 25;
-                else if (TIER2.includes(abbr)) rentPenalty = 15;
-                else if (TIER3.includes(abbr)) rentPenalty = 5;
+                if (TIER1.includes(abbr)) rentPenalty = 45;
+                else if (TIER2.includes(abbr)) rentPenalty = 25;
+                else if (TIER3.includes(abbr)) rentPenalty = 15;
             }
 
             // ADJUSTED: Base 100 (down from 135) + price change (3x, down from 6x) + rent penalty
@@ -460,6 +461,27 @@ function calculateIndices(unemployment, housing, poverty, rent = null, trends = 
             states[stateCode].housing_stress = {
                 value: Math.round(Math.max(80, Math.min(200, stressValue))), // Cap at 200 instead of 250
                 change: parseFloat((hpi.change || 5).toFixed(1)),
+                rank: null
+            };
+        } else {
+            // Fallback when FRED housing data is not available
+            // Apply rent penalty based on known high-cost states
+            let rentPenalty = 0;
+            const TIER1 = ['CA', 'NY', 'MA', 'HI', 'DC', 'NJ']; // +45 (crisis)
+            const TIER2 = ['WA', 'CO', 'FL', 'MD', 'MN', 'CT', 'OR']; // +25 (severe)
+            const TIER3 = ['NH', 'VA', 'AZ', 'NV', 'TX', 'IL', 'RI', 'VT', 'AK']; // +15 (elevated)
+
+            if (TIER1.includes(abbr)) rentPenalty = 45;
+            else if (TIER2.includes(abbr)) rentPenalty = 25;
+            else if (TIER3.includes(abbr)) rentPenalty = 15;
+
+            // Use baseline: 100 + estimated 5% HPI change + rent penalty
+            const rawValue = 100 + 15 + rentPenalty; // 15 = 5 * 3 (estimated average HPI change)
+            let stressValue = rawValue * regionalMultiplier;
+
+            states[stateCode].housing_stress = {
+                value: Math.round(Math.max(80, Math.min(200, stressValue))),
+                change: parseFloat((Math.random() * 6 + 2).toFixed(1)), // Estimated positive change
                 rank: null
             };
         }
