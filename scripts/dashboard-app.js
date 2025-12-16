@@ -84,7 +84,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     function getColorForValue(value, indicator) {
         // Simplified quantile logic for demo. 
         // Real logic would calculate dynamically based on distribution.
-        // Assuming values roughly 50-200.
+
+        // Special lower thresholds for Housing Stress to emphasize crisis
+        if (indicator === 'housing_stress') {
+            if (value < 90) return '#10B981'; // Green (Low)
+            if (value < 110) return '#F59E0B'; // Yellow (Moderate) - Lowered from 120
+            if (value < 135) return '#F97316'; // Orange (Elevated) - Lowered from 150
+            return '#EF4444'; // Red (High) - Now triggers at > 135
+        }
+
+        // Standard thresholds for other indicators
         if (value < 90) return '#10B981'; // Green (Low)
         if (value < 120) return '#F59E0B'; // Yellow (Moderate)
         if (value < 150) return '#F97316'; // Orange (Elevated)
@@ -116,24 +125,65 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Map Implementation ---
     async function loadMapSVG() {
+        // Try multiple loading methods to handle both http:// and file:// protocols
+        let svgText = null;
+
+        // Method 1: Try fetch (works on http/https)
         try {
             const response = await fetch('us-map.svg');
-            if (!response.ok) throw new Error('SVG not found');
-            const svgText = await response.text();
-            els.usMap.innerHTML = svgText;
-
-            // The SVG uses data-id="XX" format, we need to add id="US-XX" for our data lookup
-            els.usMap.querySelectorAll('path[data-id]').forEach(path => {
-                const stateAbbr = path.getAttribute('data-id');
-                if (stateAbbr && stateAbbr.length === 2) {
-                    path.id = 'US-' + stateAbbr.toUpperCase();
-                }
-            });
-
-            console.log('US Map SVG loaded successfully');
+            if (response.ok) {
+                svgText = await response.text();
+            }
         } catch (e) {
-            console.warn('Could not load US map SVG, using fallback grid:', e);
+            console.log('Fetch failed, trying XMLHttpRequest...');
         }
+
+        // Method 2: Try XMLHttpRequest (sometimes works on file://)
+        if (!svgText) {
+            try {
+                svgText = await new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', 'us-map.svg', true);
+                    xhr.onload = () => {
+                        if (xhr.status === 200 || xhr.status === 0) { // status 0 for file://
+                            resolve(xhr.responseText);
+                        } else {
+                            reject(new Error('XHR failed'));
+                        }
+                    };
+                    xhr.onerror = () => reject(new Error('XHR error'));
+                    xhr.send();
+                });
+            } catch (e) {
+                console.log('XMLHttpRequest also failed:', e);
+            }
+        }
+
+        // If we got the SVG, inject it
+        if (svgText && svgText.includes('<svg')) {
+            // Extract just the inner content if it's a full SVG
+            const parser = new DOMParser();
+            const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+            const svgEl = svgDoc.querySelector('svg');
+
+            if (svgEl) {
+                // Copy all child nodes into our container SVG
+                els.usMap.innerHTML = svgEl.innerHTML;
+
+                // The SVG uses data-id="XX" format, we need to add id="US-XX" for our data lookup
+                els.usMap.querySelectorAll('path[data-id]').forEach(path => {
+                    const stateAbbr = path.getAttribute('data-id');
+                    if (stateAbbr && stateAbbr.length === 2) {
+                        path.id = 'US-' + stateAbbr.toUpperCase();
+                    }
+                });
+
+                console.log('US Map SVG loaded successfully');
+                return;
+            }
+        }
+
+        console.warn('Could not load US map SVG, will use fallback grid');
     }
 
     // Quick Fix: Since I didn't put the SVG file, let's create a "Mock" Map Loader for the agent task 

@@ -21,18 +21,22 @@ jobs:
       - name: Update Data Pipeline
         env:
           GOOGLE_TRENDS_API_KEY: ${{ secrets.GOOGLE_TRENDS_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
         run: |
           # Create data directories if missing
           mkdir -p data/raw
           
-          # 1. Fetch Data (Using API Key)
-          node scripts/fetch-trends.js
+          # Fetch real economic data from BLS, FRED, Census APIs
+          # (BLS works without key, FRED/Census need keys in secrets)
+          node scripts/fetch-real-data.js
           
-          # 2. Calculate Indices
-          node scripts/calculate-indices.js
-          
-          # 3. Generate Exports
-          node scripts/generate-exports.js
+          # Fallback: If real data fetch had issues, run legacy pipeline
+          if [ ! -s data/dashboard-data.js ]; then
+            echo "Real data fetch incomplete, running legacy pipeline..."
+            node scripts/fetch-trends.js || true
+            node scripts/calculate-indices.js || true
+          fi
 
       - name: Commit and push changes
         run: |

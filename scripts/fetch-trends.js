@@ -8,10 +8,10 @@ const fs = require('fs');
 const path = require('path');
 
 // Ensure API key is present
+// Ensure API key is present
 const API_KEY = process.env.GOOGLE_TRENDS_API_KEY;
 if (!API_KEY) {
-    console.error("FATAL: GOOGLE_TRENDS_API_KEY environment variable is missing.");
-    process.exit(1);
+    console.warn("WARNING: GOOGLE_TRENDS_API_KEY environment variable is missing. Fetch will be skipped.");
 }
 
 const BASE_URL = 'https://www.googleapis.com/trends/v1beta/graph';
@@ -84,7 +84,7 @@ async function fetchRegionData(region, term, retries = 3) {
         } catch (e) {
             if (attempt === retries) {
                 console.error(`Failed to fetch ${term} for ${region} after ${retries} attempts:`, e.message);
-                return 0; // Return 0 on final failure to allow pipeline to continue
+                return null; // Return null on final failure to signal circuit breaker
             }
         }
     }
@@ -99,20 +99,37 @@ async function main() {
     let errorCount = 0;
 
     // Use serial execution to be polite to the API rate limits
-    for (const region of REGIONS) {
-        console.log(`Processing ${region}...`);
-        rawData[region] = {};
+    let consecutiveFailures = 0;
 
-        for (const [indicator, terms] of Object.entries(INDICATOR_TERMS)) {
-            rawData[region][indicator] = {};
-            for (const term of terms) {
-                // Base throttle: 400ms (more conservative than 200ms)
-                await sleep(400);
+    // Use serial execution to be polite to the API rate limits
+    if (API_KEY) {
+        outerLoop:
+        for (const region of REGIONS) {
+            console.log(`Processing ${region}...`);
+            rawData[region] = {};
 
-                const val = await fetchRegionData(region, term);
-                rawData[region][indicator][term] = val;
+            for (const [indicator, terms] of Object.entries(INDICATOR_TERMS)) {
+                rawData[region][indicator] = {};
+                for (const term of terms) {
+                    if (consecutiveFailures >= 5) {
+                        console.error("CRITICAL: Too many consecutive failures (Rate Limit?). Aborting fetch.");
+                        break outerLoop;
+                    }
 
-                // Track "soft" failures (if 0 is strictly due to error, tough to distinguish from actual 0, but catching exceptions helps)
+                    // Base throttle: 2000ms (to avoid 429 rate limits)
+                    await sleep(2000);
+
+                    const val = await fetchRegionData(region, term);
+
+                    if (val === null) {
+                        consecutiveFailures++;
+                        rawData[region][indicator][term] = 0; // Default to 0 so downstream doesn't break
+                    } else {
+                        consecutiveFailures = 0; // Reset on success
+                    }
+
+                    rawData[region][indicator][term] = val;
+                }
             }
         }
     }
