@@ -424,27 +424,27 @@ function calculateIndices(unemployment, housing, poverty, rent = null, trends = 
 
             // "High Rent" States Boost (Tiered Rent Burden Logic - Data Backed)
             // Tiers: Crisis (>125%), Severe (>110%), Elevated (>100%)
-            // REDUCED penalties to avoid all states hitting the cap
+            // Penalties tuned so high-cost states like CA/NY show as red
             let rentPenalty = 0;
 
             if (rent && rent[abbr]) {
                 const stateRent = rent[abbr];
 
                 if (stateRent > nationalAvgRent * 1.25) {
-                    rentPenalty = 15; // Crisis (CA, NY, HI) - reduced from 30
+                    rentPenalty = 25; // Crisis (CA, NY, HI) - enough to push to red zone
                 } else if (stateRent > nationalAvgRent * 1.10) {
-                    rentPenalty = 10; // Severe (FL, CO, WA) - reduced from 20
+                    rentPenalty = 15; // Severe (FL, CO, WA)
                 } else if (stateRent > nationalAvgRent) {
-                    rentPenalty = 5; // Elevated (TX, AZ, NV) - reduced from 10
+                    rentPenalty = 5; // Elevated (TX, AZ, NV)
                 }
             } else {
-                // Fallback list logic if API fails
-                const TIER1 = ['CA', 'NY', 'MA', 'HI', 'DC']; // +15
-                const TIER2 = ['NJ', 'WA', 'CO', 'FL', 'MD']; // +10
-                const TIER3 = ['OR', 'NH', 'CT', 'VA', 'AZ', 'NV', 'TX']; // +5
+                // Fallback list logic if API fails - these are known housing crisis states
+                const TIER1 = ['CA', 'NY', 'MA', 'HI', 'DC']; // +25 (crisis level)
+                const TIER2 = ['NJ', 'WA', 'CO', 'FL', 'MD']; // +15 (severe)
+                const TIER3 = ['OR', 'NH', 'CT', 'VA', 'AZ', 'NV', 'TX']; // +5 (elevated)
 
-                if (TIER1.includes(abbr)) rentPenalty = 15;
-                else if (TIER2.includes(abbr)) rentPenalty = 10;
+                if (TIER1.includes(abbr)) rentPenalty = 25;
+                else if (TIER2.includes(abbr)) rentPenalty = 15;
                 else if (TIER3.includes(abbr)) rentPenalty = 5;
             }
 
