@@ -1,10 +1,10 @@
 // Financial Health Barometer Data
-// Auto-generated: 2025-12-31T05:24:29.377Z
+// Auto-generated: 2026-01-01T05:15:09.706Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
   "meta": {
-    "generated": "2025-12-31T05:24:29.377Z",
+    "generated": "2026-01-01T05:15:09.705Z",
     "version": "2.4",
     "source": "BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs",
     "update_frequency": "daily",
@@ -21,12 +21,12 @@ const DASHBOARD_DATA = {
   "national": {
     "financial_anxiety": {
       "value": 136.8,
-      "change": 3.2,
+      "change": 0,
       "trend": "up"
     },
     "food_insecurity": {
-      "value": 128.3,
-      "change": 6.3,
+      "value": 128.7,
+      "change": 5.9,
       "trend": "up"
     },
     "housing_stress": {
@@ -36,7 +36,7 @@ const DASHBOARD_DATA = {
     },
     "affordability": {
       "value": 140.8,
-      "change": 6.3,
+      "change": 5.7,
       "trend": "up"
     }
   },
@@ -46,13 +46,13 @@ const DASHBOARD_DATA = {
       "abbr": "AL",
       "financial_anxiety": {
         "value": 134,
-        "change": -15.2,
+        "change": 0,
         "rank": 28
       },
       "food_insecurity": {
-        "value": 152,
-        "change": 7.6,
-        "rank": 3
+        "value": 149,
+        "change": 7.5,
+        "rank": 4
       },
       "housing_stress": {
         "value": 164,
@@ -61,7 +61,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 156,
-        "change": 7.9,
+        "change": 5.4,
         "rank": 10
       },
       "metrics": {
@@ -83,13 +83,13 @@ const DASHBOARD_DATA = {
       "abbr": "AK",
       "financial_anxiety": {
         "value": 153,
-        "change": -2.1,
+        "change": 0,
         "rank": 14
       },
       "food_insecurity": {
-        "value": 128,
-        "change": 10,
-        "rank": 24
+        "value": 129,
+        "change": 6,
+        "rank": 23
       },
       "housing_stress": {
         "value": 149,
@@ -98,7 +98,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 139,
-        "change": 4.2,
+        "change": 3.3,
         "rank": 28
       },
       "metrics": {
@@ -120,13 +120,13 @@ const DASHBOARD_DATA = {
       "abbr": "AZ",
       "financial_anxiety": {
         "value": 146,
-        "change": 10.5,
+        "change": 0,
         "rank": 17
       },
       "food_insecurity": {
-        "value": 131,
-        "change": 3.8,
-        "rank": 19
+        "value": 138,
+        "change": 6.9,
+        "rank": 10
       },
       "housing_stress": {
         "value": 148,
@@ -135,7 +135,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 139,
-        "change": 6.3,
+        "change": 6.9,
         "rank": 29
       },
       "metrics": {
@@ -157,13 +157,13 @@ const DASHBOARD_DATA = {
       "abbr": "AR",
       "financial_anxiety": {
         "value": 155,
-        "change": 11.4,
+        "change": 0,
         "rank": 12
       },
       "food_insecurity": {
-        "value": 142,
-        "change": 8.7,
-        "rank": 7
+        "value": 144,
+        "change": 8.3,
+        "rank": 6
       },
       "housing_stress": {
         "value": 156,
@@ -172,7 +172,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 150,
-        "change": 6,
+        "change": 5.2,
         "rank": 15
       },
       "metrics": {
@@ -194,12 +194,12 @@ const DASHBOARD_DATA = {
       "abbr": "CA",
       "financial_anxiety": {
         "value": 177,
-        "change": 1.8,
+        "change": 0,
         "rank": 2
       },
       "food_insecurity": {
-        "value": 140,
-        "change": 9.1,
+        "value": 139,
+        "change": 4.5,
         "rank": 9
       },
       "housing_stress": {
@@ -209,7 +209,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 158,
-        "change": 3.5,
+        "change": 7.7,
         "rank": 8
       },
       "metrics": {
@@ -231,13 +231,13 @@ const DASHBOARD_DATA = {
       "abbr": "CO",
       "financial_anxiety": {
         "value": 133,
-        "change": -8.9,
+        "change": 0,
         "rank": 29
       },
       "food_insecurity": {
-        "value": 129,
-        "change": 10,
-        "rank": 21
+        "value": 115,
+        "change": 5,
+        "rank": 43
       },
       "housing_stress": {
         "value": 144,
@@ -246,7 +246,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 133,
-        "change": 6.1,
+        "change": 5.7,
         "rank": 37
       },
       "metrics": {
@@ -268,13 +268,13 @@ const DASHBOARD_DATA = {
       "abbr": "CT",
       "financial_anxiety": {
         "value": 128,
-        "change": 18.7,
+        "change": 0,
         "rank": 36
       },
       "food_insecurity": {
-        "value": 120,
-        "change": 6.2,
-        "rank": 41
+        "value": 124,
+        "change": 4.3,
+        "rank": 33
       },
       "housing_stress": {
         "value": 183,
@@ -283,7 +283,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 157,
-        "change": 4.9,
+        "change": 3.7,
         "rank": 9
       },
       "metrics": {
@@ -305,13 +305,13 @@ const DASHBOARD_DATA = {
       "abbr": "DE",
       "financial_anxiety": {
         "value": 138,
-        "change": 25,
+        "change": 0,
         "rank": 22
       },
       "food_insecurity": {
-        "value": 125,
-        "change": 7,
-        "rank": 31
+        "value": 127,
+        "change": 7.7,
+        "rank": 26
       },
       "housing_stress": {
         "value": 155,
@@ -320,7 +320,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 139,
-        "change": 3.7,
+        "change": 5.1,
         "rank": 30
       },
       "metrics": {
@@ -342,13 +342,13 @@ const DASHBOARD_DATA = {
       "abbr": "DC",
       "financial_anxiety": {
         "value": 199,
-        "change": 17,
+        "change": 0,
         "rank": 1
       },
       "food_insecurity": {
-        "value": 134,
-        "change": 9,
-        "rank": 14
+        "value": 135,
+        "change": 6.5,
+        "rank": 15
       },
       "housing_stress": {
         "value": 150,
@@ -357,7 +357,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 144,
-        "change": 5.5,
+        "change": 4.6,
         "rank": 21
       },
       "metrics": {
@@ -379,13 +379,13 @@ const DASHBOARD_DATA = {
       "abbr": "FL",
       "financial_anxiety": {
         "value": 146,
-        "change": 11.4,
+        "change": 0,
         "rank": 18
       },
       "food_insecurity": {
-        "value": 132,
-        "change": 6.2,
-        "rank": 17
+        "value": 136,
+        "change": 5.7,
+        "rank": 12
       },
       "housing_stress": {
         "value": 184,
@@ -394,7 +394,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 163,
-        "change": 6.1,
+        "change": 8.8,
         "rank": 4
       },
       "metrics": {
@@ -416,13 +416,13 @@ const DASHBOARD_DATA = {
       "abbr": "GA",
       "financial_anxiety": {
         "value": 130,
-        "change": -5.6,
+        "change": 0,
         "rank": 33
       },
       "food_insecurity": {
         "value": 126,
-        "change": 3.1,
-        "rank": 28
+        "change": 8.1,
+        "rank": 29
       },
       "housing_stress": {
         "value": 165,
@@ -431,7 +431,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 150,
-        "change": 3.7,
+        "change": 4,
         "rank": 16
       },
       "metrics": {
@@ -453,12 +453,12 @@ const DASHBOARD_DATA = {
       "abbr": "HI",
       "financial_anxiety": {
         "value": 122,
-        "change": -16.7,
+        "change": 0,
         "rank": 39
       },
       "food_insecurity": {
-        "value": 144,
-        "change": 2.5,
+        "value": 148,
+        "change": 7.4,
         "rank": 5
       },
       "housing_stress": {
@@ -468,7 +468,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 166,
-        "change": 5.3,
+        "change": 5.6,
         "rank": 3
       },
       "metrics": {
@@ -490,13 +490,13 @@ const DASHBOARD_DATA = {
       "abbr": "ID",
       "financial_anxiety": {
         "value": 130,
-        "change": -2.6,
+        "change": 0,
         "rank": 34
       },
       "food_insecurity": {
-        "value": 123,
-        "change": 10,
-        "rank": 33
+        "value": 134,
+        "change": 2.3,
+        "rank": 16
       },
       "housing_stress": {
         "value": 130,
@@ -505,7 +505,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 126,
-        "change": 5.3,
+        "change": 5.2,
         "rank": 43
       },
       "metrics": {
@@ -527,13 +527,13 @@ const DASHBOARD_DATA = {
       "abbr": "IL",
       "financial_anxiety": {
         "value": 143,
-        "change": -12,
+        "change": 0,
         "rank": 20
       },
       "food_insecurity": {
-        "value": 124,
-        "change": 7.3,
-        "rank": 32
+        "value": 129,
+        "change": 4.8,
+        "rank": 24
       },
       "housing_stress": {
         "value": 163,
@@ -542,7 +542,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 146,
-        "change": 7.3,
+        "change": 6.5,
         "rank": 19
       },
       "metrics": {
@@ -564,13 +564,13 @@ const DASHBOARD_DATA = {
       "abbr": "IN",
       "financial_anxiety": {
         "value": 129,
-        "change": -15.9,
+        "change": 0,
         "rank": 35
       },
       "food_insecurity": {
-        "value": 126,
-        "change": 7.9,
-        "rank": 29
+        "value": 131,
+        "change": 9.8,
+        "rank": 21
       },
       "housing_stress": {
         "value": 146,
@@ -579,7 +579,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 135,
-        "change": 7.5,
+        "change": 8.1,
         "rank": 33
       },
       "metrics": {
@@ -601,13 +601,13 @@ const DASHBOARD_DATA = {
       "abbr": "IA",
       "financial_anxiety": {
         "value": 114,
-        "change": 12.1,
+        "change": 0,
         "rank": 42
       },
       "food_insecurity": {
-        "value": 110,
-        "change": 6.6,
-        "rank": 46
+        "value": 111,
+        "change": 8.9,
+        "rank": 48
       },
       "housing_stress": {
         "value": 114,
@@ -616,7 +616,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 111,
-        "change": 5.4,
+        "change": 8.5,
         "rank": 49
       },
       "metrics": {
@@ -643,7 +643,7 @@ const DASHBOARD_DATA = {
       },
       "food_insecurity": {
         "value": 126,
-        "change": 8.4,
+        "change": 6.4,
         "rank": 30
       },
       "housing_stress": {
@@ -653,7 +653,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 126,
-        "change": 5.2,
+        "change": 6.6,
         "rank": 44
       },
       "metrics": {
@@ -675,13 +675,13 @@ const DASHBOARD_DATA = {
       "abbr": "KY",
       "financial_anxiety": {
         "value": 167,
-        "change": -11.3,
+        "change": 0,
         "rank": 6
       },
       "food_insecurity": {
-        "value": 143,
-        "change": 9.2,
-        "rank": 6
+        "value": 136,
+        "change": 4.4,
+        "rank": 13
       },
       "housing_stress": {
         "value": 160,
@@ -690,7 +690,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 150,
-        "change": 4.5,
+        "change": 5.9,
         "rank": 17
       },
       "metrics": {
@@ -712,13 +712,13 @@ const DASHBOARD_DATA = {
       "abbr": "LA",
       "financial_anxiety": {
         "value": 177,
-        "change": -4.3,
+        "change": 0,
         "rank": 3
       },
       "food_insecurity": {
         "value": 164,
-        "change": 9.2,
-        "rank": 1
+        "change": 2.5,
+        "rank": 2
       },
       "housing_stress": {
         "value": 161,
@@ -727,7 +727,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 156,
-        "change": 4.7,
+        "change": 4,
         "rank": 11
       },
       "metrics": {
@@ -749,13 +749,13 @@ const DASHBOARD_DATA = {
       "abbr": "ME",
       "financial_anxiety": {
         "value": 109,
-        "change": -5.9,
+        "change": 0,
         "rank": 45
       },
       "food_insecurity": {
-        "value": 108,
-        "change": 5,
-        "rank": 47
+        "value": 111,
+        "change": 4.2,
+        "rank": 49
       },
       "housing_stress": {
         "value": 151,
@@ -764,7 +764,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 134,
-        "change": 3.3,
+        "change": 4.8,
         "rank": 35
       },
       "metrics": {
@@ -786,13 +786,13 @@ const DASHBOARD_DATA = {
       "abbr": "MD",
       "financial_anxiety": {
         "value": 125,
-        "change": 18.7,
+        "change": 0,
         "rank": 38
       },
       "food_insecurity": {
-        "value": 122,
-        "change": 3.2,
-        "rank": 35
+        "value": 123,
+        "change": 5.8,
+        "rank": 34
       },
       "housing_stress": {
         "value": 159,
@@ -801,7 +801,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 141,
-        "change": 7,
+        "change": 5,
         "rank": 24
       },
       "metrics": {
@@ -823,13 +823,13 @@ const DASHBOARD_DATA = {
       "abbr": "MA",
       "financial_anxiety": {
         "value": 144,
-        "change": 11.9,
+        "change": 0,
         "rank": 19
       },
       "food_insecurity": {
-        "value": 127,
-        "change": 9.7,
-        "rank": 26
+        "value": 118,
+        "change": 5.1,
+        "rank": 41
       },
       "housing_stress": {
         "value": 175,
@@ -838,7 +838,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 152,
-        "change": 8.4,
+        "change": 6.6,
         "rank": 12
       },
       "metrics": {
@@ -864,9 +864,9 @@ const DASHBOARD_DATA = {
         "rank": 8
       },
       "food_insecurity": {
-        "value": 137,
-        "change": 4.1,
-        "rank": 12
+        "value": 126,
+        "change": 4.6,
+        "rank": 31
       },
       "housing_stress": {
         "value": 164,
@@ -875,7 +875,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 148,
-        "change": 5.4,
+        "change": 7.2,
         "rank": 18
       },
       "metrics": {
@@ -897,13 +897,13 @@ const DASHBOARD_DATA = {
       "abbr": "MN",
       "financial_anxiety": {
         "value": 138,
-        "change": 19.4,
+        "change": 0,
         "rank": 23
       },
       "food_insecurity": {
-        "value": 139,
-        "change": 8.4,
-        "rank": 10
+        "value": 140,
+        "change": 4.9,
+        "rank": 8
       },
       "housing_stress": {
         "value": 149,
@@ -912,7 +912,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 141,
-        "change": 7.4,
+        "change": 8.8,
         "rank": 25
       },
       "metrics": {
@@ -934,13 +934,13 @@ const DASHBOARD_DATA = {
       "abbr": "MS",
       "financial_anxiety": {
         "value": 169,
-        "change": 11.8,
+        "change": 0,
         "rank": 5
       },
       "food_insecurity": {
-        "value": 162,
-        "change": 5.9,
-        "rank": 2
+        "value": 170,
+        "change": 2.1,
+        "rank": 1
       },
       "housing_stress": {
         "value": 177,
@@ -949,7 +949,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 168,
-        "change": 6.1,
+        "change": 5.4,
         "rank": 2
       },
       "metrics": {
@@ -971,13 +971,13 @@ const DASHBOARD_DATA = {
       "abbr": "MO",
       "financial_anxiety": {
         "value": 137,
-        "change": 10.8,
+        "change": 0,
         "rank": 24
       },
       "food_insecurity": {
-        "value": 127,
-        "change": 9.9,
-        "rank": 27
+        "value": 133,
+        "change": 2.6,
+        "rank": 18
       },
       "housing_stress": {
         "value": 143,
@@ -986,7 +986,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 134,
-        "change": 6.3,
+        "change": 3.9,
         "rank": 36
       },
       "metrics": {
@@ -1012,9 +1012,9 @@ const DASHBOARD_DATA = {
         "rank": 43
       },
       "food_insecurity": {
-        "value": 118,
-        "change": 4.2,
-        "rank": 43
+        "value": 119,
+        "change": 7.7,
+        "rank": 39
       },
       "housing_stress": {
         "value": 130,
@@ -1023,7 +1023,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 124,
-        "change": 8.1,
+        "change": 7.6,
         "rank": 46
       },
       "metrics": {
@@ -1045,13 +1045,13 @@ const DASHBOARD_DATA = {
       "abbr": "NE",
       "financial_anxiety": {
         "value": 105,
-        "change": 3.4,
+        "change": 0,
         "rank": 47
       },
       "food_insecurity": {
-        "value": 112,
-        "change": 7.7,
-        "rank": 45
+        "value": 119,
+        "change": 2.9,
+        "rank": 40
       },
       "housing_stress": {
         "value": 128,
@@ -1060,7 +1060,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 121,
-        "change": 8.8,
+        "change": 3.6,
         "rank": 47
       },
       "metrics": {
@@ -1082,13 +1082,13 @@ const DASHBOARD_DATA = {
       "abbr": "NV",
       "financial_anxiety": {
         "value": 171,
-        "change": -7,
+        "change": 0,
         "rank": 4
       },
       "food_insecurity": {
-        "value": 141,
-        "change": 9.7,
-        "rank": 8
+        "value": 127,
+        "change": 8.9,
+        "rank": 27
       },
       "housing_stress": {
         "value": 165,
@@ -1097,7 +1097,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 151,
-        "change": 6.8,
+        "change": 8.2,
         "rank": 14
       },
       "metrics": {
@@ -1119,13 +1119,13 @@ const DASHBOARD_DATA = {
       "abbr": "NH",
       "financial_anxiety": {
         "value": 98,
-        "change": 11.1,
+        "change": 0,
         "rank": 48
       },
       "food_insecurity": {
-        "value": 108,
-        "change": 2.9,
-        "rank": 48
+        "value": 112,
+        "change": 6,
+        "rank": 46
       },
       "housing_stress": {
         "value": 147,
@@ -1134,7 +1134,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 129,
-        "change": 7.5,
+        "change": 3,
         "rank": 40
       },
       "metrics": {
@@ -1156,13 +1156,13 @@ const DASHBOARD_DATA = {
       "abbr": "NJ",
       "financial_anxiety": {
         "value": 158,
-        "change": 13,
+        "change": 0,
         "rank": 9
       },
       "food_insecurity": {
-        "value": 122,
-        "change": 5.4,
-        "rank": 36
+        "value": 128,
+        "change": 7,
+        "rank": 25
       },
       "housing_stress": {
         "value": 190,
@@ -1171,7 +1171,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 162,
-        "change": 7.4,
+        "change": 3,
         "rank": 5
       },
       "metrics": {
@@ -1193,13 +1193,13 @@ const DASHBOARD_DATA = {
       "abbr": "NM",
       "financial_anxiety": {
         "value": 154,
-        "change": -4.7,
+        "change": 0,
         "rank": 13
       },
       "food_insecurity": {
-        "value": 138,
-        "change": 3.2,
-        "rank": 11
+        "value": 134,
+        "change": 9.5,
+        "rank": 17
       },
       "housing_stress": {
         "value": 163,
@@ -1208,7 +1208,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 152,
-        "change": 7.6,
+        "change": 6.5,
         "rank": 13
       },
       "metrics": {
@@ -1230,13 +1230,13 @@ const DASHBOARD_DATA = {
       "abbr": "NY",
       "financial_anxiety": {
         "value": 152,
-        "change": -4.5,
+        "change": 0,
         "rank": 15
       },
       "food_insecurity": {
-        "value": 137,
-        "change": 4.3,
-        "rank": 13
+        "value": 144,
+        "change": 6.3,
+        "rank": 7
       },
       "housing_stress": {
         "value": 199,
@@ -1245,7 +1245,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 172,
-        "change": 5.9,
+        "change": 7.5,
         "rank": 1
       },
       "metrics": {
@@ -1271,9 +1271,9 @@ const DASHBOARD_DATA = {
         "rank": 30
       },
       "food_insecurity": {
-        "value": 123,
-        "change": 5.7,
-        "rank": 34
+        "value": 132,
+        "change": 8.1,
+        "rank": 20
       },
       "housing_stress": {
         "value": 157,
@@ -1282,7 +1282,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 144,
-        "change": 7.6,
+        "change": 4.2,
         "rank": 22
       },
       "metrics": {
@@ -1304,12 +1304,12 @@ const DASHBOARD_DATA = {
       "abbr": "ND",
       "financial_anxiety": {
         "value": 88,
-        "change": 4,
+        "change": 0,
         "rank": 50
       },
       "food_insecurity": {
-        "value": 104,
-        "change": 4.4,
+        "value": 99,
+        "change": 8.5,
         "rank": 51
       },
       "housing_stress": {
@@ -1319,7 +1319,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 100,
-        "change": 8.1,
+        "change": 8.8,
         "rank": 51
       },
       "metrics": {
@@ -1341,13 +1341,13 @@ const DASHBOARD_DATA = {
       "abbr": "OH",
       "financial_anxiety": {
         "value": 152,
-        "change": 9.1,
+        "change": 0,
         "rank": 16
       },
       "food_insecurity": {
-        "value": 120,
-        "change": 3.7,
-        "rank": 42
+        "value": 133,
+        "change": 9.3,
+        "rank": 19
       },
       "housing_stress": {
         "value": 153,
@@ -1356,7 +1356,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 141,
-        "change": 6.1,
+        "change": 5,
         "rank": 26
       },
       "metrics": {
@@ -1378,13 +1378,13 @@ const DASHBOARD_DATA = {
       "abbr": "OK",
       "financial_anxiety": {
         "value": 132,
-        "change": -3,
+        "change": 0,
         "rank": 32
       },
       "food_insecurity": {
-        "value": 133,
-        "change": 2.6,
-        "rank": 15
+        "value": 131,
+        "change": 2.1,
+        "rank": 22
       },
       "housing_stress": {
         "value": 146,
@@ -1393,7 +1393,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 141,
-        "change": 8.9,
+        "change": 4.1,
         "rank": 27
       },
       "metrics": {
@@ -1415,13 +1415,13 @@ const DASHBOARD_DATA = {
       "abbr": "OR",
       "financial_anxiety": {
         "value": 158,
-        "change": 23.8,
+        "change": 0,
         "rank": 10
       },
       "food_insecurity": {
-        "value": 132,
-        "change": 8.3,
-        "rank": 18
+        "value": 125,
+        "change": 2.9,
+        "rank": 32
       },
       "housing_stress": {
         "value": 141,
@@ -1430,7 +1430,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 133,
-        "change": 8,
+        "change": 3.6,
         "rank": 38
       },
       "metrics": {
@@ -1452,13 +1452,13 @@ const DASHBOARD_DATA = {
       "abbr": "PA",
       "financial_anxiety": {
         "value": 133,
-        "change": 10.8,
+        "change": 0,
         "rank": 31
       },
       "food_insecurity": {
-        "value": 129,
-        "change": 8,
-        "rank": 22
+        "value": 118,
+        "change": 2.2,
+        "rank": 42
       },
       "housing_stress": {
         "value": 152,
@@ -1467,7 +1467,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 138,
-        "change": 5.5,
+        "change": 6.3,
         "rank": 31
       },
       "metrics": {
@@ -1493,8 +1493,8 @@ const DASHBOARD_DATA = {
         "rank": 27
       },
       "food_insecurity": {
-        "value": 122,
-        "change": 2.1,
+        "value": 121,
+        "change": 7.7,
         "rank": 37
       },
       "housing_stress": {
@@ -1504,7 +1504,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 142,
-        "change": 5.6,
+        "change": 3.5,
         "rank": 23
       },
       "metrics": {
@@ -1526,13 +1526,13 @@ const DASHBOARD_DATA = {
       "abbr": "SC",
       "financial_anxiety": {
         "value": 157,
-        "change": -2.2,
+        "change": 0,
         "rank": 11
       },
       "food_insecurity": {
-        "value": 133,
-        "change": 8.5,
-        "rank": 16
+        "value": 137,
+        "change": 2.7,
+        "rank": 11
       },
       "housing_stress": {
         "value": 177,
@@ -1541,7 +1541,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 159,
-        "change": 4.8,
+        "change": 7.2,
         "rank": 7
       },
       "metrics": {
@@ -1563,12 +1563,12 @@ const DASHBOARD_DATA = {
       "abbr": "SD",
       "financial_anxiety": {
         "value": 82,
-        "change": 11.1,
+        "change": 0,
         "rank": 51
       },
       "food_insecurity": {
-        "value": 107,
-        "change": 4.3,
+        "value": 102,
+        "change": 9.8,
         "rank": 50
       },
       "housing_stress": {
@@ -1578,7 +1578,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 105,
-        "change": 8.2,
+        "change": 5.3,
         "rank": 50
       },
       "metrics": {
@@ -1600,13 +1600,13 @@ const DASHBOARD_DATA = {
       "abbr": "TN",
       "financial_anxiety": {
         "value": 136,
-        "change": -2.7,
+        "change": 0,
         "rank": 26
       },
       "food_insecurity": {
-        "value": 128,
-        "change": 6.8,
-        "rank": 25
+        "value": 136,
+        "change": 5.6,
+        "rank": 14
       },
       "housing_stress": {
         "value": 157,
@@ -1615,7 +1615,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 146,
-        "change": 7,
+        "change": 7.4,
         "rank": 20
       },
       "metrics": {
@@ -1637,13 +1637,13 @@ const DASHBOARD_DATA = {
       "abbr": "TX",
       "financial_anxiety": {
         "value": 137,
-        "change": -2.4,
+        "change": 0,
         "rank": 25
       },
       "food_insecurity": {
-        "value": 131,
-        "change": 9.5,
-        "rank": 20
+        "value": 121,
+        "change": 7.3,
+        "rank": 38
       },
       "housing_stress": {
         "value": 139,
@@ -1652,7 +1652,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 132,
-        "change": 6.7,
+        "change": 5.9,
         "rank": 39
       },
       "metrics": {
@@ -1674,13 +1674,13 @@ const DASHBOARD_DATA = {
       "abbr": "UT",
       "financial_anxiety": {
         "value": 121,
-        "change": 3,
+        "change": 0,
         "rank": 40
       },
       "food_insecurity": {
-        "value": 121,
-        "change": 2.9,
-        "rank": 39
+        "value": 122,
+        "change": 6.2,
+        "rank": 36
       },
       "housing_stress": {
         "value": 132,
@@ -1715,9 +1715,9 @@ const DASHBOARD_DATA = {
         "rank": 49
       },
       "food_insecurity": {
-        "value": 108,
-        "change": 7.4,
-        "rank": 49
+        "value": 113,
+        "change": 5.7,
+        "rank": 44
       },
       "housing_stress": {
         "value": 143,
@@ -1726,7 +1726,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 128,
-        "change": 5.6,
+        "change": 3.8,
         "rank": 41
       },
       "metrics": {
@@ -1748,13 +1748,13 @@ const DASHBOARD_DATA = {
       "abbr": "VA",
       "financial_anxiety": {
         "value": 118,
-        "change": 20.7,
+        "change": 0,
         "rank": 41
       },
       "food_insecurity": {
-        "value": 122,
-        "change": 6.2,
-        "rank": 38
+        "value": 123,
+        "change": 2.6,
+        "rank": 35
       },
       "housing_stress": {
         "value": 155,
@@ -1763,7 +1763,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 138,
-        "change": 3.1,
+        "change": 7.9,
         "rank": 32
       },
       "metrics": {
@@ -1785,13 +1785,13 @@ const DASHBOARD_DATA = {
       "abbr": "WA",
       "financial_anxiety": {
         "value": 141,
-        "change": 2.3,
+        "change": 0,
         "rank": 21
       },
       "food_insecurity": {
-        "value": 129,
-        "change": 2.3,
-        "rank": 23
+        "value": 127,
+        "change": 2.2,
+        "rank": 28
       },
       "housing_stress": {
         "value": 147,
@@ -1800,7 +1800,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 135,
-        "change": 7.1,
+        "change": 7.2,
         "rank": 34
       },
       "metrics": {
@@ -1822,13 +1822,13 @@ const DASHBOARD_DATA = {
       "abbr": "WV",
       "financial_anxiety": {
         "value": 165,
-        "change": -2.4,
+        "change": 0,
         "rank": 7
       },
       "food_insecurity": {
-        "value": 149,
-        "change": 3.6,
-        "rank": 4
+        "value": 156,
+        "change": 7,
+        "rank": 3
       },
       "housing_stress": {
         "value": 171,
@@ -1837,7 +1837,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 161,
-        "change": 8.6,
+        "change": 4.4,
         "rank": 6
       },
       "metrics": {
@@ -1859,13 +1859,13 @@ const DASHBOARD_DATA = {
       "abbr": "WI",
       "financial_anxiety": {
         "value": 107,
-        "change": 3.3,
+        "change": 0,
         "rank": 46
       },
       "food_insecurity": {
-        "value": 113,
-        "change": 5.1,
-        "rank": 44
+        "value": 112,
+        "change": 9.9,
+        "rank": 47
       },
       "housing_stress": {
         "value": 140,
@@ -1874,7 +1874,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 128,
-        "change": 7.3,
+        "change": 4,
         "rank": 42
       },
       "metrics": {
@@ -1896,13 +1896,13 @@ const DASHBOARD_DATA = {
       "abbr": "WY",
       "financial_anxiety": {
         "value": 111,
-        "change": -5.7,
+        "change": 0,
         "rank": 44
       },
       "food_insecurity": {
-        "value": 121,
-        "change": 2.7,
-        "rank": 40
+        "value": 113,
+        "change": 4.4,
+        "rank": 45
       },
       "housing_stress": {
         "value": 116,
@@ -1911,7 +1911,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 113,
-        "change": 7.8,
+        "change": 3.6,
         "rank": 48
       },
       "metrics": {
@@ -1933,37 +1933,37 @@ const DASHBOARD_DATA = {
     "national": {
       "financial_anxiety": [
         {
-          "date": "2025-07-01",
-          "value": 118
-        },
-        {
           "date": "2025-08-01",
-          "value": 123
+          "value": 117
+        },
+        {
+          "date": "2025-09-01",
+          "value": 122
         },
         {
           "date": "2025-10-01",
-          "value": 127
+          "value": 126
         },
         {
-          "date": "2025-10-01",
-          "value": 129
-        },
-        {
-          "date": "2025-12-01",
-          "value": 133
+          "date": "2025-11-01",
+          "value": 130
         },
         {
           "date": "2025-12-01",
-          "value": 139
+          "value": 135
+        },
+        {
+          "date": "2026-01-01",
+          "value": 138
         }
       ],
       "food_insecurity": [
         {
-          "date": "2025-07-01",
-          "value": 110
+          "date": "2025-08-01",
+          "value": 111
         },
         {
-          "date": "2025-08-01",
+          "date": "2025-09-01",
           "value": 115
         },
         {
@@ -1971,7 +1971,7 @@ const DASHBOARD_DATA = {
           "value": 118
         },
         {
-          "date": "2025-10-01",
+          "date": "2025-11-01",
           "value": 123
         },
         {
@@ -1979,60 +1979,60 @@ const DASHBOARD_DATA = {
           "value": 126
         },
         {
-          "date": "2025-12-01",
-          "value": 129
+          "date": "2026-01-01",
+          "value": 130
         }
       ],
       "housing_stress": [
         {
-          "date": "2025-07-01",
-          "value": 132
-        },
-        {
           "date": "2025-08-01",
-          "value": 138
+          "value": 131
+        },
+        {
+          "date": "2025-09-01",
+          "value": 135
         },
         {
           "date": "2025-10-01",
-          "value": 141
+          "value": 139
         },
         {
-          "date": "2025-10-01",
+          "date": "2025-11-01",
           "value": 146
         },
         {
           "date": "2025-12-01",
-          "value": 151
+          "value": 150
         },
         {
-          "date": "2025-12-01",
-          "value": 154
+          "date": "2026-01-01",
+          "value": 153
         }
       ],
       "affordability": [
         {
-          "date": "2025-07-01",
+          "date": "2025-08-01",
           "value": 122
         },
         {
-          "date": "2025-08-01",
-          "value": 126
+          "date": "2025-09-01",
+          "value": 124
         },
         {
           "date": "2025-10-01",
           "value": 131
         },
         {
-          "date": "2025-10-01",
+          "date": "2025-11-01",
           "value": 134
         },
         {
           "date": "2025-12-01",
-          "value": 137
+          "value": 139
         },
         {
-          "date": "2025-12-01",
-          "value": 143
+          "date": "2026-01-01",
+          "value": 142
         }
       ]
     }
