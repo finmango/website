@@ -2364,16 +2364,16 @@
     }
 
     body.has-announcement nav {
-      top: 44px !important;
+      top: var(--announcement-height) !important;
     }
 
     body.has-announcement .mobile-menu {
-      top: 44px !important;
-      height: calc(100vh - 44px) !important;
+      top: var(--announcement-height) !important;
+      height: calc(100vh - var(--announcement-height)) !important;
     }
 
     body.has-announcement .hero {
-      padding-top: calc(100px + 44px) !important;
+      padding-top: calc(100px + var(--announcement-height)) !important;
     }
 
     @media (max-width: 768px) {
@@ -2385,6 +2385,77 @@
       .announcement-close {
         right: 8px;
       }
+    }
+  </style>
+  <style>
+    /* Mobile Menu Accordion Overrides */
+    .mobile-menu {
+      padding: 5rem 1.5rem 2rem !important;
+    }
+
+    .mobile-menu a {
+      font-size: 1.5rem !important;
+      /* Smaller than 2rem */
+      padding: 1rem 0 !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .mobile-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      background: none;
+      border: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 1rem 0;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--black);
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+    }
+
+    .mobile-dropdown-toggle .arrow {
+      transition: transform 0.3s ease;
+      font-size: 1.2rem;
+    }
+
+    .mobile-dropdown-toggle.active .arrow {
+      transform: rotate(180deg);
+      color: var(--orange);
+    }
+
+    .mobile-dropdown-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+      background: #f9f9f9;
+      margin: 0 -1.5rem;
+      /* Full width background */
+      padding: 0 1.5rem;
+      /* Inner padding */
+    }
+
+    .mobile-dropdown-content.open {
+      max-height: 500px;
+      /* Arbitrary large height */
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-dropdown-content a {
+      font-size: 1.1rem !important;
+      padding: 0.75rem 0 !important;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+      color: var(--gray) !important;
+      padding-left: 1rem !important;
+    }
+
+    .mobile-dropdown-content a:hover {
+      color: var(--orange) !important;
+      padding-left: 1.5rem !important;
+      background: rgba(0, 0, 0, 0.02);
     }
   </style>
 </head>
@@ -2443,20 +2514,33 @@
     </div>
   </nav>
 
+
   <div class="mobile-menu" id="mobileMenu">
     <a href="about.html">About</a>
-    <a href="research.html">Research</a>
-    <a href="affordability-lab.html" class="mobile-sub-item">↳ Affordability Lab</a>
-    <a href="barometer.html" class="mobile-sub-item">↳ Barometer</a>
-    <a href="https://github.com/finmango/research" class="mobile-sub-item" target="_blank" rel="noopener noreferrer">↳
-      GitHub</a>
-    <a href="education.html">Education</a>
-    <a href="education.html#millionaire-mindset" class="mobile-sub-item">↳ Millionaire Mindset</a>
-    <a href="barrier-breakers.html" class="mobile-sub-item">↳ Barrier Breakers</a>
-    <a href="resources.html" class="mobile-sub-item">↳ Resources</a>
+
+    <div class="mobile-dropdown">
+      <button class="mobile-dropdown-toggle">Research <span class="arrow">▾</span></button>
+      <div class="mobile-dropdown-content">
+        <a href="research.html">Overview</a>
+        <a href="affordability-lab.html">Affordability Lab</a>
+        <a href="barometer.html">Barometer</a>
+        <a href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </div>
+
+    <div class="mobile-dropdown">
+      <button class="mobile-dropdown-toggle">Education <span class="arrow">▾</span></button>
+      <div class="mobile-dropdown-content">
+        <a href="education.html#millionaire-mindset">Millionaire Mindset</a>
+        <a href="barrier-breakers.html">Barrier Breakers</a>
+        <a href="resources.html">Resources</a>
+      </div>
+    </div>
+
     <a href="ambassadors.html">Ambassadors</a>
     <a href="donate.html">Donate</a>
   </div>
+
 
   <section class="hero">
     <canvas id="particle-canvas"></canvas>
@@ -3025,6 +3109,20 @@
         document.body.classList.remove('has-announcement');
         localStorage.setItem(storageKey, Date.now().toString());
       });
+
+      // Update height CSS variable
+      if (!announcementBar.classList.contains('hidden')) {
+        var updateHeight = function () {
+          var height = announcementBar.offsetHeight;
+          document.documentElement.style.setProperty('--announcement-height', height + 'px');
+        };
+
+        // Initial update
+        updateHeight();
+
+        // Update on resize
+        window.addEventListener('resize', updateHeight);
+      }
     })();
   </script>
   <script>
@@ -3167,6 +3265,25 @@
       // Initialize
       await loadMap();
       updateIndicators();
+    });
+  </script>
+
+
+  <script>
+    // Mobile Menu Accordion Logic
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggles = document.querySelectorAll('.mobile-dropdown-toggle');
+
+      toggles.forEach(toggle => {
+        toggle.addEventListener('click', function () {
+          // Toggle active class on button
+          this.classList.toggle('active');
+
+          // Toggle open class on content
+          const content = this.nextElementSibling;
+          content.classList.toggle('open');
+        });
+      });
     });
   </script>
 
