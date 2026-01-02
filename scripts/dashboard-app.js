@@ -125,21 +125,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Try multiple loading methods to handle both http:// and file:// protocols
         let svgText = null;
 
-        // Method 0: Check for inlined content (Fix for local file:// & legacy browsers)
-        if (typeof MAP_SVG_CONTENT !== 'undefined') {
-            svgText = MAP_SVG_CONTENT;
-        }
-
         // Method 1: Try fetch (works on http/https)
-        if (!svgText) {
-            try {
-                const response = await fetch('us-map-v2.svg');
-                if (response.ok) {
-                    svgText = await response.text();
-                }
-            } catch (e) {
-                console.log('Fetch failed, trying XMLHttpRequest...');
+        try {
+            const response = await fetch('us-map-v2.svg');
+            if (response.ok) {
+                svgText = await response.text();
             }
+        } catch (e) {
+            console.log('Fetch failed, trying XMLHttpRequest...');
         }
 
         // Method 2: Try XMLHttpRequest (sometimes works on file://)
@@ -466,43 +459,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Event Listeners Central ---
     function setupEventListeners() {
-        // Segmented Toggle Buttons (new)
-        const toggleBtns = document.querySelectorAll('.toggle-btn');
-        toggleBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Update toggle button active state
-                toggleBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                // Also update indicator cards to match
-                els.indicatorCards.forEach(c => c.classList.remove('active'));
-                const matchingCard = document.querySelector(`.indicator-card[data-indicator="${btn.dataset.indicator}"]`);
-                if (matchingCard) matchingCard.classList.add('active');
-
-                // Update State
-                APP_STATE.currentIndicator = btn.dataset.indicator;
-
-                // Update View
-                updateMapView(APP_STATE.currentIndicator);
-                updateRankingsTable();
-
-                // Update Chart Select to match
-                els.chartIndicatorSelect.value = APP_STATE.currentIndicator;
-                updateChart();
-            });
-        });
-
-        // Cards (keep existing functionality, also sync toggle)
+        // Cards
         els.indicatorCards.forEach(card => {
             card.addEventListener('click', () => {
                 // Active State
                 els.indicatorCards.forEach(c => c.classList.remove('active'));
                 card.classList.add('active');
-
-                // Also update toggle buttons to match
-                toggleBtns.forEach(b => b.classList.remove('active'));
-                const matchingToggle = document.querySelector(`.toggle-btn[data-indicator="${card.dataset.indicator}"]`);
-                if (matchingToggle) matchingToggle.classList.add('active');
 
                 // Update State
                 APP_STATE.currentIndicator = card.dataset.indicator;
