@@ -36,6 +36,8 @@
         gtag('config', 'G-DW5HBYS9JW');
     </script>
 
+    <link rel="stylesheet" href="styles/affordability-addons.css">
+
     <style>
         :root {
             --bg-color: #fafafa;
@@ -49,6 +51,9 @@
             --health-color: #E47C7C;
             --community-color: #9B7CE4;
             --literacy-color: #4ABFA0;
+            --white: #ffffff;
+            --orange: #FF6B35;
+            --light-gray: #f5f5f5;
         }
 
         * {
@@ -427,170 +432,281 @@
             margin-top: 32px;
         }
 
-        /* Physics Area */
-        .physics-area {
+        /* Animated Gradient Mesh Background */
+        .hero-gradient-bg {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        #constellation-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
+            overflow: hidden;
             z-index: 0;
         }
 
-        .node {
+        .gradient-blob {
             position: absolute;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            cursor: grab;
-            user-select: none;
-            transition: box-shadow 0.2s, transform 0.2s;
-            pointer-events: auto;
-            text-align: center;
-            line-height: 1.2;
-            padding: 8px;
-            background: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border: 2px solid transparent;
-            font-size: 0.85rem;
-            z-index: 1;
+            filter: blur(100px);
+            opacity: 0.5;
+            will-change: transform;
         }
 
-        .node:active {
-            cursor: grabbing;
-            transform: scale(1.1);
+        .blob-1 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+            top: -15%;
+            right: -10%;
+            animation: blob-float-1 20s ease-in-out infinite;
         }
 
-        .node:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-            transform: scale(1.05);
-            z-index: 10;
+        .blob-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, var(--transport-color) 0%, var(--housing-color) 100%);
+            bottom: -20%;
+            left: -10%;
+            animation: blob-float-2 25s ease-in-out infinite;
         }
 
-        .node.housing {
-            border-color: var(--housing-color);
-            color: var(--housing-color);
+        .blob-3 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--community-color) 0%, var(--literacy-color) 100%);
+            top: 50%;
+            left: 40%;
+            transform: translate(-50%, -50%);
+            animation: blob-float-3 30s ease-in-out infinite;
+            opacity: 0.3;
         }
 
-        .node.transport {
-            border-color: var(--transport-color);
-            color: var(--transport-color);
-        }
-
-        .node.health {
-            border-color: var(--health-color);
-            color: var(--health-color);
-        }
-
-        .node.food {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-        }
-
-        .node.tech {
-            border-color: var(--community-color);
-            color: var(--community-color);
-        }
-
-        .node.solution {
-            background: var(--text-color);
-            color: white;
-            border-color: var(--text-color);
-            z-index: 5;
-        }
-
-        /* Hint */
-        .physics-hint {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 1;
-            transition: opacity 0.5s;
-            pointer-events: none;
-        }
-
-        .physics-hint.hidden {
-            opacity: 0;
-        }
-
-        .physics-hint svg {
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
+        @keyframes blob-float-1 {
 
             0%,
             100% {
-                transform: scale(1);
-                opacity: 0.5;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+
+            25% {
+                transform: translate(-40px, 60px) scale(1.1) rotate(10deg);
             }
 
             50% {
-                transform: scale(1.2);
-                opacity: 1;
+                transform: translate(30px, 40px) scale(0.95) rotate(-5deg);
+            }
+
+            75% {
+                transform: translate(-20px, -30px) scale(1.05) rotate(5deg);
             }
         }
 
-        /* Control buttons */
-        .physics-controls {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 1000;
+        @keyframes blob-float-2 {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(50px, -40px) scale(1.15) rotate(-10deg);
+            }
+
+            66% {
+                transform: translate(-30px, 30px) scale(0.9) rotate(15deg);
+            }
+        }
+
+        @keyframes blob-float-3 {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            }
+
+            25% {
+                transform: translate(-45%, -55%) scale(1.2) rotate(20deg);
+            }
+
+            50% {
+                transform: translate(-55%, -45%) scale(0.85) rotate(-15deg);
+            }
+
+            75% {
+                transform: translate(-48%, -52%) scale(1.1) rotate(10deg);
+            }
+        }
+
+        /* Mobile adjustments for gradient blobs */
+        @media (max-width: 768px) {
+            .blob-1 {
+                width: 350px;
+                height: 350px;
+                top: -10%;
+                right: -20%;
+            }
+
+            .blob-2 {
+                width: 300px;
+                height: 300px;
+                bottom: -15%;
+                left: -15%;
+            }
+
+            .blob-3 {
+                width: 250px;
+                height: 250px;
+            }
+        }
+
+        /* What We Study Section */
+        .focus-areas-section {
+            padding: 100px 0;
+            background: linear-gradient(180deg, var(--bg-color) 0%, #f0f4f8 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .focus-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .focus-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+        }
+
+        .focus-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .focus-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .focus-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-color);
+        }
+
+        .focus-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Get Involved Section */
+        .get-involved-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.08) 0%, rgba(74, 144, 217, 0.08) 50%, rgba(155, 124, 228, 0.08) 100%);
+        }
+
+        .involve-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .involve-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 36px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
             display: flex;
-            gap: 12px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s;
+            flex-direction: column;
         }
 
-        .physics-controls.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .involve-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
         }
 
-        .physics-btn {
-            background: var(--text-color);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 100px;
+        .involve-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .involve-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-color);
+        }
+
+        .involve-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .involve-link {
+            display: inline-block;
+            margin-top: 16px;
+            color: var(--accent-color);
             font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
+            text-decoration: none;
             transition: all 0.2s;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .physics-btn:hover {
-            background: #333;
-            transform: translateY(-2px);
+        .involve-link:hover {
+            color: var(--text-color);
+            transform: translateX(4px);
         }
 
-        .physics-btn.solve-active {
-            background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+        /* Mobile Responsive for New Sections */
+        @media (max-width: 900px) {
+
+            .focus-grid,
+            .involve-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .focus-grid,
+            .involve-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .focus-areas-section,
+            .get-involved-section {
+                padding: 60px 0;
+            }
+        }
+
+        .map-footer-action {
+            text-align: center;
+            margin-top: 32px;
         }
 
         /* Sections */
@@ -920,10 +1036,204 @@
                 text-align: center;
             }
         }
+
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--white);
+            min-width: 240px;
+            box-shadow: 8px 8px 0 var(--text-color);
+            border: 3px solid var(--text-color);
+            z-index: 1001;
+            padding: 0.5rem 0;
+            margin-top: 0;
+        }
+
+        /* Bridge for hover */
+        .dropdown-content::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+        }
+
+
+
+        .dropdown-content::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent var(--text-color) transparent;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .dropdown-item {
+            color: var(--text-color) !important;
+            padding: 0.85rem 1.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 0.95rem !important;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Disable the underline effect from parent */
+        .nav-right .dropdown-item::after {
+            display: none !important;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--light-gray);
+            padding-left: 1.75rem;
+            color: var(--orange) !important;
+        }
+
+        .badge-beta {
+            display: inline-block;
+            background: var(--black);
+            color: var(--white);
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .dropdown-item:hover .badge-beta {
+            background: var(--orange);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
     </style>
+<style>
+    /* Announcement Bar */
+    .announcement-bar {
+      background: linear-gradient(135deg, var(--orange), #ff8c5a);
+      color: white;
+      text-align: center;
+      padding: 12px 48px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
+    }
+
+    .announcement-bar a {
+      color: white;
+      text-decoration: underline;
+      font-weight: 700;
+    }
+
+    .announcement-bar a:hover {
+      opacity: 0.9;
+    }
+
+    .announcement-close {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      opacity: 0.8;
+      transition: opacity 0.2s, transform 0.2s;
+      line-height: 1;
+    }
+
+    .announcement-close:hover {
+      opacity: 1;
+      transform: translateY(-50%) scale(1.2);
+    }
+
+    .announcement-bar.hidden {
+      display: none;
+    }
+
+    body.has-announcement nav {
+      top: 44px !important;
+    }
+
+    body.has-announcement .mobile-menu {
+      top: 44px !important;
+      height: calc(100vh - 44px) !important;
+    }
+    
+    body.has-announcement .hero {
+      padding-top: calc(100px + 44px) !important;
+    }
+
+    @media (max-width: 768px) {
+      .announcement-bar {
+        font-size: 0.85rem;
+        padding: 10px 40px 10px 16px;
+      }
+
+      .announcement-close {
+        right: 8px;
+      }
+    }
+</style>
 </head>
 
-<body>
+<body class="has-announcement">
+
+  <div class="announcement-bar" id="announcementBar">
+    🚀 <strong>Barrier Breakers:</strong> $20,000+ in prizes for high school students!
+    <a href="barrier-breakers.html">Apply by February 27 →</a>
+    <button class="announcement-close" id="closeAnnouncement" aria-label="Close announcement">×</button>
+  </div>
+
     <nav id="nav">
         <div class="nav-container">
             <a href="index.html" class="logo">
@@ -932,13 +1242,23 @@
 
             <div class="nav-right">
                 <a href="about.html">About</a>
-                <a href="research.html">Research</a>
-                <a href="education.html">Education</a>
+
+                <div class="dropdown">
+                    <a href="research.html" style="cursor: pointer;">Research ▾</a>
+                    <div class="dropdown-content">
+                        <a href="research.html" class="dropdown-item">Overview</a>
+                        <a href="affordability-lab.html" class="dropdown-item">Affordability Lab <span
+                                class="badge-beta">Beta</span></a>
+                        <a href="barometer.html" class="dropdown-item">Barometer 📊</a>
+                        <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank"
+                            rel="noopener noreferrer">GitHub 🔗</a>
+                    </div>
+                </div>
+
+                <div class="dropdown"><a href="education.html" style="cursor: pointer;">Education ▾</a><div class="dropdown-content"><a href="education.html#millionaire-mindset" class="dropdown-item">Millionaire Mindset 💰</a><a href="barrier-breakers.html" class="dropdown-item">Barrier Breakers 🚀</a><a href="resources.html" class="dropdown-item">Resources 🛠️</a></div></div>
                 <a href="ambassadors.html">Ambassadors</a>
-                <a href="resources.html">Resources</a>
-                <a href="https://www.finmango.org/barrier-breakers-apply" class="btn-get-involved"
-                    style="background: var(--accent-color); color: white !important; border-color: var(--accent-color);">Apply
-                    Now</a>
+                
+                <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
                 <a href="donate.html" class="btn-donate">Donate</a>
             </div>
 
@@ -955,96 +1275,237 @@
     <div class="mobile-menu" id="mobileMenu">
         <a href="about.html">About</a>
         <a href="research.html">Research</a>
-        <a href="education.html">Education</a>
+        <a href="affordability-lab.html" style="font-size: 1.5rem; padding-left: 2rem;">↳ Affordability Lab</a>
+        <a href="barometer.html" style="font-size: 1.5rem; padding-left: 2rem;">↳ Barometer</a>
+        <a href="https://github.com/finmango/research" style="font-size: 1.5rem; padding-left: 2rem;" target="_blank"
+            rel="noopener noreferrer">↳ GitHub</a>
+        <div class="dropdown"><a href="education.html" style="cursor: pointer;">Education ▾</a><div class="dropdown-content"><a href="education.html#millionaire-mindset" class="dropdown-item">Millionaire Mindset 💰</a><a href="barrier-breakers.html" class="dropdown-item">Barrier Breakers 🚀</a><a href="resources.html" class="dropdown-item">Resources 🛠️</a></div></div>
         <a href="ambassadors.html">Ambassadors</a>
-        <a href="resources.html">Resources</a>
+        
         <a href="donate.html">Donate</a>
     </div>
 
     <main>
         <section class="hero" id="hero-section">
-            <canvas id="constellation-canvas"></canvas>
-            <div class="physics-area" id="physics-area"></div>
+            <!-- Animated Gradient Mesh Background -->
+            <div class="hero-gradient-bg">
+                <div class="gradient-blob blob-1"></div>
+                <div class="gradient-blob blob-2"></div>
+                <div class="gradient-blob blob-3"></div>
+            </div>
+
+            <script src="scripts/us-map-content.js"></script>
+            <script src="data/student-map-data.js"></script>
+            <script src="scripts/affordability-map.js"></script>
 
             <div class="container">
                 <div class="hero-content">
                     <div class="hero-text">
                         <div class="hero-badge">AI + Social Impact</div>
-                        <h1><span>Affordability Lab</span> Innovation Challenge</h1>
+                        <h1><span>Affordability Lab</span></h1>
                         <p>
-                            Connect the dots. Solve real problems. Join our quarterly challenges to tackle affordability
-                            crises using AI and data.
+                            Exploring the intersection of AI, data, and financial health. We analyze affordability
+                            challenges facing young adults and develop solutions that matter.
                         </p>
                         <div class="hero-actions">
-                            <a href="#challenges" class="btn btn-primary">View Challenges</a>
-                            <a href="#how-it-works" class="btn btn-outline">How it Works</a>
+                            <a href="#focus-areas" class="btn btn-primary">Explore Research</a>
+                            <a href="#get-involved" class="btn btn-outline">Get Involved</a>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <div class="physics-hint" id="physics-hint">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10" />
-                    <circle cx="12" cy="12" r="3" />
-                </svg>
-                Move mouse to connect nodes
+        <!-- What We Study Section -->
+        <section id="focus-areas" class="focus-areas-section">
+            <div class="container">
+                <div class="section-header">
+                    <div class="section-label">Research Focus</div>
+                    <h2>What We Study</h2>
+                    <p class="section-subtitle">Tackling the biggest affordability barriers facing young adults.</p>
+                </div>
+
+                <div class="focus-grid">
+                    <div class="focus-card">
+                        <div class="focus-icon">🏠</div>
+                        <h3>Housing Costs</h3>
+                        <p>From rent burden to homeownership gaps, we analyze what keeps housing out of reach.</p>
+                    </div>
+                    <div class="focus-card">
+                        <div class="focus-icon">🚗</div>
+                        <h3>Transportation</h3>
+                        <p>Car dependency, auto loan burdens, and mobility equity across communities.</p>
+                    </div>
+                    <div class="focus-card">
+                        <div class="focus-icon">🥗</div>
+                        <h3>Food Security</h3>
+                        <p>Understanding food deserts, grocery costs, and nutrition access barriers.</p>
+                    </div>
+                    <div class="focus-card">
+                        <div class="focus-icon">💊</div>
+                        <h3>Healthcare Access</h3>
+                        <p>Insurance gaps, prescription costs, and medical debt affecting young adults.</p>
+                    </div>
+                    <div class="focus-card">
+                        <div class="focus-icon">📚</div>
+                        <h3>Student Debt</h3>
+                        <p>The growing crisis of education costs and its impact on financial futures.</p>
+                    </div>
+                    <div class="focus-card">
+                        <div class="focus-icon">💼</div>
+                        <h3>Income Inequality</h3>
+                        <p>Wage stagnation, gig economy challenges, and the wealth gap.</p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section id="challenges" style="background: var(--surface-color);">
+        <!-- Young Adult Financial Health Map -->
+        <section id="financial-health-map">
             <div class="container">
-                <div class="section-label">Current Focus</div>
-                <h2>Active Challenges</h2>
-                <p>Pick a problem area and start building solutions.</p>
+                <div class="section-label">Research Data</div>
+                <h2>Young Adult Financial Health Map</h2>
+                <p class="intro-text">
+                    Explore the data behind the crisis. See the economic reality for 18-34 year olds nationwide.
+                </p>
 
-                <div class="challenge-grid">
-                    <div class="challenge-card">
-                        <div class="challenge-icon">🏠</div>
-                        <h3>Housing Crisis</h3>
-                        <p>Analyze rent burdens and propose policy changes or tools to help young adults find affordable
-                            housing.</p>
-                    </div>
-                    <div class="challenge-card">
-                        <div class="challenge-icon">🚗</div>
-                        <h3>Transport Costs</h3>
-                        <p>Address the rising costs of vehicle ownership and insurance for new drivers.</p>
-                    </div>
-                    <div class="challenge-card">
-                        <div class="challenge-icon">🥗</div>
-                        <h3>Food Security</h3>
-                        <p>Map food deserts and design logistics solutions to bring healthy food to underserved areas.
-                        </p>
+
+                <!-- Indicator Toggle -->
+                <div class="indicator-toggle">
+                    <div class="toggle-container">
+                        <button class="toggle-btn active" data-indicator="financial_stress">🚨 Crisis Index</button>
+                        <button class="toggle-btn" data-indicator="student_debt">📚 Student Debt</button>
+                        <button class="toggle-btn" data-indicator="auto_debt">🚗 Auto Debt</button>
+                        <button class="toggle-btn" data-indicator="rent_burden">🏠 Rent Burden</button>
+                        <button class="toggle-btn" data-indicator="median_income">💰 Income</button>
+                        <button class="toggle-btn" data-indicator="unemployment">💼 Unemployment</button>
+                        <button class="toggle-btn" data-indicator="debt_to_income">📊 Debt-to-Income</button>
+                        <button class="toggle-btn" data-indicator="cost_of_living">🏙️ Cost of Living</button>
                     </div>
                 </div>
+
+                <!-- National Summary Cards -->
+                <div class="summary-cards">
+                    <div class="summary-card active" data-indicator="financial_stress">
+                        <div class="summary-label">Crisis Index</div>
+                        <div class="summary-value" id="val-financial_stress">-</div>
+                        <div class="summary-change" id="change-financial_stress">-</div>
+                    </div>
+                    <div class="summary-card" data-indicator="student_debt">
+                        <div class="summary-label">Avg. Student Debt</div>
+                        <div class="summary-value" id="val-student_debt">-</div>
+                        <div class="summary-change" id="change-student_debt">-</div>
+                    </div>
+                    <div class="summary-card" data-indicator="rent_burden">
+                        <div class="summary-label">Rent Burden</div>
+                        <div class="summary-value" id="val-rent_burden">-</div>
+                        <div class="summary-change" id="change-rent_burden">-</div>
+                    </div>
+                    <div class="summary-card" data-indicator="median_income">
+                        <div class="summary-label">Median Income</div>
+                        <div class="summary-value" id="val-median_income">-</div>
+                        <div class="summary-change" id="change-median_income">-</div>
+                    </div>
+                </div>
+
+                <!-- Map Container -->
+                <div class="map-container">
+                    <div class="map-wrapper">
+                        <svg id="us-map" viewBox="0 0 960 600" preserveAspectRatio="xMidYMid meet">
+                            <!-- SVG loaded by script -->
+                        </svg>
+                    </div>
+
+                    <div class="map-legend">
+                        <div class="legend-item"><span class="legend-color legend-low"></span> Low</div>
+                        <div class="legend-item"><span class="legend-color legend-moderate"></span> Moderate</div>
+                        <div class="legend-item"><span class="legend-color legend-elevated"></span> Elevated</div>
+                        <div class="legend-item"><span class="legend-color legend-high"></span> High</div>
+                    </div>
+                </div>
+
+                <!-- Tooltip -->
+                <div class="state-tooltip" id="state-tooltip">
+                    <div class="tooltip-state">State</div>
+                    <div class="tooltip-value">Value</div>
+                </div>
+
+                <!-- State Panel -->
+                <div class="panel-overlay" id="panel-overlay"></div>
+                <aside class="state-panel" id="state-panel">
+                    <button class="panel-close" id="panel-close">✕</button>
+                    <h2 class="panel-title" id="panel-state-name">State</h2>
+                    <div class="panel-indicators" id="panel-indicators"></div>
+                </aside>
+
+                <div class="map-footer-action">
+                    <a href="student-map.html" class="btn-secondary">
+                        View Full Dashboard ↗
+                    </a>
+                </div>
+
             </div>
         </section>
 
         <section id="how-it-works">
             <div class="container">
-                <div class="section-label">Process</div>
-                <h2>How to Participate</h2>
+                <div class="section-label">Our Process</div>
+                <h2>How We Work</h2>
 
                 <div class="steps-grid">
                     <div class="step">
                         <div class="step-number">1</div>
-                        <h3>Select a Challenge</h3>
-                        <p>Choose a problem area that matters to you and your community.</p>
+                        <h3>Identify</h3>
+                        <p>We identify affordability gaps using real data from government and community sources.</p>
                     </div>
                     <div class="step">
                         <div class="step-number">2</div>
-                        <h3>Build with AI</h3>
-                        <p>Use tools like Google Gemini to analyze data and prototype solutions.</p>
+                        <h3>Analyze</h3>
+                        <p>AI tools help us uncover patterns, predict trends, and understand root causes at scale.</p>
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
-                        <h3>Submit & Win</h3>
-                        <p>Present your findings for a chance to win cash prizes and funding.</p>
+                        <h3>Publish</h3>
+                        <p>Findings are shared openly to drive policy change and spark community solutions.</p>
                     </div>
                 </div>
             </div>
         </section>
     </main>
+
+    <!-- Get Involved Section -->
+    <section id="get-involved" class="get-involved-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">Join Us</div>
+                <h2>Get Involved</h2>
+                <p class="section-subtitle">There are many ways to contribute to our mission.</p>
+            </div>
+
+            <div class="involve-grid">
+                <div class="involve-card">
+                    <div class="involve-icon">💬</div>
+                    <h3>Share Your Story</h3>
+                    <p>Your experience with affordability challenges helps us understand the real impact.</p>
+                    <a href="mailto:research@finmango.org?subject=My%20Affordability%20Story" class="involve-link">Tell
+                        Us →</a>
+                </div>
+                <div class="involve-card">
+                    <div class="involve-icon">🤝</div>
+                    <h3>Partner With Us</h3>
+                    <p>Organizations and researchers - let's collaborate on data-driven solutions.</p>
+                    <a href="mailto:hello@finmango.org?subject=Partnership%20Inquiry" class="involve-link">Connect →</a>
+                </div>
+                <div class="involve-card">
+                    <div class="involve-icon">📊</div>
+                    <h3>Explore the Data</h3>
+                    <p>Dive into our datasets and research findings on GitHub.</p>
+                    <a href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer"
+                        class="involve-link">View GitHub →</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <footer>
         <div class="footer-newsletter">
@@ -1072,9 +1533,9 @@
             <div class="footer-section">
                 <h4>Our Work</h4>
                 <a href="research.html">Research</a>
-                <a href="education.html">Education</a>
+                <div class="dropdown"><a href="education.html" style="cursor: pointer;">Education ▾</a><div class="dropdown-content"><a href="education.html#millionaire-mindset" class="dropdown-item">Millionaire Mindset 💰</a><a href="barrier-breakers.html" class="dropdown-item">Barrier Breakers 🚀</a><a href="resources.html" class="dropdown-item">Resources 🛠️</a></div></div>
                 <a href="ambassadors.html">Ambassadors</a>
-                <a href="resources.html">Resources</a>
+                
             </div>
 
             <div class="footer-section">
@@ -1103,14 +1564,38 @@
         </div>
     </footer>
 
-    <div class="physics-controls" id="physics-controls">
-        <button class="physics-btn" id="solve-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-            </svg>
-            <span>Align Nodes</span>
-        </button>
-        <button class="physics-btn" id="reset-btn">Reset</button>
+
+
+    <!-- Suggestion Modal -->
+    <div id="suggestion-modal-overlay" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" id="close-suggestion-modal">✕</button>
+            <div class="modal-header">
+                <h2>Suggest a Challenge</h2>
+                <p>Help us identify the next big problem to solve.</p>
+            </div>
+            <form class="suggestion-form-modal">
+                <div class="form-group">
+                    <label for="suggestName">Your Name</label>
+                    <input type="text" id="suggestName" placeholder="Jane Doe">
+                </div>
+                <div class="form-group">
+                    <label for="suggestEmail">Email Address</label>
+                    <input type="email" id="suggestEmail" placeholder="jane@example.com">
+                </div>
+                <div class="form-group full-width">
+                    <label for="suggestProblem">What's the financial barrier?</label>
+                    <textarea id="suggestProblem"
+                        placeholder="Describe the issue... (e.g. Hidden bank fees for student accounts)"></textarea>
+                </div>
+                <div class="form-group full-width">
+                    <label for="suggestWhy">Why does it matter?</label>
+                    <textarea id="suggestWhy" placeholder="Who does it hurt and how?"></textarea>
+                </div>
+                <button type="button" class="btn-submit">Submit Suggestion</button>
+                <div class="form-status" id="form-status"></div>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -1146,316 +1631,37 @@
             });
         })();
 
-        // Magnetic Constellation Physics
-        (function () {
-            var area = document.getElementById("physics-area");
-            var canvas = document.getElementById("constellation-canvas");
-            var ctx = canvas.getContext("2d");
-            var hint = document.getElementById("physics-hint");
-            var controls = document.getElementById("physics-controls");
-            var resetBtn = document.getElementById("reset-btn");
-            var solveBtn = document.getElementById("solve-btn");
-
-            var nodes = [];
-            var mouse = { x: -1000, y: -1000 };
-            var hasInteracted = false;
-            var animationId = null;
-            var solveMode = false;
-
-            var nodeData = [
-                { label: "Housing", type: "housing", size: 90 },
-                { label: "Transport", type: "transport", size: 85 },
-                { label: "Health", type: "health", size: 80 },
-                { label: "Food", type: "food", size: 75 },
-                { label: "Tech", type: "tech", size: 70 },
-                { label: "Rent", type: "housing", size: 60 },
-                { label: "Gas", type: "transport", size: 55 },
-                { label: "Meds", type: "health", size: 50 },
-                { label: "Groceries", type: "food", size: 65 },
-                { label: "Wifi", type: "tech", size: 50 },
-                { label: "Insurance", type: "transport", size: 60 },
-                { label: "Utilities", type: "housing", size: 55 }
-            ];
-
-            function resizeCanvas() {
-                canvas.width = area.offsetWidth;
-                canvas.height = area.offsetHeight;
-            }
-
-            function createNodes() {
-                area.innerHTML = "";
-                nodes = [];
-                resizeCanvas();
-
-                var width = area.offsetWidth;
-                var height = area.offsetHeight;
-                var isMobile = window.innerWidth < 768;
-
-                for (var i = 0; i < nodeData.length; i++) {
-                    var data = nodeData[i];
-                    var size = isMobile ? data.size * 0.7 : data.size;
-                    // Spread them out initially to avoid immediate overlap
-                    var x = Math.random() * (width - size);
-                    var y = Math.random() * (height - size);
-
-                    var el = document.createElement("div");
-                    el.className = "node " + data.type;
-                    el.style.width = size + "px";
-                    el.style.height = size + "px";
-                    el.textContent = data.label;
-                    area.appendChild(el);
-
-                    var node = {
-                        el: el,
-                        x: x,
-                        y: y,
-                        vx: (Math.random() - 0.5) * 1.5,
-                        vy: (Math.random() - 0.5) * 1.5,
-                        size: size,
-                        dragging: false,
-                        targetX: null,
-                        targetY: null
-                    };
-
-                    nodes.push(node);
-                    setupDrag(node);
-                }
-            }
-
-            function setupDrag(node) {
-                var offsetX = 0;
-                var offsetY = 0;
-
-                function onStart(e) {
-                    e.preventDefault();
-                    node.dragging = true;
-                    // Note: We do NOT cancel solveMode here anymore.
-                    // This allows dragging while keeping others aligned.
-
-                    var touch = e.touches ? e.touches[0] : e;
-                    var rect = area.getBoundingClientRect();
-                    offsetX = touch.clientX - rect.left - node.x;
-                    offsetY = touch.clientY - rect.top - node.y;
-
-                    if (!hasInteracted) {
-                        hasInteracted = true;
-                        hint.classList.add("hidden");
-                        controls.classList.add("visible");
-                    }
-
-                    document.addEventListener("mousemove", onMove);
-                    document.addEventListener("mouseup", onEnd);
-                    document.addEventListener("touchmove", onMove, { passive: false });
-                    document.addEventListener("touchend", onEnd);
-                }
-
-                function onMove(e) {
-                    if (!node.dragging) return;
-                    e.preventDefault();
-
-                    var touch = e.touches ? e.touches[0] : e;
-                    var rect = area.getBoundingClientRect();
-                    node.x = touch.clientX - rect.left - offsetX;
-                    node.y = touch.clientY - rect.top - offsetY;
-                    node.vx = 0;
-                    node.vy = 0;
-                }
-
-                function onEnd() {
-                    node.dragging = false;
-                    document.removeEventListener("mousemove", onMove);
-                    document.removeEventListener("mouseup", onEnd);
-                    document.removeEventListener("touchmove", onMove);
-                    document.removeEventListener("touchend", onEnd);
-                }
-
-                node.el.addEventListener("mousedown", onStart);
-                node.el.addEventListener("touchstart", onStart, { passive: false });
-            }
-
-            function update() {
-                var width = area.offsetWidth;
-                var height = area.offsetHeight;
-
-                ctx.clearRect(0, 0, width, height);
-                ctx.lineWidth = 2;
-
-                for (var i = 0; i < nodes.length; i++) {
-                    var node = nodes[i];
-
-                    if (!node.dragging) {
-                        if (solveMode) {
-                            // Move towards target
-                            var dx = node.targetX - node.x;
-                            var dy = node.targetY - node.y;
-                            // Stronger pull to target
-                            node.x += dx * 0.08;
-                            node.y += dy * 0.08;
-                        } else {
-                            // Normal physics
-                            node.x += node.vx;
-                            node.y += node.vy;
-
-                            // Bounce off walls
-                            if (node.x < 0) { node.x = 0; node.vx *= -1; }
-                            if (node.x + node.size > width) { node.x = width - node.size; node.vx *= -1; }
-                            if (node.y < 0) { node.y = 0; node.vy *= -1; }
-                            if (node.y + node.size > height) { node.y = height - node.size; node.vy *= -1; }
-
-                            // Mouse attraction
-                            var dx = mouse.x - (node.x + node.size / 2);
-                            var dy = mouse.y - (node.y + node.size / 2);
-                            var dist = Math.sqrt(dx * dx + dy * dy);
-
-                            if (dist < 300) {
-                                node.vx += dx * 0.0005;
-                                node.vy += dy * 0.0005;
-                            }
-
-                            // Friction
-                            node.vx *= 0.99;
-                            node.vy *= 0.99;
-                        }
-                    }
-
-                    // Collision Detection (prevent overlap)
-                    for (var j = i + 1; j < nodes.length; j++) {
-                        var other = nodes[j];
-                        var dx = (other.x + other.size / 2) - (node.x + node.size / 2);
-                        var dy = (other.y + other.size / 2) - (node.y + node.size / 2);
-                        var dist = Math.sqrt(dx * dx + dy * dy);
-                        var minDist = (node.size + other.size) / 2;
-
-                        if (dist < minDist) {
-                            // Push apart
-                            var angle = Math.atan2(dy, dx);
-                            var tx = Math.cos(angle) * 1; // push amount
-                            var ty = Math.sin(angle) * 1;
-
-                            if (!node.dragging) {
-                                node.x -= tx;
-                                node.y -= ty;
-                                if (!solveMode) {
-                                    node.vx -= tx * 0.05;
-                                    node.vy -= ty * 0.05;
-                                }
-                            }
-                            if (!other.dragging) {
-                                other.x += tx;
-                                other.y += ty;
-                                if (!solveMode) {
-                                    other.vx += tx * 0.05;
-                                    other.vy += ty * 0.05;
-                                }
-                            }
-                        }
-                    }
-
-                    // Keep in bounds (final check)
-                    if (node.x < 0) node.x = 0;
-                    if (node.x + node.size > width) node.x = width - node.size;
-                    if (node.y < 0) node.y = 0;
-                    if (node.y + node.size > height) node.y = height - node.size;
-
-                    node.el.style.left = node.x + "px";
-                    node.el.style.top = node.y + "px";
-
-                    // Draw connections
-                    for (var j = i + 1; j < nodes.length; j++) {
-                        var other = nodes[j];
-                        var dx = (node.x + node.size / 2) - (other.x + other.size / 2);
-                        var dy = (node.y + node.size / 2) - (other.y + other.size / 2);
-                        var dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if (dist < 250) {
-                            var opacity = 1 - (dist / 250);
-                            ctx.beginPath();
-                            ctx.strokeStyle = "rgba(255, 107, 53, " + (opacity * 0.4) + ")";
-                            ctx.moveTo(node.x + node.size / 2, node.y + node.size / 2);
-                            ctx.lineTo(other.x + other.size / 2, other.y + other.size / 2);
-                            ctx.stroke();
-                        }
-                    }
-                }
-
-                animationId = requestAnimationFrame(update);
-            }
-
-            function toggleSolve() {
-                solveMode = !solveMode;
-                var width = area.offsetWidth;
-                var height = area.offsetHeight;
-                var centerX = width / 2;
-                var centerY = height / 2;
-
-                if (solveMode) {
-                    solveBtn.classList.add("solve-active");
-                    solveBtn.querySelector("span").textContent = "Release";
-
-                    // Calculate grid/circle positions
-                    var radius = Math.min(width, height) * 0.35;
-                    for (var i = 0; i < nodes.length; i++) {
-                        var angle = (i / nodes.length) * Math.PI * 2;
-                        nodes[i].targetX = centerX + Math.cos(angle) * radius - nodes[i].size / 2;
-                        nodes[i].targetY = centerY + Math.sin(angle) * radius - nodes[i].size / 2;
-                    }
-                } else {
-                    solveBtn.classList.remove("solve-active");
-                    solveBtn.querySelector("span").textContent = "Align Nodes";
-                    // Give random velocity on release
-                    for (var i = 0; i < nodes.length; i++) {
-                        nodes[i].vx = (Math.random() - 0.5) * 2;
-                        nodes[i].vy = (Math.random() - 0.5) * 2;
-                    }
-                }
-
-                if (!hasInteracted) {
-                    hasInteracted = true;
-                    hint.classList.add("hidden");
-                    controls.classList.add("visible");
-                }
-            }
-
-            function reset() {
-                solveMode = false;
-                solveBtn.classList.remove("solve-active");
-                solveBtn.querySelector("span").textContent = "Align Nodes";
-                hasInteracted = false;
-                hint.classList.remove("hidden");
-                controls.classList.remove("visible");
-                createNodes();
-            }
-
-            // Mouse tracking
-            area.addEventListener("mousemove", function (e) {
-                var rect = area.getBoundingClientRect();
-                mouse.x = e.clientX - rect.left;
-                mouse.y = e.clientY - rect.top;
-
-                if (!hasInteracted) {
-                    hasInteracted = true;
-                    hint.classList.add("hidden");
-                    controls.classList.add("visible");
-                }
-            });
-
-            area.addEventListener("mouseleave", function () {
-                mouse.x = -1000;
-                mouse.y = -1000;
-            });
-
-            resetBtn.addEventListener("click", reset);
-            solveBtn.addEventListener("click", toggleSolve);
-            window.addEventListener("resize", function () {
-                resizeCanvas();
-                createNodes();
-            });
-
-            // Init
-            createNodes();
-            animationId = requestAnimationFrame(update);
-        })();
     </script>
+
+  <script>
+    // Announcement Bar
+    (function () {
+      var announcementBar = document.getElementById('announcementBar');
+      var closeBtn = document.getElementById('closeAnnouncement');
+      var storageKey = 'barrierBreakersAnnouncementClosedAt_v2';
+      var expiryHours = 24; // Hours until bar reappears
+
+      // Check if user has closed it and if 24 hours have passed
+      var closedAt = localStorage.getItem(storageKey);
+      if (closedAt) {
+        var hoursSinceClosed = (Date.now() - parseInt(closedAt)) / (1000 * 60 * 60);
+        if (hoursSinceClosed < expiryHours) {
+          announcementBar.classList.add('hidden');
+          document.body.classList.remove('has-announcement');
+        } else {
+          // Expired, remove the stored value
+          localStorage.removeItem(storageKey);
+        }
+      }
+
+      closeBtn.addEventListener('click', function () {
+        announcementBar.classList.add('hidden');
+        document.body.classList.remove('has-announcement');
+        localStorage.setItem(storageKey, Date.now().toString());
+      });
+    })();
+  </script>
+
 </body>
 
 </html>

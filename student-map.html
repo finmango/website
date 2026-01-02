@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Young Adult Financial Health Map | Economic Indicators for Ages 18-34 - FinMango</title>
+    <meta name="title" content="Young Adult Financial Health Map | Economic Indicators for Ages 18-34 - FinMango">
+    <meta name="description"
+        content="Track student debt, auto loans, rent burden, income, unemployment, and debt-to-income ratios for young adults across all 50 US states. Free research tool for policymakers, researchers, and young adults.">
+    <meta name="keywords"
+        content="young adult financial health, student debt, auto loans, rent burden, youth unemployment, debt to income, cost of living, millennial finances, gen z finances, FinMango">
+    <meta name="author" content="FinMango Research Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://finmango.org/student-map.html">
+
+    <!-- COPPA & Educational Compliance Meta Tags -->
+    <meta name="rating" content="general">
+    <meta name="audience" content="all">
+    <meta name="classification" content="education">
+    <meta name="category" content="education, nonprofit, financial literacy">
+    <meta name="educational-use" content="true">
+    <meta name="child-safe" content="true">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://finmango.org/student-map.html">
+    <meta property="og:title" content="Student Financial Health Map | College Grad Economic Indicators">
+    <meta property="og:description"
+        content="Track student debt, loan default rates, youth unemployment, and graduate cost burden across all 50 US states.">
+    <meta property="og:image" content="https://finmango.org/og-student-map.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="FinMango">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://finmango.org/student-map.html">
+    <meta name="twitter:title" content="Young Adult Financial Health Map | Economic Indicators for Ages 18-34">
+    <meta name="twitter:description"
+        content="Track student debt, auto loans, rent burden, income, and debt-to-income ratios for young adults across all 50 US states.">
+    <meta name="twitter:image" content="https://finmango.org/og-student-map.png">
+    <meta name="twitter:site" content="@finmango">
+
+    <!-- Structured Data / JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Young Adult Financial Health Map",
+      "description": "Interactive US map showing student debt, auto loans, rent burden, income, unemployment, and financial stress for young adults ages 18-34 across all 50 states.",
+      "url": "https://finmango.org/student-map.html",
+      "applicationCategory": "Research Tool",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "FinMango",
+        "url": "https://finmango.org"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "FinMango",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://finmango.org/finmango.png"
+        }
+      },
+      "datePublished": "2025-12-19",
+      "dateModified": "2025-12-19"
+    }
+    </script>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Core Colors - Student-focused with knowledge theme */
+            --bg: #fafafa;
+            --text: #1a1a1a;
+            --text-muted: #666666;
+            --surface: #f0f0f0;
+            --primary: #3B82F6;
+            --primary-dark: #2563EB;
+            --orange: #FF6B35;
+            --border: rgba(0, 0, 0, 0.1);
+            --white: #ffffff;
+
+            /* Status Colors */
+            --green: #10B981;
+            --yellow: #F59E0B;
+            --red: #EF4444;
+
+            /* Spacing */
+            --section-padding: 80px;
+            --container-max: 1200px;
+            --gap: 32px;
+            --radius: 12px;
+            --radius-pill: 100px;
+        }
+
+
+        /* Standard Navigation Styles */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg);
+            z-index: 1000;
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        nav.scrolled {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+            background: rgba(250, 250, 250, 0.97);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            justify-self: start;
+        }
+
+        .logo:hover {
+            transform: rotate(-2deg) scale(1.05);
+        }
+
+        .logo img {
+            height: 46px;
+            transition: height 0.3s ease;
+        }
+
+        nav.scrolled .logo img {
+            height: 38px;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .nav-right a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item)::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item):hover::after {
+            width: 100%;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item):hover {
+            color: var(--orange);
+        }
+
+        .btn-donate {
+            background: var(--orange);
+            color: white !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--text);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-donate:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-get-involved {
+            background: transparent;
+            color: var(--text) !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--text);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+
+        .btn-get-involved:hover {
+            color: white !important;
+            background: var(--text);
+            transform: scale(1.05);
+        }
+
+        /* Mobile Menu Controls */
+        .mobile-controls {
+            display: none;
+            gap: 1rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            min-width: 48px;
+            min-height: 48px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: var(--text);
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg);
+            z-index: 999;
+            padding: 6rem 2rem;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+            right: 0;
+        }
+
+        .mobile-menu a {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        /* Dropdown Styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--white);
+            min-width: 240px;
+            box-shadow: 8px 8px 0 var(--text);
+            border: 3px solid var(--text);
+            z-index: 1001;
+            padding: 0.5rem 0;
+            margin-top: 0;
+        }
+
+        /* Bridge for hover */
+        .dropdown-content::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+        }
+
+        .dropdown-content::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent var(--text) transparent;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .dropdown-item {
+            color: var(--text) !important;
+            padding: 0.85rem 1.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 0.95rem !important;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .nav-right .dropdown-item::after {
+            display: none !important;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--surface);
+            padding-left: 1.75rem;
+            color: var(--orange) !important;
+        }
+
+        .badge-beta {
+            display: inline-block;
+            background: var(--text);
+            color: var(--white);
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .dropdown-item:hover .badge-beta {
+            background: var(--orange);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, 10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .nav-container {
+                grid-template-columns: 1fr auto;
+                gap: 1rem;
+            }
+
+            .nav-right {
+                display: none;
+            }
+
+            .mobile-controls {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+
+        /* Glassmorphic Header - Now Static */
+        .dashboard-header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: relative;
+            /* Changed from sticky */
+            margin-top: 80px;
+            /* Space for navbar */
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-content {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-link img {
+            height: 36px;
+        }
+
+        .header-title h1 {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .header-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-pill);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.6;
+                transform: scale(0.9);
+            }
+        }
+
+        .last-updated {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Main Layout */
+        .dashboard-main {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Intro Section */
+        .intro-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .intro-section h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .intro-section p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Segmented Toggle */
+        .indicator-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .toggle-container {
+            display: inline-flex;
+            background: var(--surface);
+            border-radius: var(--radius-pill);
+            padding: 4px;
+            gap: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .toggle-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-pill);
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .toggle-btn:hover {
+            color: var(--text);
+            background: rgba(59, 130, 246, 0.08);
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        @media (max-width: 700px) {
+            .toggle-container {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .toggle-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.7rem;
+            }
+        }
+
+        /* National Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .summary-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .summary-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .summary-card.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .summary-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .summary-change {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .summary-change.up {
+            color: var(--red);
+        }
+
+        .summary-change.down {
+            color: var(--green);
+        }
+
+        /* Map Section */
+        .map-section {
+            margin-bottom: 3rem;
+        }
+
+        .map-container {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            position: relative;
+        }
+
+        .map-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        #us-map {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        #us-map svg {
+            width: 100%;
+            height: auto;
+        }
+
+        #us-map path {
+            transition: all 0.25s ease;
+            cursor: pointer;
+            stroke: var(--white);
+            stroke-width: 1.5;
+        }
+
+        #us-map path:hover {
+            opacity: 0.85;
+            stroke-width: 2;
+            filter: brightness(1.1);
+        }
+
+        /* State Tooltip */
+        .state-tooltip {
+            position: fixed;
+            background: var(--text);
+            color: var(--white);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            pointer-events: none;
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .state-tooltip.visible {
+            opacity: 1;
+        }
+
+        .tooltip-state {
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .tooltip-value {
+            opacity: 0.9;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Map Legend */
+        .map-legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 10px;
+            border-radius: 3px;
+        }
+
+        .legend-low {
+            background: #10B981;
+        }
+
+        .legend-moderate {
+            background: #F59E0B;
+        }
+
+        .legend-elevated {
+            background: #F97316;
+        }
+
+        .legend-high {
+            background: #EF4444;
+        }
+
+        /* State Detail Panel */
+        .state-panel {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 400px;
+            height: 100vh;
+            background: var(--white);
+            border-left: 1px solid var(--border);
+            padding: 2rem;
+            z-index: 200;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .state-panel.open {
+            right: 0;
+        }
+
+        .panel-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--surface);
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .panel-close:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .panel-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            padding-right: 2rem;
+            color: var(--text);
+        }
+
+        .panel-indicators {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .panel-indicator {
+            padding: 1rem;
+            background: var(--surface);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--primary);
+        }
+
+        .panel-indicator-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .panel-indicator-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-indicator-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .panel-indicator-meta {
+            text-align: right;
+            font-size: 0.75rem;
+        }
+
+        .panel-rank {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .panel-change {
+            color: var(--text-muted);
+        }
+
+        .panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(4px);
+            z-index: 150;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .panel-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* Chart Section */
+        .chart-section {
+            margin-bottom: 3rem;
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .chart-controls select {
+            padding: 0.6rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            background: var(--white);
+            font-family: inherit;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text);
+        }
+
+        .chart-controls select:hover {
+            border-color: var(--primary);
+        }
+
+        .chart-controls select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .chart-container {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            height: 350px;
+        }
+
+        /* Rankings Table */
+        .rankings-section {
+            margin-bottom: 3rem;
+        }
+
+        .rankings-table-container {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--white);
+        }
+
+        .rankings-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .rankings-table th,
+        .rankings-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .rankings-table th {
+            background: var(--surface);
+            color: var(--text);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .rankings-table th:hover {
+            color: var(--primary);
+        }
+
+        .rankings-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .rankings-table tbody tr:hover {
+            background: rgba(59, 130, 246, 0.04);
+        }
+
+        .rankings-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 0.75rem;
+            border-radius: 50%;
+        }
+
+        .table-pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+        }
+
+        .pagination-info {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .pagination-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            background: var(--white);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            color: var(--text);
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--white);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* Researcher Tools */
+        .tools-section {
+            margin-bottom: 3rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .tool-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .tool-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary);
+        }
+
+        .tool-btn:hover .tool-icon {
+            transform: scale(1.1);
+        }
+
+        .tool-btn:hover .tool-label {
+            color: var(--primary);
+        }
+
+        .tool-icon {
+            font-size: 1.5rem;
+            transition: transform 0.25s ease;
+        }
+
+        .tool-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: color 0.25s ease;
+        }
+
+        /* Methodology Section */
+        .methodology-section {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .methodology-section h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .methodology-section p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .methodology-section ul {
+            margin-left: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .methodology-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .methodology-section a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .methodology-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .dashboard-footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .dashboard-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .dashboard-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .header-left {
+                flex-direction: column;
+            }
+
+            .header-right {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .dashboard-main {
+                padding: 1.5rem 1rem;
+            }
+
+            .state-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
+    </style>
+<style>
+    /* Announcement Bar */
+    .announcement-bar {
+      background: linear-gradient(135deg, var(--orange), #ff8c5a);
+      color: white;
+      text-align: center;
+      padding: 12px 48px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
+    }
+
+    .announcement-bar a {
+      color: white;
+      text-decoration: underline;
+      font-weight: 700;
+    }
+
+    .announcement-bar a:hover {
+      opacity: 0.9;
+    }
+
+    .announcement-close {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 4px 8px;
+      opacity: 0.8;
+      transition: opacity 0.2s, transform 0.2s;
+      line-height: 1;
+    }
+
+    .announcement-close:hover {
+      opacity: 1;
+      transform: translateY(-50%) scale(1.2);
+    }
+
+    .announcement-bar.hidden {
+      display: none;
+    }
+
+    body.has-announcement nav {
+      top: 44px !important;
+    }
+
+    body.has-announcement .mobile-menu {
+      top: 44px !important;
+      height: calc(100vh - 44px) !important;
+    }
+    
+    body.has-announcement .hero {
+      padding-top: calc(100px + 44px) !important;
+    }
+
+    @media (max-width: 768px) {
+      .announcement-bar {
+        font-size: 0.85rem;
+        padding: 10px 40px 10px 16px;
+      }
+
+      .announcement-close {
+        right: 8px;
+      }
+    }
+</style>
+</head>
+
+<body class="has-announcement">
+
+  <div class="announcement-bar" id="announcementBar">
+    🚀 <strong>Barrier Breakers:</strong> $20,000+ in prizes for high school students!
+    <a href="barrier-breakers.html">Apply by February 27 →</a>
+    <button class="announcement-close" id="closeAnnouncement" aria-label="Close announcement">×</button>
+  </div>
+
+
+    <nav id="nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
+
+            <div class="nav-right">
+                <a href="about.html">About</a>
+
+                <div class="dropdown">
+                    <a href="research.html" style="cursor: pointer;">Research ▾</a>
+                    <div class="dropdown-content">
+                        <a href="research.html" class="dropdown-item">Overview</a>
+                        <a href="affordability-lab.html" class="dropdown-item">Affordability Lab <span
+                                class="badge-beta">Beta</span></a>
+                        <a href="barometer.html" class="dropdown-item">Barometer 📊</a>
+                        <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank"
+                            rel="noopener noreferrer">GitHub 🔗</a>
+                    </div>
+                </div>
+
+                <div class="dropdown"><a href="education.html" style="cursor: pointer;">Education ▾</a><div class="dropdown-content"><a href="education.html#millionaire-mindset" class="dropdown-item">Millionaire Mindset 💰</a><a href="barrier-breakers.html" class="dropdown-item">Barrier Breakers 🚀</a><a href="resources.html" class="dropdown-item">Resources 🛠️</a></div></div>
+                <a href="ambassadors.html">Ambassadors</a>
+                
+                <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+                <a href="donate.html" class="btn-donate">Donate</a>
+            </div>
+
+            <div class="mobile-controls">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="about.html">About</a>
+        <a href="research.html">Research</a>
+        <a href="affordability-lab.html" style="font-size: 1.5rem; padding-left: 2rem;">↳ Affordability Lab</a>
+        <a href="barometer.html" style="font-size: 1.5rem; padding-left: 2rem;">↳ Barometer</a>
+        <a href="https://github.com/finmango/research" style="font-size: 1.5rem; padding-left: 2rem;" target="_blank"
+            rel="noopener noreferrer">↳ GitHub</a>
+        <div class="dropdown"><a href="education.html" style="cursor: pointer;">Education ▾</a><div class="dropdown-content"><a href="education.html#millionaire-mindset" class="dropdown-item">Millionaire Mindset 💰</a><a href="barrier-breakers.html" class="dropdown-item">Barrier Breakers 🚀</a><a href="resources.html" class="dropdown-item">Resources 🛠️</a></div></div>
+        <a href="ambassadors.html">Ambassadors</a>
+        
+        <a href="donate.html">Donate</a>
+    </div>
+
+    <!-- Header -->
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div class="header-left">
+                <a href="index.html" class="logo-link">
+                    <img src="finmango.png" alt="FinMango">
+                </a>
+                <div class="header-title">
+                    <h1>Young Adult Financial Health Map</h1>
+                    <span class="header-subtitle">Economic Indicators for Ages 18-34</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="live-indicator">
+                    <span class="live-dot"></span>
+                    Data Current
+                </div>
+                <span class="last-updated" id="last-updated-date">December 2025</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <!-- Hero Crisis Stat -->
+        <section class="intro-section" style="margin-bottom: 2rem;">
+            <h2 style="color: #EF4444; font-size: 2rem; margin-bottom: 1rem;">🚨 The Young Adult Financial Crisis</h2>
+            <p style="font-size: 1.1rem; max-width: 800px; margin: 0 auto 1.5rem;">Young adults today face unprecedented
+                financial pressure. Our <strong>Crisis Index</strong> is a weighted composite of all 7 indicators
+                below—averaging
+                debt, income, and cost factors to show which states are hardest hit.</p>
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                <div
+                    style="text-align: center; padding: 1rem 2rem; background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%); border-radius: 12px; color: white;">
+                    <div style="font-size: 0.75rem; text-transform: uppercase; opacity: 0.9;">National Crisis Index
+                    </div>
+                    <div style="font-size: 2.5rem; font-weight: 800;" id="hero-crisis-index">100</div>
+                    <div style="font-size: 0.85rem;">▲ 2.0% from last year</div>
+                </div>
+                <div
+                    style="text-align: center; padding: 1rem 2rem; background: var(--surface); border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Worst State
+                    </div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #EF4444;" id="hero-worst-state">California
+                        (118)</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">Highest financial stress</div>
+                </div>
+                <div
+                    style="text-align: center; padding: 1rem 2rem; background: var(--surface); border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted);">Best State
+                    </div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #10B981;" id="hero-best-state">North Dakota
+                        (78)</div>
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">Lowest financial stress</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Indicator Toggle -->
+        <div class="indicator-toggle" style="margin-bottom: 1rem;">
+            <p style="text-align: center; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">View by
+                indicator:</p>
+            <div class="toggle-container">
+                <button class="toggle-btn active" data-indicator="financial_stress"
+                    title="Weighted average of all 7 indicators">🚨 Crisis Index</button>
+                <button class="toggle-btn" data-indicator="student_debt">📚 Student Debt</button>
+                <button class="toggle-btn" data-indicator="auto_debt">🚗 Auto Debt</button>
+                <button class="toggle-btn" data-indicator="rent_burden">🏠 Rent Burden</button>
+                <button class="toggle-btn" data-indicator="median_income">💰 Income</button>
+                <button class="toggle-btn" data-indicator="unemployment">💼 Unemployment</button>
+                <button class="toggle-btn" data-indicator="debt_to_income">📊 Debt-to-Income</button>
+                <button class="toggle-btn" data-indicator="cost_of_living">🏙️ Cost of Living</button>
+            </div>
+        </div>
+
+        <!-- National Summary Cards -->
+        <div class="summary-cards" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="summary-card" data-indicator="financial_stress" style="border-color: #EF4444;">
+                <div class="summary-label" style="color: #EF4444;">🚨 Crisis Index</div>
+                <div class="summary-value" id="val-financial_stress" style="color: #EF4444;">142</div>
+                <div class="summary-change up" id="change-financial_stress">▲ 5.1%</div>
+            </div>
+            <div class="summary-card" data-indicator="student_debt">
+                <div class="summary-label">Avg. Student Debt</div>
+                <div class="summary-value" id="val-student_debt">$29,400</div>
+                <div class="summary-change up" id="change-student_debt">▲ 2.1%</div>
+            </div>
+            <div class="summary-card" data-indicator="auto_debt">
+                <div class="summary-label">Avg. Auto Loan</div>
+                <div class="summary-value" id="val-auto_debt">$23,800</div>
+                <div class="summary-change up" id="change-auto_debt">▲ 4.2%</div>
+            </div>
+            <div class="summary-card" data-indicator="rent_burden">
+                <div class="summary-label">Rent Burden</div>
+                <div class="summary-value" id="val-rent_burden">30.4%</div>
+                <div class="summary-change up" id="change-rent_burden">▲ 1.8%</div>
+            </div>
+            <div class="summary-card" data-indicator="median_income">
+                <div class="summary-label">Median Income (22-34)</div>
+                <div class="summary-value" id="val-median_income">$48,500</div>
+                <div class="summary-change up" id="change-median_income">▲ 3.1%</div>
+            </div>
+        </div>
+        <div class="summary-cards" style="grid-template-columns: repeat(3, 1fr); margin-top: -1rem;">
+            <div class="summary-card" data-indicator="unemployment">
+                <div class="summary-label">Youth Unemployment</div>
+                <div class="summary-value" id="val-unemployment">7.4%</div>
+                <div class="summary-change up" id="change-unemployment">▲ 0.3%</div>
+            </div>
+            <div class="summary-card" data-indicator="debt_to_income">
+                <div class="summary-label">Debt-to-Income</div>
+                <div class="summary-value" id="val-debt_to_income">38.2%</div>
+                <div class="summary-change up" id="change-debt_to_income">▲ 2.5%</div>
+            </div>
+            <div class="summary-card" data-indicator="cost_of_living">
+                <div class="summary-label">Cost of Living</div>
+                <div class="summary-value" id="val-cost_of_living">134</div>
+                <div class="summary-change up" id="change-cost_of_living">▲ 4.2%</div>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <section class="map-section">
+            <div class="map-container">
+                <div class="map-wrapper">
+                    <svg id="us-map" viewBox="0 0 960 600" preserveAspectRatio="xMidYMid meet">
+                        <!-- SVG paths will be loaded dynamically -->
+                    </svg>
+                </div>
+
+                <div class="map-legend">
+                    <div class="legend-item">
+                        <span class="legend-color legend-low"></span>
+                        <span>Low</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color legend-moderate"></span>
+                        <span>Moderate</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color legend-elevated"></span>
+                        <span>Elevated</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color legend-high"></span>
+                        <span>High</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tooltip -->
+        <div class="state-tooltip" id="state-tooltip">
+            <div class="tooltip-state">State Name</div>
+            <div class="tooltip-value">Value</div>
+        </div>
+
+        <!-- State Detail Panel -->
+        <div class="panel-overlay" id="panel-overlay"></div>
+        <aside class="state-panel" id="state-panel">
+            <button class="panel-close" id="panel-close">✕</button>
+            <h2 class="panel-title" id="panel-state-name">State Name</h2>
+            <div class="panel-indicators" id="panel-indicators">
+                <!-- Populated dynamically -->
+            </div>
+        </aside>
+
+        <!-- Chart Section -->
+        <section class="chart-section">
+            <div class="section-header">
+                <h3 class="section-title">📈 Trend Analysis</h3>
+                <div class="chart-controls">
+                    <select id="chart-indicator">
+                        <option value="student_debt">Student Debt</option>
+                        <option value="auto_debt">Auto Debt</option>
+                        <option value="rent_burden">Rent Burden</option>
+                        <option value="median_income">Median Income</option>
+                        <option value="unemployment">Youth Unemployment</option>
+                        <option value="debt_to_income">Debt-to-Income</option>
+                        <option value="cost_of_living">Cost of Living</option>
+                        <option value="financial_stress">Financial Stress</option>
+                    </select>
+                    <select id="chart-period">
+                        <option value="5y">5 Years</option>
+                        <option value="10y">10 Years</option>
+                    </select>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="trend-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Rankings Table -->
+        <section class="rankings-section">
+            <div class="section-header">
+                <h3 class="section-title">🏆 State Rankings</h3>
+            </div>
+            <div class="rankings-table-container">
+                <table class="rankings-table" id="rankings-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="rank">Rank</th>
+                            <th data-sort="name">State</th>
+                            <th data-sort="student_debt">Student Debt</th>
+                            <th data-sort="auto_debt">Auto Debt</th>
+                            <th data-sort="rent_burden">Rent Burden</th>
+                            <th data-sort="median_income">Income</th>
+                            <th data-sort="financial_stress">Stress Index</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankings-body">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+                <div class="table-pagination">
+                    <span class="pagination-info">Showing <span id="page-start">1</span>-<span id="page-end">10</span>
+                        of 51</span>
+                    <div class="pagination-buttons">
+                        <button class="pagination-btn" id="prev-btn" disabled>← Previous</button>
+                        <button class="pagination-btn" id="next-btn">Next →</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Researcher Tools -->
+        <section class="tools-section">
+            <div class="section-header">
+                <h3 class="section-title">🔬 Researcher Tools</h3>
+            </div>
+            <div class="tools-grid">
+                <button class="tool-btn" id="download-csv">
+                    <span class="tool-icon">📊</span>
+                    <span class="tool-label">Download CSV</span>
+                </button>
+                <button class="tool-btn" id="download-json">
+                    <span class="tool-icon">📋</span>
+                    <span class="tool-label">Download JSON</span>
+                </button>
+                <button class="tool-btn" id="copy-citation">
+                    <span class="tool-icon">📝</span>
+                    <span class="tool-label">Copy Citation</span>
+                </button>
+                <a class="tool-btn" href="barometer.html">
+                    <span class="tool-icon">🌡️</span>
+                    <span class="tool-label">Main Barometer</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Methodology -->
+        <section class="methodology-section">
+            <h3>📚 Methodology & Data Sources</h3>
+            <p>The Young Adult Financial Health Map aggregates data from authoritative government and research sources
+                to
+                provide a comprehensive view of financial conditions facing young adults ages 18-34.</p>
+
+            <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">🚨 Crisis Index Calculation</h4>
+            <p style="margin-bottom: 1rem;">The Crisis Index is a composite score (100 = baseline) that combines all 7
+                sub-indicators, weighted by their impact on young adult financial health. Higher scores indicate greater
+                financial stress.</p>
+
+            <h4 style="margin-top: 1.5rem; margin-bottom: 0.5rem;">Data Sources</h4>
+            <ul>
+                <li><strong>Student Debt:</strong> Average debt at graduation from <a href="https://ticas.org/"
+                        target="_blank">The Institute for College Access & Success (TICAS)</a> - Class of 2023</li>
+                <li><strong>Auto Debt:</strong> Average auto loan balances from <a
+                        href="https://www.federalreserve.gov/releases/g19/current/" target="_blank">Federal Reserve G.19
+                        Consumer Credit</a></li>
+                <li><strong>Rent Burden:</strong> Gross rent as % of income from <a href="https://www.jchs.harvard.edu/"
+                        target="_blank">Census ACS B25071 + Harvard JCHS 2025</a></li>
+                <li><strong>Median Income:</strong> Young adult (22-34) income from <a
+                        href="https://www.census.gov/programs-surveys/acs" target="_blank">Census ACS S1902</a></li>
+                <li><strong>Youth Unemployment:</strong> 20-29 age group unemployment from <a
+                        href="https://www.bls.gov/cps/" target="_blank">Bureau of Labor Statistics CPS</a></li>
+                <li><strong>Debt-to-Income:</strong> Calculated from Federal Reserve + Census data</li>
+                <li><strong>Cost of Living:</strong> Composite index from BLS + Census data</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Note:</strong> Some data points are illustrative estimates based on
+                available research. For academic/policy use requiring exact figures, please <a
+                    href="mailto:research@finmango.org">contact our research team</a> for detailed methodology.</p>
+            <p>Data is updated annually. For questions about methodology or data access, please <a
+                    href="mailto:research@finmango.org">contact our research team</a>.</p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="dashboard-footer">
+        <p>© 2025 FinMango. Financial Health Is A Right, Not A Privilege. | <a href="index.html">Home</a> | <a
+                href="research.html">Research</a> | </p>
+    </footer>
+
+    <!-- Data -->
+    <script src="data/student-map-data.js"></script>
+
+    <!-- App Logic -->
+    <script src="scripts/student-map-app.js"></script>
+
+  <script>
+    // Announcement Bar
+    (function () {
+      var announcementBar = document.getElementById('announcementBar');
+      var closeBtn = document.getElementById('closeAnnouncement');
+      var storageKey = 'barrierBreakersAnnouncementClosedAt_v2';
+      var expiryHours = 24; // Hours until bar reappears
+
+      // Check if user has closed it and if 24 hours have passed
+      var closedAt = localStorage.getItem(storageKey);
+      if (closedAt) {
+        var hoursSinceClosed = (Date.now() - parseInt(closedAt)) / (1000 * 60 * 60);
+        if (hoursSinceClosed < expiryHours) {
+          announcementBar.classList.add('hidden');
+          document.body.classList.remove('has-announcement');
+        } else {
+          // Expired, remove the stored value
+          localStorage.removeItem(storageKey);
+        }
+      }
+
+      closeBtn.addEventListener('click', function () {
+        announcementBar.classList.add('hidden');
+        document.body.classList.remove('has-announcement');
+        localStorage.setItem(storageKey, Date.now().toString());
+      });
+    })();
+  </script>
+
+</body>
+
+</html>
