@@ -1860,86 +1860,92 @@
 
 
     <script>
-        // Announcement Bar
-        (function () {
-            var announcementBar = document.getElementById('announcementBar');
-            var closeBtn = document.getElementById('closeAnnouncement');
-            var storageKey = 'barrierBreakersAnnouncementClosedAt_v3';
-            var expiryHours = 24; // Hours until bar reappears
+        // Consolidated Mobile Logic & Announcement Bar
+        document.addEventListener('DOMContentLoaded', function () {
+            // 1. Announcement Bar Logic
+            (function () {
+                var announcementBar = document.getElementById('announcementBar');
+                var closeBtn = document.getElementById('closeAnnouncement');
+                var storageKey = 'barrierBreakersAnnouncementClosedAt_v3';
+                var expiryHours = 24; // Hours until bar reappears
 
-            // Check if user has closed it and if 24 hours have passed
-            var closedAt = localStorage.getItem(storageKey);
-            if (closedAt) {
-                var hoursSinceClosed = (Date.now() - parseInt(closedAt)) / (1000 * 60 * 60);
-                if (hoursSinceClosed < expiryHours) {
-                    announcementBar.classList.add('hidden');
-                    document.body.classList.remove('has-announcement');
-                } else {
-                    // Expired, remove the stored value
-                    localStorage.removeItem(storageKey);
+                if (announcementBar && closeBtn) {
+                    // Check if user has closed it and if 24 hours have passed
+                    var closedAt = localStorage.getItem(storageKey);
+                    if (closedAt) {
+                        var hoursSinceClosed = (Date.now() - parseInt(closedAt)) / (1000 * 60 * 60);
+                        if (hoursSinceClosed < expiryHours) {
+                            announcementBar.classList.add('hidden');
+                            document.body.classList.remove('has-announcement');
+                        } else {
+                            localStorage.removeItem(storageKey);
+                        }
+                    }
+
+                    closeBtn.addEventListener('click', function () {
+                        announcementBar.classList.add('hidden');
+                        document.body.classList.remove('has-announcement');
+                        localStorage.setItem(storageKey, Date.now().toString());
+                    });
+
+                    // Update height CSS variable
+                    var updateHeight = function () {
+                        if (!announcementBar.classList.contains('hidden')) {
+                            var height = announcementBar.offsetHeight;
+                            document.documentElement.style.setProperty('--announcement-height', height + 'px');
+                        }
+                    };
+
+                    // Initial update & resize listener
+                    updateHeight();
+                    window.addEventListener('resize', updateHeight);
                 }
-            }
+            })();
 
-            closeBtn.addEventListener('click', function () {
-                announcementBar.classList.add('hidden');
-                document.body.classList.remove('has-announcement');
-                localStorage.setItem(storageKey, Date.now().toString());
-            });
+            // 2. Mobile Menu & Accordion Logic
+            (function () {
+                const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+                const mobileMenu = document.getElementById("mobileMenu");
 
-            // Update height CSS variable
-            if (!announcementBar.classList.contains('hidden')) {
-                var updateHeight = function () {
-                    var height = announcementBar.offsetHeight;
-                    document.documentElement.style.setProperty('--announcement-height', height + 'px');
-                };
+                if (!mobileMenuBtn || !mobileMenu) return;
 
-                // Initial update
-                updateHeight();
-
-                // Update on resize
-                window.addEventListener('resize', updateHeight);
-            }
-        })();
-
-        // Mobile Menu Toggle
-        (function () {
-            var mobileMenuBtn = document.getElementById("mobileMenuBtn");
-            var mobileMenu = document.getElementById("mobileMenu");
-
-            if (mobileMenuBtn && mobileMenu) {
-                mobileMenuBtn.addEventListener('click', function () {
+                // Toggle Menu Open/Close
+                mobileMenuBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
                     mobileMenu.classList.toggle('active');
                     mobileMenuBtn.classList.toggle('active');
                     document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
                 });
 
-                document.querySelectorAll('.mobile-menu a').forEach(function (link) {
-                    link.addEventListener('click', function () {
+                // Event Delegation for Menu Interactions
+                mobileMenu.addEventListener('click', function (e) {
+                    // A. Handle Accordion Toggles
+                    const toggle = e.target.closest('.mobile-dropdown-toggle');
+                    if (toggle) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        // Toggle active state on button
+                        toggle.classList.toggle('active');
+
+                        // Toggle content visibility
+                        const content = toggle.nextElementSibling;
+                        if (content && content.classList.contains('mobile-dropdown-content')) {
+                            content.classList.toggle('open');
+                        }
+                        return;
+                    }
+
+                    // B. Handle Link Clicks (Close Menu)
+                    const link = e.target.closest('a');
+                    if (link) {
+                        // Allow navigation to proceed, just close menu
                         mobileMenu.classList.remove('active');
                         mobileMenuBtn.classList.remove('active');
                         document.body.style.overflow = '';
-                    });
+                    }
                 });
-            }
-        })();
-    </script>
-
-
-    <script>
-        // Mobile Menu Accordion Logic
-        document.addEventListener('DOMContentLoaded', function () {
-            const toggles = document.querySelectorAll('.mobile-dropdown-toggle');
-
-            toggles.forEach(toggle => {
-                toggle.addEventListener('click', function () {
-                    // Toggle active class on button
-                    this.classList.toggle('active');
-
-                    // Toggle open class on content
-                    const content = this.nextElementSibling;
-                    content.classList.toggle('open');
-                });
-            });
+            })();
         });
     </script>
 
