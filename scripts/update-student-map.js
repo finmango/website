@@ -215,6 +215,16 @@ async function main() {
         thresholds: { "low": 1200, "moderate": 1600, "elevated": 2000, "high": 2400 }
     };
 
+    // Update Financial Stress Thresholds (Make Map Redder)
+    if (data.indicators.financial_stress) {
+        data.indicators.financial_stress.thresholds = {
+            "low": 110,
+            "moderate": 125,
+            "elevated": 135,
+            "high": 145
+        };
+    }
+
     // Write Back
     const dataPath = path.join(__dirname, '..', 'data', 'student-map-data.js');
     const newContent = `// Young Adult Financial Health Map Data
