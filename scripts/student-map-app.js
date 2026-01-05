@@ -202,7 +202,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const indicators = [
             { key: 'student_debt', label: 'Average Student Debt' },
             { key: 'auto_debt', label: 'Average Auto Loan' },
-            { key: 'rent_burden', label: 'Rent Burden (% of Income)' },
+            { key: 'average_rent', label: 'Avg Rent (HUD 2025)' },
+            { key: 'rent_burden', label: 'Cost Burdened Rate' },
             { key: 'median_income', label: 'Median Income (22-34)' },
             { key: 'unemployment', label: 'Unemployment Rate' },
             { key: 'debt_to_income', label: 'Debt-to-Income Ratio' },

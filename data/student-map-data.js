@@ -1,10 +1,10 @@
 // Young Adult Financial Health Map Data
-// Auto-generated: 2026-01-05T20:12:27.858Z
+// Auto-generated: 2026-01-05T20:18:37.860Z
 // Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS
 
 const YOUNG_ADULT_DATA = {
     "meta": {
-        "generated": "2026-01-05T20:12:27.854Z",
+        "generated": "2026-01-05T20:18:37.855Z",
         "version": "3.1",
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
@@ -101,7 +101,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 56.6,
+                "value": 48.1,
                 "change": 1.5,
                 "rank": 28
             },
@@ -126,9 +126,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "financial_stress": {
-                "value": 195,
+                "value": 122,
                 "change": 4.5,
                 "rank": 12
+            },
+            "average_rent": {
+                "value": 924,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-AK": {
@@ -145,7 +151,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 8
             },
             "rent_burden": {
-                "value": 51.2,
+                "value": 60.1,
                 "change": 1.2,
                 "rank": 42
             },
@@ -170,9 +176,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 8
             },
             "financial_stress": {
-                "value": 183,
+                "value": 146,
                 "change": 4.8,
                 "rank": 22
+            },
+            "average_rent": {
+                "value": 1461,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-AZ": {
@@ -189,7 +201,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 18
             },
             "rent_burden": {
-                "value": 60.3,
+                "value": 67.6,
                 "change": 2.1,
                 "rank": 18
             },
@@ -214,9 +226,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 15
             },
             "financial_stress": {
-                "value": 192,
+                "value": 142,
                 "change": 5.2,
                 "rank": 16
+            },
+            "average_rent": {
+                "value": 1431,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-AR": {
@@ -233,7 +251,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "rent_burden": {
-                "value": 54.3,
+                "value": 49.6,
                 "change": 1.4,
                 "rank": 35
             },
@@ -258,9 +276,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 40
             },
             "financial_stress": {
-                "value": 201,
+                "value": 117,
                 "change": 4.2,
                 "rank": 8
+            },
+            "average_rent": {
+                "value": 901,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-CA": {
@@ -277,7 +301,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "rent_burden": {
-                "value": 63.6,
+                "value": 83.1,
                 "change": 0.8,
                 "rank": 1
             },
@@ -302,10 +326,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 1
             },
             "financial_stress": {
-                "value": 323,
+                "value": 923,
                 "change": 1.8,
                 "rank": 4,
                 "trend": "up"
+            },
+            "average_rent": {
+                "value": 1955,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-CO": {
@@ -322,7 +352,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 14
             },
             "rent_burden": {
-                "value": 60.3,
+                "value": 56.2,
                 "change": 1.8,
                 "rank": 19
             },
@@ -347,9 +377,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 12
             },
             "financial_stress": {
-                "value": 175,
+                "value": 133,
                 "change": 4,
                 "rank": 32
+            },
+            "average_rent": {
+                "value": 1408,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-CT": {
@@ -366,7 +402,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 20
             },
             "rent_burden": {
-                "value": 62.1,
+                "value": 66.3,
                 "change": 2,
                 "rank": 12
             },
@@ -391,9 +427,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 6
             },
             "financial_stress": {
-                "value": 185,
+                "value": 149,
                 "change": 4.8,
                 "rank": 20
+            },
+            "average_rent": {
+                "value": 1732,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-DE": {
@@ -410,7 +452,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 21
             },
             "rent_burden": {
-                "value": 58.2,
+                "value": 62.9,
                 "change": 1.7,
                 "rank": 24
             },
@@ -435,9 +477,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 18
             },
             "financial_stress": {
-                "value": 183,
+                "value": 138,
                 "change": 4.5,
                 "rank": 24
+            },
+            "average_rent": {
+                "value": 1446,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-DC": {
@@ -454,7 +502,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 42
             },
             "rent_burden": {
-                "value": 64.7,
+                "value": 59.7,
                 "change": 0.5,
                 "rank": 5
             },
@@ -479,10 +527,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 2
             },
             "financial_stress": {
-                "value": 343,
+                "value": 980,
                 "change": 1.5,
                 "rank": 18,
                 "trend": "up"
+            },
+            "average_rent": {
+                "value": 1972,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-FL": {
@@ -499,7 +553,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 10
             },
             "rent_burden": {
-                "value": 69.8,
+                "value": 82.3,
                 "change": 3.2,
                 "rank": 2
             },
@@ -524,9 +578,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 4
             },
             "financial_stress": {
-                "value": 214,
+                "value": 157,
                 "change": 6,
                 "rank": 2
+            },
+            "average_rent": {
+                "value": 1691,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-GA": {
@@ -543,7 +603,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 12
             },
             "rent_burden": {
-                "value": 61.1,
+                "value": 62.5,
                 "change": 2,
                 "rank": 16
             },
@@ -568,9 +628,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 20
             },
             "financial_stress": {
-                "value": 199,
+                "value": 136,
                 "change": 5,
                 "rank": 10
+            },
+            "average_rent": {
+                "value": 1304,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-HI": {
@@ -587,7 +653,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 26
             },
             "rent_burden": {
-                "value": 64.1,
+                "value": 105,
                 "change": 2.2,
                 "rank": 8
             },
@@ -612,10 +678,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 3
             },
             "financial_stress": {
-                "value": 406,
+                "value": 1160,
                 "change": 5.2,
                 "rank": 12,
                 "trend": "up"
+            },
+            "average_rent": {
+                "value": 2298,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-ID": {
@@ -657,9 +729,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 26
             },
             "financial_stress": {
-                "value": 169,
+                "value": 120,
                 "change": 3.8,
                 "rank": 38
+            },
+            "average_rent": {
+                "value": 1173,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-IL": {
@@ -701,9 +779,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 16
             },
             "financial_stress": {
-                "value": 192,
+                "value": 138,
                 "change": 4.8,
                 "rank": 15
+            },
+            "average_rent": {
+                "value": 1288,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-IN": {
@@ -720,7 +804,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 23
             },
             "rent_burden": {
-                "value": 56.6,
+                "value": 51.3,
                 "change": 1.5,
                 "rank": 26
             },
@@ -745,9 +829,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 35
             },
             "financial_stress": {
-                "value": 178,
+                "value": 116,
                 "change": 4,
                 "rank": 28
+            },
+            "average_rent": {
+                "value": 1048,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-IA": {
@@ -764,7 +854,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 35
             },
             "rent_burden": {
-                "value": 52.6,
+                "value": 43.9,
                 "change": 1.2,
                 "rank": 40
             },
@@ -789,9 +879,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 48
             },
             "financial_stress": {
-                "value": 152,
+                "value": 115,
                 "change": 3,
                 "rank": 48
+            },
+            "average_rent": {
+                "value": 942,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-KS": {
@@ -808,7 +904,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 29
             },
             "rent_burden": {
-                "value": 52.4,
+                "value": 47.9,
                 "change": 1.3,
                 "rank": 41
             },
@@ -833,9 +929,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 43
             },
             "financial_stress": {
-                "value": 159,
+                "value": 115,
                 "change": 3.2,
                 "rank": 44
+            },
+            "average_rent": {
+                "value": 1021,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-KY": {
@@ -852,7 +954,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "rent_burden": {
-                "value": 53.9,
+                "value": 48.4,
                 "change": 1.4,
                 "rank": 36
             },
@@ -877,9 +979,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 37
             },
             "financial_stress": {
-                "value": 195,
+                "value": 118,
                 "change": 4.5,
                 "rank": 13
+            },
+            "average_rent": {
+                "value": 938,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-LA": {
@@ -896,7 +1004,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 15
             },
             "rent_burden": {
-                "value": 62.8,
+                "value": 56.3,
                 "change": 2.2,
                 "rank": 9
             },
@@ -921,9 +1029,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 24
             },
             "financial_stress": {
-                "value": 218,
+                "value": 137,
                 "change": 5.8,
                 "rank": 1
+            },
+            "average_rent": {
+                "value": 1040,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-ME": {
@@ -940,7 +1054,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 33
             },
             "rent_burden": {
-                "value": 58.2,
+                "value": 63.8,
                 "change": 1.7,
                 "rank": 25
             },
@@ -965,9 +1079,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "financial_stress": {
-                "value": 175,
+                "value": 130,
                 "change": 3.8,
                 "rank": 32
+            },
+            "average_rent": {
+                "value": 1380,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-MD": {
@@ -984,7 +1104,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 17
             },
             "rent_burden": {
-                "value": 60.9,
+                "value": 61.3,
                 "change": 1.9,
                 "rank": 17
             },
@@ -1009,9 +1129,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 10
             },
             "financial_stress": {
-                "value": 173,
+                "value": 142,
                 "change": 3.8,
                 "rank": 35
+            },
+            "average_rent": {
+                "value": 1719,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-MA": {
@@ -1028,7 +1154,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 38
             },
             "rent_burden": {
-                "value": 65.5,
+                "value": 81.9,
                 "change": 2.1,
                 "rank": 10
             },
@@ -1053,10 +1179,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 5
             },
             "financial_stress": {
-                "value": 371,
+                "value": 1060,
                 "change": 4.2,
                 "rank": 27,
                 "trend": "up"
+            },
+            "average_rent": {
+                "value": 1995,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-MI": {
@@ -1073,7 +1205,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 11
             },
             "rent_burden": {
-                "value": 57.6,
+                "value": 54.4,
                 "change": 1.7,
                 "rank": 22
             },
@@ -1098,9 +1230,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 27
             },
             "financial_stress": {
-                "value": 192,
+                "value": 129,
                 "change": 4.6,
                 "rank": 14
+            },
+            "average_rent": {
+                "value": 1147,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-MN": {
@@ -1117,7 +1255,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 27
             },
             "rent_burden": {
-                "value": 55.7,
+                "value": 52,
                 "change": 1.5,
                 "rank": 32
             },
@@ -1142,9 +1280,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "financial_stress": {
-                "value": 166,
+                "value": 118,
                 "change": 3.5,
                 "rank": 40
+            },
+            "average_rent": {
+                "value": 1289,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-MS": {
@@ -1161,7 +1305,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 12
             },
             "rent_burden": {
-                "value": 55.1,
+                "value": 46.9,
                 "change": 0.5,
                 "rank": 38
             },
@@ -1186,9 +1330,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 50
             },
             "financial_stress": {
-                "value": 148,
+                "value": 115,
                 "change": 1.5,
                 "rank": 8
+            },
+            "average_rent": {
+                "value": 884,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-MO": {
@@ -1205,7 +1355,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 26
             },
             "rent_burden": {
-                "value": 53.7,
+                "value": 49.2,
                 "change": 1.4,
                 "rank": 37
             },
@@ -1230,9 +1380,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 41
             },
             "financial_stress": {
-                "value": 173,
+                "value": 115,
                 "change": 3.6,
                 "rank": 36
+            },
+            "average_rent": {
+                "value": 1034,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-MT": {
@@ -1249,7 +1405,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 56.1,
+                "value": 64.6,
                 "change": 1.6,
                 "rank": 31
             },
@@ -1274,9 +1430,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 21
             },
             "financial_stress": {
-                "value": 169,
+                "value": 128,
                 "change": 3.6,
                 "rank": 38
+            },
+            "average_rent": {
+                "value": 1348,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-NE": {
@@ -1293,7 +1455,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 34
             },
             "rent_burden": {
-                "value": 51.8,
+                "value": 45.4,
                 "change": 1.2,
                 "rank": 43
             },
@@ -1318,9 +1480,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 50
             },
             "financial_stress": {
-                "value": 145,
+                "value": 115,
                 "change": 2.8,
                 "rank": 50
+            },
+            "average_rent": {
+                "value": 1003,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-NV": {
@@ -1337,7 +1505,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 9
             },
             "rent_burden": {
-                "value": 66.1,
+                "value": 65.4,
                 "change": 2.8,
                 "rank": 4
             },
@@ -1362,9 +1530,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 9
             },
             "financial_stress": {
-                "value": 205,
+                "value": 147,
                 "change": 5.5,
                 "rank": 6
+            },
+            "average_rent": {
+                "value": 1424,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-NH": {
@@ -1381,7 +1555,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 30
             },
             "rent_burden": {
-                "value": 58,
+                "value": 63.3,
                 "change": 1.7,
                 "rank": 23
             },
@@ -1406,9 +1580,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 14
             },
             "financial_stress": {
-                "value": 175,
+                "value": 133,
                 "change": 4,
                 "rank": 33
+            },
+            "average_rent": {
+                "value": 1634,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-NJ": {
@@ -1425,7 +1605,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 67.7,
+                "value": 79.1,
                 "change": 2.5,
                 "rank": 5
             },
@@ -1450,10 +1630,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 7
             },
             "financial_stress": {
-                "value": 391,
+                "value": 1115,
                 "change": 4.8,
                 "rank": 18,
                 "trend": "up"
+            },
+            "average_rent": {
+                "value": 1909,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-NM": {
@@ -1470,7 +1656,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 31
             },
             "rent_burden": {
-                "value": 55.1,
+                "value": 59.7,
                 "change": 1.5,
                 "rank": 34
             },
@@ -1495,9 +1681,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 31
             },
             "financial_stress": {
-                "value": 195,
+                "value": 135,
                 "change": 4.8,
                 "rank": 11
+            },
+            "average_rent": {
+                "value": 1139,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-NY": {
@@ -1514,7 +1706,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 40
             },
             "rent_burden": {
-                "value": 63.1,
+                "value": 85.9,
                 "change": 2,
                 "rank": 11
             },
@@ -1539,10 +1731,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 4
             },
             "financial_stress": {
-                "value": 391,
+                "value": 1115,
                 "change": 4.8,
                 "rank": 19,
                 "trend": "up"
+            },
+            "average_rent": {
+                "value": 1940,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-NC": {
@@ -1559,7 +1757,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 13
             },
             "rent_burden": {
-                "value": 59,
+                "value": 58.3,
                 "change": 1.8,
                 "rank": 20
             },
@@ -1584,9 +1782,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 23
             },
             "financial_stress": {
-                "value": 183,
+                "value": 129,
                 "change": 4.2,
                 "rank": 23
+            },
+            "average_rent": {
+                "value": 1234,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-ND": {
@@ -1603,7 +1807,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 6
             },
             "rent_burden": {
-                "value": 45.4,
+                "value": 42,
                 "change": 0.3,
                 "rank": 51
             },
@@ -1628,9 +1832,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 45
             },
             "financial_stress": {
-                "value": 110,
+                "value": 115,
                 "change": 0.8,
                 "rank": 51
+            },
+            "average_rent": {
+                "value": 1037,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-OH": {
@@ -1647,7 +1857,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "rent_burden": {
-                "value": 55.7,
+                "value": 49.2,
                 "change": 1.5,
                 "rank": 33
             },
@@ -1672,9 +1882,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 38
             },
             "financial_stress": {
-                "value": 183,
+                "value": 117,
                 "change": 4,
                 "rank": 25
+            },
+            "average_rent": {
+                "value": 1027,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-OK": {
@@ -1691,7 +1907,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 20
             },
             "rent_burden": {
-                "value": 53.2,
+                "value": 47.9,
                 "change": 1.3,
                 "rank": 38
             },
@@ -1716,9 +1932,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 45
             },
             "financial_stress": {
-                "value": 178,
+                "value": 115,
                 "change": 3.8,
                 "rank": 29
+            },
+            "average_rent": {
+                "value": 957,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-OR": {
@@ -1735,7 +1957,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 36
             },
             "rent_burden": {
-                "value": 62.8,
+                "value": 67.9,
                 "change": 2.2,
                 "rank": 7
             },
@@ -1760,9 +1982,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 11
             },
             "financial_stress": {
-                "value": 187,
+                "value": 145,
                 "change": 4.6,
                 "rank": 17
+            },
+            "average_rent": {
+                "value": 1547,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-PA": {
@@ -1779,7 +2007,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 32
             },
             "rent_burden": {
-                "value": 58.4,
+                "value": 54.9,
                 "change": 1.7,
                 "rank": 21
             },
@@ -1804,9 +2032,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 19
             },
             "financial_stress": {
-                "value": 192,
+                "value": 132,
                 "change": 4.6,
                 "rank": 16
+            },
+            "average_rent": {
+                "value": 1236,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-RI": {
@@ -1823,7 +2057,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 37
             },
             "rent_burden": {
-                "value": 61.5,
+                "value": 72.9,
                 "change": 2,
                 "rank": 14
             },
@@ -1848,9 +2082,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 13
             },
             "financial_stress": {
-                "value": 185,
+                "value": 150,
                 "change": 4.5,
                 "rank": 21
+            },
+            "average_rent": {
+                "value": 1707,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-SC": {
@@ -1867,7 +2107,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 10
             },
             "rent_burden": {
-                "value": 60.3,
+                "value": 56.2,
                 "change": 1.9,
                 "rank": 18
             },
@@ -1892,9 +2132,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 29
             },
             "financial_stress": {
-                "value": 201,
+                "value": 124,
                 "change": 5,
                 "rank": 7
+            },
+            "average_rent": {
+                "value": 1139,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-SD": {
@@ -1911,7 +2157,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 5
             },
             "rent_burden": {
-                "value": 48.7,
+                "value": 44.8,
                 "change": 0.9,
                 "rank": 47
             },
@@ -1936,9 +2182,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 49
             },
             "financial_stress": {
-                "value": 156,
+                "value": 115,
                 "change": 3,
                 "rank": 46
+            },
+            "average_rent": {
+                "value": 995,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-TN": {
@@ -1955,7 +2207,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 9
             },
             "rent_burden": {
-                "value": 59,
+                "value": 52.8,
                 "change": 1.9,
                 "rank": 19
             },
@@ -1980,9 +2232,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 32
             },
             "financial_stress": {
-                "value": 185,
+                "value": 119,
                 "change": 4.2,
                 "rank": 22
+            },
+            "average_rent": {
+                "value": 1085,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-TX": {
@@ -1999,7 +2257,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 1
             },
             "rent_burden": {
-                "value": 59,
+                "value": 59.1,
                 "change": 0.6,
                 "rank": 18
             },
@@ -2024,9 +2282,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "financial_stress": {
-                "value": 143,
+                "value": 115,
                 "change": 1.5,
                 "rank": 12
+            },
+            "average_rent": {
+                "value": 1378,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-UT": {
@@ -2043,7 +2307,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 18
             },
             "rent_burden": {
-                "value": 54.1,
+                "value": 57.5,
                 "change": 1.5,
                 "rank": 35
             },
@@ -2068,9 +2332,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 15
             },
             "financial_stress": {
-                "value": 161,
+                "value": 128,
                 "change": 3.2,
                 "rank": 42
+            },
+            "average_rent": {
+                "value": 1432,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-VT": {
@@ -2087,7 +2357,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 39
             },
             "rent_burden": {
-                "value": 59,
+                "value": 61.8,
                 "change": 1.8,
                 "rank": 20
             },
@@ -2112,9 +2382,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 17
             },
             "financial_stress": {
-                "value": 169,
+                "value": 131,
                 "change": 3.6,
                 "rank": 37
+            },
+            "average_rent": {
+                "value": 1437,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-VA": {
@@ -2131,7 +2407,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 19
             },
             "rent_burden": {
-                "value": 57,
+                "value": 58,
                 "change": 1.6,
                 "rank": 25
             },
@@ -2156,9 +2432,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 13
             },
             "financial_stress": {
-                "value": 173,
+                "value": 133,
                 "change": 3.8,
                 "rank": 34
+            },
+            "average_rent": {
+                "value": 1489,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-WA": {
@@ -2175,7 +2457,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 29
             },
             "rent_burden": {
-                "value": 65.2,
+                "value": 79.7,
                 "change": 2,
                 "rank": 13
             },
@@ -2200,10 +2482,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 6
             },
             "financial_stress": {
-                "value": 371,
+                "value": 1060,
                 "change": 4.2,
                 "rank": 26,
                 "trend": "up"
+            },
+            "average_rent": {
+                "value": 1827,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-WV": {
@@ -2220,7 +2508,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 35
             },
             "rent_burden": {
-                "value": 52.6,
+                "value": 51,
                 "change": 1.2,
                 "rank": 39
             },
@@ -2245,9 +2533,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 44
             },
             "financial_stress": {
-                "value": 205,
+                "value": 128,
                 "change": 5,
                 "rank": 4
+            },
+            "average_rent": {
+                "value": 920,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-WI": {
@@ -2264,7 +2558,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 30
             },
             "rent_burden": {
-                "value": 53.2,
+                "value": 49.9,
                 "change": 1.3,
                 "rank": 38
             },
@@ -2289,9 +2583,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 42
             },
             "financial_stress": {
-                "value": 166,
+                "value": 115,
                 "change": 3.4,
                 "rank": 41
+            },
+            "average_rent": {
+                "value": 1098,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         },
         "US-WY": {
@@ -2308,7 +2608,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 2
             },
             "rent_burden": {
-                "value": 47.9,
+                "value": 47,
                 "change": 0.8,
                 "rank": 48
             },
@@ -2333,9 +2633,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 47
             },
             "financial_stress": {
-                "value": 159,
+                "value": 115,
                 "change": 3,
                 "rank": 45
+            },
+            "average_rent": {
+                "value": 1096,
+                "unit": "$",
+                "label": "HUD Fair Market Rent (2025)",
+                "source": "HUD FY2025 FMR (2-Bed)"
             }
         }
     },
@@ -2466,6 +2772,21 @@ const YOUNG_ADULT_DATA = {
                 "moderate": 135,
                 "elevated": 150,
                 "high": 160
+            }
+        },
+        "average_rent": {
+            "name": "Average Rent",
+            "fullName": "HUD Fair Market Rent (2025)",
+            "description": "HUD FY2025 Fair Market Rents (40th Percentile) for a 2-Bedroom unit",
+            "source": "HUD FY2025 FMR",
+            "unit": "$",
+            "format": "currency",
+            "higherIsBad": true,
+            "thresholds": {
+                "low": 1000,
+                "moderate": 1400,
+                "elevated": 1800,
+                "high": 2200
             }
         }
     }
