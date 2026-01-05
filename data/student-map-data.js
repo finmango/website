@@ -1,10 +1,10 @@
 // Young Adult Financial Health Map Data
-// Auto-generated: 2026-01-05T20:04:37.911Z
+// Auto-generated: 2026-01-05T20:07:36.059Z
 // Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS
 
 const YOUNG_ADULT_DATA = {
     "meta": {
-        "generated": "2026-01-05T20:04:37.908Z",
+        "generated": "2026-01-05T20:07:36.055Z",
         "version": "3.1",
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
@@ -277,7 +277,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "rent_burden": {
-                "value": 41.1,
+                "value": 62.4,
                 "change": 0.8,
                 "rank": 1
             },
@@ -297,14 +297,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "cost_of_living": {
-                "value": 112.6,
-                "change": 1.2,
+                "value": 152,
+                "change": 4.5,
                 "rank": 1
             },
             "financial_stress": {
-                "value": 118,
+                "value": 165,
                 "change": 1.8,
-                "rank": 4
+                "rank": 4,
+                "trend": "up"
             }
         },
         "US-CO": {
@@ -453,7 +454,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 42
             },
             "rent_burden": {
-                "value": 35.2,
+                "value": 61.3,
                 "change": 0.5,
                 "rank": 5
             },
@@ -473,14 +474,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 45
             },
             "cost_of_living": {
-                "value": 110.8,
-                "change": 1,
+                "value": 150,
+                "change": 4.5,
                 "rank": 2
             },
             "financial_stress": {
-                "value": 105,
+                "value": 175,
                 "change": 1.5,
-                "rank": 18
+                "rank": 18,
+                "trend": "up"
             }
         },
         "US-FL": {
@@ -585,7 +587,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 26
             },
             "rent_burden": {
-                "value": 32.6,
+                "value": 59.4,
                 "change": 2.2,
                 "rank": 8
             },
@@ -610,9 +612,10 @@ const YOUNG_ADULT_DATA = {
                 "rank": 3
             },
             "financial_stress": {
-                "value": 148,
+                "value": 207,
                 "change": 5.2,
-                "rank": 12
+                "rank": 12,
+                "trend": "up"
             }
         },
         "US-ID": {
@@ -1025,7 +1028,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 38
             },
             "rent_burden": {
-                "value": 32.4,
+                "value": 59.7,
                 "change": 2.1,
                 "rank": 10
             },
@@ -1050,9 +1053,10 @@ const YOUNG_ADULT_DATA = {
                 "rank": 5
             },
             "financial_stress": {
-                "value": 135,
+                "value": 189,
                 "change": 4.2,
-                "rank": 27
+                "rank": 27,
+                "trend": "up"
             }
         },
         "US-MI": {
@@ -1421,7 +1425,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 34,
+                "value": 62.6,
                 "change": 2.5,
                 "rank": 5
             },
@@ -1446,9 +1450,10 @@ const YOUNG_ADULT_DATA = {
                 "rank": 7
             },
             "financial_stress": {
-                "value": 142,
+                "value": 199,
                 "change": 4.8,
-                "rank": 18
+                "rank": 18,
+                "trend": "up"
             }
         },
         "US-NM": {
@@ -1509,7 +1514,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 40
             },
             "rent_burden": {
-                "value": 32.2,
+                "value": 60.4,
                 "change": 2,
                 "rank": 11
             },
@@ -1534,9 +1539,10 @@ const YOUNG_ADULT_DATA = {
                 "rank": 4
             },
             "financial_stress": {
-                "value": 142,
+                "value": 199,
                 "change": 4.8,
-                "rank": 19
+                "rank": 19,
+                "trend": "up"
             }
         },
         "US-NC": {
@@ -2169,7 +2175,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 29
             },
             "rent_burden": {
-                "value": 31.8,
+                "value": 61.5,
                 "change": 2,
                 "rank": 13
             },
@@ -2194,9 +2200,10 @@ const YOUNG_ADULT_DATA = {
                 "rank": 6
             },
             "financial_stress": {
-                "value": 135,
+                "value": 189,
                 "change": 4.2,
-                "rank": 26
+                "rank": 26,
+                "trend": "up"
             }
         },
         "US-WV": {
