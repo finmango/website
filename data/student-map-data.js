@@ -1,10 +1,10 @@
 // Young Adult Financial Health Map Data
-// Auto-generated: 2025-12-19
+// Auto-generated: 2026-01-05T19:58:39.285Z
 // Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS
 
 const YOUNG_ADULT_DATA = {
     "meta": {
-        "generated": "2025-01-05T12:00:00.000Z",
+        "generated": "2026-01-05T19:58:39.279Z",
         "version": "3.1",
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
@@ -54,12 +54,12 @@ const YOUNG_ADULT_DATA = {
             "source_note": "BLS Q2 2025 Estimate"
         },
         "unemployment": {
-            "value": 9.2,
+            "value": 8.3,
             "change": 1.1,
             "label": "Youth Unemployment Rate",
             "unit": "%",
             "trend": "up",
-            "source_note": "BLS (Ages 20-24), Sept 2025"
+            "source_note": "BLS (Ages 20-24) November 2025"
         },
         "debt_to_income": {
             "value": 42.5,
@@ -79,7 +79,7 @@ const YOUNG_ADULT_DATA = {
         },
         "financial_stress": {
             "value": 100,
-            "change": 2.0,
+            "change": 2,
             "label": "Financial Stress Index",
             "unit": "index",
             "trend": "up",
@@ -90,614 +90,2246 @@ const YOUNG_ADULT_DATA = {
         "US-AL": {
             "name": "Alabama",
             "abbr": "AL",
-            "student_debt": { "value": 30318, "change": 1.8, "rank": 18 },
-            "auto_debt": { "value": 24100, "change": 3.5, "rank": 22 },
-            "rent_burden": { "value": 29.3, "change": 1.5, "rank": 28 },
-            "median_income": { "value": 42800, "change": 2.8, "rank": 42 },
-            "unemployment": { "value": 8.1, "change": 0.5, "rank": 35 },
-            "debt_to_income": { "value": 42.1, "change": 2.8, "rank": 15 },
-            "cost_of_living": { "value": 128, "change": 3.2, "rank": 28 },
-            "financial_stress": { "value": 148, "change": 4.5, "rank": 12 }
+            "student_debt": {
+                "value": 30318,
+                "change": 1.8,
+                "rank": 18
+            },
+            "auto_debt": {
+                "value": 24100,
+                "change": 3.5,
+                "rank": 22
+            },
+            "rent_burden": {
+                "value": 29.3,
+                "change": 1.5,
+                "rank": 28
+            },
+            "median_income": {
+                "value": 42800,
+                "change": 2.8,
+                "rank": 42
+            },
+            "unemployment": {
+                "value": 8.1,
+                "change": 0.5,
+                "rank": 35
+            },
+            "debt_to_income": {
+                "value": 42.1,
+                "change": 2.8,
+                "rank": 15
+            },
+            "cost_of_living": {
+                "value": 128,
+                "change": 3.2,
+                "rank": 28
+            },
+            "financial_stress": {
+                "value": 148,
+                "change": 4.5,
+                "rank": 12
+            }
         },
         "US-AK": {
             "name": "Alaska",
             "abbr": "AK",
-            "student_debt": { "value": 26719, "change": 2.4, "rank": 39 },
-            "auto_debt": { "value": 26500, "change": 4.1, "rank": 8 },
-            "rent_burden": { "value": 26.5, "change": 1.2, "rank": 42 },
-            "median_income": { "value": 54200, "change": 3.5, "rank": 12 },
-            "unemployment": { "value": 9.2, "change": 0.8, "rank": 45 },
-            "debt_to_income": { "value": 35.8, "change": 2.2, "rank": 32 },
-            "cost_of_living": { "value": 152, "change": 5.1, "rank": 8 },
-            "financial_stress": { "value": 138, "change": 4.8, "rank": 22 }
+            "student_debt": {
+                "value": 26719,
+                "change": 2.4,
+                "rank": 39
+            },
+            "auto_debt": {
+                "value": 26500,
+                "change": 4.1,
+                "rank": 8
+            },
+            "rent_burden": {
+                "value": 26.5,
+                "change": 1.2,
+                "rank": 42
+            },
+            "median_income": {
+                "value": 54200,
+                "change": 3.5,
+                "rank": 12
+            },
+            "unemployment": {
+                "value": 9.2,
+                "change": 0.8,
+                "rank": 45
+            },
+            "debt_to_income": {
+                "value": 35.8,
+                "change": 2.2,
+                "rank": 32
+            },
+            "cost_of_living": {
+                "value": 152,
+                "change": 5.1,
+                "rank": 8
+            },
+            "financial_stress": {
+                "value": 138,
+                "change": 4.8,
+                "rank": 22
+            }
         },
         "US-AZ": {
             "name": "Arizona",
             "abbr": "AZ",
-            "student_debt": { "value": 24349, "change": 1.5, "rank": 46 },
-            "auto_debt": { "value": 24800, "change": 4.5, "rank": 18 },
-            "rent_burden": { "value": 31.2, "change": 2.1, "rank": 18 },
-            "median_income": { "value": 47200, "change": 3.2, "rank": 28 },
-            "unemployment": { "value": 7.8, "change": 0.4, "rank": 32 },
-            "debt_to_income": { "value": 39.5, "change": 3.0, "rank": 22 },
-            "cost_of_living": { "value": 142, "change": 4.8, "rank": 15 },
-            "financial_stress": { "value": 145, "change": 5.2, "rank": 16 }
+            "student_debt": {
+                "value": 24349,
+                "change": 1.5,
+                "rank": 46
+            },
+            "auto_debt": {
+                "value": 24800,
+                "change": 4.5,
+                "rank": 18
+            },
+            "rent_burden": {
+                "value": 31.2,
+                "change": 2.1,
+                "rank": 18
+            },
+            "median_income": {
+                "value": 47200,
+                "change": 3.2,
+                "rank": 28
+            },
+            "unemployment": {
+                "value": 7.8,
+                "change": 0.4,
+                "rank": 32
+            },
+            "debt_to_income": {
+                "value": 39.5,
+                "change": 3,
+                "rank": 22
+            },
+            "cost_of_living": {
+                "value": 142,
+                "change": 4.8,
+                "rank": 15
+            },
+            "financial_stress": {
+                "value": 145,
+                "change": 5.2,
+                "rank": 16
+            }
         },
         "US-AR": {
             "name": "Arkansas",
             "abbr": "AR",
-            "student_debt": { "value": 27093, "change": 2.0, "rank": 37 },
-            "auto_debt": { "value": 23200, "change": 3.2, "rank": 28 },
-            "rent_burden": { "value": 28.1, "change": 1.4, "rank": 35 },
-            "median_income": { "value": 40500, "change": 2.5, "rank": 48 },
-            "unemployment": { "value": 7.5, "change": 0.3, "rank": 28 },
-            "debt_to_income": { "value": 44.2, "change": 3.1, "rank": 8 },
-            "cost_of_living": { "value": 118, "change": 2.8, "rank": 40 },
-            "financial_stress": { "value": 152, "change": 4.2, "rank": 8 }
+            "student_debt": {
+                "value": 27093,
+                "change": 2,
+                "rank": 37
+            },
+            "auto_debt": {
+                "value": 23200,
+                "change": 3.2,
+                "rank": 28
+            },
+            "rent_burden": {
+                "value": 28.1,
+                "change": 1.4,
+                "rank": 35
+            },
+            "median_income": {
+                "value": 40500,
+                "change": 2.5,
+                "rank": 48
+            },
+            "unemployment": {
+                "value": 7.5,
+                "change": 0.3,
+                "rank": 28
+            },
+            "debt_to_income": {
+                "value": 44.2,
+                "change": 3.1,
+                "rank": 8
+            },
+            "cost_of_living": {
+                "value": 118,
+                "change": 2.8,
+                "rank": 40
+            },
+            "financial_stress": {
+                "value": 152,
+                "change": 4.2,
+                "rank": 8
+            }
         },
         "US-CA": {
             "name": "California",
             "abbr": "CA",
-            "student_debt": { "value": 37819, "change": 2.1, "rank": 15 },
-            "auto_debt": { "value": 24500, "change": 2.0, "rank": 25 },
-            "rent_burden": { "value": 41.1, "change": 0.8, "rank": 1 },
-            "median_income": { "value": 58000, "change": 3.5, "rank": 8 },
-            "unemployment": { "value": 5.4, "change": 0.3, "rank": 48 },
-            "debt_to_income": { "value": 38.2, "change": 1.5, "rank": 25 },
-            "cost_of_living": { "value": 112.6, "change": 1.2, "rank": 1 },
-            "financial_stress": { "value": 118, "change": 1.8, "rank": 4 }
+            "student_debt": {
+                "value": 37819,
+                "change": 2.1,
+                "rank": 15
+            },
+            "auto_debt": {
+                "value": 24500,
+                "change": 2,
+                "rank": 25
+            },
+            "rent_burden": {
+                "value": 41.1,
+                "change": 0.8,
+                "rank": 1
+            },
+            "median_income": {
+                "value": 58000,
+                "change": 3.5,
+                "rank": 8
+            },
+            "unemployment": {
+                "value": 5.4,
+                "change": 0.3,
+                "rank": 48
+            },
+            "debt_to_income": {
+                "value": 38.2,
+                "change": 1.5,
+                "rank": 25
+            },
+            "cost_of_living": {
+                "value": 112.6,
+                "change": 1.2,
+                "rank": 1
+            },
+            "financial_stress": {
+                "value": 118,
+                "change": 1.8,
+                "rank": 4
+            }
         },
         "US-CO": {
             "name": "Colorado",
             "abbr": "CO",
-            "student_debt": { "value": 26969, "change": 1.8, "rank": 38 },
-            "auto_debt": { "value": 25200, "change": 4.2, "rank": 14 },
-            "rent_burden": { "value": 31.2, "change": 1.8, "rank": 19 },
-            "median_income": { "value": 55800, "change": 4.1, "rank": 8 },
-            "unemployment": { "value": 7.2, "change": 0.2, "rank": 22 },
-            "debt_to_income": { "value": 34.2, "change": 2.0, "rank": 38 },
-            "cost_of_living": { "value": 148, "change": 4.5, "rank": 12 },
-            "financial_stress": { "value": 132, "change": 4.0, "rank": 32 }
+            "student_debt": {
+                "value": 26969,
+                "change": 1.8,
+                "rank": 38
+            },
+            "auto_debt": {
+                "value": 25200,
+                "change": 4.2,
+                "rank": 14
+            },
+            "rent_burden": {
+                "value": 31.2,
+                "change": 1.8,
+                "rank": 19
+            },
+            "median_income": {
+                "value": 55800,
+                "change": 4.1,
+                "rank": 8
+            },
+            "unemployment": {
+                "value": 7.2,
+                "change": 0.2,
+                "rank": 22
+            },
+            "debt_to_income": {
+                "value": 34.2,
+                "change": 2,
+                "rank": 38
+            },
+            "cost_of_living": {
+                "value": 148,
+                "change": 4.5,
+                "rank": 12
+            },
+            "financial_stress": {
+                "value": 132,
+                "change": 4,
+                "rank": 32
+            }
         },
         "US-CT": {
             "name": "Connecticut",
             "abbr": "CT",
-            "student_debt": { "value": 35115, "change": 2.5, "rank": 4 },
-            "auto_debt": { "value": 24600, "change": 3.8, "rank": 20 },
-            "rent_burden": { "value": 32.1, "change": 2.0, "rank": 12 },
-            "median_income": { "value": 58200, "change": 3.5, "rank": 5 },
-            "unemployment": { "value": 8.4, "change": 0.5, "rank": 38 },
-            "debt_to_income": { "value": 38.5, "change": 2.5, "rank": 24 },
-            "cost_of_living": { "value": 155, "change": 5.2, "rank": 6 },
-            "financial_stress": { "value": 140, "change": 4.8, "rank": 20 }
+            "student_debt": {
+                "value": 35115,
+                "change": 2.5,
+                "rank": 4
+            },
+            "auto_debt": {
+                "value": 24600,
+                "change": 3.8,
+                "rank": 20
+            },
+            "rent_burden": {
+                "value": 32.1,
+                "change": 2,
+                "rank": 12
+            },
+            "median_income": {
+                "value": 58200,
+                "change": 3.5,
+                "rank": 5
+            },
+            "unemployment": {
+                "value": 8.4,
+                "change": 0.5,
+                "rank": 38
+            },
+            "debt_to_income": {
+                "value": 38.5,
+                "change": 2.5,
+                "rank": 24
+            },
+            "cost_of_living": {
+                "value": 155,
+                "change": 5.2,
+                "rank": 6
+            },
+            "financial_stress": {
+                "value": 140,
+                "change": 4.8,
+                "rank": 20
+            }
         },
         "US-DE": {
             "name": "Delaware",
             "abbr": "DE",
-            "student_debt": { "value": 33808, "change": 2.3, "rank": 8 },
-            "auto_debt": { "value": 24200, "change": 3.6, "rank": 21 },
-            "rent_burden": { "value": 30.1, "change": 1.7, "rank": 24 },
-            "median_income": { "value": 51200, "change": 3.2, "rank": 18 },
-            "unemployment": { "value": 8.0, "change": 0.4, "rank": 34 },
-            "debt_to_income": { "value": 40.2, "change": 2.6, "rank": 18 },
-            "cost_of_living": { "value": 140, "change": 4.2, "rank": 18 },
-            "financial_stress": { "value": 138, "change": 4.5, "rank": 24 }
+            "student_debt": {
+                "value": 33808,
+                "change": 2.3,
+                "rank": 8
+            },
+            "auto_debt": {
+                "value": 24200,
+                "change": 3.6,
+                "rank": 21
+            },
+            "rent_burden": {
+                "value": 30.1,
+                "change": 1.7,
+                "rank": 24
+            },
+            "median_income": {
+                "value": 51200,
+                "change": 3.2,
+                "rank": 18
+            },
+            "unemployment": {
+                "value": 8,
+                "change": 0.4,
+                "rank": 34
+            },
+            "debt_to_income": {
+                "value": 40.2,
+                "change": 2.6,
+                "rank": 18
+            },
+            "cost_of_living": {
+                "value": 140,
+                "change": 4.2,
+                "rank": 18
+            },
+            "financial_stress": {
+                "value": 138,
+                "change": 4.5,
+                "rank": 24
+            }
         },
         "US-DC": {
             "name": "District of Columbia",
             "abbr": "DC",
-            "student_debt": { "value": 54795, "change": 2.5, "rank": 1 },
-            "auto_debt": { "value": 22000, "change": 1.8, "rank": 42 },
-            "rent_burden": { "value": 35.2, "change": 0.5, "rank": 5 },
-            "median_income": { "value": 85000, "change": 4.0, "rank": 1 },
-            "unemployment": { "value": 5.2, "change": 0.2, "rank": 47 },
-            "debt_to_income": { "value": 32.1, "change": 1.2, "rank": 45 },
-            "cost_of_living": { "value": 110.8, "change": 1.0, "rank": 2 },
-            "financial_stress": { "value": 105, "change": 1.5, "rank": 18 }
+            "student_debt": {
+                "value": 54795,
+                "change": 2.5,
+                "rank": 1
+            },
+            "auto_debt": {
+                "value": 22000,
+                "change": 1.8,
+                "rank": 42
+            },
+            "rent_burden": {
+                "value": 35.2,
+                "change": 0.5,
+                "rank": 5
+            },
+            "median_income": {
+                "value": 85000,
+                "change": 4,
+                "rank": 1
+            },
+            "unemployment": {
+                "value": 5.2,
+                "change": 0.2,
+                "rank": 47
+            },
+            "debt_to_income": {
+                "value": 32.1,
+                "change": 1.2,
+                "rank": 45
+            },
+            "cost_of_living": {
+                "value": 110.8,
+                "change": 1,
+                "rank": 2
+            },
+            "financial_stress": {
+                "value": 105,
+                "change": 1.5,
+                "rank": 18
+            }
         },
         "US-FL": {
             "name": "Florida",
             "abbr": "FL",
-            "student_debt": { "value": 24376, "change": 1.6, "rank": 45 },
-            "auto_debt": { "value": 25800, "change": 4.8, "rank": 10 },
-            "rent_burden": { "value": 36.1, "change": 3.2, "rank": 2 },
-            "median_income": { "value": 45800, "change": 3.0, "rank": 35 },
-            "unemployment": { "value": 7.0, "change": 0.2, "rank": 18 },
-            "debt_to_income": { "value": 44.8, "change": 3.5, "rank": 6 },
-            "cost_of_living": { "value": 158, "change": 5.5, "rank": 4 },
-            "financial_stress": { "value": 162, "change": 6.0, "rank": 2 }
+            "student_debt": {
+                "value": 24376,
+                "change": 1.6,
+                "rank": 45
+            },
+            "auto_debt": {
+                "value": 25800,
+                "change": 4.8,
+                "rank": 10
+            },
+            "rent_burden": {
+                "value": 36.1,
+                "change": 3.2,
+                "rank": 2
+            },
+            "median_income": {
+                "value": 45800,
+                "change": 3,
+                "rank": 35
+            },
+            "unemployment": {
+                "value": 7,
+                "change": 0.2,
+                "rank": 18
+            },
+            "debt_to_income": {
+                "value": 44.8,
+                "change": 3.5,
+                "rank": 6
+            },
+            "cost_of_living": {
+                "value": 158,
+                "change": 5.5,
+                "rank": 4
+            },
+            "financial_stress": {
+                "value": 162,
+                "change": 6,
+                "rank": 2
+            }
         },
         "US-GA": {
             "name": "Georgia",
             "abbr": "GA",
-            "student_debt": { "value": 30502, "change": 2.1, "rank": 16 },
-            "auto_debt": { "value": 25400, "change": 4.3, "rank": 12 },
-            "rent_burden": { "value": 31.6, "change": 2.0, "rank": 16 },
-            "median_income": { "value": 46500, "change": 3.2, "rank": 32 },
-            "unemployment": { "value": 7.6, "change": 0.3, "rank": 30 },
-            "debt_to_income": { "value": 42.5, "change": 2.9, "rank": 14 },
-            "cost_of_living": { "value": 138, "change": 4.0, "rank": 20 },
-            "financial_stress": { "value": 150, "change": 5.0, "rank": 10 }
+            "student_debt": {
+                "value": 30502,
+                "change": 2.1,
+                "rank": 16
+            },
+            "auto_debt": {
+                "value": 25400,
+                "change": 4.3,
+                "rank": 12
+            },
+            "rent_burden": {
+                "value": 31.6,
+                "change": 2,
+                "rank": 16
+            },
+            "median_income": {
+                "value": 46500,
+                "change": 3.2,
+                "rank": 32
+            },
+            "unemployment": {
+                "value": 7.6,
+                "change": 0.3,
+                "rank": 30
+            },
+            "debt_to_income": {
+                "value": 42.5,
+                "change": 2.9,
+                "rank": 14
+            },
+            "cost_of_living": {
+                "value": 138,
+                "change": 4,
+                "rank": 20
+            },
+            "financial_stress": {
+                "value": 150,
+                "change": 5,
+                "rank": 10
+            }
         },
         "US-HI": {
             "name": "Hawaii",
             "abbr": "HI",
-            "student_debt": { "value": 24097, "change": 1.4, "rank": 47 },
-            "auto_debt": { "value": 23500, "change": 3.5, "rank": 26 },
-            "rent_burden": { "value": 32.6, "change": 2.2, "rank": 8 },
-            "median_income": { "value": 52800, "change": 3.5, "rank": 14 },
-            "unemployment": { "value": 6.8, "change": 0.1, "rank": 15 },
-            "debt_to_income": { "value": 35.2, "change": 2.1, "rank": 35 },
-            "cost_of_living": { "value": 165, "change": 5.6, "rank": 3 },
-            "financial_stress": { "value": 148, "change": 5.2, "rank": 12 }
+            "student_debt": {
+                "value": 24097,
+                "change": 1.4,
+                "rank": 47
+            },
+            "auto_debt": {
+                "value": 23500,
+                "change": 3.5,
+                "rank": 26
+            },
+            "rent_burden": {
+                "value": 32.6,
+                "change": 2.2,
+                "rank": 8
+            },
+            "median_income": {
+                "value": 52800,
+                "change": 3.5,
+                "rank": 14
+            },
+            "unemployment": {
+                "value": 6.8,
+                "change": 0.1,
+                "rank": 15
+            },
+            "debt_to_income": {
+                "value": 35.2,
+                "change": 2.1,
+                "rank": 35
+            },
+            "cost_of_living": {
+                "value": 165,
+                "change": 5.6,
+                "rank": 3
+            },
+            "financial_stress": {
+                "value": 148,
+                "change": 5.2,
+                "rank": 12
+            }
         },
         "US-ID": {
             "name": "Idaho",
             "abbr": "ID",
-            "student_debt": { "value": 27563, "change": 2.2, "rank": 34 },
-            "auto_debt": { "value": 24500, "change": 4.0, "rank": 19 },
-            "rent_burden": { "value": 29.3, "change": 1.6, "rank": 29 },
-            "median_income": { "value": 46200, "change": 3.5, "rank": 34 },
-            "unemployment": { "value": 5.8, "change": 0.1, "rank": 5 },
-            "debt_to_income": { "value": 38.8, "change": 2.5, "rank": 23 },
-            "cost_of_living": { "value": 130, "change": 3.5, "rank": 26 },
-            "financial_stress": { "value": 128, "change": 3.8, "rank": 38 }
+            "student_debt": {
+                "value": 27563,
+                "change": 2.2,
+                "rank": 34
+            },
+            "auto_debt": {
+                "value": 24500,
+                "change": 4,
+                "rank": 19
+            },
+            "rent_burden": {
+                "value": 29.3,
+                "change": 1.6,
+                "rank": 29
+            },
+            "median_income": {
+                "value": 46200,
+                "change": 3.5,
+                "rank": 34
+            },
+            "unemployment": {
+                "value": 5.8,
+                "change": 0.1,
+                "rank": 5
+            },
+            "debt_to_income": {
+                "value": 38.8,
+                "change": 2.5,
+                "rank": 23
+            },
+            "cost_of_living": {
+                "value": 130,
+                "change": 3.5,
+                "rank": 26
+            },
+            "financial_stress": {
+                "value": 128,
+                "change": 3.8,
+                "rank": 38
+            }
         },
         "US-IL": {
             "name": "Illinois",
             "abbr": "IL",
-            "student_debt": { "value": 30193, "change": 2.0, "rank": 19 },
-            "auto_debt": { "value": 23800, "change": 3.6, "rank": 24 },
-            "rent_burden": { "value": 29.4, "change": 1.6, "rank": 27 },
-            "median_income": { "value": 50500, "change": 3.2, "rank": 20 },
-            "unemployment": { "value": 9.0, "change": 0.6, "rank": 43 },
-            "debt_to_income": { "value": 39.8, "change": 2.6, "rank": 20 },
-            "cost_of_living": { "value": 142, "change": 4.3, "rank": 16 },
-            "financial_stress": { "value": 145, "change": 4.8, "rank": 15 }
+            "student_debt": {
+                "value": 30193,
+                "change": 2,
+                "rank": 19
+            },
+            "auto_debt": {
+                "value": 23800,
+                "change": 3.6,
+                "rank": 24
+            },
+            "rent_burden": {
+                "value": 29.4,
+                "change": 1.6,
+                "rank": 27
+            },
+            "median_income": {
+                "value": 50500,
+                "change": 3.2,
+                "rank": 20
+            },
+            "unemployment": {
+                "value": 9,
+                "change": 0.6,
+                "rank": 43
+            },
+            "debt_to_income": {
+                "value": 39.8,
+                "change": 2.6,
+                "rank": 20
+            },
+            "cost_of_living": {
+                "value": 142,
+                "change": 4.3,
+                "rank": 16
+            },
+            "financial_stress": {
+                "value": 145,
+                "change": 4.8,
+                "rank": 15
+            }
         },
         "US-IN": {
             "name": "Indiana",
             "abbr": "IN",
-            "student_debt": { "value": 29193, "change": 1.9, "rank": 23 },
-            "auto_debt": { "value": 24000, "change": 3.8, "rank": 23 },
-            "rent_burden": { "value": 29.3, "change": 1.5, "rank": 26 },
-            "median_income": { "value": 45500, "change": 2.8, "rank": 38 },
-            "unemployment": { "value": 6.5, "change": 0.2, "rank": 12 },
-            "debt_to_income": { "value": 40.8, "change": 2.6, "rank": 17 },
-            "cost_of_living": { "value": 122, "change": 3.0, "rank": 35 },
-            "financial_stress": { "value": 135, "change": 4.0, "rank": 28 }
+            "student_debt": {
+                "value": 29193,
+                "change": 1.9,
+                "rank": 23
+            },
+            "auto_debt": {
+                "value": 24000,
+                "change": 3.8,
+                "rank": 23
+            },
+            "rent_burden": {
+                "value": 29.3,
+                "change": 1.5,
+                "rank": 26
+            },
+            "median_income": {
+                "value": 45500,
+                "change": 2.8,
+                "rank": 38
+            },
+            "unemployment": {
+                "value": 6.5,
+                "change": 0.2,
+                "rank": 12
+            },
+            "debt_to_income": {
+                "value": 40.8,
+                "change": 2.6,
+                "rank": 17
+            },
+            "cost_of_living": {
+                "value": 122,
+                "change": 3,
+                "rank": 35
+            },
+            "financial_stress": {
+                "value": 135,
+                "change": 4,
+                "rank": 28
+            }
         },
         "US-IA": {
             "name": "Iowa",
             "abbr": "IA",
-            "student_debt": { "value": 29953, "change": 2.1, "rank": 20 },
-            "auto_debt": { "value": 22500, "change": 3.2, "rank": 35 },
-            "rent_burden": { "value": 27.2, "change": 1.2, "rank": 40 },
-            "median_income": { "value": 47800, "change": 2.8, "rank": 26 },
-            "unemployment": { "value": 5.2, "change": 0.0, "rank": 2 },
-            "debt_to_income": { "value": 36.2, "change": 2.2, "rank": 30 },
-            "cost_of_living": { "value": 108, "change": 2.2, "rank": 48 },
-            "financial_stress": { "value": 115, "change": 3.0, "rank": 48 }
+            "student_debt": {
+                "value": 29953,
+                "change": 2.1,
+                "rank": 20
+            },
+            "auto_debt": {
+                "value": 22500,
+                "change": 3.2,
+                "rank": 35
+            },
+            "rent_burden": {
+                "value": 27.2,
+                "change": 1.2,
+                "rank": 40
+            },
+            "median_income": {
+                "value": 47800,
+                "change": 2.8,
+                "rank": 26
+            },
+            "unemployment": {
+                "value": 5.2,
+                "change": 0,
+                "rank": 2
+            },
+            "debt_to_income": {
+                "value": 36.2,
+                "change": 2.2,
+                "rank": 30
+            },
+            "cost_of_living": {
+                "value": 108,
+                "change": 2.2,
+                "rank": 48
+            },
+            "financial_stress": {
+                "value": 115,
+                "change": 3,
+                "rank": 48
+            }
         },
         "US-KS": {
             "name": "Kansas",
             "abbr": "KS",
-            "student_debt": { "value": 28621, "change": 2.0, "rank": 26 },
-            "auto_debt": { "value": 23200, "change": 3.4, "rank": 29 },
-            "rent_burden": { "value": 27.1, "change": 1.3, "rank": 41 },
-            "median_income": { "value": 47500, "change": 2.9, "rank": 27 },
-            "unemployment": { "value": 5.6, "change": 0.1, "rank": 4 },
-            "debt_to_income": { "value": 37.5, "change": 2.3, "rank": 26 },
-            "cost_of_living": { "value": 115, "change": 2.5, "rank": 43 },
-            "financial_stress": { "value": 120, "change": 3.2, "rank": 44 }
+            "student_debt": {
+                "value": 28621,
+                "change": 2,
+                "rank": 26
+            },
+            "auto_debt": {
+                "value": 23200,
+                "change": 3.4,
+                "rank": 29
+            },
+            "rent_burden": {
+                "value": 27.1,
+                "change": 1.3,
+                "rank": 41
+            },
+            "median_income": {
+                "value": 47500,
+                "change": 2.9,
+                "rank": 27
+            },
+            "unemployment": {
+                "value": 5.6,
+                "change": 0.1,
+                "rank": 4
+            },
+            "debt_to_income": {
+                "value": 37.5,
+                "change": 2.3,
+                "rank": 26
+            },
+            "cost_of_living": {
+                "value": 115,
+                "change": 2.5,
+                "rank": 43
+            },
+            "financial_stress": {
+                "value": 120,
+                "change": 3.2,
+                "rank": 44
+            }
         },
         "US-KY": {
             "name": "Kentucky",
             "abbr": "KY",
-            "student_debt": { "value": 28671, "change": 2.2, "rank": 25 },
-            "auto_debt": { "value": 23800, "change": 3.7, "rank": 25 },
-            "rent_burden": { "value": 27.9, "change": 1.4, "rank": 36 },
-            "median_income": { "value": 43200, "change": 2.6, "rank": 40 },
-            "unemployment": { "value": 7.8, "change": 0.4, "rank": 33 },
-            "debt_to_income": { "value": 43.5, "change": 3.0, "rank": 10 },
-            "cost_of_living": { "value": 120, "change": 2.9, "rank": 37 },
-            "financial_stress": { "value": 148, "change": 4.5, "rank": 13 }
+            "student_debt": {
+                "value": 28671,
+                "change": 2.2,
+                "rank": 25
+            },
+            "auto_debt": {
+                "value": 23800,
+                "change": 3.7,
+                "rank": 25
+            },
+            "rent_burden": {
+                "value": 27.9,
+                "change": 1.4,
+                "rank": 36
+            },
+            "median_income": {
+                "value": 43200,
+                "change": 2.6,
+                "rank": 40
+            },
+            "unemployment": {
+                "value": 7.8,
+                "change": 0.4,
+                "rank": 33
+            },
+            "debt_to_income": {
+                "value": 43.5,
+                "change": 3,
+                "rank": 10
+            },
+            "cost_of_living": {
+                "value": 120,
+                "change": 2.9,
+                "rank": 37
+            },
+            "financial_stress": {
+                "value": 148,
+                "change": 4.5,
+                "rank": 13
+            }
         },
         "US-LA": {
             "name": "Louisiana",
             "abbr": "LA",
-            "student_debt": { "value": 27406, "change": 1.8, "rank": 35 },
-            "auto_debt": { "value": 25200, "change": 4.2, "rank": 15 },
-            "rent_burden": { "value": 32.5, "change": 2.2, "rank": 9 },
-            "median_income": { "value": 41200, "change": 2.4, "rank": 46 },
-            "unemployment": { "value": 9.8, "change": 0.7, "rank": 48 },
-            "debt_to_income": { "value": 48.5, "change": 3.8, "rank": 2 },
-            "cost_of_living": { "value": 132, "change": 3.8, "rank": 24 },
-            "financial_stress": { "value": 165, "change": 5.8, "rank": 1 }
+            "student_debt": {
+                "value": 27406,
+                "change": 1.8,
+                "rank": 35
+            },
+            "auto_debt": {
+                "value": 25200,
+                "change": 4.2,
+                "rank": 15
+            },
+            "rent_burden": {
+                "value": 32.5,
+                "change": 2.2,
+                "rank": 9
+            },
+            "median_income": {
+                "value": 41200,
+                "change": 2.4,
+                "rank": 46
+            },
+            "unemployment": {
+                "value": 9.8,
+                "change": 0.7,
+                "rank": 48
+            },
+            "debt_to_income": {
+                "value": 48.5,
+                "change": 3.8,
+                "rank": 2
+            },
+            "cost_of_living": {
+                "value": 132,
+                "change": 3.8,
+                "rank": 24
+            },
+            "financial_stress": {
+                "value": 165,
+                "change": 5.8,
+                "rank": 1
+            }
         },
         "US-ME": {
             "name": "Maine",
             "abbr": "ME",
-            "student_debt": { "value": 31888, "change": 2.4, "rank": 12 },
-            "auto_debt": { "value": 22800, "change": 3.4, "rank": 33 },
-            "rent_burden": { "value": 30.1, "change": 1.7, "rank": 25 },
-            "median_income": { "value": 48200, "change": 3.0, "rank": 24 },
-            "unemployment": { "value": 6.2, "change": 0.1, "rank": 9 },
-            "debt_to_income": { "value": 39.2, "change": 2.5, "rank": 21 },
-            "cost_of_living": { "value": 135, "change": 3.9, "rank": 22 },
-            "financial_stress": { "value": 132, "change": 3.8, "rank": 32 }
+            "student_debt": {
+                "value": 31888,
+                "change": 2.4,
+                "rank": 12
+            },
+            "auto_debt": {
+                "value": 22800,
+                "change": 3.4,
+                "rank": 33
+            },
+            "rent_burden": {
+                "value": 30.1,
+                "change": 1.7,
+                "rank": 25
+            },
+            "median_income": {
+                "value": 48200,
+                "change": 3,
+                "rank": 24
+            },
+            "unemployment": {
+                "value": 6.2,
+                "change": 0.1,
+                "rank": 9
+            },
+            "debt_to_income": {
+                "value": 39.2,
+                "change": 2.5,
+                "rank": 21
+            },
+            "cost_of_living": {
+                "value": 135,
+                "change": 3.9,
+                "rank": 22
+            },
+            "financial_stress": {
+                "value": 132,
+                "change": 3.8,
+                "rank": 32
+            }
         },
         "US-MD": {
             "name": "Maryland",
             "abbr": "MD",
-            "student_debt": { "value": 30854, "change": 2.0, "rank": 15 },
-            "auto_debt": { "value": 24800, "change": 3.9, "rank": 17 },
-            "rent_burden": { "value": 31.5, "change": 1.9, "rank": 17 },
-            "median_income": { "value": 62500, "change": 4.0, "rank": 2 },
-            "unemployment": { "value": 8.2, "change": 0.5, "rank": 36 },
-            "debt_to_income": { "value": 33.8, "change": 1.9, "rank": 40 },
-            "cost_of_living": { "value": 150, "change": 4.8, "rank": 10 },
-            "financial_stress": { "value": 130, "change": 3.8, "rank": 35 }
+            "student_debt": {
+                "value": 30854,
+                "change": 2,
+                "rank": 15
+            },
+            "auto_debt": {
+                "value": 24800,
+                "change": 3.9,
+                "rank": 17
+            },
+            "rent_burden": {
+                "value": 31.5,
+                "change": 1.9,
+                "rank": 17
+            },
+            "median_income": {
+                "value": 62500,
+                "change": 4,
+                "rank": 2
+            },
+            "unemployment": {
+                "value": 8.2,
+                "change": 0.5,
+                "rank": 36
+            },
+            "debt_to_income": {
+                "value": 33.8,
+                "change": 1.9,
+                "rank": 40
+            },
+            "cost_of_living": {
+                "value": 150,
+                "change": 4.8,
+                "rank": 10
+            },
+            "financial_stress": {
+                "value": 130,
+                "change": 3.8,
+                "rank": 35
+            }
         },
         "US-MA": {
             "name": "Massachusetts",
             "abbr": "MA",
-            "student_debt": { "value": 33350, "change": 2.2, "rank": 9 },
-            "auto_debt": { "value": 22200, "change": 3.2, "rank": 38 },
-            "rent_burden": { "value": 32.4, "change": 2.1, "rank": 10 },
-            "median_income": { "value": 60200, "change": 3.8, "rank": 3 },
-            "unemployment": { "value": 7.4, "change": 0.3, "rank": 26 },
-            "debt_to_income": { "value": 34.5, "change": 2.0, "rank": 36 },
-            "cost_of_living": { "value": 158, "change": 5.3, "rank": 5 },
-            "financial_stress": { "value": 135, "change": 4.2, "rank": 27 }
+            "student_debt": {
+                "value": 33350,
+                "change": 2.2,
+                "rank": 9
+            },
+            "auto_debt": {
+                "value": 22200,
+                "change": 3.2,
+                "rank": 38
+            },
+            "rent_burden": {
+                "value": 32.4,
+                "change": 2.1,
+                "rank": 10
+            },
+            "median_income": {
+                "value": 60200,
+                "change": 3.8,
+                "rank": 3
+            },
+            "unemployment": {
+                "value": 7.4,
+                "change": 0.3,
+                "rank": 26
+            },
+            "debt_to_income": {
+                "value": 34.5,
+                "change": 2,
+                "rank": 36
+            },
+            "cost_of_living": {
+                "value": 158,
+                "change": 5.3,
+                "rank": 5
+            },
+            "financial_stress": {
+                "value": 135,
+                "change": 4.2,
+                "rank": 27
+            }
         },
         "US-MI": {
             "name": "Michigan",
             "abbr": "MI",
-            "student_debt": { "value": 31411, "change": 2.3, "rank": 14 },
-            "auto_debt": { "value": 25600, "change": 4.5, "rank": 11 },
-            "rent_burden": { "value": 29.8, "change": 1.7, "rank": 22 },
-            "median_income": { "value": 47000, "change": 2.9, "rank": 30 },
-            "unemployment": { "value": 8.6, "change": 0.5, "rank": 40 },
-            "debt_to_income": { "value": 43.2, "change": 3.0, "rank": 11 },
-            "cost_of_living": { "value": 128, "change": 3.2, "rank": 27 },
-            "financial_stress": { "value": 145, "change": 4.6, "rank": 14 }
+            "student_debt": {
+                "value": 31411,
+                "change": 2.3,
+                "rank": 14
+            },
+            "auto_debt": {
+                "value": 25600,
+                "change": 4.5,
+                "rank": 11
+            },
+            "rent_burden": {
+                "value": 29.8,
+                "change": 1.7,
+                "rank": 22
+            },
+            "median_income": {
+                "value": 47000,
+                "change": 2.9,
+                "rank": 30
+            },
+            "unemployment": {
+                "value": 8.6,
+                "change": 0.5,
+                "rank": 40
+            },
+            "debt_to_income": {
+                "value": 43.2,
+                "change": 3,
+                "rank": 11
+            },
+            "cost_of_living": {
+                "value": 128,
+                "change": 3.2,
+                "rank": 27
+            },
+            "financial_stress": {
+                "value": 145,
+                "change": 4.6,
+                "rank": 14
+            }
         },
         "US-MN": {
             "name": "Minnesota",
             "abbr": "MN",
-            "student_debt": { "value": 32181, "change": 2.4, "rank": 11 },
-            "auto_debt": { "value": 23500, "change": 3.6, "rank": 27 },
-            "rent_burden": { "value": 28.8, "change": 1.5, "rank": 32 },
-            "median_income": { "value": 55200, "change": 3.5, "rank": 10 },
-            "unemployment": { "value": 6.0, "change": 0.1, "rank": 7 },
-            "debt_to_income": { "value": 36.5, "change": 2.2, "rank": 29 },
-            "cost_of_living": { "value": 132, "change": 3.6, "rank": 25 },
-            "financial_stress": { "value": 125, "change": 3.5, "rank": 40 }
+            "student_debt": {
+                "value": 32181,
+                "change": 2.4,
+                "rank": 11
+            },
+            "auto_debt": {
+                "value": 23500,
+                "change": 3.6,
+                "rank": 27
+            },
+            "rent_burden": {
+                "value": 28.8,
+                "change": 1.5,
+                "rank": 32
+            },
+            "median_income": {
+                "value": 55200,
+                "change": 3.5,
+                "rank": 10
+            },
+            "unemployment": {
+                "value": 6,
+                "change": 0.1,
+                "rank": 7
+            },
+            "debt_to_income": {
+                "value": 36.5,
+                "change": 2.2,
+                "rank": 29
+            },
+            "cost_of_living": {
+                "value": 132,
+                "change": 3.6,
+                "rank": 25
+            },
+            "financial_stress": {
+                "value": 125,
+                "change": 3.5,
+                "rank": 40
+            }
         },
         "US-MS": {
             "name": "Mississippi",
             "abbr": "MS",
-            "student_debt": { "value": 37208, "change": 2.0, "rank": 20 },
-            "auto_debt": { "value": 25500, "change": 2.5, "rank": 12 },
-            "rent_burden": { "value": 28.5, "change": 0.5, "rank": 38 },
-            "median_income": { "value": 42000, "change": 2.5, "rank": 51 },
-            "unemployment": { "value": 4.4, "change": 0.2, "rank": 30 },
-            "debt_to_income": { "value": 53.0, "change": 2.0, "rank": 1 },
-            "cost_of_living": { "value": 87.3, "change": 0.8, "rank": 50 },
-            "financial_stress": { "value": 112, "change": 1.5, "rank": 8 }
+            "student_debt": {
+                "value": 37208,
+                "change": 2,
+                "rank": 20
+            },
+            "auto_debt": {
+                "value": 25500,
+                "change": 2.5,
+                "rank": 12
+            },
+            "rent_burden": {
+                "value": 28.5,
+                "change": 0.5,
+                "rank": 38
+            },
+            "median_income": {
+                "value": 42000,
+                "change": 2.5,
+                "rank": 51
+            },
+            "unemployment": {
+                "value": 4.4,
+                "change": 0.2,
+                "rank": 30
+            },
+            "debt_to_income": {
+                "value": 53,
+                "change": 2,
+                "rank": 1
+            },
+            "cost_of_living": {
+                "value": 87.3,
+                "change": 0.8,
+                "rank": 50
+            },
+            "financial_stress": {
+                "value": 112,
+                "change": 1.5,
+                "rank": 8
+            }
         },
         "US-MO": {
             "name": "Missouri",
             "abbr": "MO",
-            "student_debt": { "value": 28225, "change": 2.0, "rank": 28 },
-            "auto_debt": { "value": 23600, "change": 3.7, "rank": 26 },
-            "rent_burden": { "value": 27.8, "change": 1.4, "rank": 37 },
-            "median_income": { "value": 46800, "change": 2.9, "rank": 31 },
-            "unemployment": { "value": 6.8, "change": 0.2, "rank": 16 },
-            "debt_to_income": { "value": 39.0, "change": 2.5, "rank": 22 },
-            "cost_of_living": { "value": 118, "change": 2.7, "rank": 41 },
-            "financial_stress": { "value": 130, "change": 3.6, "rank": 36 }
+            "student_debt": {
+                "value": 28225,
+                "change": 2,
+                "rank": 28
+            },
+            "auto_debt": {
+                "value": 23600,
+                "change": 3.7,
+                "rank": 26
+            },
+            "rent_burden": {
+                "value": 27.8,
+                "change": 1.4,
+                "rank": 37
+            },
+            "median_income": {
+                "value": 46800,
+                "change": 2.9,
+                "rank": 31
+            },
+            "unemployment": {
+                "value": 6.8,
+                "change": 0.2,
+                "rank": 16
+            },
+            "debt_to_income": {
+                "value": 39,
+                "change": 2.5,
+                "rank": 22
+            },
+            "cost_of_living": {
+                "value": 118,
+                "change": 2.7,
+                "rank": 41
+            },
+            "financial_stress": {
+                "value": 130,
+                "change": 3.6,
+                "rank": 36
+            }
         },
         "US-MT": {
             "name": "Montana",
             "abbr": "MT",
-            "student_debt": { "value": 28100, "change": 2.1, "rank": 29 },
-            "auto_debt": { "value": 24000, "change": 3.8, "rank": 22 },
-            "rent_burden": { "value": 29.0, "change": 1.6, "rank": 31 },
-            "median_income": { "value": 46500, "change": 3.2, "rank": 33 },
-            "unemployment": { "value": 5.4, "change": 0.0, "rank": 3 },
-            "debt_to_income": { "value": 38.0, "change": 2.4, "rank": 25 },
-            "cost_of_living": { "value": 136, "change": 4.0, "rank": 21 },
-            "financial_stress": { "value": 128, "change": 3.6, "rank": 38 }
+            "student_debt": {
+                "value": 28100,
+                "change": 2.1,
+                "rank": 29
+            },
+            "auto_debt": {
+                "value": 24000,
+                "change": 3.8,
+                "rank": 22
+            },
+            "rent_burden": {
+                "value": 29,
+                "change": 1.6,
+                "rank": 31
+            },
+            "median_income": {
+                "value": 46500,
+                "change": 3.2,
+                "rank": 33
+            },
+            "unemployment": {
+                "value": 5.4,
+                "change": 0,
+                "rank": 3
+            },
+            "debt_to_income": {
+                "value": 38,
+                "change": 2.4,
+                "rank": 25
+            },
+            "cost_of_living": {
+                "value": 136,
+                "change": 4,
+                "rank": 21
+            },
+            "financial_stress": {
+                "value": 128,
+                "change": 3.6,
+                "rank": 38
+            }
         },
         "US-NE": {
             "name": "Nebraska",
             "abbr": "NE",
-            "student_debt": { "value": 26476, "change": 1.8, "rank": 40 },
-            "auto_debt": { "value": 22800, "change": 3.4, "rank": 34 },
-            "rent_burden": { "value": 26.8, "change": 1.2, "rank": 43 },
-            "median_income": { "value": 49200, "change": 3.0, "rank": 22 },
-            "unemployment": { "value": 4.8, "change": -0.1, "rank": 1 },
-            "debt_to_income": { "value": 35.5, "change": 2.1, "rank": 33 },
-            "cost_of_living": { "value": 105, "change": 2.0, "rank": 50 },
-            "financial_stress": { "value": 110, "change": 2.8, "rank": 50 }
+            "student_debt": {
+                "value": 26476,
+                "change": 1.8,
+                "rank": 40
+            },
+            "auto_debt": {
+                "value": 22800,
+                "change": 3.4,
+                "rank": 34
+            },
+            "rent_burden": {
+                "value": 26.8,
+                "change": 1.2,
+                "rank": 43
+            },
+            "median_income": {
+                "value": 49200,
+                "change": 3,
+                "rank": 22
+            },
+            "unemployment": {
+                "value": 4.8,
+                "change": -0.1,
+                "rank": 1
+            },
+            "debt_to_income": {
+                "value": 35.5,
+                "change": 2.1,
+                "rank": 33
+            },
+            "cost_of_living": {
+                "value": 105,
+                "change": 2,
+                "rank": 50
+            },
+            "financial_stress": {
+                "value": 110,
+                "change": 2.8,
+                "rank": 50
+            }
         },
         "US-NV": {
             "name": "Nevada",
             "abbr": "NV",
-            "student_debt": { "value": 22383, "change": 1.4, "rank": 49 },
-            "auto_debt": { "value": 26200, "change": 4.8, "rank": 9 },
-            "rent_burden": { "value": 34.2, "change": 2.8, "rank": 4 },
-            "median_income": { "value": 48500, "change": 3.2, "rank": 25 },
-            "unemployment": { "value": 8.5, "change": 0.5, "rank": 39 },
-            "debt_to_income": { "value": 44.2, "change": 3.2, "rank": 7 },
-            "cost_of_living": { "value": 152, "change": 5.2, "rank": 9 },
-            "financial_stress": { "value": 155, "change": 5.5, "rank": 6 }
+            "student_debt": {
+                "value": 22383,
+                "change": 1.4,
+                "rank": 49
+            },
+            "auto_debt": {
+                "value": 26200,
+                "change": 4.8,
+                "rank": 9
+            },
+            "rent_burden": {
+                "value": 34.2,
+                "change": 2.8,
+                "rank": 4
+            },
+            "median_income": {
+                "value": 48500,
+                "change": 3.2,
+                "rank": 25
+            },
+            "unemployment": {
+                "value": 8.5,
+                "change": 0.5,
+                "rank": 39
+            },
+            "debt_to_income": {
+                "value": 44.2,
+                "change": 3.2,
+                "rank": 7
+            },
+            "cost_of_living": {
+                "value": 152,
+                "change": 5.2,
+                "rank": 9
+            },
+            "financial_stress": {
+                "value": 155,
+                "change": 5.5,
+                "rank": 6
+            }
         },
         "US-NH": {
             "name": "New Hampshire",
             "abbr": "NH",
-            "student_debt": { "value": 36653, "change": 2.8, "rank": 1 },
-            "auto_debt": { "value": 23000, "change": 3.4, "rank": 30 },
-            "rent_burden": { "value": 30.0, "change": 1.7, "rank": 23 },
-            "median_income": { "value": 57500, "change": 3.6, "rank": 6 },
-            "unemployment": { "value": 6.0, "change": 0.1, "rank": 8 },
-            "debt_to_income": { "value": 37.2, "change": 2.3, "rank": 27 },
-            "cost_of_living": { "value": 145, "change": 4.5, "rank": 14 },
-            "financial_stress": { "value": 132, "change": 4.0, "rank": 33 }
+            "student_debt": {
+                "value": 36653,
+                "change": 2.8,
+                "rank": 1
+            },
+            "auto_debt": {
+                "value": 23000,
+                "change": 3.4,
+                "rank": 30
+            },
+            "rent_burden": {
+                "value": 30,
+                "change": 1.7,
+                "rank": 23
+            },
+            "median_income": {
+                "value": 57500,
+                "change": 3.6,
+                "rank": 6
+            },
+            "unemployment": {
+                "value": 6,
+                "change": 0.1,
+                "rank": 8
+            },
+            "debt_to_income": {
+                "value": 37.2,
+                "change": 2.3,
+                "rank": 27
+            },
+            "cost_of_living": {
+                "value": 145,
+                "change": 4.5,
+                "rank": 14
+            },
+            "financial_stress": {
+                "value": 132,
+                "change": 4,
+                "rank": 33
+            }
         },
         "US-NJ": {
             "name": "New Jersey",
             "abbr": "NJ",
-            "student_debt": { "value": 33606, "change": 2.4, "rank": 10 },
-            "auto_debt": { "value": 24000, "change": 3.6, "rank": 22 },
-            "rent_burden": { "value": 34.0, "change": 2.5, "rank": 5 },
-            "median_income": { "value": 59800, "change": 3.8, "rank": 4 },
-            "unemployment": { "value": 9.1, "change": 0.6, "rank": 44 },
-            "debt_to_income": { "value": 36.0, "change": 2.2, "rank": 31 },
-            "cost_of_living": { "value": 155, "change": 5.1, "rank": 7 },
-            "financial_stress": { "value": 142, "change": 4.8, "rank": 18 }
+            "student_debt": {
+                "value": 33606,
+                "change": 2.4,
+                "rank": 10
+            },
+            "auto_debt": {
+                "value": 24000,
+                "change": 3.6,
+                "rank": 22
+            },
+            "rent_burden": {
+                "value": 34,
+                "change": 2.5,
+                "rank": 5
+            },
+            "median_income": {
+                "value": 59800,
+                "change": 3.8,
+                "rank": 4
+            },
+            "unemployment": {
+                "value": 9.1,
+                "change": 0.6,
+                "rank": 44
+            },
+            "debt_to_income": {
+                "value": 36,
+                "change": 2.2,
+                "rank": 31
+            },
+            "cost_of_living": {
+                "value": 155,
+                "change": 5.1,
+                "rank": 7
+            },
+            "financial_stress": {
+                "value": 142,
+                "change": 4.8,
+                "rank": 18
+            }
         },
         "US-NM": {
             "name": "New Mexico",
             "abbr": "NM",
-            "student_debt": { "value": 22659, "change": 1.3, "rank": 48 },
-            "auto_debt": { "value": 23000, "change": 3.5, "rank": 31 },
-            "rent_burden": { "value": 28.5, "change": 1.5, "rank": 34 },
-            "median_income": { "value": 42500, "change": 2.6, "rank": 43 },
-            "unemployment": { "value": 9.2, "change": 0.7, "rank": 46 },
-            "debt_to_income": { "value": 41.2, "change": 2.8, "rank": 16 },
-            "cost_of_living": { "value": 125, "change": 3.1, "rank": 31 },
-            "financial_stress": { "value": 148, "change": 4.8, "rank": 11 }
+            "student_debt": {
+                "value": 22659,
+                "change": 1.3,
+                "rank": 48
+            },
+            "auto_debt": {
+                "value": 23000,
+                "change": 3.5,
+                "rank": 31
+            },
+            "rent_burden": {
+                "value": 28.5,
+                "change": 1.5,
+                "rank": 34
+            },
+            "median_income": {
+                "value": 42500,
+                "change": 2.6,
+                "rank": 43
+            },
+            "unemployment": {
+                "value": 9.2,
+                "change": 0.7,
+                "rank": 46
+            },
+            "debt_to_income": {
+                "value": 41.2,
+                "change": 2.8,
+                "rank": 16
+            },
+            "cost_of_living": {
+                "value": 125,
+                "change": 3.1,
+                "rank": 31
+            },
+            "financial_stress": {
+                "value": 148,
+                "change": 4.8,
+                "rank": 11
+            }
         },
         "US-NY": {
             "name": "New York",
             "abbr": "NY",
-            "student_debt": { "value": 30877, "change": 1.9, "rank": 14 },
-            "auto_debt": { "value": 21800, "change": 3.0, "rank": 40 },
-            "rent_burden": { "value": 32.2, "change": 2.0, "rank": 11 },
-            "median_income": { "value": 55500, "change": 3.5, "rank": 9 },
-            "unemployment": { "value": 8.8, "change": 0.5, "rank": 42 },
-            "debt_to_income": { "value": 35.0, "change": 2.0, "rank": 34 },
-            "cost_of_living": { "value": 160, "change": 5.4, "rank": 4 },
-            "financial_stress": { "value": 142, "change": 4.8, "rank": 19 }
+            "student_debt": {
+                "value": 30877,
+                "change": 1.9,
+                "rank": 14
+            },
+            "auto_debt": {
+                "value": 21800,
+                "change": 3,
+                "rank": 40
+            },
+            "rent_burden": {
+                "value": 32.2,
+                "change": 2,
+                "rank": 11
+            },
+            "median_income": {
+                "value": 55500,
+                "change": 3.5,
+                "rank": 9
+            },
+            "unemployment": {
+                "value": 8.8,
+                "change": 0.5,
+                "rank": 42
+            },
+            "debt_to_income": {
+                "value": 35,
+                "change": 2,
+                "rank": 34
+            },
+            "cost_of_living": {
+                "value": 160,
+                "change": 5.4,
+                "rank": 4
+            },
+            "financial_stress": {
+                "value": 142,
+                "change": 4.8,
+                "rank": 19
+            }
         },
         "US-NC": {
             "name": "North Carolina",
             "abbr": "NC",
-            "student_debt": { "value": 27980, "change": 2.0, "rank": 31 },
-            "auto_debt": { "value": 25200, "change": 4.2, "rank": 13 },
-            "rent_burden": { "value": 30.5, "change": 1.8, "rank": 20 },
-            "median_income": { "value": 47200, "change": 3.1, "rank": 29 },
-            "unemployment": { "value": 7.2, "change": 0.3, "rank": 23 },
-            "debt_to_income": { "value": 40.0, "change": 2.6, "rank": 19 },
-            "cost_of_living": { "value": 134, "change": 3.8, "rank": 23 },
-            "financial_stress": { "value": 138, "change": 4.2, "rank": 23 }
+            "student_debt": {
+                "value": 27980,
+                "change": 2,
+                "rank": 31
+            },
+            "auto_debt": {
+                "value": 25200,
+                "change": 4.2,
+                "rank": 13
+            },
+            "rent_burden": {
+                "value": 30.5,
+                "change": 1.8,
+                "rank": 20
+            },
+            "median_income": {
+                "value": 47200,
+                "change": 3.1,
+                "rank": 29
+            },
+            "unemployment": {
+                "value": 7.2,
+                "change": 0.3,
+                "rank": 23
+            },
+            "debt_to_income": {
+                "value": 40,
+                "change": 2.6,
+                "rank": 19
+            },
+            "cost_of_living": {
+                "value": 134,
+                "change": 3.8,
+                "rank": 23
+            },
+            "financial_stress": {
+                "value": 138,
+                "change": 4.2,
+                "rank": 23
+            }
         },
         "US-ND": {
             "name": "North Dakota",
             "abbr": "ND",
-            "student_debt": { "value": 29647, "change": 1.8, "rank": 51 },
-            "auto_debt": { "value": 26200, "change": 2.8, "rank": 6 },
-            "rent_burden": { "value": 23.5, "change": 0.3, "rank": 51 },
-            "median_income": { "value": 55000, "change": 3.2, "rank": 12 },
-            "unemployment": { "value": 2.0, "change": -0.1, "rank": 1 },
-            "debt_to_income": { "value": 36.2, "change": 1.2, "rank": 38 },
-            "cost_of_living": { "value": 91.5, "change": 0.5, "rank": 45 },
-            "financial_stress": { "value": 78, "change": 0.8, "rank": 51 }
+            "student_debt": {
+                "value": 29647,
+                "change": 1.8,
+                "rank": 51
+            },
+            "auto_debt": {
+                "value": 26200,
+                "change": 2.8,
+                "rank": 6
+            },
+            "rent_burden": {
+                "value": 23.5,
+                "change": 0.3,
+                "rank": 51
+            },
+            "median_income": {
+                "value": 55000,
+                "change": 3.2,
+                "rank": 12
+            },
+            "unemployment": {
+                "value": 2,
+                "change": -0.1,
+                "rank": 1
+            },
+            "debt_to_income": {
+                "value": 36.2,
+                "change": 1.2,
+                "rank": 38
+            },
+            "cost_of_living": {
+                "value": 91.5,
+                "change": 0.5,
+                "rank": 45
+            },
+            "financial_stress": {
+                "value": 78,
+                "change": 0.8,
+                "rank": 51
+            }
         },
         "US-OH": {
             "name": "Ohio",
             "abbr": "OH",
-            "student_debt": { "value": 29615, "change": 2.1, "rank": 21 },
-            "auto_debt": { "value": 23500, "change": 3.6, "rank": 28 },
-            "rent_burden": { "value": 28.8, "change": 1.5, "rank": 33 },
-            "median_income": { "value": 46500, "change": 2.8, "rank": 33 },
-            "unemployment": { "value": 7.5, "change": 0.3, "rank": 29 },
-            "debt_to_income": { "value": 40.5, "change": 2.6, "rank": 18 },
-            "cost_of_living": { "value": 120, "change": 2.8, "rank": 38 },
-            "financial_stress": { "value": 138, "change": 4.0, "rank": 25 }
+            "student_debt": {
+                "value": 29615,
+                "change": 2.1,
+                "rank": 21
+            },
+            "auto_debt": {
+                "value": 23500,
+                "change": 3.6,
+                "rank": 28
+            },
+            "rent_burden": {
+                "value": 28.8,
+                "change": 1.5,
+                "rank": 33
+            },
+            "median_income": {
+                "value": 46500,
+                "change": 2.8,
+                "rank": 33
+            },
+            "unemployment": {
+                "value": 7.5,
+                "change": 0.3,
+                "rank": 29
+            },
+            "debt_to_income": {
+                "value": 40.5,
+                "change": 2.6,
+                "rank": 18
+            },
+            "cost_of_living": {
+                "value": 120,
+                "change": 2.8,
+                "rank": 38
+            },
+            "financial_stress": {
+                "value": 138,
+                "change": 4,
+                "rank": 25
+            }
         },
         "US-OK": {
             "name": "Oklahoma",
             "abbr": "OK",
-            "student_debt": { "value": 26215, "change": 1.7, "rank": 42 },
-            "auto_debt": { "value": 24200, "change": 4.0, "rank": 20 },
-            "rent_burden": { "value": 27.5, "change": 1.3, "rank": 38 },
-            "median_income": { "value": 44500, "change": 2.6, "rank": 39 },
-            "unemployment": { "value": 6.5, "change": 0.2, "rank": 13 },
-            "debt_to_income": { "value": 40.2, "change": 2.7, "rank": 19 },
-            "cost_of_living": { "value": 112, "change": 2.4, "rank": 45 },
-            "financial_stress": { "value": 135, "change": 3.8, "rank": 29 }
+            "student_debt": {
+                "value": 26215,
+                "change": 1.7,
+                "rank": 42
+            },
+            "auto_debt": {
+                "value": 24200,
+                "change": 4,
+                "rank": 20
+            },
+            "rent_burden": {
+                "value": 27.5,
+                "change": 1.3,
+                "rank": 38
+            },
+            "median_income": {
+                "value": 44500,
+                "change": 2.6,
+                "rank": 39
+            },
+            "unemployment": {
+                "value": 6.5,
+                "change": 0.2,
+                "rank": 13
+            },
+            "debt_to_income": {
+                "value": 40.2,
+                "change": 2.7,
+                "rank": 19
+            },
+            "cost_of_living": {
+                "value": 112,
+                "change": 2.4,
+                "rank": 45
+            },
+            "financial_stress": {
+                "value": 135,
+                "change": 3.8,
+                "rank": 29
+            }
         },
         "US-OR": {
             "name": "Oregon",
             "abbr": "OR",
-            "student_debt": { "value": 28052, "change": 2.0, "rank": 30 },
-            "auto_debt": { "value": 22500, "change": 3.4, "rank": 36 },
-            "rent_burden": { "value": 32.5, "change": 2.2, "rank": 7 },
-            "median_income": { "value": 50800, "change": 3.4, "rank": 19 },
-            "unemployment": { "value": 7.8, "change": 0.4, "rank": 31 },
-            "debt_to_income": { "value": 37.0, "change": 2.3, "rank": 28 },
-            "cost_of_living": { "value": 150, "change": 5.0, "rank": 11 },
-            "financial_stress": { "value": 142, "change": 4.6, "rank": 17 }
+            "student_debt": {
+                "value": 28052,
+                "change": 2,
+                "rank": 30
+            },
+            "auto_debt": {
+                "value": 22500,
+                "change": 3.4,
+                "rank": 36
+            },
+            "rent_burden": {
+                "value": 32.5,
+                "change": 2.2,
+                "rank": 7
+            },
+            "median_income": {
+                "value": 50800,
+                "change": 3.4,
+                "rank": 19
+            },
+            "unemployment": {
+                "value": 7.8,
+                "change": 0.4,
+                "rank": 31
+            },
+            "debt_to_income": {
+                "value": 37,
+                "change": 2.3,
+                "rank": 28
+            },
+            "cost_of_living": {
+                "value": 150,
+                "change": 5,
+                "rank": 11
+            },
+            "financial_stress": {
+                "value": 142,
+                "change": 4.6,
+                "rank": 17
+            }
         },
         "US-PA": {
             "name": "Pennsylvania",
             "abbr": "PA",
-            "student_debt": { "value": 36193, "change": 2.7, "rank": 2 },
-            "auto_debt": { "value": 22800, "change": 3.4, "rank": 32 },
-            "rent_burden": { "value": 30.2, "change": 1.7, "rank": 21 },
-            "median_income": { "value": 50200, "change": 3.0, "rank": 21 },
-            "unemployment": { "value": 8.2, "change": 0.5, "rank": 37 },
-            "debt_to_income": { "value": 42.8, "change": 2.9, "rank": 12 },
-            "cost_of_living": { "value": 138, "change": 4.1, "rank": 19 },
-            "financial_stress": { "value": 145, "change": 4.6, "rank": 16 }
+            "student_debt": {
+                "value": 36193,
+                "change": 2.7,
+                "rank": 2
+            },
+            "auto_debt": {
+                "value": 22800,
+                "change": 3.4,
+                "rank": 32
+            },
+            "rent_burden": {
+                "value": 30.2,
+                "change": 1.7,
+                "rank": 21
+            },
+            "median_income": {
+                "value": 50200,
+                "change": 3,
+                "rank": 21
+            },
+            "unemployment": {
+                "value": 8.2,
+                "change": 0.5,
+                "rank": 37
+            },
+            "debt_to_income": {
+                "value": 42.8,
+                "change": 2.9,
+                "rank": 12
+            },
+            "cost_of_living": {
+                "value": 138,
+                "change": 4.1,
+                "rank": 19
+            },
+            "financial_stress": {
+                "value": 145,
+                "change": 4.6,
+                "rank": 16
+            }
         },
         "US-RI": {
             "name": "Rhode Island",
             "abbr": "RI",
-            "student_debt": { "value": 34305, "change": 2.5, "rank": 6 },
-            "auto_debt": { "value": 22200, "change": 3.2, "rank": 37 },
-            "rent_burden": { "value": 31.8, "change": 2.0, "rank": 14 },
-            "median_income": { "value": 52200, "change": 3.4, "rank": 16 },
-            "unemployment": { "value": 8.0, "change": 0.4, "rank": 33 },
-            "debt_to_income": { "value": 38.2, "change": 2.4, "rank": 23 },
-            "cost_of_living": { "value": 148, "change": 4.8, "rank": 13 },
-            "financial_stress": { "value": 140, "change": 4.5, "rank": 21 }
+            "student_debt": {
+                "value": 34305,
+                "change": 2.5,
+                "rank": 6
+            },
+            "auto_debt": {
+                "value": 22200,
+                "change": 3.2,
+                "rank": 37
+            },
+            "rent_burden": {
+                "value": 31.8,
+                "change": 2,
+                "rank": 14
+            },
+            "median_income": {
+                "value": 52200,
+                "change": 3.4,
+                "rank": 16
+            },
+            "unemployment": {
+                "value": 8,
+                "change": 0.4,
+                "rank": 33
+            },
+            "debt_to_income": {
+                "value": 38.2,
+                "change": 2.4,
+                "rank": 23
+            },
+            "cost_of_living": {
+                "value": 148,
+                "change": 4.8,
+                "rank": 13
+            },
+            "financial_stress": {
+                "value": 140,
+                "change": 4.5,
+                "rank": 21
+            }
         },
         "US-SC": {
             "name": "South Carolina",
             "abbr": "SC",
-            "student_debt": { "value": 34291, "change": 2.5, "rank": 7 },
-            "auto_debt": { "value": 25800, "change": 4.5, "rank": 10 },
-            "rent_burden": { "value": 31.2, "change": 1.9, "rank": 18 },
-            "median_income": { "value": 45200, "change": 2.8, "rank": 37 },
-            "unemployment": { "value": 7.0, "change": 0.2, "rank": 19 },
-            "debt_to_income": { "value": 45.5, "change": 3.2, "rank": 5 },
-            "cost_of_living": { "value": 128, "change": 3.3, "rank": 29 },
-            "financial_stress": { "value": 152, "change": 5.0, "rank": 7 }
+            "student_debt": {
+                "value": 34291,
+                "change": 2.5,
+                "rank": 7
+            },
+            "auto_debt": {
+                "value": 25800,
+                "change": 4.5,
+                "rank": 10
+            },
+            "rent_burden": {
+                "value": 31.2,
+                "change": 1.9,
+                "rank": 18
+            },
+            "median_income": {
+                "value": 45200,
+                "change": 2.8,
+                "rank": 37
+            },
+            "unemployment": {
+                "value": 7,
+                "change": 0.2,
+                "rank": 19
+            },
+            "debt_to_income": {
+                "value": 45.5,
+                "change": 3.2,
+                "rank": 5
+            },
+            "cost_of_living": {
+                "value": 128,
+                "change": 3.3,
+                "rank": 29
+            },
+            "financial_stress": {
+                "value": 152,
+                "change": 5,
+                "rank": 7
+            }
         },
         "US-SD": {
             "name": "South Dakota",
             "abbr": "SD",
-            "student_debt": { "value": 28528, "change": 2.2, "rank": 27 },
-            "auto_debt": { "value": 27200, "change": 4.6, "rank": 5 },
-            "rent_burden": { "value": 25.2, "change": 0.9, "rank": 47 },
-            "median_income": { "value": 49500, "change": 3.1, "rank": 23 },
-            "unemployment": { "value": 5.8, "change": 0.1, "rank": 6 },
-            "debt_to_income": { "value": 40.0, "change": 2.6, "rank": 20 },
-            "cost_of_living": { "value": 108, "change": 2.1, "rank": 49 },
-            "financial_stress": { "value": 118, "change": 3.0, "rank": 46 }
+            "student_debt": {
+                "value": 28528,
+                "change": 2.2,
+                "rank": 27
+            },
+            "auto_debt": {
+                "value": 27200,
+                "change": 4.6,
+                "rank": 5
+            },
+            "rent_burden": {
+                "value": 25.2,
+                "change": 0.9,
+                "rank": 47
+            },
+            "median_income": {
+                "value": 49500,
+                "change": 3.1,
+                "rank": 23
+            },
+            "unemployment": {
+                "value": 5.8,
+                "change": 0.1,
+                "rank": 6
+            },
+            "debt_to_income": {
+                "value": 40,
+                "change": 2.6,
+                "rank": 20
+            },
+            "cost_of_living": {
+                "value": 108,
+                "change": 2.1,
+                "rank": 49
+            },
+            "financial_stress": {
+                "value": 118,
+                "change": 3,
+                "rank": 46
+            }
         },
         "US-TN": {
             "name": "Tennessee",
             "abbr": "TN",
-            "student_debt": { "value": 26345, "change": 1.8, "rank": 41 },
-            "auto_debt": { "value": 26000, "change": 4.5, "rank": 9 },
-            "rent_burden": { "value": 30.5, "change": 1.9, "rank": 19 },
-            "median_income": { "value": 45800, "change": 2.9, "rank": 36 },
-            "unemployment": { "value": 6.8, "change": 0.2, "rank": 17 },
-            "debt_to_income": { "value": 42.5, "change": 2.9, "rank": 13 },
-            "cost_of_living": { "value": 124, "change": 3.0, "rank": 32 },
-            "financial_stress": { "value": 140, "change": 4.2, "rank": 22 }
+            "student_debt": {
+                "value": 26345,
+                "change": 1.8,
+                "rank": 41
+            },
+            "auto_debt": {
+                "value": 26000,
+                "change": 4.5,
+                "rank": 9
+            },
+            "rent_burden": {
+                "value": 30.5,
+                "change": 1.9,
+                "rank": 19
+            },
+            "median_income": {
+                "value": 45800,
+                "change": 2.9,
+                "rank": 36
+            },
+            "unemployment": {
+                "value": 6.8,
+                "change": 0.2,
+                "rank": 17
+            },
+            "debt_to_income": {
+                "value": 42.5,
+                "change": 2.9,
+                "rank": 13
+            },
+            "cost_of_living": {
+                "value": 124,
+                "change": 3,
+                "rank": 32
+            },
+            "financial_stress": {
+                "value": 140,
+                "change": 4.2,
+                "rank": 22
+            }
         },
         "US-TX": {
             "name": "Texas",
             "abbr": "TX",
-            "student_debt": { "value": 37014, "change": 2.0, "rank": 22 },
-            "auto_debt": { "value": 29760, "change": 3.2, "rank": 1 },
-            "rent_burden": { "value": 30.5, "change": 0.6, "rank": 18 },
-            "median_income": { "value": 52000, "change": 3.5, "rank": 18 },
-            "unemployment": { "value": 4.0, "change": 0.1, "rank": 20 },
-            "debt_to_income": { "value": 45.8, "change": 1.8, "rank": 5 },
-            "cost_of_living": { "value": 97.8, "change": 1.0, "rank": 28 },
-            "financial_stress": { "value": 108, "change": 1.5, "rank": 12 }
+            "student_debt": {
+                "value": 37014,
+                "change": 2,
+                "rank": 22
+            },
+            "auto_debt": {
+                "value": 29760,
+                "change": 3.2,
+                "rank": 1
+            },
+            "rent_burden": {
+                "value": 30.5,
+                "change": 0.6,
+                "rank": 18
+            },
+            "median_income": {
+                "value": 52000,
+                "change": 3.5,
+                "rank": 18
+            },
+            "unemployment": {
+                "value": 4,
+                "change": 0.1,
+                "rank": 20
+            },
+            "debt_to_income": {
+                "value": 45.8,
+                "change": 1.8,
+                "rank": 5
+            },
+            "cost_of_living": {
+                "value": 97.8,
+                "change": 1,
+                "rank": 28
+            },
+            "financial_stress": {
+                "value": 108,
+                "change": 1.5,
+                "rank": 12
+            }
         },
         "US-UT": {
             "name": "Utah",
             "abbr": "UT",
-            "student_debt": { "value": 19592, "change": 1.0, "rank": 51 },
-            "auto_debt": { "value": 24800, "change": 4.2, "rank": 18 },
-            "rent_burden": { "value": 28.0, "change": 1.5, "rank": 35 },
-            "median_income": { "value": 55500, "change": 4.0, "rank": 11 },
-            "unemployment": { "value": 6.2, "change": 0.1, "rank": 10 },
-            "debt_to_income": { "value": 32.0, "change": 1.8, "rank": 45 },
-            "cost_of_living": { "value": 142, "change": 4.5, "rank": 15 },
-            "financial_stress": { "value": 122, "change": 3.2, "rank": 42 }
+            "student_debt": {
+                "value": 19592,
+                "change": 1,
+                "rank": 51
+            },
+            "auto_debt": {
+                "value": 24800,
+                "change": 4.2,
+                "rank": 18
+            },
+            "rent_burden": {
+                "value": 28,
+                "change": 1.5,
+                "rank": 35
+            },
+            "median_income": {
+                "value": 55500,
+                "change": 4,
+                "rank": 11
+            },
+            "unemployment": {
+                "value": 6.2,
+                "change": 0.1,
+                "rank": 10
+            },
+            "debt_to_income": {
+                "value": 32,
+                "change": 1.8,
+                "rank": 45
+            },
+            "cost_of_living": {
+                "value": 142,
+                "change": 4.5,
+                "rank": 15
+            },
+            "financial_stress": {
+                "value": 122,
+                "change": 3.2,
+                "rank": 42
+            }
         },
         "US-VT": {
             "name": "Vermont",
             "abbr": "VT",
-            "student_debt": { "value": 29469, "change": 2.3, "rank": 22 },
-            "auto_debt": { "value": 22000, "change": 3.2, "rank": 39 },
-            "rent_burden": { "value": 30.5, "change": 1.8, "rank": 20 },
-            "median_income": { "value": 51800, "change": 3.3, "rank": 17 },
-            "unemployment": { "value": 6.4, "change": 0.1, "rank": 11 },
-            "debt_to_income": { "value": 35.2, "change": 2.1, "rank": 34 },
-            "cost_of_living": { "value": 140, "change": 4.2, "rank": 17 },
-            "financial_stress": { "value": 128, "change": 3.6, "rank": 37 }
+            "student_debt": {
+                "value": 29469,
+                "change": 2.3,
+                "rank": 22
+            },
+            "auto_debt": {
+                "value": 22000,
+                "change": 3.2,
+                "rank": 39
+            },
+            "rent_burden": {
+                "value": 30.5,
+                "change": 1.8,
+                "rank": 20
+            },
+            "median_income": {
+                "value": 51800,
+                "change": 3.3,
+                "rank": 17
+            },
+            "unemployment": {
+                "value": 6.4,
+                "change": 0.1,
+                "rank": 11
+            },
+            "debt_to_income": {
+                "value": 35.2,
+                "change": 2.1,
+                "rank": 34
+            },
+            "cost_of_living": {
+                "value": 140,
+                "change": 4.2,
+                "rank": 17
+            },
+            "financial_stress": {
+                "value": 128,
+                "change": 3.6,
+                "rank": 37
+            }
         },
         "US-VA": {
             "name": "Virginia",
             "abbr": "VA",
-            "student_debt": { "value": 29106, "change": 2.0, "rank": 23 },
-            "auto_debt": { "value": 24500, "change": 3.8, "rank": 19 },
-            "rent_burden": { "value": 29.5, "change": 1.6, "rank": 25 },
-            "median_income": { "value": 57200, "change": 3.6, "rank": 7 },
-            "unemployment": { "value": 7.2, "change": 0.3, "rank": 24 },
-            "debt_to_income": { "value": 34.0, "change": 1.9, "rank": 38 },
-            "cost_of_living": { "value": 145, "change": 4.5, "rank": 13 },
-            "financial_stress": { "value": 130, "change": 3.8, "rank": 34 }
+            "student_debt": {
+                "value": 29106,
+                "change": 2,
+                "rank": 23
+            },
+            "auto_debt": {
+                "value": 24500,
+                "change": 3.8,
+                "rank": 19
+            },
+            "rent_burden": {
+                "value": 29.5,
+                "change": 1.6,
+                "rank": 25
+            },
+            "median_income": {
+                "value": 57200,
+                "change": 3.6,
+                "rank": 7
+            },
+            "unemployment": {
+                "value": 7.2,
+                "change": 0.3,
+                "rank": 24
+            },
+            "debt_to_income": {
+                "value": 34,
+                "change": 1.9,
+                "rank": 38
+            },
+            "cost_of_living": {
+                "value": 145,
+                "change": 4.5,
+                "rank": 13
+            },
+            "financial_stress": {
+                "value": 130,
+                "change": 3.8,
+                "rank": 34
+            }
         },
         "US-WA": {
             "name": "Washington",
             "abbr": "WA",
-            "student_debt": { "value": 24623, "change": 1.5, "rank": 44 },
-            "auto_debt": { "value": 23200, "change": 3.5, "rank": 29 },
-            "rent_burden": { "value": 31.8, "change": 2.0, "rank": 13 },
-            "median_income": { "value": 56800, "change": 3.8, "rank": 7 },
-            "unemployment": { "value": 7.4, "change": 0.3, "rank": 27 },
-            "debt_to_income": { "value": 32.5, "change": 1.8, "rank": 42 },
-            "cost_of_living": { "value": 155, "change": 5.2, "rank": 6 },
-            "financial_stress": { "value": 135, "change": 4.2, "rank": 26 }
+            "student_debt": {
+                "value": 24623,
+                "change": 1.5,
+                "rank": 44
+            },
+            "auto_debt": {
+                "value": 23200,
+                "change": 3.5,
+                "rank": 29
+            },
+            "rent_burden": {
+                "value": 31.8,
+                "change": 2,
+                "rank": 13
+            },
+            "median_income": {
+                "value": 56800,
+                "change": 3.8,
+                "rank": 7
+            },
+            "unemployment": {
+                "value": 7.4,
+                "change": 0.3,
+                "rank": 27
+            },
+            "debt_to_income": {
+                "value": 32.5,
+                "change": 1.8,
+                "rank": 42
+            },
+            "cost_of_living": {
+                "value": 155,
+                "change": 5.2,
+                "rank": 6
+            },
+            "financial_stress": {
+                "value": 135,
+                "change": 4.2,
+                "rank": 26
+            }
         },
         "US-WV": {
             "name": "West Virginia",
             "abbr": "WV",
-            "student_debt": { "value": 27188, "change": 2.0, "rank": 36 },
-            "auto_debt": { "value": 22500, "change": 3.5, "rank": 35 },
-            "rent_burden": { "value": 27.2, "change": 1.2, "rank": 39 },
-            "median_income": { "value": 40200, "change": 2.2, "rank": 49 },
-            "unemployment": { "value": 10.2, "change": 0.8, "rank": 50 },
-            "debt_to_income": { "value": 45.8, "change": 3.4, "rank": 4 },
-            "cost_of_living": { "value": 115, "change": 2.5, "rank": 44 },
-            "financial_stress": { "value": 155, "change": 5.0, "rank": 4 }
+            "student_debt": {
+                "value": 27188,
+                "change": 2,
+                "rank": 36
+            },
+            "auto_debt": {
+                "value": 22500,
+                "change": 3.5,
+                "rank": 35
+            },
+            "rent_burden": {
+                "value": 27.2,
+                "change": 1.2,
+                "rank": 39
+            },
+            "median_income": {
+                "value": 40200,
+                "change": 2.2,
+                "rank": 49
+            },
+            "unemployment": {
+                "value": 10.2,
+                "change": 0.8,
+                "rank": 50
+            },
+            "debt_to_income": {
+                "value": 45.8,
+                "change": 3.4,
+                "rank": 4
+            },
+            "cost_of_living": {
+                "value": 115,
+                "change": 2.5,
+                "rank": 44
+            },
+            "financial_stress": {
+                "value": 155,
+                "change": 5,
+                "rank": 4
+            }
         },
         "US-WI": {
             "name": "Wisconsin",
             "abbr": "WI",
-            "student_debt": { "value": 30150, "change": 2.1, "rank": 19 },
-            "auto_debt": { "value": 23000, "change": 3.4, "rank": 30 },
-            "rent_burden": { "value": 27.5, "change": 1.3, "rank": 38 },
-            "median_income": { "value": 49000, "change": 2.9, "rank": 23 },
-            "unemployment": { "value": 6.5, "change": 0.1, "rank": 14 },
-            "debt_to_income": { "value": 38.5, "change": 2.4, "rank": 24 },
-            "cost_of_living": { "value": 118, "change": 2.6, "rank": 42 },
-            "financial_stress": { "value": 125, "change": 3.4, "rank": 41 }
+            "student_debt": {
+                "value": 30150,
+                "change": 2.1,
+                "rank": 19
+            },
+            "auto_debt": {
+                "value": 23000,
+                "change": 3.4,
+                "rank": 30
+            },
+            "rent_burden": {
+                "value": 27.5,
+                "change": 1.3,
+                "rank": 38
+            },
+            "median_income": {
+                "value": 49000,
+                "change": 2.9,
+                "rank": 23
+            },
+            "unemployment": {
+                "value": 6.5,
+                "change": 0.1,
+                "rank": 14
+            },
+            "debt_to_income": {
+                "value": 38.5,
+                "change": 2.4,
+                "rank": 24
+            },
+            "cost_of_living": {
+                "value": 118,
+                "change": 2.6,
+                "rank": 42
+            },
+            "financial_stress": {
+                "value": 125,
+                "change": 3.4,
+                "rank": 41
+            }
         },
         "US-WY": {
             "name": "Wyoming",
             "abbr": "WY",
-            "student_debt": { "value": 24118, "change": 1.8, "rank": 46 },
-            "auto_debt": { "value": 28500, "change": 5.2, "rank": 2 },
-            "rent_burden": { "value": 24.8, "change": 0.8, "rank": 48 },
-            "median_income": { "value": 52000, "change": 3.4, "rank": 16 },
-            "unemployment": { "value": 7.0, "change": 0.2, "rank": 21 },
-            "debt_to_income": { "value": 36.5, "change": 2.2, "rank": 29 },
-            "cost_of_living": { "value": 110, "change": 2.3, "rank": 47 },
-            "financial_stress": { "value": 120, "change": 3.0, "rank": 45 }
+            "student_debt": {
+                "value": 24118,
+                "change": 1.8,
+                "rank": 46
+            },
+            "auto_debt": {
+                "value": 28500,
+                "change": 5.2,
+                "rank": 2
+            },
+            "rent_burden": {
+                "value": 24.8,
+                "change": 0.8,
+                "rank": 48
+            },
+            "median_income": {
+                "value": 52000,
+                "change": 3.4,
+                "rank": 16
+            },
+            "unemployment": {
+                "value": 7,
+                "change": 0.2,
+                "rank": 21
+            },
+            "debt_to_income": {
+                "value": 36.5,
+                "change": 2.2,
+                "rank": 29
+            },
+            "cost_of_living": {
+                "value": 110,
+                "change": 2.3,
+                "rank": 47
+            },
+            "financial_stress": {
+                "value": 120,
+                "change": 3,
+                "rank": 45
+            }
         }
     },
     "indicators": {
@@ -710,7 +2342,12 @@ const YOUNG_ADULT_DATA = {
             "unit": "$",
             "format": "currency",
             "higherIsBad": true,
-            "thresholds": { "low": 25000, "moderate": 30000, "elevated": 35000, "high": 40000 }
+            "thresholds": {
+                "low": 25000,
+                "moderate": 30000,
+                "elevated": 35000,
+                "high": 40000
+            }
         },
         "auto_debt": {
             "name": "Auto Debt",
@@ -721,7 +2358,12 @@ const YOUNG_ADULT_DATA = {
             "unit": "$",
             "format": "currency",
             "higherIsBad": true,
-            "thresholds": { "low": 22000, "moderate": 25000, "elevated": 27000, "high": 30000 }
+            "thresholds": {
+                "low": 22000,
+                "moderate": 25000,
+                "elevated": 27000,
+                "high": 30000
+            }
         },
         "rent_burden": {
             "name": "Rent Burden",
@@ -732,7 +2374,12 @@ const YOUNG_ADULT_DATA = {
             "unit": "%",
             "format": "percentage",
             "higherIsBad": true,
-            "thresholds": { "low": 25, "moderate": 30, "elevated": 33, "high": 36 }
+            "thresholds": {
+                "low": 25,
+                "moderate": 30,
+                "elevated": 33,
+                "high": 36
+            }
         },
         "median_income": {
             "name": "Median Income",
@@ -743,7 +2390,12 @@ const YOUNG_ADULT_DATA = {
             "unit": "$",
             "format": "currency",
             "higherIsBad": false,
-            "thresholds": { "low": 55000, "moderate": 48000, "elevated": 42000, "high": 38000 }
+            "thresholds": {
+                "low": 55000,
+                "moderate": 48000,
+                "elevated": 42000,
+                "high": 38000
+            }
         },
         "unemployment": {
             "name": "Youth Unemployment",
@@ -754,7 +2406,12 @@ const YOUNG_ADULT_DATA = {
             "unit": "%",
             "format": "percentage",
             "higherIsBad": true,
-            "thresholds": { "low": 6.0, "moderate": 8.0, "elevated": 10.0, "high": 12.0 }
+            "thresholds": {
+                "low": 6,
+                "moderate": 8,
+                "elevated": 10,
+                "high": 12
+            }
         },
         "debt_to_income": {
             "name": "Debt-to-Income",
@@ -765,7 +2422,12 @@ const YOUNG_ADULT_DATA = {
             "unit": "%",
             "format": "percentage",
             "higherIsBad": true,
-            "thresholds": { "low": 35, "moderate": 40, "elevated": 45, "high": 50 }
+            "thresholds": {
+                "low": 35,
+                "moderate": 40,
+                "elevated": 45,
+                "high": 50
+            }
         },
         "cost_of_living": {
             "name": "Cost of Living",
@@ -776,7 +2438,12 @@ const YOUNG_ADULT_DATA = {
             "unit": "index",
             "format": "index",
             "higherIsBad": true,
-            "thresholds": { "low": 110, "moderate": 130, "elevated": 150, "high": 165 }
+            "thresholds": {
+                "low": 110,
+                "moderate": 130,
+                "elevated": 150,
+                "high": 165
+            }
         },
         "financial_stress": {
             "name": "Financial Stress",
@@ -787,7 +2454,12 @@ const YOUNG_ADULT_DATA = {
             "unit": "index",
             "format": "index",
             "higherIsBad": true,
-            "thresholds": { "low": 115, "moderate": 135, "elevated": 150, "high": 160 }
+            "thresholds": {
+                "low": 115,
+                "moderate": 135,
+                "elevated": 150,
+                "high": 160
+            }
         }
     }
 };
