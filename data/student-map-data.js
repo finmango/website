@@ -1,10 +1,10 @@
 // Young Adult Financial Health Map Data
-// Auto-generated: 2026-01-05T20:09:26.512Z
+// Auto-generated: 2026-01-05T20:12:27.858Z
 // Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS
 
 const YOUNG_ADULT_DATA = {
     "meta": {
-        "generated": "2026-01-05T20:09:26.507Z",
+        "generated": "2026-01-05T20:12:27.854Z",
         "version": "3.1",
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
@@ -101,7 +101,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 29.3,
+                "value": 56.6,
                 "change": 1.5,
                 "rank": 28
             },
@@ -126,7 +126,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "financial_stress": {
-                "value": 170,
+                "value": 195,
                 "change": 4.5,
                 "rank": 12
             }
@@ -145,7 +145,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 8
             },
             "rent_burden": {
-                "value": 26.5,
+                "value": 51.2,
                 "change": 1.2,
                 "rank": 42
             },
@@ -170,7 +170,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 8
             },
             "financial_stress": {
-                "value": 159,
+                "value": 183,
                 "change": 4.8,
                 "rank": 22
             }
@@ -189,7 +189,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 18
             },
             "rent_burden": {
-                "value": 31.2,
+                "value": 60.3,
                 "change": 2.1,
                 "rank": 18
             },
@@ -214,7 +214,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 15
             },
             "financial_stress": {
-                "value": 167,
+                "value": 192,
                 "change": 5.2,
                 "rank": 16
             }
@@ -233,7 +233,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "rent_burden": {
-                "value": 28.1,
+                "value": 54.3,
                 "change": 1.4,
                 "rank": 35
             },
@@ -258,7 +258,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 40
             },
             "financial_stress": {
-                "value": 175,
+                "value": 201,
                 "change": 4.2,
                 "rank": 8
             }
@@ -277,7 +277,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "rent_burden": {
-                "value": 58.6,
+                "value": 63.6,
                 "change": 0.8,
                 "rank": 1
             },
@@ -302,7 +302,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 1
             },
             "financial_stress": {
-                "value": 231,
+                "value": 323,
                 "change": 1.8,
                 "rank": 4,
                 "trend": "up"
@@ -322,7 +322,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 14
             },
             "rent_burden": {
-                "value": 31.2,
+                "value": 60.3,
                 "change": 1.8,
                 "rank": 19
             },
@@ -347,7 +347,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 12
             },
             "financial_stress": {
-                "value": 152,
+                "value": 175,
                 "change": 4,
                 "rank": 32
             }
@@ -366,7 +366,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 20
             },
             "rent_burden": {
-                "value": 32.1,
+                "value": 62.1,
                 "change": 2,
                 "rank": 12
             },
@@ -391,7 +391,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 6
             },
             "financial_stress": {
-                "value": 161,
+                "value": 185,
                 "change": 4.8,
                 "rank": 20
             }
@@ -410,7 +410,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 21
             },
             "rent_burden": {
-                "value": 30.1,
+                "value": 58.2,
                 "change": 1.7,
                 "rank": 24
             },
@@ -435,7 +435,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 18
             },
             "financial_stress": {
-                "value": 159,
+                "value": 183,
                 "change": 4.5,
                 "rank": 24
             }
@@ -454,7 +454,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 42
             },
             "rent_burden": {
-                "value": 59.7,
+                "value": 64.7,
                 "change": 0.5,
                 "rank": 5
             },
@@ -479,7 +479,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 2
             },
             "financial_stress": {
-                "value": 245,
+                "value": 343,
                 "change": 1.5,
                 "rank": 18,
                 "trend": "up"
@@ -499,7 +499,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 10
             },
             "rent_burden": {
-                "value": 36.1,
+                "value": 69.8,
                 "change": 3.2,
                 "rank": 2
             },
@@ -524,7 +524,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 4
             },
             "financial_stress": {
-                "value": 186,
+                "value": 214,
                 "change": 6,
                 "rank": 2
             }
@@ -543,7 +543,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 12
             },
             "rent_burden": {
-                "value": 31.6,
+                "value": 61.1,
                 "change": 2,
                 "rank": 16
             },
@@ -568,7 +568,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 20
             },
             "financial_stress": {
-                "value": 173,
+                "value": 199,
                 "change": 5,
                 "rank": 10
             }
@@ -587,7 +587,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 26
             },
             "rent_burden": {
-                "value": 59.1,
+                "value": 64.1,
                 "change": 2.2,
                 "rank": 8
             },
@@ -612,7 +612,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 3
             },
             "financial_stress": {
-                "value": 290,
+                "value": 406,
                 "change": 5.2,
                 "rank": 12,
                 "trend": "up"
@@ -632,7 +632,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 19
             },
             "rent_burden": {
-                "value": 29.3,
+                "value": 56.6,
                 "change": 1.6,
                 "rank": 29
             },
@@ -657,7 +657,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 26
             },
             "financial_stress": {
-                "value": 147,
+                "value": 169,
                 "change": 3.8,
                 "rank": 38
             }
@@ -676,7 +676,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 24
             },
             "rent_burden": {
-                "value": 29.4,
+                "value": 56.8,
                 "change": 1.6,
                 "rank": 27
             },
@@ -701,7 +701,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 16
             },
             "financial_stress": {
-                "value": 167,
+                "value": 192,
                 "change": 4.8,
                 "rank": 15
             }
@@ -720,7 +720,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 23
             },
             "rent_burden": {
-                "value": 29.3,
+                "value": 56.6,
                 "change": 1.5,
                 "rank": 26
             },
@@ -745,7 +745,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 35
             },
             "financial_stress": {
-                "value": 155,
+                "value": 178,
                 "change": 4,
                 "rank": 28
             }
@@ -764,7 +764,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 35
             },
             "rent_burden": {
-                "value": 27.2,
+                "value": 52.6,
                 "change": 1.2,
                 "rank": 40
             },
@@ -789,7 +789,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 48
             },
             "financial_stress": {
-                "value": 132,
+                "value": 152,
                 "change": 3,
                 "rank": 48
             }
@@ -808,7 +808,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 29
             },
             "rent_burden": {
-                "value": 27.1,
+                "value": 52.4,
                 "change": 1.3,
                 "rank": 41
             },
@@ -833,7 +833,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 43
             },
             "financial_stress": {
-                "value": 138,
+                "value": 159,
                 "change": 3.2,
                 "rank": 44
             }
@@ -852,7 +852,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "rent_burden": {
-                "value": 27.9,
+                "value": 53.9,
                 "change": 1.4,
                 "rank": 36
             },
@@ -877,7 +877,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 37
             },
             "financial_stress": {
-                "value": 170,
+                "value": 195,
                 "change": 4.5,
                 "rank": 13
             }
@@ -896,7 +896,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 15
             },
             "rent_burden": {
-                "value": 32.5,
+                "value": 62.8,
                 "change": 2.2,
                 "rank": 9
             },
@@ -921,7 +921,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 24
             },
             "financial_stress": {
-                "value": 190,
+                "value": 218,
                 "change": 5.8,
                 "rank": 1
             }
@@ -940,7 +940,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 33
             },
             "rent_burden": {
-                "value": 30.1,
+                "value": 58.2,
                 "change": 1.7,
                 "rank": 25
             },
@@ -965,7 +965,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "financial_stress": {
-                "value": 152,
+                "value": 175,
                 "change": 3.8,
                 "rank": 32
             }
@@ -984,7 +984,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 17
             },
             "rent_burden": {
-                "value": 31.5,
+                "value": 60.9,
                 "change": 1.9,
                 "rank": 17
             },
@@ -1009,7 +1009,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 10
             },
             "financial_stress": {
-                "value": 150,
+                "value": 173,
                 "change": 3.8,
                 "rank": 35
             }
@@ -1028,7 +1028,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 38
             },
             "rent_burden": {
-                "value": 60.5,
+                "value": 65.5,
                 "change": 2.1,
                 "rank": 10
             },
@@ -1053,7 +1053,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 5
             },
             "financial_stress": {
-                "value": 265,
+                "value": 371,
                 "change": 4.2,
                 "rank": 27,
                 "trend": "up"
@@ -1073,7 +1073,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 11
             },
             "rent_burden": {
-                "value": 29.8,
+                "value": 57.6,
                 "change": 1.7,
                 "rank": 22
             },
@@ -1098,7 +1098,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 27
             },
             "financial_stress": {
-                "value": 167,
+                "value": 192,
                 "change": 4.6,
                 "rank": 14
             }
@@ -1117,7 +1117,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 27
             },
             "rent_burden": {
-                "value": 28.8,
+                "value": 55.7,
                 "change": 1.5,
                 "rank": 32
             },
@@ -1142,7 +1142,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "financial_stress": {
-                "value": 144,
+                "value": 166,
                 "change": 3.5,
                 "rank": 40
             }
@@ -1161,7 +1161,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 12
             },
             "rent_burden": {
-                "value": 28.5,
+                "value": 55.1,
                 "change": 0.5,
                 "rank": 38
             },
@@ -1186,7 +1186,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 50
             },
             "financial_stress": {
-                "value": 129,
+                "value": 148,
                 "change": 1.5,
                 "rank": 8
             }
@@ -1205,7 +1205,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 26
             },
             "rent_burden": {
-                "value": 27.8,
+                "value": 53.7,
                 "change": 1.4,
                 "rank": 37
             },
@@ -1230,7 +1230,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 41
             },
             "financial_stress": {
-                "value": 150,
+                "value": 173,
                 "change": 3.6,
                 "rank": 36
             }
@@ -1249,7 +1249,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 29,
+                "value": 56.1,
                 "change": 1.6,
                 "rank": 31
             },
@@ -1274,7 +1274,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 21
             },
             "financial_stress": {
-                "value": 147,
+                "value": 169,
                 "change": 3.6,
                 "rank": 38
             }
@@ -1293,7 +1293,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 34
             },
             "rent_burden": {
-                "value": 26.8,
+                "value": 51.8,
                 "change": 1.2,
                 "rank": 43
             },
@@ -1318,7 +1318,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 50
             },
             "financial_stress": {
-                "value": 126,
+                "value": 145,
                 "change": 2.8,
                 "rank": 50
             }
@@ -1337,7 +1337,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 9
             },
             "rent_burden": {
-                "value": 34.2,
+                "value": 66.1,
                 "change": 2.8,
                 "rank": 4
             },
@@ -1362,7 +1362,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 9
             },
             "financial_stress": {
-                "value": 178,
+                "value": 205,
                 "change": 5.5,
                 "rank": 6
             }
@@ -1381,7 +1381,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 30
             },
             "rent_burden": {
-                "value": 30,
+                "value": 58,
                 "change": 1.7,
                 "rank": 23
             },
@@ -1406,7 +1406,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 14
             },
             "financial_stress": {
-                "value": 152,
+                "value": 175,
                 "change": 4,
                 "rank": 33
             }
@@ -1425,7 +1425,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 62.7,
+                "value": 67.7,
                 "change": 2.5,
                 "rank": 5
             },
@@ -1450,7 +1450,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 7
             },
             "financial_stress": {
-                "value": 279,
+                "value": 391,
                 "change": 4.8,
                 "rank": 18,
                 "trend": "up"
@@ -1470,7 +1470,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 31
             },
             "rent_burden": {
-                "value": 28.5,
+                "value": 55.1,
                 "change": 1.5,
                 "rank": 34
             },
@@ -1495,7 +1495,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 31
             },
             "financial_stress": {
-                "value": 170,
+                "value": 195,
                 "change": 4.8,
                 "rank": 11
             }
@@ -1514,7 +1514,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 40
             },
             "rent_burden": {
-                "value": 58.1,
+                "value": 63.1,
                 "change": 2,
                 "rank": 11
             },
@@ -1539,7 +1539,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 4
             },
             "financial_stress": {
-                "value": 279,
+                "value": 391,
                 "change": 4.8,
                 "rank": 19,
                 "trend": "up"
@@ -1559,7 +1559,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 13
             },
             "rent_burden": {
-                "value": 30.5,
+                "value": 59,
                 "change": 1.8,
                 "rank": 20
             },
@@ -1584,7 +1584,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 23
             },
             "financial_stress": {
-                "value": 159,
+                "value": 183,
                 "change": 4.2,
                 "rank": 23
             }
@@ -1603,7 +1603,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 6
             },
             "rent_burden": {
-                "value": 23.5,
+                "value": 45.4,
                 "change": 0.3,
                 "rank": 51
             },
@@ -1628,7 +1628,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 45
             },
             "financial_stress": {
-                "value": 90,
+                "value": 110,
                 "change": 0.8,
                 "rank": 51
             }
@@ -1647,7 +1647,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "rent_burden": {
-                "value": 28.8,
+                "value": 55.7,
                 "change": 1.5,
                 "rank": 33
             },
@@ -1672,7 +1672,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 38
             },
             "financial_stress": {
-                "value": 159,
+                "value": 183,
                 "change": 4,
                 "rank": 25
             }
@@ -1691,7 +1691,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 20
             },
             "rent_burden": {
-                "value": 27.5,
+                "value": 53.2,
                 "change": 1.3,
                 "rank": 38
             },
@@ -1716,7 +1716,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 45
             },
             "financial_stress": {
-                "value": 155,
+                "value": 178,
                 "change": 3.8,
                 "rank": 29
             }
@@ -1735,7 +1735,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 36
             },
             "rent_burden": {
-                "value": 32.5,
+                "value": 62.8,
                 "change": 2.2,
                 "rank": 7
             },
@@ -1760,7 +1760,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 11
             },
             "financial_stress": {
-                "value": 163,
+                "value": 187,
                 "change": 4.6,
                 "rank": 17
             }
@@ -1779,7 +1779,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 32
             },
             "rent_burden": {
-                "value": 30.2,
+                "value": 58.4,
                 "change": 1.7,
                 "rank": 21
             },
@@ -1804,7 +1804,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 19
             },
             "financial_stress": {
-                "value": 167,
+                "value": 192,
                 "change": 4.6,
                 "rank": 16
             }
@@ -1823,7 +1823,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 37
             },
             "rent_burden": {
-                "value": 31.8,
+                "value": 61.5,
                 "change": 2,
                 "rank": 14
             },
@@ -1848,7 +1848,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 13
             },
             "financial_stress": {
-                "value": 161,
+                "value": 185,
                 "change": 4.5,
                 "rank": 21
             }
@@ -1867,7 +1867,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 10
             },
             "rent_burden": {
-                "value": 31.2,
+                "value": 60.3,
                 "change": 1.9,
                 "rank": 18
             },
@@ -1892,7 +1892,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 29
             },
             "financial_stress": {
-                "value": 175,
+                "value": 201,
                 "change": 5,
                 "rank": 7
             }
@@ -1911,7 +1911,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 5
             },
             "rent_burden": {
-                "value": 25.2,
+                "value": 48.7,
                 "change": 0.9,
                 "rank": 47
             },
@@ -1936,7 +1936,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 49
             },
             "financial_stress": {
-                "value": 136,
+                "value": 156,
                 "change": 3,
                 "rank": 46
             }
@@ -1955,7 +1955,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 9
             },
             "rent_burden": {
-                "value": 30.5,
+                "value": 59,
                 "change": 1.9,
                 "rank": 19
             },
@@ -1980,7 +1980,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 32
             },
             "financial_stress": {
-                "value": 161,
+                "value": 185,
                 "change": 4.2,
                 "rank": 22
             }
@@ -1999,7 +1999,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 1
             },
             "rent_burden": {
-                "value": 30.5,
+                "value": 59,
                 "change": 0.6,
                 "rank": 18
             },
@@ -2024,7 +2024,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "financial_stress": {
-                "value": 124,
+                "value": 143,
                 "change": 1.5,
                 "rank": 12
             }
@@ -2043,7 +2043,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 18
             },
             "rent_burden": {
-                "value": 28,
+                "value": 54.1,
                 "change": 1.5,
                 "rank": 35
             },
@@ -2068,7 +2068,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 15
             },
             "financial_stress": {
-                "value": 140,
+                "value": 161,
                 "change": 3.2,
                 "rank": 42
             }
@@ -2087,7 +2087,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 39
             },
             "rent_burden": {
-                "value": 30.5,
+                "value": 59,
                 "change": 1.8,
                 "rank": 20
             },
@@ -2112,7 +2112,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 17
             },
             "financial_stress": {
-                "value": 147,
+                "value": 169,
                 "change": 3.6,
                 "rank": 37
             }
@@ -2131,7 +2131,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 19
             },
             "rent_burden": {
-                "value": 29.5,
+                "value": 57,
                 "change": 1.6,
                 "rank": 25
             },
@@ -2156,7 +2156,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 13
             },
             "financial_stress": {
-                "value": 150,
+                "value": 173,
                 "change": 3.8,
                 "rank": 34
             }
@@ -2175,7 +2175,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 29
             },
             "rent_burden": {
-                "value": 60.2,
+                "value": 65.2,
                 "change": 2,
                 "rank": 13
             },
@@ -2200,7 +2200,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 6
             },
             "financial_stress": {
-                "value": 265,
+                "value": 371,
                 "change": 4.2,
                 "rank": 26,
                 "trend": "up"
@@ -2220,7 +2220,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 35
             },
             "rent_burden": {
-                "value": 27.2,
+                "value": 52.6,
                 "change": 1.2,
                 "rank": 39
             },
@@ -2245,7 +2245,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 44
             },
             "financial_stress": {
-                "value": 178,
+                "value": 205,
                 "change": 5,
                 "rank": 4
             }
@@ -2264,7 +2264,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 30
             },
             "rent_burden": {
-                "value": 27.5,
+                "value": 53.2,
                 "change": 1.3,
                 "rank": 38
             },
@@ -2289,7 +2289,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 42
             },
             "financial_stress": {
-                "value": 144,
+                "value": 166,
                 "change": 3.4,
                 "rank": 41
             }
@@ -2308,7 +2308,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 2
             },
             "rent_burden": {
-                "value": 24.8,
+                "value": 47.9,
                 "change": 0.8,
                 "rank": 48
             },
@@ -2333,7 +2333,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 47
             },
             "financial_stress": {
-                "value": 138,
+                "value": 159,
                 "change": 3,
                 "rank": 45
             }
