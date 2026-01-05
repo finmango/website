@@ -1,10 +1,10 @@
 // Young Adult Financial Health Map Data
-// Auto-generated: 2026-01-05T19:58:39.285Z
+// Auto-generated: 2026-01-05T20:04:37.911Z
 // Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS
 
 const YOUNG_ADULT_DATA = {
     "meta": {
-        "generated": "2026-01-05T19:58:39.279Z",
+        "generated": "2026-01-05T20:04:37.908Z",
         "version": "3.1",
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
@@ -38,12 +38,12 @@ const YOUNG_ADULT_DATA = {
             "source_note": "Experian Q3 2024 (Gen Z/Millennial Avg)"
         },
         "rent_burden": {
-            "value": 34.5,
+            "value": 58.6,
             "change": 1.2,
-            "label": "Rent Burden (% of Income)",
+            "label": "Cost Burdened Renters",
             "unit": "%",
             "trend": "up",
-            "source_note": "Median for Young Adult Renters (Est)"
+            "source_note": "Harvard JCHS / Zillow (Renters under 25 paying >30% income)"
         },
         "median_income": {
             "value": 59100,
@@ -55,7 +55,7 @@ const YOUNG_ADULT_DATA = {
         },
         "unemployment": {
             "value": 8.3,
-            "change": 1.1,
+            "change": 0,
             "label": "Youth Unemployment Rate",
             "unit": "%",
             "trend": "up",
@@ -2366,19 +2366,19 @@ const YOUNG_ADULT_DATA = {
             }
         },
         "rent_burden": {
-            "name": "Rent Burden",
+            "name": "Cost Burdened Rate",
             "fullName": "Rent as % of Income",
-            "description": "Median gross rent as percentage of household income for young renters",
+            "description": "% of young renters paying >30% of income on housing",
             "source": "Census ACS B25071 + Harvard JCHS 2025",
             "sourceUrl": "https://www.jchs.harvard.edu/",
             "unit": "%",
             "format": "percentage",
             "higherIsBad": true,
             "thresholds": {
-                "low": 25,
-                "moderate": 30,
-                "elevated": 33,
-                "high": 36
+                "low": 40,
+                "moderate": 50,
+                "elevated": 55,
+                "high": 60
             }
         },
         "median_income": {
