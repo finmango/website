@@ -137,7 +137,7 @@
             top: 0;
             width: 100%;
             background: var(--bg);
-            z-index: 1000;
+            z-index: 1050;
             padding: 1.5rem 0;
             transition: all 0.3s ease;
             border-bottom: 1px solid rgba(0, 0, 0, 0.06);
@@ -313,7 +313,7 @@
             width: 100%;
             height: 100vh;
             background: var(--bg);
-            z-index: 999;
+            z-index: 1040;
             padding: 6rem 2rem;
             transition: right 0.3s ease;
             overflow-y: auto;
@@ -1280,16 +1280,16 @@
     }
 
     body.has-announcement nav {
-      top: 44px !important;
+      top: var(--announcement-height) !important;
     }
 
     body.has-announcement .mobile-menu {
-      top: 44px !important;
-      height: calc(100vh - 44px) !important;
+      top: var(--announcement-height) !important;
+      height: calc(100vh - var(--announcement-height)) !important;
     }
     
     body.has-announcement .hero {
-      padding-top: calc(100px + 44px) !important;
+      padding-top: calc(100px + var(--announcement-height)) !important;
     }
 
     @media (max-width: 768px) {
@@ -1776,7 +1776,20 @@
         announcementBar.classList.add('hidden');
         document.body.classList.remove('has-announcement');
         localStorage.setItem(storageKey, Date.now().toString());
-      });
+
+      // Update height CSS variable
+      if (!announcementBar.classList.contains('hidden')) {
+        var updateHeight = function () {
+          var height = announcementBar.offsetHeight;
+          document.documentElement.style.setProperty('--announcement-height', height + 'px');
+        };
+
+        // Initial update
+        updateHeight();
+
+        // Update on resize
+        window.addEventListener('resize', updateHeight);
+      }
     })();
   </script>
 
@@ -1794,8 +1807,6 @@
                 // Toggle open class on content
                 const content = this.nextElementSibling;
                 content.classList.toggle('open');
-            });
-        });
     });
 </script>
 

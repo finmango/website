@@ -64,6 +64,9 @@
       --gray-medium: #666666;
       --light-gray: #f5f5f5;
 
+      /* Announcement bar default height (updated by JS) */
+      --announcement-height: 44px;
+
       /* Semantic Colors */
       --success: #10B981;
       --error: #EF4444;
@@ -191,7 +194,7 @@
       top: 0;
       width: 100%;
       background: var(--white);
-      z-index: 1000;
+      z-index: 1050;
       padding: 1.5rem 0;
       transition: all 0.3s ease;
       border-bottom: 1px solid rgba(0, 0, 0, 0.06);
@@ -203,7 +206,7 @@
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
       backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.97);
+      background: var(--white);
     }
 
     .nav-container {
@@ -394,7 +397,7 @@
       width: 100%;
       height: 100vh;
       background: var(--white);
-      z-index: 999;
+      z-index: 1040;
       padding: 6rem 2rem;
       transition: right 0.3s ease;
       overflow-y: auto;
@@ -1000,7 +1003,6 @@
       if (searchInput) {
         searchInput.addEventListener('input', (e) => {
           renderResources('all', e.target.value);
-        });
       }
     });
 
@@ -1037,7 +1039,6 @@
           else if (resource.section === 'calculators') calculatorsGrid.innerHTML += cardHTML;
           else if (resource.section === 'education') educationGrid.innerHTML += cardHTML;
         }
-      });
       
       // Handle empty sections
       [systemicGrid, simulatorsGrid, calculatorsGrid, educationGrid].forEach(grid => {
@@ -1049,7 +1050,6 @@
            grid.style.display = 'grid';
            if(header && header.classList.contains('section-header')) header.style.display = 'block';
         }
-      });
     }
 
   */
@@ -1504,16 +1504,16 @@
     }
 
     body.has-announcement nav {
-      top: 44px !important;
+      top: var(--announcement-height) !important;
     }
 
     body.has-announcement .mobile-menu {
-      top: 44px !important;
-      height: calc(100vh - 44px) !important;
+      top: var(--announcement-height) !important;
+      height: calc(100vh - var(--announcement-height)) !important;
     }
     
     body.has-announcement .hero {
-      padding-top: calc(100px + 44px) !important;
+      padding-top: calc(100px + var(--announcement-height)) !important;
     }
 
     @media (max-width: 768px) {
@@ -2130,7 +2130,6 @@
           const activeBtn = document.querySelector('.filter-btn.active');
           const category = activeBtn ? activeBtn.getAttribute('data-category') : 'all';
           renderResources(category, e.target.value);
-        });
       }
 
       // Filter Events
@@ -2145,8 +2144,6 @@
           const category = btn.getAttribute('data-category');
           const searchTerm = searchInput ? searchInput.value : '';
           renderResources(category, searchTerm);
-        });
-      });
     });
 
     // Render Resources
@@ -2182,7 +2179,6 @@
             mainGrid.innerHTML += cardHTML;
           }
         }
-      });
 
       // Handle empty sections
       [featuredGrid, newGrid, mainGrid].forEach(grid => {
@@ -2194,7 +2190,6 @@
           grid.style.display = 'grid';
           if (header && header.classList.contains('section-header')) header.style.display = 'block';
         }
-      });
     }
 
     function createCardHTML(resource, index) {
@@ -2227,7 +2222,6 @@
         mobileMenuBtn.classList.toggle('active');
         mobileMenu.classList.toggle('active');
         document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-      });
     }
   </script>
 
@@ -2257,7 +2251,20 @@
         announcementBar.classList.add('hidden');
         document.body.classList.remove('has-announcement');
         localStorage.setItem(storageKey, Date.now().toString());
-      });
+
+      // Update height CSS variable
+      if (!announcementBar.classList.contains('hidden')) {
+        var updateHeight = function () {
+          var height = announcementBar.offsetHeight;
+          document.documentElement.style.setProperty('--announcement-height', height + 'px');
+        };
+
+        // Initial update
+        updateHeight();
+
+        // Update on resize
+        window.addEventListener('resize', updateHeight);
+      }
     })();
   </script>
 
@@ -2275,8 +2282,6 @@
                 // Toggle open class on content
                 const content = this.nextElementSibling;
                 content.classList.toggle('open');
-            });
-        });
     });
 </script>
 
