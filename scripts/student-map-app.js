@@ -247,7 +247,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         els.tooltip.querySelector('.tooltip-state').textContent = data.name;
         const val = data[APP_STATE.currentIndicator]?.value;
         const label = DATA.indicators[APP_STATE.currentIndicator]?.name || APP_STATE.currentIndicator;
-        els.tooltip.querySelector('.tooltip-value').textContent = `${label}: ${formatValue(val, APP_STATE.currentIndicator)}`;
+
+        let content = `<div class="tooltip-main">${label}: ${formatValue(val, APP_STATE.currentIndicator)}</div>`;
+
+        // Add Context: Show Rent if not already selected
+        if (APP_STATE.currentIndicator !== 'average_rent' && data.average_rent) {
+            content += `<div class="tooltip-sub" style="font-size: 0.85em; opacity: 0.9; margin-top: 4px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 4px;">Avg Rent: ${formatValue(data.average_rent.value, 'average_rent')}</div>`;
+        }
+
+        els.tooltip.querySelector('.tooltip-value').innerHTML = content;
         els.tooltip.classList.add('visible');
     }
 
