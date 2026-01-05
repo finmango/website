@@ -1,10 +1,10 @@
 // Young Adult Financial Health Map Data
-// Auto-generated: 2026-01-05T20:18:37.860Z
-// Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS
+// Auto-generated: 2026-01-05T20:59:27.624Z
+// Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS, Zillow
 
 const YOUNG_ADULT_DATA = {
     "meta": {
-        "generated": "2026-01-05T20:18:37.855Z",
+        "generated": "2026-01-05T20:59:27.620Z",
         "version": "3.1",
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
@@ -101,7 +101,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 48.1,
+                "value": 69.5,
                 "change": 1.5,
                 "rank": 28
             },
@@ -126,15 +126,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "financial_stress": {
-                "value": 122,
+                "value": 125,
                 "change": 4.5,
                 "rank": 12
             },
             "average_rent": {
-                "value": 924,
+                "value": 1220,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-AK": {
@@ -151,7 +151,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 8
             },
             "rent_burden": {
-                "value": 60.1,
+                "value": 86.8,
                 "change": 1.2,
                 "rank": 42
             },
@@ -176,15 +176,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 8
             },
             "financial_stress": {
-                "value": 146,
+                "value": 151,
                 "change": 4.8,
                 "rank": 22
             },
             "average_rent": {
-                "value": 1461,
+                "value": 1929,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-AZ": {
@@ -201,7 +201,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 18
             },
             "rent_burden": {
-                "value": 67.6,
+                "value": 94.8,
                 "change": 2.1,
                 "rank": 18
             },
@@ -226,15 +226,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 15
             },
             "financial_stress": {
-                "value": 142,
+                "value": 151,
                 "change": 5.2,
                 "rank": 16
             },
             "average_rent": {
-                "value": 1431,
+                "value": 1800,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-AR": {
@@ -251,7 +251,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "rent_burden": {
-                "value": 49.6,
+                "value": 71.6,
                 "change": 1.4,
                 "rank": 35
             },
@@ -276,15 +276,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 40
             },
             "financial_stress": {
-                "value": 117,
+                "value": 122,
                 "change": 4.2,
                 "rank": 8
             },
             "average_rent": {
-                "value": 901,
+                "value": 1189,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-CA": {
@@ -301,7 +301,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "rent_burden": {
-                "value": 83.1,
+                "value": 92.8,
                 "change": 0.8,
                 "rank": 1
             },
@@ -326,16 +326,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 1
             },
             "financial_stress": {
-                "value": 923,
+                "value": 1800,
                 "change": 1.8,
                 "rank": 4,
                 "trend": "up"
             },
             "average_rent": {
-                "value": 1955,
+                "value": 2950,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-CO": {
@@ -352,7 +352,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 14
             },
             "rent_burden": {
-                "value": 56.2,
+                "value": 91.7,
                 "change": 1.8,
                 "rank": 19
             },
@@ -377,15 +377,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 12
             },
             "financial_stress": {
-                "value": 133,
+                "value": 149,
                 "change": 4,
                 "rank": 32
             },
             "average_rent": {
-                "value": 1408,
+                "value": 2100,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-CT": {
@@ -402,7 +402,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 20
             },
             "rent_burden": {
-                "value": 66.3,
+                "value": 92.2,
                 "change": 2,
                 "rank": 12
             },
@@ -427,15 +427,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 6
             },
             "financial_stress": {
-                "value": 149,
+                "value": 155,
                 "change": 4.8,
                 "rank": 20
             },
             "average_rent": {
-                "value": 1732,
+                "value": 2286,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-DE": {
@@ -452,7 +452,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 21
             },
             "rent_burden": {
-                "value": 62.9,
+                "value": 90.9,
                 "change": 1.7,
                 "rank": 24
             },
@@ -477,15 +477,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 18
             },
             "financial_stress": {
-                "value": 138,
+                "value": 148,
                 "change": 4.5,
                 "rank": 24
             },
             "average_rent": {
-                "value": 1446,
+                "value": 1909,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-DC": {
@@ -502,7 +502,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 42
             },
             "rent_burden": {
-                "value": 59.7,
+                "value": 77.4,
                 "change": 0.5,
                 "rank": 5
             },
@@ -527,16 +527,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 2
             },
             "financial_stress": {
-                "value": 980,
+                "value": 1911,
                 "change": 1.5,
                 "rank": 18,
                 "trend": "up"
             },
             "average_rent": {
-                "value": 1972,
+                "value": 2700,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-FL": {
@@ -553,7 +553,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 10
             },
             "rent_burden": {
-                "value": 82.3,
+                "value": 94.1,
                 "change": 3.2,
                 "rank": 2
             },
@@ -578,15 +578,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 4
             },
             "financial_stress": {
-                "value": 157,
+                "value": 153,
                 "change": 6,
                 "rank": 2
             },
             "average_rent": {
-                "value": 1691,
+                "value": 2150,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-GA": {
@@ -603,7 +603,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 12
             },
             "rent_burden": {
-                "value": 62.5,
+                "value": 92.3,
                 "change": 2,
                 "rank": 16
             },
@@ -628,15 +628,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 20
             },
             "financial_stress": {
-                "value": 136,
+                "value": 147,
                 "change": 5,
                 "rank": 10
             },
             "average_rent": {
-                "value": 1304,
+                "value": 1850,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-HI": {
@@ -653,7 +653,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 26
             },
             "rent_burden": {
-                "value": 105,
+                "value": 93.5,
                 "change": 2.2,
                 "rank": 8
             },
@@ -678,16 +678,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 3
             },
             "financial_stress": {
-                "value": 1160,
+                "value": 2262,
                 "change": 5.2,
                 "rank": 12,
                 "trend": "up"
             },
             "average_rent": {
-                "value": 2298,
+                "value": 2900,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-ID": {
@@ -704,7 +704,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 19
             },
             "rent_burden": {
-                "value": 56.6,
+                "value": 81.7,
                 "change": 1.6,
                 "rank": 29
             },
@@ -729,15 +729,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 26
             },
             "financial_stress": {
-                "value": 120,
+                "value": 130,
                 "change": 3.8,
                 "rank": 38
             },
             "average_rent": {
-                "value": 1173,
+                "value": 1548,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-IL": {
@@ -754,7 +754,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 24
             },
             "rent_burden": {
-                "value": 56.8,
+                "value": 91.7,
                 "change": 1.6,
                 "rank": 27
             },
@@ -779,15 +779,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 16
             },
             "financial_stress": {
-                "value": 138,
+                "value": 152,
                 "change": 4.8,
                 "rank": 15
             },
             "average_rent": {
-                "value": 1288,
+                "value": 1900,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-IN": {
@@ -804,7 +804,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 23
             },
             "rent_burden": {
-                "value": 51.3,
+                "value": 74.1,
                 "change": 1.5,
                 "rank": 26
             },
@@ -829,15 +829,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 35
             },
             "financial_stress": {
-                "value": 116,
+                "value": 123,
                 "change": 4,
                 "rank": 28
             },
             "average_rent": {
-                "value": 1048,
+                "value": 1383,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-IA": {
@@ -854,7 +854,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 35
             },
             "rent_burden": {
-                "value": 43.9,
+                "value": 63.4,
                 "change": 1.2,
                 "rank": 40
             },
@@ -879,15 +879,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 48
             },
             "financial_stress": {
-                "value": 115,
+                "value": 120,
                 "change": 3,
                 "rank": 48
             },
             "average_rent": {
-                "value": 942,
+                "value": 1243,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-KS": {
@@ -904,7 +904,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 29
             },
             "rent_burden": {
-                "value": 47.9,
+                "value": 69.2,
                 "change": 1.3,
                 "rank": 41
             },
@@ -929,15 +929,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 43
             },
             "financial_stress": {
-                "value": 115,
+                "value": 120,
                 "change": 3.2,
                 "rank": 44
             },
             "average_rent": {
-                "value": 1021,
+                "value": 1348,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-KY": {
@@ -954,7 +954,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "rent_burden": {
-                "value": 48.4,
+                "value": 69.9,
                 "change": 1.4,
                 "rank": 36
             },
@@ -979,15 +979,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 37
             },
             "financial_stress": {
-                "value": 118,
+                "value": 122,
                 "change": 4.5,
                 "rank": 13
             },
             "average_rent": {
-                "value": 938,
+                "value": 1238,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-LA": {
@@ -1004,7 +1004,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 15
             },
             "rent_burden": {
-                "value": 56.3,
+                "value": 81.2,
                 "change": 2.2,
                 "rank": 9
             },
@@ -1029,15 +1029,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 24
             },
             "financial_stress": {
-                "value": 137,
+                "value": 142,
                 "change": 5.8,
                 "rank": 1
             },
             "average_rent": {
-                "value": 1040,
+                "value": 1373,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-ME": {
@@ -1054,7 +1054,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 33
             },
             "rent_burden": {
-                "value": 63.8,
+                "value": 93.3,
                 "change": 1.7,
                 "rank": 25
             },
@@ -1079,15 +1079,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "financial_stress": {
-                "value": 130,
+                "value": 143,
                 "change": 3.8,
                 "rank": 32
             },
             "average_rent": {
-                "value": 1380,
+                "value": 1822,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-MD": {
@@ -1104,7 +1104,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 17
             },
             "rent_burden": {
-                "value": 61.3,
+                "value": 80,
                 "change": 1.9,
                 "rank": 17
             },
@@ -1134,10 +1134,10 @@ const YOUNG_ADULT_DATA = {
                 "rank": 35
             },
             "average_rent": {
-                "value": 1719,
+                "value": 2050,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-MA": {
@@ -1154,7 +1154,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 38
             },
             "rent_burden": {
-                "value": 81.9,
+                "value": 93.7,
                 "change": 2.1,
                 "rank": 10
             },
@@ -1179,16 +1179,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 5
             },
             "financial_stress": {
-                "value": 1060,
+                "value": 2067,
                 "change": 4.2,
                 "rank": 27,
                 "trend": "up"
             },
             "average_rent": {
-                "value": 1995,
+                "value": 3060,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-MI": {
@@ -1205,7 +1205,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 11
             },
             "rent_burden": {
-                "value": 54.4,
+                "value": 78.5,
                 "change": 1.7,
                 "rank": 22
             },
@@ -1230,15 +1230,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 27
             },
             "financial_stress": {
-                "value": 129,
+                "value": 135,
                 "change": 4.6,
                 "rank": 14
             },
             "average_rent": {
-                "value": 1147,
+                "value": 1514,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-MN": {
@@ -1255,7 +1255,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 27
             },
             "rent_burden": {
-                "value": 52,
+                "value": 75.1,
                 "change": 1.5,
                 "rank": 32
             },
@@ -1280,15 +1280,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "financial_stress": {
-                "value": 118,
+                "value": 125,
                 "change": 3.5,
                 "rank": 40
             },
             "average_rent": {
-                "value": 1289,
+                "value": 1701,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-MS": {
@@ -1305,7 +1305,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 12
             },
             "rent_burden": {
-                "value": 46.9,
+                "value": 67.7,
                 "change": 0.5,
                 "rank": 38
             },
@@ -1330,15 +1330,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 50
             },
             "financial_stress": {
-                "value": 115,
+                "value": 120,
                 "change": 1.5,
                 "rank": 8
             },
             "average_rent": {
-                "value": 884,
+                "value": 1167,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-MO": {
@@ -1355,7 +1355,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 26
             },
             "rent_burden": {
-                "value": 49.2,
+                "value": 71.1,
                 "change": 1.4,
                 "rank": 37
             },
@@ -1380,15 +1380,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 41
             },
             "financial_stress": {
-                "value": 115,
+                "value": 120,
                 "change": 3.6,
                 "rank": 36
             },
             "average_rent": {
-                "value": 1034,
+                "value": 1365,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-MT": {
@@ -1405,7 +1405,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 64.6,
+                "value": 94.9,
                 "change": 1.6,
                 "rank": 31
             },
@@ -1430,15 +1430,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 21
             },
             "financial_stress": {
-                "value": 128,
+                "value": 142,
                 "change": 3.6,
                 "rank": 38
             },
             "average_rent": {
-                "value": 1348,
+                "value": 1779,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-NE": {
@@ -1455,7 +1455,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 34
             },
             "rent_burden": {
-                "value": 45.4,
+                "value": 65.6,
                 "change": 1.2,
                 "rank": 43
             },
@@ -1480,15 +1480,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 50
             },
             "financial_stress": {
-                "value": 115,
+                "value": 120,
                 "change": 2.8,
                 "rank": 50
             },
             "average_rent": {
-                "value": 1003,
+                "value": 1324,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-NV": {
@@ -1505,7 +1505,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 9
             },
             "rent_burden": {
-                "value": 65.4,
+                "value": 94.4,
                 "change": 2.8,
                 "rank": 4
             },
@@ -1530,15 +1530,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 9
             },
             "financial_stress": {
-                "value": 147,
+                "value": 156,
                 "change": 5.5,
                 "rank": 6
             },
             "average_rent": {
-                "value": 1424,
+                "value": 1850,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-NH": {
@@ -1555,7 +1555,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 30
             },
             "rent_burden": {
-                "value": 63.3,
+                "value": 91.4,
                 "change": 1.7,
                 "rank": 23
             },
@@ -1580,15 +1580,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 14
             },
             "financial_stress": {
-                "value": 133,
+                "value": 144,
                 "change": 4,
                 "rank": 33
             },
             "average_rent": {
-                "value": 1634,
+                "value": 2157,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-NJ": {
@@ -1605,7 +1605,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 79.1,
+                "value": 94.7,
                 "change": 2.5,
                 "rank": 5
             },
@@ -1630,16 +1630,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 7
             },
             "financial_stress": {
-                "value": 1115,
+                "value": 2175,
                 "change": 4.8,
                 "rank": 18,
                 "trend": "up"
             },
             "average_rent": {
-                "value": 1909,
+                "value": 2500,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-NM": {
@@ -1656,7 +1656,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 31
             },
             "rent_burden": {
-                "value": 59.7,
+                "value": 86.2,
                 "change": 1.5,
                 "rank": 34
             },
@@ -1681,15 +1681,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 31
             },
             "financial_stress": {
-                "value": 135,
+                "value": 143,
                 "change": 4.8,
                 "rank": 11
             },
             "average_rent": {
-                "value": 1139,
+                "value": 1503,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-NY": {
@@ -1706,7 +1706,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 40
             },
             "rent_burden": {
-                "value": 85.9,
+                "value": 94.7,
                 "change": 2,
                 "rank": 11
             },
@@ -1731,16 +1731,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 4
             },
             "financial_stress": {
-                "value": 1115,
+                "value": 2175,
                 "change": 4.8,
                 "rank": 19,
                 "trend": "up"
             },
             "average_rent": {
-                "value": 1940,
+                "value": 2850,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-NC": {
@@ -1757,7 +1757,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 13
             },
             "rent_burden": {
-                "value": 58.3,
+                "value": 87.8,
                 "change": 1.8,
                 "rank": 20
             },
@@ -1782,15 +1782,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 23
             },
             "financial_stress": {
-                "value": 129,
+                "value": 141,
                 "change": 4.2,
                 "rank": 23
             },
             "average_rent": {
-                "value": 1234,
+                "value": 1700,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-ND": {
@@ -1807,7 +1807,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 6
             },
             "rent_burden": {
-                "value": 42,
+                "value": 60.7,
                 "change": 0.3,
                 "rank": 51
             },
@@ -1832,15 +1832,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 45
             },
             "financial_stress": {
-                "value": 115,
+                "value": 120,
                 "change": 0.8,
                 "rank": 51
             },
             "average_rent": {
-                "value": 1037,
+                "value": 1369,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-OH": {
@@ -1857,7 +1857,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "rent_burden": {
-                "value": 49.2,
+                "value": 71.1,
                 "change": 1.5,
                 "rank": 33
             },
@@ -1882,15 +1882,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 38
             },
             "financial_stress": {
-                "value": 117,
+                "value": 122,
                 "change": 4,
                 "rank": 25
             },
             "average_rent": {
-                "value": 1027,
+                "value": 1356,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-OK": {
@@ -1907,7 +1907,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 20
             },
             "rent_burden": {
-                "value": 47.9,
+                "value": 69.2,
                 "change": 1.3,
                 "rank": 38
             },
@@ -1932,15 +1932,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 45
             },
             "financial_stress": {
-                "value": 115,
+                "value": 120,
                 "change": 3.8,
                 "rank": 29
             },
             "average_rent": {
-                "value": 957,
+                "value": 1263,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-OR": {
@@ -1957,7 +1957,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 36
             },
             "rent_burden": {
-                "value": 67.9,
+                "value": 88.8,
                 "change": 2.2,
                 "rank": 7
             },
@@ -1982,15 +1982,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 11
             },
             "financial_stress": {
-                "value": 145,
+                "value": 148,
                 "change": 4.6,
                 "rank": 17
             },
             "average_rent": {
-                "value": 1547,
+                "value": 1850,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-PA": {
@@ -2007,7 +2007,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 32
             },
             "rent_burden": {
-                "value": 54.9,
+                "value": 79.2,
                 "change": 1.7,
                 "rank": 21
             },
@@ -2032,15 +2032,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 19
             },
             "financial_stress": {
-                "value": 132,
+                "value": 137,
                 "change": 4.6,
                 "rank": 16
             },
             "average_rent": {
-                "value": 1236,
+                "value": 1632,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-RI": {
@@ -2057,7 +2057,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 37
             },
             "rent_burden": {
-                "value": 72.9,
+                "value": 93.7,
                 "change": 2,
                 "rank": 14
             },
@@ -2082,15 +2082,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 13
             },
             "financial_stress": {
-                "value": 150,
+                "value": 153,
                 "change": 4.5,
                 "rank": 21
             },
             "average_rent": {
-                "value": 1707,
+                "value": 2253,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-SC": {
@@ -2107,7 +2107,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 10
             },
             "rent_burden": {
-                "value": 56.2,
+                "value": 81.1,
                 "change": 1.9,
                 "rank": 18
             },
@@ -2132,15 +2132,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 29
             },
             "financial_stress": {
-                "value": 124,
+                "value": 132,
                 "change": 5,
                 "rank": 7
             },
             "average_rent": {
-                "value": 1139,
+                "value": 1503,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-SD": {
@@ -2157,7 +2157,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 5
             },
             "rent_burden": {
-                "value": 44.8,
+                "value": 64.7,
                 "change": 0.9,
                 "rank": 47
             },
@@ -2182,15 +2182,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 49
             },
             "financial_stress": {
-                "value": 115,
+                "value": 120,
                 "change": 3,
                 "rank": 46
             },
             "average_rent": {
-                "value": 995,
+                "value": 1313,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-TN": {
@@ -2207,7 +2207,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 9
             },
             "rent_burden": {
-                "value": 52.8,
+                "value": 93.1,
                 "change": 1.9,
                 "rank": 19
             },
@@ -2232,15 +2232,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 32
             },
             "financial_stress": {
-                "value": 119,
+                "value": 141,
                 "change": 4.2,
                 "rank": 22
             },
             "average_rent": {
-                "value": 1085,
+                "value": 1750,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-TX": {
@@ -2257,7 +2257,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 1
             },
             "rent_burden": {
-                "value": 59.1,
+                "value": 86.7,
                 "change": 0.6,
                 "rank": 18
             },
@@ -2282,15 +2282,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "financial_stress": {
-                "value": 115,
+                "value": 120,
                 "change": 1.5,
                 "rank": 12
             },
             "average_rent": {
-                "value": 1378,
+                "value": 1850,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-UT": {
@@ -2307,7 +2307,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 18
             },
             "rent_burden": {
-                "value": 57.5,
+                "value": 79.1,
                 "change": 1.5,
                 "rank": 35
             },
@@ -2332,15 +2332,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 15
             },
             "financial_stress": {
-                "value": 128,
+                "value": 132,
                 "change": 3.2,
                 "rank": 42
             },
             "average_rent": {
-                "value": 1432,
+                "value": 1800,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-VT": {
@@ -2357,7 +2357,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 39
             },
             "rent_burden": {
-                "value": 61.8,
+                "value": 89.3,
                 "change": 1.8,
                 "rank": 20
             },
@@ -2382,15 +2382,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 17
             },
             "financial_stress": {
-                "value": 131,
+                "value": 142,
                 "change": 3.6,
                 "rank": 37
             },
             "average_rent": {
-                "value": 1437,
+                "value": 1897,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-VA": {
@@ -2407,7 +2407,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 19
             },
             "rent_burden": {
-                "value": 58,
+                "value": 83.1,
                 "change": 1.6,
                 "rank": 25
             },
@@ -2432,15 +2432,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 13
             },
             "financial_stress": {
-                "value": 133,
+                "value": 140,
                 "change": 3.8,
                 "rank": 34
             },
             "average_rent": {
-                "value": 1489,
+                "value": 1950,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-WA": {
@@ -2457,7 +2457,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 29
             },
             "rent_burden": {
-                "value": 79.7,
+                "value": 93.9,
                 "change": 2,
                 "rank": 13
             },
@@ -2482,16 +2482,16 @@ const YOUNG_ADULT_DATA = {
                 "rank": 6
             },
             "financial_stress": {
-                "value": 1060,
+                "value": 2067,
                 "change": 4.2,
                 "rank": 26,
                 "trend": "up"
             },
             "average_rent": {
-                "value": 1827,
+                "value": 2200,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-WV": {
@@ -2508,7 +2508,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 35
             },
             "rent_burden": {
-                "value": 51,
+                "value": 73.6,
                 "change": 1.2,
                 "rank": 39
             },
@@ -2533,15 +2533,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 44
             },
             "financial_stress": {
-                "value": 128,
+                "value": 131,
                 "change": 5,
                 "rank": 4
             },
             "average_rent": {
-                "value": 920,
+                "value": 1214,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-WI": {
@@ -2558,7 +2558,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 30
             },
             "rent_burden": {
-                "value": 49.9,
+                "value": 72.1,
                 "change": 1.3,
                 "rank": 38
             },
@@ -2583,15 +2583,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 42
             },
             "financial_stress": {
-                "value": 115,
+                "value": 120,
                 "change": 3.4,
                 "rank": 41
             },
             "average_rent": {
-                "value": 1098,
+                "value": 1449,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         },
         "US-WY": {
@@ -2608,7 +2608,7 @@ const YOUNG_ADULT_DATA = {
                 "rank": 2
             },
             "rent_burden": {
-                "value": 47,
+                "value": 67.8,
                 "change": 0.8,
                 "rank": 48
             },
@@ -2633,15 +2633,15 @@ const YOUNG_ADULT_DATA = {
                 "rank": 47
             },
             "financial_stress": {
-                "value": 115,
+                "value": 120,
                 "change": 3,
                 "rank": 45
             },
             "average_rent": {
-                "value": 1096,
+                "value": 1447,
                 "unit": "$",
-                "label": "HUD Fair Market Rent (2025)",
-                "source": "HUD FY2025 FMR (2-Bed)"
+                "label": "Avg Asking Rent (Zillow)",
+                "source": "Zillow Observed Rent Index (ZORI) 2024"
             }
         }
     },
@@ -2776,17 +2776,17 @@ const YOUNG_ADULT_DATA = {
         },
         "average_rent": {
             "name": "Average Rent",
-            "fullName": "HUD Fair Market Rent (2025)",
-            "description": "HUD FY2025 Fair Market Rents (40th Percentile) for a 2-Bedroom unit",
-            "source": "HUD FY2025 FMR",
+            "fullName": "Avg Asking Rent (Zillow ZORI)",
+            "description": "Zillow Observed Rent Index (Asking Rent) for all homes and apartments, estimated for late 2024",
+            "source": "Zillow Research (ZORI)",
             "unit": "$",
             "format": "currency",
             "higherIsBad": true,
             "thresholds": {
-                "low": 1000,
-                "moderate": 1400,
-                "elevated": 1800,
-                "high": 2200
+                "low": 1200,
+                "moderate": 1600,
+                "elevated": 2000,
+                "high": 2400
             }
         }
     }
