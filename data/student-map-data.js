@@ -54,12 +54,12 @@ const YOUNG_ADULT_DATA = {
             "source_note": "Census ACS 2023"
         },
         "unemployment": {
-            "value": 4.2,
-            "change": 0.3,
-            "label": "State Unemployment Rate",
+            "value": 9.2,
+            "change": 1.1,
+            "label": "Youth Unemployment Rate",
             "unit": "%",
             "trend": "up",
-            "source_note": "BLS LAUS Nov 2024"
+            "source_note": "BLS (Ages 20-24), Sept 2025"
         },
         "debt_to_income": {
             "value": 42.5,
