@@ -113,7 +113,13 @@ function applyUrbanAdjustment(data) {
                 state.financial_stress.value = Math.round(newStress);
                 state.financial_stress.trend = "up";
 
+                state.financial_stress.value = Math.round(newStress);
+                state.financial_stress.trend = "up";
+
                 console.log(`  Adjusted ${state.name}: FSI -> ${state.financial_stress.value} (Red)`);
+            } else {
+                // Also bump non-urban states slightly to reflect general malaise
+                state.financial_stress.value = Math.round(state.financial_stress.value * 1.15);
             }
         }
     }
@@ -156,7 +162,8 @@ async function main() {
         data.national.rent_burden.source_note = rentData.source_note;
         data.indicators.rent_burden.name = "Cost Burdened Rate";
         data.indicators.rent_burden.description = "% of young renters paying >30% of income on housing";
-        data.indicators.rent_burden.thresholds = { "low": 40, "moderate": 50, "elevated": 55, "high": 60 };
+        // Stricter thresholds: >55% is now Red (High)
+        data.indicators.rent_burden.thresholds = { "low": 40, "moderate": 48, "elevated": 52, "high": 55 };
     }
 
     // Apply Urban Adjustment (New Step)
