@@ -22,15 +22,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         panelIndicators: document.getElementById('panel-indicators')
     };
 
-    // Use DASHBOARD_DATA
-    const DATA = typeof DASHBOARD_DATA !== 'undefined' ? DASHBOARD_DATA : null;
+    let DATA = null;
 
     // --- Initialization ---
     async function init() {
         await loadMapSVG();
 
-        if (!DATA) {
-            console.error('DASHBOARD_DATA not loaded');
+        // Robust Wait for Data
+        try {
+            await waitForData();
+            DATA = typeof DASHBOARD_DATA !== 'undefined' ? DASHBOARD_DATA : window.DASHBOARD_DATA;
+        } catch (e) {
+            console.error('Data load timed out:', e);
+            // Show error state on UI?
             return;
         }
 
@@ -41,6 +45,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         updateMapView(APP_STATE.currentIndicator);
 
         console.log('Affordability Map initialized with Barometer Data');
+    }
+
+    function waitForData() {
+        return new Promise((resolve, reject) => {
+            if (typeof DASHBOARD_DATA !== 'undefined' || window.DASHBOARD_DATA) {
+                return resolve();
+            }
+
+            console.log('Waiting for DASHBOARD_DATA...');
+            let retries = 0;
+            const maxRetries = 50; // 5 seconds total
+            const interval = setInterval(() => {
+                retries++;
+                if (typeof DASHBOARD_DATA !== 'undefined' || window.DASHBOARD_DATA) {
+                    clearInterval(interval);
+                    resolve();
+                } else if (retries >= maxRetries) {
+                    clearInterval(interval);
+                    reject(new Error('DASHBOARD_DATA not found after 5s'));
+                }
+            }, 100);
+        });
     }
 
     // --- Helpers ---
