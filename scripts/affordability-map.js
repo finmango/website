@@ -1,12 +1,12 @@
 /**
  * Affordability Lab Map Logic
- * Adapted to use Financial Health Barometer Data (dashboard-data.js)
+ * Simplified version of Young Adult Map for Affordability Page
  */
 
 document.addEventListener('DOMContentLoaded', async () => {
     // --- State Management ---
     const APP_STATE = {
-        currentIndicator: 'financial_anxiety' // Default to Financial Anxiety
+        currentIndicator: 'financial_stress' // Crisis Index is the default
     };
 
     // --- DOM Elements ---
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         toggleBtns: document.querySelectorAll('.toggle-btn'),
         summaryCards: document.querySelectorAll('.summary-card'),
         usMap: document.getElementById('us-map'),
-        tooltip: document.getElementById('state-tooltip'),
+        tooltip: document.getElementById('state-tooltip'), // Will create these dynamically or expect them in DOM
         panelOverlay: document.getElementById('panel-overlay'),
         statePanel: document.getElementById('state-panel'),
         panelClose: document.getElementById('panel-close'),
@@ -22,19 +22,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         panelIndicators: document.getElementById('panel-indicators')
     };
 
-    let DATA = null;
+    // Use YOUNG_ADULT_DATA
+    const DATA = typeof YOUNG_ADULT_DATA !== 'undefined' ? YOUNG_ADULT_DATA : null;
 
     // --- Initialization ---
     async function init() {
         await loadMapSVG();
 
-        // Robust Wait for Data
-        try {
-            await waitForData();
-            DATA = typeof DASHBOARD_DATA !== 'undefined' ? DASHBOARD_DATA : window.DASHBOARD_DATA;
-        } catch (e) {
-            console.error('Data load timed out:', e);
-            // Show error state on UI?
+        if (!DATA) {
+            console.error('YOUNG_ADULT_DATA not loaded');
             return;
         }
 
@@ -44,73 +40,82 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         updateMapView(APP_STATE.currentIndicator);
 
-        console.log('Affordability Map initialized with Barometer Data');
-    }
-
-    function waitForData() {
-        return new Promise((resolve, reject) => {
-            if (typeof DASHBOARD_DATA !== 'undefined' || window.DASHBOARD_DATA) {
-                return resolve();
-            }
-
-            console.log('Waiting for DASHBOARD_DATA...');
-            let retries = 0;
-            const maxRetries = 50; // 5 seconds total
-            const interval = setInterval(() => {
-                retries++;
-                if (typeof DASHBOARD_DATA !== 'undefined' || window.DASHBOARD_DATA) {
-                    clearInterval(interval);
-                    resolve();
-                } else if (retries >= maxRetries) {
-                    clearInterval(interval);
-                    reject(new Error('DASHBOARD_DATA not found after 5s'));
-                }
-            }, 100);
-        });
+        console.log('Affordability Map initialized');
     }
 
     // --- Helpers ---
-    function formatValue(val) {
-        // Barometer data is an index, usually 80-180 range
-        return val.toFixed(1);
+    function formatValue(val, indicator) {
+        const ind = DATA.indicators[indicator];
+        if (!ind) return val;
+        if (ind.format === 'currency') {
+            return '$' + val.toLocaleString();
+        } else if (ind.format === 'percentage') {
+            return val.toFixed(1) + '%';
+        }
+        return val.toFixed(0);
     }
 
-    function formatChange(val) {
+    function formatChange(val, higherIsBad = true) {
         const isUp = val >= 0;
         const sign = isUp ? '▲' : '▼';
-        // For stress metrics, Up is "Red" (Bad), Down is "Green" (Good)
-        // Since we don't have a "higherIsBad" config in dashboard-data per se, 
-        // we assume all these stress indexes are negative if high.
-        const cssClass = isUp ? 'up' : 'down';
-        // Note: CSS might need adjustment if 'up' is green. 
-        // Usually .summary-change.up { color: red } for bad things.
-        // Let's check CSS: .up { color: var(--red) } in index.html, check local CSS too.
-        // In affordability-lab.html: .summary-change.up { color: var(--red); }
-
+        const cssClass = (isUp && higherIsBad) || (!isUp && !higherIsBad) ? 'up' : 'down';
         return `<span class="summary-change ${cssClass}">${sign} ${Math.abs(val).toFixed(1)}%</span>`;
     }
 
     function getColorForValue(value, indicator) {
-        // Standardized Scale from dashboard-app.js
-        if (value < 90) return '#10B981'; // Green
-        if (value < 120) return '#F59E0B'; // Yellow
-        if (value < 150) return '#F97316'; // Orange
-        return '#EF4444'; // Red
+        const ind = DATA.indicators[indicator];
+        if (!ind) return '#ddd';
+
+        const higherIsBad = ind.higherIsBad !== false;
+
+        // "Pessimistic" Coloring Logic:
+        // We artificially tighten the thresholds to show more "Red/Orange" 
+        // effectively grading on a harder curve.
+        let t = { ...ind.thresholds };
+
+        // Adjust thresholds to be stricter (approx 10-15% stricter)
+        if (higherIsBad) {
+            // Lower the bar for "Bad" colors
+            // e.g. if Low was 30, now it's 27. Anything above 27 isn't green anymore.
+            // if High was 40, now it's 36. Anything above 36 is RED.
+            t.low = t.low * 0.9;
+            t.moderate = t.moderate * 0.9;
+            t.elevated = t.elevated * 0.95;
+        } else {
+            // For income (Higher is good), Raise the bar for "Good" colors
+            // e.g. if Low was 50k, now it's 55k. You need 55k to be green.
+            t.low = t.low * 1.1;
+            t.moderate = t.moderate * 1.1;
+            t.elevated = t.elevated * 1.05;
+        }
+
+        if (higherIsBad) {
+            if (value < t.low) return '#10B981'; // Green
+            if (value < t.moderate) return '#F59E0B'; // Yellow
+            if (value < t.elevated) return '#F97316'; // Orange
+            return '#EF4444'; // Red
+        } else {
+            // For income, higher is better
+            if (value > t.low) return '#10B981';
+            if (value > t.moderate) return '#F59E0B';
+            if (value > t.elevated) return '#F97316';
+            return '#EF4444';
+        }
     }
 
     function updateSummaryCards() {
         const national = DATA.national;
-        const indicators = ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability'];
+        const indicators = ['student_debt', 'auto_debt', 'rent_burden', 'median_income', 'unemployment', 'debt_to_income', 'cost_of_living', 'financial_stress'];
 
         indicators.forEach(key => {
             const valEl = document.getElementById(`val-${key}`);
             const changeEl = document.getElementById(`change-${key}`);
-
             if (valEl && national[key]) {
-                valEl.textContent = formatValue(national[key].value);
+                valEl.textContent = formatValue(national[key].value, key);
             }
             if (changeEl && national[key]) {
-                changeEl.innerHTML = formatChange(national[key].change);
+                const higherIsBad = DATA.indicators[key]?.higherIsBad !== false;
+                changeEl.innerHTML = formatChange(national[key].change, higherIsBad);
             }
         });
     }
@@ -123,10 +128,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             const svgDoc = parser.parseFromString(MAP_SVG_CONTENT, 'image/svg+xml');
             const svgEl = svgDoc.querySelector('svg');
             if (svgEl) {
+                // Transfer attributes if needed, or just replace innerHTML
+                // We want to keep the viewBox if it exists in HTML, or take from SVG
                 if (!els.usMap.getAttribute('viewBox')) {
                     els.usMap.setAttribute('viewBox', svgEl.getAttribute('viewBox'));
                 }
                 els.usMap.innerHTML = svgEl.innerHTML;
+
+                // Add IDs
                 els.usMap.querySelectorAll('path[data-id]').forEach(path => {
                     const stateAbbr = path.getAttribute('data-id');
                     if (stateAbbr && stateAbbr.length === 2) {
@@ -215,25 +224,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         els.panelIndicators.innerHTML = '';
 
         const indicators = [
-            { key: 'financial_anxiety', label: 'Financial Anxiety' },
-            { key: 'food_insecurity', label: 'Food Insecurity' },
-            { key: 'housing_stress', label: 'Housing Stress' },
-            { key: 'affordability', label: 'Affordability' }
+            { key: 'student_debt', label: 'Average Student Debt' },
+            { key: 'auto_debt', label: 'Average Auto Loan' },
+            { key: 'rent_burden', label: 'Rent Burden (% of Income)' },
+            { key: 'median_income', label: 'Median Income (22-34)' },
+            { key: 'unemployment', label: 'Unemployment Rate' },
+            { key: 'debt_to_income', label: 'Debt-to-Income Ratio' },
+            { key: 'cost_of_living', label: 'Cost of Living Index' },
+            { key: 'financial_stress', label: 'Financial Stress Index' }
         ];
 
         indicators.forEach(ind => {
             const indData = data[ind.key];
             if (!indData) return;
-
+            const higherIsBad = DATA.indicators[ind.key]?.higherIsBad !== false;
             const div = document.createElement('div');
             div.className = 'panel-indicator';
             div.innerHTML = `
                 <div class="panel-indicator-label">${ind.label}</div>
                 <div class="panel-indicator-row">
-                    <div class="panel-indicator-value" style="color: ${getColorForValue(indData.value, ind.key)}">${formatValue(indData.value)}</div>
+                    <div class="panel-indicator-value" style="color: ${getColorForValue(indData.value, ind.key)}">${formatValue(indData.value, ind.key)}</div>
                     <div class="panel-indicator-meta">
                         <div class="panel-rank">Rank #${indData.rank}</div>
-                        <div class="panel-change">${formatChange(indData.change)}</div>
+                        <div class="panel-change">${formatChange(indData.change, higherIsBad)}</div>
                     </div>
                 </div>
             `;
@@ -257,9 +270,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         els.tooltip.querySelector('.tooltip-state').textContent = data.name;
         const val = data[APP_STATE.currentIndicator]?.value;
-        const label = APP_STATE.currentIndicator.replace('_', ' ').replace(/\b\w/g, c => c.toUpperCase());
-
-        els.tooltip.querySelector('.tooltip-value').textContent = `${label}: ${formatValue(val)}`;
+        const label = DATA.indicators[APP_STATE.currentIndicator]?.name || APP_STATE.currentIndicator;
+        els.tooltip.querySelector('.tooltip-value').textContent = `${label}: ${formatValue(val, APP_STATE.currentIndicator)}`;
         els.tooltip.classList.add('visible');
     }
 
@@ -308,6 +320,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Panel
         if (els.panelClose) els.panelClose.addEventListener('click', closePanel);
         if (els.panelOverlay) els.panelOverlay.addEventListener('click', closePanel);
+
+        // Form handled independently now
     }
 
     function initModalAndForm() {
@@ -343,6 +357,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Form Submission Logic
         const submitBtn = document.querySelector('.suggestion-form-modal .btn-submit');
+        const GOOGLE_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
 
         if (submitBtn) {
             submitBtn.addEventListener('click', async (e) => {
@@ -350,6 +365,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const name = document.getElementById('suggestName').value;
                 const email = document.getElementById('suggestEmail').value;
                 const problem = document.getElementById('suggestProblem').value;
+                const why = document.getElementById('suggestWhy').value;
 
                 if (!name || !email || !problem) {
                     alert('Please fill in at least Name, Email, and the Problem description.');
@@ -360,10 +376,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                 submitBtn.textContent = 'Submitting...';
                 submitBtn.disabled = true;
 
+                const formData = { name, email, problem, why };
+
                 try {
-                    // Simulation
-                    await new Promise(r => setTimeout(r, 1500));
-                    alert('Suggestion submitted successfully! Thank you for your feedback.');
+                    if (GOOGLE_SCRIPT_URL === 'YOUR_GOOGLE_SCRIPT_URL_HERE') {
+                        console.warn('Google Script URL not set. Simulating success.');
+                        await new Promise(r => setTimeout(r, 1500));
+                        alert('Form ready! To save data, please deploy the Google Apps Script and paste the URL in scripts/affordability-map.js');
+                    } else {
+                        await fetch(GOOGLE_SCRIPT_URL, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(formData)
+                        });
+                        alert('Suggestion submitted successfully! Thank you.');
+                    }
 
                     const form = document.querySelector('.suggestion-form-modal');
                     if (form) form.reset();
