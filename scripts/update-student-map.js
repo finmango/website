@@ -100,17 +100,15 @@ const ZORI_ESTIMATES_2024 = {
 };
 
 /**
- * Apply Zillow "Asking Rent" Adjustment
- * Replaces HUD FMR (40th percentile) with ZORI (Mean Asking) for reality check.
+ * Apply Urban Adjustment for Cost of Living and Financial Stress
+ * NOTE: Rent burden values are now sourced directly from Census ACS 2024 and should NOT be recalculated.
  */
 function applyUrbanAdjustment(data) {
     const urbanStates = ['US-CA', 'US-NY', 'US-MA', 'US-DC', 'US-WA', 'US-HI', 'US-NJ'];
 
     if (data.states) {
         for (const [key, state] of Object.entries(data.states)) {
-            // 1. Determine Market Asking Rent
-            // Use specific ZORI Estimate if available, otherwise scale HUD FMR by 1.32x 
-            // (Asking rents are typically 30% higher than FMR baseline)
+            // 1. Determine Market Asking Rent (for reference/display only)
             const fmrRent = HUD_FMR_2025[key] || 1200;
             const marketRent = ZORI_ESTIMATES_2024[key] || Math.round(fmrRent * 1.32);
 
@@ -121,42 +119,31 @@ function applyUrbanAdjustment(data) {
                 source: "Zillow Observed Rent Index (ZORI) 2024"
             };
 
-            // 2. Calculate REAL Cost Burden based on Asking Rent
-            // Burden = Annual Rent / Annual Income
-            const income = state.median_income?.value || 45000;
-            const annualRent = marketRent * 12;
-            const baseBurdenRatio = (annualRent / income) * 100;
+            // 2. DO NOT recalculate rent_burden - use Census ACS 2024 values directly
+            // The rent_burden values are already correct from Census ACS 2024 data
 
-            // 3. Convert Base Burden to "Cost Burdened Rate"
-            // Start curve steeper: If Avg Rent is 40% of Income, almost 90% of young people are burdened.
-            // Formula: (BurdenRatio / 32) * 65
-            let costBurdenedRate = (baseBurdenRatio / 32.0) * 65.0;
-
-            // Cap at 95% to be realistic (somewhat)
-            if (costBurdenedRate > 92) costBurdenedRate = 92 + (Math.random() * 3);
-
-            state.rent_burden.value = parseFloat(costBurdenedRate.toFixed(1));
-
-            // 4. Urban COL Bump (Aggressive)
+            // 3. Urban COL Bump (Aggressive)
             if (urbanStates.includes(key)) {
                 if (state.cost_of_living.value < 145) {
-                    state.cost_of_living.value = Math.round(state.cost_of_living.value * 1.4);
+                    state.cost_of_living.value = Math.round(state.cost_of_living.value * 1.2);
                     state.cost_of_living.change = 4.8;
                 }
 
-                // Stress Calculation: heavily weighted by Rent
-                // Asking rents of $3k on $60k income is catastrophic (50% DTI just on rent)
-                let newStress = state.financial_stress.value * 1.5;
-                if (newStress < 175) newStress = 175 + (Math.random() * 15); // Deep Red
+                // Stress Calculation for urban states
+                let newStress = 100 + ((state.rent_burden?.value || 50) - 45) * 2;
+                if (newStress < 125) newStress = 125;
+                if (newStress > 180) newStress = 180;
                 state.financial_stress.value = Math.round(newStress);
             } else {
                 // Non-urban stress
-                let newStress = (costBurdenedRate * 0.9) + (state.unemployment.value * 3) + (state.cost_of_living.value * 0.3);
-                if (newStress < 120) newStress = 120;
+                const rentBurden = state.rent_burden?.value || 40;
+                let newStress = 100 + (rentBurden - 40) * 1.5 + (state.unemployment.value - 7) * 3;
+                if (newStress < 100) newStress = 100;
+                if (newStress > 160) newStress = 160;
                 state.financial_stress.value = Math.round(newStress);
             }
 
-            console.log(`  ${state.abbr}: Market Rent $${marketRent} -> Burden ${state.rent_burden.value}% (Stress: ${state.financial_stress.value})`);
+            console.log(`  ${state.abbr}: Market Rent $${marketRent} | Burden ${state.rent_burden?.value || 'N/A'}% | Stress: ${state.financial_stress.value}`);
         }
     }
 }

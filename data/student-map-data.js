@@ -1,10 +1,10 @@
 // Young Adult Financial Health Map Data
-// Auto-generated: 2026-01-05T21:15:51.959Z
-// Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS, Zillow
+// Auto-generated: 2026-01-06T16:38:50.542Z
+// Sources: TICAS, Dept. of Education, BLS, Census ACS 2024, Federal Reserve, JCHS
 
 const YOUNG_ADULT_DATA = {
     "meta": {
-        "generated": "2026-01-05T21:15:51.954Z",
+        "generated": "2026-01-06T16:38:50.536Z",
         "version": "3.1",
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
@@ -38,12 +38,12 @@ const YOUNG_ADULT_DATA = {
             "source_note": "Experian Q3 2024 (Gen Z/Millennial Avg)"
         },
         "rent_burden": {
-            "value": 58.6,
-            "change": 1.2,
+            "value": 50.3,
+            "change": 0.6,
             "label": "Cost Burdened Renters",
             "unit": "%",
             "trend": "up",
-            "source_note": "Harvard JCHS / Zillow (Renters under 25 paying >30% income)"
+            "source_note": "Census ACS 2024 / Harvard JCHS (Renters paying >30% income)"
         },
         "median_income": {
             "value": 59100,
@@ -101,8 +101,8 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 69.5,
-                "change": 1.5,
+                "value": 41.5,
+                "change": 0.5,
                 "rank": 28
             },
             "median_income": {
@@ -151,9 +151,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 8
             },
             "rent_burden": {
-                "value": 86.8,
-                "change": 1.2,
-                "rank": 42
+                "value": 36,
+                "change": -0.4,
+                "rank": 39
             },
             "median_income": {
                 "value": 54200,
@@ -201,9 +201,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 18
             },
             "rent_burden": {
-                "value": 94.6,
-                "change": 2.1,
-                "rank": 18
+                "value": 50.5,
+                "change": -0.3,
+                "rank": 10
             },
             "median_income": {
                 "value": 47200,
@@ -251,9 +251,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "rent_burden": {
-                "value": 71.6,
-                "change": 1.4,
-                "rank": 35
+                "value": 37.5,
+                "change": -0.2,
+                "rank": 36
             },
             "median_income": {
                 "value": 40500,
@@ -301,9 +301,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "rent_burden": {
-                "value": 94.5,
-                "change": 0.8,
-                "rank": 1
+                "value": 54.5,
+                "change": -0.4,
+                "rank": 4
             },
             "median_income": {
                 "value": 58000,
@@ -352,9 +352,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 14
             },
             "rent_burden": {
-                "value": 91.7,
-                "change": 1.8,
-                "rank": 19
+                "value": 49.5,
+                "change": 1.2,
+                "rank": 12
             },
             "median_income": {
                 "value": 55800,
@@ -402,9 +402,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 20
             },
             "rent_burden": {
-                "value": 94.6,
-                "change": 2,
-                "rank": 12
+                "value": 47,
+                "change": -0.3,
+                "rank": 17
             },
             "median_income": {
                 "value": 58200,
@@ -452,9 +452,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 21
             },
             "rent_burden": {
-                "value": 90.9,
-                "change": 1.7,
-                "rank": 24
+                "value": 44.5,
+                "change": 0.4,
+                "rank": 22
             },
             "median_income": {
                 "value": 51200,
@@ -502,9 +502,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 42
             },
             "rent_burden": {
-                "value": 77.4,
-                "change": 0.5,
-                "rank": 5
+                "value": 46,
+                "change": -0.4,
+                "rank": 20
             },
             "median_income": {
                 "value": 85000,
@@ -553,9 +553,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 10
             },
             "rent_burden": {
-                "value": 94.4,
-                "change": 3.2,
-                "rank": 2
+                "value": 60,
+                "change": -0.5,
+                "rank": 1
             },
             "median_income": {
                 "value": 45800,
@@ -603,9 +603,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 12
             },
             "rent_burden": {
-                "value": 94.6,
-                "change": 2,
-                "rank": 16
+                "value": 50,
+                "change": 0.9,
+                "rank": 11
             },
             "median_income": {
                 "value": 46500,
@@ -653,9 +653,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 26
             },
             "rent_burden": {
-                "value": 92.7,
-                "change": 2.2,
-                "rank": 8
+                "value": 55,
+                "change": 0.7,
+                "rank": 3
             },
             "median_income": {
                 "value": 52800,
@@ -704,9 +704,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 19
             },
             "rent_burden": {
-                "value": 81.7,
-                "change": 1.6,
-                "rank": 29
+                "value": 40,
+                "change": 1,
+                "rank": 31
             },
             "median_income": {
                 "value": 46200,
@@ -754,9 +754,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 24
             },
             "rent_burden": {
-                "value": 91.7,
-                "change": 1.6,
-                "rank": 27
+                "value": 45.5,
+                "change": -0.3,
+                "rank": 20
             },
             "median_income": {
                 "value": 50500,
@@ -804,9 +804,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 23
             },
             "rent_burden": {
-                "value": 74.1,
-                "change": 1.5,
-                "rank": 26
+                "value": 39.5,
+                "change": 0.8,
+                "rank": 32
             },
             "median_income": {
                 "value": 45500,
@@ -854,9 +854,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 35
             },
             "rent_burden": {
-                "value": 63.4,
-                "change": 1.2,
-                "rank": 40
+                "value": 32.5,
+                "change": 1.5,
+                "rank": 46
             },
             "median_income": {
                 "value": 47800,
@@ -904,9 +904,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 29
             },
             "rent_burden": {
-                "value": 69.2,
+                "value": 36.5,
                 "change": 1.3,
-                "rank": 41
+                "rank": 38
             },
             "median_income": {
                 "value": 47500,
@@ -954,9 +954,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 25
             },
             "rent_burden": {
-                "value": 69.9,
-                "change": 1.4,
-                "rank": 36
+                "value": 37,
+                "change": 0.8,
+                "rank": 37
             },
             "median_income": {
                 "value": 43200,
@@ -1004,9 +1004,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 15
             },
             "rent_burden": {
-                "value": 81.2,
-                "change": 2.2,
-                "rank": 9
+                "value": 52,
+                "change": 0.2,
+                "rank": 7
             },
             "median_income": {
                 "value": 41200,
@@ -1054,9 +1054,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 33
             },
             "rent_burden": {
-                "value": 93.5,
-                "change": 1.7,
-                "rank": 25
+                "value": 34.5,
+                "change": 1.1,
+                "rank": 42
             },
             "median_income": {
                 "value": 48200,
@@ -1104,9 +1104,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 17
             },
             "rent_burden": {
-                "value": 80,
-                "change": 1.9,
-                "rank": 17
+                "value": 47.5,
+                "change": 1.1,
+                "rank": 16
             },
             "median_income": {
                 "value": 62500,
@@ -1154,9 +1154,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 38
             },
             "rent_burden": {
-                "value": 93.9,
-                "change": 2.1,
-                "rank": 10
+                "value": 48.5,
+                "change": 1.2,
+                "rank": 14
             },
             "median_income": {
                 "value": 60200,
@@ -1205,9 +1205,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 11
             },
             "rent_burden": {
-                "value": 78.5,
-                "change": 1.7,
-                "rank": 22
+                "value": 43,
+                "change": 0.9,
+                "rank": 25
             },
             "median_income": {
                 "value": 47000,
@@ -1255,9 +1255,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 27
             },
             "rent_burden": {
-                "value": 75.1,
-                "change": 1.5,
-                "rank": 32
+                "value": 35,
+                "change": -0.4,
+                "rank": 41
             },
             "median_income": {
                 "value": 55200,
@@ -1305,9 +1305,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 12
             },
             "rent_burden": {
-                "value": 67.7,
-                "change": 0.5,
-                "rank": 38
+                "value": 38,
+                "change": 0.9,
+                "rank": 35
             },
             "median_income": {
                 "value": 42000,
@@ -1355,9 +1355,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 26
             },
             "rent_burden": {
-                "value": 71.1,
-                "change": 1.4,
-                "rank": 37
+                "value": 42,
+                "change": 0.9,
+                "rank": 27
             },
             "median_income": {
                 "value": 46800,
@@ -1405,9 +1405,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 93.8,
-                "change": 1.6,
-                "rank": 31
+                "value": 33,
+                "change": 0.2,
+                "rank": 45
             },
             "median_income": {
                 "value": 46500,
@@ -1455,9 +1455,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 34
             },
             "rent_burden": {
-                "value": 65.6,
-                "change": 1.2,
-                "rank": 43
+                "value": 35.5,
+                "change": 0.9,
+                "rank": 40
             },
             "median_income": {
                 "value": 49200,
@@ -1505,9 +1505,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 9
             },
             "rent_burden": {
-                "value": 93.9,
-                "change": 2.8,
-                "rank": 4
+                "value": 57,
+                "change": 1.3,
+                "rank": 2
             },
             "median_income": {
                 "value": 48500,
@@ -1555,9 +1555,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 30
             },
             "rent_burden": {
-                "value": 91.4,
-                "change": 1.7,
-                "rank": 23
+                "value": 33.5,
+                "change": 0.8,
+                "rank": 44
             },
             "median_income": {
                 "value": 57500,
@@ -1605,9 +1605,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 22
             },
             "rent_burden": {
-                "value": 94.2,
-                "change": 2.5,
-                "rank": 5
+                "value": 52.5,
+                "change": 1.3,
+                "rank": 6
             },
             "median_income": {
                 "value": 59800,
@@ -1656,9 +1656,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 31
             },
             "rent_burden": {
-                "value": 86.2,
-                "change": 1.5,
-                "rank": 34
+                "value": 41,
+                "change": 1.1,
+                "rank": 29
             },
             "median_income": {
                 "value": 42500,
@@ -1706,9 +1706,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 40
             },
             "rent_burden": {
-                "value": 95,
-                "change": 2,
-                "rank": 11
+                "value": 53,
+                "change": 1.4,
+                "rank": 5
             },
             "median_income": {
                 "value": 55500,
@@ -1757,9 +1757,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 13
             },
             "rent_burden": {
-                "value": 87.8,
-                "change": 1.8,
-                "rank": 20
+                "value": 46.5,
+                "change": -0.2,
+                "rank": 18
             },
             "median_income": {
                 "value": 47200,
@@ -1807,9 +1807,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 6
             },
             "rent_burden": {
-                "value": 60.7,
-                "change": 0.3,
-                "rank": 51
+                "value": 28,
+                "change": 0.2,
+                "rank": 49
             },
             "median_income": {
                 "value": 55000,
@@ -1857,9 +1857,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 28
             },
             "rent_burden": {
-                "value": 71.1,
-                "change": 1.5,
-                "rank": 33
+                "value": 42.5,
+                "change": 0.8,
+                "rank": 26
             },
             "median_income": {
                 "value": 46500,
@@ -1907,9 +1907,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 20
             },
             "rent_burden": {
-                "value": 69.2,
-                "change": 1.3,
-                "rank": 38
+                "value": 40.5,
+                "change": 0.6,
+                "rank": 30
             },
             "median_income": {
                 "value": 44500,
@@ -1957,9 +1957,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 36
             },
             "rent_burden": {
-                "value": 88.8,
-                "change": 2.2,
-                "rank": 7
+                "value": 49,
+                "change": 0.4,
+                "rank": 13
             },
             "median_income": {
                 "value": 50800,
@@ -2007,9 +2007,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 32
             },
             "rent_burden": {
-                "value": 79.2,
-                "change": 1.7,
-                "rank": 21
+                "value": 43.5,
+                "change": -0.3,
+                "rank": 24
             },
             "median_income": {
                 "value": 50200,
@@ -2057,9 +2057,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 37
             },
             "rent_burden": {
-                "value": 94.1,
-                "change": 2,
-                "rank": 14
+                "value": 46,
+                "change": 0.4,
+                "rank": 19
             },
             "median_income": {
                 "value": 52200,
@@ -2107,9 +2107,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 10
             },
             "rent_burden": {
-                "value": 81.1,
-                "change": 1.9,
-                "rank": 18
+                "value": 51.5,
+                "change": 1,
+                "rank": 8
             },
             "median_income": {
                 "value": 45200,
@@ -2157,9 +2157,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 5
             },
             "rent_burden": {
-                "value": 64.7,
-                "change": 0.9,
-                "rank": 47
+                "value": 30,
+                "change": -0.1,
+                "rank": 48
             },
             "median_income": {
                 "value": 49500,
@@ -2207,9 +2207,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 9
             },
             "rent_burden": {
-                "value": 93.8,
-                "change": 1.9,
-                "rank": 19
+                "value": 45,
+                "change": 0.9,
+                "rank": 21
             },
             "median_income": {
                 "value": 45800,
@@ -2257,9 +2257,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 1
             },
             "rent_burden": {
-                "value": 86.7,
-                "change": 0.6,
-                "rank": 18
+                "value": 51,
+                "change": 0.1,
+                "rank": 9
             },
             "median_income": {
                 "value": 52000,
@@ -2307,9 +2307,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 18
             },
             "rent_burden": {
-                "value": 79.1,
-                "change": 1.5,
-                "rank": 35
+                "value": 38.5,
+                "change": 0.9,
+                "rank": 34
             },
             "median_income": {
                 "value": 55500,
@@ -2357,9 +2357,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 39
             },
             "rent_burden": {
-                "value": 89.3,
-                "change": 1.8,
-                "rank": 20
+                "value": 34,
+                "change": 0.5,
+                "rank": 43
             },
             "median_income": {
                 "value": 51800,
@@ -2407,9 +2407,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 19
             },
             "rent_burden": {
-                "value": 83.1,
-                "change": 1.6,
-                "rank": 25
+                "value": 44,
+                "change": -0.5,
+                "rank": 23
             },
             "median_income": {
                 "value": 57200,
@@ -2457,9 +2457,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 29
             },
             "rent_burden": {
-                "value": 94.5,
-                "change": 2,
-                "rank": 13
+                "value": 48,
+                "change": 0.3,
+                "rank": 15
             },
             "median_income": {
                 "value": 56800,
@@ -2508,9 +2508,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 35
             },
             "rent_burden": {
-                "value": 73.6,
-                "change": 1.2,
-                "rank": 39
+                "value": 25,
+                "change": 0.1,
+                "rank": 50
             },
             "median_income": {
                 "value": 40200,
@@ -2558,9 +2558,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 30
             },
             "rent_burden": {
-                "value": 72.1,
-                "change": 1.3,
-                "rank": 38
+                "value": 39,
+                "change": -0.4,
+                "rank": 33
             },
             "median_income": {
                 "value": 49000,
@@ -2608,9 +2608,9 @@ const YOUNG_ADULT_DATA = {
                 "rank": 2
             },
             "rent_burden": {
-                "value": 67.8,
-                "change": 0.8,
-                "rank": 48
+                "value": 32,
+                "change": 1.2,
+                "rank": 47
             },
             "median_income": {
                 "value": 52000,
@@ -2682,16 +2682,16 @@ const YOUNG_ADULT_DATA = {
             "name": "Cost Burdened Rate",
             "fullName": "Rent as % of Income",
             "description": "% of young renters paying >30% of income on housing",
-            "source": "Census ACS B25071 + Harvard JCHS 2025",
+            "source": "Census ACS 2024 / Harvard JCHS",
             "sourceUrl": "https://www.jchs.harvard.edu/",
             "unit": "%",
             "format": "percentage",
             "higherIsBad": true,
             "thresholds": {
-                "low": 40,
-                "moderate": 48,
-                "elevated": 52,
-                "high": 55
+                "low": 35,
+                "moderate": 42,
+                "elevated": 48,
+                "high": 52
             }
         },
         "median_income": {
