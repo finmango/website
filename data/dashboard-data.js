@@ -1,10 +1,10 @@
 // Financial Health Barometer Data
-// Auto-generated: 2026-01-07T05:12:48.213Z
+// Auto-generated: 2026-01-08T05:12:07.488Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
   "meta": {
-    "generated": "2026-01-07T05:12:48.213Z",
+    "generated": "2026-01-08T05:12:07.487Z",
     "version": "2.4",
     "source": "BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs",
     "update_frequency": "daily",
@@ -20,13 +20,13 @@ const DASHBOARD_DATA = {
   },
   "national": {
     "financial_anxiety": {
-      "value": 136.8,
+      "value": 138,
       "change": 0,
       "trend": "up"
     },
     "food_insecurity": {
-      "value": 126.9,
-      "change": 5.5,
+      "value": 127.2,
+      "change": 5.6,
       "trend": "up"
     },
     "housing_stress": {
@@ -36,7 +36,7 @@ const DASHBOARD_DATA = {
     },
     "affordability": {
       "value": 140.8,
-      "change": 5.7,
+      "change": 6.3,
       "trend": "up"
     }
   },
@@ -45,14 +45,14 @@ const DASHBOARD_DATA = {
       "name": "Alabama",
       "abbr": "AL",
       "financial_anxiety": {
-        "value": 134,
+        "value": 132,
         "change": 0,
-        "rank": 28
+        "rank": 31
       },
       "food_insecurity": {
-        "value": 142,
-        "change": 8.5,
-        "rank": 6
+        "value": 144,
+        "change": 3,
+        "rank": 5
       },
       "housing_stress": {
         "value": 164,
@@ -61,11 +61,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 156,
-        "change": 6.6,
+        "change": 3.8,
         "rank": 10
       },
       "metrics": {
-        "unemployment_rate": 2.8,
+        "unemployment_rate": 2.7,
         "poverty_rate": null,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
@@ -84,12 +84,12 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 153,
         "change": 0,
-        "rank": 14
+        "rank": 15
       },
       "food_insecurity": {
-        "value": 131,
-        "change": 4,
-        "rank": 19
+        "value": 129,
+        "change": 9,
+        "rank": 21
       },
       "housing_stress": {
         "value": 149,
@@ -98,7 +98,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 139,
-        "change": 7.5,
+        "change": 5,
         "rank": 28
       },
       "metrics": {
@@ -119,14 +119,14 @@ const DASHBOARD_DATA = {
       "name": "Arizona",
       "abbr": "AZ",
       "financial_anxiety": {
-        "value": 146,
+        "value": 148,
         "change": 0,
         "rank": 17
       },
       "food_insecurity": {
-        "value": 137,
-        "change": 6.9,
-        "rank": 12
+        "value": 131,
+        "change": 4.8,
+        "rank": 17
       },
       "housing_stress": {
         "value": 148,
@@ -135,11 +135,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 139,
-        "change": 3.6,
+        "change": 4.4,
         "rank": 29
       },
       "metrics": {
-        "unemployment_rate": 4.2,
+        "unemployment_rate": 4.3,
         "poverty_rate": null,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
@@ -156,13 +156,13 @@ const DASHBOARD_DATA = {
       "name": "Arkansas",
       "abbr": "AR",
       "financial_anxiety": {
-        "value": 155,
+        "value": 160,
         "change": 0,
-        "rank": 12
+        "rank": 10
       },
       "food_insecurity": {
         "value": 138,
-        "change": 3.6,
+        "change": 5.5,
         "rank": 9
       },
       "housing_stress": {
@@ -172,11 +172,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 150,
-        "change": 5.6,
+        "change": 3.5,
         "rank": 15
       },
       "metrics": {
-        "unemployment_rate": 3.9,
+        "unemployment_rate": 4.1,
         "poverty_rate": null,
         "rent_burden_pct": 28.1,
         "rent_burden_source": "census_acs",
@@ -193,14 +193,14 @@ const DASHBOARD_DATA = {
       "name": "California",
       "abbr": "CA",
       "financial_anxiety": {
-        "value": 177,
+        "value": 175,
         "change": 0,
         "rank": 2
       },
       "food_insecurity": {
-        "value": 134,
-        "change": 3.6,
-        "rank": 14
+        "value": 127,
+        "change": 6,
+        "rank": 25
       },
       "housing_stress": {
         "value": 177,
@@ -209,11 +209,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 158,
-        "change": 5.3,
+        "change": 7.3,
         "rank": 8
       },
       "metrics": {
-        "unemployment_rate": 5.6,
+        "unemployment_rate": 5.5,
         "poverty_rate": null,
         "rent_burden_pct": 33.1,
         "rent_burden_source": "census_acs",
@@ -230,14 +230,14 @@ const DASHBOARD_DATA = {
       "name": "Colorado",
       "abbr": "CO",
       "financial_anxiety": {
-        "value": 133,
+        "value": 130,
         "change": 0,
-        "rank": 29
+        "rank": 35
       },
       "food_insecurity": {
-        "value": 116,
-        "change": 6.5,
-        "rank": 40
+        "value": 129,
+        "change": 2.7,
+        "rank": 22
       },
       "housing_stress": {
         "value": 144,
@@ -246,11 +246,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 133,
-        "change": 8.1,
+        "change": 4.5,
         "rank": 37
       },
       "metrics": {
-        "unemployment_rate": 4.1,
+        "unemployment_rate": 3.9,
         "poverty_rate": null,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
@@ -267,14 +267,14 @@ const DASHBOARD_DATA = {
       "name": "Connecticut",
       "abbr": "CT",
       "financial_anxiety": {
-        "value": 128,
+        "value": 132,
         "change": 0,
-        "rank": 36
+        "rank": 32
       },
       "food_insecurity": {
-        "value": 125,
-        "change": 9.4,
-        "rank": 27
+        "value": 128,
+        "change": 5.8,
+        "rank": 24
       },
       "housing_stress": {
         "value": 183,
@@ -283,11 +283,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 157,
-        "change": 3.5,
+        "change": 6.5,
         "rank": 9
       },
       "metrics": {
-        "unemployment_rate": 3.8,
+        "unemployment_rate": 4,
         "poverty_rate": null,
         "rent_burden_pct": 32.1,
         "rent_burden_source": "census_acs",
@@ -304,14 +304,14 @@ const DASHBOARD_DATA = {
       "name": "Delaware",
       "abbr": "DE",
       "financial_anxiety": {
-        "value": 138,
+        "value": 145,
         "change": 0,
-        "rank": 22
+        "rank": 19
       },
       "food_insecurity": {
-        "value": 117,
-        "change": 9.6,
-        "rank": 38
+        "value": 113,
+        "change": 7.2,
+        "rank": 45
       },
       "housing_stress": {
         "value": 155,
@@ -320,11 +320,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 139,
-        "change": 3.8,
+        "change": 6.8,
         "rank": 30
       },
       "metrics": {
-        "unemployment_rate": 4.5,
+        "unemployment_rate": 4.9,
         "poverty_rate": null,
         "rent_burden_pct": 30.1,
         "rent_burden_source": "census_acs",
@@ -341,14 +341,14 @@ const DASHBOARD_DATA = {
       "name": "District of Columbia",
       "abbr": "DC",
       "financial_anxiety": {
-        "value": 199,
+        "value": 200,
         "change": 0,
         "rank": 1
       },
       "food_insecurity": {
-        "value": 142,
-        "change": 4.2,
-        "rank": 7
+        "value": 136,
+        "change": 7,
+        "rank": 12
       },
       "housing_stress": {
         "value": 150,
@@ -357,11 +357,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 144,
-        "change": 8.5,
+        "change": 8.1,
         "rank": 21
       },
       "metrics": {
-        "unemployment_rate": 6.2,
+        "unemployment_rate": 6.5,
         "poverty_rate": null,
         "rent_burden_pct": 29,
         "rent_burden_source": "census_acs",
@@ -378,14 +378,14 @@ const DASHBOARD_DATA = {
       "name": "Florida",
       "abbr": "FL",
       "financial_anxiety": {
-        "value": 146,
+        "value": 152,
         "change": 0,
-        "rank": 18
+        "rank": 16
       },
       "food_insecurity": {
-        "value": 144,
-        "change": 4.5,
-        "rank": 5
+        "value": 140,
+        "change": 4.3,
+        "rank": 8
       },
       "housing_stress": {
         "value": 184,
@@ -394,11 +394,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 163,
-        "change": 5.8,
+        "change": 6.9,
         "rank": 4
       },
       "metrics": {
-        "unemployment_rate": 3.9,
+        "unemployment_rate": 4.2,
         "poverty_rate": null,
         "rent_burden_pct": 36.1,
         "rent_burden_source": "census_acs",
@@ -415,14 +415,14 @@ const DASHBOARD_DATA = {
       "name": "Georgia",
       "abbr": "GA",
       "financial_anxiety": {
-        "value": 130,
+        "value": 132,
         "change": 0,
         "rank": 33
       },
       "food_insecurity": {
-        "value": 129,
-        "change": 6.1,
-        "rank": 24
+        "value": 137,
+        "change": 3.8,
+        "rank": 10
       },
       "housing_stress": {
         "value": 165,
@@ -431,11 +431,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 150,
-        "change": 4.1,
+        "change": 7.4,
         "rank": 16
       },
       "metrics": {
-        "unemployment_rate": 3.4,
+        "unemployment_rate": 3.5,
         "poverty_rate": null,
         "rent_burden_pct": 31.6,
         "rent_burden_source": "census_acs",
@@ -452,14 +452,14 @@ const DASHBOARD_DATA = {
       "name": "Hawaii",
       "abbr": "HI",
       "financial_anxiety": {
-        "value": 122,
+        "value": 116,
         "change": 0,
-        "rank": 39
+        "rank": 41
       },
       "food_insecurity": {
-        "value": 140,
-        "change": 4.3,
-        "rank": 8
+        "value": 142,
+        "change": 9.6,
+        "rank": 7
       },
       "housing_stress": {
         "value": 185,
@@ -468,11 +468,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 166,
-        "change": 7.2,
+        "change": 8.7,
         "rank": 3
       },
       "metrics": {
-        "unemployment_rate": 2.5,
+        "unemployment_rate": 2.2,
         "poverty_rate": null,
         "rent_burden_pct": 32.6,
         "rent_burden_source": "census_acs",
@@ -491,12 +491,12 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 130,
         "change": 0,
-        "rank": 34
+        "rank": 36
       },
       "food_insecurity": {
-        "value": 121,
-        "change": 3.2,
-        "rank": 32
+        "value": 120,
+        "change": 5.7,
+        "rank": 35
       },
       "housing_stress": {
         "value": 130,
@@ -505,7 +505,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 126,
-        "change": 4.2,
+        "change": 5.2,
         "rank": 43
       },
       "metrics": {
@@ -528,12 +528,12 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 143,
         "change": 0,
-        "rank": 20
+        "rank": 22
       },
       "food_insecurity": {
-        "value": 133,
-        "change": 5.6,
-        "rank": 17
+        "value": 129,
+        "change": 9.9,
+        "rank": 23
       },
       "housing_stress": {
         "value": 163,
@@ -542,7 +542,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 146,
-        "change": 4.8,
+        "change": 4.2,
         "rank": 19
       },
       "metrics": {
@@ -565,12 +565,12 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 129,
         "change": 0,
-        "rank": 35
+        "rank": 37
       },
       "food_insecurity": {
-        "value": 131,
-        "change": 9.5,
-        "rank": 20
+        "value": 121,
+        "change": 2.9,
+        "rank": 34
       },
       "housing_stress": {
         "value": 146,
@@ -579,7 +579,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 135,
-        "change": 4.4,
+        "change": 6.9,
         "rank": 33
       },
       "metrics": {
@@ -600,14 +600,14 @@ const DASHBOARD_DATA = {
       "name": "Iowa",
       "abbr": "IA",
       "financial_anxiety": {
-        "value": 114,
+        "value": 110,
         "change": 0,
-        "rank": 42
+        "rank": 44
       },
       "food_insecurity": {
-        "value": 104,
-        "change": 3.1,
-        "rank": 49
+        "value": 110,
+        "change": 4.6,
+        "rank": 48
       },
       "housing_stress": {
         "value": 114,
@@ -616,11 +616,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 111,
-        "change": 8.5,
+        "change": 8.6,
         "rank": 49
       },
       "metrics": {
-        "unemployment_rate": 3.7,
+        "unemployment_rate": 3.5,
         "poverty_rate": null,
         "rent_burden_pct": 27.2,
         "rent_burden_source": "census_acs",
@@ -639,12 +639,12 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 125,
         "change": 0,
-        "rank": 37
+        "rank": 38
       },
       "food_insecurity": {
-        "value": 124,
-        "change": 4.6,
-        "rank": 31
+        "value": 120,
+        "change": 4.3,
+        "rank": 36
       },
       "housing_stress": {
         "value": 133,
@@ -653,7 +653,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 126,
-        "change": 4.8,
+        "change": 6,
         "rank": 44
       },
       "metrics": {
@@ -676,12 +676,12 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 167,
         "change": 0,
-        "rank": 6
+        "rank": 7
       },
       "food_insecurity": {
-        "value": 134,
-        "change": 9.7,
-        "rank": 15
+        "value": 143,
+        "change": 4.6,
+        "rank": 6
       },
       "housing_stress": {
         "value": 160,
@@ -690,7 +690,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 150,
-        "change": 8.9,
+        "change": 4.8,
         "rank": 17
       },
       "metrics": {
@@ -711,13 +711,13 @@ const DASHBOARD_DATA = {
       "name": "Louisiana",
       "abbr": "LA",
       "financial_anxiety": {
-        "value": 177,
+        "value": 175,
         "change": 0,
         "rank": 3
       },
       "food_insecurity": {
-        "value": 160,
-        "change": 2.4,
+        "value": 156,
+        "change": 5.6,
         "rank": 2
       },
       "housing_stress": {
@@ -727,11 +727,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 156,
-        "change": 6.6,
+        "change": 4.9,
         "rank": 11
       },
       "metrics": {
-        "unemployment_rate": 4.4,
+        "unemployment_rate": 4.3,
         "poverty_rate": null,
         "rent_burden_pct": 32.5,
         "rent_burden_source": "census_acs",
@@ -753,9 +753,9 @@ const DASHBOARD_DATA = {
         "rank": 45
       },
       "food_insecurity": {
-        "value": 110,
-        "change": 9.3,
-        "rank": 47
+        "value": 119,
+        "change": 7.6,
+        "rank": 37
       },
       "housing_stress": {
         "value": 151,
@@ -764,7 +764,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 134,
-        "change": 8.4,
+        "change": 5.7,
         "rank": 35
       },
       "metrics": {
@@ -785,14 +785,14 @@ const DASHBOARD_DATA = {
       "name": "Maryland",
       "abbr": "MD",
       "financial_anxiety": {
-        "value": 125,
+        "value": 133,
         "change": 0,
-        "rank": 38
+        "rank": 30
       },
       "food_insecurity": {
-        "value": 114,
-        "change": 6.7,
-        "rank": 42
+        "value": 119,
+        "change": 2.8,
+        "rank": 38
       },
       "housing_stress": {
         "value": 159,
@@ -801,11 +801,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 141,
-        "change": 3.4,
+        "change": 8.9,
         "rank": 24
       },
       "metrics": {
-        "unemployment_rate": 3.8,
+        "unemployment_rate": 4.2,
         "poverty_rate": null,
         "rent_burden_pct": 30.8,
         "rent_burden_source": "census_acs",
@@ -824,12 +824,12 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 144,
         "change": 0,
-        "rank": 19
+        "rank": 20
       },
       "food_insecurity": {
-        "value": 126,
-        "change": 9.2,
-        "rank": 26
+        "value": 123,
+        "change": 2.8,
+        "rank": 31
       },
       "housing_stress": {
         "value": 175,
@@ -838,7 +838,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 152,
-        "change": 8,
+        "change": 7.1,
         "rank": 12
       },
       "metrics": {
@@ -859,14 +859,14 @@ const DASHBOARD_DATA = {
       "name": "Michigan",
       "abbr": "MI",
       "financial_anxiety": {
-        "value": 161,
+        "value": 159,
         "change": 0,
-        "rank": 8
+        "rank": 11
       },
       "food_insecurity": {
-        "value": 125,
-        "change": 4.8,
-        "rank": 28
+        "value": 123,
+        "change": 5.3,
+        "rank": 32
       },
       "housing_stress": {
         "value": 164,
@@ -875,11 +875,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 148,
-        "change": 7.9,
+        "change": 6.2,
         "rank": 18
       },
       "metrics": {
-        "unemployment_rate": 5.1,
+        "unemployment_rate": 5,
         "poverty_rate": null,
         "rent_burden_pct": 30.7,
         "rent_burden_source": "census_acs",
@@ -896,14 +896,14 @@ const DASHBOARD_DATA = {
       "name": "Minnesota",
       "abbr": "MN",
       "financial_anxiety": {
-        "value": 138,
+        "value": 144,
         "change": 0,
-        "rank": 23
+        "rank": 21
       },
       "food_insecurity": {
-        "value": 138,
-        "change": 4.3,
-        "rank": 10
+        "value": 137,
+        "change": 2.7,
+        "rank": 11
       },
       "housing_stress": {
         "value": 149,
@@ -912,11 +912,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 141,
-        "change": 5.8,
+        "change": 3.3,
         "rank": 25
       },
       "metrics": {
-        "unemployment_rate": 3.7,
+        "unemployment_rate": 4,
         "poverty_rate": null,
         "rent_burden_pct": 29.1,
         "rent_burden_source": "census_acs",
@@ -938,8 +938,8 @@ const DASHBOARD_DATA = {
         "rank": 5
       },
       "food_insecurity": {
-        "value": 161,
-        "change": 5.2,
+        "value": 163,
+        "change": 4.4,
         "rank": 1
       },
       "housing_stress": {
@@ -949,7 +949,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 168,
-        "change": 4.3,
+        "change": 5.9,
         "rank": 2
       },
       "metrics": {
@@ -970,14 +970,14 @@ const DASHBOARD_DATA = {
       "name": "Missouri",
       "abbr": "MO",
       "financial_anxiety": {
-        "value": 137,
+        "value": 135,
         "change": 0,
-        "rank": 24
+        "rank": 27
       },
       "food_insecurity": {
-        "value": 125,
-        "change": 5.7,
-        "rank": 29
+        "value": 122,
+        "change": 7.5,
+        "rank": 33
       },
       "housing_stress": {
         "value": 143,
@@ -986,11 +986,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 134,
-        "change": 8.8,
+        "change": 8,
         "rank": 36
       },
       "metrics": {
-        "unemployment_rate": 4.1,
+        "unemployment_rate": 4,
         "poverty_rate": null,
         "rent_burden_pct": 27.9,
         "rent_burden_source": "census_acs",
@@ -1007,14 +1007,14 @@ const DASHBOARD_DATA = {
       "name": "Montana",
       "abbr": "MT",
       "financial_anxiety": {
-        "value": 111,
+        "value": 116,
         "change": 0,
-        "rank": 43
+        "rank": 42
       },
       "food_insecurity": {
-        "value": 114,
-        "change": 2.7,
-        "rank": 43
+        "value": 117,
+        "change": 8.6,
+        "rank": 41
       },
       "housing_stress": {
         "value": 130,
@@ -1023,11 +1023,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 124,
-        "change": 4.9,
+        "change": 5.3,
         "rank": 46
       },
       "metrics": {
-        "unemployment_rate": 3,
+        "unemployment_rate": 3.3,
         "poverty_rate": null,
         "rent_burden_pct": 27,
         "rent_burden_source": "census_acs",
@@ -1049,9 +1049,9 @@ const DASHBOARD_DATA = {
         "rank": 47
       },
       "food_insecurity": {
-        "value": 113,
-        "change": 7.8,
-        "rank": 45
+        "value": 118,
+        "change": 7.1,
+        "rank": 40
       },
       "housing_stress": {
         "value": 128,
@@ -1060,7 +1060,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 121,
-        "change": 3.5,
+        "change": 8.5,
         "rank": 47
       },
       "metrics": {
@@ -1081,14 +1081,14 @@ const DASHBOARD_DATA = {
       "name": "Nevada",
       "abbr": "NV",
       "financial_anxiety": {
-        "value": 171,
+        "value": 169,
         "change": 0,
-        "rank": 4
+        "rank": 6
       },
       "food_insecurity": {
-        "value": 130,
-        "change": 3.9,
-        "rank": 21
+        "value": 133,
+        "change": 5.7,
+        "rank": 14
       },
       "housing_stress": {
         "value": 165,
@@ -1097,11 +1097,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 151,
-        "change": 6.4,
+        "change": 8,
         "rank": 14
       },
       "metrics": {
-        "unemployment_rate": 5.3,
+        "unemployment_rate": 5.2,
         "poverty_rate": null,
         "rent_burden_pct": 34,
         "rent_burden_source": "census_acs",
@@ -1123,9 +1123,9 @@ const DASHBOARD_DATA = {
         "rank": 48
       },
       "food_insecurity": {
-        "value": 106,
-        "change": 5.6,
-        "rank": 48
+        "value": 100,
+        "change": 9.9,
+        "rank": 51
       },
       "housing_stress": {
         "value": 147,
@@ -1134,7 +1134,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 129,
-        "change": 3.9,
+        "change": 8.4,
         "rank": 40
       },
       "metrics": {
@@ -1155,13 +1155,13 @@ const DASHBOARD_DATA = {
       "name": "New Jersey",
       "abbr": "NJ",
       "financial_anxiety": {
-        "value": 158,
+        "value": 162,
         "change": 0,
-        "rank": 9
+        "rank": 8
       },
       "food_insecurity": {
-        "value": 125,
-        "change": 3.9,
+        "value": 124,
+        "change": 2.4,
         "rank": 30
       },
       "housing_stress": {
@@ -1171,11 +1171,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 162,
-        "change": 6.3,
+        "change": 8.6,
         "rank": 5
       },
       "metrics": {
-        "unemployment_rate": 5.2,
+        "unemployment_rate": 5.4,
         "poverty_rate": null,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
@@ -1192,14 +1192,14 @@ const DASHBOARD_DATA = {
       "name": "New Mexico",
       "abbr": "NM",
       "financial_anxiety": {
-        "value": 154,
+        "value": 156,
         "change": 0,
-        "rank": 13
+        "rank": 14
       },
       "food_insecurity": {
-        "value": 133,
-        "change": 8.7,
-        "rank": 18
+        "value": 150,
+        "change": 9.3,
+        "rank": 3
       },
       "housing_stress": {
         "value": 163,
@@ -1208,11 +1208,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 152,
-        "change": 7.9,
+        "change": 4,
         "rank": 13
       },
       "metrics": {
-        "unemployment_rate": 4.1,
+        "unemployment_rate": 4.2,
         "poverty_rate": null,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
@@ -1229,14 +1229,14 @@ const DASHBOARD_DATA = {
       "name": "New York",
       "abbr": "NY",
       "financial_anxiety": {
-        "value": 152,
+        "value": 159,
         "change": 0,
-        "rank": 15
+        "rank": 12
       },
       "food_insecurity": {
-        "value": 137,
-        "change": 2.5,
-        "rank": 13
+        "value": 132,
+        "change": 7.2,
+        "rank": 15
       },
       "housing_stress": {
         "value": 199,
@@ -1245,11 +1245,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 172,
-        "change": 6.4,
+        "change": 8.2,
         "rank": 1
       },
       "metrics": {
-        "unemployment_rate": 4.2,
+        "unemployment_rate": 4.5,
         "poverty_rate": null,
         "rent_burden_pct": 30.9,
         "rent_burden_source": "census_acs",
@@ -1266,14 +1266,14 @@ const DASHBOARD_DATA = {
       "name": "North Carolina",
       "abbr": "NC",
       "financial_anxiety": {
-        "value": 133,
+        "value": 135,
         "change": 0,
-        "rank": 30
+        "rank": 28
       },
       "food_insecurity": {
-        "value": 129,
-        "change": 6.6,
-        "rank": 25
+        "value": 125,
+        "change": 7.4,
+        "rank": 29
       },
       "housing_stress": {
         "value": 157,
@@ -1282,11 +1282,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 144,
-        "change": 3.1,
+        "change": 8,
         "rank": 22
       },
       "metrics": {
-        "unemployment_rate": 3.7,
+        "unemployment_rate": 3.8,
         "poverty_rate": null,
         "rent_burden_pct": 30.8,
         "rent_burden_source": "census_acs",
@@ -1308,9 +1308,9 @@ const DASHBOARD_DATA = {
         "rank": 50
       },
       "food_insecurity": {
-        "value": 101,
-        "change": 7.2,
-        "rank": 51
+        "value": 105,
+        "change": 3.7,
+        "rank": 50
       },
       "housing_stress": {
         "value": 102,
@@ -1319,7 +1319,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 100,
-        "change": 4.9,
+        "change": 5,
         "rank": 51
       },
       "metrics": {
@@ -1340,14 +1340,14 @@ const DASHBOARD_DATA = {
       "name": "Ohio",
       "abbr": "OH",
       "financial_anxiety": {
-        "value": 152,
+        "value": 146,
         "change": 0,
-        "rank": 16
+        "rank": 18
       },
       "food_insecurity": {
-        "value": 120,
-        "change": 3.5,
-        "rank": 33
+        "value": 132,
+        "change": 4.8,
+        "rank": 16
       },
       "housing_stress": {
         "value": 153,
@@ -1356,11 +1356,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 141,
-        "change": 4.7,
+        "change": 8,
         "rank": 26
       },
       "metrics": {
-        "unemployment_rate": 4.8,
+        "unemployment_rate": 4.5,
         "poverty_rate": null,
         "rent_burden_pct": 29,
         "rent_burden_source": "census_acs",
@@ -1377,14 +1377,14 @@ const DASHBOARD_DATA = {
       "name": "Oklahoma",
       "abbr": "OK",
       "financial_anxiety": {
-        "value": 132,
+        "value": 138,
         "change": 0,
-        "rank": 32
+        "rank": 25
       },
       "food_insecurity": {
-        "value": 145,
-        "change": 3.5,
-        "rank": 4
+        "value": 131,
+        "change": 2.5,
+        "rank": 18
       },
       "housing_stress": {
         "value": 146,
@@ -1393,11 +1393,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 141,
-        "change": 5.3,
+        "change": 7,
         "rank": 27
       },
       "metrics": {
-        "unemployment_rate": 3.2,
+        "unemployment_rate": 3.5,
         "poverty_rate": null,
         "rent_burden_pct": 28.4,
         "rent_burden_source": "census_acs",
@@ -1416,12 +1416,12 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 158,
         "change": 0,
-        "rank": 10
+        "rank": 13
       },
       "food_insecurity": {
         "value": 119,
-        "change": 3.9,
-        "rank": 35
+        "change": 7.2,
+        "rank": 39
       },
       "housing_stress": {
         "value": 141,
@@ -1430,7 +1430,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 133,
-        "change": 5.9,
+        "change": 5.3,
         "rank": 38
       },
       "metrics": {
@@ -1451,14 +1451,14 @@ const DASHBOARD_DATA = {
       "name": "Pennsylvania",
       "abbr": "PA",
       "financial_anxiety": {
-        "value": 133,
+        "value": 135,
         "change": 0,
-        "rank": 31
+        "rank": 29
       },
       "food_insecurity": {
-        "value": 130,
-        "change": 8.6,
-        "rank": 22
+        "value": 126,
+        "change": 3,
+        "rank": 28
       },
       "housing_stress": {
         "value": 152,
@@ -1467,11 +1467,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 138,
-        "change": 3.2,
+        "change": 7.1,
         "rank": 31
       },
       "metrics": {
-        "unemployment_rate": 4.1,
+        "unemployment_rate": 4.2,
         "poverty_rate": null,
         "rent_burden_pct": 29.7,
         "rent_burden_source": "census_acs",
@@ -1488,14 +1488,14 @@ const DASHBOARD_DATA = {
       "name": "Rhode Island",
       "abbr": "RI",
       "financial_anxiety": {
-        "value": 135,
+        "value": 132,
         "change": 0,
-        "rank": 27
+        "rank": 34
       },
       "food_insecurity": {
-        "value": 118,
-        "change": 2.2,
-        "rank": 36
+        "value": 114,
+        "change": 6.2,
+        "rank": 43
       },
       "housing_stress": {
         "value": 161,
@@ -1504,11 +1504,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 142,
-        "change": 4.6,
+        "change": 4.8,
         "rank": 23
       },
       "metrics": {
-        "unemployment_rate": 4.5,
+        "unemployment_rate": 4.3,
         "poverty_rate": null,
         "rent_burden_pct": 30.5,
         "rent_burden_source": "census_acs",
@@ -1525,14 +1525,14 @@ const DASHBOARD_DATA = {
       "name": "South Carolina",
       "abbr": "SC",
       "financial_anxiety": {
-        "value": 157,
+        "value": 161,
         "change": 0,
-        "rank": 11
+        "rank": 9
       },
       "food_insecurity": {
-        "value": 138,
-        "change": 2.4,
-        "rank": 11
+        "value": 134,
+        "change": 7.4,
+        "rank": 13
       },
       "housing_stress": {
         "value": 177,
@@ -1541,11 +1541,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 159,
-        "change": 4.6,
+        "change": 5.7,
         "rank": 7
       },
       "metrics": {
-        "unemployment_rate": 4.4,
+        "unemployment_rate": 4.6,
         "poverty_rate": null,
         "rent_burden_pct": 31.4,
         "rent_burden_source": "census_acs",
@@ -1562,14 +1562,14 @@ const DASHBOARD_DATA = {
       "name": "South Dakota",
       "abbr": "SD",
       "financial_anxiety": {
-        "value": 82,
+        "value": 83,
         "change": 0,
         "rank": 51
       },
       "food_insecurity": {
-        "value": 111,
-        "change": 5.2,
-        "rank": 46
+        "value": 112,
+        "change": 5.8,
+        "rank": 47
       },
       "housing_stress": {
         "value": 107,
@@ -1578,11 +1578,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 105,
-        "change": 3.1,
+        "change": 7.7,
         "rank": 50
       },
       "metrics": {
-        "unemployment_rate": 2,
+        "unemployment_rate": 2.1,
         "poverty_rate": null,
         "rent_burden_pct": 26.9,
         "rent_burden_source": "census_acs",
@@ -1604,9 +1604,9 @@ const DASHBOARD_DATA = {
         "rank": 26
       },
       "food_insecurity": {
-        "value": 130,
-        "change": 5.4,
-        "rank": 23
+        "value": 131,
+        "change": 3.5,
+        "rank": 19
       },
       "housing_stress": {
         "value": 157,
@@ -1615,7 +1615,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 146,
-        "change": 8.1,
+        "change": 3.6,
         "rank": 20
       },
       "metrics": {
@@ -1636,14 +1636,14 @@ const DASHBOARD_DATA = {
       "name": "Texas",
       "abbr": "TX",
       "financial_anxiety": {
-        "value": 137,
+        "value": 139,
         "change": 0,
-        "rank": 25
+        "rank": 24
       },
       "food_insecurity": {
-        "value": 134,
-        "change": 5.5,
-        "rank": 16
+        "value": 130,
+        "change": 9.9,
+        "rank": 20
       },
       "housing_stress": {
         "value": 139,
@@ -1652,11 +1652,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 132,
-        "change": 5.9,
+        "change": 4.6,
         "rank": 39
       },
       "metrics": {
-        "unemployment_rate": 4.1,
+        "unemployment_rate": 4.2,
         "poverty_rate": null,
         "rent_burden_pct": 31.4,
         "rent_burden_source": "census_acs",
@@ -1673,14 +1673,14 @@ const DASHBOARD_DATA = {
       "name": "Utah",
       "abbr": "UT",
       "financial_anxiety": {
-        "value": 121,
+        "value": 124,
         "change": 0,
-        "rank": 40
+        "rank": 39
       },
       "food_insecurity": {
-        "value": 120,
-        "change": 8.4,
-        "rank": 34
+        "value": 127,
+        "change": 4.8,
+        "rank": 26
       },
       "housing_stress": {
         "value": 132,
@@ -1689,11 +1689,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 126,
-        "change": 3.7,
+        "change": 5.8,
         "rank": 45
       },
       "metrics": {
-        "unemployment_rate": 3.4,
+        "unemployment_rate": 3.6,
         "poverty_rate": null,
         "rent_burden_pct": 29.4,
         "rent_burden_source": "census_acs",
@@ -1710,14 +1710,14 @@ const DASHBOARD_DATA = {
       "name": "Vermont",
       "abbr": "VT",
       "financial_anxiety": {
-        "value": 94,
+        "value": 95,
         "change": 0,
         "rank": 49
       },
       "food_insecurity": {
-        "value": 104,
-        "change": 5.1,
-        "rank": 50
+        "value": 113,
+        "change": 3.4,
+        "rank": 46
       },
       "housing_stress": {
         "value": 143,
@@ -1726,11 +1726,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 128,
-        "change": 7,
+        "change": 4.7,
         "rank": 41
       },
       "metrics": {
-        "unemployment_rate": 2.5,
+        "unemployment_rate": 2.6,
         "poverty_rate": null,
         "rent_burden_pct": 29.5,
         "rent_burden_source": "census_acs",
@@ -1749,12 +1749,12 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 118,
         "change": 0,
-        "rank": 41
+        "rank": 40
       },
       "food_insecurity": {
-        "value": 118,
-        "change": 4.4,
-        "rank": 37
+        "value": 117,
+        "change": 8.3,
+        "rank": 42
       },
       "housing_stress": {
         "value": 155,
@@ -1763,7 +1763,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 138,
-        "change": 5.6,
+        "change": 8,
         "rank": 32
       },
       "metrics": {
@@ -1784,14 +1784,14 @@ const DASHBOARD_DATA = {
       "name": "Washington",
       "abbr": "WA",
       "financial_anxiety": {
-        "value": 141,
+        "value": 143,
         "change": 0,
-        "rank": 21
+        "rank": 23
       },
       "food_insecurity": {
-        "value": 117,
-        "change": 2.9,
-        "rank": 39
+        "value": 127,
+        "change": 2.4,
+        "rank": 27
       },
       "housing_stress": {
         "value": 147,
@@ -1800,11 +1800,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 135,
-        "change": 4.8,
+        "change": 3.8,
         "rank": 34
       },
       "metrics": {
-        "unemployment_rate": 4.5,
+        "unemployment_rate": 4.6,
         "poverty_rate": null,
         "rent_burden_pct": 30.4,
         "rent_burden_source": "census_acs",
@@ -1821,14 +1821,14 @@ const DASHBOARD_DATA = {
       "name": "West Virginia",
       "abbr": "WV",
       "financial_anxiety": {
-        "value": 165,
+        "value": 174,
         "change": 0,
-        "rank": 7
+        "rank": 4
       },
       "food_insecurity": {
         "value": 147,
-        "change": 4.3,
-        "rank": 3
+        "change": 5.9,
+        "rank": 4
       },
       "housing_stress": {
         "value": 171,
@@ -1837,11 +1837,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 161,
-        "change": 5.4,
+        "change": 8.8,
         "rank": 6
       },
       "metrics": {
-        "unemployment_rate": 4,
+        "unemployment_rate": 4.4,
         "poverty_rate": null,
         "rent_burden_pct": 28.4,
         "rent_burden_source": "census_acs",
@@ -1864,7 +1864,7 @@ const DASHBOARD_DATA = {
       },
       "food_insecurity": {
         "value": 114,
-        "change": 4.8,
+        "change": 3.1,
         "rank": 44
       },
       "housing_stress": {
@@ -1874,7 +1874,7 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 128,
-        "change": 6,
+        "change": 7.7,
         "rank": 42
       },
       "metrics": {
@@ -1895,14 +1895,14 @@ const DASHBOARD_DATA = {
       "name": "Wyoming",
       "abbr": "WY",
       "financial_anxiety": {
-        "value": 111,
+        "value": 112,
         "change": 0,
-        "rank": 44
+        "rank": 43
       },
       "food_insecurity": {
-        "value": 116,
-        "change": 9.4,
-        "rank": 41
+        "value": 108,
+        "change": 9.1,
+        "rank": 49
       },
       "housing_stress": {
         "value": 116,
@@ -1911,11 +1911,11 @@ const DASHBOARD_DATA = {
       },
       "affordability": {
         "value": 113,
-        "change": 8.4,
+        "change": 4.9,
         "rank": 48
       },
       "metrics": {
-        "unemployment_rate": 3.3,
+        "unemployment_rate": 3.4,
         "poverty_rate": null,
         "rent_burden_pct": 26.5,
         "rent_burden_source": "census_acs",
@@ -1934,45 +1934,45 @@ const DASHBOARD_DATA = {
       "financial_anxiety": [
         {
           "date": "2025-08-01",
-          "value": 117
+          "value": 118
         },
         {
           "date": "2025-09-01",
-          "value": 122
+          "value": 123
         },
         {
           "date": "2025-10-01",
-          "value": 127
+          "value": 128
         },
         {
           "date": "2025-11-01",
-          "value": 130
+          "value": 132
         },
         {
           "date": "2025-12-01",
-          "value": 133
+          "value": 135
         },
         {
           "date": "2026-01-01",
-          "value": 139
+          "value": 140
         }
       ],
       "food_insecurity": [
         {
           "date": "2025-08-01",
-          "value": 110
+          "value": 109
         },
         {
           "date": "2025-09-01",
-          "value": 113
+          "value": 112
         },
         {
           "date": "2025-10-01",
-          "value": 117
+          "value": 118
         },
         {
           "date": "2025-11-01",
-          "value": 119
+          "value": 122
         },
         {
           "date": "2025-12-01",
@@ -1980,13 +1980,13 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2026-01-01",
-          "value": 129
+          "value": 128
         }
       ],
       "housing_stress": [
         {
           "date": "2025-08-01",
-          "value": 132
+          "value": 133
         },
         {
           "date": "2025-09-01",
@@ -1994,11 +1994,11 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-10-01",
-          "value": 142
+          "value": 141
         },
         {
           "date": "2025-11-01",
-          "value": 146
+          "value": 145
         },
         {
           "date": "2025-12-01",
@@ -2012,11 +2012,11 @@ const DASHBOARD_DATA = {
       "affordability": [
         {
           "date": "2025-08-01",
-          "value": 121
+          "value": 120
         },
         {
           "date": "2025-09-01",
-          "value": 125
+          "value": 124
         },
         {
           "date": "2025-10-01",
@@ -2024,7 +2024,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-11-01",
-          "value": 134
+          "value": 133
         },
         {
           "date": "2025-12-01",
@@ -2032,7 +2032,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2026-01-01",
-          "value": 142
+          "value": 141
         }
       ]
     }
