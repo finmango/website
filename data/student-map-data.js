@@ -22,15 +22,15 @@ const YOUNG_ADULT_DATA = {
     },
     "national": {
         "student_debt": {
-            "value": 29400,
-            "change": 2.1,
+            "value": 39075,
+            "change": 3.2,
             "label": "Avg. Student Debt",
             "unit": "$",
             "trend": "up",
-            "source_note": "Bachelor's Degree Recipients (Class of 2024 Est)"
+            "source_note": "Federal Student Loan Debt per Borrower (Oct 2024)"
         },
         "auto_debt": {
-            "value": 22800,
+            "value": 23800,
             "change": 2.8,
             "label": "Avg. Auto Loan Balance",
             "unit": "$",
@@ -38,32 +38,32 @@ const YOUNG_ADULT_DATA = {
             "source_note": "Experian Q3 2024 (Gen Z/Millennial Avg)"
         },
         "rent_burden": {
-            "value": 58.6,
-            "change": 0.6,
+            "value": 60,
+            "change": 1.4,
             "label": "Cost Burdened Renters",
             "unit": "%",
             "trend": "up",
-            "source_note": "Harvard JCHS / Zillow (Renters under 25 paying >30% income)"
+            "source_note": "Harvard JCHS (Renters under 25 paying >30% income, 2023)"
         },
         "median_income": {
-            "value": 59100,
-            "change": 4.1,
+            "value": 55000,
+            "change": 3.5,
             "label": "Median Income (25-34)",
             "unit": "$",
             "trend": "up",
-            "source_note": "BLS Q2 2025 Estimate"
+            "source_note": "Census ACS 2023 Estimate"
         },
         "unemployment": {
-            "value": 8.3,
-            "change": 0,
+            "value": 7.7,
+            "change": 0.4,
             "label": "Youth Unemployment Rate",
             "unit": "%",
             "trend": "up",
-            "source_note": "BLS (Ages 20-24) November 2025"
+            "source_note": "BLS (Ages 20-24) Q4 2024"
         },
         "debt_to_income": {
-            "value": 42.5,
-            "change": 1.8,
+            "value": 45.2,
+            "change": 2.1,
             "label": "Debt-to-Income Ratio",
             "unit": "%",
             "trend": "up",
@@ -71,15 +71,15 @@ const YOUNG_ADULT_DATA = {
         },
         "cost_of_living": {
             "value": 100,
-            "change": 1.5,
+            "change": 2.5,
             "label": "Cost of Living Index",
             "unit": "index",
-            "trend": "stable",
-            "source_note": "BEA Regional Price Parities 2023 (100 = national avg)"
+            "trend": "up",
+            "source_note": "BEA Regional Price Parities 2024 (100 = national avg)"
         },
         "financial_stress": {
             "value": 100,
-            "change": 2,
+            "change": 3.5,
             "label": "Financial Stress Index",
             "unit": "index",
             "trend": "up",
@@ -2656,10 +2656,10 @@ const YOUNG_ADULT_DATA = {
             "format": "currency",
             "higherIsBad": true,
             "thresholds": {
-                "low": 25000,
-                "moderate": 30000,
-                "elevated": 35000,
-                "high": 40000
+                "low": 28000,
+                "moderate": 33000,
+                "elevated": 38000,
+                "high": 43000
             }
         },
         "auto_debt": {
@@ -2672,10 +2672,10 @@ const YOUNG_ADULT_DATA = {
             "format": "currency",
             "higherIsBad": true,
             "thresholds": {
-                "low": 22000,
-                "moderate": 25000,
-                "elevated": 27000,
-                "high": 30000
+                "low": 20000,
+                "moderate": 23000,
+                "elevated": 25000,
+                "high": 27000
             }
         },
         "rent_burden": {
@@ -2688,10 +2688,10 @@ const YOUNG_ADULT_DATA = {
             "format": "percentage",
             "higherIsBad": true,
             "thresholds": {
-                "low": 40,
-                "moderate": 48,
-                "elevated": 52,
-                "high": 55
+                "low": 35,
+                "moderate": 42,
+                "elevated": 48,
+                "high": 52
             }
         },
         "median_income": {
@@ -2704,10 +2704,10 @@ const YOUNG_ADULT_DATA = {
             "format": "currency",
             "higherIsBad": false,
             "thresholds": {
-                "low": 55000,
-                "moderate": 48000,
-                "elevated": 42000,
-                "high": 38000
+                "low": 58000,
+                "moderate": 50000,
+                "elevated": 44000,
+                "high": 40000
             }
         },
         "unemployment": {
@@ -2720,10 +2720,10 @@ const YOUNG_ADULT_DATA = {
             "format": "percentage",
             "higherIsBad": true,
             "thresholds": {
-                "low": 6,
-                "moderate": 8,
-                "elevated": 10,
-                "high": 12
+                "low": 5,
+                "moderate": 7,
+                "elevated": 9,
+                "high": 11
             }
         },
         "debt_to_income": {
@@ -2736,10 +2736,10 @@ const YOUNG_ADULT_DATA = {
             "format": "percentage",
             "higherIsBad": true,
             "thresholds": {
-                "low": 35,
-                "moderate": 40,
-                "elevated": 45,
-                "high": 50
+                "low": 32,
+                "moderate": 38,
+                "elevated": 43,
+                "high": 48
             }
         },
         "cost_of_living": {
@@ -2768,10 +2768,10 @@ const YOUNG_ADULT_DATA = {
             "format": "index",
             "higherIsBad": true,
             "thresholds": {
-                "low": 110,
-                "moderate": 125,
-                "elevated": 135,
-                "high": 145
+                "low": 95,
+                "moderate": 105,
+                "elevated": 115,
+                "high": 125
             }
         },
         "average_rent": {
