@@ -1,10 +1,10 @@
 // Young Adult Financial Health Map Data
-// Auto-generated: 2026-01-08T05:12:07.885Z
+// Auto-generated: 2026-01-09T05:12:35.621Z
 // Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS, Zillow
 
 const YOUNG_ADULT_DATA = {
     "meta": {
-        "generated": "2026-01-08T05:12:07.883Z",
+        "generated": "2026-01-09T05:12:35.619Z",
         "version": "3.1",
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
@@ -38,12 +38,12 @@ const YOUNG_ADULT_DATA = {
             "source_note": "Experian Q3 2024 (Gen Z/Millennial Avg)"
         },
         "rent_burden": {
-            "value": 60,
+            "value": 58.6,
             "change": 1.4,
             "label": "Cost Burdened Renters",
             "unit": "%",
             "trend": "up",
-            "source_note": "Harvard JCHS (Renters under 25 paying >30% income, 2023)"
+            "source_note": "Harvard JCHS / Zillow (Renters under 25 paying >30% income)"
         },
         "median_income": {
             "value": 55000,
@@ -54,12 +54,12 @@ const YOUNG_ADULT_DATA = {
             "source_note": "Census ACS 2023 Estimate"
         },
         "unemployment": {
-            "value": 7.7,
-            "change": 0.4,
+            "value": 8.3,
+            "change": 0,
             "label": "Youth Unemployment Rate",
             "unit": "%",
             "trend": "up",
-            "source_note": "BLS (Ages 20-24) Q4 2024"
+            "source_note": "BLS (Ages 20-24) November 2025"
         },
         "debt_to_income": {
             "value": 45.2,
@@ -2688,10 +2688,10 @@ const YOUNG_ADULT_DATA = {
             "format": "percentage",
             "higherIsBad": true,
             "thresholds": {
-                "low": 35,
-                "moderate": 42,
-                "elevated": 48,
-                "high": 52
+                "low": 40,
+                "moderate": 48,
+                "elevated": 52,
+                "high": 55
             }
         },
         "median_income": {
@@ -2768,10 +2768,10 @@ const YOUNG_ADULT_DATA = {
             "format": "index",
             "higherIsBad": true,
             "thresholds": {
-                "low": 95,
-                "moderate": 105,
-                "elevated": 115,
-                "high": 125
+                "low": 110,
+                "moderate": 125,
+                "elevated": 135,
+                "high": 145
             }
         },
         "average_rent": {
