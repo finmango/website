@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function updateSummaryCards() {
         const national = DATA.national;
-        const indicators = ['student_debt', 'auto_debt', 'rent_burden', 'median_income', 'unemployment', 'debt_to_income', 'cost_of_living', 'financial_stress'];
+        const indicators = ['yaai', 'student_debt', 'auto_debt', 'rent_burden', 'median_income', 'unemployment', 'debt_to_income', 'cost_of_living', 'financial_stress'];
 
         indicators.forEach(key => {
             const valEl = document.getElementById(`val-${key}`);
@@ -224,6 +224,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         els.panelIndicators.innerHTML = '';
 
         const indicators = [
+            { key: 'yaai', label: 'Young Adult Affordability Index' },
             { key: 'student_debt', label: 'Average Student Debt' },
             { key: 'auto_debt', label: 'Average Auto Loan' },
             { key: 'rent_burden', label: 'Rent Burden (% of Income)' },

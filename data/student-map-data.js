@@ -1,11 +1,11 @@
 // Young Adult Financial Health Map Data
-// Auto-generated: 2026-01-12T05:16:29.922Z
+// Auto-generated: 2026-01-12T05:49:06.037Z
 // Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS, Zillow
 
 const YOUNG_ADULT_DATA = {
     "meta": {
-        "generated": "2026-01-12T05:16:29.920Z",
-        "version": "3.1",
+        "generated": "2026-01-12T05:49:06.037Z",
+        "version": "3.2",
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
         "data_sources": {
@@ -16,7 +16,8 @@ const YOUNG_ADULT_DATA = {
             "unemployment": "BLS (Ages 20-24) Sept 2025",
             "debt_to_income": "Calculated from student + auto debt vs median income",
             "cost_of_living": "BEA Regional Price Parities",
-            "financial_stress": "FinMango weighted composite of all indicators"
+            "financial_stress": "FinMango weighted composite of all indicators",
+            "yaai": "FinMango Research - Weighted z-score composite"
         },
         "methodology_notes": "Data specifically curated for Young Adult demographic (18-34) where available."
     },
@@ -84,6 +85,14 @@ const YOUNG_ADULT_DATA = {
             "unit": "index",
             "trend": "up",
             "source_note": "FinMango weighted composite (100 = national avg)"
+        },
+        "yaai": {
+            "value": 50,
+            "change": 0,
+            "label": "Young Adult Affordability Index",
+            "unit": "score",
+            "trend": "stable",
+            "source_note": "FinMango weighted composite (lower = more affordable)"
         }
     },
     "states": {
@@ -135,6 +144,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 52.6,
+                "rank": 29,
+                "change": 0
             }
         },
         "US-AK": {
@@ -185,6 +199,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 43.1,
+                "rank": 10,
+                "change": 0
             }
         },
         "US-AZ": {
@@ -235,6 +254,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 54.3,
+                "rank": 36,
+                "change": 0
             }
         },
         "US-AR": {
@@ -285,6 +309,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 48.8,
+                "rank": 24,
+                "change": 0
             }
         },
         "US-CA": {
@@ -336,6 +365,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 61.7,
+                "rank": 48,
+                "change": 0
             }
         },
         "US-CO": {
@@ -386,6 +420,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 50.4,
+                "rank": 27,
+                "change": 0
             }
         },
         "US-CT": {
@@ -436,6 +475,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 55.7,
+                "rank": 40,
+                "change": 0
             }
         },
         "US-DE": {
@@ -486,6 +530,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 54.5,
+                "rank": 37,
+                "change": 0
             }
         },
         "US-DC": {
@@ -537,6 +586,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 53.8,
+                "rank": 34,
+                "change": 0
             }
         },
         "US-FL": {
@@ -587,6 +641,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 65.8,
+                "rank": 51,
+                "change": 0
             }
         },
         "US-GA": {
@@ -637,6 +696,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 58.7,
+                "rank": 46,
+                "change": 0
             }
         },
         "US-HI": {
@@ -688,6 +752,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 56,
+                "rank": 41,
+                "change": 0
             }
         },
         "US-ID": {
@@ -738,6 +807,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 47.6,
+                "rank": 19,
+                "change": 0
             }
         },
         "US-IL": {
@@ -788,6 +862,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 53.4,
+                "rank": 31,
+                "change": 0
             }
         },
         "US-IN": {
@@ -838,6 +917,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 48.5,
+                "rank": 23,
+                "change": 0
             }
         },
         "US-IA": {
@@ -888,6 +972,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 39.4,
+                "rank": 6,
+                "change": 0
             }
         },
         "US-KS": {
@@ -938,6 +1027,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 43,
+                "rank": 9,
+                "change": 0
             }
         },
         "US-KY": {
@@ -988,6 +1082,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 48.4,
+                "rank": 22,
+                "change": 0
             }
         },
         "US-LA": {
@@ -1038,6 +1137,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 62.3,
+                "rank": 49,
+                "change": 0
             }
         },
         "US-ME": {
@@ -1088,6 +1192,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 46.5,
+                "rank": 16,
+                "change": 0
             }
         },
         "US-MD": {
@@ -1138,6 +1247,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 49.3,
+                "rank": 25,
+                "change": 0
             }
         },
         "US-MA": {
@@ -1189,6 +1303,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 53.4,
+                "rank": 32,
+                "change": 0
             }
         },
         "US-MI": {
@@ -1239,6 +1358,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 53.5,
+                "rank": 33,
+                "change": 0
             }
         },
         "US-MN": {
@@ -1289,6 +1413,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 43.1,
+                "rank": 11,
+                "change": 0
             }
         },
         "US-MS": {
@@ -1339,6 +1468,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 55.1,
+                "rank": 38,
+                "change": 0
             }
         },
         "US-MO": {
@@ -1389,6 +1523,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 47.8,
+                "rank": 20,
+                "change": 0
             }
         },
         "US-MT": {
@@ -1439,6 +1578,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 43.4,
+                "rank": 12,
+                "change": 0
             }
         },
         "US-NE": {
@@ -1489,6 +1633,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 38.3,
+                "rank": 4,
+                "change": 0
             }
         },
         "US-NV": {
@@ -1539,6 +1688,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 60.8,
+                "rank": 47,
+                "change": 0
             }
         },
         "US-NH": {
@@ -1589,6 +1743,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 45.8,
+                "rank": 13,
+                "change": 0
             }
         },
         "US-NJ": {
@@ -1640,6 +1799,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 56.7,
+                "rank": 43,
+                "change": 0
             }
         },
         "US-NM": {
@@ -1690,6 +1854,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 47.3,
+                "rank": 18,
+                "change": 0
             }
         },
         "US-NY": {
@@ -1741,6 +1910,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 56.9,
+                "rank": 44,
+                "change": 0
             }
         },
         "US-NC": {
@@ -1791,6 +1965,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 53,
+                "rank": 30,
+                "change": 0
             }
         },
         "US-ND": {
@@ -1841,6 +2020,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 32,
+                "rank": 1,
+                "change": 0
             }
         },
         "US-OH": {
@@ -1891,6 +2075,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 50,
+                "rank": 26,
+                "change": 0
             }
         },
         "US-OK": {
@@ -1941,6 +2130,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 46.2,
+                "rank": 15,
+                "change": 0
             }
         },
         "US-OR": {
@@ -1991,6 +2185,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 53.9,
+                "rank": 35,
+                "change": 0
             }
         },
         "US-PA": {
@@ -2041,6 +2240,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 56.6,
+                "rank": 42,
+                "change": 0
             }
         },
         "US-RI": {
@@ -2091,6 +2295,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 55.4,
+                "rank": 39,
+                "change": 0
             }
         },
         "US-SC": {
@@ -2141,6 +2350,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 62.6,
+                "rank": 50,
+                "change": 0
             }
         },
         "US-SD": {
@@ -2191,6 +2405,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 38.4,
+                "rank": 5,
+                "change": 0
             }
         },
         "US-TN": {
@@ -2241,6 +2460,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 51.6,
+                "rank": 28,
+                "change": 0
             }
         },
         "US-TX": {
@@ -2291,6 +2515,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 58.2,
+                "rank": 45,
+                "change": 0
             }
         },
         "US-UT": {
@@ -2341,6 +2570,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 37.2,
+                "rank": 3,
+                "change": 0
             }
         },
         "US-VT": {
@@ -2391,6 +2625,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 42.3,
+                "rank": 8,
+                "change": 0
             }
         },
         "US-VA": {
@@ -2441,6 +2680,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 47.1,
+                "rank": 17,
+                "change": 0
             }
         },
         "US-WA": {
@@ -2492,6 +2736,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 47.8,
+                "rank": 21,
+                "change": 0
             }
         },
         "US-WV": {
@@ -2542,6 +2791,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 41,
+                "rank": 7,
+                "change": 0
             }
         },
         "US-WI": {
@@ -2592,6 +2846,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 45.9,
+                "rank": 14,
+                "change": 0
             }
         },
         "US-WY": {
@@ -2642,6 +2901,11 @@ const YOUNG_ADULT_DATA = {
                 "unit": "$",
                 "label": "Avg Asking Rent (Zillow)",
                 "source": "Zillow Observed Rent Index (ZORI) 2024"
+            },
+            "yaai": {
+                "value": 34.9,
+                "rank": 2,
+                "change": 0
             }
         }
     },
@@ -2787,6 +3051,22 @@ const YOUNG_ADULT_DATA = {
                 "moderate": 1600,
                 "elevated": 2000,
                 "high": 2400
+            }
+        },
+        "yaai": {
+            "name": "YAAI",
+            "fullName": "Young Adult Affordability Index",
+            "description": "Weighted composite: Rent Burden (35%), Student Debt (20%), D/I Ratio (15%), Cost of Living (15%), Income (15%). Lower scores = more affordable.",
+            "source": "FinMango Research - Z-score normalized",
+            "sourceUrl": "https://finmango.org/affordability-lab",
+            "unit": "score",
+            "format": "index",
+            "higherIsBad": true,
+            "thresholds": {
+                "low": 35,
+                "moderate": 50,
+                "elevated": 65,
+                "high": 80
             }
         }
     }
