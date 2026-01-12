@@ -82,19 +82,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     function getColorForValue(value, indicator) {
         const ind = DATA.indicators[indicator];
         if (!ind) return '#ddd';
-        const thresholds = ind.thresholds;
+
         const higherIsBad = ind.higherIsBad !== false;
 
+        // "Pessimistic" Coloring Logic:
+        // We artificially tighten the thresholds to show more "Red/Orange" 
+        // effectively grading on a harder curve.
+        let t = { ...ind.thresholds };
+
+        // Adjust thresholds to be stricter (approx 10-15% stricter)
         if (higherIsBad) {
-            if (value < thresholds.low) return '#10B981';
-            if (value < thresholds.moderate) return '#F59E0B';
-            if (value < thresholds.elevated) return '#F97316';
-            return '#EF4444';
+            // Lower the bar for "Bad" colors
+            // e.g. if Low was 30, now it's 27. Anything above 27 isn't green anymore.
+            // if High was 40, now it's 36. Anything above 36 is RED.
+            t.low = t.low * 0.9;
+            t.moderate = t.moderate * 0.9;
+            t.elevated = t.elevated * 0.95;
         } else {
-            // For income, higher is better (green = high)
-            if (value > thresholds.low) return '#10B981';
-            if (value > thresholds.moderate) return '#F59E0B';
-            if (value > thresholds.elevated) return '#F97316';
+            // For income (Higher is good), Raise the bar for "Good" colors
+            // e.g. if Low was 50k, now it's 55k. You need 55k to be green.
+            t.low = t.low * 1.1;
+            t.moderate = t.moderate * 1.1;
+            t.elevated = t.elevated * 1.05;
+        }
+
+        if (higherIsBad) {
+            if (value < t.low) return '#10B981'; // Green
+            if (value < t.moderate) return '#F59E0B'; // Yellow
+            if (value < t.elevated) return '#F97316'; // Orange
+            return '#EF4444'; // Red
+        } else {
+            // For income, higher is better
+            if (value > t.low) return '#10B981';
+            if (value > t.moderate) return '#F59E0B';
+            if (value > t.elevated) return '#F97316';
             return '#EF4444';
         }
     }
