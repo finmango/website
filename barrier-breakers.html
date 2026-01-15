@@ -1379,81 +1379,141 @@
             margin-top: 48px;
         }
 
-        .winner-year {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        /* Winners Redesign */
+        .winners-section {
+            display: flex;
+            flex-direction: column;
+            gap: 64px;
+            margin-top: 64px;
         }
 
-        .winner-year-header {
-            text-align: center;
-            margin-bottom: 24px;
+        .winner-year-block {
+            position: relative;
         }
 
-        .winner-year-header span {
-            font-size: 2rem;
+        .winner-year-label {
+            font-size: 4rem;
+            font-weight: 900;
+            color: rgba(0, 0, 0, 0.03);
+            line-height: 1;
+            position: absolute;
+            top: -30px;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .winner-year-title {
+            font-size: 1.5rem;
             font-weight: 800;
-            color: var(--accent-color);
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+            padding-left: 12px;
+            border-left: 4px solid var(--accent-color);
         }
 
-        .winner-content {
+        .winners-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 32px;
-            align-items: start;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            position: relative;
+            z-index: 1;
         }
 
-        .winner-image {
-            border-radius: 12px;
+        .winner-card {
+            background: white;
+            border-radius: 20px;
             overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
         }
 
-        .winner-image img {
+        .winner-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
+        }
+
+        .winner-card-header {
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .winner-card.gold .winner-card-header {
+            background: linear-gradient(135deg, #FFF9D9, #FFF0B3);
+            color: #B38F00;
+        }
+
+        .winner-card.silver .winner-card-header {
+            background: linear-gradient(135deg, #F5F5F7, #E8E8EB);
+            color: #757575;
+        }
+
+        .winner-card.bronze .winner-card-header {
+            background: linear-gradient(135deg, #FFF0E0, #FFE0CC);
+            color: #A05A20;
+        }
+
+        .winner-group-photo {
+            margin-bottom: 32px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: relative;
+            z-index: 1;
+        }
+
+        .winner-group-photo img {
             width: 100%;
             height: auto;
             display: block;
         }
 
-        .winner-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+        .place {
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
         }
 
-        .winner-card {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px;
-            background: var(--surface-color);
-            border-radius: 12px;
+        .medal {
+            font-size: 1.5rem;
         }
 
-        .winner-card:first-child {
-            background: linear-gradient(135deg, #FFD700, #FFF4CC);
+        .winner-card-body {
+            padding: 24px;
         }
 
-        .winner-card:nth-child(2) {
-            background: linear-gradient(135deg, #C0C0C0, #F0F0F0);
-        }
-
-        .winner-card:nth-child(3) {
-            background: linear-gradient(135deg, #CD7F32, #F4E4CC);
-        }
-
-        .winner-medal {
-            font-size: 2rem;
-        }
-
-        .winner-info .name {
+        .winner-name {
+            font-size: 1.25rem;
             font-weight: 700;
-            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: var(--text-color);
         }
 
-        .winner-info .school {
-            font-size: 0.9rem;
+        .winner-school {
+            font-size: 0.95rem;
             color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .winners-grid {
+                grid-template-columns: 1fr;
+            }
+
+            /* Hero image is now visible on mobile to showcase partnership */
+            .hero-image-container {
+                margin-top: 32px;
+                max-width: 400px;
+                margin-left: auto;
+                margin-right: auto;
+            }
         }
 
         /* Support */
@@ -1988,6 +2048,16 @@
                 justify-content: center;
             }
 
+            /* Add extra padding to hero on mobile to prevent navbar overlap */
+            /* Add extra padding to hero on mobile to prevent navbar overlap */
+            .hero {
+                padding-top: 160px !important;
+            }
+
+            body.has-announcement .hero {
+                padding-top: calc(160px + var(--announcement-height)) !important;
+            }
+
             .past-events {
                 padding: 32px 24px;
             }
@@ -2443,6 +2513,18 @@
                                 Attend</a>
                         </div>
                     </div>
+                    <div class="hero-image-container" style="position: relative; z-index: 2;">
+                        <img src="ksu-finmango.jpg" alt="Kent State University Partnership"
+                            style="width: 100%; border-radius: 24px; box-shadow: 0 20px 80px rgba(0,0,0,0.15); transform: rotate(2deg); border: 4px solid white;">
+                        <div
+                            style="position: absolute; bottom: -24px; left: -24px; background: white; padding: 20px 24px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); max-width: 280px;">
+                            <p
+                                style="margin: 0; font-size: 0.9rem; font-weight: 600; color: var(--text-color); line-height: 1.4;">
+                                Hosted in partnership with <span style="color: var(--accent-color);">Kent State
+                                    University</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -2770,28 +2852,7 @@
             </div>
         </section>
 
-        <section id="partners">
-            <div class="container">
-                <div class="partners-grid">
-                    <div class="partner-content">
-                        <div class="section-label">Partnership</div>
-                        <h3>In Partnership with Kent State University</h3>
-                        <p>
-                            Barrier Breakers is proudly hosted with the <a href="https://www.kent.edu/business"
-                                target="_blank">Ambassador Crawford College of Business and Entrepreneurship</a> at Kent
-                            State University.
-                        </p>
-                        <p>
-                            This partnership brings together academic excellence, entrepreneurial spirit, and real-world
-                            problem-solving to empower high school students.
-                        </p>
-                    </div>
-                    <div class="partner-image">
-                        <img src="ksu-finmango.jpg" alt="Kent State University Partnership">
-                    </div>
-                </div>
-            </div>
-        </section>
+
 
         <section id="sponsors" style="background: var(--surface-color);">
             <div class="container">
@@ -2835,75 +2896,94 @@
                 <p>Celebrating students who tackled barriers to financial health with innovative solutions.</p>
 
                 <div class="winners-section">
-                    <div class="winner-year">
-                        <div class="winner-year-header">
-                            <span>2025</span>
-                        </div>
-                        <div class="winner-content">
-                            <div class="winner-image">
-                                <img src="2025-winner.jpg" alt="2025 Winners">
+                    <!-- 2025 Block -->
+                    <div class="winner-year-block">
+                        <div class="winner-year-block">
+                            <h3 class="winner-year-title">2025</h3>
+                            <div class="winner-group-photo">
+                                <img src="2025-winner.jpg" alt="Class of 2025 Barrier Breakers Winners">
                             </div>
-                            <div class="winner-list">
-                                <div class="winner-card">
-                                    <span class="winner-medal">🥇</span>
-                                    <div class="winner-info">
-                                        <div class="name">Dylan Quinones</div>
-                                        <div class="school">Polaris Career Center</div>
+                            <div class="winners-grid">
+                                <!-- Gold -->
+                                <div class="winner-card gold">
+                                    <div class="winner-card-header">
+                                        <span class="place">1st Place</span>
+                                        <span class="medal">🥇</span>
+                                    </div>
+                                    <div class="winner-card-body">
+                                        <div class="winner-name">Dylan Quinones</div>
+                                        <div class="winner-school">Polaris Career Center</div>
                                     </div>
                                 </div>
-                                <div class="winner-card">
-                                    <span class="winner-medal">🥈</span>
-                                    <div class="winner-info">
-                                        <div class="name">Rogan Allen</div>
-                                        <div class="school">Stow-Munroe Falls High</div>
+                                <!-- Silver -->
+                                <div class="winner-card silver">
+                                    <div class="winner-card-header">
+                                        <span class="place">2nd Place</span>
+                                        <span class="medal">🥈</span>
+                                    </div>
+                                    <div class="winner-card-body">
+                                        <div class="winner-name">Rogan Allen</div>
+                                        <div class="winner-school">Stow-Munroe Falls High</div>
                                     </div>
                                 </div>
-                                <div class="winner-card">
-                                    <span class="winner-medal">🥉</span>
-                                    <div class="winner-info">
-                                        <div class="name">Katherine Rosner</div>
-                                        <div class="school">Chagrin Falls High School</div>
+                                <!-- Bronze -->
+                                <div class="winner-card bronze">
+                                    <div class="winner-card-header">
+                                        <span class="place">3rd Place</span>
+                                        <span class="medal">🥉</span>
+                                    </div>
+                                    <div class="winner-card-body">
+                                        <div class="winner-name">Katherine Rosner</div>
+                                        <div class="winner-school">Chagrin Falls High School</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="winner-year">
-                        <div class="winner-year-header">
-                            <span>2024</span>
-                        </div>
-                        <div class="winner-content">
-                            <div class="winner-image">
-                                <img src="2024-winner.jpg" alt="2024 Winners">
+                        <!-- 2024 Block -->
+                        <div class="winner-year-block">
+                            <h3 class="winner-year-title">2024</h3>
+                            <div class="winner-group-photo">
+                                <img src="2024-winner.jpg" alt="Class of 2024 Barrier Breakers Winners">
                             </div>
-                            <div class="winner-list">
-                                <div class="winner-card">
-                                    <span class="winner-medal">🥇</span>
-                                    <div class="winner-info">
-                                        <div class="name">Brianna Johnson</div>
-                                        <div class="school">Stow-Munroe Falls High School</div>
+                            <div class="winners-grid">
+                                <!-- Gold -->
+                                <div class="winner-card gold">
+                                    <div class="winner-card-header">
+                                        <span class="place">1st Place</span>
+                                        <span class="medal">🥇</span>
+                                    </div>
+                                    <div class="winner-card-body">
+                                        <div class="winner-name">Brianna Johnson</div>
+                                        <div class="winner-school">Stow-Munroe Falls High</div>
                                     </div>
                                 </div>
-                                <div class="winner-card">
-                                    <span class="winner-medal">🥈</span>
-                                    <div class="winner-info">
-                                        <div class="name">Samuel Denys</div>
-                                        <div class="school">Westlake High School</div>
+                                <!-- Silver -->
+                                <div class="winner-card silver">
+                                    <div class="winner-card-header">
+                                        <span class="place">2nd Place</span>
+                                        <span class="medal">🥈</span>
+                                    </div>
+                                    <div class="winner-card-body">
+                                        <div class="winner-name">Samuel Denys</div>
+                                        <div class="winner-school">Westlake High School</div>
                                     </div>
                                 </div>
-                                <div class="winner-card">
-                                    <span class="winner-medal">🥉</span>
-                                    <div class="winner-info">
-                                        <div class="name">Cullen Rooney</div>
-                                        <div class="school">Normandy High School</div>
+                                <!-- Bronze -->
+                                <div class="winner-card bronze">
+                                    <div class="winner-card-header">
+                                        <span class="place">3rd Place</span>
+                                        <span class="medal">🥉</span>
+                                    </div>
+                                    <div class="winner-card-body">
+                                        <div class="winner-name">Cullen Rooney</div>
+                                        <div class="winner-school">Normandy High School</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </section>
 
 
