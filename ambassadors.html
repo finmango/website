@@ -1622,10 +1622,10 @@
     /* Interactive Physics Styles */
     .physics-area {
       position: absolute;
-      top: 40%;
+      top: 0;
       left: 0;
       width: 100%;
-      height: 60%;
+      height: 100%;
       z-index: 1;
       pointer-events: none;
     }
@@ -2389,11 +2389,13 @@
           el.style.height = size + "px";
 
           var x = Math.random() * (width - size);
-          var y = Math.random() * (height - size - 100);
 
-          // Ensure balls don't spawn off-screen or too low
-          y = Math.min(y, height - size - 50);
-          y = Math.max(y, 100); // Don't spawn behind navbar
+          // Spawn in the bottom 60% of the screen so they start below the text
+          var minSpawnY = height * 0.4;
+          var y = minSpawnY + Math.random() * (height - minSpawnY - size);
+
+          // Safety check
+          y = Math.min(y, height - size - 10);
 
           el.style.left = x + "px";
           el.style.top = y + "px";
