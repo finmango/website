@@ -28,15 +28,29 @@
         :root {
             --bg-color: #fafafa;
             --text-color: #1a1a1a;
-            --text-muted: #666;
-            --surface-color: #f0f0f0;
+            --text-muted: #555;
+            --surface-color: #ffffff;
+            --surface-highlight: #f8f9fa;
             --accent-color: #FF6B35;
             --accent-light: #ff8c5a;
+            --accent-dim: rgba(255, 107, 53, 0.08);
+
+            /* Track Colors */
             --transport-color: #4A90D9;
+            --transport-bg: rgba(74, 144, 217, 0.1);
             --housing-color: #7C9BE4;
+            --housing-bg: rgba(124, 155, 228, 0.1);
             --health-color: #E47C7C;
+            --health-bg: rgba(228, 124, 124, 0.1);
             --community-color: #9B7CE4;
+            --community-bg: rgba(155, 124, 228, 0.1);
             --literacy-color: #4ABFA0;
+            --literacy-bg: rgba(74, 191, 160, 0.1);
+
+            /* Prize Colors */
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --bronze: #CD7F32;
         }
 
         * {
@@ -515,6 +529,20 @@
             margin-bottom: 20px;
         }
 
+        .hero-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .hero-meta-row {
+                justify-content: center;
+            }
+        }
+
         .hero-text h1 {
             font-size: clamp(2.5rem, 5vw, 4rem);
             font-weight: 800;
@@ -763,45 +791,83 @@
         .timeline-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-top: 48px;
+            gap: 32px;
+            margin-top: 64px;
+            position: relative;
+        }
+
+        /* Connector Line */
+        .timeline-grid::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 16%;
+            right: 16%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-light), var(--accent-color));
+            z-index: 0;
+            border-radius: 4px;
+            opacity: 0.2;
         }
 
         .timeline-item {
             background: white;
             padding: 32px 24px;
-            border-radius: 16px;
+            border-radius: 20px;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(0, 0, 0, 0.03);
         }
 
         .timeline-item:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
         }
 
         .timeline-item.featured {
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), rgba(255, 140, 90, 0.05));
+            background: white;
             border: 2px solid var(--accent-color);
+            transform: scale(1.05);
+            box-shadow: 0 12px 40px rgba(255, 107, 53, 0.15);
+        }
+
+        .timeline-item.featured:hover {
+            transform: scale(1.08) translateY(-4px);
         }
 
         .timeline-date {
-            font-size: 1.75rem;
+            display: inline-block;
+            background: var(--surface-highlight);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 1.1rem;
             font-weight: 800;
             color: var(--accent-color);
-            margin-bottom: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .timeline-item.featured .timeline-date {
+            background: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
 
         .timeline-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 8px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
         }
 
         .timeline-item p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             margin: 0;
+            color: var(--text-muted);
+            line-height: 1.5;
         }
 
         /* Tracks */
@@ -809,56 +875,138 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
-            margin-top: 48px;
+            margin-top: 56px;
         }
 
         .track-card {
             background: white;
-            padding: 32px 24px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-            border: 2px solid transparent;
+            padding: 36px 28px;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         .track-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
         }
 
-        .track-card.transport:hover {
-            border-color: var(--transport-color);
-        }
-
-        .track-card.housing:hover {
-            border-color: var(--housing-color);
-        }
-
-        .track-card.health:hover {
-            border-color: var(--health-color);
-        }
-
-        .track-card.community:hover {
-            border-color: var(--community-color);
-        }
-
-        .track-card.literacy:hover {
-            border-color: var(--literacy-color);
+        /* Hover Gradients & Icons */
+        .track-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--text-muted);
+            opacity: 0.2;
+            transition: all 0.3s;
         }
 
         .track-icon {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            background: var(--surface-highlight);
+            transition: all 0.3s;
+        }
+
+        /* Specific Track Styles */
+        .track-card.transport:hover::before {
+            background: var(--transport-color);
+            opacity: 1;
+        }
+
+        .track-card.transport:hover .track-icon {
+            background: var(--transport-bg);
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .track-card.transport h3 {
+            color: var(--transport-color);
+        }
+
+        .track-card.housing:hover::before {
+            background: var(--housing-color);
+            opacity: 1;
+        }
+
+        .track-card.housing:hover .track-icon {
+            background: var(--housing-bg);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .track-card.housing h3 {
+            color: var(--housing-color);
+        }
+
+        .track-card.health:hover::before {
+            background: var(--health-color);
+            opacity: 1;
+        }
+
+        .track-card.health:hover .track-icon {
+            background: var(--health-bg);
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .track-card.health h3 {
+            color: var(--health-color);
+        }
+
+        .track-card.community:hover::before {
+            background: var(--community-color);
+            opacity: 1;
+        }
+
+        .track-card.community:hover .track-icon {
+            background: var(--community-bg);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .track-card.community h3 {
+            color: var(--community-color);
+        }
+
+        .track-card.literacy:hover::before {
+            background: var(--literacy-color);
+            opacity: 1;
+        }
+
+        .track-card.literacy:hover .track-icon {
+            background: var(--literacy-bg);
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .track-card.literacy h3 {
+            color: var(--literacy-color);
         }
 
         .track-card h3 {
-            font-size: 1.25rem;
+            font-size: 1.35rem;
+            font-weight: 800;
             margin-bottom: 12px;
+            transition: color 0.3s;
         }
 
         .track-card p {
-            font-size: 0.95rem;
+            font-size: 1rem;
+            color: var(--text-muted);
             margin: 0;
+            line-height: 1.6;
         }
 
         /* Steps */
@@ -900,76 +1048,161 @@
 
         /* Prizes */
         .prize-hero {
-            background: white;
-            border-radius: 24px;
-            padding: 48px;
+            background: radial-gradient(circle at center, #ffffff 0%, #f8f9fa 100%);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 32px;
+            padding: 64px;
             text-align: center;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
-            margin-bottom: 48px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06);
+            margin-bottom: 64px;
+            position: relative;
+            overflow: hidden;
         }
 
         .prize-amount {
-            font-size: clamp(3rem, 8vw, 5rem);
-            font-weight: 800;
-            color: var(--text-color);
+            font-size: clamp(3.5rem, 8vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--text-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
             line-height: 1;
-            margin-bottom: 8px;
+            margin-bottom: 16px;
+            letter-spacing: -0.03em;
         }
 
         .prize-desc {
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: 1.25rem;
+            font-weight: 500;
         }
 
         .divisions-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+            align-items: stretch;
+        }
+
+        .divisions-grid>.division-card:first-child {
+            grid-column: 1 / -1;
         }
 
         .division-card {
             background: white;
             padding: 32px 24px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            height: 100%;
         }
 
         .division-card h3 {
             font-size: 1.35rem;
             margin-bottom: 12px;
+            font-weight: 800;
+            text-align: center;
         }
 
         .division-card .desc {
             font-size: 0.95rem;
             color: var(--text-muted);
             margin-bottom: 24px;
+            text-align: center;
         }
 
         .prize-list {
             list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .prize-list.compact {
+            gap: 8px;
         }
 
         .prize-item {
-            padding: 12px 0;
-            border-bottom: 1px solid var(--surface-color);
+            padding: 12px 16px;
+            border-radius: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 0.95rem;
+            transition: transform 0.2s;
+            background: var(--surface-highlight);
         }
 
-        .prize-item:last-child {
-            border-bottom: none;
+        .prize-list.compact .prize-item {
+            padding: 8px 12px;
+            font-size: 0.85rem;
+        }
+
+        /* Demo Day Internal Grid */
+        .demo-day-prizes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            background: var(--surface-highlight);
+            padding: 24px;
+            border-radius: 16px;
+            margin-top: 16px;
+        }
+
+        .demo-day-prizes-grid .prize-list .prize-item {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .demo-day-prizes-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+        }
+
+        /* Top 3 Highlighting */
+        .prize-list .prize-item:nth-child(1) {
+            background: linear-gradient(135deg, #FFF9D9, #FFF0B3);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 16px;
+            margin-bottom: 4px;
+        }
+
+        .prize-list .prize-item:nth-child(1) strong {
+            color: #B38F00;
+            font-size: 1.05rem;
+        }
+
+        .prize-list .prize-item:nth-child(2) {
+            background: linear-gradient(135deg, #F5F5F7, #E8E8EB);
+            border: 1px solid rgba(192, 192, 192, 0.3);
+        }
+
+        .prize-list .prize-item:nth-child(2) strong {
+            color: #757575;
+        }
+
+        .prize-list .prize-item:nth-child(3) {
+            background: linear-gradient(135deg, #FFF0E0, #FFE0CC);
+            border: 1px solid rgba(205, 127, 50, 0.2);
+        }
+
+        .prize-list .prize-item:nth-child(3) strong {
+            color: #A05A20;
         }
 
         .prize-item strong {
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .prize-item span {
-            color: var(--text-muted);
+            color: var(--text-color);
+            font-weight: 600;
             text-align: right;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
         /* Partners */
@@ -999,56 +1232,108 @@
         }
 
         /* Sponsors */
+        /* Sponsors */
         .sponsors-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 32px;
-            align-items: start;
-            margin-bottom: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+            align-items: center;
+            margin-bottom: 48px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .platinum-sponsor {
-            background: linear-gradient(135deg, #E5E4E2, #F0F0F0);
-            padding: 48px;
-            border-radius: 24px;
+            background: linear-gradient(135deg, #ffffff, #f0f0f0);
+            padding: 64px 48px;
+            border-radius: 32px;
             text-align: center;
+            width: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Shine effect for Platinum */
+        .platinum-sponsor::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 60%);
+            opacity: 0.5;
+            pointer-events: none;
         }
 
         .platinum-sponsor h3 {
-            font-size: 1rem;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-muted);
-            margin-bottom: 24px;
+            letter-spacing: 0.15em;
+            color: #999;
+            margin-bottom: 32px;
+            position: relative;
         }
 
         .sponsor-logo-large {
-            max-width: 350px;
-            background: white;
-            padding: 32px;
-            border-radius: 12px;
-            margin: 0 auto 16px;
+            max-width: 500px;
+            width: 90%;
+            height: auto;
+            background: transparent;
+            padding: 0;
+            margin: 0 auto 24px;
             display: block;
+            position: relative;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.05));
+            transition: transform 0.3s;
+        }
+
+        .sponsor-logo-large:hover {
+            transform: scale(1.02);
         }
 
         .sponsor-amount {
-            font-weight: 600;
-            color: var(--text-muted);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            position: relative;
+            background: rgba(255, 107, 53, 0.1);
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 100px;
         }
 
         .supporting-sponsors {
             display: flex;
-            gap: 24px;
-            flex-direction: column;
+            gap: 32px;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
         }
 
         .supporting-sponsor {
             background: white;
-            padding: 24px 32px;
-            border-radius: 12px;
+            padding: 32px 40px;
+            border-radius: 20px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            min-width: 240px;
         }
+
+        .supporting-sponsor:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+
 
         .supporting-sponsor img {
             max-width: 150px;
@@ -1811,30 +2096,51 @@
             margin-bottom: 0;
         }
 
+        /* Evaluation Cards Enhancement */
         .criteria-list {
-            display: flex;
-            flex-direction: column;
+            display: grid;
             gap: 16px;
         }
 
         .criteria-card {
-            border-left: 4px solid var(--accent-color);
-            padding: 16px 24px;
-            background: #fafafa;
-            border-radius: 0 8px 8px 0;
+            padding: 20px 24px;
+            background: white;
+            border-radius: 12px;
+            border-left: 5px solid var(--accent-light);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+            transition: all 0.2s ease;
+        }
+
+        .criteria-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            border-left-color: var(--accent-color);
         }
 
         .criteria-card h4 {
             font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .criteria-card p {
-            font-size: 0.9rem;
-            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
             color: var(--text-muted);
+            margin: 0;
+        }
+
+        .points {
+            background: var(--accent-dim);
+            color: var(--accent-color);
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 800;
         }
 
         .criteria-top {
@@ -2112,7 +2418,16 @@
             <div class="container">
                 <div class="hero-content">
                     <div class="hero-text">
-                        <div class="hero-badge">$20,000+ in prizes</div>
+                        <div class="hero-meta-row">
+                            <div class="hero-badge" style="margin-bottom: 0; font-size: 0.9rem; padding: 6px 12px;">
+                                $20,000+ in prizes</div>
+                            <div class="presented-by"
+                                style="font-weight: 500; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; display: flex; align-items: center; opacity: 0.8;">
+                                <span style="opacity: 0.7; margin-right: 6px;">Presented By</span>
+                                <img src="valmark.svg" alt="Valmark Financial Group"
+                                    style="height: 18px; filter: grayscale(1); opacity: 0.7;">
+                            </div>
+                        </div>
                         <h1><span>Barrier Breakers</span> Innovation Challenge</h1>
                         <p>
                             High school students in Northeast Ohio: Build solutions to financial health barriers.
@@ -2373,7 +2688,9 @@
                 <div class="prize-hero">
                     <div class="prize-amount">$20,000+</div>
                     <p class="prize-desc" style="text-align: center; margin: 0 auto;">Cash prizes + Kent State
-                        scholarships + school grants</p>
+                        scholarships + school grants <br><span
+                            style="font-size: 0.9rem; opacity: 0.7; font-weight: 400; margin-top: 8px; display: inline-block;">Sponsored
+                            by Valmark Financial Group</span></p>
                 </div>
 
                 <div class="divisions-grid">
@@ -2381,40 +2698,49 @@
                         <h3>🚀 Demo Day</h3>
                         <p class="desc">Top team from each of 5 tracks. 5-min pitch + 2-min Q&A.</p>
 
-                        <h4 style="margin-top: 16px; font-size: 0.9rem; color: var(--accent-color);">💵 Student Cash
-                            Prizes</h4>
-                        <ul class="prize-list">
-                            <li class="prize-item"><strong>1st Place</strong><span>$4,000 cash prize</span></li>
-                            <li class="prize-item"><strong>2nd Place</strong><span>$2,500 cash prize</span></li>
-                            <li class="prize-item"><strong>3rd Place</strong><span>$1,250 cash prize</span></li>
-                            <li class="prize-item"><strong>4th Place</strong><span>$750 cash prize</span></li>
-                            <li class="prize-item"><strong>5th Place</strong><span>$500 cash prize</span></li>
-                        </ul>
+                        <div class="demo-day-prizes-grid">
+                            <!-- Student Cash -->
+                            <div class="prize-column">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-color); margin-bottom: 12px;">💵
+                                    Student Cash</h4>
+                                <ul class="prize-list compact">
+                                    <li class="prize-item"><strong>1st</strong><span>$4,000</span></li>
+                                    <li class="prize-item"><strong>2nd</strong><span>$2,500</span></li>
+                                    <li class="prize-item"><strong>3rd</strong><span>$1,250</span></li>
+                                    <li class="prize-item"><strong>4th</strong><span>$750</span></li>
+                                    <li class="prize-item"><strong>5th</strong><span>$500</span></li>
+                                </ul>
+                            </div>
 
-                        <h4 style="margin-top: 16px; font-size: 0.9rem; color: var(--accent-color);">📚 KSU Scholarships
-                        </h4>
-                        <ul class="prize-list">
-                            <li class="prize-item"><strong>1st Place</strong><span>$2,500 one-time scholarship</span>
-                            </li>
-                            <li class="prize-item"><strong>2nd Place</strong><span>$1,500 one-time scholarship</span>
-                            </li>
-                            <li class="prize-item"><strong>3rd Place</strong><span>$1,000 one-time scholarship</span>
-                            </li>
-                            <li class="prize-item"><strong>4th Place</strong><span>$750 one-time scholarship</span></li>
-                            <li class="prize-item"><strong>5th Place</strong><span>$500 one-time scholarship</span></li>
-                        </ul>
-                        <p style="font-size: 0.75rem; opacity: 0.7; margin-top: 8px; font-style: italic;">*Must attend
-                            KSU and select a major/minor in the ACCBE.</p>
+                            <!-- Scholarships -->
+                            <div class="prize-column">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-color); margin-bottom: 12px;">📚 KSU
+                                    Scholarships</h4>
+                                <ul class="prize-list compact">
+                                    <li class="prize-item"><strong>1st</strong><span>$2,500</span></li>
+                                    <li class="prize-item"><strong>2nd</strong><span>$1,500</span></li>
+                                    <li class="prize-item"><strong>3rd</strong><span>$1,000</span></li>
+                                    <li class="prize-item"><strong>4th</strong><span>$750</span></li>
+                                    <li class="prize-item"><strong>5th</strong><span>$500</span></li>
+                                </ul>
+                                <p
+                                    style="font-size: 0.65rem; opacity: 0.7; margin-top: 8px; font-style: italic; line-height: 1.2;">
+                                    *Must attend KSU & select ACCBE major/minor.</p>
+                            </div>
 
-                        <h4 style="margin-top: 16px; font-size: 0.9rem; color: var(--accent-color);">🏫 High School
-                            Awards</h4>
-                        <ul class="prize-list">
-                            <li class="prize-item"><strong>1st Place</strong><span>$1,000 cash prize</span></li>
-                            <li class="prize-item"><strong>2nd Place</strong><span>$650 cash prize</span></li>
-                            <li class="prize-item"><strong>3rd Place</strong><span>$500 cash prize</span></li>
-                            <li class="prize-item"><strong>4th Place</strong><span>$350 cash prize</span></li>
-                            <li class="prize-item"><strong>5th Place</strong><span>$250 cash prize</span></li>
-                        </ul>
+                            <!-- School Awards -->
+                            <div class="prize-column">
+                                <h4 style="font-size: 0.9rem; color: var(--accent-color); margin-bottom: 12px;">🏫
+                                    School Awards</h4>
+                                <ul class="prize-list compact">
+                                    <li class="prize-item"><strong>1st</strong><span>$1,000</span></li>
+                                    <li class="prize-item"><strong>2nd</strong><span>$650</span></li>
+                                    <li class="prize-item"><strong>3rd</strong><span>$500</span></li>
+                                    <li class="prize-item"><strong>4th</strong><span>$350</span></li>
+                                    <li class="prize-item"><strong>5th</strong><span>$250</span></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     <div class="division-card">
                         <h3>📊 Innovation Gallery</h3>
@@ -2833,7 +3159,7 @@
         </div>
 
         <div class="footer-bottom">
-            <div>© 2025 FinMango. All rights reserved.</div>
+            <div>© 2026 FinMango. All rights reserved.</div>
             <div>
                 <a href="privacy.html">Privacy</a>
                 <a href="terms.html">Terms</a>
