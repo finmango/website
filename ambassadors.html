@@ -1615,6 +1615,155 @@
       background: rgba(0, 0, 0, 0.02);
     }
   </style>
+  <style>
+    /* Interactive Physics Styles */
+    .physics-area {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .ball {
+      position: absolute;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      cursor: grab;
+      user-select: none;
+      transition: box-shadow 0.2s;
+      pointer-events: auto;
+      text-align: center;
+      line-height: 1.2;
+      padding: 8px;
+    }
+
+    .ball:active {
+      cursor: grabbing;
+    }
+
+    .ball:hover {
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+      z-index: 10;
+    }
+
+    .ball.orange {
+      background: linear-gradient(135deg, var(--orange), #ff8c5a);
+      color: white;
+      box-shadow: 0 6px 24px rgba(255, 107, 53, 0.3);
+    }
+
+    .ball.black {
+      background: linear-gradient(135deg, var(--black), #333);
+      color: white;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .ball.white {
+      background: linear-gradient(135deg, #ffffff, #f5f5f5);
+      color: var(--black);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .ball.emoji {
+      font-size: 2rem;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
+    }
+
+    /* Hint */
+    .physics-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      font-size: 0.85rem;
+      color: var(--gray);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.8;
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
+
+    .physics-hint.hidden {
+      opacity: 0;
+    }
+
+    .physics-hint svg {
+      animation: wiggle 2s ease-in-out infinite;
+    }
+
+    @keyframes wiggle {
+
+      0%,
+      100% {
+        transform: rotate(-10deg);
+      }
+
+      50% {
+        transform: rotate(10deg);
+      }
+    }
+
+    /* Control buttons */
+    .physics-controls {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      z-index: 10;
+      display: flex;
+      gap: 12px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s;
+    }
+
+    .physics-controls.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .physics-btn {
+      background: var(--black);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .physics-btn:hover {
+      background: #333;
+      transform: translateY(-2px);
+    }
+
+    .physics-btn.antigravity-active {
+      background: var(--orange);
+    }
+
+    .physics-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+  </style>
 </head>
 
 <body class="has-announcement">
@@ -1695,6 +1844,34 @@
   </div>
 
   <section class="hero">
+    <div class="physics-area" id="physicsArea"></div>
+    <div class="physics-hint" id="physicsHint">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" />
+        <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span>Drag the balls!</span>
+    </div>
+    <div class="physics-controls" id="physicsControls">
+      <button class="physics-btn" id="resetBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+          <path d="M3 3v5h5" />
+        </svg>
+        Reset
+      </button>
+      <button class="physics-btn" id="antigravityBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M8 12h8" />
+          <path d="M12 8v8" />
+        </svg>
+        <span>Antigravity</span>
+      </button>
+    </div>
     <div class="hero-container">
       <div class="hero-label">Ambassadors</div>
       <h1>
@@ -2152,6 +2329,279 @@
         });
       }
     });
+  </script>
+
+
+  <!-- Interactive Physics Script -->
+  <script>
+    (function () {
+      var area = document.getElementById("physicsArea");
+      var hint = document.getElementById("physicsHint");
+      var controls = document.getElementById("physicsControls");
+      var resetBtn = document.getElementById("resetBtn");
+      var antigravityBtn = document.getElementById("antigravityBtn");
+
+      if (!area) return;
+
+      var balls = [];
+      var gravity = 0.5;
+      var friction = 0.98;
+      var bounce = 0.7;
+      var antigravityMode = false;
+      var animationId;
+      var hasInteracted = false;
+
+      var ballsData = [
+        { label: "Leadership 🌟", type: "orange", size: 120 },
+        { label: "Global 🌍", type: "black", size: 100 },
+        { label: "Impact 🚀", type: "orange", size: 110 },
+        { label: "Community 🤝", type: "black", size: 130 },
+        { label: "Financial Health 💰", type: "white", size: 140 },
+        { label: "Equity ⚖️", type: "orange", size: 90 },
+        { label: "Change ⚡", type: "black", size: 95 },
+        { label: "Education 🎓", type: "white", size: 100 },
+        { label: "Innovation 💡", type: "orange", size: 105 },
+        { label: "Future 🔮", type: "black", size: 85 }
+      ];
+
+      function createBalls() {
+        area.innerHTML = "";
+        balls = [];
+
+        var width = area.offsetWidth;
+        var height = area.offsetHeight;
+
+        for (var i = 0; i < ballsData.length; i++) {
+          var data = ballsData[i];
+          var el = document.createElement("div");
+          el.className = "ball " + data.type;
+
+          var size = data.size;
+          // Scale size for mobile
+          if (window.innerWidth < 768) {
+            size = size * 0.7;
+          }
+
+          el.style.width = size + "px";
+          el.style.height = size + "px";
+
+          var x = Math.random() * (width - size);
+          var y = Math.random() * (height - size - 100);
+
+          // Ensure balls don't spawn off-screen or too low
+          y = Math.min(y, height - size - 50);
+          y = Math.max(y, 100); // Don't spawn behind navbar
+
+          el.style.left = x + "px";
+          el.style.top = y + "px";
+          el.style.fontSize = Math.max(12, size * 0.14) + "px";
+
+          el.textContent = data.label;
+          area.appendChild(el);
+
+          var ballObj = {
+            el: el,
+            x: x,
+            y: y,
+            vx: 0,
+            vy: 0,
+            size: size,
+            dragging: false,
+            floatPhase: Math.random() * Math.PI * 2,
+            floatSpeed: 0.02 + Math.random() * 0.02
+          };
+
+          balls.push(ballObj);
+          setupDrag(ballObj);
+        }
+      }
+
+      function setupDrag(ball) {
+        var offsetX = 0;
+        var offsetY = 0;
+
+        function onStart(e) {
+          e.preventDefault();
+          ball.dragging = true;
+          ball.vx = 0;
+          ball.vy = 0;
+
+          var touch = e.touches ? e.touches[0] : e;
+          var rect = area.getBoundingClientRect();
+          offsetX = touch.clientX - rect.left - ball.x;
+          offsetY = touch.clientY - rect.top - ball.y;
+
+          if (!hasInteracted) {
+            hasInteracted = true;
+            hint.classList.add("hidden");
+            controls.classList.add("visible");
+          }
+
+          document.addEventListener("mousemove", onMove);
+          document.addEventListener("mouseup", onEnd);
+          document.addEventListener("touchmove", onMove, { passive: false });
+          document.addEventListener("touchend", onEnd);
+        }
+
+        function onMove(e) {
+          if (!ball.dragging) return;
+          e.preventDefault();
+
+          var touch = e.touches ? e.touches[0] : e;
+          var rect = area.getBoundingClientRect();
+          var newX = touch.clientX - rect.left - offsetX;
+          var newY = touch.clientY - rect.top - offsetY;
+
+          ball.vx = newX - ball.x;
+          ball.vy = newY - ball.y;
+          ball.x = newX;
+          ball.y = newY;
+        }
+
+        function onEnd() {
+          ball.dragging = false;
+          document.removeEventListener("mousemove", onMove);
+          document.removeEventListener("mouseup", onEnd);
+          document.removeEventListener("touchmove", onMove);
+          document.removeEventListener("touchend", onEnd);
+        }
+
+        ball.el.addEventListener("mousedown", onStart);
+        ball.el.addEventListener("touchstart", onStart, { passive: false });
+      }
+
+      function update() {
+        var width = area.offsetWidth;
+        var height = area.offsetHeight;
+
+        for (var i = 0; i < balls.length; i++) {
+          var ball = balls[i];
+          if (ball.dragging) {
+            ball.el.style.left = ball.x + "px";
+            ball.el.style.top = ball.y + "px";
+            continue;
+          }
+
+          if (antigravityMode) {
+            ball.floatPhase += ball.floatSpeed;
+            var floatForceX = Math.sin(ball.floatPhase) * 0.05;
+            var floatForceY = Math.cos(ball.floatPhase * 0.7) * 0.05;
+            ball.vy -= 0.02;
+            ball.vx += floatForceX;
+            ball.vy += floatForceY;
+            ball.vx *= 0.995;
+            ball.vy *= 0.995;
+          } else {
+            ball.vy += gravity;
+            ball.vx *= friction;
+            ball.vy *= friction;
+          }
+
+          ball.x += ball.vx;
+          ball.y += ball.vy;
+
+          if (ball.x < 0) {
+            ball.x = 0;
+            ball.vx *= -bounce;
+          }
+          if (ball.x + ball.size > width) {
+            ball.x = width - ball.size;
+            ball.vx *= -bounce;
+          }
+          if (ball.y < 0) {
+            ball.y = 0;
+            ball.vy *= -bounce;
+          }
+          if (ball.y + ball.size > height) {
+            ball.y = height - ball.size;
+            ball.vy *= -bounce;
+          }
+
+          for (var j = i + 1; j < balls.length; j++) {
+            var other = balls[j];
+            var dx = (other.x + other.size / 2) - (ball.x + ball.size / 2);
+            var dy = (other.y + other.size / 2) - (ball.y + ball.size / 2);
+            var dist = Math.sqrt(dx * dx + dy * dy);
+            var minDist = (ball.size + other.size) / 2;
+
+            if (dist < minDist && dist > 0) {
+              var overlap = minDist - dist;
+              var nx = dx / dist;
+              var ny = dy / dist;
+
+              ball.x -= nx * overlap / 2;
+              ball.y -= ny * overlap / 2;
+              other.x += nx * overlap / 2;
+              other.y += ny * overlap / 2;
+
+              var dvx = ball.vx - other.vx;
+              var dvy = ball.vy - other.vy;
+              var dot = dvx * nx + dvy * ny;
+
+              ball.vx -= dot * nx * bounce;
+              ball.vy -= dot * ny * bounce;
+              other.vx += dot * nx * bounce;
+              other.vy += dot * ny * bounce;
+            }
+          }
+
+          ball.el.style.left = ball.x + "px";
+          ball.el.style.top = ball.y + "px";
+        }
+
+        animationId = requestAnimationFrame(update);
+      }
+
+      function toggleAntigravity() {
+        antigravityMode = !antigravityMode;
+
+        if (antigravityMode) {
+          antigravityBtn.classList.add("antigravity-active");
+          antigravityBtn.querySelector("span").textContent = "Gravity";
+
+          for (var i = 0; i < balls.length; i++) {
+            balls[i].vy -= 2 + Math.random() * 2;
+            balls[i].vx += (Math.random() - 0.5) * 2;
+          }
+        } else {
+          antigravityBtn.classList.remove("antigravity-active");
+          antigravityBtn.querySelector("span").textContent = "Antigravity";
+        }
+
+        if (!hasInteracted) {
+          hasInteracted = true;
+          hint.classList.add("hidden");
+          controls.classList.add("visible");
+        }
+      }
+
+      function reset() {
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+        }
+        antigravityMode = false;
+        antigravityBtn.classList.remove("antigravity-active");
+        antigravityBtn.querySelector("span").textContent = "Antigravity";
+        hasInteracted = false;
+        hint.classList.remove("hidden");
+        controls.classList.remove("visible");
+        createBalls();
+        animationId = requestAnimationFrame(update);
+      }
+
+      // Initialize
+      createBalls();
+      animationId = requestAnimationFrame(update);
+
+      resetBtn.addEventListener("click", reset);
+      antigravityBtn.addEventListener("click", toggleAntigravity);
+
+      var resizeTimer;
+      window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(reset, 300);
+      });
+    })();
   </script>
 
 </body>
