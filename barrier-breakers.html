@@ -870,7 +870,81 @@
             line-height: 1.5;
         }
 
-        /* Tracks */
+        /* Expandable Tracks */
+        .tracks-compact {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 32px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .track-expandable {
+            border: none;
+        }
+
+        .track-summary {
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 24px;
+            background: white;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .track-summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .track-summary:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(255, 140, 90, 0.04));
+        }
+
+        .track-summary .track-icon {
+            font-size: 1.5rem;
+            width: auto;
+            height: auto;
+            margin: 0;
+        }
+
+        .track-summary .track-name {
+            flex: 1;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .track-arrow {
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            transition: transform 0.2s ease;
+        }
+
+        .track-expandable[open] .track-arrow {
+            transform: rotate(180deg);
+        }
+
+        .track-expandable[open] .track-summary {
+            border-radius: 12px 12px 0 0;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(255, 140, 90, 0.04));
+        }
+
+        .track-desc {
+            padding: 16px 24px;
+            background: white;
+            border-radius: 0 0 12px 12px;
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Tracks Grid (legacy) */
         .tracks-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -2620,48 +2694,60 @@
                 <h2>Innovation Tracks</h2>
                 <p>
                     Choose one challenge. Research why it's a barrier to financial health. Build a solution—policy
-                    proposal, app prototype, financial literacy tool, or anything else that could help young adults
-                    break free from these barriers.
+                    proposal, app prototype, financial literacy tool, or anything else.
                 </p>
 
-                <div class="tracks-grid">
-                    <div class="track-card transport">
-                        <div class="track-icon">🚗</div>
-                        <h3>Transportation</h3>
-                        <p>High car costs, insurance rates, and transit gaps prevent young adults from accessing stable
-                            jobs.</p>
-                    </div>
-                    <div class="track-card housing">
-                        <div class="track-icon">🏠</div>
-                        <h3>Housing Affordability</h3>
-                        <p>Rent burden, security deposits, and credit barriers block young adults from stable housing.
+                <div class="tracks-compact">
+                    <details class="track-expandable">
+                        <summary class="track-summary">
+                            <span class="track-icon">🚗</span>
+                            <span class="track-name">Transportation</span>
+                            <span class="track-arrow">▼</span>
+                        </summary>
+                        <p class="track-desc">High car costs, insurance rates, and transit gaps prevent young adults
+                            from accessing stable jobs.</p>
+                    </details>
+                    <details class="track-expandable">
+                        <summary class="track-summary">
+                            <span class="track-icon">🏠</span>
+                            <span class="track-name">Housing Affordability</span>
+                            <span class="track-arrow">▼</span>
+                        </summary>
+                        <p class="track-desc">Rent burden, security deposits, and credit barriers block young adults
+                            from stable housing.</p>
+                    </details>
+                    <details class="track-expandable">
+                        <summary class="track-summary">
+                            <span class="track-icon">🏥</span>
+                            <span class="track-name">Healthcare Access</span>
+                            <span class="track-arrow">▼</span>
+                        </summary>
+                        <p class="track-desc">Medical debt drives bankruptcy. High healthcare costs devastate young
+                            adults before careers begin.</p>
+                    </details>
+                    <details class="track-expandable">
+                        <summary class="track-summary">
+                            <span class="track-icon">📚</span>
+                            <span class="track-name">Literacy & Investment</span>
+                            <span class="track-arrow">▼</span>
+                        </summary>
+                        <p class="track-desc">Limited financial education and investment access prevent building
+                            generational wealth.</p>
+                    </details>
+                    <details class="track-expandable">
+                        <summary class="track-summary">
+                            <span class="track-icon">🌟</span>
+                            <span class="track-name">Open Track</span>
+                            <span class="track-arrow">▼</span>
+                        </summary>
+                        <p class="track-desc">Identify any financial barrier not covered above—childcare costs, food
+                            insecurity, mental health access, student debt, or another issue impacting your community.
                         </p>
-                    </div>
-                    <div class="track-card health">
-                        <div class="track-icon">🏥</div>
-                        <h3>Healthcare Access</h3>
-                        <p>Medical debt drives bankruptcy. High healthcare costs devastate young adults before careers
-                            begin.</p>
-                    </div>
-                    <div class="track-card community">
-                        <div class="track-icon">🌟</div>
-                        <h3>Open Track</h3>
-                        <p>Identify any financial barrier not covered above—childcare costs, food insecurity, mental
-                            health access, student debt, or another issue impacting your community.</p>
-                    </div>
-                    <div class="track-card literacy">
-                        <div class="track-icon">📚</div>
-                        <h3>Literacy & Investment</h3>
-                        <p>Limited financial education and investment access prevent building generational wealth.</p>
-                    </div>
-                    <div class="track-card"
-                        style="background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 140, 90, 0.05)); border: 2px solid var(--accent-color);">
-                        <div class="track-icon">🚀</div>
-                        <h3>Ready to Compete?</h3>
-                        <p>Pick your track and compete for $20,000+ in prizes at Kent State.</p>
-                        <a href="https://www.finmango.org/barrier-breakers-apply" class="btn btn-accent btn-small"
-                            style="margin-top: 16px;">Apply Now</a>
-                    </div>
+                    </details>
+                </div>
+
+                <div style="text-align: center; margin-top: 32px;">
+                    <a href="https://www.finmango.org/barrier-breakers-apply" class="btn btn-accent">Apply Now →</a>
                 </div>
             </div>
         </section>
@@ -2718,24 +2804,16 @@
                                 just the idea.</p>
                         </div>
                         <div class="criteria-list">
-                            <div class="criteria-card">
-                                <h4>Team & Execution Ability</h4>
-                                <p>Why is your team suited to tackle this barrier? What makes you capable of building a
-                                    real solution?</p>
-                            </div>
-                            <div class="criteria-card">
-                                <h4>Problem Clarity</h4>
-                                <p>How well do you understand the barrier you're addressing? Have you done your
-                                    research?</p>
-                            </div>
-                            <div class="criteria-card">
-                                <h4>Solution Potential</h4>
-                                <p>Is your initial approach thoughtful and feasible? Does it actually address the root
-                                    cause?</p>
-                            </div>
-                            <div class="criteria-card">
-                                <h4>Ambition & Impact</h4>
-                                <p>How big could this be if it works? Could it help thousands of young adults?</p>
+                            <div class="criteria-card" style="padding: 24px 32px;">
+                                <ul style="list-style: none; margin: 0; padding: 0;">
+                                    <li style="margin-bottom: 12px;"><strong>Team & Execution</strong> — Why is your
+                                        team suited to tackle this?</li>
+                                    <li style="margin-bottom: 12px;"><strong>Problem Clarity</strong> — How well do you
+                                        understand the barrier?</li>
+                                    <li style="margin-bottom: 12px;"><strong>Solution Potential</strong> — Is your
+                                        approach thoughtful and feasible?</li>
+                                    <li><strong>Ambition & Impact</strong> — How big could this be if it works?</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -2752,7 +2830,8 @@
                             <div class="criteria-card" style="text-align: center; padding: 32px;">
                                 <p style="font-size: 1.1rem; margin-bottom: 16px;"><strong>Problem
                                         Understanding</strong> • <strong>Solution Quality</strong> •
-                                    <strong>Presentation</strong> • <strong>Impact Potential</strong></p>
+                                    <strong>Presentation</strong> • <strong>Impact Potential</strong>
+                                </p>
                                 <p style="color: var(--text-muted); margin-bottom: 24px;">25 points each • 100 points
                                     total</p>
                                 <a href="barrier-breakers-rubric.pdf" target="_blank"
@@ -2783,50 +2862,15 @@
                     <div class="division-card">
                         <h3>🚀 Demo Day (Oral Presentations)</h3>
                         <p class="desc">Top team from each of 5 tracks. 5-min pitch + 2-min Q&A.</p>
-
-                        <div class="demo-day-prizes-grid">
-                            <!-- Student Cash -->
-                            <div class="prize-column">
-                                <h4 style="font-size: 0.9rem; color: var(--accent-color); margin-bottom: 12px;">💵
-                                    Student Cash</h4>
-                                <ul class="prize-list compact">
-                                    <li class="prize-item"><strong>1st</strong><span>$4,000</span></li>
-                                    <li class="prize-item"><strong>2nd</strong><span>$2,500</span></li>
-                                    <li class="prize-item"><strong>3rd</strong><span>$1,250</span></li>
-                                    <li class="prize-item"><strong>4th</strong><span>$750</span></li>
-                                    <li class="prize-item"><strong>5th</strong><span>$500</span></li>
-                                </ul>
-                            </div>
-
-                            <!-- Scholarships -->
-                            <div class="prize-column">
-                                <h4 style="font-size: 0.9rem; color: var(--accent-color); margin-bottom: 12px;">📚 KSU
-                                    Scholarships</h4>
-                                <ul class="prize-list compact">
-                                    <li class="prize-item"><strong>1st</strong><span>$2,500</span></li>
-                                    <li class="prize-item"><strong>2nd</strong><span>$1,500</span></li>
-                                    <li class="prize-item"><strong>3rd</strong><span>$1,000</span></li>
-                                    <li class="prize-item"><strong>4th</strong><span>$750</span></li>
-                                    <li class="prize-item"><strong>5th</strong><span>$500</span></li>
-                                </ul>
-                                <p
-                                    style="font-size: 0.65rem; opacity: 0.7; margin-top: 8px; font-style: italic; line-height: 1.2;">
-                                    *Must attend KSU & select ACCBE major/minor.</p>
-                            </div>
-
-                            <!-- School Awards -->
-                            <div class="prize-column">
-                                <h4 style="font-size: 0.9rem; color: var(--accent-color); margin-bottom: 12px;">🏫
-                                    School Awards</h4>
-                                <ul class="prize-list compact">
-                                    <li class="prize-item"><strong>1st</strong><span>$1,000</span></li>
-                                    <li class="prize-item"><strong>2nd</strong><span>$650</span></li>
-                                    <li class="prize-item"><strong>3rd</strong><span>$500</span></li>
-                                    <li class="prize-item"><strong>4th</strong><span>$350</span></li>
-                                    <li class="prize-item"><strong>5th</strong><span>$250</span></li>
-                                </ul>
-                            </div>
-                        </div>
+                        <ul class="prize-list">
+                            <li class="prize-item"><strong>1st Place</strong><span>$7,500 total*</span></li>
+                            <li class="prize-item"><strong>2nd Place</strong><span>$4,650 total*</span></li>
+                            <li class="prize-item"><strong>3rd Place</strong><span>$2,750 total*</span></li>
+                            <li class="prize-item"><strong>4th Place</strong><span>$1,850 total*</span></li>
+                            <li class="prize-item"><strong>5th Place</strong><span>$1,250 total*</span></li>
+                        </ul>
+                        <p style="font-size: 0.7rem; opacity: 0.7; margin-top: 12px; font-style: italic;">*Includes cash
+                            + KSU scholarship + school grant. Scholarship requires attending KSU.</p>
                     </div>
                     <div class="division-card">
                         <h3>📊 Innovation Gallery (Poster Presentations)</h3>
@@ -2853,43 +2897,6 @@
                     Student cash prizes split among team members. High school awards go directly to the school.
                     Prize amounts may increase as we add more sponsors.
                 </p>
-            </div>
-        </section>
-
-
-
-        <section id="sponsors" style="background: var(--surface-color);">
-            <div class="container">
-                <div style="text-align: center;">
-                    <div class="section-label">Thank You</div>
-                    <h2>2026 Sponsors</h2>
-                    <p style="max-width: 600px; margin: 0 auto 48px;">These organizations make it possible for students
-                        to compete for life-changing prizes.</p>
-                </div>
-
-                <div class="sponsors-container">
-                    <div class="platinum-sponsor">
-                        <h3>💎 Platinum Sponsor</h3>
-                        <img src="valmark.svg" alt="Valmark Financial Group" class="sponsor-logo-large">
-                        <div class="sponsor-amount">$25,000 Commitment</div>
-                    </div>
-
-                    <div class="supporting-sponsors">
-                        <div class="supporting-sponsor">
-                            <img src="1stday.png" alt="1st Day School Supplies">
-                        </div>
-                        <div class="supporting-sponsor">
-                            <img src="hyland-financial.jpg" alt="Hyland Financial">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sponsor-cta">
-                    <h3>Become a Sponsor</h3>
-                    <p>Join us in empowering the next generation of financial health innovators.</p>
-                    <a href="mailto:competition@finmango.org?subject=Sponsorship Inquiry" class="btn">Inquire About
-                        Sponsorship</a>
-                </div>
             </div>
         </section>
 
@@ -3056,31 +3063,41 @@
                                 format best showcases your innovation.</p>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
 
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>What is the Knowledge Track?</span>
-                            <span class="faq-icon">+</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p>A financial literacy test open to all students attending on March 20th. It's a 20-30
-                                minute multiple-choice test taken on your phone. No application required—just show up!
-                                Prizes: $250 (1st), $150 (2nd), $100 (3rd).</p>
-                        </div>
+        <section id="sponsors" style="background: var(--surface-color);">
+            <div class="container">
+                <div style="text-align: center;">
+                    <div class="section-label">Thank You</div>
+                    <h2>2026 Sponsors</h2>
+                    <p style="max-width: 600px; margin: 0 auto 48px;">These organizations make it possible for students
+                        to compete for life-changing prizes.</p>
+                </div>
+
+                <div class="sponsors-container">
+                    <div class="platinum-sponsor">
+                        <h3>💎 Platinum Sponsor</h3>
+                        <img src="valmark.svg" alt="Valmark Financial Group" class="sponsor-logo-large">
+                        <div class="sponsor-amount">$25,000 Commitment</div>
                     </div>
 
-                    <div class="faq-item">
-                        <button class="faq-question">
-                            <span>Can we bring family or non-competing students?</span>
-                            <span class="faq-icon">+</span>
-                        </button>
-                        <div class="faq-answer">
-                            <p><strong>Absolutely! Everyone is welcome.</strong> Teachers can make March 20th a field
-                                trip day. Families and parents are encouraged to attend. Email <a
-                                    href="mailto:competition@finmango.org">competition@finmango.org</a> with your
-                                headcount.</p>
+                    <div class="supporting-sponsors">
+                        <div class="supporting-sponsor">
+                            <img src="1stday.png" alt="1st Day School Supplies">
+                        </div>
+                        <div class="supporting-sponsor">
+                            <img src="hyland-financial.jpg" alt="Hyland Financial">
                         </div>
                     </div>
+                </div>
+
+                <div class="sponsor-cta">
+                    <h3>Become a Sponsor</h3>
+                    <p>Join us in empowering the next generation of financial health innovators.</p>
+                    <a href="mailto:competition@finmango.org?subject=Sponsorship Inquiry" class="btn">Inquire About
+                        Sponsorship</a>
                 </div>
             </div>
         </section>
