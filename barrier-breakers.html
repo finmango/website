@@ -870,78 +870,97 @@
             line-height: 1.5;
         }
 
-        /* Expandable Tracks */
-        .tracks-compact {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 32px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+        /* Expandable Track Cards Grid */
+        .tracks-grid-expandable {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
         }
 
-        .track-expandable {
+        .track-card-expandable {
             border: none;
         }
 
-        .track-summary {
+        .track-card-expandable summary {
             cursor: pointer;
             list-style: none;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 16px;
-            padding: 16px 24px;
+            text-align: center;
+            padding: 36px 24px;
             background: white;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
         }
 
-        .track-summary::-webkit-details-marker {
+        .track-card-expandable summary::-webkit-details-marker {
             display: none;
         }
 
-        .track-summary:hover {
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(255, 140, 90, 0.04));
+        .track-card-expandable summary:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
         }
 
-        .track-summary .track-icon {
-            font-size: 1.5rem;
-            width: auto;
-            height: auto;
-            margin: 0;
+        .track-card-expandable summary .track-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 140, 90, 0.05));
+            border-radius: 16px;
         }
 
-        .track-summary .track-name {
-            flex: 1;
+        .track-card-expandable summary h3 {
+            margin: 0 0 8px;
+            font-size: 1.1rem;
             font-weight: 600;
-            font-size: 1rem;
         }
 
-        .track-arrow {
-            font-size: 0.8rem;
+        .track-card-expandable summary .expand-hint {
+            font-size: 0.75rem;
             color: var(--accent-color);
-            transition: transform 0.2s ease;
+            opacity: 0.8;
         }
 
-        .track-expandable[open] .track-arrow {
-            transform: rotate(180deg);
-        }
-
-        .track-expandable[open] .track-summary {
-            border-radius: 12px 12px 0 0;
+        .track-card-expandable[open] summary {
+            border-radius: 24px 24px 0 0;
             background: linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(255, 140, 90, 0.04));
         }
 
-        .track-desc {
-            padding: 16px 24px;
+        .track-card-expandable[open] summary .expand-hint {
+            display: none;
+        }
+
+        .track-card-expandable p {
+            padding: 20px 24px;
             background: white;
-            border-radius: 0 0 12px 12px;
+            border-radius: 0 0 24px 24px;
             margin: 0;
             color: var(--text-muted);
-            font-size: 0.95rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .tracks-grid-expandable {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .tracks-grid-expandable {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Tracks Grid (legacy) */
@@ -2697,52 +2716,50 @@
                     proposal, app prototype, financial literacy tool, or anything else.
                 </p>
 
-                <div class="tracks-compact">
-                    <details class="track-expandable">
-                        <summary class="track-summary">
-                            <span class="track-icon">🚗</span>
-                            <span class="track-name">Transportation</span>
-                            <span class="track-arrow">▼</span>
+                <div class="tracks-grid-expandable">
+                    <details class="track-card-expandable">
+                        <summary>
+                            <div class="track-icon">🚗</div>
+                            <h3>Transportation</h3>
+                            <span class="expand-hint">Tap to learn more</span>
                         </summary>
-                        <p class="track-desc">High car costs, insurance rates, and transit gaps prevent young adults
-                            from accessing stable jobs.</p>
+                        <p>High car costs, insurance rates, and transit gaps prevent young adults from accessing stable
+                            jobs.</p>
                     </details>
-                    <details class="track-expandable">
-                        <summary class="track-summary">
-                            <span class="track-icon">🏠</span>
-                            <span class="track-name">Housing Affordability</span>
-                            <span class="track-arrow">▼</span>
+                    <details class="track-card-expandable">
+                        <summary>
+                            <div class="track-icon">🏠</div>
+                            <h3>Housing Affordability</h3>
+                            <span class="expand-hint">Tap to learn more</span>
                         </summary>
-                        <p class="track-desc">Rent burden, security deposits, and credit barriers block young adults
-                            from stable housing.</p>
-                    </details>
-                    <details class="track-expandable">
-                        <summary class="track-summary">
-                            <span class="track-icon">🏥</span>
-                            <span class="track-name">Healthcare Access</span>
-                            <span class="track-arrow">▼</span>
-                        </summary>
-                        <p class="track-desc">Medical debt drives bankruptcy. High healthcare costs devastate young
-                            adults before careers begin.</p>
-                    </details>
-                    <details class="track-expandable">
-                        <summary class="track-summary">
-                            <span class="track-icon">📚</span>
-                            <span class="track-name">Literacy & Investment</span>
-                            <span class="track-arrow">▼</span>
-                        </summary>
-                        <p class="track-desc">Limited financial education and investment access prevent building
-                            generational wealth.</p>
-                    </details>
-                    <details class="track-expandable">
-                        <summary class="track-summary">
-                            <span class="track-icon">🌟</span>
-                            <span class="track-name">Open Track</span>
-                            <span class="track-arrow">▼</span>
-                        </summary>
-                        <p class="track-desc">Identify any financial barrier not covered above—childcare costs, food
-                            insecurity, mental health access, student debt, or another issue impacting your community.
+                        <p>Rent burden, security deposits, and credit barriers block young adults from stable housing.
                         </p>
+                    </details>
+                    <details class="track-card-expandable">
+                        <summary>
+                            <div class="track-icon">🏥</div>
+                            <h3>Healthcare Access</h3>
+                            <span class="expand-hint">Tap to learn more</span>
+                        </summary>
+                        <p>Medical debt drives bankruptcy. High healthcare costs devastate young adults before careers
+                            begin.</p>
+                    </details>
+                    <details class="track-card-expandable">
+                        <summary>
+                            <div class="track-icon">📚</div>
+                            <h3>Literacy & Investment</h3>
+                            <span class="expand-hint">Tap to learn more</span>
+                        </summary>
+                        <p>Limited financial education and investment access prevent building generational wealth.</p>
+                    </details>
+                    <details class="track-card-expandable">
+                        <summary>
+                            <div class="track-icon">🌟</div>
+                            <h3>Open Track</h3>
+                            <span class="expand-hint">Tap to learn more</span>
+                        </summary>
+                        <p>Identify any financial barrier not covered above—childcare costs, food insecurity, mental
+                            health access, student debt, or another issue impacting your community.</p>
                     </details>
                 </div>
 
