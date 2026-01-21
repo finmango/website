@@ -54,7 +54,7 @@ function createBarrierBreakersForm() {
             '🚗 Transportation',
             '🏠 Housing Affordability',
             '🏥 Healthcare Access',
-            '🌟 Community Challenge',
+            '🌟 Open Track',
             '📚 Literacy & Investment Access'
         ])
         .setRequired(true);
