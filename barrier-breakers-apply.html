@@ -291,7 +291,7 @@
       letter-spacing: 0.05em;
     }
 
-    .team-member .form-row {
+    .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
@@ -995,12 +995,27 @@
                   <input type="radio" name="role" id="role-student" value="Student">
                   <span>🎓 Student</span>
                 </label>
+                <label class="radio-option" id="role-guest-label">
+                  <input type="radio" name="role" id="role-guest" value="Guest">
+                  <span>👋 Guest</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name <span class="required">*</span></label>
+                <input type="text" id="firstName" name="firstName" required placeholder="First Name">
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name <span class="required">*</span></label>
+                <input type="text" id="lastName" name="lastName" required placeholder="Last Name">
               </div>
             </div>
 
             <div class="form-group">
-              <label for="fullName">What is your full name? <span class="required">*</span></label>
-              <input type="text" id="fullName" name="fullName" placeholder="First and Last Name">
+              <label for="birthDate">Date of Birth <span class="required">*</span></label>
+              <input type="date" id="birthDate" name="birthDate" required>
             </div>
 
             <div class="form-group" id="graduationYearGroup">
@@ -1011,6 +1026,8 @@
                 <option value="2027">2027</option>
                 <option value="2028">2028</option>
                 <option value="2029">2029</option>
+                <option value="2030">2030</option>
+                <option value="2031">2031</option>
               </select>
               <p class="helper-text">If you're a teacher, please skip this question.</p>
             </div>
@@ -1141,7 +1158,7 @@
     <script>
       // URLs
       const APPLY_URL = 'https://script.google.com/macros/s/AKfycbzNxbarMfbAKWx7yB7NFCKp-Wypo7exg20l-RUofmk2jb3QoBBvsEK33IiN4ewIsR_vgQ/exec';
-      const RSVP_URL = 'https://script.google.com/macros/s/AKfycbxz3AkZCWJRTzSjCWyACkvuFUnL8aIeAguyrZGgnRAT_EYGCYtfxuWiVy8D7v3PDuPU/exec';
+      const RSVP_URL = 'https://script.google.com/macros/s/AKfycbz-F5CoBPSkTxh8rH3mAcMfG9na65lcnePv4G6PzX-o1oLW16MnPbor8k3wScLCnZ2A/exec';
 
       // --- Toggle Mechanics ---
       function selectType(type) {
@@ -1260,32 +1277,40 @@
       // --- RSVP Form Logic ---
       const roleTeacher = document.getElementById('role-teacher');
       const roleStudent = document.getElementById('role-student');
+      const roleGuest = document.getElementById('role-guest');
       const roleTeacherLabel = document.getElementById('role-teacher-label');
       const roleStudentLabel = document.getElementById('role-student-label');
+      const roleGuestLabel = document.getElementById('role-guest-label');
       const graduationYearGroup = document.getElementById('graduationYearGroup');
       const graduationYear = document.getElementById('graduationYear');
 
       function updateRoleUI() {
-        if (roleTeacher.checked) {
-          roleTeacherLabel.classList.add('selected');
-          roleStudentLabel.classList.remove('selected');
-          graduationYearGroup.style.opacity = '0.5';
-          graduationYear.removeAttribute('required');
-          graduationYear.disabled = true;
-        } else {
+        // Reset styles
+        [roleTeacherLabel, roleStudentLabel, roleGuestLabel].forEach(label => {
+          if (label) label.classList.remove('selected');
+        });
+
+        if (roleStudent.checked) {
           roleStudentLabel.classList.add('selected');
-          roleTeacherLabel.classList.remove('selected');
           graduationYearGroup.style.opacity = '1';
-          // Only require if RSVP section is active
           if (!roleStudent.disabled) {
             graduationYear.setAttribute('required', 'required');
             graduationYear.disabled = false;
           }
+        } else {
+          // Teacher or Guest
+          if (roleTeacher.checked) roleTeacherLabel.classList.add('selected');
+          if (roleGuest && roleGuest.checked) roleGuestLabel.classList.add('selected');
+
+          graduationYearGroup.style.opacity = '0.5';
+          graduationYear.removeAttribute('required');
+          graduationYear.disabled = true;
         }
       }
 
       roleTeacher.addEventListener('change', updateRoleUI);
       roleStudent.addEventListener('change', updateRoleUI);
+      if (roleGuest) roleGuest.addEventListener('change', updateRoleUI);
 
       // Checkbox Group Styling
       ['releaseAccept', 'dataPermission'].forEach(id => {
@@ -1320,7 +1345,12 @@
         header.style.borderColor = 'var(--orange)';
 
         // 4. Pre-fill Data
-        document.getElementById('fullName').value = appData.member1Name || '';
+        const nameParts = (appData.member1Name || '').trim().split(' ');
+        const fName = nameParts[0] || '';
+        const lName = nameParts.slice(1).join(' ') || '';
+
+        document.getElementById('firstName').value = fName;
+        document.getElementById('lastName').value = lName;
         document.getElementById('email').value = appData.member1Email || '';
         document.getElementById('attendeeCount').value = appData.teamSize || '1';
 
@@ -1384,7 +1414,9 @@
           const role = document.querySelector('input[name="role"]:checked')?.value || '';
           formData = {
             role: role,
-            fullName: document.getElementById('fullName').value,
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            birthDate: document.getElementById('birthDate').value,
             graduationYear: document.getElementById('graduationYear').value,
             phone: document.getElementById('phone').value,
             email: document.getElementById('email').value,
