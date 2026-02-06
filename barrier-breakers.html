@@ -572,6 +572,60 @@
             color: var(--accent-color);
         }
 
+        /* Countdown Timer */
+        .countdown-timer {
+            margin: 20px 0 28px;
+        }
+
+        .countdown-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .countdown-boxes {
+            display: flex;
+            gap: 10px;
+        }
+
+        .countdown-box {
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            border-radius: 10px;
+            padding: 10px 14px;
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .countdown-value {
+            display: block;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            line-height: 1;
+        }
+
+        .countdown-unit {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+        }
+
+        @media (max-width: 480px) {
+            .countdown-box {
+                padding: 8px 10px;
+                min-width: 50px;
+            }
+
+            .countdown-value {
+                font-size: 1.2rem;
+            }
+        }
+
         .hero-actions {
             display: flex;
             gap: 16px;
@@ -2847,6 +2901,28 @@
                         <p class="hero-date">
                             <strong>March 20, 2026</strong> at Kent State University
                         </p>
+                        <!-- Countdown Timer -->
+                        <div class="countdown-timer" id="countdown-timer">
+                            <div class="countdown-label">⏰ Application deadline in:</div>
+                            <div class="countdown-boxes">
+                                <div class="countdown-box">
+                                    <span class="countdown-value" id="countdown-days">--</span>
+                                    <span class="countdown-unit">days</span>
+                                </div>
+                                <div class="countdown-box">
+                                    <span class="countdown-value" id="countdown-hours">--</span>
+                                    <span class="countdown-unit">hrs</span>
+                                </div>
+                                <div class="countdown-box">
+                                    <span class="countdown-value" id="countdown-minutes">--</span>
+                                    <span class="countdown-unit">min</span>
+                                </div>
+                                <div class="countdown-box">
+                                    <span class="countdown-value" id="countdown-seconds">--</span>
+                                    <span class="countdown-unit">sec</span>
+                                </div>
+                            </div>
+                        </div>
                         <div class="hero-actions">
                             <a href="https://www.finmango.org/barrier-breakers-apply" class="btn btn-primary">Register
                                 Now</a>
@@ -3915,6 +3991,39 @@
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(reset, 300);
             });
+        })();
+    </script>
+
+    <!-- Countdown Timer Script -->
+    <script>
+        (function () {
+            // Deadline: February 27, 2026 at 11:59 PM EST
+            const deadline = new Date('2026-02-27T23:59:59-05:00').getTime();
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const timeLeft = deadline - now;
+
+                if (timeLeft <= 0) {
+                    document.getElementById('countdown-timer').innerHTML =
+                        '<div class="countdown-label" style="color: var(--accent-color); font-weight: 600;">⏰ Application deadline has passed</div>';
+                    return;
+                }
+
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                document.getElementById('countdown-days').textContent = days;
+                document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('countdown-minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('countdown-seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+
+            // Update immediately and then every second
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
         })();
     </script>
 
