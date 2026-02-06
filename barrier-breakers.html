@@ -2420,6 +2420,120 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Track Popularity Compact */
+        .track-popularity-compact {
+            background: linear-gradient(135deg, #fff 0%, #fef7f4 100%);
+            border: 1px solid rgba(255, 107, 53, 0.15);
+            border-radius: 16px;
+            padding: 24px 32px;
+            margin-top: 24px;
+            grid-column: 1 / -1;
+        }
+
+        .track-popularity-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .track-popularity-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+        }
+
+        .track-popularity-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .track-stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: white;
+            border-radius: 100px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            font-size: 0.9rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .track-stat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .track-stat-icon {
+            font-size: 1rem;
+        }
+
+        .track-stat-count {
+            font-weight: 800;
+            color: var(--accent-color);
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .track-stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .total-applications {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .total-applications strong {
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 768px) {
+            .track-popularity-compact {
+                padding: 20px;
+            }
+
+            .track-popularity-header {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .track-stat-item {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+        }
     </style>
     <style>
         /* Announcement Bar */
@@ -2795,6 +2909,21 @@
                         <p>Identify any financial barrier not covered above—childcare costs, food insecurity, mental
                             health access, student debt, or another issue impacting your community.</p>
                     </details>
+
+                    <!-- Track Popularity Compact Display -->
+                    <div class="track-popularity-compact" id="track-popularity-compact">
+                        <div class="track-popularity-header">
+                            <div class="track-popularity-title">
+                                <span class="live-dot"></span>
+                                <span>📊 Track Interest</span>
+                            </div>
+                            <div class="total-applications" id="total-apps-compact">Loading...</div>
+                        </div>
+                        <div class="track-popularity-stats" id="track-stats-compact">
+                            <!-- Populated by JavaScript -->
+                        </div>
+                    </div>
+
                     <div class="track-card-cta">
                         <div class="track-icon">🚀</div>
                         <h3>Ready to Compete?</h3>
@@ -3632,6 +3761,70 @@
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(reset, 300);
             });
+        })();
+    </script>
+
+    <!-- Track Popularity Script -->
+    <script>
+        (function () {
+            const TRACK_STATS_URL = 'https://script.google.com/macros/s/AKfycbxRdSmCvCa4Yhc1OzsALlwcmlh1eKOH4nLypWFNWcyp3W85rXs7DxQJRGglPbPdKmbvdg/exec?action=getTrackStats';
+            const statsContainer = document.getElementById('track-stats-compact');
+            const totalAppsEl = document.getElementById('total-apps-compact');
+
+            const trackIcons = {
+                'Transportation': '🚗',
+                'Housing Affordability': '🏠',
+                'Healthcare Access': '🏥',
+                'Open Track': '🌟',
+                'Literacy & Investment Access': '📚'
+            };
+
+            const trackShortNames = {
+                'Transportation': 'Transport',
+                'Housing Affordability': 'Housing',
+                'Healthcare Access': 'Healthcare',
+                'Open Track': 'Open',
+                'Literacy & Investment Access': 'Literacy'
+            };
+
+            async function loadTrackStats() {
+                try {
+                    const response = await fetch(TRACK_STATS_URL);
+                    const data = await response.json();
+
+                    if (data && data.tracks) {
+                        renderStats(data.tracks, data.total);
+                    }
+                } catch (error) {
+                    console.log('Could not load track stats');
+                    // Show fallback
+                    statsContainer.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem;">Stats loading...</span>';
+                }
+            }
+
+            function renderStats(tracks, total) {
+                let html = '';
+                for (const [track, count] of Object.entries(tracks)) {
+                    const icon = trackIcons[track] || '📊';
+                    const shortName = trackShortNames[track] || track;
+                    html += `
+                        <div class="track-stat-item">
+                            <span class="track-stat-icon">${icon}</span>
+                            <span class="track-stat-count">${count}</span>
+                            <span class="track-stat-label">${shortName}</span>
+                        </div>
+                    `;
+                }
+                statsContainer.innerHTML = html;
+                totalAppsEl.innerHTML = `<strong>${total}</strong> teams applied`;
+            }
+
+            // Load on page ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', loadTrackStats);
+            } else {
+                loadTrackStats();
+            }
         })();
     </script>
 
