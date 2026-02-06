@@ -2421,7 +2421,7 @@
             }
         }
 
-        /* Track Popularity Compact */
+        /* Track Popularity with Progress Bars */
         .track-popularity-compact {
             background: linear-gradient(135deg, #fff 0%, #fef7f4 100%);
             border: 1px solid rgba(255, 107, 53, 0.15);
@@ -2435,14 +2435,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .track-popularity-title {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: var(--text-color);
         }
@@ -2464,49 +2464,93 @@
             }
 
             50% {
-                opacity: 0.5;
-                transform: scale(0.8);
+                opacity: 0.7;
+                transform: scale(1.2);
             }
         }
 
-        .track-popularity-stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            justify-content: center;
-        }
-
-        .track-stat-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: white;
-            border-radius: 100px;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            font-size: 0.9rem;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .track-stat-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .track-stat-icon {
-            font-size: 1rem;
-        }
-
-        .track-stat-count {
-            font-weight: 800;
-            color: var(--accent-color);
-            min-width: 20px;
-            text-align: center;
-        }
-
-        .track-stat-label {
+        .track-stats-subtitle {
+            font-size: 0.75rem;
             color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .track-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .track-item {
+            display: grid;
+            grid-template-columns: 120px 1fr auto;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .track-name {
             font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .track-bar-container {
+            height: 20px;
+            background: rgba(0, 0, 0, 0.04);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .track-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-light) 100%);
+            border-radius: 10px;
+            transition: width 1s ease-out;
+            min-width: 2px;
+            position: relative;
+        }
+
+        .track-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .track-count {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            min-width: 45px;
+            text-align: right;
+        }
+
+        .track-stats-footer {
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .total-applications {
@@ -2516,6 +2560,7 @@
 
         .total-applications strong {
             color: var(--accent-color);
+            font-weight: 700;
         }
 
         @media (max-width: 768px) {
@@ -2525,13 +2570,21 @@
 
             .track-popularity-header {
                 flex-direction: column;
-                gap: 8px;
+                gap: 4px;
                 text-align: center;
             }
 
-            .track-stat-item {
-                padding: 6px 12px;
-                font-size: 0.85rem;
+            .track-item {
+                grid-template-columns: 90px 1fr auto;
+                gap: 0.5rem;
+            }
+
+            .track-name {
+                font-size: 0.75rem;
+            }
+
+            .track-bar-container {
+                height: 16px;
             }
         }
     </style>
@@ -2917,17 +2970,55 @@
                             Now →</a>
                     </div>
 
-                    <!-- Track Popularity Compact Display -->
+                    <!-- Track Popularity with Progress Bars -->
                     <div class="track-popularity-compact" id="track-popularity-compact">
                         <div class="track-popularity-header">
                             <div class="track-popularity-title">
                                 <span class="live-dot"></span>
-                                <span>📊 Track Interest</span>
+                                <span>📊 Track Popularity</span>
                             </div>
-                            <div class="total-applications" id="total-apps-compact">Loading...</div>
+                            <span class="track-stats-subtitle">Live submissions</span>
                         </div>
-                        <div class="track-popularity-stats" id="track-stats-compact">
-                            <!-- Populated by JavaScript -->
+                        <div class="track-list" id="track-stats-compact">
+                            <div class="track-item" data-track="Transportation">
+                                <span class="track-name">🚗 Transportation</span>
+                                <div class="track-bar-container">
+                                    <div class="track-bar" style="width: 0%"></div>
+                                </div>
+                                <span class="track-count">--</span>
+                            </div>
+                            <div class="track-item" data-track="Housing Affordability">
+                                <span class="track-name">🏠 Housing</span>
+                                <div class="track-bar-container">
+                                    <div class="track-bar" style="width: 0%"></div>
+                                </div>
+                                <span class="track-count">--</span>
+                            </div>
+                            <div class="track-item" data-track="Healthcare Access">
+                                <span class="track-name">🏥 Healthcare</span>
+                                <div class="track-bar-container">
+                                    <div class="track-bar" style="width: 0%"></div>
+                                </div>
+                                <span class="track-count">--</span>
+                            </div>
+                            <div class="track-item" data-track="Open Track">
+                                <span class="track-name">🌟 Open Track</span>
+                                <div class="track-bar-container">
+                                    <div class="track-bar" style="width: 0%"></div>
+                                </div>
+                                <span class="track-count">--</span>
+                            </div>
+                            <div class="track-item" data-track="Literacy & Investment Access">
+                                <span class="track-name">📚 Literacy</span>
+                                <div class="track-bar-container">
+                                    <div class="track-bar" style="width: 0%"></div>
+                                </div>
+                                <span class="track-count">--</span>
+                            </div>
+                        </div>
+                        <div class="track-stats-footer">
+                            <span class="total-applications"><strong id="total-apps-compact">--</strong> total
+                                applications</span>
                         </div>
                     </div>
                 </div>
@@ -3771,52 +3862,44 @@
             const statsContainer = document.getElementById('track-stats-compact');
             const totalAppsEl = document.getElementById('total-apps-compact');
 
-            const trackIcons = {
-                'Transportation': '🚗',
-                'Housing Affordability': '🏠',
-                'Healthcare Access': '🏥',
-                'Open Track': '🌟',
-                'Literacy & Investment Access': '📚'
-            };
-
-            const trackShortNames = {
-                'Transportation': 'Transport',
-                'Housing Affordability': 'Housing',
-                'Healthcare Access': 'Healthcare',
-                'Open Track': 'Open',
-                'Literacy & Investment Access': 'Literacy'
-            };
-
             async function loadTrackStats() {
                 try {
                     const response = await fetch(TRACK_STATS_URL);
                     const data = await response.json();
 
                     if (data && data.tracks) {
-                        renderStats(data.tracks, data.total);
+                        updateBars(data.tracks, data.total);
                     }
                 } catch (error) {
                     console.log('Could not load track stats');
-                    // Show fallback
-                    statsContainer.innerHTML = '<span style="color: var(--text-muted); font-size: 0.85rem;">Stats loading...</span>';
                 }
             }
 
-            function renderStats(tracks, total) {
-                let html = '';
-                for (const [track, count] of Object.entries(tracks)) {
-                    const icon = trackIcons[track] || '📊';
-                    const shortName = trackShortNames[track] || track;
-                    html += `
-                        <div class="track-stat-item">
-                            <span class="track-stat-icon">${icon}</span>
-                            <span class="track-stat-count">${count}</span>
-                            <span class="track-stat-label">${shortName}</span>
-                        </div>
-                    `;
-                }
-                statsContainer.innerHTML = html;
-                totalAppsEl.innerHTML = `<strong>${total}</strong> teams applied`;
+            function updateBars(tracks, total) {
+                const maxCount = Math.max(...Object.values(tracks), 1);
+
+                // Update each track bar
+                const trackItems = statsContainer.querySelectorAll('.track-item');
+                trackItems.forEach(item => {
+                    const trackName = item.dataset.track;
+                    const count = tracks[trackName] || 0;
+                    const bar = item.querySelector('.track-bar');
+                    const countEl = item.querySelector('.track-count');
+
+                    // Calculate percentage (min 5% for visibility if count > 0)
+                    const percentage = count > 0 ? Math.max((count / maxCount) * 100, 8) : 0;
+
+                    // Animate the bar
+                    setTimeout(() => {
+                        bar.style.width = percentage + '%';
+                    }, 100);
+
+                    // Update count text
+                    countEl.textContent = count + ' team' + (count !== 1 ? 's' : '');
+                });
+
+                // Update total
+                totalAppsEl.textContent = total;
             }
 
             // Load on page ready
