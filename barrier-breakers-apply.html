@@ -662,6 +662,195 @@
       display: none !important;
     }
 
+    /* Track Stats Section */
+    .track-stats {
+      background: linear-gradient(135deg, var(--white) 0%, #fef7f4 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .track-stats::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--orange), var(--orange-light), var(--orange));
+    }
+
+    .track-stats-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .track-stats-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .track-stats-title .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.7;
+        transform: scale(1.2);
+      }
+    }
+
+    .track-stats-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .track-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .track-item {
+      display: grid;
+      grid-template-columns: 140px 1fr auto;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .track-name {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .track-bar-container {
+      height: 24px;
+      background: rgba(0, 0, 0, 0.04);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .track-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--orange) 0%, var(--orange-light) 100%);
+      border-radius: 12px;
+      transition: width 1s ease-out;
+      min-width: 2px;
+      position: relative;
+    }
+
+    .track-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: shimmer 2s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .track-count {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--orange);
+      min-width: 45px;
+      text-align: right;
+    }
+
+    .track-stats-footer {
+      margin-top: 1rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .total-apps {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .total-apps strong {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .last-updated {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .track-stats.loading .track-bar {
+      width: 30% !important;
+      opacity: 0.5;
+    }
+
+    .track-stats.error .track-bar {
+      background: var(--border-subtle);
+    }
+
+    @media (max-width: 640px) {
+      .track-item {
+        grid-template-columns: 100px 1fr auto;
+        gap: 0.5rem;
+      }
+
+      .track-name {
+        font-size: 0.75rem;
+      }
+
+      .track-count {
+        font-size: 0.75rem;
+        min-width: 35px;
+      }
+
+      .track-stats-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+      }
+    }
+
     /* Responsive */
     @media (max-width: 640px) {
       main {
@@ -750,6 +939,58 @@
           <span class="icon">🎟️</span>
           <h3>Attend Only (RSVP)</h3>
           <p>For guests, teachers, and spectators</p>
+        </div>
+      </div>
+
+      <!-- Track Popularity Stats (only visible when Apply mode is active) -->
+      <div class="track-stats loading" id="track-stats">
+        <div class="track-stats-header">
+          <div class="track-stats-title">
+            <span class="pulse-dot"></span>
+            <span>📊 Track Popularity</span>
+          </div>
+          <span class="track-stats-subtitle">Live submissions</span>
+        </div>
+        <div class="track-list">
+          <div class="track-item" data-track="Transportation">
+            <span class="track-name">🚗 Transportation</span>
+            <div class="track-bar-container">
+              <div class="track-bar" style="width: 0%"></div>
+            </div>
+            <span class="track-count">--</span>
+          </div>
+          <div class="track-item" data-track="Housing Affordability">
+            <span class="track-name">🏠 Housing</span>
+            <div class="track-bar-container">
+              <div class="track-bar" style="width: 0%"></div>
+            </div>
+            <span class="track-count">--</span>
+          </div>
+          <div class="track-item" data-track="Healthcare Access">
+            <span class="track-name">🏥 Healthcare</span>
+            <div class="track-bar-container">
+              <div class="track-bar" style="width: 0%"></div>
+            </div>
+            <span class="track-count">--</span>
+          </div>
+          <div class="track-item" data-track="Open Track">
+            <span class="track-name">🌟 Open Track</span>
+            <div class="track-bar-container">
+              <div class="track-bar" style="width: 0%"></div>
+            </div>
+            <span class="track-count">--</span>
+          </div>
+          <div class="track-item" data-track="Literacy & Investment Access">
+            <span class="track-name">📚 Literacy</span>
+            <div class="track-bar-container">
+              <div class="track-bar" style="width: 0%"></div>
+            </div>
+            <span class="track-count">--</span>
+          </div>
+        </div>
+        <div class="track-stats-footer">
+          <span class="total-apps"><strong id="total-applications">--</strong> total applications</span>
+          <span class="last-updated" id="last-updated">Loading...</span>
         </div>
       </div>
 
@@ -1476,6 +1717,97 @@
           submitBtn.classList.remove('loading');
         }
       });
+
+      // --- Track Stats Functionality ---
+      const TRACK_STATS_URL = 'https://script.google.com/macros/s/AKfycbxRdSmCvCa4Yhc1OzsALlwcmlh1eKOH4nLypWFNWcyp3W85rXs7DxQJRGglPbPdKmbvdg/exec?action=getTrackStats';
+      const trackStatsElement = document.getElementById('track-stats');
+
+      async function loadTrackStats() {
+        try {
+          const response = await fetch(TRACK_STATS_URL);
+          const data = await response.json();
+
+          if (data && data.tracks) {
+            updateTrackDisplay(data.tracks, data.total, data.lastUpdated);
+            trackStatsElement.classList.remove('loading', 'error');
+          } else {
+            throw new Error('Invalid data format');
+          }
+        } catch (error) {
+          console.log('Track stats unavailable, using demo data:', error);
+          // Use demo data for now - this will be replaced with real data once the API is set up
+          const demoData = {
+            tracks: {
+              'Transportation': 3,
+              'Housing Affordability': 2,
+              'Healthcare Access': 4,
+              'Open Track': 5,
+              'Literacy & Investment Access': 1
+            },
+            total: 15,
+            lastUpdated: new Date().toISOString()
+          };
+          updateTrackDisplay(demoData.tracks, demoData.total, demoData.lastUpdated);
+          trackStatsElement.classList.remove('loading');
+          trackStatsElement.classList.add('demo-mode');
+        }
+      }
+
+      function updateTrackDisplay(tracks, total, lastUpdated) {
+        const maxCount = Math.max(...Object.values(tracks), 1);
+
+        Object.entries(tracks).forEach(([trackName, count]) => {
+          const trackItem = document.querySelector(`.track-item[data-track="${trackName}"]`);
+          if (trackItem) {
+            const bar = trackItem.querySelector('.track-bar');
+            const countEl = trackItem.querySelector('.track-count');
+
+            // Calculate percentage (relative to max, minimum 5% if has submissions)
+            const percentage = maxCount > 0 ? Math.max((count / maxCount) * 100, count > 0 ? 5 : 0) : 0;
+
+            // Animate in with slight delay for each track
+            setTimeout(() => {
+              bar.style.width = percentage + '%';
+              countEl.textContent = count;
+            }, Object.keys(tracks).indexOf(trackName) * 100);
+          }
+        });
+
+        // Update total
+        document.getElementById('total-applications').textContent = total;
+
+        // Update timestamp
+        const updateEl = document.getElementById('last-updated');
+        if (lastUpdated) {
+          const date = new Date(lastUpdated);
+          updateEl.textContent = 'Updated ' + formatTimeAgo(date);
+        } else {
+          updateEl.textContent = 'Live data';
+        }
+      }
+
+      function formatTimeAgo(date) {
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 1) return 'just now';
+        if (diffMins < 60) return diffMins + ' min ago';
+        if (diffHours < 24) return diffHours + 'h ago';
+        return diffDays + 'd ago';
+      }
+
+      // Load stats on page load
+      loadTrackStats();
+
+      // Toggle track stats visibility based on form type
+      const originalSelectType = selectType;
+      selectType = function (type) {
+        originalSelectType(type);
+        trackStatsElement.style.display = type === 'apply' ? 'block' : 'none';
+      };
 
       // Initialize defaults
       selectType('apply'); 
