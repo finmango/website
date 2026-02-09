@@ -85,7 +85,7 @@ function showDashboard() {
     document.getElementById('successOverlay').style.display = 'none';
     document.getElementById('form-view').classList.remove('active');
     document.getElementById('dashboard-view').classList.add('active');
-    document.getElementById('nav-action').innerHTML = `<a href="../barrier-breakers.html" class="back-link">Exit</a>`;
+    document.getElementById('nav-action').innerHTML = `<a href="/barrier-breakers.html" class="back-link">Exit</a>`;
     renderDashboard();
     window.scrollTo(0, 0);
 }
