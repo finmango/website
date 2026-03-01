@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Judges Portal - Barrier Breakers 2026</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --black: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --orange: #FF6B35;
+            --orange-hover: #e55a2b;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--black);
+            min-height: 100vh;
+        }
+
+        /* ===== PASSWORD ===== */
+        .pw-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.4s;
+        }
+
+        .pw-overlay.gone {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .pw-box {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .pw-box img {
+            height: 40px;
+            margin-bottom: 1.5rem;
+        }
+
+        .pw-box h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 0.35rem;
+        }
+
+        .pw-box p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .pw-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .pw-row input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            text-align: center;
+            outline: none;
+        }
+
+        .pw-row input:focus {
+            border-color: var(--orange);
+        }
+
+        .pw-row button {
+            padding: 0.75rem 1.25rem;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .pw-err {
+            color: #EF4444;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* ===== NAV ===== */
+        .top-bar {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-bar img {
+            height: 28px;
+        }
+
+        .top-bar a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .top-bar a:hover {
+            color: var(--orange);
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .page-header p {
+            color: var(--muted);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* ===== TRACK TABS ===== */
+        .track-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .track-tab {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--white);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+
+        .track-tab:hover {
+            border-color: var(--black);
+        }
+
+        .track-tab.active {
+            background: var(--black);
+            color: var(--white);
+            border-color: var(--black);
+        }
+
+        .track-count {
+            font-size: 0.75rem;
+            opacity: 0.6;
+            margin-left: 0.15rem;
+        }
+
+        /* ===== LOADING / ERROR ===== */
+        .status-msg {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--muted);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--orange);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-bottom: 0.75rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ===== SUBMISSION CARDS ===== */
+        .cards {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            transition: border-color 0.15s;
+        }
+
+        .card:hover {
+            border-color: var(--orange);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .team-name {
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+
+        .school {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 0.15rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* ===== FAVORITE BUTTON ===== */
+        .fav-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.3rem;
+            line-height: 1;
+            padding: 0.15rem;
+            opacity: 0.25;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+
+        .fav-btn:hover {
+            opacity: 0.6;
+            transform: scale(1.15);
+        }
+
+        .fav-btn.active {
+            opacity: 1;
+        }
+
+        .card.favorited {
+            border-color: #F59E0B;
+            border-width: 2px;
+        }
+
+        .track-tab.fav-tab {
+            background: #FFFBEB;
+            border-color: #F59E0B;
+            color: #92400E;
+        }
+
+        .track-tab.fav-tab.active {
+            background: #F59E0B;
+            color: white;
+            border-color: #F59E0B;
+        }
+
+        .badge-transport {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .badge-housing {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .badge-health {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .badge-open {
+            background: #EDE9FE;
+            color: #5B21B6;
+        }
+
+        .badge-literacy {
+            background: #FFE4E6;
+            color: #9F1239;
+        }
+
+        .summary {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        .field {
+            margin-bottom: 0.6rem;
+        }
+
+        .field-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            margin-bottom: 0.15rem;
+        }
+
+        .field-text {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: #334155;
+        }
+
+        /* Show more / less */
+        .more-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--orange);
+            padding: 0.25rem 0;
+            margin-top: 0.25rem;
+        }
+
+        .more-btn:hover {
+            color: var(--orange-hover);
+        }
+
+        .more-content {
+            display: none;
+            margin-top: 0.5rem;
+        }
+
+        .more-content.open {
+            display: block;
+        }
+
+        .more-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem;
+        }
+
+        .members-row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .video-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+            padding: 0.3rem 0.6rem;
+            background: #FFF7ED;
+            border: 1px solid #FDBA74;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #C2410C;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .video-link:hover {
+            background: #FFEDD5;
+        }
+
+        .results-text {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 0.75rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .card-top {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .more-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 1.25rem;
+            }
+
+            .track-tab {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.75rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Password -->
+    <div class="pw-overlay" id="pwOverlay">
+        <div class="pw-box">
+            <img src="finmango.png" alt="FinMango">
+            <h2>Judges Portal</h2>
+            <p>Enter the access code to view submissions.</p>
+            <div class="pw-row">
+                <input type="password" id="pwInput" placeholder="Access code" autocomplete="off">
+                <button onclick="unlock()">Go</button>
+            </div>
+            <div class="pw-err" id="pwErr">Incorrect code.</div>
+        </div>
+    </div>
+
+    <!-- Nav -->
+    <div class="top-bar">
+        <img src="finmango.png" alt="FinMango">
+        <a href="barrier-breakers.html">← Back to Event</a>
+    </div>
+
+    <!-- Main -->
+    <div class="container">
+        <div class="page-header">
+            <h1>📋 Team Submissions</h1>
+            <p>Barrier Breakers 2026 — Review applications by track</p>
+        </div>
+
+        <!-- Track Tabs -->
+        <div class="track-tabs" id="trackTabs"></div>
+        <div id="favInfo"
+            style="text-align:center;font-size:0.8rem;color:var(--muted);margin-bottom:1rem;display:none;">⭐ Click the
+            star on any card to save your favorites</div>
+
+        <!-- Results -->
+        <div class="results-text" id="resultsText"></div>
+
+        <!-- Cards -->
+        <div class="cards" id="cardsContainer">
+            <div class="status-msg" id="statusMsg">
+                <div class="spinner"></div>
+                <p>Loading submissions...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIG =====
+        const SHEET_ID = '1b5r4qXGzrrGQToc3TuIHVi_bMaMJgqXzn_a-CuQ4Fr8';
+        const PASSWORD = 'mango'; // Same as existing judges portal
+
+        let allData = [];
+        let activeTrack = 'all';
+        let favorites = JSON.parse(localStorage.getItem('bb_favs') || '[]');
+
+        // ===== AUTH =====
+        function unlock() {
+            if (document.getElementById('pwInput').value.toLowerCase() === PASSWORD) {
+                document.getElementById('pwOverlay').classList.add('gone');
+                sessionStorage.setItem('j_auth', '1');
+                loadData();
+            } else {
+                document.getElementById('pwErr').style.display = 'block';
+            }
+        }
+        document.getElementById('pwInput').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+        if (sessionStorage.getItem('j_auth') === '1') {
+            document.getElementById('pwOverlay').classList.add('gone');
+            loadData();
+        }
+
+        // ===== LOAD DATA =====
+        async function loadData() {
+            const el = document.getElementById('cardsContainer');
+            el.innerHTML = '<div class="status-msg"><div class="spinner"></div><p>Loading submissions...</p></div>';
+
+            try {
+                const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+                const res = await fetch(url);
+                const txt = await res.text();
+                const json = txt.replace(/^.*google\.visualization\.Query\.setResponse\(/, '').replace(/\);?\s*$/, '');
+                const data = JSON.parse(json);
+
+                allData = data.table.rows.map(row => {
+                    const c = row.c;
+                    const g = i => (c[i] && c[i].v != null) ? String(c[i].v).trim() : '';
+                    return {
+                        teamName: g(1), teamSize: g(2), school: g(3),
+                        m1: g(5), m1g: g(7), m2: g(8), m2g: g(10), m3: g(11), m3g: g(13),
+                        track: g(14), summary: g(15), problem: g(16), solution: g(17),
+                        whyYou: g(18), progress: g(19), video: g(20), extra: g(21),
+                        teacher: g(22), teacherEmail: g(23),
+                    };
+                }).filter(s => s.teamName);
+
+                buildTabs();
+                render();
+            } catch (err) {
+                el.innerHTML = `<div class="status-msg"><p>⚠️ Could not load data. Make sure the sheet is shared publicly.</p><p style="font-size:0.8rem;margin-top:0.5rem;opacity:0.6">${err.message}</p></div>`;
+            }
+        }
+
+        // ===== TABS =====
+        function buildTabs() {
+            const tracks = {};
+            allData.forEach(s => { const t = norm(s.track); tracks[t] = (tracks[t] || 0) + 1; });
+
+            let html = `<button class="track-tab active" onclick="setTrack('all',this)">All <span class="track-count">(${allData.length})</span></button>`;
+            const order = ['Transportation', 'Housing Affordability', 'Healthcare Access', 'Open Track', 'Literacy & Investment Access'];
+            order.forEach(t => {
+                const n = norm(t);
+                const count = tracks[n] || 0;
+                if (count > 0) {
+                    const icon = getIcon(n);
+                    const short = t.replace(' Affordability', '').replace(' Access', '').replace(' & Investment Access', '').replace(' Track', '');
+                    html += `<button class="track-tab" onclick="setTrack('${n}',this)">${icon} ${short} <span class="track-count">(${count})</span></button>`;
+                }
+            });
+            const favCount = allData.filter(s => favorites.includes(s.teamName)).length;
+            html += `<button class="track-tab fav-tab" onclick="setTrack('favorites',this)">⭐ Favorites <span class="track-count">(${favCount})</span></button>`;
+            document.getElementById('trackTabs').innerHTML = html;
+            document.getElementById('favInfo').style.display = favCount === 0 ? 'block' : 'none';
+        }
+
+        function setTrack(t, btn) {
+            activeTrack = t;
+            document.querySelectorAll('.track-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            render();
+        }
+
+        // ===== RENDER =====
+        function render() {
+            let filtered;
+            if (activeTrack === 'all') filtered = allData;
+            else if (activeTrack === 'favorites') filtered = allData.filter(s => favorites.includes(s.teamName));
+            else filtered = allData.filter(s => norm(s.track) === activeTrack);
+            document.getElementById('resultsText').textContent = `${filtered.length} submission${filtered.length !== 1 ? 's' : ''}`;
+
+            if (!filtered.length) {
+                document.getElementById('cardsContainer').innerHTML = '<div class="status-msg"><p>No submissions in this track yet.</p></div>';
+                return;
+            }
+
+            document.getElementById('cardsContainer').innerHTML = filtered.map((s, i) => card(s, i)).join('');
+        }
+
+        function card(s, i) {
+            const bc = badgeClass(s.track);
+            const icon = getIcon(norm(s.track));
+            const members = [s.m1, s.m2, s.m3].filter(Boolean);
+            const hasVideo = s.video && s.video.startsWith('http');
+            const isFav = favorites.includes(s.teamName);
+
+            return `
+        <div class="card${isFav ? ' favorited' : ''}">
+          <div class="card-top">
+            <div>
+              <div class="team-name">${esc(s.teamName)}</div>
+              <div class="school">🏫 ${esc(s.school || 'N/A')} · 👥 ${s.teamSize || members.length}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <span class="badge ${bc}">${icon} ${esc(s.track)}</span>
+              <button class="fav-btn${isFav ? ' active' : ''}" onclick="toggleFav('${esc(s.teamName).replace(/'/g, "\\'")}')"
+                title="${isFav ? 'Remove from favorites' : 'Add to favorites'}">${isFav ? '⭐' : '☆'}</button>
+            </div>
+          </div>
+
+          ${s.summary ? `<div class="summary">"${esc(s.summary)}"</div>` : ''}
+
+          <div class="field">
+            <div class="field-label">Problem</div>
+            <div class="field-text">${esc(s.problem || '—')}</div>
+          </div>
+          <div class="field">
+            <div class="field-label">Solution</div>
+            <div class="field-text">${esc(s.solution || '—')}</div>
+          </div>
+
+          <button class="more-btn" onclick="toggle(this)">▶ More details</button>
+          <div class="more-content">
+            <div class="more-grid">
+              <div class="field">
+                <div class="field-label">Why This Team</div>
+                <div class="field-text">${esc(s.whyYou || '—')}</div>
+              </div>
+              <div class="field">
+                <div class="field-label">Progress</div>
+                <div class="field-text">${esc(s.progress || '—')}</div>
+              </div>
+            </div>
+            ${s.extra ? `<div class="field" style="margin-top:0.5rem"><div class="field-label">Notes</div><div class="field-text">${esc(s.extra)}</div></div>` : ''}
+            ${s.teacher ? `<div class="field" style="margin-top:0.5rem"><div class="field-label">Teacher</div><div class="field-text">${esc(s.teacher)}${s.teacherEmail ? ` · ${esc(s.teacherEmail)}` : ''}</div></div>` : ''}
+            <div class="members-row">
+              ${members.map(m => `<span>👤 ${esc(m)}</span>`).join('')}
+            </div>
+            ${hasVideo ? `<a href="${esc(s.video)}" target="_blank" rel="noopener" class="video-link">🎬 Watch Video</a>` : ''}
+          </div>
+        </div>
+      `;
+        }
+
+        function toggle(btn) {
+            const content = btn.nextElementSibling;
+            const open = content.classList.toggle('open');
+            btn.textContent = open ? '▼ Less details' : '▶ More details';
+        }
+
+        function toggleFav(teamName) {
+            const idx = favorites.indexOf(teamName);
+            if (idx >= 0) favorites.splice(idx, 1);
+            else favorites.push(teamName);
+            localStorage.setItem('bb_favs', JSON.stringify(favorites));
+            buildTabs();
+            render();
+        }
+
+        // ===== HELPERS =====
+        function norm(t) {
+            if (!t) return '';
+            if (t.includes('Transport')) return 'Transportation';
+            if (t.includes('Housing')) return 'Housing Affordability';
+            if (t.includes('Health')) return 'Healthcare Access';
+            if (t.includes('Open')) return 'Open Track';
+            if (t.includes('Liter') || t.includes('Invest')) return 'Literacy & Investment Access';
+            return t;
+        }
+        function getIcon(t) {
+            return { 'Transportation': '🚗', 'Housing Affordability': '🏠', 'Healthcare Access': '🏥', 'Open Track': '🌟', 'Literacy & Investment Access': '📚' }[t] || '📋';
+        }
+        function badgeClass(t) {
+            const n = norm(t);
+            return { 'Transportation': 'badge-transport', 'Housing Affordability': 'badge-housing', 'Healthcare Access': 'badge-health', 'Open Track': 'badge-open', 'Literacy & Investment Access': 'badge-literacy' }[n] || '';
+        }
+        function esc(s) {
+            if (!s) return '';
+            const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+        }
+    </script>
+
+</body>
+
+</html>
