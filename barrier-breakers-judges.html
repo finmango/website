@@ -34,89 +34,6 @@
             min-height: 100vh;
         }
 
-        /* ===== PASSWORD ===== */
-        .pw-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--bg);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.4s;
-        }
-
-        .pw-overlay.gone {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .pw-box {
-            background: var(--white);
-            padding: 2.5rem;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 380px;
-            text-align: center;
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        .pw-box img {
-            height: 40px;
-            margin-bottom: 1.5rem;
-        }
-
-        .pw-box h2 {
-            font-size: 1.3rem;
-            font-weight: 800;
-            margin-bottom: 0.35rem;
-        }
-
-        .pw-box p {
-            color: var(--muted);
-            font-size: 0.9rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .pw-row {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .pw-row input {
-            flex: 1;
-            padding: 0.75rem;
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            font-size: 1rem;
-            font-family: inherit;
-            text-align: center;
-            outline: none;
-        }
-
-        .pw-row input:focus {
-            border-color: var(--orange);
-        }
-
-        .pw-row button {
-            padding: 0.75rem 1.25rem;
-            background: var(--black);
-            color: var(--white);
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: inherit;
-        }
-
-        .pw-err {
-            color: #EF4444;
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-            display: none;
-        }
-
         /* ===== NAV ===== */
         .top-bar {
             background: var(--white);
@@ -464,19 +381,6 @@
 
 <body>
 
-    <!-- Password -->
-    <div class="pw-overlay" id="pwOverlay">
-        <div class="pw-box">
-            <img src="finmango.png" alt="FinMango">
-            <h2>Judges Portal</h2>
-            <p>Enter the access code to view submissions.</p>
-            <div class="pw-row">
-                <input type="password" id="pwInput" placeholder="Access code" autocomplete="off">
-                <button onclick="unlock()">Go</button>
-            </div>
-            <div class="pw-err" id="pwErr">Incorrect code.</div>
-        </div>
-    </div>
 
     <!-- Nav -->
     <div class="top-bar">
@@ -512,27 +416,12 @@
     <script>
         // ===== CONFIG =====
         const SHEET_ID = '1b5r4qXGzrrGQToc3TuIHVi_bMaMJgqXzn_a-CuQ4Fr8';
-        const PASSWORD = 'mango'; // Same as existing judges portal
-
         let allData = [];
         let activeTrack = 'all';
         let favorites = JSON.parse(localStorage.getItem('bb_favs') || '[]');
 
-        // ===== AUTH =====
-        function unlock() {
-            if (document.getElementById('pwInput').value.toLowerCase() === PASSWORD) {
-                document.getElementById('pwOverlay').classList.add('gone');
-                sessionStorage.setItem('j_auth', '1');
-                loadData();
-            } else {
-                document.getElementById('pwErr').style.display = 'block';
-            }
-        }
-        document.getElementById('pwInput').addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
-        if (sessionStorage.getItem('j_auth') === '1') {
-            document.getElementById('pwOverlay').classList.add('gone');
-            loadData();
-        }
+        // Load data immediately (auth handled by /judges/ portal)
+        loadData();
 
         // ===== LOAD DATA =====
         async function loadData() {
