@@ -330,20 +330,54 @@
         .video-link {
             display: inline-flex;
             align-items: center;
-            gap: 0.25rem;
-            margin-top: 0.5rem;
-            padding: 0.3rem 0.6rem;
+            gap: 0.35rem;
+            padding: 0.4rem 0.75rem;
             background: #FFF7ED;
             border: 1px solid #FDBA74;
-            border-radius: 6px;
+            border-radius: 8px;
             text-decoration: none;
             color: #C2410C;
             font-size: 0.8rem;
             font-weight: 600;
+            transition: all 0.15s;
         }
 
         .video-link:hover {
             background: #FFEDD5;
+            transform: translateY(-1px);
+        }
+
+        .link-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px dashed var(--border);
+        }
+
+        .extra-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.35rem 0.65rem;
+            background: #EFF6FF;
+            border: 1px solid #93C5FD;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #1D4ED8;
+            font-size: 0.78rem;
+            font-weight: 600;
+            transition: all 0.15s;
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .extra-link:hover {
+            background: #DBEAFE;
+            transform: translateY(-1px);
         }
 
         .results-text {
@@ -501,6 +535,33 @@
             document.getElementById('cardsContainer').innerHTML = filtered.map((s, i) => card(s, i)).join('');
         }
 
+        // ===== LINK HELPERS =====
+        function extractLinks(text) {
+            if (!text) return [];
+            const urlRegex = /https?:\/\/[^\s,)]+/gi;
+            return (text.match(urlRegex) || []);
+        }
+
+        function hasLinks(text) {
+            return extractLinks(text).length > 0;
+        }
+
+        function linkLabel(url) {
+            try {
+                const host = new URL(url).hostname.replace('www.', '');
+                if (host.includes('youtube') || host.includes('youtu.be')) return 'YouTube Video';
+                if (host.includes('drive.google')) return 'Google Drive';
+                if (host.includes('docs.google')) return 'Google Docs';
+                if (host.includes('canva.com')) return 'Canva';
+                if (host.includes('figma.com')) return 'Figma';
+                if (host.includes('github.com')) return 'GitHub';
+                if (host.includes('tiktok.com')) return 'TikTok';
+                if (host.includes('instagram.com')) return 'Instagram';
+                if (host.includes('linkedin.com')) return 'LinkedIn';
+                return host.split('.')[0].charAt(0).toUpperCase() + host.split('.')[0].slice(1);
+            } catch { return 'Link'; }
+        }
+
         function card(s, i) {
             const bc = badgeClass(s.track);
             const icon = getIcon(norm(s.track));
@@ -533,6 +594,12 @@
             <div class="field-text">${esc(s.solution || '—')}</div>
           </div>
 
+          ${(hasVideo || hasLinks(s.extra)) ? `
+          <div class="link-pills">
+            ${hasVideo ? `<a href="${esc(s.video)}" target="_blank" rel="noopener" class="video-link">🎬 Watch Video</a>` : ''}
+            ${extractLinks(s.extra).map(url => `<a href="${esc(url)}" target="_blank" rel="noopener" class="extra-link">🔗 ${linkLabel(url)}</a>`).join('')}
+          </div>` : ''}
+
           <button class="more-btn" onclick="toggle(this)">▶ More details</button>
           <div class="more-content">
             <div class="more-grid">
@@ -545,12 +612,11 @@
                 <div class="field-text">${esc(s.progress || '—')}</div>
               </div>
             </div>
-            ${s.extra ? `<div class="field" style="margin-top:0.5rem"><div class="field-label">Notes</div><div class="field-text">${esc(s.extra)}</div></div>` : ''}
+            ${s.extra ? `<div class="field" style="margin-top:0.5rem"><div class="field-label">Additional Notes</div><div class="field-text">${esc(s.extra)}</div></div>` : ''}
             ${s.teacher ? `<div class="field" style="margin-top:0.5rem"><div class="field-label">Teacher</div><div class="field-text">${esc(s.teacher)}${s.teacherEmail ? ` · ${esc(s.teacherEmail)}` : ''}</div></div>` : ''}
             <div class="members-row">
               ${members.map(m => `<span>👤 ${esc(m)}</span>`).join('')}
             </div>
-            ${hasVideo ? `<a href="${esc(s.video)}" target="_blank" rel="noopener" class="video-link">🎬 Watch Video</a>` : ''}
           </div>
         </div>
       `;
