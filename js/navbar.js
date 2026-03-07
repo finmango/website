@@ -86,7 +86,7 @@
 
         if (!announcementBar || !closeBtn) return;
 
-        var storageKey = 'barrierBreakersAnnouncementClosedAt_v4';
+        var storageKey = 'barrierBreakersAnnouncementClosedAt_v5';
         var expiryHours = 24;
 
         // Check if user has closed it and if 24 hours have passed
