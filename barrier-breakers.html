@@ -2630,7 +2630,7 @@
         /* ===== Judges Section ===== */
         .judges-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 28px;
             margin-top: 48px;
         }
@@ -2725,6 +2725,12 @@
             border-left: 3px solid var(--accent-color);
             text-align: left;
             position: relative;
+            display: none;
+            margin-top: 8px;
+        }
+
+        .judge-quote.active {
+            display: block;
         }
 
         .judge-quote::before {
@@ -2737,6 +2743,33 @@
             opacity: 0.3;
             font-family: Georgia, serif;
             line-height: 1;
+        }
+
+        .judge-quote-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.78rem;
+            color: var(--accent-color);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-weight: 600;
+            padding: 4px 0;
+            transition: opacity 0.2s;
+        }
+
+        .judge-quote-toggle:hover {
+            opacity: 0.7;
+        }
+
+        .judge-quote-toggle .toggle-arrow {
+            transition: transform 0.2s;
+            font-size: 0.7rem;
+        }
+
+        .judge-quote-toggle.active .toggle-arrow {
+            transform: rotate(90deg);
         }
 
         @media (max-width: 1024px) {
@@ -3266,12 +3299,40 @@
                 </div>
 
                 <div class="judges-grid">
+                    <!-- Cass Lacey -->
+                    <div class="judge-card">
+                        <img src="Cass Lacey.jpg" alt="Cass Lacey" class="judge-photo" loading="lazy">
+                        <div class="judge-name">Cass Lacey</div>
+                        <div class="judge-title">Early Talent Program Manager</div>
+                        <div class="judge-credential">&nbsp;</div>
+                        <button class="judge-quote-toggle" onclick="toggleJudgeQuote(this)">Why financial health matters <span class="toggle-arrow">▶</span></button>
+                        <div class="judge-quote">
+                            Financial health matters to me because it helps create stability and security for families. Having a strong financial foundation means being prepared for the unexpected and knowing the people I care about are protected. It also allows us to plan with confidence and focus on what matters most — time together and long-term well-being.
+                        </div>
+                    </div>
+
+                    <!-- Mia Fawls -->
+                    <div class="judge-card">
+                        <img src="Mia Fawls.jpg" alt="Mia Fawls" class="judge-photo" loading="lazy">
+                        <div class="judge-name">Mia Fawls</div>
+                        <div class="judge-title">Associate Financial Planner</div>
+                        <div class="judge-credential">&nbsp;</div>
+                        <button class="judge-quote-toggle" onclick="toggleJudgeQuote(this)">Why financial health matters <span class="toggle-arrow">▶</span></button>
+                        <div class="judge-quote">
+                            Financial health knowledge matters to me because many people tend to focus only on the present and don't always realize how important it is to prepare for the future. Understanding concepts like saving, managing debt, and planning for retirement early in life can set people up for long-term success. When your financial health is strong, it can create more opportunities and flexibility in both your career and personal life.
+                        </div>
+                    </div>
+
                     <!-- Drew Mallott -->
                     <div class="judge-card">
                         <img src="Drew Mallott.jpg" alt="Drew Mallott" class="judge-photo" loading="lazy">
                         <div class="judge-name">Drew Mallott</div>
                         <div class="judge-title">SVP, Platform Strategy at Bank of America</div>
                         <div class="judge-credential">KSU Grad '04 (Marketing)</div>
+                        <button class="judge-quote-toggle" onclick="toggleJudgeQuote(this)">Why financial health matters <span class="toggle-arrow">▶</span></button>
+                        <div class="judge-quote">
+                            While long-term financial health is a series of individual choices, collectively we can all learn more over time and consistently improve. The earlier positive financial health habits are learned and put into practice, the greater the long-term impact, which is why the work done by FinMango is critical.
+                        </div>
                     </div>
 
                     <!-- Peyton Zachrich -->
@@ -3280,6 +3341,10 @@
                         <div class="judge-name">Peyton Zachrich</div>
                         <div class="judge-title">Owner, Evolve Egress & Exteriors</div>
                         <div class="judge-credential">Entrepreneur & Real Estate Investor</div>
+                        <button class="judge-quote-toggle" onclick="toggleJudgeQuote(this)">Why financial health matters <span class="toggle-arrow">▶</span></button>
+                        <div class="judge-quote">
+                            Financial health matters to me because it can lead to greater agency and freedom in people's lives.
+                        </div>
                     </div>
 
                     <!-- Ryan Bayonnet -->
@@ -3288,6 +3353,10 @@
                         <div class="judge-name">Ryan Bayonnet, CFP®</div>
                         <div class="judge-title">Founder, Hyland Wealth Management</div>
                         <div class="judge-credential">Certified Financial Planner® · Fee-Only RIA</div>
+                        <button class="judge-quote-toggle" onclick="toggleJudgeQuote(this)">Why financial health matters <span class="toggle-arrow">▶</span></button>
+                        <div class="judge-quote">
+                            Financial health matters to me because I've seen firsthand how the right guidance at the right time can transform a family's future. Everyone deserves access to honest, transparent financial advice — not just the wealthy.
+                        </div>
                     </div>
 
                     <!-- Ashley Wasielewski -->
@@ -3296,6 +3365,10 @@
                         <div class="judge-name">Ashley Wasielewski</div>
                         <div class="judge-title">VP, Community Relations Manager – Cleveland, Indianapolis & Wisconsin Markets</div>
                         <div class="judge-credential">Bank of America</div>
+                        <button class="judge-quote-toggle" onclick="toggleJudgeQuote(this)">Why financial health matters <span class="toggle-arrow">▶</span></button>
+                        <div class="judge-quote">
+                            I really believe it is important to learn financial literacy and learn it ASAP. I still remember our program in elementary school. I want to give that experience to others and help them avoid costly mistakes.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -3767,8 +3840,14 @@
         })();
     </script>
 
-    <!-- Shared Navbar JavaScript -->
-    <script src="js/navbar.js"></script>
+    <!-- Judge Quote Toggle -->
+    <script>
+        function toggleJudgeQuote(btn) {
+            var quote = btn.nextElementSibling;
+            btn.classList.toggle('active');
+            quote.classList.toggle('active');
+        }
+    </script>
 
     <!-- Shared Navbar JavaScript -->
     <script src="js/navbar.js"></script>
