@@ -1041,8 +1041,8 @@
                 </div>
 
                 <div class="name-group">
-                    <label for="nameInput">Your Name (optional)</label>
-                    <input type="text" class="name-input" id="nameInput" placeholder="Enter your name" maxlength="60">
+                    <label for="nameInput">Your Name <span style="color:var(--orange)">*</span></label>
+                    <input type="text" class="name-input" id="nameInput" placeholder="Enter your full name" maxlength="60" oninput="checkReady()" required>
                 </div>
 
                 <button class="btn-start" id="btnStart" disabled onclick="startQuiz()">
@@ -1295,7 +1295,12 @@
             participantType = type;
             document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            document.getElementById('btnStart').disabled = false;
+            checkReady();
+        }
+
+        function checkReady() {
+            const nameOk = document.getElementById('nameInput').value.trim().length > 0;
+            document.getElementById('btnStart').disabled = !(participantType && nameOk);
         }
 
         // ===== START QUIZ =====
