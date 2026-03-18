@@ -9,10 +9,10 @@
         content="$20,000+ in prizes. High school students compete at Kent State to solve systemic barriers to financial health.">
     <link rel="icon" type="image/png" href="favicon.png">
 
-    <!-- Fonts -->
+    <!-- Fonts: DM Sans + Caveat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -28,12 +28,15 @@
         :root {
             --bg-color: #fafafa;
             --text-color: #1a1a1a;
-            --text-muted: #555;
+            --text-muted: #5a574f;
             --surface-color: #ffffff;
             --surface-highlight: #f8f9fa;
             --accent-color: #FF6B35;
             --accent-light: #ff8c5a;
             --accent-dim: rgba(255, 107, 53, 0.08);
+            --warm-white: #f9f5f0;
+            --font-accent: 'Caveat', cursive;
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 
             /* Track Colors */
             --transport-color: #4A90D9;
@@ -53,57 +56,36 @@
             --bronze: #CD7F32;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: var(--font-body);
             background: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1050;
-            background: rgba(250, 250, 250, 0.9);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
+        /* ============================================
+           HAND-DRAWN ACCENT LAYER
+           ============================================ */
+        .hand-underline { position: relative; display: inline-block; }
+        .hand-underline svg { position: absolute; bottom: -8px; left: -4%; width: 108%; height: 14px; pointer-events: none; }
+        .squiggle-divider { display: block; margin: 0 auto; width: 120px; height: 12px; opacity: 0.25; }
+        .section-divider-bb { padding: 2rem 0 0; display: flex; justify-content: center; }
 
-        header nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 72px;
-        }
-
+        /* ============================================
+           NAVIGATION
+           ============================================ */
         nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: var(--bg-color);
-            z-index: 1050;
-            padding: 1.5rem 0;
-            transition: all 0.3s ease;
+            position: fixed; top: 0; width: 100%;
+            background: var(--bg-color); z-index: 1050;
+            padding: 1.5rem 0; transition: all 0.3s ease;
             border-bottom: 1px solid rgba(0, 0, 0, 0.06);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
         }
-
         nav.scrolled {
             padding: 1rem 0;
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -111,2954 +93,380 @@
             backdrop-filter: blur(10px);
             background: rgba(250, 250, 250, 0.97);
         }
-
-        .nav-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            transition: transform 0.3s ease;
-            justify-self: start;
-        }
-
-        .logo:hover {
-            transform: rotate(-2deg) scale(1.05);
-        }
-
-        .logo img {
-            height: 46px;
-            transition: height 0.3s ease;
-        }
-
-        nav.scrolled .logo img {
-            height: 38px;
-        }
-
-        .nav-right {
-            display: flex;
-            gap: 1.75rem;
-            align-items: center;
-            justify-self: end;
-        }
-
-        .nav-right a {
-            color: var(--text-color);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.2s ease;
-            position: relative;
-            white-space: nowrap;
-            letter-spacing: -0.01em;
-        }
-
-        .nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent-color);
-            transition: width 0.3s ease;
-        }
-
-        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
-            width: 100%;
-        }
-
-        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
-            color: var(--accent-color);
-        }
-
-        /* Dropdown Styles */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-            height: 100%;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--bg-color);
-            min-width: 240px;
-            box-shadow: 8px 8px 0 var(--text-color);
-            border: 3px solid var(--text-color);
-            z-index: 1001;
-            padding: 0.5rem 0;
-            margin-top: 0;
-        }
-
-        .dropdown::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 10px;
-        }
-
-        .dropdown-content::after {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: 0;
-            width: 100%;
-            height: 15px;
-        }
-
-        .dropdown-content::before {
-            content: '';
-            position: absolute;
-            top: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 0 8px 8px 8px;
-            border-style: solid;
-            border-color: transparent transparent var(--text-color) transparent;
-            z-index: 1002;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-            animation: fadeIn 0.2s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-5px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
-        }
-
-        .dropdown-item {
-            color: var(--text-color) !important;
-            padding: 0.85rem 1.5rem;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.2s ease;
-            font-weight: 600;
-            font-size: 0.95rem !important;
-            text-align: left;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-
-        .nav-right .dropdown-item::after {
-            display: none !important;
-        }
-
-        .dropdown-item:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-            padding-left: 1.75rem;
-            color: var(--accent-color) !important;
-        }
-
-        .mobile-sub-item {
-            font-size: 1.25rem !important;
-            padding: 0.75rem 0 0.75rem 1.5rem !important;
-            font-weight: 500 !important;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-            color: #666 !important;
-        }
-
-        .mobile-sub-item:hover {
-            color: var(--accent-color) !important;
-            padding-left: 2rem !important;
-        }
-
-        .btn-donate {
-            background: var(--accent-color);
-            color: white !important;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.2s ease;
-            border: 2px solid var(--text-color);
-            position: relative;
-            overflow: hidden;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            letter-spacing: 0.01em;
-        }
-
-        .btn-donate::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--text-color);
-            transition: left 0.3s ease;
-            z-index: -1;
-        }
-
-        .btn-donate:hover::before {
-            left: 0;
-        }
-
-        .btn-donate:hover {
-            transform: scale(1.05);
-        }
-
-        .btn-get-involved {
-            background: transparent;
-            color: var(--text-color) !important;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.2s ease;
-            border: 2px solid var(--text-color);
-            position: relative;
-            overflow: hidden;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            letter-spacing: 0.01em;
-        }
-
-        .btn-get-involved::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: var(--text-color);
-            transition: left 0.3s ease;
-            z-index: -1;
-        }
-
-        .btn-get-involved:hover::before {
-            left: 0;
-        }
-
-        .btn-get-involved:hover {
-            color: white !important;
-            transform: scale(1.05);
-        }
-
-        .mobile-controls {
-            display: none;
-            gap: 1rem;
-            align-items: center;
-            justify-self: end;
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-            min-width: 48px;
-            min-height: 48px;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            transition: background 0.3s ease;
-        }
-
-        .mobile-menu-btn:hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 28px;
-            height: 3px;
-            background: var(--text-color);
-            margin: 3px 0;
-            transition: all 0.3s ease;
-            border-radius: 2px;
-        }
-
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-
-        .mobile-get-involved {
-            display: none;
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 100%;
-            height: 100vh;
-            background: var(--bg-color);
-            z-index: 1040;
-            padding: 6rem 2rem;
-            transition: right 0.3s ease;
-            overflow-y: auto;
-        }
-
-        .mobile-menu.active {
-            display: block;
-            right: 0;
-        }
-
-        .mobile-menu a {
-            display: block;
-            padding: 1.5rem 0;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-color);
-            text-decoration: none;
-            border-bottom: 2px solid var(--text-color);
-            transition: all 0.2s ease;
-        }
-
-        .mobile-menu a:hover {
-            color: var(--accent-color);
-            padding-left: 1rem;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            padding: 14px 28px;
-            border-radius: 100px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            text-decoration: none;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-primary {
-            background: var(--text-color);
-            color: white !important;
-        }
-
-        .btn-primary:hover {
-            background: #333;
-            transform: translateY(-2px);
-        }
-
-        .btn-accent {
-            background: var(--accent-color);
-            color: white !important;
-        }
-
-        .btn-accent:hover {
-            background: var(--accent-light);
-            transform: translateY(-2px);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--text-color);
-            border: 2px solid var(--text-color);
-        }
-
-        .btn-outline:hover {
-            background: var(--text-color);
-            color: white;
-        }
-
-        .btn-small {
-            padding: 10px 20px;
-            font-size: 0.85rem;
-        }
-
-        /* Hero */
-        .hero {
-            display: flex;
-            align-items: flex-start;
-            padding-top: 120px;
-            padding-bottom: 64px;
-            position: relative;
-            overflow: hidden;
-            border-left: 8px solid var(--accent-color);
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 64px;
-            align-items: center;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            background: rgba(255, 107, 53, 0.1);
-            color: var(--accent-color);
-            padding: 8px 16px;
-            border-radius: 100px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .hero-meta-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        @media (max-width: 768px) {
-            .hero-meta-row {
-                justify-content: center;
-            }
-        }
-
-        .hero-text h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 24px;
-        }
-
-        .hero-text h1 span {
-            color: var(--accent-color);
-        }
-
-        .hero-text p {
-            font-size: 1.15rem;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-            max-width: 500px;
-        }
-
-        .hero-date {
-            font-size: 1rem;
-            color: var(--text-color);
-            margin-bottom: 32px;
-            font-weight: 500;
-        }
-
-        .hero-date strong {
-            color: var(--accent-color);
-        }
-
-        /* Countdown Timer */
-        .countdown-timer {
-            margin: 20px 0 28px;
-        }
-
-        .countdown-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 10px;
-            font-weight: 500;
-        }
-
-        .countdown-boxes {
-            display: flex;
-            gap: 10px;
-        }
-
-        .countdown-box {
-            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
-            border: 1px solid rgba(255, 107, 53, 0.2);
-            border-radius: 10px;
-            padding: 10px 14px;
-            text-align: center;
-            min-width: 60px;
-        }
-
-        .countdown-value {
-            display: block;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            line-height: 1;
-        }
-
-        .countdown-unit {
-            display: block;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-top: 4px;
-        }
-
-        @media (max-width: 768px) {
-            .hero-text p {
-                font-size: 0.95rem;
-            }
-
-            .countdown-timer {
-                text-align: center;
-            }
-
-            .countdown-boxes {
-                justify-content: center;
-            }
-
-            .countdown-box {
-                padding: 8px 10px;
-                min-width: 50px;
-            }
-
-            .countdown-value {
-                font-size: 1.2rem;
-            }
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-
-
-        /* Sections */
-        section {
-            padding: 64px 0;
-        }
-
-        .section-label {
-            display: inline-block;
-            background: rgba(255, 107, 53, 0.1);
-            color: var(--accent-color);
-            padding: 6px 14px;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 20px;
-        }
-
-        section h2 {
-            font-size: clamp(2rem, 4vw, 2.75rem);
-            font-weight: 800;
-            margin-bottom: 16px;
-            line-height: 1.15;
-        }
-
-        section h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        section p {
-            color: var(--text-muted);
-            max-width: 700px;
-            margin-bottom: 16px;
-        }
-
-        section p a {
-            color: var(--accent-color);
-            text-decoration: none;
-        }
-
-        section p a:hover {
-            text-decoration: underline;
-        }
-
-        /* Timeline */
-        .timeline-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-            margin-top: 64px;
-            position: relative;
-        }
-
-        /* Connector Line */
-        .timeline-grid::before {
-            content: '';
-            position: absolute;
-            top: 40px;
-            left: 16%;
-            right: 16%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-light), var(--accent-color));
-            z-index: 0;
-            border-radius: 4px;
-            opacity: 0.2;
-        }
-
-        .timeline-item {
-            background: white;
-            padding: 32px 24px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative;
-            z-index: 1;
-            border: 1px solid rgba(0, 0, 0, 0.03);
-        }
-
-        .timeline-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        .timeline-item.featured {
-            background: white;
-            border: 2px solid var(--accent-color);
-            transform: scale(1.05);
-            box-shadow: 0 12px 40px rgba(255, 107, 53, 0.15);
-        }
-
-        .timeline-item.featured:hover {
-            transform: scale(1.08) translateY(-4px);
-        }
-
-        .timeline-date {
-            display: inline-block;
-            background: var(--surface-highlight);
-            padding: 8px 16px;
-            border-radius: 100px;
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: var(--accent-color);
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .timeline-item.featured .timeline-date {
-            background: var(--accent-color);
-            color: white;
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
-        }
-
-        .timeline-title {
-            font-size: 1.25rem;
-            font-weight: 800;
-            margin-bottom: 12px;
-            letter-spacing: -0.01em;
-        }
-
-        .timeline-item p {
-            font-size: 0.95rem;
-            margin: 0;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        /* Expandable Track Cards Grid */
-        .tracks-grid-expandable {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-top: 48px;
-        }
-
-        .track-card-expandable {
-            border: none;
-        }
-
-        .track-card-expandable summary {
-            cursor: pointer;
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 36px 24px;
-            background: white;
-            border-radius: 24px;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-        }
-
-        .track-card-expandable summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .track-card-expandable summary:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
-        }
-
-        .track-card-expandable summary .track-icon {
-            font-size: 2rem;
-            margin-bottom: 16px;
-            width: 64px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 140, 90, 0.05));
-            border-radius: 16px;
-        }
-
-        .track-card-expandable summary h3 {
-            margin: 0 0 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .track-card-expandable summary .expand-hint {
-            font-size: 0.75rem;
-            color: var(--accent-color);
-            opacity: 0.8;
-        }
-
-        .track-card-expandable[open] summary {
-            border-radius: 24px 24px 0 0;
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(255, 140, 90, 0.04));
-        }
-
-        .track-card-expandable[open] summary .expand-hint {
-            display: none;
-        }
-
-        .track-card-expandable p {
-            padding: 20px 24px;
-            background: white;
-            border-radius: 0 0 24px 24px;
-            margin: 0;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-            text-align: center;
-        }
-
-        .track-card-cta {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 36px 24px;
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 140, 90, 0.05));
-            border-radius: 24px;
-            border: 2px solid var(--accent-color);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-        }
-
-        .track-card-cta .track-icon {
-            font-size: 2rem;
-            margin-bottom: 16px;
-            width: 64px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 140, 90, 0.1));
-            border-radius: 16px;
-        }
-
-        .track-card-cta h3 {
-            margin: 0 0 16px;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        @media (max-width: 900px) {
-            .tracks-grid-expandable {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .tracks-grid-expandable {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Tracks Grid (legacy) */
-        .tracks-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-top: 56px;
-        }
-
-        .track-card {
-            background: white;
-            padding: 36px 28px;
-            border-radius: 24px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            position: relative;
-            overflow: hidden;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .track-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Hover Gradients & Icons */
-        .track-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 6px;
-            background: var(--text-muted);
-            opacity: 0.2;
-            transition: all 0.3s;
-        }
-
-        .track-icon {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            width: 64px;
-            height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 16px;
-            background: var(--surface-highlight);
-            transition: all 0.3s;
-        }
-
-        /* Specific Track Styles */
-        .track-card.transport:hover::before {
-            background: var(--transport-color);
-            opacity: 1;
-        }
-
-        .track-card.transport:hover .track-icon {
-            background: var(--transport-bg);
-            transform: scale(1.1) rotate(-5deg);
-        }
-
-        .track-card.transport h3 {
-            color: var(--transport-color);
-        }
-
-        .track-card.housing:hover::before {
-            background: var(--housing-color);
-            opacity: 1;
-        }
-
-        .track-card.housing:hover .track-icon {
-            background: var(--housing-bg);
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .track-card.housing h3 {
-            color: var(--housing-color);
-        }
-
-        .track-card.health:hover::before {
-            background: var(--health-color);
-            opacity: 1;
-        }
-
-        .track-card.health:hover .track-icon {
-            background: var(--health-bg);
-            transform: scale(1.1) rotate(-5deg);
-        }
-
-        .track-card.health h3 {
-            color: var(--health-color);
-        }
-
-        .track-card.community:hover::before {
-            background: var(--community-color);
-            opacity: 1;
-        }
-
-        .track-card.community:hover .track-icon {
-            background: var(--community-bg);
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .track-card.community h3 {
-            color: var(--community-color);
-        }
-
-        .track-card.literacy:hover::before {
-            background: var(--literacy-color);
-            opacity: 1;
-        }
-
-        .track-card.literacy:hover .track-icon {
-            background: var(--literacy-bg);
-            transform: scale(1.1) rotate(-5deg);
-        }
-
-        .track-card.literacy h3 {
-            color: var(--literacy-color);
-        }
-
-        .track-card h3 {
-            font-size: 1.35rem;
-            font-weight: 800;
-            margin-bottom: 12px;
-            transition: color 0.3s;
-        }
-
-        .track-card p {
-            font-size: 1rem;
-            color: var(--text-muted);
-            margin: 0;
-            line-height: 1.6;
-        }
-
-        /* Steps */
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 48px;
-            margin-top: 48px;
-        }
-
-        .step {
-            text-align: center;
-        }
-
-        .step-number {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 0 auto 20px;
-        }
-
-        .step h3 {
-            font-size: 1.2rem;
-            margin-bottom: 12px;
-        }
-
-        .step p {
-            font-size: 0.95rem;
-            max-width: 320px;
-            margin: 0 auto;
-        }
-
-        /* Prizes */
-        .prize-hero {
-            background: radial-gradient(circle at center, #ffffff 0%, #f8f9fa 100%);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            border-radius: 32px;
-            padding: 64px;
-            text-align: center;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06);
-            margin-bottom: 64px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .prize-amount {
-            font-size: clamp(3.5rem, 8vw, 6rem);
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--text-color), var(--accent-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1;
-            margin-bottom: 16px;
-            letter-spacing: -0.03em;
-        }
-
-        .prize-desc {
-            color: var(--text-muted);
-            font-size: 1.25rem;
-            font-weight: 500;
-        }
-
-        .divisions-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            max-width: 1000px;
-            margin: 0 auto;
-            align-items: stretch;
-        }
-
-        .divisions-grid>.division-card:first-child {
-            grid-column: 1 / -1;
-        }
-
-        .division-card {
-            background: white;
-            padding: 32px 24px;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            height: 100%;
-        }
-
-        .division-card h3 {
-            font-size: 1.35rem;
-            margin-bottom: 12px;
-            font-weight: 800;
-            text-align: center;
-        }
-
-        .division-card .desc {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin-bottom: 24px;
-            text-align: center;
-        }
-
-        .prize-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .prize-list.compact {
-            gap: 8px;
-        }
-
-        .prize-item {
-            padding: 12px 16px;
-            border-radius: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.95rem;
-            transition: transform 0.2s;
-            background: var(--surface-highlight);
-        }
-
-        .prize-list.compact .prize-item {
-            padding: 8px 12px;
-            font-size: 0.85rem;
-        }
-
-        /* Demo Day Internal Grid */
-        .demo-day-prizes-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            background: var(--surface-highlight);
-            padding: 24px;
-            border-radius: 16px;
-            margin-top: 16px;
-        }
-
-        .demo-day-prizes-grid .prize-list .prize-item {
-            background: white;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        @media (max-width: 768px) {
-            .demo-day-prizes-grid {
-                grid-template-columns: 1fr;
-                gap: 32px;
-            }
-        }
-
-        /* Top 3 Highlighting */
-        .prize-list .prize-item:nth-child(1) {
-            background: linear-gradient(135deg, #FFF9D9, #FFF0B3);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            padding: 16px;
-            margin-bottom: 4px;
-        }
-
-        .prize-list .prize-item:nth-child(1) strong {
-            color: #B38F00;
-            font-size: 1.05rem;
-        }
-
-        .prize-list .prize-item:nth-child(2) {
-            background: linear-gradient(135deg, #F5F5F7, #E8E8EB);
-            border: 1px solid rgba(192, 192, 192, 0.3);
-        }
-
-        .prize-list .prize-item:nth-child(2) strong {
-            color: #757575;
-        }
-
-        .prize-list .prize-item:nth-child(3) {
-            background: linear-gradient(135deg, #FFF0E0, #FFE0CC);
-            border: 1px solid rgba(205, 127, 50, 0.2);
-        }
-
-        .prize-list .prize-item:nth-child(3) strong {
-            color: #A05A20;
-        }
-
-        .prize-item strong {
-            font-weight: 700;
-        }
-
-        .prize-item span {
-            color: var(--text-color);
-            font-weight: 600;
-            text-align: right;
-            font-size: 0.9rem;
-        }
-
-        /* Partners */
-        .partners-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
-            align-items: center;
-            margin-top: 48px;
-        }
-
-        .partner-image {
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .partner-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .partner-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 16px;
-        }
-
-        /* Partnership / Collaboration */
-        .collab-section {
-            background: linear-gradient(135deg, #f0f4ff 0%, #fafafa 50%, #fff7ed 100%);
-            border-top: 1px solid rgba(0, 0, 0, 0.04);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-        }
-
-        .collab-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .collab-logos {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 24px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .collab-logos img {
-            height: 52px;
-            object-fit: contain;
-        }
-
-        .collab-x {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            opacity: 0.4;
-        }
-
-        .collab-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
-            align-items: center;
-        }
-
-        .collab-details h3 {
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: 16px;
-            color: var(--text-color);
-        }
-
-        .collab-details p {
-            font-size: 1rem;
-            color: var(--text-muted);
-            line-height: 1.7;
-            margin-bottom: 16px;
-        }
-
-        .collab-highlights {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-top: 24px;
-        }
-
-        .collab-highlight-card {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .collab-highlight-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-        }
-
-        .collab-highlight-card .icon {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
-
-        .collab-highlight-card h4 {
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: var(--text-color);
-        }
-
-        .collab-highlight-card p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin: 0;
-            line-height: 1.4;
-        }
-
-        .collab-photos {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .collab-photos img {
-            width: 100%;
-            border-radius: 16px;
-            object-fit: cover;
-            aspect-ratio: 4/3;
-            border: 3px solid white;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .collab-photos img:hover {
-            transform: scale(1.03);
-        }
-
-        .collab-photos img:first-child {
-            grid-column: 1 / -1;
-            aspect-ratio: 16/9;
-        }
-
-        .collab-venue-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: white;
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 100px;
-            padding: 8px 16px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-color);
-            margin-bottom: 16px;
-        }
-
-        .collab-venue-badge span {
-            color: var(--accent-color);
-        }
-
-        @media (max-width: 768px) {
-            .collab-grid {
-                grid-template-columns: 1fr;
-                gap: 32px;
-            }
-
-            .collab-highlights {
-                grid-template-columns: 1fr;
-            }
-
-            .collab-logos img {
-                height: 40px;
-            }
-
-            .collab-photos {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .collab-photos img:first-child {
-                grid-column: 1 / -1;
-            }
-        }
-
-        /* Sponsors */
-        /* Sponsors */
-        .sponsors-container {
-            display: flex;
-            flex-direction: column;
-            gap: 48px;
-            align-items: center;
-            margin-bottom: 48px;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .platinum-sponsor {
-            background: linear-gradient(135deg, #ffffff, #f0f0f0);
-            padding: 64px 48px;
-            border-radius: 32px;
-            text-align: center;
-            width: 100%;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Shine effect for Platinum */
-        .platinum-sponsor::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 60%);
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .platinum-sponsor h3 {
-            font-size: 1.1rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: #999;
-            margin-bottom: 32px;
-            position: relative;
-        }
-
-        .sponsor-logo-large {
-            max-width: 500px;
-            width: 90%;
-            height: auto;
-            background: transparent;
-            padding: 0;
-            margin: 0 auto 24px;
-            display: block;
-            position: relative;
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.05));
-            transition: transform 0.3s;
-        }
-
-        .sponsor-logo-large:hover {
-            transform: scale(1.02);
-        }
-
-        .sponsor-amount {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            position: relative;
-            background: rgba(255, 107, 53, 0.1);
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 100px;
-        }
-
-        .gold-sponsor {
-            background: linear-gradient(135deg, #fffef5, #fff8e1);
-            padding: 48px 40px;
-            border-radius: 28px;
-            text-align: center;
-            width: 100%;
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            box-shadow: 0 8px 36px rgba(212, 175, 55, 0.08);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .gold-sponsor::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.15) 0%, transparent 60%);
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .gold-sponsor h3 {
-            font-size: 1rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: #b8960c;
-            margin-bottom: 24px;
-            position: relative;
-        }
-
-        .gold-sponsor .sponsor-logo-gold {
-            max-width: 320px;
-            width: 80%;
-            height: auto;
-            background: transparent;
-            padding: 0;
-            margin: 0 auto 20px;
-            display: block;
-            position: relative;
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.05));
-            transition: transform 0.3s;
-        }
-
-        .gold-sponsor .sponsor-logo-gold:hover {
-            transform: scale(1.02);
-        }
-
-        .gold-sponsor .sponsor-amount {
-            background: rgba(212, 175, 55, 0.12);
-            color: #9a7d0a;
-        }
-
-        /* Silver Sponsors */
-        .silver-sponsors {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            width: 100%;
-        }
-
-        .silver-sponsor {
-            background: linear-gradient(135deg, #fafafa, #f0f0f5);
-            padding: 36px 32px;
-            border-radius: 24px;
-            text-align: center;
-            border: 1px solid rgba(192, 192, 192, 0.25);
-            box-shadow: 0 6px 28px rgba(0, 0, 0, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .silver-sponsor::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(192, 192, 192, 0.15) 0%, transparent 60%);
-            opacity: 0.5;
-            pointer-events: none;
-        }
-
-        .silver-sponsor h3 {
-            font-size: 0.9rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: #888;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .silver-sponsor .sponsor-logo-silver {
-            max-width: 240px;
-            width: 75%;
-            height: auto;
-            background: transparent;
-            padding: 0;
-            margin: 0 auto 16px;
-            display: block;
-            position: relative;
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.05));
-            transition: transform 0.3s;
-        }
-
-        .silver-sponsor .sponsor-logo-silver:hover {
-            transform: scale(1.02);
-        }
-
-        .silver-sponsor .sponsor-name {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: var(--text-color);
-            margin-bottom: 4px;
-            position: relative;
-        }
-
-        .silver-sponsor .sponsor-subtitle {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-            position: relative;
-        }
-
-        .silver-sponsor .sponsor-amount {
-            background: rgba(140, 140, 160, 0.1);
-            color: #666;
-        }
-
-        @media (max-width: 640px) {
-            .silver-sponsors {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .supporting-sponsors {
-            display: flex;
-            gap: 32px;
-            justify-content: center;
-            flex-wrap: wrap;
-            width: 100%;
-        }
-
-        .supporting-sponsor {
-            background: white;
-            padding: 32px 40px;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-            border: 1px solid rgba(0, 0, 0, 0.03);
-            min-width: 240px;
-        }
-
-        .supporting-sponsor:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-        }
-
-
-
-        .supporting-sponsor img {
-            max-width: 150px;
-            height: auto;
-        }
-
-        .sponsor-cta {
-            background: var(--accent-color);
-            color: white;
-            padding: 48px;
-            border-radius: 24px;
-            text-align: center;
-            margin-top: 48px;
-        }
-
-        .sponsor-cta h3 {
-            font-size: 1.75rem;
-            margin-bottom: 12px;
-            color: white;
-        }
-
-        .sponsor-cta p {
-            color: rgba(255, 255, 255, 0.9);
-            max-width: 500px;
-            margin: 0 auto 24px;
-        }
-
-        .sponsor-cta .btn {
-            background: white;
-            color: var(--accent-color) !important;
-        }
-
-        .sponsor-cta .btn:hover {
-            background: var(--text-color);
-            color: white !important;
-        }
-
-        /* Collapsible Winners */
-        .winners-collapsible {
-            border: none;
-        }
-
-        .winners-toggle {
-            cursor: pointer;
-            list-style: none;
-            padding: 24px 32px;
-            background: var(--surface-color);
-            border-radius: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .winners-toggle::-webkit-details-marker {
-            display: none;
-        }
-
-        .winners-toggle:hover {
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 140, 90, 0.05));
-        }
-
-        .winners-toggle-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .toggle-icon {
-            font-size: 1.5rem;
-            color: var(--accent-color);
-            transition: transform 0.3s ease;
-        }
-
-        .winners-collapsible[open] .toggle-icon {
-            transform: rotate(180deg);
-        }
-
-        .winners-collapsible[open] .winners-toggle {
-            border-radius: 16px 16px 0 0;
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 140, 90, 0.05));
-        }
-
-        /* Past Winners */
-        .winners-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-top: 48px;
-        }
-
-        /* Winners Redesign */
-        .winners-section {
-            display: flex;
-            flex-direction: column;
-            gap: 64px;
-            margin-top: 64px;
-        }
-
-        .winner-year-block {
-            position: relative;
-        }
-
-        .winner-year-label {
-            font-size: 4rem;
-            font-weight: 900;
-            color: rgba(0, 0, 0, 0.03);
-            line-height: 1;
-            position: absolute;
-            top: -30px;
-            left: 0;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .winner-year-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            margin-bottom: 32px;
-            position: relative;
-            z-index: 1;
-            padding-left: 12px;
-            border-left: 4px solid var(--accent-color);
-        }
-
-        .winners-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .winner-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-            transition: transform 0.3s;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .winner-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
-        }
-
-        .winner-card-header {
-            padding: 16px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .winner-card.gold .winner-card-header {
-            background: linear-gradient(135deg, #FFF9D9, #FFF0B3);
-            color: #B38F00;
-        }
-
-        .winner-card.silver .winner-card-header {
-            background: linear-gradient(135deg, #F5F5F7, #E8E8EB);
-            color: #757575;
-        }
-
-        .winner-card.bronze .winner-card-header {
-            background: linear-gradient(135deg, #FFF0E0, #FFE0CC);
-            color: #A05A20;
-        }
-
-        .winner-group-photo {
-            margin-bottom: 32px;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            position: relative;
-            z-index: 1;
-        }
-
-        .winner-group-photo img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .place {
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-        }
-
-        .medal {
-            font-size: 1.5rem;
-        }
-
-        .winner-card-body {
-            padding: 24px;
-        }
-
-        .winner-name {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-color);
-        }
-
-        .winner-school {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            line-height: 1.4;
-        }
-
-        @media (max-width: 768px) {
-            .winners-grid {
-                grid-template-columns: 1fr;
-            }
-
-            /* Hero image is now visible on mobile to showcase partnership */
-            .hero-image-container {
-                margin-top: 16px;
-                max-width: 400px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-        }
-
-        /* Support */
-        .support-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 24px;
-            margin-top: 48px;
-        }
-
-        .support-card {
-            background: white;
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid var(--accent-color);
-        }
-
-        .support-card h4 {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-        }
-
-        .support-card p {
-            font-size: 0.9rem;
-            margin: 0;
-        }
-
-        /* Activities Grid */
-        .activities-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 24px;
-            margin-top: 48px;
-        }
-
-        .activity-card {
-            background: white;
-            padding: 32px 20px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-        }
-
-        .activity-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .activity-icon {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
-        }
-
-        .activity-card h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .activity-card p {
-            font-size: 0.85rem;
-            margin: 0;
-            color: var(--text-muted);
-        }
-
-        /* Past Events */
-        .past-events {
-            margin-top: 48px;
-            padding: 48px;
-            background: var(--surface-color);
-            border-radius: 16px;
-            text-align: center;
-        }
-
-        .past-events>p {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 24px;
-            color: var(--text-color);
-        }
-
-        .past-events-links {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        /* FAQ */
-        .faq-list {
-            max-width: 800px;
-            margin: 48px auto 0;
-        }
-
-        .faq-item {
-            background: white;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
-            overflow: hidden;
-        }
-
-        .faq-question {
-            width: 100%;
-            padding: 20px 24px;
-            background: none;
-            border: none;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: var(--text-color);
-            text-align: left;
-            font-family: inherit;
-        }
-
-        .faq-question:hover {
-            color: var(--accent-color);
-        }
-
-        .faq-icon {
-            font-size: 1.5rem;
-            color: var(--accent-color);
-            transition: transform 0.3s;
-        }
-
-        .faq-item.active .faq-icon {
-            transform: rotate(45deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .faq-item.active .faq-answer {
-            max-height: 500px;
-        }
-
-        .faq-answer p {
-            padding: 0 24px 20px;
-            font-size: 0.95rem;
-            max-width: none;
-        }
-
-        /* CTA Section */
-        .cta-section {
-            background: var(--text-color);
-            color: white;
-            text-align: center;
-        }
-
-        .cta-section h2 {
-            color: white;
-            max-width: 700px;
-            margin: 0 auto 16px;
-        }
-
-        .cta-section p {
-            color: rgba(255, 255, 255, 0.8);
-            max-width: 600px;
-            margin: 0 auto 32px;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 32px;
-        }
-
-        .cta-section .btn-primary {
-            background: var(--accent-color);
-        }
-
-        .cta-section .btn-primary:hover {
-            background: var(--accent-light);
-        }
-
-        .cta-section .btn-outline {
-            border-color: white;
-            color: white;
-        }
-
-        .cta-section .btn-outline:hover {
-            background: white;
-            color: var(--text-color);
-        }
-
-        .contact-link {
-            font-size: 0.95rem;
-            opacity: 0.8;
-        }
-
-        .contact-link a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .contact-link a:hover {
-            text-decoration: underline;
-        }
-
-        /* Footer */
-        footer {
-            padding: 0;
-            border-top: 4px solid var(--accent-color);
-            background: var(--text-color);
-            color: white;
-        }
-
-        .footer-newsletter {
-            padding: 3rem 2rem;
-            background: rgba(255, 107, 53, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-
-        .footer-newsletter-container {
-            max-width: 850px;
-            margin: 0 auto;
-        }
-
-        .footer-newsletter h3 {
-            font-size: 1.5rem;
-            font-weight: 900;
-            margin-bottom: 0.75rem;
-            letter-spacing: -0.02em;
-        }
-
-        .footer-newsletter p {
-            font-size: 1rem;
-            opacity: 0.8;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-            max-width: none;
-        }
-
-        .footer-newsletter-btn {
-            display: inline-block;
-            padding: 0.85rem 2rem;
-            font-size: 1rem;
-            font-weight: 700;
-            background: var(--accent-color);
-            color: white;
-            text-decoration: none;
-            border: 2px solid var(--accent-color);
-            transition: all 0.2s ease;
-            font-family: 'Inter', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
-        }
-
-        .footer-newsletter-btn:hover {
-            background: white;
-            color: var(--text-color);
-            border-color: white;
-            transform: translateY(-2px);
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem 0;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-
-        .footer-brand {
-            font-size: 2rem;
-            font-weight: 900;
-            margin-bottom: 1rem;
-        }
-
-        .footer-brand img {
-            height: 32px;
-            filter: brightness(0) invert(1);
-            margin-bottom: 1rem;
-        }
-
-        .footer-tagline {
-            opacity: 0.7;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            max-width: 300px;
-        }
-
-        .footer-ein {
-            margin-top: 0.5rem;
-            opacity: 0.6;
-            font-size: 0.9rem;
-        }
-
-        .footer-section h4 {
-            font-size: 0.875rem;
-            font-weight: 900;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            opacity: 0.6;
-        }
-
-        .footer-section a {
-            display: block;
-            color: white;
-            text-decoration: none;
-            margin-bottom: 0.75rem;
-            transition: all 0.2s ease;
-            font-size: 0.95rem;
-        }
-
-        .footer-section a:hover {
-            color: var(--accent-color);
-            transform: translateX(4px);
-        }
-
-        .footer-bottom {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            opacity: 0.6;
-            font-size: 0.9rem;
-        }
-
-        .footer-bottom a {
-            color: #999;
-            text-decoration: none;
-            transition: color 0.2s ease;
-            margin-left: 1rem;
-        }
-
-        .footer-bottom a:hover {
-            color: var(--accent-color);
-        }
-
-
-
-
-        /* iPad/Tablet Optimization */
-        @media (max-width: 1100px) {
-            .activities-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 20px;
-            }
-
-            .support-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 1200px) {
-            .nav-right {
-                gap: 1.5rem;
-            }
-
-            .nav-right a {
-                font-size: 0.95rem;
-            }
-
-            .btn-donate,
-            .btn-get-involved {
-                padding: 0.65rem 1.5rem;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (max-width: 1080px) {
-            nav {
-                padding: 1.25rem 0;
-            }
-
-            nav.scrolled {
-                padding: 0.875rem 0;
-            }
-
-            .logo img {
-                height: 42px;
-            }
-
-            nav.scrolled .logo img {
-                height: 36px;
-            }
-
-            .nav-right {
-                gap: 1.25rem;
-            }
-
-            .btn-donate,
-            .btn-get-involved {
-                padding: 0.6rem 1.25rem;
-                font-size: 0.85rem;
-            }
-        }
-
+        .nav-container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        .logo { display: flex; align-items: center; text-decoration: none; transition: transform 0.3s ease; justify-self: start; }
+        .logo:hover { transform: rotate(-2deg) scale(1.05); }
+        .logo img { height: 46px; transition: height 0.3s ease; }
+        nav.scrolled .logo img { height: 38px; }
+
+        .nav-right { display: flex; gap: 1.75rem; align-items: center; justify-self: end; }
+        .nav-right a { color: var(--text-color); text-decoration: none; font-weight: 600; font-size: 1rem; transition: all 0.2s ease; position: relative; white-space: nowrap; letter-spacing: -0.01em; }
+        .nav-right a:not(.btn-donate):not(.btn-get-involved)::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--accent-color); transition: width 0.3s ease; }
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after { width: 100%; }
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover { color: var(--accent-color); }
+
+        .dropdown { position: relative; display: inline-block; height: 100%; }
+        .dropdown-content { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background-color: var(--bg-color); min-width: 240px; box-shadow: 8px 8px 0 var(--text-color); border: 3px solid var(--text-color); z-index: 1001; padding: 0.5rem 0; }
+        .dropdown::after { content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; height: 10px; }
+        .dropdown-content::after { content: ''; position: absolute; top: -15px; left: 0; width: 100%; height: 15px; }
+        .dropdown-content::before { content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); border-width: 0 8px 8px 8px; border-style: solid; border-color: transparent transparent var(--text-color) transparent; z-index: 1002; }
+        .dropdown:hover .dropdown-content { display: block; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(-50%) translateY(-5px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+        .dropdown-item { color: var(--text-color) !important; padding: 0.85rem 1.5rem; text-decoration: none; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s ease; font-weight: 600; font-size: 0.95rem !important; text-align: left; border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
+        .dropdown-item:last-child { border-bottom: none; }
+        .nav-right .dropdown-item::after { display: none !important; }
+        .dropdown-item:hover { background-color: rgba(0, 0, 0, 0.05); padding-left: 1.75rem; color: var(--accent-color) !important; }
+
+        .badge-beta { display: inline-block; background: var(--text-color); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; margin-left: 0.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+        .dropdown-item:hover .badge-beta { background: var(--accent-color); }
+
+        .btn-donate { background: var(--accent-color); color: white !important; padding: 0.5rem 1rem; text-decoration: none; font-weight: 700; transition: all 0.2s ease; border: 2px solid var(--text-color); position: relative; overflow: hidden; font-size: 0.85rem; white-space: nowrap; }
+        .btn-donate::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--text-color); transition: left 0.3s ease; z-index: -1; }
+        .btn-donate:hover::before { left: 0; }
+        .btn-donate:hover { transform: scale(1.05); }
+
+        .btn-get-involved { background: transparent; color: var(--text-color) !important; padding: 0.5rem 1rem; text-decoration: none; font-weight: 700; transition: all 0.2s ease; border: 2px solid var(--text-color); position: relative; overflow: hidden; font-size: 0.85rem; white-space: nowrap; }
+        .btn-get-involved::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--text-color); transition: left 0.3s ease; z-index: -1; }
+        .btn-get-involved:hover::before { left: 0; }
+        .btn-get-involved:hover { color: white !important; transform: scale(1.05); }
+
+        .mobile-controls { display: none; gap: 1rem; align-items: center; justify-self: end; }
+        .mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; min-width: 48px; min-height: 48px; flex-direction: column; align-items: center; justify-content: center; border-radius: 8px; transition: background 0.3s ease; }
+        .mobile-menu-btn:hover { background: rgba(0, 0, 0, 0.05); }
+        .mobile-menu-btn span { display: block; width: 28px; height: 3px; background: var(--text-color); margin: 3px 0; transition: all 0.3s ease; border-radius: 2px; }
+        .mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+        .mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+        .mobile-get-involved { display: none; }
+
+        .mobile-menu { display: none; position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background: var(--bg-color); z-index: 1040; padding: 5rem 1.5rem 2rem; transition: right 0.3s ease; overflow-y: auto; }
+        .mobile-menu.active { display: block; right: 0; }
+        .mobile-menu a { display: block; padding: 1rem 0; font-size: 1.5rem; font-weight: 700; color: var(--text-color); text-decoration: none; border-bottom: 1px solid rgba(0, 0, 0, 0.1); transition: all 0.2s ease; }
+        .mobile-menu a:hover { color: var(--accent-color); padding-left: 1rem; }
+
+        .mobile-dropdown-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding: 1rem 0; font-size: 1.5rem; font-weight: 700; color: var(--text-color); cursor: pointer; text-align: left; font-family: inherit; }
+        .mobile-dropdown-toggle .arrow { transition: transform 0.3s ease; font-size: 1.2rem; }
+        .mobile-dropdown-toggle.active .arrow { transform: rotate(180deg); color: var(--accent-color); }
+        .mobile-dropdown-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #f9f9f9; margin: 0 -1.5rem; padding: 0 1.5rem; }
+        .mobile-dropdown-content.open { max-height: 500px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+        .mobile-dropdown-content a { font-size: 1.1rem !important; padding: 0.75rem 0 !important; border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important; color: var(--text-muted) !important; padding-left: 1rem !important; }
+        .mobile-dropdown-content a:hover { color: var(--accent-color) !important; padding-left: 1.5rem !important; }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        .btn { display: inline-flex; align-items: center; padding: 14px 28px; border-radius: 100px; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: all 0.2s; cursor: pointer; border: none; }
+        .btn-primary { background: var(--text-color); color: white !important; }
+        .btn-primary:hover { background: #333; transform: translateY(-2px); }
+        .btn-accent { background: var(--accent-color); color: white !important; }
+        .btn-accent:hover { background: var(--accent-light); transform: translateY(-2px); }
+        .btn-outline { background: transparent; color: var(--text-color); border: 2px solid var(--text-color); }
+        .btn-outline:hover { background: var(--text-color); color: white; }
+        .btn-small { padding: 10px 20px; font-size: 0.85rem; }
+
+        /* ============================================
+           HERO
+           ============================================ */
+        .hero { display: flex; align-items: flex-start; padding-top: 120px; padding-bottom: 64px; position: relative; overflow: hidden; border-left: 8px solid var(--accent-color); }
+        .hero-content { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+        .hero-badge { display: inline-block; background: rgba(255, 107, 53, 0.1); color: var(--accent-color); padding: 8px 16px; border-radius: 100px; font-family: var(--font-accent); font-size: 1.15rem; font-weight: 600; margin-bottom: 20px; }
+        .hero-meta-row { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+        .hero-text h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; margin-bottom: 24px; }
+        .hero-text h1 span { color: var(--accent-color); }
+        .hero-text p { font-size: 1.15rem; color: var(--text-muted); margin-bottom: 16px; max-width: 500px; }
+        .hero-date { font-size: 1rem; color: var(--text-color); margin-bottom: 32px; font-weight: 500; }
+        .hero-date strong { color: var(--accent-color); }
+        .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+        /* Countdown — Caveat numbers */
+        .countdown-timer { margin: 20px 0 28px; }
+        .countdown-label { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; font-weight: 500; }
+        .countdown-boxes { display: flex; gap: 10px; }
+        .countdown-box { background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border: 1px solid rgba(255, 107, 53, 0.2); border-radius: 10px; padding: 10px 14px; text-align: center; min-width: 60px; }
+        .countdown-value { display: block; font-family: var(--font-accent); font-size: 1.8rem; font-weight: 700; color: var(--accent-color); line-height: 1; }
+        .countdown-unit { display: block; font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+
+        /* ============================================
+           SECTIONS
+           ============================================ */
+        section { padding: 64px 0; }
+        .section-label { display: inline-block; font-family: var(--font-accent); font-size: 1.3rem; font-weight: 600; color: var(--accent-color); margin-bottom: 20px; }
+        section h2 { font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 800; margin-bottom: 16px; line-height: 1.15; }
+        section h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; }
+        section p { color: var(--text-muted); max-width: 700px; margin-bottom: 16px; }
+        section p a { color: var(--accent-color); text-decoration: none; }
+        section p a:hover { text-decoration: underline; }
+
+        /* ============================================
+           TIMELINE
+           ============================================ */
+        .timeline-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 64px; position: relative; }
+        .timeline-grid::before { content: ''; position: absolute; top: 40px; left: 16%; right: 16%; height: 4px; background: linear-gradient(90deg, var(--accent-light), var(--accent-color)); z-index: 0; border-radius: 4px; opacity: 0.2; }
+        .timeline-item { background: white; padding: 32px 24px; border-radius: 20px; text-align: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; z-index: 1; border: 1px solid rgba(0, 0, 0, 0.03); }
+        .timeline-item:hover { transform: translateY(-8px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08); }
+        .timeline-item.featured { background: white; border: 2px solid var(--accent-color); transform: scale(1.05); box-shadow: 0 12px 40px rgba(255, 107, 53, 0.15); }
+        .timeline-item.featured:hover { transform: scale(1.08) translateY(-4px); }
+        .timeline-date { display: inline-block; background: var(--surface-highlight); padding: 8px 16px; border-radius: 100px; font-family: var(--font-accent); font-size: 1.3rem; font-weight: 700; color: var(--accent-color); margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); }
+        .timeline-item.featured .timeline-date { background: var(--accent-color); color: white; box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3); }
+        .timeline-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 12px; }
+        .timeline-item p { font-size: 0.95rem; margin: 0; color: var(--text-muted); line-height: 1.5; }
+
+        /* ============================================
+           TRACKS
+           ============================================ */
+        .tracks-grid-expandable { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+        .track-card-expandable { border: none; }
+        .track-card-expandable summary { cursor: pointer; list-style: none; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 36px 24px; background: white; border-radius: 24px; transition: all 0.3s; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04); border: 1px solid rgba(0, 0, 0, 0.04); }
+        .track-card-expandable summary::-webkit-details-marker { display: none; }
+        .track-card-expandable summary:hover { transform: translateY(-8px); box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1); }
+        .track-card-expandable summary .track-icon { font-size: 2rem; margin-bottom: 16px; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 140, 90, 0.05)); border-radius: 16px; }
+        .track-card-expandable summary h3 { margin: 0 0 8px; font-size: 1.1rem; font-weight: 600; }
+        .track-card-expandable summary .expand-hint { font-size: 0.75rem; color: var(--accent-color); opacity: 0.8; }
+        .track-card-expandable[open] summary { border-radius: 24px 24px 0 0; background: linear-gradient(135deg, rgba(255, 107, 53, 0.08), rgba(255, 140, 90, 0.04)); }
+        .track-card-expandable[open] summary .expand-hint { display: none; }
+        .track-card-expandable p { padding: 20px 24px; background: white; border-radius: 0 0 24px 24px; margin: 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04); text-align: center; }
+        .track-icon { font-size: 2rem; margin-bottom: 20px; width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; border-radius: 16px; background: var(--surface-highlight); transition: all 0.3s; }
+
+        /* Track Popularity Bars */
+        .track-popularity-compact { background: linear-gradient(135deg, #fff 0%, #fef7f4 100%); border: 1px solid rgba(255, 107, 53, 0.15); border-radius: 16px; padding: 24px 32px; margin-top: 24px; grid-column: 1 / -1; }
+        .track-popularity-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+        .track-popularity-title { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--text-color); }
+        .live-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.2); } }
+        .track-stats-subtitle { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        .track-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .track-item { display: grid; grid-template-columns: 120px 1fr auto; align-items: center; gap: 0.75rem; }
+        .track-name { font-size: 0.85rem; font-weight: 500; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .track-bar-container { height: 20px; background: rgba(0, 0, 0, 0.04); border-radius: 10px; overflow: hidden; position: relative; }
+        .track-bar { height: 100%; background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-light) 100%); border-radius: 10px; transition: width 1s ease-out; min-width: 2px; position: relative; }
+        .track-bar::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent); animation: shimmer 2s ease-in-out infinite; }
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        .track-count { font-size: 0.85rem; font-weight: 700; color: var(--accent-color); min-width: 45px; text-align: right; }
+        .track-stats-footer { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid rgba(0, 0, 0, 0.08); display: flex; justify-content: space-between; align-items: center; }
+        .total-applications { font-size: 0.85rem; color: var(--text-muted); }
+        .total-applications strong { color: var(--accent-color); font-weight: 700; }
+
+        /* ============================================
+           PRIZES
+           ============================================ */
+        .prize-hero { background: radial-gradient(circle at center, #ffffff 0%, #f8f9fa 100%); border: 1px solid rgba(0, 0, 0, 0.05); border-radius: 32px; padding: 64px; text-align: center; box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06); margin-bottom: 64px; position: relative; overflow: hidden; }
+        .prize-amount { font-family: var(--font-accent); font-size: clamp(3.5rem, 8vw, 6rem); font-weight: 900; background: linear-gradient(135deg, var(--text-color), var(--accent-color)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; margin-bottom: 16px; letter-spacing: -0.03em; }
+        .prize-desc { color: var(--text-muted); font-size: 1.25rem; font-weight: 500; }
+
+        .divisions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1000px; margin: 0 auto; align-items: stretch; }
+        .divisions-grid>.division-card:first-child { grid-column: 1 / -1; }
+        .division-card { background: white; padding: 32px 24px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); border: 1px solid rgba(0, 0, 0, 0.04); height: 100%; }
+        .division-card h3 { font-size: 1.35rem; margin-bottom: 12px; font-weight: 800; text-align: center; }
+        .division-card .desc { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 24px; text-align: center; }
+
+        .prize-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .prize-list.compact { gap: 8px; }
+        .prize-item { padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem; transition: transform 0.2s; background: var(--surface-highlight); }
+        .prize-list .prize-item:nth-child(1) { background: linear-gradient(135deg, #FFF9D9, #FFF0B3); border: 1px solid rgba(255, 215, 0, 0.3); padding: 16px; margin-bottom: 4px; }
+        .prize-list .prize-item:nth-child(1) strong { color: #B38F00; font-size: 1.05rem; }
+        .prize-list .prize-item:nth-child(2) { background: linear-gradient(135deg, #F5F5F7, #E8E8EB); border: 1px solid rgba(192, 192, 192, 0.3); }
+        .prize-list .prize-item:nth-child(2) strong { color: #757575; }
+        .prize-list .prize-item:nth-child(3) { background: linear-gradient(135deg, #FFF0E0, #FFE0CC); border: 1px solid rgba(205, 127, 50, 0.2); }
+        .prize-list .prize-item:nth-child(3) strong { color: #A05A20; }
+        .prize-item strong { font-weight: 700; }
+        .prize-item span { color: var(--text-color); font-weight: 600; text-align: right; font-size: 0.9rem; }
+
+        /* ============================================
+           COLLABORATION
+           ============================================ */
+        .collab-section { background: linear-gradient(135deg, #f0f4ff 0%, #fafafa 50%, #fff7ed 100%); border-top: 1px solid rgba(0, 0, 0, 0.04); border-bottom: 1px solid rgba(0, 0, 0, 0.04); }
+        .collab-header { text-align: center; margin-bottom: 48px; }
+        .collab-logos { display: flex; align-items: center; justify-content: center; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
+        .collab-logos img { height: 52px; object-fit: contain; }
+        .collab-x { font-size: 1.5rem; font-weight: 700; color: var(--text-muted); opacity: 0.4; }
+
+        /* ============================================
+           SPONSORS
+           ============================================ */
+        .sponsors-container { display: flex; flex-direction: column; gap: 48px; align-items: center; margin-bottom: 48px; max-width: 900px; margin-left: auto; margin-right: auto; }
+        .platinum-sponsor { background: linear-gradient(135deg, #ffffff, #f0f0f0); padding: 64px 48px; border-radius: 32px; text-align: center; width: 100%; border: 1px solid rgba(0, 0, 0, 0.05); box-shadow: 0 12px 48px rgba(0, 0, 0, 0.06); position: relative; overflow: hidden; }
+        .platinum-sponsor::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 60%); opacity: 0.5; pointer-events: none; }
+        .platinum-sponsor h3 { font-size: 1.1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: #999; margin-bottom: 32px; position: relative; }
+        .sponsor-logo-large { max-width: 500px; width: 90%; height: auto; margin: 0 auto 24px; display: block; position: relative; filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.05)); transition: transform 0.3s; }
+        .sponsor-logo-large:hover { transform: scale(1.02); }
+        .sponsor-amount { font-size: 1.2rem; font-weight: 700; color: var(--accent-color); position: relative; background: rgba(255, 107, 53, 0.1); display: inline-block; padding: 8px 16px; border-radius: 100px; }
+
+        .silver-sponsors { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; width: 100%; }
+        .silver-sponsor { background: linear-gradient(135deg, #fafafa, #f0f0f5); padding: 36px 32px; border-radius: 24px; text-align: center; border: 1px solid rgba(192, 192, 192, 0.25); box-shadow: 0 6px 28px rgba(0, 0, 0, 0.05); position: relative; overflow: hidden; }
+        .silver-sponsor h3 { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: #888; margin-bottom: 20px; position: relative; }
+        .silver-sponsor .sponsor-logo-silver { max-width: 240px; width: 75%; height: auto; margin: 0 auto 16px; display: block; position: relative; filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.05)); transition: transform 0.3s; }
+        .silver-sponsor .sponsor-logo-silver:hover { transform: scale(1.02); }
+        .silver-sponsor .sponsor-name { font-size: 1.15rem; font-weight: 800; color: var(--text-color); margin-bottom: 4px; position: relative; }
+        .silver-sponsor .sponsor-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px; position: relative; }
+        .silver-sponsor .sponsor-amount { background: rgba(140, 140, 160, 0.1); color: #666; }
+
+        .sponsor-cta { background: var(--accent-color); color: white; padding: 48px; border-radius: 24px; text-align: center; margin-top: 48px; }
+        .sponsor-cta h3 { font-size: 1.75rem; margin-bottom: 12px; color: white; }
+        .sponsor-cta p { color: rgba(255, 255, 255, 0.9); max-width: 500px; margin: 0 auto 24px; }
+
+        /* ============================================
+           WINNERS
+           ============================================ */
+        .winners-section { display: flex; flex-direction: column; gap: 64px; margin-top: 64px; }
+        .winner-year-block { position: relative; }
+        .winner-year-label { font-family: var(--font-accent); font-size: 4rem; font-weight: 900; color: rgba(0, 0, 0, 0.03); line-height: 1; position: absolute; top: -30px; left: 0; z-index: 0; pointer-events: none; }
+        .winner-year-title { font-family: var(--font-accent); font-size: 1.5rem; font-weight: 800; margin-bottom: 32px; position: relative; z-index: 1; padding-left: 12px; border-left: 4px solid var(--accent-color); }
+        .winners-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; position: relative; z-index: 1; }
+        .winner-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06); transition: transform 0.3s; border: 1px solid rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; }
+        .winner-card:hover { transform: translateY(-8px); box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12); }
+        .winner-card-header { padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .winner-card.gold .winner-card-header { background: linear-gradient(135deg, #FFF9D9, #FFF0B3); color: #B38F00; }
+        .winner-card.silver .winner-card-header { background: linear-gradient(135deg, #F5F5F7, #E8E8EB); color: #757575; }
+        .winner-card.bronze .winner-card-header { background: linear-gradient(135deg, #FFF0E0, #FFE0CC); color: #A05A20; }
+        .winner-group-photo { margin-bottom: 32px; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); position: relative; z-index: 1; }
+        .winner-group-photo img { width: 100%; height: auto; display: block; }
+        .place { font-weight: 800; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em; }
+        .medal { font-size: 1.5rem; }
+        .winner-card-body { padding: 24px; }
+        .winner-name { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; color: var(--text-color); }
+        .winner-school { font-size: 0.95rem; color: var(--text-muted); line-height: 1.4; }
+
+        /* ============================================
+           JUDGES
+           ============================================ */
+        .judges-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 48px; }
+        .judge-card { background: white; border-radius: 20px; padding: 32px 24px 28px; text-align: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03); border: 1px solid rgba(0, 0, 0, 0.04); transition: all 0.3s; position: relative; overflow: hidden; }
+        .judge-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent-color), var(--accent-light)); opacity: 0; transition: opacity 0.3s; }
+        .judge-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1); }
+        .judge-card:hover::before { opacity: 1; }
+        .judge-photo { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; margin: 0 auto 16px; display: block; border: 3px solid rgba(255, 107, 53, 0.15); transition: transform 0.3s, border-color 0.3s; }
+        .judge-card:hover .judge-photo { transform: scale(1.05); border-color: var(--accent-color); }
+        .judge-name { font-size: 1.1rem; font-weight: 800; margin-bottom: 4px; }
+        .judge-title { font-size: 0.82rem; color: var(--accent-color); font-weight: 600; margin-bottom: 4px; line-height: 1.35; }
+        .judge-credential { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; margin-bottom: 12px; font-style: italic; }
+        .judge-bio { font-size: 0.85rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 14px; }
+        .judge-quote { font-size: 0.82rem; color: #334155; line-height: 1.5; font-style: italic; padding: 12px 16px; background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border-radius: 10px; border-left: 3px solid var(--accent-color); text-align: left; position: relative; display: none; margin-top: 8px; }
+        .judge-quote.active { display: block; }
+        .judge-quote::before { content: '\201C'; position: absolute; top: 4px; left: 10px; font-size: 1.6rem; color: var(--accent-color); opacity: 0.3; font-family: Georgia, serif; line-height: 1; }
+        .judge-quote-toggle { display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--accent-color); cursor: pointer; background: none; border: none; font-weight: 600; padding: 4px 0; transition: opacity 0.2s; }
+        .judge-quote-toggle:hover { opacity: 0.7; }
+        .judge-quote-toggle .toggle-arrow { transition: transform 0.2s; font-size: 0.7rem; }
+        .judge-quote-toggle.active .toggle-arrow { transform: rotate(90deg); }
+
+        /* ============================================
+           CTA
+           ============================================ */
+        .cta-section { background: var(--text-color); color: white; text-align: center; }
+        .cta-section h2 { color: white; max-width: 700px; margin: 0 auto 16px; }
+        .cta-section p { color: rgba(255, 255, 255, 0.8); max-width: 600px; margin: 0 auto 32px; }
+        .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+        .cta-section .btn-primary { background: var(--accent-color); }
+        .cta-section .btn-primary:hover { background: var(--accent-light); }
+        .cta-section .btn-outline { border-color: white; color: white; }
+        .cta-section .btn-outline:hover { background: white; color: var(--text-color); }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer { padding: 0; border-top: 4px solid var(--accent-color); background: var(--text-color); color: white; }
+        .footer-newsletter { padding: 3rem 2rem; background: rgba(255, 107, 53, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.1); text-align: center; }
+        .footer-newsletter-container { max-width: 850px; margin: 0 auto; }
+        .footer-newsletter h3 { font-size: 1.5rem; font-weight: 900; margin-bottom: 0.75rem; }
+        .footer-newsletter p { font-size: 1rem; opacity: 0.8; margin-bottom: 1.5rem; line-height: 1.5; max-width: none; }
+        .footer-newsletter-btn { display: inline-block; padding: 0.85rem 2rem; font-size: 1rem; font-weight: 700; background: var(--accent-color); color: white; text-decoration: none; border: 2px solid var(--accent-color); transition: all 0.2s ease; font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.02em; }
+        .footer-newsletter-btn:hover { background: white; color: var(--text-color); border-color: white; transform: translateY(-2px); }
+        .footer-container { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem 0; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+        .footer-brand { font-size: 2rem; font-weight: 900; margin-bottom: 1rem; }
+        .footer-brand img { height: 32px; filter: brightness(0) invert(1); margin-bottom: 1rem; }
+        .footer-tagline { opacity: 0.7; line-height: 1.6; font-size: 0.95rem; max-width: 300px; }
+        .footer-ein { margin-top: 0.5rem; opacity: 0.6; font-size: 0.9rem; }
+        .footer-section h4 { font-size: 0.875rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0.6; }
+        .footer-section a { display: block; color: white; text-decoration: none; margin-bottom: 0.75rem; transition: all 0.2s ease; font-size: 0.95rem; }
+        .footer-section a:hover { color: var(--accent-color); transform: translateX(4px); }
+        .footer-bottom { max-width: 1200px; margin: 0 auto; padding: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.2); display: flex; justify-content: space-between; align-items: center; opacity: 0.6; font-size: 0.9rem; }
+        .footer-bottom a { color: #999; text-decoration: none; transition: color 0.2s; margin-left: 1rem; }
+        .footer-bottom a:hover { color: var(--accent-color); }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 1200px) { .nav-right { gap: 1.5rem; } .nav-right a { font-size: 0.95rem; } .btn-donate, .btn-get-involved { padding: 0.65rem 1.5rem; font-size: 0.9rem; } }
+        @media (max-width: 1080px) { nav { padding: 1.25rem 0; } nav.scrolled { padding: 0.875rem 0; } .logo img { height: 42px; } nav.scrolled .logo img { height: 36px; } .nav-right { gap: 1.25rem; } .btn-donate, .btn-get-involved { padding: 0.6rem 1.25rem; font-size: 0.85rem; } }
+        @media (max-width: 1024px) { .judges-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
         @media (max-width: 968px) {
-            .nav-container {
-                grid-template-columns: 1fr auto;
-                gap: 1rem;
-            }
-
-            .nav-right {
-                display: none;
-            }
-
-            .mobile-controls {
-                display: flex;
-            }
-
-            .mobile-menu-btn {
-                display: flex;
-            }
-
-            .mobile-get-involved {
-                display: inline-block;
-                padding: 0.35rem 0.85rem;
-                font-size: 0.72rem;
-            }
-
-            .hero-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .hero-text p {
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .hero-actions {
-                justify-content: center;
-            }
-
-            .timeline-grid,
-            .tracks-grid,
-            .steps-grid,
-            .divisions-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            .activities-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 16px;
-            }
-
-            .partners-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .partner-image {
-                order: -1;
-            }
-
-            .support-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .winner-content {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-container {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-
-
-            .footer-newsletter {
-                padding: 2.5rem 1.5rem;
-            }
-
-            .footer-newsletter h3 {
-                font-size: 1.25rem;
-            }
-
-            .footer-newsletter p {
-                font-size: 0.95rem;
-            }
-
-            .footer-newsletter-btn {
-                padding: 0.75rem 1.5rem;
-                font-size: 0.9rem;
-            }
+            .nav-container { grid-template-columns: 1fr auto; gap: 1rem; }
+            .nav-right { display: none; }
+            .mobile-controls { display: flex; }
+            .mobile-menu-btn { display: flex; }
+            .mobile-get-involved { display: inline-block; padding: 0.35rem 0.85rem; font-size: 0.72rem; }
+            .hero-content { grid-template-columns: 1fr; text-align: center; }
+            .hero-text p { margin-left: auto; margin-right: auto; }
+            .hero-actions { justify-content: center; }
+            .hero-meta-row { justify-content: center; }
+            .timeline-grid, .divisions-grid { grid-template-columns: 1fr; gap: 16px; }
+            .winners-grid { grid-template-columns: 1fr; }
+            .footer-container { grid-template-columns: 1fr; gap: 2rem; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            .footer-newsletter { padding: 2.5rem 1.5rem; }
+            .silver-sponsors { grid-template-columns: 1fr; }
         }
-
-        @media (max-width: 640px) {
-            .support-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .activities-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .hero-text h1 {
-                font-size: 2rem;
-            }
-
-
-
-            .hero-actions {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 280px;
-                justify-content: center;
-            }
-
-            /* Add extra padding to hero on mobile to prevent navbar overlap */
-            /* Add extra padding to hero on mobile to prevent navbar overlap */
-            .hero {
-                padding-top: 170px !important;
-            }
-
-            body.has-announcement .hero {
-                padding-top: calc(170px + var(--announcement-height)) !important;
-            }
-
-            .past-events {
-                padding: 32px 24px;
-            }
-
-            .past-events-links {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .mobile-menu a {
-                font-size: 1.5rem;
-                padding: 1.25rem 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .mobile-menu {
-                padding: 5rem 1.5rem 2rem;
-            }
-        }
-
-        /* Resources & Evaluation Section */
-        .resource-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-bottom: 64px;
-        }
-
-        .resource-card {
-            background: white;
-            padding: 32px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .resource-icon {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
-        }
-
-        .resource-card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 12px;
-        }
-
-        .resource-card p {
-            font-size: 0.95rem;
-            margin-bottom: 24px;
-            color: var(--text-muted);
-        }
-
-        .evaluation-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
-        }
-
-        .eval-column {
-            background: white;
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .eval-header {
-            margin-bottom: 32px;
-        }
-
-        .eval-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-            letter-spacing: 0.05em;
-        }
-
-        .eval-badge.dark {
-            background: #333;
-            color: white;
-        }
-
-        .eval-badge.orange {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .eval-column h3 {
-            font-size: 1.75rem;
-            margin-bottom: 8px;
-        }
-
-        .eval-column .subtitle {
-            font-size: 1rem;
-            color: var(--text-muted);
-            margin-bottom: 0;
-        }
-
-        /* Evaluation Cards Enhancement */
-        .criteria-list {
-            display: grid;
-            gap: 16px;
-        }
-
-        .criteria-card {
-            padding: 20px 24px;
-            background: white;
-            border-radius: 12px;
-            border-left: 5px solid var(--accent-light);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
-            transition: all 0.2s ease;
-        }
-
-        .criteria-card:hover {
-            transform: translateX(4px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-            border-left-color: var(--accent-color);
-        }
-
-        .criteria-card h4 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .criteria-card p {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        .points {
-            background: var(--accent-dim);
-            color: var(--accent-color);
-            padding: 4px 10px;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 800;
-        }
-
-        .criteria-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 4px;
-        }
-
-        .points {
-            font-weight: 700;
-            color: var(--accent-color);
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 900px) {
-            .resource-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .evaluation-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .sponsors-container {
-                grid-template-columns: 1fr;
-            }
-
-            .winner-content {
-                grid-template-columns: 1fr;
-            }
-
-            .winners-section {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Track Popularity with Progress Bars */
-        .track-popularity-compact {
-            background: linear-gradient(135deg, #fff 0%, #fef7f4 100%);
-            border: 1px solid rgba(255, 107, 53, 0.15);
-            border-radius: 16px;
-            padding: 24px 32px;
-            margin-top: 24px;
-            grid-column: 1 / -1;
-        }
-
-        .track-popularity-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .track-popularity-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-color);
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #22c55e;
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-
-            50% {
-                opacity: 0.7;
-                transform: scale(1.2);
-            }
-        }
-
-        .track-stats-subtitle {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .track-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .track-item {
-            display: grid;
-            grid-template-columns: 120px 1fr auto;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .track-name {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-color);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .track-bar-container {
-            height: 20px;
-            background: rgba(0, 0, 0, 0.04);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .track-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-light) 100%);
-            border-radius: 10px;
-            transition: width 1s ease-out;
-            min-width: 2px;
-            position: relative;
-        }
-
-        .track-bar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 2s ease-in-out infinite;
-        }
-
-        @keyframes shimmer {
-            0% {
-                transform: translateX(-100%);
-            }
-
-            100% {
-                transform: translateX(100%);
-            }
-        }
-
-        .track-count {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            min-width: 45px;
-            text-align: right;
-        }
-
-        .track-stats-footer {
-            margin-top: 1rem;
-            padding-top: 0.75rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .total-applications {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .total-applications strong {
-            color: var(--accent-color);
-            font-weight: 700;
-        }
-
+        @media (max-width: 900px) { .tracks-grid-expandable { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 768px) {
-            .track-popularity-compact {
-                padding: 20px;
-            }
-
-            .track-popularity-header {
-                flex-direction: column;
-                gap: 4px;
-                text-align: center;
-            }
-
-            .track-item {
-                grid-template-columns: 90px 1fr auto;
-                gap: 0.5rem;
-            }
-
-            .track-name {
-                font-size: 0.75rem;
-            }
-
-            .track-bar-container {
-                height: 16px;
-            }
+            .hero-text p { font-size: 0.95rem; }
+            .countdown-timer { text-align: center; }
+            .countdown-boxes { justify-content: center; }
+            .countdown-box { padding: 8px 10px; min-width: 50px; }
+            .countdown-value { font-size: 1.4rem !important; }
+            .collab-logos img { height: 40px; }
+            .track-popularity-compact { padding: 20px; }
+            .track-popularity-header { flex-direction: column; gap: 4px; text-align: center; }
+            .track-item { grid-template-columns: 90px 1fr auto; gap: 0.5rem; }
+            .track-name { font-size: 0.75rem; }
+            .track-bar-container { height: 16px; }
+            .hero-image-container { margin-top: 16px; max-width: 400px; margin-left: auto; margin-right: auto; }
         }
-
-        /* ===== Judges Section ===== */
-        .judges-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 28px;
-            margin-top: 48px;
+        @media (max-width: 640px) {
+            .hero-text h1 { font-size: 2rem; }
+            .hero-actions { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 280px; justify-content: center; }
+            .hero { padding-top: 170px !important; }
+            body.has-announcement .hero { padding-top: calc(170px + var(--announcement-height)) !important; }
+            .mobile-menu a { font-size: 1.5rem; padding: 1.25rem 0; }
         }
-
-        .judge-card {
-            background: white;
-            border-radius: 20px;
-            padding: 32px 24px 28px;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .judge-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-color), var(--accent-light));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .judge-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
-        }
-
-        .judge-card:hover::before {
-            opacity: 1;
-        }
-
-        .judge-photo {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 16px;
-            display: block;
-            border: 3px solid rgba(255, 107, 53, 0.15);
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .judge-card:hover .judge-photo {
-            transform: scale(1.05);
-            border-color: var(--accent-color);
-        }
-
-        .judge-name {
-            font-size: 1.1rem;
-            font-weight: 800;
-            margin-bottom: 4px;
-            letter-spacing: -0.01em;
-        }
-
-        .judge-title {
-            font-size: 0.82rem;
-            color: var(--accent-color);
-            font-weight: 600;
-            margin-bottom: 4px;
-            line-height: 1.35;
-        }
-
-        .judge-credential {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            font-weight: 500;
-            margin-bottom: 12px;
-            font-style: italic;
-        }
-
-        .judge-bio {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.55;
-            margin-bottom: 14px;
-        }
-
-        .judge-quote {
-            font-size: 0.82rem;
-            color: #334155;
-            line-height: 1.5;
-            font-style: italic;
-            padding: 12px 16px;
-            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
-            border-radius: 10px;
-            border-left: 3px solid var(--accent-color);
-            text-align: left;
-            position: relative;
-            display: none;
-            margin-top: 8px;
-        }
-
-        .judge-quote.active {
-            display: block;
-        }
-
-        .judge-quote::before {
-            content: '"';
-            position: absolute;
-            top: 4px;
-            left: 10px;
-            font-size: 1.6rem;
-            color: var(--accent-color);
-            opacity: 0.3;
-            font-family: Georgia, serif;
-            line-height: 1;
-        }
-
-        .judge-quote-toggle {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 0.78rem;
-            color: var(--accent-color);
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-weight: 600;
-            padding: 4px 0;
-            transition: opacity 0.2s;
-        }
-
-        .judge-quote-toggle:hover {
-            opacity: 0.7;
-        }
-
-        .judge-quote-toggle .toggle-arrow {
-            transition: transform 0.2s;
-            font-size: 0.7rem;
-        }
-
-        .judge-quote-toggle.active .toggle-arrow {
-            transform: rotate(90deg);
-        }
-
-        @media (max-width: 1024px) {
-            .judges-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .judges-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            .judge-card {
-                padding: 24px 20px 22px;
-            }
-
-            .judge-photo {
-                width: 90px;
-                height: 90px;
-            }
-        }
+        @media (max-width: 600px) { .tracks-grid-expandable { grid-template-columns: 1fr; } .judges-grid { grid-template-columns: 1fr; gap: 16px; } .judge-card { padding: 24px 20px 22px; } .judge-photo { width: 90px; height: 90px; } }
+        @media (max-width: 480px) { .mobile-menu { padding: 5rem 1.5rem 2rem; } }
     </style>
-    <style>
-        /* Mobile Menu Accordion Overrides */
-        .mobile-menu {
-            padding: 5rem 1.5rem 2rem !important;
-        }
-
-        .mobile-menu a {
-            font-size: 1.5rem !important;
-            /* Smaller than 2rem */
-            padding: 1rem 0 !important;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-        }
-
-        .mobile-dropdown-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            background: none;
-            border: none;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            padding: 1rem 0;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--black);
-            cursor: pointer;
-            text-align: left;
-            font-family: inherit;
-        }
-
-        .mobile-dropdown-toggle .arrow {
-            transition: transform 0.3s ease;
-            font-size: 1.2rem;
-        }
-
-        .mobile-dropdown-toggle.active .arrow {
-            transform: rotate(180deg);
-            color: var(--orange);
-        }
-
-        .mobile-dropdown-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background: #f9f9f9;
-            margin: 0 -1.5rem;
-            /* Full width background */
-            padding: 0 1.5rem;
-            /* Inner padding */
-        }
-
-        .mobile-dropdown-content.open {
-            max-height: 500px;
-            /* Arbitrary large height */
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        .mobile-dropdown-content a {
-            font-size: 1.1rem !important;
-            padding: 0.75rem 0 !important;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
-            color: var(--gray) !important;
-            padding-left: 1rem !important;
-        }
-
-        .mobile-dropdown-content a:hover {
-            color: var(--orange) !important;
-            padding-left: 1.5rem !important;
-            background: rgba(0, 0, 0, 0.02);
-        }
-    </style>
-    <!-- Shared Navbar Styles -->
-    <link rel="stylesheet" href="css/navbar.css">
-
 </head>
 
 <body>
     <nav id="nav">
         <div class="nav-container">
-            <a href="index.html" class="logo">
-                <img src="finmango.png" alt="FinMango">
-            </a>
-
+            <a href="index.html" class="logo"><img src="finmango.png" alt="FinMango"></a>
             <div class="nav-right">
                 <a href="about.html">About</a>
-                <div class="dropdown"><a href="research.html" style="cursor: pointer;">Research ▾</a>
-                    <div class="dropdown-content"><a href="research.html" class="dropdown-item">Overview</a><a
-                            href="affordability-lab.html" class="dropdown-item">Affordability Lab</a><a
-                            href="barometer.html" class="dropdown-item">Barometer 📊</a><a
-                            href="https://github.com/finmango/research" class="dropdown-item" target="_blank"
-                            rel="noopener noreferrer">GitHub</a></div>
-                </div>
-                <div class="dropdown"><a href="education.html" style="cursor: pointer;">Education ▾</a>
-                    <div class="dropdown-content"><a href="education.html#millionaire-mindset"
-                            class="dropdown-item">Millionaire Mindset 💰</a><a href="barrier-breakers.html"
-                            class="dropdown-item">Barrier Breakers 🚀</a><a href="resources.html"
-                            class="dropdown-item">Resources 🛠️</a></div>
-                </div>
-                <a href="ambassadors.html">Ambassadors</a>
 
+                <div class="dropdown">
+                    <a href="research.html" style="cursor: pointer;">Research ▾</a>
+                    <div class="dropdown-content">
+                        <a href="research.html" class="dropdown-item">Overview</a>
+                        <a href="affordability-lab.html" class="dropdown-item">Affordability Lab <span class="badge-beta">Beta</span></a>
+                        <a href="barometer.html" class="dropdown-item">Barometer 📊</a>
+                        <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer">GitHub 🔗</a>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <a href="education.html" style="cursor: pointer;">Education ▾</a>
+                    <div class="dropdown-content">
+                        <a href="education.html#millionaire-mindset" class="dropdown-item">Millionaire Mindset 💰</a>
+                        <a href="barrier-breakers.html" class="dropdown-item">Barrier Breakers 🚀</a>
+                        <a href="resources.html" class="dropdown-item">Resources 🛠️</a>
+                    </div>
+                </div>
+
+                <a href="ambassadors.html">Ambassadors</a>
+                <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
                 <a href="donate.html" class="btn-donate">Donate</a>
             </div>
 
             <div class="mobile-controls">
-
+                <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
                 <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
                     <span></span>
                     <span></span>
@@ -3067,7 +475,6 @@
             </div>
         </div>
     </nav>
-
 
     <div class="mobile-menu" id="mobileMenu">
         <a href="about.html">About</a>
@@ -3093,83 +500,52 @@
 
         <a href="ambassadors.html">Ambassadors</a>
         <a href="donate.html">Donate</a>
+        <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
     </div>
-
 
     <main>
         <section class="hero" id="hero-section">
-
-
             <div class="container">
                 <div class="hero-content">
                     <div class="hero-text">
                         <div class="hero-meta-row">
-                            <div class="hero-badge" style="margin-bottom: 0; font-size: 0.9rem; padding: 6px 12px;">
-                                $20,000+ in prizes</div>
-                            <div class="presented-by"
-                                style="font-weight: 500; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; display: flex; align-items: center; opacity: 0.8;">
+                            <div class="hero-badge" style="margin-bottom: 0; padding: 6px 12px;">$20,000+ in prizes</div>
+                            <div style="font-weight: 500; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 0.05em; text-transform: uppercase; display: flex; align-items: center; opacity: 0.8;">
                                 <span style="opacity: 0.7; margin-right: 6px;">Presented By</span>
-                                <img src="valmark.svg" alt="Valmark Financial Group"
-                                    style="height: 18px; filter: grayscale(1); opacity: 0.7;">
+                                <img src="valmark.svg" alt="Valmark Financial Group" style="height: 18px; filter: grayscale(1); opacity: 0.7;">
                             </div>
                         </div>
-                        <h1><span>Barrier Breakers</span> Innovation Challenge</h1>
-                        <p>
-                            High school students in Northeast Ohio: Build solutions to financial health barriers.
-                            Compete in Demo Day (oral presentations), Innovation Gallery (poster presentations), or test
-                            your knowledge.
-                        </p>
-                        <p class="hero-date">
-                            <strong>March 20, 2026</strong> at Kent State University
-                        </p>
-                        <!-- Countdown Timer -->
+                        <h1><span class="hand-underline" style="color: var(--accent-color);">Barrier Breakers
+                            <svg viewBox="0 0 200 12" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M2 8 C 30 3, 50 10, 80 6 S 130 2, 160 7 S 185 4, 198 6" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.7"/>
+                              <path d="M4 10 C 35 5, 55 11, 85 7 S 135 3, 165 8 S 188 5, 196 8" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.4"/>
+                            </svg>
+                        </span> Innovation Challenge</h1>
+                        <p>High school students in Northeast Ohio: Build solutions to financial health barriers. Compete in Demo Day (oral presentations), Innovation Gallery (poster presentations), or test your knowledge.</p>
+                        <p class="hero-date"><strong>March 20, 2026</strong> at Kent State University</p>
                         <div class="countdown-timer" id="countdown-timer">
                             <div class="countdown-label">⏰ Event starts in:</div>
                             <div class="countdown-boxes">
-                                <div class="countdown-box">
-                                    <span class="countdown-value" id="countdown-days">--</span>
-                                    <span class="countdown-unit">days</span>
-                                </div>
-                                <div class="countdown-box">
-                                    <span class="countdown-value" id="countdown-hours">--</span>
-                                    <span class="countdown-unit">hrs</span>
-                                </div>
-                                <div class="countdown-box">
-                                    <span class="countdown-value" id="countdown-minutes">--</span>
-                                    <span class="countdown-unit">min</span>
-                                </div>
-                                <div class="countdown-box">
-                                    <span class="countdown-value" id="countdown-seconds">--</span>
-                                    <span class="countdown-unit">sec</span>
-                                </div>
+                                <div class="countdown-box"><span class="countdown-value" id="countdown-days">--</span><span class="countdown-unit">days</span></div>
+                                <div class="countdown-box"><span class="countdown-value" id="countdown-hours">--</span><span class="countdown-unit">hrs</span></div>
+                                <div class="countdown-box"><span class="countdown-value" id="countdown-minutes">--</span><span class="countdown-unit">min</span></div>
+                                <div class="countdown-box"><span class="countdown-value" id="countdown-seconds">--</span><span class="countdown-unit">sec</span></div>
                             </div>
                         </div>
                         <div class="hero-actions">
-                            <a href="https://finmango.org/barrier-breakers-schedule.pdf" target="_blank" class="btn btn-accent">
-                                Event Schedule
-                            </a>
+                            <a href="https://finmango.org/barrier-breakers-schedule.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-accent">📋 View Schedule</a>
                         </div>
-
                     </div>
                     <div class="hero-image-container" style="position: relative; z-index: 2;">
-                        <img src="ksu-finmango.jpg" alt="Kent State University Partnership"
-                            style="width: 100%; border-radius: 24px; box-shadow: 0 20px 80px rgba(0,0,0,0.15); transform: rotate(2deg); border: 4px solid white;">
-                        <div
-                            style="position: absolute; bottom: -24px; left: -24px; background: white; padding: 20px 24px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); max-width: 280px;">
-                            <p
-                                style="margin: 0; font-size: 0.9rem; font-weight: 600; color: var(--text-color); line-height: 1.4;">
-                                Hosted in partnership with <span style="color: var(--accent-color);">Kent State
-                                    University</span>
-                            </p>
+                        <img src="ksu-finmango.jpg" alt="Kent State University Partnership" style="width: 100%; border-radius: 24px; box-shadow: 0 20px 80px rgba(0,0,0,0.15); transform: rotate(2deg); border: 4px solid white;">
+                        <div style="position: absolute; bottom: -24px; left: -24px; background: white; padding: 20px 24px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); max-width: 280px;">
+                            <p style="margin: 0; font-size: 0.9rem; font-weight: 600; color: var(--text-color); line-height: 1.4;">Hosted in partnership with <span style="color: var(--accent-color);">Kent State University</span></p>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </section>
 
-        <!-- Kent State Collaboration Section -->
         <section class="collab-section" id="partnership">
             <div class="container">
                 <div class="collab-header">
@@ -3185,13 +561,18 @@
             </div>
         </section>
 
+        <div class="section-divider-bb">
+            <svg class="squiggle-divider" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/>
+            </svg>
+        </div>
+
         <section id="timeline">
             <div class="container">
                 <div style="text-align: center;">
-                    <div class="section-label">How It Works</div>
+                    <div class="section-label">how it works</div>
                     <h2>Your Path to Competition</h2>
                 </div>
-
                 <div class="timeline-grid">
                     <div class="timeline-item">
                         <div class="timeline-date">Mar 4</div>
@@ -3201,239 +582,133 @@
                     <div class="timeline-item">
                         <div class="timeline-date">Early Mar</div>
                         <div class="timeline-title">Build Your Solution</div>
-                        <p>All teams notified. Research your barrier and build a solution—use AI tools like Gemini or
-                            Claude to prototype. <strong>Don't just start—finish your project! Even a rough prototype is
-                                better than just an idea.</strong></p>
+                        <p>All teams notified. Research your barrier and build a solution—use AI tools like Gemini or Claude to prototype. <strong>Don't just start—finish your project!</strong></p>
                     </div>
                     <div class="timeline-item featured">
                         <div class="timeline-date">Mar 20</div>
                         <div class="timeline-title">Present & Compete</div>
-                        <p>Present at Kent State in Demo Day (oral) or Innovation Gallery (poster). Cash prizes +
-                            scholarships!</p>
+                        <p>Present at Kent State in Demo Day (oral) or Innovation Gallery (poster). Cash prizes + scholarships!</p>
                     </div>
                 </div>
-
-                <!-- Selection note merged in -->
                 <div style="max-width: 750px; margin: 32px auto 0; padding: 20px 28px; background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%); border-radius: 12px; border: 1px solid rgba(255, 107, 53, 0.15); text-align: center;">
                     <p style="margin: 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-                        <strong style="color: var(--text-color);">How selection works:</strong>
-                        Top project from each track presents on the <strong>Demo Day stage</strong>. Everyone else competes in the <strong>Innovation Gallery</strong>. All teams can win cash prizes.
-                        <strong style="color: var(--accent-color);">Everyone who applies competes!</strong>
+                        <strong style="color: var(--text-color);">How selection works:</strong> Top project from each track presents on the <strong>Demo Day stage</strong>. Everyone else competes in the <strong>Innovation Gallery</strong>. All teams can win cash prizes. <strong style="color: var(--accent-color);">Everyone who applies competes!</strong>
                     </p>
                 </div>
             </div>
         </section>
 
-        <section id="tracks" style="background: var(--surface-color);">
+        <section id="tracks" style="background: var(--warm-white);">
             <div class="container">
                 <div style="text-align: center;">
-                    <div class="section-label">Pick Your Focus</div>
+                    <div class="section-label">pick your focus</div>
                     <h2>Innovation Tracks</h2>
-                    <p style="max-width: 700px; margin: 0 auto;">
-                        Choose one challenge. Research why it's a barrier to financial health. Build a solution—policy
-                        proposal, app prototype, financial literacy tool, or anything else.
-                    </p>
+                    <p style="max-width: 700px; margin: 0 auto;">Choose one challenge. Research why it's a barrier to financial health. Build a solution—policy proposal, app prototype, financial literacy tool, or anything else.</p>
                 </div>
-
                 <div class="tracks-grid-expandable" style="gap: 12px;">
                     <div class="track-card-expandable" style="pointer-events: none;">
                         <div style="display: flex; align-items: center; gap: 12px; padding: 16px 20px;">
                             <div class="track-icon" style="font-size: 1.3rem;">🚗</div>
-                            <div>
-                                <h3 style="margin: 0; font-size: 1rem;">Transportation</h3>
-                                <p style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">Car costs, insurance, and transit gaps blocking stable employment</p>
-                            </div>
+                            <div><h3 style="margin: 0; font-size: 1rem;">Transportation</h3><p style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">Car costs, insurance, and transit gaps blocking stable employment</p></div>
                         </div>
                     </div>
                     <div class="track-card-expandable" style="pointer-events: none;">
                         <div style="display: flex; align-items: center; gap: 12px; padding: 16px 20px;">
                             <div class="track-icon" style="font-size: 1.3rem;">🏠</div>
-                            <div>
-                                <h3 style="margin: 0; font-size: 1rem;">Housing Affordability</h3>
-                                <p style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">Rent burden, deposits, and credit barriers to stable housing</p>
-                            </div>
+                            <div><h3 style="margin: 0; font-size: 1rem;">Housing Affordability</h3><p style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">Rent burden, deposits, and credit barriers to stable housing</p></div>
                         </div>
                     </div>
                     <div class="track-card-expandable" style="pointer-events: none;">
                         <div style="display: flex; align-items: center; gap: 12px; padding: 16px 20px;">
                             <div class="track-icon" style="font-size: 1.3rem;">🏥</div>
-                            <div>
-                                <h3 style="margin: 0; font-size: 1rem;">Healthcare Access</h3>
-                                <p style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">Medical debt and high costs devastating young adults</p>
-                            </div>
+                            <div><h3 style="margin: 0; font-size: 1rem;">Healthcare Access</h3><p style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">Medical debt and high costs devastating young adults</p></div>
                         </div>
                     </div>
                     <div class="track-card-expandable" style="pointer-events: none;">
                         <div style="display: flex; align-items: center; gap: 12px; padding: 16px 20px;">
                             <div class="track-icon" style="font-size: 1.3rem;">📚</div>
-                            <div>
-                                <h3 style="margin: 0; font-size: 1rem;">Literacy &amp; Investment</h3>
-                                <p style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">Limited financial education preventing generational wealth</p>
-                            </div>
+                            <div><h3 style="margin: 0; font-size: 1rem;">Literacy &amp; Investment</h3><p style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">Limited financial education preventing generational wealth</p></div>
                         </div>
                     </div>
                     <div class="track-card-expandable" style="pointer-events: none;">
                         <div style="display: flex; align-items: center; gap: 12px; padding: 16px 20px;">
                             <div class="track-icon" style="font-size: 1.3rem;">🌟</div>
-                            <div>
-                                <h3 style="margin: 0; font-size: 1rem;">Open Track</h3>
-                                <p style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">Any financial barrier — childcare, food insecurity, student debt, or your own idea</p>
-                            </div>
+                            <div><h3 style="margin: 0; font-size: 1rem;">Open Track</h3><p style="margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted);">Any financial barrier — childcare, food insecurity, student debt, or your own idea</p></div>
                         </div>
                     </div>
-
-                    <!-- Track Popularity with Progress Bars -->
                     <div class="track-popularity-compact" id="track-popularity-compact">
                         <div class="track-popularity-header">
-                            <div class="track-popularity-title">
-                                <span class="live-dot"></span>
-                                <span>📊 Track Popularity</span>
-                            </div>
+                            <div class="track-popularity-title"><span class="live-dot"></span><span>📊 Track Popularity</span></div>
                             <span class="track-stats-subtitle">Live submissions</span>
                         </div>
                         <div class="track-list" id="track-stats-compact">
-                            <div class="track-item" data-track="Transportation">
-                                <span class="track-name">🚗 Transportation</span>
-                                <div class="track-bar-container">
-                                    <div class="track-bar" style="width: 0%"></div>
-                                </div>
-                                <span class="track-count">--</span>
-                            </div>
-                            <div class="track-item" data-track="Housing Affordability">
-                                <span class="track-name">🏠 Housing</span>
-                                <div class="track-bar-container">
-                                    <div class="track-bar" style="width: 0%"></div>
-                                </div>
-                                <span class="track-count">--</span>
-                            </div>
-                            <div class="track-item" data-track="Healthcare Access">
-                                <span class="track-name">🏥 Healthcare</span>
-                                <div class="track-bar-container">
-                                    <div class="track-bar" style="width: 0%"></div>
-                                </div>
-                                <span class="track-count">--</span>
-                            </div>
-                            <div class="track-item" data-track="Open Track">
-                                <span class="track-name">🌟 Open Track</span>
-                                <div class="track-bar-container">
-                                    <div class="track-bar" style="width: 0%"></div>
-                                </div>
-                                <span class="track-count">--</span>
-                            </div>
-                            <div class="track-item" data-track="Literacy &amp; Investment Access">
-                                <span class="track-name">📚 Literacy</span>
-                                <div class="track-bar-container">
-                                    <div class="track-bar" style="width: 0%"></div>
-                                </div>
-                                <span class="track-count">--</span>
-                            </div>
+                            <div class="track-item" data-track="Transportation"><span class="track-name">🚗 Transportation</span><div class="track-bar-container"><div class="track-bar" style="width: 0%"></div></div><span class="track-count">--</span></div>
+                            <div class="track-item" data-track="Housing Affordability"><span class="track-name">🏠 Housing</span><div class="track-bar-container"><div class="track-bar" style="width: 0%"></div></div><span class="track-count">--</span></div>
+                            <div class="track-item" data-track="Healthcare Access"><span class="track-name">🏥 Healthcare</span><div class="track-bar-container"><div class="track-bar" style="width: 0%"></div></div><span class="track-count">--</span></div>
+                            <div class="track-item" data-track="Open Track"><span class="track-name">🌟 Open Track</span><div class="track-bar-container"><div class="track-bar" style="width: 0%"></div></div><span class="track-count">--</span></div>
+                            <div class="track-item" data-track="Literacy &amp; Investment Access"><span class="track-name">📚 Literacy</span><div class="track-bar-container"><div class="track-bar" style="width: 0%"></div></div><span class="track-count">--</span></div>
                         </div>
-                        <div class="track-stats-footer">
-                            <span class="total-applications"><strong id="total-apps-compact">--</strong> total
-                                applications</span>
-                        </div>
+                        <div class="track-stats-footer"><span class="total-applications"><strong id="total-apps-compact">--</strong> total applications</span></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="resources-evaluation" style="background: var(--surface-color); padding: 48px 0;">
+        <section id="resources-evaluation" style="background: var(--warm-white); padding: 48px 0;">
             <div class="container">
                 <div style="text-align: center;">
-                    <div class="section-label">Prepare to Win</div>
+                    <div class="section-label">prepare to win</div>
                     <h2>Resources & Scoring</h2>
                 </div>
-
-                <!-- Compact resource links row -->
                 <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px;">
                     <a href="barrier-breakers-schedule.pdf" target="_blank" class="btn btn-outline btn-small" style="display: inline-flex; align-items: center; gap: 6px;">📋 Event Schedule</a>
                     <a href="barrier-breakers-one-pager-2026.pdf" target="_blank" class="btn btn-outline btn-small" style="display: inline-flex; align-items: center; gap: 6px;">📝 Teacher One-Pager</a>
                     <a href="barrier-breakers-flyer.pdf" target="_blank" class="btn btn-outline btn-small" style="display: inline-flex; align-items: center; gap: 6px;">📄 Class Flyer</a>
                     <a href="barrier-breakers-rubric.pdf" target="_blank" class="btn btn-outline btn-small" style="display: inline-flex; align-items: center; gap: 6px;">⭐ Judging Rubric</a>
                 </div>
-
-                <!-- Compact scoring summary -->
                 <div style="max-width: 700px; margin: 0 auto; background: white; border-radius: 16px; padding: 24px 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
                     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                        <div>
-                            <h3 style="margin: 0 0 6px; font-size: 1rem;">How Projects Are Scored</h3>
-                            <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Same rubric for Demo Day & Innovation Gallery · Each criterion scored 1-5</p>
-                        </div>
-                        <div style="font-size: 0.85rem; color: var(--text-muted); text-align: right;">
-                            <strong style="color: var(--text-color);">100 pts total</strong>
-                        </div>
+                        <div><h3 style="margin: 0 0 6px; font-size: 1rem;">How Projects Are Scored</h3><p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">Same rubric for Demo Day & Innovation Gallery · Each criterion scored 1-5</p></div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted); text-align: right;"><strong style="color: var(--text-color);">100 pts total</strong></div>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; text-align: center;">
-                        <div style="padding: 12px; background: var(--bg-color); border-radius: 10px;">
-                            <div style="font-weight: 700; font-size: 0.85rem;">Problem</div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);">25 pts</div>
-                        </div>
-                        <div style="padding: 12px; background: var(--bg-color); border-radius: 10px;">
-                            <div style="font-weight: 700; font-size: 0.85rem;">Solution</div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);">25 pts</div>
-                        </div>
-                        <div style="padding: 12px; background: var(--bg-color); border-radius: 10px;">
-                            <div style="font-weight: 700; font-size: 0.85rem;">Presentation</div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);">25 pts</div>
-                        </div>
-                        <div style="padding: 12px; background: var(--bg-color); border-radius: 10px;">
-                            <div style="font-weight: 700; font-size: 0.85rem;">Impact</div>
-                            <div style="font-size: 0.75rem; color: var(--text-muted);">25 pts</div>
-                        </div>
+                        <div style="padding: 12px; background: var(--bg-color); border-radius: 10px;"><div style="font-weight: 700; font-size: 0.85rem;">Problem</div><div style="font-size: 0.75rem; color: var(--text-muted);">25 pts</div></div>
+                        <div style="padding: 12px; background: var(--bg-color); border-radius: 10px;"><div style="font-weight: 700; font-size: 0.85rem;">Solution</div><div style="font-size: 0.75rem; color: var(--text-muted);">25 pts</div></div>
+                        <div style="padding: 12px; background: var(--bg-color); border-radius: 10px;"><div style="font-weight: 700; font-size: 0.85rem;">Presentation</div><div style="font-size: 0.75rem; color: var(--text-muted);">25 pts</div></div>
+                        <div style="padding: 12px; background: var(--bg-color); border-radius: 10px;"><div style="font-weight: 700; font-size: 0.85rem;">Impact</div><div style="font-size: 0.75rem; color: var(--text-muted);">25 pts</div></div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <div class="section-divider-bb">
+            <svg class="squiggle-divider" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/>
+            </svg>
+        </div>
+
         <section id="prizes">
             <div class="container">
                 <div style="text-align: center;">
                     <div style="display: inline-flex; align-items: center; gap: 12px;">
-                        <div class="section-label">Rewards</div>
+                        <div class="section-label">rewards</div>
                         <span style="font-size: 0.75rem; color: var(--text-muted); opacity: 0.6;">Sponsored by</span>
                         <img src="valmark.svg" alt="Valmark Financial Group" style="height: 18px; opacity: 0.45;">
                     </div>
                     <h2>Prizes &amp; Awards</h2>
                 </div>
-
                 <div class="divisions-grid">
                     <div class="division-card">
                         <h3>🚀 Demo Day (Oral Presentations)</h3>
-                        <p class="desc"
-                            style="text-align: center !important; margin: 0 auto !important; width: 100% !important; display: block !important;">
-                            Top
-                            team from each of 5 tracks. 5-min pitch + 2-min
-                            Q&A.</p>
+                        <p class="desc" style="text-align: center; margin: 0 auto; width: 100%; display: block;">Top team from each of 5 tracks. 5-min pitch + 2-min Q&A.</p>
                         <ul class="prize-list" style="font-size: 0.9rem;">
-                            <li class="prize-item" style="flex-wrap: wrap; gap: 4px;">
-                                <strong>1st Place — $7,500</strong>
-                                <span style="font-size: 0.8rem; opacity: 0.8;">($4,000 cash + $2,500 scholarship +
-                                    $1,000 school)</span>
-                            </li>
-                            <li class="prize-item" style="flex-wrap: wrap; gap: 4px;">
-                                <strong>2nd Place — $4,650</strong>
-                                <span style="font-size: 0.8rem; opacity: 0.8;">($2,500 cash + $1,500 scholarship + $650
-                                    school)</span>
-                            </li>
-                            <li class="prize-item" style="flex-wrap: wrap; gap: 4px;">
-                                <strong>3rd Place — $2,750</strong>
-                                <span style="font-size: 0.8rem; opacity: 0.8;">($1,250 cash + $1,000 scholarship + $500
-                                    school)</span>
-                            </li>
-                            <li class="prize-item" style="flex-wrap: wrap; gap: 4px;">
-                                <strong>4th Place — $1,850</strong>
-                                <span style="font-size: 0.8rem; opacity: 0.8;">($750 cash + $750 scholarship + $350
-                                    school)</span>
-                            </li>
-                            <li class="prize-item" style="flex-wrap: wrap; gap: 4px;">
-                                <strong>5th Place — $1,250</strong>
-                                <span style="font-size: 0.8rem; opacity: 0.8;">($500 cash + $500 scholarship + $250
-                                    school)</span>
-                            </li>
+                            <li class="prize-item" style="flex-wrap: wrap; gap: 4px;"><strong>1st Place — $7,500</strong><span style="font-size: 0.8rem; opacity: 0.8;">($4,000 cash + $2,500 scholarship + $1,000 school)</span></li>
+                            <li class="prize-item" style="flex-wrap: wrap; gap: 4px;"><strong>2nd Place — $4,650</strong><span style="font-size: 0.8rem; opacity: 0.8;">($2,500 cash + $1,500 scholarship + $650 school)</span></li>
+                            <li class="prize-item" style="flex-wrap: wrap; gap: 4px;"><strong>3rd Place — $2,750</strong><span style="font-size: 0.8rem; opacity: 0.8;">($1,250 cash + $1,000 scholarship + $500 school)</span></li>
+                            <li class="prize-item" style="flex-wrap: wrap; gap: 4px;"><strong>4th Place — $1,850</strong><span style="font-size: 0.8rem; opacity: 0.8;">($750 cash + $750 scholarship + $350 school)</span></li>
+                            <li class="prize-item" style="flex-wrap: wrap; gap: 4px;"><strong>5th Place — $1,250</strong><span style="font-size: 0.8rem; opacity: 0.8;">($500 cash + $500 scholarship + $250 school)</span></li>
                         </ul>
-                        <p style="font-size: 0.7rem; opacity: 0.7; margin-top: 12px; font-style: italic;">Cash prizes & scholarships split among team members. Scholarships
-                            require attending KSU & selecting ACCBE major/minor. School grants go directly to the
-                            school.</p>
+                        <p style="font-size: 0.7rem; opacity: 0.7; margin-top: 12px; font-style: italic;">Cash prizes & scholarships split among team members. Scholarships require attending KSU & selecting ACCBE major/minor. School grants go directly to the school.</p>
                     </div>
                     <div class="division-card">
                         <h3>📊 Innovation Gallery (Poster Presentations)</h3>
@@ -3454,97 +729,65 @@
                         </ul>
                     </div>
                 </div>
-
-                <p
-                    style="text-align: center; font-size: 0.85rem; margin-top: 24px; opacity: 0.7; font-style: italic; max-width: 700px; margin-left: auto; margin-right: auto;">
-                    Student cash prizes split among team members. High school awards go directly to the school.
-                    Prize amounts may increase as we add more sponsors.
-                </p>
+                <p style="text-align: center; font-size: 0.85rem; margin-top: 24px; opacity: 0.7; font-style: italic; max-width: 700px; margin-left: auto; margin-right: auto;">Student cash prizes split among team members. High school awards go directly to the school. Prize amounts may increase as we add more sponsors.</p>
             </div>
         </section>
 
-        <!-- Judges Section -->
         <section id="judges">
             <div class="container">
                 <div style="text-align: center;">
-                    <div class="section-label">Demo Day Judges</div>
+                    <div class="section-label">demo day judges</div>
                     <h2>Meet the Judges</h2>
-                    <p style="max-width: 700px; margin: 0 auto;">
-                        Our judges bring diverse expertise across finance, entrepreneurship, and community impact to evaluate Demo Day presentations.
-                    </p>
+                    <p style="max-width: 700px; margin: 0 auto;">Our judges bring diverse expertise across finance, entrepreneurship, and community impact to evaluate Demo Day presentations.</p>
                 </div>
-
                 <div class="judges-grid">
-                    <!-- Cass Lacey -->
                     <div class="judge-card">
                         <img src="Cass Lacey.jpg" alt="Cass Lacey" class="judge-photo" loading="lazy">
                         <div class="judge-name">Cass Lacey</div>
                         <div class="judge-title">Early Talent Program Manager</div>
                         <div class="judge-credential">Valmark</div>
                         <button class="judge-quote-toggle" onclick="toggleJudgeQuote(this)">Why financial health matters <span class="toggle-arrow">▶</span></button>
-                        <div class="judge-quote">
-                            Financial health matters to me because it helps create stability and security for families. Having a strong financial foundation means being prepared for the unexpected and knowing the people I care about are protected. It also allows us to plan with confidence and focus on what matters most — time together and long-term well-being.
-                        </div>
+                        <div class="judge-quote">Financial health matters to me because it helps create stability and security for families. Having a strong financial foundation means being prepared for the unexpected and knowing the people I care about are protected.</div>
                     </div>
-
-                    <!-- Mia Fawls -->
                     <div class="judge-card">
                         <img src="Mia Fawls.jpg" alt="Mia Fawls" class="judge-photo" loading="lazy">
                         <div class="judge-name">Mia Fawls</div>
                         <div class="judge-title">Associate Financial Planner</div>
                         <div class="judge-credential">Valmark</div>
                         <button class="judge-quote-toggle" onclick="toggleJudgeQuote(this)">Why financial health matters <span class="toggle-arrow">▶</span></button>
-                        <div class="judge-quote">
-                            Financial health knowledge matters to me because many people tend to focus only on the present and don't always realize how important it is to prepare for the future. Understanding concepts like saving, managing debt, and planning for retirement early in life can set people up for long-term success. When your financial health is strong, it can create more opportunities and flexibility in both your career and personal life.
-                        </div>
+                        <div class="judge-quote">Financial health knowledge matters to me because many people tend to focus only on the present and don't always realize how important it is to prepare for the future. Understanding concepts like saving, managing debt, and planning for retirement early in life can set people up for long-term success.</div>
                     </div>
-
-                    <!-- Drew Mallott -->
                     <div class="judge-card">
                         <img src="Drew Mallott.jpg" alt="Drew Mallott" class="judge-photo" loading="lazy">
                         <div class="judge-name">Drew Mallott</div>
                         <div class="judge-title">SVP, Platform Strategy at Bank of America</div>
                         <div class="judge-credential">KSU Grad '04 (Marketing)</div>
                         <button class="judge-quote-toggle" onclick="toggleJudgeQuote(this)">Why financial health matters <span class="toggle-arrow">▶</span></button>
-                        <div class="judge-quote">
-                            While long-term financial health is a series of individual choices, collectively we can all learn more over time and consistently improve. The earlier positive financial health habits are learned and put into practice, the greater the long-term impact, which is why the work done by FinMango is critical.
-                        </div>
+                        <div class="judge-quote">While long-term financial health is a series of individual choices, collectively we can all learn more over time and consistently improve. The earlier positive financial health habits are learned, the greater the long-term impact.</div>
                     </div>
-
-                    <!-- Peyton Zachrich -->
                     <div class="judge-card">
                         <img src="Peyton Zachrich.jpeg" alt="Peyton Zachrich" class="judge-photo" loading="lazy">
                         <div class="judge-name">Peyton Zachrich</div>
                         <div class="judge-title">Owner, Evolve Egress & Exteriors</div>
                         <div class="judge-credential">Entrepreneur & Real Estate Investor</div>
                         <button class="judge-quote-toggle" onclick="toggleJudgeQuote(this)">Why financial health matters <span class="toggle-arrow">▶</span></button>
-                        <div class="judge-quote">
-                            Financial health matters to me because it can lead to greater agency and freedom in people's lives.
-                        </div>
+                        <div class="judge-quote">Financial health matters to me because it can lead to greater agency and freedom in people's lives.</div>
                     </div>
-
-                    <!-- Ryan Bayonnet -->
                     <div class="judge-card">
                         <img src="Ryan Bayonnet, CFP.jpeg" alt="Ryan Bayonnet, CFP®" class="judge-photo" loading="lazy">
                         <div class="judge-name">Ryan Bayonnet, CFP®</div>
                         <div class="judge-title">Founder, Hyland Wealth Management</div>
                         <div class="judge-credential">Certified Financial Planner® · Fee-Only RIA</div>
                         <button class="judge-quote-toggle" onclick="toggleJudgeQuote(this)">Why financial health matters <span class="toggle-arrow">▶</span></button>
-                        <div class="judge-quote">
-                            Financial health matters to me because I've seen firsthand how the right guidance at the right time can transform a family's future. Everyone deserves access to honest, transparent financial advice — not just the wealthy.
-                        </div>
+                        <div class="judge-quote">Financial health matters to me because I've seen firsthand how the right guidance at the right time can transform a family's future. Everyone deserves access to honest, transparent financial advice — not just the wealthy.</div>
                     </div>
-
-                    <!-- Ashley Wasielewski -->
                     <div class="judge-card">
                         <img src="Ashley Wasielewski.jpeg" alt="Ashley Wasielewski" class="judge-photo" loading="lazy">
                         <div class="judge-name">Ashley Wasielewski</div>
                         <div class="judge-title">VP, Community Relations Manager – Cleveland, Indianapolis & Wisconsin Markets</div>
                         <div class="judge-credential">Bank of America</div>
                         <button class="judge-quote-toggle" onclick="toggleJudgeQuote(this)">Why financial health matters <span class="toggle-arrow">▶</span></button>
-                        <div class="judge-quote">
-                            I really believe it is important to learn financial literacy and learn it ASAP. I still remember our program in elementary school. I want to give that experience to others and help them avoid costly mistakes.
-                        </div>
+                        <div class="judge-quote">I really believe it is important to learn financial literacy and learn it ASAP. I still remember our program in elementary school. I want to give that experience to others and help them avoid costly mistakes.</div>
                     </div>
                 </div>
             </div>
@@ -3553,121 +796,46 @@
         <section id="winners">
             <div class="container">
                 <div style="text-align: center;">
-                    <div class="section-label">Past Champions</div>
+                    <div class="section-label">past champions</div>
                     <h2>Previous Winners</h2>
-                    <p style="margin: 0 auto;">Celebrating students who tackled barriers to financial health
-                        with innovative solutions.</p>
+                    <p style="margin: 0 auto;">Celebrating students who tackled barriers to financial health with innovative solutions.</p>
                 </div>
-
-                    <div class="winners-section">
-                        <!-- 2025 Block -->
-                        <div class="winner-year-block">
-                            <div class="winner-year-block">
-                                <h3 class="winner-year-title">2025</h3>
-                                <div class="winner-group-photo">
-                                    <img src="2025-winner.jpg" alt="Class of 2025 Barrier Breakers Winners">
-                                </div>
-                                <div class="winners-grid">
-                                    <!-- Gold -->
-                                    <div class="winner-card gold">
-                                        <div class="winner-card-header">
-                                            <span class="place">1st Place</span>
-                                            <span class="medal">🥇</span>
-                                        </div>
-                                        <div class="winner-card-body">
-                                            <div class="winner-name">Dylan Quinones</div>
-                                            <div class="winner-school">Polaris Career Center</div>
-                                        </div>
-                                    </div>
-                                    <!-- Silver -->
-                                    <div class="winner-card silver">
-                                        <div class="winner-card-header">
-                                            <span class="place">2nd Place</span>
-                                            <span class="medal">🥈</span>
-                                        </div>
-                                        <div class="winner-card-body">
-                                            <div class="winner-name">Rogan Allen</div>
-                                            <div class="winner-school">Stow-Munroe Falls High</div>
-                                        </div>
-                                    </div>
-                                    <!-- Bronze -->
-                                    <div class="winner-card bronze">
-                                        <div class="winner-card-header">
-                                            <span class="place">3rd Place</span>
-                                            <span class="medal">🥉</span>
-                                        </div>
-                                        <div class="winner-card-body">
-                                            <div class="winner-name">Katherine Rosner</div>
-                                            <div class="winner-school">Chagrin Falls High School</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 2024 Block -->
-                            <div class="winner-year-block">
-                                <h3 class="winner-year-title">2024</h3>
-                                <div class="winner-group-photo">
-                                    <img src="2024-winner.jpg" alt="Class of 2024 Barrier Breakers Winners">
-                                </div>
-                                <div class="winners-grid">
-                                    <!-- Gold -->
-                                    <div class="winner-card gold">
-                                        <div class="winner-card-header">
-                                            <span class="place">1st Place</span>
-                                            <span class="medal">🥇</span>
-                                        </div>
-                                        <div class="winner-card-body">
-                                            <div class="winner-name">Brianna Johnson</div>
-                                            <div class="winner-school">Stow-Munroe Falls High</div>
-                                        </div>
-                                    </div>
-                                    <!-- Silver -->
-                                    <div class="winner-card silver">
-                                        <div class="winner-card-header">
-                                            <span class="place">2nd Place</span>
-                                            <span class="medal">🥈</span>
-                                        </div>
-                                        <div class="winner-card-body">
-                                            <div class="winner-name">Samuel Denys</div>
-                                            <div class="winner-school">Westlake High School</div>
-                                        </div>
-                                    </div>
-                                    <!-- Bronze -->
-                                    <div class="winner-card bronze">
-                                        <div class="winner-card-header">
-                                            <span class="place">3rd Place</span>
-                                            <span class="medal">🥉</span>
-                                        </div>
-                                        <div class="winner-card-body">
-                                            <div class="winner-name">Cullen Rooney</div>
-                                            <div class="winner-school">Normandy High School</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="winners-section">
+                    <div class="winner-year-block">
+                        <h3 class="winner-year-title">2025</h3>
+                        <div class="winner-group-photo"><img src="2025-winner.jpg" alt="Class of 2025 Barrier Breakers Winners"></div>
+                        <div class="winners-grid">
+                            <div class="winner-card gold"><div class="winner-card-header"><span class="place">1st Place</span><span class="medal">🥇</span></div><div class="winner-card-body"><div class="winner-name">Dylan Quinones</div><div class="winner-school">Polaris Career Center</div></div></div>
+                            <div class="winner-card silver"><div class="winner-card-header"><span class="place">2nd Place</span><span class="medal">🥈</span></div><div class="winner-card-body"><div class="winner-name">Rogan Allen</div><div class="winner-school">Stow-Munroe Falls High</div></div></div>
+                            <div class="winner-card bronze"><div class="winner-card-header"><span class="place">3rd Place</span><span class="medal">🥉</span></div><div class="winner-card-body"><div class="winner-name">Katherine Rosner</div><div class="winner-school">Chagrin Falls High School</div></div></div>
                         </div>
                     </div>
+                    <div class="winner-year-block">
+                        <h3 class="winner-year-title">2024</h3>
+                        <div class="winner-group-photo"><img src="2024-winner.jpg" alt="Class of 2024 Barrier Breakers Winners"></div>
+                        <div class="winners-grid">
+                            <div class="winner-card gold"><div class="winner-card-header"><span class="place">1st Place</span><span class="medal">🥇</span></div><div class="winner-card-body"><div class="winner-name">Brianna Johnson</div><div class="winner-school">Stow-Munroe Falls High</div></div></div>
+                            <div class="winner-card silver"><div class="winner-card-header"><span class="place">2nd Place</span><span class="medal">🥈</span></div><div class="winner-card-body"><div class="winner-name">Samuel Denys</div><div class="winner-school">Westlake High School</div></div></div>
+                            <div class="winner-card bronze"><div class="winner-card-header"><span class="place">3rd Place</span><span class="medal">🥉</span></div><div class="winner-card-body"><div class="winner-name">Cullen Rooney</div><div class="winner-school">Normandy High School</div></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-
-
-        <section id="sponsors" style="background: var(--surface-color);">
+        <section id="sponsors" style="background: var(--warm-white);">
             <div class="container">
                 <div style="text-align: center;">
-                    <div class="section-label">Thank You</div>
+                    <div class="section-label">thank you</div>
                     <h2>2026 Sponsors</h2>
-                    <p style="max-width: 600px; margin: 0 auto 48px;">These organizations make it possible for students
-                        to compete for life-changing prizes.</p>
+                    <p style="max-width: 600px; margin: 0 auto 48px;">These organizations make it possible for students to compete for life-changing prizes.</p>
                 </div>
-
                 <div class="sponsors-container">
                     <div class="platinum-sponsor">
                         <h3>💎 Platinum Sponsor</h3>
                         <img src="valmark.svg" alt="Valmark Financial Group" class="sponsor-logo-large">
                         <div class="sponsor-amount">$25,000 Commitment</div>
                     </div>
-
                     <div class="silver-sponsors">
                         <div class="silver-sponsor">
                             <h3>🥈 Silver Sponsor</h3>
@@ -3683,17 +851,13 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="sponsor-cta">
                     <h3>Ready to Break Barriers?</h3>
                     <p>Three ways to win: Build a solution, present in the Gallery, or test your knowledge.</p>
                     <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-
                         <a href="mailto:competition@finmango.org?subject=Sponsorship Inquiry" class="btn" style="background: transparent; border: 2px solid white; color: white !important;">Become a Sponsor</a>
                     </div>
-                    <div style="margin-top: 16px; font-size: 0.85rem; opacity: 0.8;">
-                        Questions? Email <a href="mailto:competition@finmango.org" style="color: white;">competition@finmango.org</a>
-                    </div>
+                    <div style="margin-top: 16px; font-size: 0.85rem; opacity: 0.8;">Questions? Email <a href="mailto:competition@finmango.org" style="color: white;">competition@finmango.org</a></div>
                 </div>
             </div>
         </section>
@@ -3704,24 +868,15 @@
             <div class="footer-newsletter-container">
                 <h3>Stay Updated</h3>
                 <p>Join our newsletter for updates on financial health research, education, and advocacy.</p>
-                <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank"
-                    rel="noopener noreferrer">Subscribe</a>
+                <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a>
             </div>
         </div>
-
         <div class="footer-container">
             <div>
-                <div class="footer-brand">
-                    <img src="finmango.png" alt="FinMango" loading="lazy">
-                </div>
-                <p class="footer-tagline">
-                    A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
-                </p>
-                <p class="footer-ein">
-                    EIN: 81-2543425
-                </p>
+                <div class="footer-brand"><img src="finmango.png" alt="FinMango" loading="lazy"></div>
+                <p class="footer-tagline">A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.</p>
+                <p class="footer-ein">EIN: 81-2543425</p>
             </div>
-
             <div class="footer-section">
                 <h4>Our Work</h4>
                 <a href="research.html">Research</a>
@@ -3729,92 +884,38 @@
                 <a href="ambassadors.html">Ambassadors</a>
                 <a href="resources.html">Resources</a>
             </div>
-
             <div class="footer-section">
                 <h4>Get Involved</h4>
                 <a href="donate.html">Donate</a>
                 <a href="ambassadors.html">Ambassador Program</a>
                 <a href="mailto:hello@finmango.org">Partner With Us</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform"
-                    target="_blank" rel="noopener noreferrer">Volunteer</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a>
                 <a href="judges.html">Judges Portal</a>
             </div>
-
             <div class="footer-section">
                 <h4>Connect</h4>
-                <a href="https://www.linkedin.com/company/finmango/" target="_blank"
-                    rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                 <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">Twitter</a>
                 <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer">Instagram</a>
                 <a href="mailto:hello@finmango.org">Contact</a>
             </div>
         </div>
-
         <div class="footer-bottom">
             <div>© 2026 FinMango. All rights reserved.</div>
-            <div>
-                <a href="privacy.html">Privacy</a>
-                <a href="terms.html">Terms</a>
-            </div>
+            <div><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
         </div>
     </footer>
 
-
-
     <script>
-        // Announcement Bar
-        (function () {
-            var announcementBar = document.getElementById('announcementBar');
-            var closeBtn = document.getElementById('closeAnnouncement');
-            var storageKey = 'barrierBreakersAnnouncementClosedAt_v5';
-            var expiryHours = 24; // Hours until bar reappears
-
-            // Check if user has closed it and if 24 hours have passed
-            var closedAt = localStorage.getItem(storageKey);
-            if (closedAt) {
-                var hoursSinceClosed = (Date.now() - parseInt(closedAt)) / (1000 * 60 * 60);
-                if (hoursSinceClosed < expiryHours) {
-                    announcementBar.classList.add('hidden');
-                    document.body.classList.remove('has-announcement');
-                } else {
-                    // Expired, remove the stored value
-                    localStorage.removeItem(storageKey);
-                }
-            }
-
-            closeBtn.addEventListener('click', function () {
-                announcementBar.classList.add('hidden');
-                document.body.classList.remove('has-announcement');
-                localStorage.setItem(storageKey, Date.now().toString());
-            });
-
-            // Update height CSS variable
-            if (!announcementBar.classList.contains('hidden')) {
-                var updateHeight = function () {
-                    var height = announcementBar.offsetHeight;
-                    document.documentElement.style.setProperty('--announcement-height', height + 'px');
-                };
-
-                // Initial update
-                updateHeight();
-
-                // Update on resize
-                window.addEventListener('resize', updateHeight);
-            }
-        })();
-
         // Mobile Menu
         (function () {
             var mobileMenuBtn = document.getElementById("mobileMenuBtn");
             var mobileMenu = document.getElementById("mobileMenu");
-
             mobileMenuBtn.addEventListener('click', function () {
                 mobileMenu.classList.toggle('active');
                 mobileMenuBtn.classList.toggle('active');
                 document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
             });
-
-            // Close mobile menu on link click
             document.querySelectorAll('.mobile-menu a').forEach(function (link) {
                 link.addEventListener('click', function () {
                     mobileMenu.classList.remove('active');
@@ -3822,33 +923,22 @@
                     document.body.style.overflow = '';
                 });
             });
-
-            // Mobile Dropdowns
             var mobileDropdowns = document.querySelectorAll('.mobile-dropdown-toggle');
             mobileDropdowns.forEach(function (toggle) {
                 toggle.addEventListener('click', function () {
                     this.classList.toggle('active');
                     var content = this.nextElementSibling;
-                    if (content.style.maxHeight) {
-                        content.style.maxHeight = null;
-                        content.classList.remove('active');
-                    } else {
-                        content.style.maxHeight = content.scrollHeight + "px";
-                        content.classList.add('active');
-                    }
+                    if (content.style.maxHeight) { content.style.maxHeight = null; content.classList.remove('active'); }
+                    else { content.style.maxHeight = content.scrollHeight + "px"; content.classList.add('active'); }
                 });
             });
         })();
 
-        // Navigation scroll effect
+        // Navigation scroll
         (function () {
             var nav = document.getElementById('nav');
             window.addEventListener('scroll', function () {
-                if (window.scrollY > 50) {
-                    nav.classList.add('scrolled');
-                } else {
-                    nav.classList.remove('scrolled');
-                }
+                if (window.scrollY > 50) { nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); }
             });
         })();
 
@@ -3857,119 +947,72 @@
             button.addEventListener('click', function () {
                 var faqItem = button.parentElement;
                 var wasActive = faqItem.classList.contains('active');
-
-                document.querySelectorAll('.faq-item').forEach(function (item) {
-                    item.classList.remove('active');
-                });
-
-                if (!wasActive) {
-                    faqItem.classList.add('active');
-                }
+                document.querySelectorAll('.faq-item').forEach(function (item) { item.classList.remove('active'); });
+                if (!wasActive) { faqItem.classList.add('active'); }
             });
         });
     </script>
 
-    <!-- Countdown Timer Script -->
+    <!-- Countdown Timer -->
     <script>
         (function () {
-            // Deadline: March 20, 2026 at 9:00 AM EST
             const deadline = new Date('2026-03-20T09:00:00-05:00').getTime();
-
             function updateCountdown() {
                 const now = new Date().getTime();
                 const timeLeft = deadline - now;
-
-                if (timeLeft <= 0) {
-                    document.getElementById('countdown-timer').innerHTML =
-                        '<div class="countdown-label" style="color: var(--accent-color); font-weight: 600;">⏰ Event Started!</div>';
-                    return;
-                }
-
+                if (timeLeft <= 0) { document.getElementById('countdown-timer').innerHTML = '<div class="countdown-label" style="color: var(--accent-color); font-weight: 600;">⏰ Event Started!</div>'; return; }
                 const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
                 document.getElementById('countdown-days').textContent = days;
                 document.getElementById('countdown-hours').textContent = hours.toString().padStart(2, '0');
                 document.getElementById('countdown-minutes').textContent = minutes.toString().padStart(2, '0');
                 document.getElementById('countdown-seconds').textContent = seconds.toString().padStart(2, '0');
             }
-
-            // Update immediately and then every second
             updateCountdown();
             setInterval(updateCountdown, 1000);
         })();
     </script>
 
-    <!-- Track Popularity Script -->
+    <!-- Track Popularity -->
     <script>
         (function () {
             const TRACK_STATS_URL = 'https://script.google.com/macros/s/AKfycbxRdSmCvCa4Yhc1OzsALlwcmlh1eKOH4nLypWFNWcyp3W85rXs7DxQJRGglPbPdKmbvdg/exec?action=getTrackStats';
             const statsContainer = document.getElementById('track-stats-compact');
             const totalAppsEl = document.getElementById('total-apps-compact');
-
             async function loadTrackStats() {
                 try {
                     const response = await fetch(TRACK_STATS_URL);
                     const data = await response.json();
-
-                    if (data && data.tracks) {
-                        updateBars(data.tracks, data.total);
-                    }
-                } catch (error) {
-                    console.log('Could not load track stats');
-                }
+                    if (data && data.tracks) { updateBars(data.tracks, data.total); }
+                } catch (error) { console.log('Could not load track stats'); }
             }
-
             function updateBars(tracks, total) {
                 const maxCount = Math.max(...Object.values(tracks), 1);
-
-                // Update each track bar
                 const trackItems = statsContainer.querySelectorAll('.track-item');
                 trackItems.forEach(item => {
                     const trackName = item.dataset.track;
                     const count = tracks[trackName] || 0;
                     const bar = item.querySelector('.track-bar');
                     const countEl = item.querySelector('.track-count');
-
-                    // Calculate percentage (min 5% for visibility if count > 0)
                     const percentage = count > 0 ? Math.max((count / maxCount) * 100, 8) : 0;
-
-                    // Animate the bar
-                    setTimeout(() => {
-                        bar.style.width = percentage + '%';
-                    }, 100);
-
-                    // Update count text
+                    setTimeout(() => { bar.style.width = percentage + '%'; }, 100);
                     countEl.textContent = count + ' team' + (count !== 1 ? 's' : '');
                 });
-
-                // Update total
                 totalAppsEl.textContent = total;
             }
-
-            // Load on page ready
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', loadTrackStats);
-            } else {
-                loadTrackStats();
-            }
+            if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', loadTrackStats); }
+            else { loadTrackStats(); }
         })();
     </script>
 
     <!-- Judge Quote Toggle -->
     <script>
-        function toggleJudgeQuote(btn) {
-            var quote = btn.nextElementSibling;
-            btn.classList.toggle('active');
-            quote.classList.toggle('active');
-        }
+        function toggleJudgeQuote(btn) { var quote = btn.nextElementSibling; btn.classList.toggle('active'); quote.classList.toggle('active'); }
     </script>
 
     <!-- Shared Navbar JavaScript -->
     <script src="js/navbar.js"></script>
-
 </body>
-
 </html>
