@@ -400,19 +400,18 @@
                 return;
             }
 
-            // Gather data
+            // Gather data as URLSearchParams to guarantee delivery bypassing CORS payload restrictions
+            const urlEncodedData = new URLSearchParams();
             const formData = new FormData(form);
-            const data = {
-                timestamp: new Date().toISOString(),
-                judgeName: formData.get('judgeName'),
-                teamNumber: formData.get('teamNumber'),
-                scoreProblem: formData.get('scoreProblem'),
-                scoreSolution: formData.get('scoreSolution'),
-                scorePresentation: formData.get('scorePresentation'),
-                scoreImpact: formData.get('scoreImpact'),
-                totalScore: scoreDisplay.textContent,
-                comments: formData.get('comments')
-            };
+            urlEncodedData.append('timestamp', new Date().toISOString());
+            urlEncodedData.append('judgeName', formData.get('judgeName'));
+            urlEncodedData.append('teamNumber', formData.get('teamNumber'));
+            urlEncodedData.append('scoreProblem', formData.get('scoreProblem'));
+            urlEncodedData.append('scoreSolution', formData.get('scoreSolution'));
+            urlEncodedData.append('scorePresentation', formData.get('scorePresentation'));
+            urlEncodedData.append('scoreImpact', formData.get('scoreImpact'));
+            urlEncodedData.append('totalScore', scoreDisplay.textContent);
+            urlEncodedData.append('comments', formData.get('comments') || "");
 
             // UI Loading state
             submitBtn.disabled = true;
@@ -426,9 +425,9 @@
                     method: 'POST',
                     mode: 'no-cors', // Needed to bypass CORS with a simple redirect script
                     headers: {
-                        'Content-Type': 'text/plain;charset=utf-8',
+                        'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: JSON.stringify(data)
+                    body: urlEncodedData.toString()
                 });
 
                 // Since we use no-cors, response is opaque. We just assume success if it didn't throw.

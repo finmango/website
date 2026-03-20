@@ -1,14 +1,14 @@
 /**
- * GOOGLE APPS SCRIPT FOR FINMANGO JUDGING FORM
+ * FOOLPROOF GOOGLE APPS SCRIPT FOR FINMANGO JUDGING FORM
  * 
  * Instructions:
- * 1. Open a new Google Sheet.
- * 2. Rename the first tab "Responses" (or create a new sheet with that name).
- * 3. Go to Extensions > Apps Script.
- * 4. Paste this script, click Save.
- * 5. Click Deploy > New Deployment.
- * 6. Select type: "Web App". Execute as: "Me", Who has access: "Anyone".
- * 7. Click Deploy, Authorize the script, and copy the Web App URL!
+ * 1. Open a brand new Google Sheet.
+ * 2. Go to Extensions > Apps Script.
+ * 3. Delete any code provided there, and paste this entire code block below.
+ * 4. Click the Save icon.
+ * 5. Click Deploy > New deployment.
+ * 6. Select "Web app" (Execute as: "Me", Who has access: "Anyone").
+ * 7. Click Deploy, Authorize the script, and copy the new Web App URL it gives you!
  */
 
 function doPost(e) {
@@ -16,12 +16,12 @@ function doPost(e) {
     var sheetName = "Responses";
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
     
-    // Automatically create the "Responses" sheet if it doesn't even exist yet!
+    // Automatically create the "Responses" tab if it doesn't exist
     if (!sheet) {
       sheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet(sheetName);
     }
 
-    // Automatically add nicely-formatted headers if the sheet is empty
+    // Automatically add nicely-formatted headers if the sheet is completely empty
     if (sheet.getLastRow() === 0) {
       var headers = [
         "Timestamp", 
@@ -41,30 +41,29 @@ function doPost(e) {
       sheet.setFrozenRows(1);
     }
 
-    // Parse the JSON data sent from the HTML form
-    var data = JSON.parse(e.postData.contents);
-    
-    // Create an array with the data ordered correctly under the headers
+    // Since we are sending data securely via URLencoded format from the website, 
+    // we extract the data using e.parameter instead of JSON parsing.
     var rowData = [
-      data.timestamp || new Date().toISOString(), // Column 1: Timestamp
-      data.judgeName || "",                       // Column 2: Judge Name
-      data.teamNumber || "",                      // Column 3: Team Number
-      data.scoreProblem || "",                    // Column 4: Problem Score
-      data.scoreSolution || "",                   // Column 5: Solution Score
-      data.scorePresentation || "",               // Column 6: Presentation Score
-      data.scoreImpact || "",                     // Column 7: Impact Score
-      data.totalScore || "",                      // Column 8: Total Score
-      data.comments || ""                         // Column 9: Comments
+      e.parameter.timestamp        || new Date().toISOString(),
+      e.parameter.judgeName        || "",
+      e.parameter.teamNumber       || "",
+      e.parameter.scoreProblem     || "",
+      e.parameter.scoreSolution    || "",
+      e.parameter.scorePresentation|| "",
+      e.parameter.scoreImpact      || "",
+      e.parameter.totalScore       || "",
+      e.parameter.comments         || ""
     ];
     
-    // Append the team's score to the bottom of the Google Sheet
+    // Append the team's score to the bottom of the Google Sheet! 🚀
     sheet.appendRow(rowData);
     
     // Return a success JSON response
-    return ContentService.createTextOutput(JSON.stringify({"result":"success", "data": JSON.stringify(data)}))
+    return ContentService.createTextOutput(JSON.stringify({"result":"success"}))
       .setMimeType(ContentService.MimeType.JSON);
       
   } catch (error) {
+    // Return the error message if something fundamentally broke
     return ContentService.createTextOutput(JSON.stringify({"result":"error", "error": error.toString()}))
       .setMimeType(ContentService.MimeType.JSON);
   }
