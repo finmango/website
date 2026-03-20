@@ -240,7 +240,7 @@
             <p>Official Judging Form</p>
         </div>
 
-        <div class="form-card">
+        <div class="form-card" id="formCard">
             <form id="judgingForm">
                 <div class="form-group">
                     <label for="judgeName">Judge Name</label>
@@ -344,9 +344,16 @@
                 <button type="submit" class="btn-submit" id="submitBtn">Submit Score</button>
 
                 <div id="loadingMsg">Submitting...</div>
-                <div id="successMsg">✅ Successfully submitted! You can move to the next team.</div>
                 <div id="errorMsg">❌ Error submitting form. Please try again or notify staff.</div>
             </form>
+        </div>
+
+        <!-- Success View (Hidden by default) -->
+        <div class="form-card" id="successCard" style="display: none; text-align: center; padding: 60px 20px;">
+            <div style="font-size: 4rem; margin-bottom: 20px; line-height: 1;">✅</div>
+            <h2 style="font-size: 2rem; margin-bottom: 10px;">Score Submitted!</h2>
+            <p style="color: var(--text-muted); margin-bottom: 40px;">Thank you for your evaluation. The score has been securely saved.</p>
+            <button type="button" class="btn-submit" id="nextTeamBtn">Evaluate Next Team</button>
         </div>
     </div>
 
@@ -376,8 +383,10 @@
         const form = document.getElementById('judgingForm');
         const submitBtn = document.getElementById('submitBtn');
         const loadingMsg = document.getElementById('loadingMsg');
-        const successMsg = document.getElementById('successMsg');
         const errorMsg = document.getElementById('errorMsg');
+        const formCard = document.getElementById('formCard');
+        const successCard = document.getElementById('successCard');
+        const nextTeamBtn = document.getElementById('nextTeamBtn');
 
         // IMPORTANT: Replace this URL with your deployed Google Apps Script Web App URL
         const GOOGLE_APP_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzT53GZM7jvWKLYrbBWE6tNbJ9cdBbzCg71Vw1BKWgSNuPUpfDoH-6K__pVCfQVPioaxw/exec';
@@ -409,7 +418,6 @@
             submitBtn.disabled = true;
             submitBtn.style.display = 'none';
             loadingMsg.style.display = 'block';
-            successMsg.style.display = 'none';
             errorMsg.style.display = 'none';
 
             try {
@@ -425,15 +433,15 @@
 
                 // Since we use no-cors, response is opaque. We just assume success if it didn't throw.
                 loadingMsg.style.display = 'none';
-                successMsg.style.display = 'block';
-                submitBtn.disabled = false;
-                submitBtn.style.display = 'block';
+                
+                // Show Success Card, hide Form
+                formCard.style.display = 'none';
+                successCard.style.display = 'block';
 
                 // Reset form slightly (keep judge name)
                 const currentJudge = form.judgeName.value;
                 form.reset();
                 form.judgeName.value = currentJudge; 
-                document.getElementById('teamNumber').focus();
                 updateTotalScore(); // Reset total to 0
                 
             } catch (err) {
@@ -443,6 +451,20 @@
                 submitBtn.disabled = false;
                 submitBtn.style.display = 'block';
             }
+        });
+
+        // Handle "Evaluate Next Team" button click
+        nextTeamBtn.addEventListener('click', () => {
+            successCard.style.display = 'none';
+            formCard.style.display = 'block';
+            
+            // Restore Submit button state
+            submitBtn.disabled = false;
+            submitBtn.style.display = 'block';
+            
+            // Focus on Team Number for fast data entry
+            document.getElementById('teamNumber').focus();
+            window.scrollTo(0, 0);
         });
     </script>
 </body>
