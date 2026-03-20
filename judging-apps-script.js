@@ -16,7 +16,7 @@
 function doPost(e) {
   try {
     // PASTE YOUR SPREADSHEET URL BELOW:
-    var SPREADSHEET_URL = "YOUR_GOOGLE_SHEET_URL_HERE";
+    var SPREADSHEET_URL = "https://docs.google.com/spreadsheets/d/1Qz-5yrt3i8w_KUAXt8U3DYRz3rVZ6sX3_wggMSC9MeY/edit";
     var ss = SpreadsheetApp.openByUrl(SPREADSHEET_URL);
     
     var sheetName = "Responses";
