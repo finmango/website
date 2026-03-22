@@ -97,6 +97,19 @@
     gtag('config', 'G-DW5HBYS9JW');
   </script>
 
+  <!-- Early announcement bar dismissal check (prevents flash) -->
+  <script>
+    (function() {
+      var key = 'ambassadorAnnouncementClosedAt_v1';
+      var closedAt = localStorage.getItem(key);
+      if (closedAt && (Date.now() - parseInt(closedAt)) / 36e5 < 24) {
+        document.documentElement.classList.add('announcement-dismissed');
+      } else if (closedAt) {
+        localStorage.removeItem(key);
+      }
+    })();
+  </script>
+
   <style>
     * {
       margin: 0;
@@ -2473,6 +2486,12 @@
 
     .announcement-bar.hidden { display: none; }
 
+    /* Early dismissal — set in <head> before paint */
+    html.announcement-dismissed .announcement-bar { display: none; }
+    html.announcement-dismissed body.has-announcement nav { top: 0 !important; }
+    html.announcement-dismissed body.has-announcement .mobile-menu { top: 0 !important; height: 100vh !important; }
+    html.announcement-dismissed body.has-announcement .hero { padding-top: 100px !important; }
+
     body.has-announcement nav { top: var(--announcement-height) !important; }
     body.has-announcement .mobile-menu { top: var(--announcement-height) !important; height: calc(100vh - var(--announcement-height)) !important; }
     body.has-announcement .hero { padding-top: calc(100px + var(--announcement-height)) !important; }
@@ -3430,12 +3449,20 @@
       var storageKey = 'ambassadorAnnouncementClosedAt_v1';
       var expiryHours = 24;
 
+      // If early check already dismissed it, sync the DOM
+      if (document.documentElement.classList.contains('announcement-dismissed')) {
+        announcementBar.classList.add('hidden');
+        document.body.classList.remove('has-announcement');
+        return;
+      }
+
       var closedAt = localStorage.getItem(storageKey);
       if (closedAt) {
         var hoursSinceClosed = (Date.now() - parseInt(closedAt)) / (1000 * 60 * 60);
         if (hoursSinceClosed < expiryHours) {
           announcementBar.classList.add('hidden');
           document.body.classList.remove('has-announcement');
+          return;
         } else {
           localStorage.removeItem(storageKey);
         }
@@ -3447,14 +3474,12 @@
         localStorage.setItem(storageKey, Date.now().toString());
       });
 
-      if (!announcementBar.classList.contains('hidden')) {
-        var updateHeight = function () {
-          var height = announcementBar.offsetHeight;
-          document.documentElement.style.setProperty('--announcement-height', height + 'px');
-        };
-        updateHeight();
-        window.addEventListener('resize', updateHeight);
-      }
+      var updateHeight = function () {
+        var height = announcementBar.offsetHeight;
+        document.documentElement.style.setProperty('--announcement-height', height + 'px');
+      };
+      updateHeight();
+      window.addEventListener('resize', updateHeight);
     })();
   </script>
   <script>
