@@ -86,6 +86,13 @@
 
         if (!announcementBar || !closeBtn) return;
 
+        // Early dismissal already applied by inline <head> script
+        if (document.documentElement.classList.contains('announcement-dismissed')) {
+            announcementBar.classList.add('hidden');
+            document.body.classList.remove('has-announcement');
+            return;
+        }
+
         var storageKey = 'ambassadorAnnouncementClosedAt_v1';
         var expiryHours = 24;
 
