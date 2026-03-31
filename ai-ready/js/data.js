@@ -440,21 +440,21 @@ const DIMENSIONS = {
     label: 'Financial Cushion',
     shortLabel: 'Cushion',
     color: 'var(--dim-cushion)',
-    hexColor: '#2a9d8f',
+    hexColor: '#1a1a1a',
     description: 'Your financial buffer if your income changed unexpectedly.'
   },
   adaptability: {
     label: 'Adaptability Capital',
     shortLabel: 'Adaptability',
     color: 'var(--dim-adaptability)',
-    hexColor: '#7b68ee',
+    hexColor: '#5a574f',
     description: 'Your ability to learn, pivot, and create new income streams.'
   },
   safety: {
     label: 'Safety Net Awareness',
     shortLabel: 'Safety Net',
     color: 'var(--dim-safety)',
-    hexColor: '#e76f51',
+    hexColor: '#FF8C61',
     description: 'How well you know the resources available to you.'
   }
 };

@@ -322,7 +322,7 @@
 
         <!-- Action Items -->
         <div class="results__actions">
-          <h3 class="caveat" style="font-size: 1.4rem; color: var(--orange); margin-bottom: 0.25rem;">what to do next</h3>
+          <h3 style="font-size: 1.4rem; color: var(--orange); margin-bottom: 0.25rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.85rem;">What To Do Next</h3>
           <h3 style="margin-bottom: 1.25rem;">Your personalized action plan</h3>
           ${r.actionItems.map((item, i) => `
             <div class="action-item">
@@ -408,19 +408,19 @@
         <circle cx="28" cy="14" r="1.5" fill="#FF6B35" opacity="0.4"/>
       </svg>`,
       cushion: `<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <ellipse cx="20" cy="28" rx="10" ry="4" stroke="#2a9d8f" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M10 28V18c0-5.5 4.5-10 10-10s10 4.5 10 10v10" stroke="#2a9d8f" stroke-width="1.5" stroke-linecap="round"/>
-        <path d="M16 22l4-4 4 4" stroke="#2a9d8f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <line x1="20" y1="18" x2="20" y2="26" stroke="#2a9d8f" stroke-width="1.5" stroke-linecap="round"/>
+        <ellipse cx="20" cy="28" rx="10" ry="4" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M10 28V18c0-5.5 4.5-10 10-10s10 4.5 10 10v10" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M16 22l4-4 4 4" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="20" y1="18" x2="20" y2="26" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>
       </svg>`,
       adaptability: `<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <path d="M8 32L16 24L22 28L32 12" stroke="#7b68ee" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M26 12h6v6" stroke="#7b68ee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="8" cy="32" r="2" fill="#7b68ee" opacity="0.3"/>
+        <path d="M8 32L16 24L22 28L32 12" stroke="#5a574f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M26 12h6v6" stroke="#5a574f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="8" cy="32" r="2" fill="#5a574f" opacity="0.3"/>
       </svg>`,
       safety: `<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <path d="M20 6l12 6v10c0 7-5 12-12 14C13 34 8 29 8 22V12l12-6z" stroke="#e76f51" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M15 20l3 3 7-7" stroke="#e76f51" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20 6l12 6v10c0 7-5 12-12 14C13 34 8 29 8 22V12l12-6z" stroke="#FF8C61" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 20l3 3 7-7" stroke="#FF8C61" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>`
     };
     return icons[key] || '';
