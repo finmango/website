@@ -433,7 +433,7 @@ const DIMENSIONS = {
     label: 'AI Exposure',
     shortLabel: 'Exposure',
     color: 'var(--dim-exposure)',
-    hexColor: '#e87c2a',
+    hexColor: '#FF6B35',
     description: 'How much your current work might be affected by AI and automation.'
   },
   cushion: {
