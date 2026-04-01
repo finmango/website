@@ -226,6 +226,17 @@ function showSlide(index) {
     slideText.textContent = slide.text || '';
   }
 
+  // Trigger Entrance Animations
+  const elementsToAnimate = ['slideEmoji', 'slideTitle', 'slideText'];
+  elementsToAnimate.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) {
+      el.classList.remove('animate-slide-up');
+      void el.offsetWidth; // Trigger reflow
+      el.classList.add('animate-slide-up');
+    }
+  });
+
   const backgrounds = ['gradient-bg-1', 'gradient-bg-2', 'gradient-bg-3', 'gradient-bg-4',
     'gradient-bg-5', 'gradient-bg-6', 'gradient-bg-7', 'gradient-bg-8'];
   const bgElement = document.getElementById('slideBackground');
