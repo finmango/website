@@ -11,7 +11,7 @@ const stories = [
       { emoji: "📊", title: "What is it?", text: "Housing is considered affordable when a household spends no more than 30% of its income on housing costs.\n\nToday, nearly half of American renters are 'cost-burdened,' paying far more than that. Rising rents, stagnant wages, and a shortage of homes have pushed millions to the financial edge.\n\n49% are cost burdened, and there is a 7M+ unit shortage in the U.S." },
       { emoji: "🌊", title: "Why is it important?", text: "Housing affordability goes far beyond housing: It affects health, education, and the economy.\n\nFamilies who spend too much on rent have less for food, healthcare, and savings. Children in unstable housing have worse school outcomes. Communities lose workers when housing costs force people out." },
       { emoji: "💡", title: "Local Resources", text: "There is help available. Resources include:\n- 211.org\n- HUD housing counselors\n- NLIHC emergency rental assistance finder\n- Consumer Financial Protection Bureau housing tools." },
-      { emoji: "🗺️", title: "Find Local Resources", text: "", html: "<div class='ai-search-tool' id='aiSearch1'><h3>Find Local Housing Resources</h3><p>Enter your zip code to discover tailored housing assistance.</p><div class='ai-input-group'><input type='text' id='zip1' placeholder='ZIP Code' maxlength='5'><select id='type1'><option value='rent'>I am renting</option><option value='own'>I own a home</option></select><button onclick='simulateAISearch(1)' class='ai-btn'>Search</button></div><div id='aiResults1' class='ai-results hidden'><div class='loader'>Searching local databases...</div></div></div>" }
+      { emoji: "🗺️", title: "Find Local Resources", text: "", html: "<div class='ai-search-tool' id='aiSearch1'><h3>Find Local Housing Resources</h3><p>Enter your zip code to discover tailored housing assistance.</p><div class='ai-input-group'><input type='text' id='zip1' placeholder='ZIP Code' maxlength='5'><select id='type1'><option value='rent'>I am renting</option><option value='own'>I own a home</option></select><button onclick='performAISearch(1)' class='ai-btn'>Search</button></div><div id='aiResults1' class='ai-results hidden'><div class='loader'>Searching local databases...</div></div></div>" }
     ]
   },
   {
@@ -74,7 +74,7 @@ const stories = [
       { emoji: "🤝", title: "Strategies for Finding Private Housing", text: "Contacting property managers directly may reveal special income-restricted units that aren’t widely advertised. Housing nonprofits often maintain lists of affordable nearby rentals. In addition, leveraging personal networks and word-of-mouth may uncover housing opportunities." },
       { emoji: "🏛️", title: "Finding Government-Supported Housing", text: "Government support varies significantly by city and state. Offerings could include public housing, Section 8 vouchers, or rent-subsidy programs. It’s important to apply to these programs early as they may be in high demand." },
       { emoji: "🌍", title: "Nonprofits and Community Alternatives", text: "Nonprofits and co-ops can provide alternative affordable housing solutions. Co-ops allow residents to pool resources, share ownership, and reduce individual costs. These options, which may be organized independently or through nonprofits can increase affordability while also developing community." },
-      { emoji: "🤖", title: "Find Local Resources", text: "", html: "<div class='ai-search-tool' id='aiSearch3'><h3>Find Affordable Housing Resources</h3><p>Enter your zip code to discover housing assistance near you.</p><div class='ai-input-group'><input type='text' id='zip3' placeholder='ZIP Code' maxlength='5'><select id='type3'><option value='rent'>I am renting</option><option value='own'>I own a home</option></select><button onclick='simulateAISearch(3)' class='ai-btn'>Search</button></div><div id='aiResults3' class='ai-results hidden'><div class='loader'>Searching local databases...</div></div></div>" }
+      { emoji: "🤖", title: "Find Local Resources", text: "", html: "<div class='ai-search-tool' id='aiSearch3'><h3>Find Affordable Housing Resources</h3><p>Enter your zip code to discover housing assistance near you.</p><div class='ai-input-group'><input type='text' id='zip3' placeholder='ZIP Code' maxlength='5'><select id='type3'><option value='rent'>I am renting</option><option value='own'>I own a home</option></select><button onclick='performAISearch(3)' class='ai-btn'>Search</button></div><div id='aiResults3' class='ai-results hidden'><div class='loader'>Searching local databases...</div></div></div>" }
     ]
   },
   {
@@ -90,7 +90,7 @@ const stories = [
       { emoji: "🧱", title: "Ongoing Challenges", text: "Local governments can play a big role in housing development, particularly through zoning restrictions that limit where new housing can be built or how large buildings can be. Construction delays and high material costs, particularly with global trade uncertainty, can slow the development of new units. Local opposition through “NIMBY” movements also slow housing development in certain areas." },
       { emoji: "💡", title: "Emerging Solutions", text: "Some cities have relaxed or removed zoning laws to enable more multifamily or low income housing. Other effective policies include requiring affordable units in new construction or incentivizing low-cost construction. Deregulation generally helps expand housing supply in urban areas." },
       { emoji: "📚", title: "Resources", text: "Urban areas typically have more robust local government, which may support affordable housing initiatives. Furthermore, nonprofits are typically located in urban areas, providing rental assistance and community-based options to find housing. Residents generally have broader access to public and private networks in comparison to rural areas." },
-      { emoji: "🤖", title: "Find Local Resources", text: "", html: "<div class='ai-search-tool' id='aiSearch4'><h3>Urban Housing Assistance Locator</h3><p>Find programs active in your zip code.</p><div class='ai-input-group'><input type='text' id='zip4' placeholder='ZIP Code' maxlength='5'><select id='type4'><option value='rent'>I am renting</option><option value='own'>I own a home</option></select><button onclick='simulateAISearch(4)' class='ai-btn'>Search</button></div><div id='aiResults4' class='ai-results hidden'><div class='loader'>Searching local databases...</div></div></div>" }
+      { emoji: "🤖", title: "Find Local Resources", text: "", html: "<div class='ai-search-tool' id='aiSearch4'><h3>Urban Housing Assistance Locator</h3><p>Find programs active in your zip code.</p><div class='ai-input-group'><input type='text' id='zip4' placeholder='ZIP Code' maxlength='5'><select id='type4'><option value='rent'>I am renting</option><option value='own'>I own a home</option></select><button onclick='performAISearch(4)' class='ai-btn'>Search</button></div><div id='aiResults4' class='ai-results hidden'><div class='loader'>Searching local databases...</div></div></div>" }
     ]
   },
   {
@@ -106,7 +106,7 @@ const stories = [
       { emoji: "🧩", title: "Specific Drivers of the Rural Crisis", text: "", html: "<div class='interactive-drivers'><p class='drivers-intro'>Click on a driver to learn more about why rural housing remains unaffordable.</p><div class='drivers-grid'><button class='driver-btn' onclick='toggleDriver(1)'>Pandemic-era Surge</button><button class='driver-btn' onclick='toggleDriver(2)'>Stagnant Wages</button><button class='driver-btn' onclick='toggleDriver(3)'>Limited Supply</button><button class='driver-btn' onclick='toggleDriver(4)'>Construction Costs</button><button class='driver-btn' onclick='toggleDriver(5)'>Cookie-Cutter Policies</button></div><div id='driverInfoBox' class='driver-info-box hidden'></div></div>" },
       { emoji: "🛠️", title: "Specific Solutions", text: "• ROAD to Housing Act (2025 bipartisan senate bill)\n• Grants to local govts to implement pre-approved housing designs (10% of funding reserved for rural areas)\n• Preserve existing affordable units by decoupling rental assistance from maturing USDA mortgages.\n• Reduce regulatory barriers." },
       { emoji: "📚", title: "Specific Resources", text: "• USDA Rural Housing Service (loans, grants)\n• Housing Assistance Council (credit, maintaining stock, building housing)\n• National Low Income Housing Coalition (NLIHC) rural renter’s factsheet." },
-      { emoji: "🤖", title: "Find Rural Resources", text: "", html: "<div class='ai-search-tool' id='aiSearch5'><h3>Find USDA & Rural Housing Assistance</h3><p>Enter your zip code to discover rural housing resources.</p><div class='ai-input-group'><input type='text' id='zip5' placeholder='ZIP Code' maxlength='5'><select id='type5'><option value='rent'>I am renting</option><option value='own'>I own a home</option></select><button onclick='simulateAISearch(5)' class='ai-btn'>Search</button></div><div id='aiResults5' class='ai-results hidden'><div class='loader'>Searching local databases...</div></div></div>" },
+      { emoji: "🤖", title: "Find Rural Resources", text: "", html: "<div class='ai-search-tool' id='aiSearch5'><h3>Find USDA & Rural Housing Assistance</h3><p>Enter your zip code to discover rural housing resources.</p><div class='ai-input-group'><input type='text' id='zip5' placeholder='ZIP Code' maxlength='5'><select id='type5'><option value='rent'>I am renting</option><option value='own'>I own a home</option></select><button onclick='performAISearch(5)' class='ai-btn'>Search</button></div><div id='aiResults5' class='ai-results hidden'><div class='loader'>Searching local databases...</div></div></div>" },
       { emoji: "🌟", title: "Example: McCall, Idaho", text: "McCall, an idyllic rural town in western Idaho, has been severely affected by the housing affordability crisis. Due to a surge in demand from urban residents interested in moving to McCall from nearby cities like Boise for remote work, or interested in buying a vacation home.\n\nThis has led housing prices to surge, pricing residents out. Drastic measures have been taken, such as the local hospital spending over $1 million to build housing for employees, who are leaving because they cannot afford to live in this town with a population of just over 4,000." }
     ]
   },
@@ -275,7 +275,7 @@ window.toggleDriver = function(driverId) {
 };
 
 // Interactive Feature: AI Search Tool
-window.simulateAISearch = function(instanceId) {
+window.performAISearch = async function(instanceId) {
   const zipInput = document.getElementById('zip' + instanceId);
   const typeSelect = document.getElementById('type' + instanceId);
   const resultsDiv = document.getElementById('aiResults' + instanceId);
@@ -286,26 +286,56 @@ window.simulateAISearch = function(instanceId) {
     return;
   }
   
-  resultsDiv.innerHTML = "<div class='loader'>Searching local databases for " + zip + "...</div>";
+  resultsDiv.innerHTML = "<div class='loader'>Searching real-time databases for " + zip + "...</div>";
   resultsDiv.classList.remove('hidden');
   resultsDiv.classList.add('visible');
   
-  setTimeout(() => {
-    let html = "<h4>✨ Resources Found for " + zip + "</h4>";
-    html += "<ul class='ai-resource-list'>";
-    html += "<li><a href='https://www.211.org/' target='_blank'><strong>211 Resource Finder</strong> - Essential community services</a></li>";
-    html += "<li><a href='https://hudgov-answers.force.com/housingcounseling/s/?language=en_US' target='_blank'><strong>HUD Counseling</strong> - Speak with a local expert</a></li>";
-    
-    if (typeSelect.value === 'rent') {
-      html += "<li><a href='https://nlihc.org/era-dashboard' target='_blank'><strong>NLIHC ERA</strong> - Emergency Rental Assistance</a></li>";
-    } else {
-      html += "<li><a href='https://www.consumerfinance.gov/housing/' target='_blank'><strong>CFPB Housing Tools</strong> - Homeowner support</a></li>";
+  try {
+    const response = await fetch(`https://api.zippopotam.us/us/${zip}`);
+    if (!response.ok) {
+      throw new Error("Invalid ZIP code");
     }
     
-    html += "</ul><p class='ai-footnote'>* Results simulated for demonstration</p>";
+    const data = await response.json();
+    const place = data.places[0];
+    const city = place["place name"];
+    const state = place["state"];
+    const stateAbbr = place["state abbreviation"];
+    
+    // Construct dynamic real-time links based on location
+    const formattedCity = encodeURIComponent(city);
+    const formattedState = encodeURIComponent(state);
+    
+    let html = "<h4>📍 Real-Time Resources for " + city + ", " + stateAbbr + "</h4>";
+    html += "<ul class='ai-resource-list'>";
+    
+    // Local Housing Authority (Google Search dynamic)
+    const phaLink = `https://www.google.com/search?q=Public+Housing+Authority+${formattedCity}+${formattedState}`;
+    html += `<li><a href='${phaLink}' target='_blank'><strong>Local Public Housing Authority</strong> - Contact for local housing lists</a></li>`;
+    
+    // State HUD Page
+    const hudState = state.toLowerCase().replace(/ /g, "_");
+    html += `<li><a href='https://www.hud.gov/states/${hudState}' target='_blank'><strong>HUD ${state} Office</strong> - Federal housing programs & info</a></li>`;
+    
+    html += `<li><a href='https://www.211.org/' target='_blank'><strong>211 Local Help</strong> - Community services in ${stateAbbr}</a></li>`;
+    
+    if (typeSelect.value === 'rent') {
+      const rentLink = `https://www.google.com/search?q=Emergency+Rental+Assistance+${formattedCity}+${formattedState}`;
+      html += `<li><a href='${rentLink}' target='_blank'><strong>Emergency Rental Assistance</strong> - Connect with local non-profits</a></li>`;
+      html += "<li><a href='https://nlihc.org/era-dashboard' target='_blank'><strong>NLIHC ERA</strong> - National rental help dashboard</a></li>";
+    } else {
+      const ownLink = `https://www.google.com/search?q=First+Time+Homebuyer+Assistance+Programs+${formattedCity}+${formattedState}`;
+      html += `<li><a href='${ownLink}' target='_blank'><strong>Buyer / Homeowner Assistance</strong> - Local grants</a></li>`;
+      html += "<li><a href='https://www.consumerfinance.gov/housing/' target='_blank'><strong>CFPB Housing Tools</strong> - Federal homeowner support</a></li>";
+    }
+    
+    html += "</ul><p class='ai-footnote'>Results generated in real-time based on your location.</p>";
     
     resultsDiv.innerHTML = html;
-  }, 1500);
+    
+  } catch (err) {
+    resultsDiv.innerHTML = "<p style='color: #ef4444; font-weight: 600; text-align: center;'>Sorry, we couldn't find data for ZIP code: " + zip + ". Please try another one.</p>";
+  }
 };
 
 document.addEventListener('keydown', (e) => {
