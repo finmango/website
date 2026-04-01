@@ -209,20 +209,18 @@ function initializeStories() {
 
     card.innerHTML = `
       <div class="story-header">
-        <div>
-          <span class="story-number">Lesson ${String(index + 1).padStart(2, '0')}</span>
-          <span class="story-icon">${iconImg(story.icon, 52)}</span>
-          <h3 class="story-title">${story.title}</h3>
-          <p class="story-author">by ${story.author}</p>
-          <div class="story-meta">
-            <div class="meta-item">
-              <span>📖</span>
-              <span>${story.slides.length} Slides</span>
-            </div>
-            <div class="meta-item">
-              <span>⏱️</span>
-              <span>${story.time}</span>
-            </div>
+        <span class="story-number">Lesson ${String(index + 1).padStart(2, '0')}</span>
+        <div class="story-icon">${iconImg(story.icon, 44)}</div>
+        <h3 class="story-title">${story.title}</h3>
+        <p class="story-author">by ${story.author}</p>
+        <div class="story-meta">
+          <div class="meta-item">
+            <img src="images/illustrations/icon_book.svg" alt="">
+            <span>${story.slides.length} slides</span>
+          </div>
+          <div class="meta-item">
+            <img src="images/illustrations/icon_clock.svg" alt="">
+            <span>${story.time}</span>
           </div>
         </div>
       </div>
