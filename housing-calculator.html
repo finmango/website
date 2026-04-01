@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Housing Affordability Calculator | FinMango</title>
+  <meta name="description" content="Find out if you can afford a home with FinMango's free housing affordability calculator. Real math, clear results, no jargon.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300..800&family=Fraunces:opsz,wght@9..144,400..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/shared.css">
+
+  <style>
+    :root {
+      --cream: #fdfbf7;
+      --black: #1a1a1a;
+      --orange: #FF6B35;
+      --gray: #888;
+      --light-border: rgba(26,26,26,0.15);
+      --success: #2a7a4b;
+      --warning-color: #b45309;
+      --danger: #b91c1c;
+      --shadow-sm: 4px 4px 0 #1a1a1a;
+      --shadow-md: 6px 6px 0 #1a1a1a;
+      --font-display: 'Fraunces', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-body); background: var(--cream); color: var(--black); line-height: 1.5; }
+    a { color: inherit; }
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    input[type=number] { -moz-appearance: textfield; }
+
+    /* ── HERO ─────────────────────────────── */
+    .calc-hero {
+      padding: 9rem 2rem 3rem;
+      text-align: center;
+      background: var(--cream);
+      border-bottom: 2.5px solid var(--black);
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--black); color: white;
+      padding: 0.2rem 0.7rem; margin-bottom: 1rem;
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 7vw, 4.5rem);
+      font-weight: 900; letter-spacing: -0.04em; line-height: 1;
+      margin-bottom: 0.9rem;
+    }
+    .hero-sub {
+      font-size: 1.05rem; color: #666; max-width: 500px; margin: 0 auto;
+    }
+
+    /* ── MAIN LAYOUT ─────────────────────── */
+    .calc-main { max-width: 680px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+    /* ── STEP TRACK ──────────────────────── */
+    .step-track {
+      display: flex; align-items: flex-start; margin-bottom: 2.5rem;
+    }
+    .step-node { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; flex-shrink: 0; }
+    .step-badge {
+      width: 38px; height: 38px;
+      border: 2.5px solid rgba(26,26,26,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.68rem; font-weight: 800; letter-spacing: 0.05em;
+      background: var(--cream); color: #aaa;
+      transition: all 0.2s;
+    }
+    .step-node.active .step-badge { border-color: var(--orange); background: var(--orange); color: white; box-shadow: 3px 3px 0 var(--black); }
+    .step-node.done .step-badge { border-color: var(--black); background: var(--black); color: white; }
+    .step-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #ccc; text-align: center; }
+    .step-node.active .step-label, .step-node.done .step-label { color: var(--black); }
+    .step-connector { flex: 1; height: 2px; background: rgba(26,26,26,0.12); margin: 20px 0.5rem 0; transition: background 0.3s; }
+    .step-connector.done { background: var(--black); }
+
+    /* ── CALC CARD ────────────────────────── */
+    .calc-card {
+      background: var(--cream); border: 2.5px solid var(--black);
+      box-shadow: var(--shadow-md); padding: 2.5rem;
+      display: none;
+    }
+    .calc-card.active { display: block; }
+    .card-eyebrow { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 0.3rem; }
+    .card-title { font-family: var(--font-display); font-size: 2rem; font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 0.4rem; }
+    .card-desc { font-size: 0.9rem; color: #666; margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1.5px dashed rgba(26,26,26,0.18); }
+
+    /* ── FORM FIELDS ───────────────────────── */
+    .field-group { margin-bottom: 1.5rem; }
+    .field-label { display: block; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .field-hint { display: block; font-size: 0.78rem; color: #999; margin-top: 0.3rem; font-style: italic; }
+    .field-error { display: none; font-size: 0.78rem; color: var(--danger); font-weight: 700; margin-top: 0.3rem; }
+    .input-wrap { position: relative; }
+    .input-prefix { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); font-weight: 700; color: #bbb; pointer-events: none; }
+    .input-suffix { position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%); font-weight: 700; color: #bbb; pointer-events: none; }
+    .field-input {
+      width: 100%; padding: 0.85rem 1rem;
+      border: 2px solid var(--black); background: white;
+      font-family: var(--font-body); font-size: 1.05rem; font-weight: 600;
+      color: var(--black); outline: none; transition: box-shadow 0.15s;
+    }
+    .field-input:focus { box-shadow: 3px 3px 0 var(--orange); }
+    .field-input::placeholder { color: #ccc; font-weight: 400; }
+    .field-input.has-prefix { padding-left: 1.8rem; }
+    .field-input.has-suffix { padding-right: 2.2rem; }
+    .field-input.error { border-color: var(--danger); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media(max-width:520px) { .field-row { grid-template-columns: 1fr; } }
+
+    /* ── PILL SELECTOR ─────────────────────── */
+    .pill-group { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.35rem; }
+    .pill-btn {
+      padding: 0.45rem 0.9rem; border: 2px solid var(--black);
+      background: var(--cream); font-family: var(--font-body);
+      font-size: 0.82rem; font-weight: 700; cursor: pointer;
+      color: var(--black); transition: all 0.15s;
+    }
+    .pill-btn:hover { box-shadow: 2px 2px 0 var(--black); transform: translate(-1px,-1px); }
+    .pill-btn.selected { background: var(--black); color: white; box-shadow: 3px 3px 0 var(--orange); }
+
+    /* ── BUTTONS ───────────────────────────── */
+    .btn-row { display: flex; gap: 1rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1.5px dashed rgba(26,26,26,0.18); }
+    .btn-primary {
+      flex: 1; padding: 0.9rem 1.5rem;
+      background: var(--orange); color: white;
+      border: 2.5px solid var(--black); box-shadow: var(--shadow-sm);
+      font-family: var(--font-body); font-size: 0.88rem; font-weight: 800;
+      letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; transition: all 0.15s;
+    }
+    .btn-primary:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--black); }
+    .btn-secondary {
+      padding: 0.9rem 1.5rem;
+      background: var(--cream); color: var(--black);
+      border: 2.5px solid var(--black); box-shadow: var(--shadow-sm);
+      font-family: var(--font-body); font-size: 0.88rem; font-weight: 700;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .btn-secondary:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--black); }
+    .btn-restart {
+      display: block; width: 100%; margin-top: 1.5rem; padding: 0.85rem;
+      background: transparent; border: 2.5px solid var(--black);
+      box-shadow: var(--shadow-sm); font-family: var(--font-body);
+      font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.15s; text-align: center;
+    }
+    .btn-restart:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--black); background: var(--cream); }
+
+    /* ── RESULTS ───────────────────────────── */
+    .result-status {
+      padding: 1.5rem 1.6rem; border: 2.5px solid var(--black);
+      box-shadow: var(--shadow-md); margin-bottom: 1.5rem;
+      display: flex; align-items: flex-start; gap: 1.2rem;
+    }
+    .result-status.affordable { border-left: 8px solid var(--success); }
+    .result-status.manageable { border-left: 8px solid #F59E0B; }
+    .result-status.stretch    { border-left: 8px solid var(--danger); }
+    .status-circle {
+      width: 44px; height: 44px; flex-shrink: 0;
+      border: 2.5px solid currentColor; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1.1rem;
+    }
+    .affordable .status-circle { color: var(--success); }
+    .manageable .status-circle { color: #b45309; }
+    .stretch    .status-circle { color: var(--danger); }
+    .status-label { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.2rem; }
+    .affordable .status-label { color: var(--success); }
+    .manageable .status-label { color: #b45309; }
+    .stretch    .status-label { color: var(--danger); }
+    .status-headline { font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+    .status-sub { font-size: 0.87rem; color: #666; margin-top: 0.35rem; line-height: 1.5; }
+
+    .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    @media(max-width:520px) { .metrics-grid { grid-template-columns: 1fr; } }
+    .metric-card {
+      background: var(--cream); border: 2.5px solid var(--black);
+      box-shadow: var(--shadow-sm); padding: 1.2rem 1.3rem;
+      position: relative; overflow: hidden;
+    }
+    .metric-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 5px; }
+    .metric-card:nth-child(1)::before { background: var(--orange); }
+    .metric-card:nth-child(2)::before { background: #3B82F6; }
+    .metric-card:nth-child(3)::before { background: #10B981; }
+    .metric-card:nth-child(4)::before { background: #8B5CF6; }
+    .metric-label { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: #999; margin-bottom: 0.3rem; }
+    .metric-value { font-family: var(--font-display); font-size: 1.8rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 0.2rem; }
+    .metric-sub { font-size: 0.75rem; color: #999; }
+
+    .result-section {
+      background: var(--cream); border: 2.5px solid var(--black);
+      box-shadow: var(--shadow-sm); padding: 1.5rem; margin-bottom: 1.5rem;
+    }
+    .section-title { font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #aaa; margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1.5px dashed rgba(26,26,26,0.18); }
+
+    /* savings bar */
+    .savings-narrative { font-size: 0.92rem; line-height: 1.55; margin-bottom: 1rem; }
+    .savings-narrative strong { color: var(--black); }
+    .progress-track { height: 14px; background: rgba(26,26,26,0.08); border: 2px solid var(--black); position: relative; margin-bottom: 0.5rem; }
+    .progress-fill { height: 100%; background: var(--orange); transition: width 0.8s ease; }
+    .progress-labels { display: flex; justify-content: space-between; font-size: 0.72rem; font-weight: 700; color: #999; }
+
+    /* monthly breakdown */
+    .breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0; border-bottom: 1px dashed rgba(26,26,26,0.13); font-size: 0.9rem; }
+    .breakdown-row:last-child { border: none; }
+    .breakdown-row.total { border-top: 2.5px solid var(--black); border-bottom: none; padding-top: 0.9rem; margin-top: 0.3rem; font-weight: 800; font-size: 1rem; }
+    .breakdown-label small { display: block; font-size: 0.7rem; color: #bbb; font-weight: 500; margin-top: 0.1rem; }
+    .breakdown-amount { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    /* gauge */
+    .gauge-wrap { position: relative; height: 22px; border: 2px solid var(--black); margin: 2rem 0 2.5rem; overflow: visible; }
+    .gauge-zone { position: absolute; top: 0; height: 100%; }
+    .gz-green  { background: #86efac; }
+    .gz-yellow { background: #fde68a; }
+    .gz-red    { background: #fca5a5; }
+    .gauge-line { position: absolute; top: -10px; width: 2px; height: calc(100% + 20px); background: rgba(26,26,26,0.5); }
+    .gauge-line-label { position: absolute; top: -24px; transform: translateX(-50%); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; color: #666; }
+    .gauge-ptr { position: absolute; top: -12px; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 13px solid var(--black); transition: left 0.8s ease; }
+    .gauge-ptr-label { position: absolute; bottom: -30px; transform: translateX(-50%); background: var(--black); color: white; font-size: 0.68rem; font-weight: 800; padding: 0.15rem 0.45rem; white-space: nowrap; }
+    .gauge-scale { display: flex; justify-content: space-between; font-size: 0.65rem; font-weight: 600; color: #bbb; margin-top: 0.3rem; }
+
+    /* outlook */
+    .outlook-row { display: flex; align-items: center; gap: 1rem; margin: 0.8rem 0; flex-wrap: wrap; }
+    .outlook-val { font-family: var(--font-display); font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; }
+    .outlook-arrow { font-size: 1.5rem; color: var(--orange); font-weight: 900; }
+    .outlook-badge { display: inline-block; padding: 0.2rem 0.6rem; border: 1.5px solid var(--success); color: var(--success); font-size: 0.8rem; font-weight: 800; background: #edfaf3; }
+    .outlook-note { font-size: 0.8rem; color: #999; }
+
+    /* disclaimer */
+    .disclaimer { font-size: 0.73rem; color: #bbb; text-align: center; margin-top: 2rem; padding: 1rem; border: 1px dashed rgba(26,26,26,0.18); line-height: 1.6; }
+
+    /* mobile nav for results back btn*/
+    @media(max-width:520px) { .calc-card { padding: 1.5rem; } .calc-hero { padding: 8rem 1.5rem 2.5rem; } }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="nav" id="nav">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">FinMango</a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="mango-stories.html">Stories</a>
+        <a href="housing-affordability-stories.html">Housing</a>
+      </div>
+      <div class="nav-cta">
+        <a href="index.html#get-involved" class="btn btn-outline">Get Involved</a>
+        <a href="index.html#donate" class="btn btn-primary-nav">Donate</a>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="calc-hero">
+    <div class="hero-tag">Free Tool — No Account Needed</div>
+    <h1 class="hero-title">Housing<br>Affordability<br>Calculator</h1>
+    <p class="hero-sub">Real math. Clear results. No jargon. Find out what you can actually afford — and how long it'll take to get there.</p>
+  </header>
+
+  <!-- MAIN -->
+  <main class="calc-main">
+
+    <!-- STEP INDICATOR -->
+    <div class="step-track">
+      <div class="step-node active" id="sn1">
+        <div class="step-badge">01</div>
+        <div class="step-label">Finances</div>
+      </div>
+      <div class="step-connector" id="sc1"></div>
+      <div class="step-node" id="sn2">
+        <div class="step-badge">02</div>
+        <div class="step-label">Goals</div>
+      </div>
+      <div class="step-connector" id="sc2"></div>
+      <div class="step-node" id="sn3">
+        <div class="step-badge">03</div>
+        <div class="step-label">Results</div>
+      </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="calc-card active" id="step1">
+      <div class="card-eyebrow">Step 01 of 03</div>
+      <h2 class="card-title">Financial Snapshot</h2>
+      <p class="card-desc">Tell us about your current situation. Everything stays on your device — nothing is stored or shared.</p>
+
+      <div class="field-group">
+        <label class="field-label" for="annualIncome">Annual Household Income *</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input class="field-input has-prefix" type="number" id="annualIncome" placeholder="75,000" min="0">
+        </div>
+        <span class="field-hint">Total yearly income before taxes</span>
+        <span class="field-error" id="err-income">Please enter your annual income to continue.</span>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label" for="currentSavings">Current Savings</label>
+          <div class="input-wrap">
+            <span class="input-prefix">$</span>
+            <input class="field-input has-prefix" type="number" id="currentSavings" placeholder="10,000" min="0">
+          </div>
+          <span class="field-hint">Cash available for a down payment</span>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="monthlySavings">Monthly Savings</label>
+          <div class="input-wrap">
+            <span class="input-prefix">$</span>
+            <input class="field-input has-prefix" type="number" id="monthlySavings" placeholder="500" min="0">
+          </div>
+          <span class="field-hint">How much you can save each month</span>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="currentRent">Current Monthly Housing Cost</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input class="field-input has-prefix" type="number" id="currentRent" placeholder="1,400" min="0">
+        </div>
+        <span class="field-hint">Your current rent or mortgage (optional)</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="goStep(2)">Next: Housing Goals →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="calc-card" id="step2">
+      <div class="card-eyebrow">Step 02 of 03</div>
+      <h2 class="card-title">Housing Goals</h2>
+      <p class="card-desc">Tell us about the home you want to buy. Not sure on price? The national median is about $420,800.</p>
+
+      <div class="field-group">
+        <label class="field-label" for="homePrice">Target Home Price *</label>
+        <div class="input-wrap">
+          <span class="input-prefix">$</span>
+          <input class="field-input has-prefix" type="number" id="homePrice" placeholder="420,000" min="0">
+        </div>
+        <span class="field-hint">The price of the home you'd like to buy</span>
+        <span class="field-error" id="err-price">Please enter a home price to continue.</span>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Property Type</label>
+        <div class="pill-group" id="grpPropertyType">
+          <button class="pill-btn selected" data-val="single">Single Family</button>
+          <button class="pill-btn" data-val="townhouse">Townhouse</button>
+          <button class="pill-btn" data-val="condo">Condo</button>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Down Payment</label>
+        <div class="pill-group" id="grpDownPayment">
+          <button class="pill-btn" data-val="3.5">3.5% FHA</button>
+          <button class="pill-btn" data-val="5">5%</button>
+          <button class="pill-btn" data-val="10">10%</button>
+          <button class="pill-btn" data-val="15">15%</button>
+          <button class="pill-btn selected" data-val="20">20%</button>
+          <button class="pill-btn" data-val="25">25%</button>
+        </div>
+        <span class="field-hint" id="dpHint">20% → no PMI required</span>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label class="field-label">Mortgage Term</label>
+          <div class="pill-group" id="grpTerm">
+            <button class="pill-btn" data-val="15">15 yr</button>
+            <button class="pill-btn" data-val="20">20 yr</button>
+            <button class="pill-btn selected" data-val="30">30 yr</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="interestRate">Interest Rate</label>
+          <div class="input-wrap">
+            <input class="field-input has-suffix" type="number" id="interestRate" value="6.8" min="0" max="20" step="0.1">
+            <span class="input-suffix">%</span>
+          </div>
+          <span class="field-hint">Current 30-yr avg ≈ 6.8%</span>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goStep(1)">← Back</button>
+        <button class="btn-primary" onclick="calculate()">See My Results →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: RESULTS (built by JS) -->
+    <div class="calc-card" id="step3">
+      <div id="resultsOut"></div>
+    </div>
+
+  </main>
+
+  <footer style="background:#1a1a1a;color:white;padding:3rem 2rem;text-align:center;">
+    <p style="opacity:0.5;font-size:0.82rem">© 2025 FinMango · <a href="index.html" style="color:var(--orange)">finmango.org</a> · Financial health is a right, not a privilege.</p>
+  </footer>
+
+  <script src="js/navbar.js"></script>
+  <script>
+    // ── CONSTANTS ────────────────────────────────────────────────────────────
+    const TAX_RATE = 0.012;
+    const INS_RATE = 0.0035;
+    const PMI_RATE = 0.007;
+    const APPR_RATE = 0.035;
+
+    // ── STATE ─────────────────────────────────────────────────────────────────
+    const S = { propertyType: 'single', downPaymentPct: 20, mortgageYears: 30 };
+
+    // ── FORMATTERS ────────────────────────────────────────────────────────────
+    function $f(n) {
+      if (!isFinite(n) || isNaN(n)) return '—';
+      if (n >= 1e6) return '$' + (n / 1e6).toFixed(2) + 'M';
+      return '$' + Math.round(n).toLocaleString();
+    }
+    function pct(n) { return (n * 100).toFixed(1) + '%'; }
+    function fmtMo(n) {
+      if (!isFinite(n) || n <= 0) return '—';
+      const y = Math.floor(n / 12), m = n % 12;
+      if (y === 0) return m + ' mo';
+      if (m === 0) return y + (y === 1 ? ' yr' : ' yrs');
+      return y + ' yr ' + m + ' mo';
+    }
+
+    // ── MORTGAGE FORMULA ──────────────────────────────────────────────────────
+    function calcPI(principal, annualRate, years) {
+      const r = annualRate / 12, n = years * 12;
+      if (r === 0) return principal / n;
+      return (principal * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    }
+
+    // ── STEP NAV ──────────────────────────────────────────────────────────────
+    function goStep(n) {
+      if (n === 2 && !v1()) return;
+      document.querySelectorAll('.calc-card').forEach(c => c.classList.remove('active'));
+      document.getElementById('step' + n).classList.add('active');
+      [1, 2, 3].forEach(i => {
+        const nd = document.getElementById('sn' + i);
+        nd.classList.remove('active', 'done');
+        if (i < n) nd.classList.add('done');
+        else if (i === n) nd.classList.add('active');
+      });
+      [1, 2].forEach(i => document.getElementById('sc' + i).classList.toggle('done', i < n));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function v1() {
+      const v = parseFloat(document.getElementById('annualIncome').value);
+      const err = document.getElementById('err-income');
+      const inp = document.getElementById('annualIncome');
+      if (!v || v <= 0) { err.style.display = 'block'; inp.classList.add('error'); inp.focus(); return false; }
+      err.style.display = 'none'; inp.classList.remove('error'); return true;
+    }
+
+    // ── PILL GROUPS ───────────────────────────────────────────────────────────
+    function initPills(id, key, onChange) {
+      document.getElementById(id).querySelectorAll('.pill-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.getElementById(id).querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          S[key] = parseFloat(btn.dataset.val) || btn.dataset.val;
+          if (onChange) onChange(S[key]);
+        });
+      });
+    }
+    initPills('grpPropertyType', 'propertyType');
+    initPills('grpTerm', 'mortgageYears');
+    initPills('grpDownPayment', 'downPaymentPct', val => {
+      document.getElementById('dpHint').textContent =
+        val < 20 ? `${val}% → PMI required — adds ~0.7%/yr to loan amount` : `${val}% → no PMI required`;
+    });
+
+    // ── CALCULATE ─────────────────────────────────────────────────────────────
+    function calculate() {
+      const price = parseFloat(document.getElementById('homePrice').value);
+      const pErr = document.getElementById('err-price');
+      const pInp = document.getElementById('homePrice');
+      if (!price || price <= 0) { pErr.style.display = 'block'; pInp.classList.add('error'); pInp.focus(); return; }
+      pErr.style.display = 'none'; pInp.classList.remove('error');
+
+      const income        = parseFloat(document.getElementById('annualIncome').value) || 0;
+      const savings       = parseFloat(document.getElementById('currentSavings').value) || 0;
+      const monthlySave   = parseFloat(document.getElementById('monthlySavings').value) || 0;
+      const rate          = (parseFloat(document.getElementById('interestRate').value) || 6.8) / 100;
+      const dpPct         = S.downPaymentPct / 100;
+      const years         = parseInt(S.mortgageYears);
+      const monthlyIncome = income / 12;
+      const downPayment   = price * dpPct;
+      const loan          = price - downPayment;
+
+      const pi        = calcPI(loan, rate, years);
+      const propTax   = (price * TAX_RATE) / 12;
+      const insurance = (price * INS_RATE) / 12;
+      const pmi       = dpPct < 0.2 ? (loan * PMI_RATE) / 12 : 0;
+      const total     = pi + propTax + insurance + pmi;
+      const ratio     = monthlyIncome > 0 ? total / monthlyIncome : 0;
+
+      const remaining  = Math.max(downPayment - savings, 0);
+      const monthsToSave = monthlySave > 0 ? Math.ceil(remaining / monthlySave) : Infinity;
+      const savingsProgress = downPayment > 0 ? Math.min(savings / downPayment, 1) : 0;
+
+      // Max affordable price at 28% rule
+      let maxPrice = 0;
+      if (monthlyIncome > 0 && rate > 0) {
+        const maxPI = monthlyIncome * 0.28 * 0.72;
+        const r = rate / 12, n = years * 12;
+        const maxLoan = (maxPI * (Math.pow(1+r,n) - 1)) / (r * Math.pow(1+r,n));
+        maxPrice = maxLoan / (1 - dpPct);
+      }
+
+      const futurePrice = price * Math.pow(1 + APPR_RATE, 5);
+      const equity5yr   = futurePrice - price;
+
+      let cls, statusLabel, statusCircle, headline, statusSub;
+      if (ratio <= 0.28) {
+        cls = 'affordable'; statusLabel = 'Affordable'; statusCircle = '✓';
+        headline = 'This home fits within your budget.';
+        statusSub = `Your housing costs would be <strong>${pct(ratio)}</strong> of gross income — below the recommended 28% threshold. You're in good shape.`;
+      } else if (ratio <= 0.36) {
+        cls = 'manageable'; statusLabel = 'Manageable — watch expenses'; statusCircle = '~';
+        headline = 'Possible, but budget carefully.';
+        statusSub = `At <strong>${pct(ratio)}</strong> of your income, this is above the ideal 28% — but within what many lenders accept (up to 36%). Keep other expenses low.`;
+      } else {
+        cls = 'stretch'; statusLabel = 'Stretch — consider alternatives'; statusCircle = '!';
+        headline = 'This may be a financial stretch.';
+        statusSub = `<strong>${pct(ratio)}</strong> of your income toward housing exceeds most lenders' 36% threshold. Consider a lower price, bigger down payment, or longer savings timeline.`;
+      }
+
+      // ── GAUGE MATH ──────────────────────────────────────────────────────────
+      const gaugeMax = 0.50;
+      const g28 = 0.28 / gaugeMax * 100;
+      const g36 = 0.36 / gaugeMax * 100;
+      const gUser = Math.min(ratio / gaugeMax * 100, 99);
+
+      // ── BUILD HTML ──────────────────────────────────────────────────────────
+      let html = `
+        <div class="card-eyebrow">Step 03 — Results</div>
+        <h2 class="card-title">Your Affordability<br>Report</h2>
+        <p class="card-desc" style="margin-bottom:1.5rem">Based on the numbers you provided. Estimates only — see disclaimer below.</p>
+
+        <!-- STATUS BANNER -->
+        <div class="result-status ${cls}">
+          <div class="status-circle">${statusCircle}</div>
+          <div>
+            <div class="status-label">${statusLabel}</div>
+            <div class="status-headline">${headline}</div>
+            <div class="status-sub">${statusSub}</div>
+          </div>
+        </div>
+
+        <!-- METRICS GRID -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-label">Down Payment Needed</div>
+            <div class="metric-value">${$f(downPayment)}</div>
+            <div class="metric-sub">${S.downPaymentPct}% of ${$f(price)}</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Time to Save</div>
+            <div class="metric-value">${fmtMo(monthsToSave)}</div>
+            <div class="metric-sub">${isFinite(monthsToSave) ? 'at current savings rate' : 'add monthly savings to calculate'}</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Max Affordable Price</div>
+            <div class="metric-value">${$f(maxPrice)}</div>
+            <div class="metric-sub">at 28% income rule</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Housing-to-Income</div>
+            <div class="metric-value">${(ratio*100).toFixed(1)}%</div>
+            <div class="metric-sub">lender limit ≈ 36–43%</div>
+          </div>
+        </div>`;
+
+      // SAVINGS BAR
+      if (downPayment > 0) {
+        const savedPct = Math.min(Math.round(savingsProgress * 100), 100);
+        html += `
+        <div class="result-section">
+          <div class="section-title">Savings Toward Down Payment</div>
+          <div class="savings-narrative">
+            You have <strong>${$f(savings)}</strong> saved toward a down payment of <strong>${$f(downPayment)}</strong>.
+            ${remaining > 0 && isFinite(monthsToSave)
+              ? ` At <strong>${$f(monthlySave)}/mo</strong>, you'll reach your goal in <strong>${fmtMo(monthsToSave)}</strong>.`
+              : remaining <= 0 ? ` <strong>Great news — you already have enough for the down payment!</strong>` : ''}
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="pBar" style="width:0%"></div>
+          </div>
+          <div class="progress-labels">
+            <span>${$f(savings)} saved</span>
+            <span>${savedPct}% of goal</span>
+            <span>Goal: ${$f(downPayment)}</span>
+          </div>
+        </div>`;
+        // Animate bar after render
+        setTimeout(() => {
+          const bar = document.getElementById('pBar');
+          if (bar) bar.style.width = savedPct + '%';
+        }, 120);
+      }
+
+      // MONTHLY BREAKDOWN
+      html += `
+        <div class="result-section">
+          <div class="section-title">Monthly Payment Breakdown</div>
+          <div class="breakdown-row">
+            <div class="breakdown-label">Principal & Interest<small>${$f(loan)} loan @ ${(rate*100).toFixed(1)}% for ${years} yrs</small></div>
+            <div class="breakdown-amount">${$f(pi)}</div>
+          </div>
+          <div class="breakdown-row">
+            <div class="breakdown-label">Property Tax<small>~1.2% annually — national average</small></div>
+            <div class="breakdown-amount">${$f(propTax)}</div>
+          </div>
+          <div class="breakdown-row">
+            <div class="breakdown-label">Home Insurance<small>~0.35% annually</small></div>
+            <div class="breakdown-amount">${$f(insurance)}</div>
+          </div>
+          ${pmi > 0 ? `<div class="breakdown-row">
+            <div class="breakdown-label">PMI<small>Required — down payment below 20%</small></div>
+            <div class="breakdown-amount">${$f(pmi)}</div>
+          </div>` : ''}
+          <div class="breakdown-row total">
+            <div class="breakdown-label">Total Monthly Cost</div>
+            <div class="breakdown-amount">${$f(total)}</div>
+          </div>
+        </div>`;
+
+      // GAUGE
+      html += `
+        <div class="result-section">
+          <div class="section-title">Housing Cost as % of Gross Income</div>
+          <div class="gauge-wrap">
+            <div class="gauge-zone gz-green"  style="left:0;       width:${g28}%"></div>
+            <div class="gauge-zone gz-yellow" style="left:${g28}%; width:${g36 - g28}%"></div>
+            <div class="gauge-zone gz-red"    style="left:${g36}%; width:${100 - g36}%"></div>
+            <div class="gauge-line" style="left:${g28}%">
+              <div class="gauge-line-label">28% target</div>
+            </div>
+            <div class="gauge-line" style="left:${g36}%; background:rgba(26,26,26,0.3)">
+              <div class="gauge-line-label" style="color:#aaa">36% limit</div>
+            </div>
+            <div class="gauge-ptr" id="gaugePtr" style="left:0%">
+              <div class="gauge-ptr-label">${pct(ratio)}</div>
+            </div>
+          </div>
+          <div class="gauge-scale"><span>0%</span><span>10%</span><span>20%</span><span>30%</span><span>40%</span><span>50%+</span></div>
+        </div>`;
+
+      // 5-YEAR OUTLOOK
+      html += `
+        <div class="result-section">
+          <div class="section-title">5-Year Appreciation Outlook</div>
+          <div class="outlook-row">
+            <div>
+              <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#aaa;margin-bottom:0.2rem">Today</div>
+              <div class="outlook-val">${$f(price)}</div>
+            </div>
+            <div class="outlook-arrow">→</div>
+            <div>
+              <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#aaa;margin-bottom:0.2rem">In 5 Years</div>
+              <div class="outlook-val">${$f(futurePrice)}</div>
+            </div>
+            <div class="outlook-badge">+${$f(equity5yr)}</div>
+          </div>
+          <div class="outlook-note">Estimated using the national average appreciation rate of 3.5%/yr. Local rates vary significantly. This is not a guarantee of value.</div>
+        </div>
+
+        <div class="disclaimer">
+          This calculator provides estimates for educational purposes only and does not constitute financial advice.
+          Actual mortgage rates, property taxes, insurance costs, and home values vary by location and individual circumstances.
+          Consult a licensed housing counselor or mortgage professional before making any home-buying decision.
+          <strong>FinMango</strong> is a 501(c)(3) nonprofit — <a href="index.html" style="color:var(--orange)">finmango.org</a>
+        </div>
+
+        <button class="btn-restart" onclick="restart()">← Start Over with New Numbers</button>`;
+
+      document.getElementById('resultsOut').innerHTML = html;
+      goStep(3);
+
+      // Animate gauge pointer
+      setTimeout(() => {
+        const ptr = document.getElementById('gaugePtr');
+        if (ptr) ptr.style.left = gUser + '%';
+      }, 150);
+    }
+
+    function restart() {
+      document.getElementById('annualIncome').value = '';
+      document.getElementById('currentSavings').value = '';
+      document.getElementById('monthlySavings').value = '';
+      document.getElementById('currentRent').value = '';
+      document.getElementById('homePrice').value = '';
+      document.getElementById('interestRate').value = '6.8';
+      ['grpPropertyType','grpDownPayment','grpTerm'].forEach(id => {
+        document.getElementById(id).querySelectorAll('.pill-btn').forEach(b => b.classList.remove('selected'));
+      });
+      document.querySelector('#grpPropertyType [data-val="single"]').classList.add('selected');
+      document.querySelector('#grpDownPayment [data-val="20"]').classList.add('selected');
+      document.querySelector('#grpTerm [data-val="30"]').classList.add('selected');
+      S.propertyType = 'single'; S.downPaymentPct = 20; S.mortgageYears = 30;
+      goStep(1);
+    }
+  </script>
+</body>
+</html>
