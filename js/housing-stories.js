@@ -1,3 +1,55 @@
+// Hand-drawn SVG icon map — replaces all emojis
+const ICON_MAP = {
+  '🏠': 'images/illustrations/icon_house.svg',
+  '🏘️': 'images/illustrations/icon_suburb.svg',
+  '📈': 'images/illustrations/icon_chart.svg',
+  '📉': 'images/illustrations/icon_chart.svg',
+  '📊': 'images/illustrations/icon_chart.svg',
+  '💥': 'images/illustrations/icon_impact.svg',
+  '🔍': 'images/illustrations/icon_magnify.svg',
+  '🏙️': 'images/illustrations/icon_city.svg',
+  '🏢': 'images/illustrations/icon_city.svg',
+  '🌾': 'images/illustrations/icon_wheat.svg',
+  '🚜': 'images/illustrations/icon_tractor.svg',
+  '🔭': 'images/illustrations/icon_telescope.svg',
+  '🫵': 'images/illustrations/icon_point.svg',
+  '👤': 'images/illustrations/icon_person.svg',
+  '💡': 'images/illustrations/icon_bulb.svg',
+  '🗺️': 'images/illustrations/icon_map.svg',
+  '📍': 'images/illustrations/icon_map.svg',
+  '💸': 'images/illustrations/icon_money.svg',
+  '📚': 'images/illustrations/icon_book.svg',
+  '📖': 'images/illustrations/icon_book.svg',
+  '📝': 'images/illustrations/icon_book.svg',
+  '🤝': 'images/illustrations/icon_handshake.svg',
+  '🌱': 'images/illustrations/icon_sprout.svg',
+  '⚖️': 'images/illustrations/icon_scales.svg',
+  '🗣️': 'images/illustrations/icon_speech.svg',
+  '⚠️': 'images/illustrations/icon_warning.svg',
+  '⚙️': 'images/illustrations/icon_gear.svg',
+  '⏱️': 'images/illustrations/icon_clock.svg',
+  '🌟': 'images/illustrations/icon_bulb.svg',
+  '🤖': 'images/illustrations/icon_magnify.svg',
+  '🌍': 'images/illustrations/icon_map.svg',
+  '🏗️': 'images/illustrations/icon_tractor.svg',
+  '🚧': 'images/illustrations/icon_warning.svg',
+  '🧱': 'images/illustrations/icon_city.svg',
+  '🧩': 'images/illustrations/icon_gear.svg',
+  '🌪️': 'images/illustrations/icon_impact.svg',
+  '🏛️': 'images/illustrations/icon_city.svg',
+  '🚗': 'images/illustrations/icon_tractor.svg',
+  '🛠️': 'images/illustrations/icon_gear.svg',
+  '🤔': 'images/illustrations/icon_speech.svg',
+  '🌊': 'images/illustrations/icon_sprout.svg',
+  '🏡': 'images/illustrations/icon_house.svg',
+};
+
+function iconImg(emoji, size = 56) {
+  const src = ICON_MAP[emoji];
+  if (!src) return `<span style="font-size:${size}px">${emoji}</span>`;
+  return `<img src="${src}" width="${size}" height="${size}" alt="" style="display:block;margin:0 auto" />`;
+}
+
 const stories = [
   {
     id: 1,
@@ -159,7 +211,7 @@ function initializeStories() {
       <div class="story-header">
         <div>
           <span class="story-number">Lesson ${String(index + 1).padStart(2, '0')}</span>
-          <span class="story-icon">${story.icon}</span>
+          <span class="story-icon">${iconImg(story.icon, 52)}</span>
           <h3 class="story-title">${story.title}</h3>
           <p class="story-author">by ${story.author}</p>
           <div class="story-meta">
@@ -216,7 +268,8 @@ function showSlide(index) {
   currentSlideIndex = index;
   const slide = currentStory.slides[index];
 
-  document.getElementById('slideEmoji').textContent = slide.emoji || '';
+  const emojiEl = document.getElementById('slideEmoji');
+  emojiEl.innerHTML = slide.emoji ? iconImg(slide.emoji, 72) : '';
   document.getElementById('slideTitle').textContent = slide.title || '';
   
   const slideText = document.getElementById('slideText');
