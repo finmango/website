@@ -354,4 +354,30 @@ function initializeMobileMenu() {
 document.addEventListener('DOMContentLoaded', function () {
   initializeMobileMenu();
   initializeStories();
+
+  const viewer = document.getElementById('storyViewer');
+  if (viewer) {
+    viewer.addEventListener('click', function(e) {
+      if (!currentStory) return;
+      
+      // Ignore clicks on interactive elements inside the slide
+      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select') || e.target.closest('a') || e.target.closest('.interactive-drivers')) {
+        return;
+      }
+      
+      // Allow closing the story with the close button
+      if (e.target.closest('.close-btn')) {
+        return;
+      }
+
+      const rect = viewer.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      
+      if (x < rect.width * 0.4) {
+        previousSlide();
+      } else if (x > rect.width * 0.6) {
+        nextSlide();
+      }
+    });
+  }
 });
