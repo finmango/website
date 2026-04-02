@@ -507,7 +507,7 @@
       justify-content: center;
       padding: 10rem 2rem 6rem;
       text-align: center;
-      background: var(--white);
+      background: #fdfbf7;
       position: relative;
       max-width: 1100px;
       margin: 0 auto;
@@ -520,30 +520,26 @@
     }
 
     .hero-stats {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--gray);
-      margin-bottom: 1rem;
-      display: flex;
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #fff;
+      background: #1a1a1a;
+      padding: 0.2rem 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 0.5rem;
     }
 
     .hero-stats .count {
       color: var(--orange);
       font-weight: 900;
-      font-size: 1.1rem;
     }
 
     .hero-label {
-      font-size: 2rem;
-      font-weight: 600;
-      font-family: 'Caveat', cursive;
-      color: var(--amber);
-      margin-bottom: 1.5rem;
-      display: inline-block;
-      transform: rotate(-3deg);
+      display: none;
     }
 
     .hero h1 {
@@ -645,8 +641,8 @@
 
     /* Resources Grid */
     .resources-section {
-      padding: 5rem 2rem 8rem; /* 80-100px vertical padding */
-      background: var(--white);
+      padding: 5rem 2rem 8rem;
+      background: #fdfbf7;
     }
 
     .resources-container {
@@ -681,11 +677,12 @@
 
     /* Resource Card */
     .resource-card {
-      background: var(--white);
-      border: 2px solid var(--black);
-      padding: 2.5rem 2rem;
+      background: #fdfbf7;
+      border: 2.5px solid #1a1a1a;
+      box-shadow: 6px 6px 0 #1a1a1a;
+      padding: 1.6rem 1.4rem 1.4rem 1.8rem;
       position: relative;
-      transition: all 0.3s ease;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -696,158 +693,97 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--orange);
-      transform: scale(0);
-      transition: transform 0.3s ease;
-      z-index: 0;
-    }
-
-    .resource-card:hover::before {
-      transform: scale(1);
-    }
-
-    .resource-card > * {
-      position: relative;
-      z-index: 1;
+      bottom: 0;
+      width: 6px;
     }
 
     .resource-card:hover {
-      transform: translate(-6px, -6px);
-      box-shadow: 8px 8px 0 var(--black);
+      transform: translate(-3px, -3px);
+      box-shadow: 9px 9px 0 #1a1a1a;
     }
 
-    .resource-card:hover .resource-title,
-    .resource-card:hover .resource-description {
-      color: var(--white);
-    }
+    /* Category accent bars */
+    .resource-card[data-category="lifestyle"]::before   { background: var(--lifestyle); }
+    .resource-card[data-category="education"]::before   { background: var(--education); }
+    .resource-card[data-category="retirement"]::before  { background: var(--retirement); }
+    .resource-card[data-category="income"]::before      { background: var(--income); }
+    .resource-card[data-category="business"]::before    { background: var(--business); }
+    .resource-card[data-category="family"]::before      { background: var(--family); }
+    .resource-card[data-category="emergencies"]::before { background: var(--emergencies); }
+    .resource-card[data-category="college"]::before     { background: var(--education); }
 
-    .resource-card .resource-link {
-      transition: all 0.3s ease;
-    }
+    /* Badge — hidden, replaced by inline tag */
+    .badge { display: none; }
 
-    /* Badge */
-        .badge {
-      position: absolute;
-      top: -10px;
-      right: 1.5rem;
-      padding: 0.25rem 0.85rem;
-      background: var(--orange);
-      color: var(--white);
-      font-size: 1.3rem;
-      font-family: 'Caveat', cursive;
-      font-weight: 600;
-      border: 1.5px solid var(--black);
-      transform: rotate(3deg);
-    }
-
-    .badge.new {
-      background: #10B981;
+    /* Card tag (replaces badge) */
+    .resource-tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #fff;
+      background: #1a1a1a;
+      padding: 0.2rem 0.55rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.85rem;
+      align-self: flex-start;
     }
 
     /* Card Content */
-    .resource-category {
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-      padding: 0.25rem 0.65rem;
-      background: var(--orange);
-      color: var(--white);
-      display: inline-block;
-      border: 1px solid var(--black);
-      max-width: calc(100% - 105px);
-      word-wrap: break-word;
-      line-height: 1.3;
-    }
-
-    /* Category-specific colors */
-    .resource-card[data-category="education"] .resource-category {
-      background: var(--education);
-    }
-
-    .resource-card[data-category="retirement"] .resource-category {
-      background: var(--retirement);
-    }
-
-    .resource-card[data-category="income"] .resource-category {
-      background: var(--income);
-    }
-
-    .resource-card[data-category="lifestyle"] .resource-category {
-      background: var(--lifestyle);
-    }
-
-    .resource-card[data-category="business"] .resource-category {
-      background: var(--business);
-    }
-
-    .resource-card[data-category="family"] .resource-category {
-      background: var(--family);
-    }
-
-    .resource-card[data-category="emergencies"] .resource-category {
-      background: var(--emergencies);
-    }
 
     .resource-title {
-      font-size: 1.4rem;
+      font-size: 1.15rem;
       font-weight: 900;
-      margin-bottom: 1rem;
-      letter-spacing: -0.02em;
-      color: var(--black);
-      line-height: 1.2;
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.025em;
+      color: #1a1a1a;
+      line-height: 1.25;
     }
 
     .resource-description {
-      color: var(--gray);
+      color: #555;
       line-height: 1.6;
-      margin-bottom: 1.5rem;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       flex: 1;
+    }
+
+    .resource-meta {
+      display: flex;
+      align-items: center;
+      margin-top: 1rem;
+      padding-top: 0.8rem;
+      border-top: 1.5px dashed rgba(26,26,26,0.2);
     }
 
     .resource-link {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.85rem 1.75rem;
-      background: var(--black);
-      color: var(--white);
-      font-size: 0.9rem;
+      gap: 0.4rem;
+      font-size: 0.8rem;
       font-weight: 700;
+      color: #1a1a1a;
       text-decoration: none;
-      transition: all 0.2s ease;
-      align-self: flex-start;
-      border: 2px solid var(--black);
+      letter-spacing: 0.04em;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .resource-link .icon {
-      display: inline-block;
-      transition: transform 0.3s ease;
-    }
-
-    .resource-card:hover .resource-link .icon {
-      transform: translateX(4px);
-    }
-
-    .resource-card:hover .resource-link {
-      color: var(--white);
+      transition: gap 0.2s ease;
     }
 
     .resource-link:hover {
-      opacity: 0.85;
+      gap: 0.7rem;
     }
 
-    /* Featured Cards */
+    .resource-link svg {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Featured Cards — no special border, placement is enough */
     .resource-card.featured {
-      border-color: var(--orange);
-      border-width: 4px;
-      background: var(--light-gray);
+      border-color: #1a1a1a;
+      border-width: 2.5px;
+      background: #fdfbf7;
     }
 
     /* Footer */
@@ -2562,10 +2498,9 @@
   <section class="hero">
     <div class="hero-container">
       <div class="hero-stats">
-        <span class="count" id="resourceCount">32</span>
+        <span class="count" id="resourceCount">24</span>
         <span>Free Tools Available</span>
       </div>
-      <span class="hero-label">Free Tools & Resources</span>
       <h1>
         Build 
         <span class="wavy-underline-container">Better
@@ -2605,27 +2540,22 @@
     <div class="resources-container">
 
       <!-- Featured Resources -->
-      <div class="section-header wavy-underline-container" id="featuredHeader">
-        <span class="annotation section-annotation">Our best stuff!</span>
-        <h2>Featured Resources</h2>
-        <svg class="wavy" style="bottom: 0px;" preserveAspectRatio="none" viewBox="0 0 120 12"><path d="M0 6 Q 15 0, 30 6 T 60 6 T 90 6 T 120 6"></path></svg>
+      <div class="section-header" id="featuredHeader">
+        <h2>Featured</h2>
         <p>Our most popular and impactful tools.</p>
       </div>
       <div class="resources-grid" id="featuredGrid"></div>
 
       <!-- New Arrivals -->
-      <div class="section-header wavy-underline-container" id="newHeader">
-        <span class="annotation section-annotation" style="color: #10B981;">Hot off the press</span>
+      <div class="section-header" id="newHeader">
         <h2>New Arrivals</h2>
-        <svg class="wavy" style="bottom: 0px;" preserveAspectRatio="none" viewBox="0 0 120 12"><path d="M0 6 Q 15 0, 30 6 T 60 6 T 90 6 T 120 6"></path></svg>
         <p>The latest additions to our financial toolkit.</p>
       </div>
       <div class="resources-grid" id="newGrid"></div>
 
       <!-- All Tools -->
-      <div class="section-header wavy-underline-container" id="mainHeader">
+      <div class="section-header" id="mainHeader">
         <h2>All Tools & Resources</h2>
-        <svg class="wavy" style="bottom: 0px;" preserveAspectRatio="none" viewBox="0 0 120 12"><path d="M0 6 Q 15 0, 30 6 T 60 6 T 90 6 T 120 6"></path></svg>
         <p>Browse our complete collection of calculators, simulators, and guides.</p>
       </div>
       <div class="resources-grid" id="mainGrid"></div>
@@ -3041,27 +2971,21 @@
     }
 
     function createCardHTML(resource, index) {
-      const delay = 100 + (index % 10) * 100;
+      const tagLabel = resource.isNew ? 'New' : resource.category;
       return `
-        <div class="resource-card ${resource.featured ? 'featured' : ''}" onclick="window.location.href='${resource.link}'" style="cursor: pointer;" 
-             data-category="${resource.category}"
-             style="animation: fadeUpHuman 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards ${delay}ms; opacity: 0;">
-          ${resource.isNew ? '<span class="badge new">NEW</span>' : ''}
-          ${resource.featured && !resource.isNew ? '<span class="badge">FEATURED</span>' : ''}
-          
-          <span class="resource-category">${resource.category}</span>
+        <div class="resource-card ${resource.featured ? 'featured' : ''}" onclick="window.location.href='${resource.link}'" style="cursor: pointer;"
+             data-category="${resource.category}">
+          <span class="resource-tag">${resource.icon} ${tagLabel}</span>
           <h3 class="resource-title">${resource.title}</h3>
           <p class="resource-description">${resource.description}</p>
-          
-          <div style="flex-grow: 1;"></div>
-          
-          <a href="${resource.link}" class="resource-link" style="background: none; color: var(--black); border: none; padding: 0.5rem 0; font-family: 'Caveat', cursive; font-size: 1.6rem; text-transform: none;">
-            <span class="icon" style="margin-right: 8px; font-style: normal;">${resource.icon}</span>
-            Open Tool 
-            <svg class="sketch-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7" stroke-dasharray="100" stroke-dashoffset="0"/>
-            </svg>
-          </a>
+          <div class="resource-meta">
+            <a href="${resource.link}" class="resource-link">
+              Open Tool
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
         </div>
       `;
     }
