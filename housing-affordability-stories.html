@@ -396,23 +396,26 @@
     }
 
     .mobile-menu {
-      display: none;
+      display: flex;
+      flex-direction: column;
       position: fixed;
       top: 0;
-      right: -100%;
+      right: 0;
       width: 100%;
       height: 100vh;
       background: var(--white);
       z-index: 1040;
       padding: 6rem 2rem;
-      transition: right 0.3s ease;
+      transform: translateX(100%);
+      visibility: hidden;
+      transition: transform 0.3s ease, visibility 0.3s ease;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
 
     .mobile-menu.active {
-      display: block;
-      right: 0;
+      transform: translateX(0);
+      visibility: visible;
     }
 
     .mobile-menu a {
@@ -976,6 +979,42 @@
       }
     }
 
+    /* Story viewer: full-screen on mobile for consistent sizing */
+    @media (max-width: 600px) {
+      .story-content {
+        margin: 0;
+        border-radius: 0;
+        height: 100vh;
+        height: 100dvh;
+        max-height: none;
+        border-left: none;
+        border-right: none;
+        box-shadow: none;
+        width: 100%;
+      }
+      .slide-container {
+        padding: 72px 16px 24px;
+      }
+      .slide-title {
+        font-size: 22px;
+      }
+      .story-header-viewer {
+        padding: 14px 16px;
+      }
+      .slide-text {
+        font-size: 15px;
+        padding: 16px;
+      }
+    }
+
+    /* Disable hover lift on touch devices (prevents stuck hover state after tap) */
+    @media (hover: none) {
+      .story-card:hover {
+        transform: none;
+        box-shadow: 6px 6px 0 #1a1a1a;
+      }
+    }
+
     /* ============================================
    BASE COMPONENT CLASSES
    ============================================ */
@@ -1506,25 +1545,27 @@
     }
 
     .mobile-menu {
-      display: none;
+      display: flex;
+      flex-direction: column;
       position: fixed;
       top: 0;
-      right: -100%;
+      right: 0;
       width: 100%;
       height: 100vh;
       height: 100dvh;
       background: var(--white);
       z-index: 1040;
       padding: 5rem 1.5rem 1.5rem;
-      transition: right 0.3s ease;
+      transform: translateX(100%);
+      visibility: hidden;
+      transition: transform 0.3s ease, visibility 0.3s ease;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
 
     .mobile-menu.active {
-      display: flex;
-      flex-direction: column;
-      right: 0;
+      transform: translateX(0);
+      visibility: visible;
     }
 
     /* Orange accent strip at top */
