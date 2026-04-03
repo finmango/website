@@ -2363,15 +2363,35 @@
 
   <script>
     // Load current pledge count on page load
+    // Uses a cache-busting timestamp so every refresh gets a fresh count.
+    // Falls back to a JSONP <script> tag if fetch is blocked by CORS redirect.
     (function() {
-      fetch('https://script.google.com/macros/s/AKfycbzNE-S8fg48jc8PgLDFCTBSj6T126dzX6C6nkaSB4SZ7SDKnE-aTD5Be_ae-8kwUA5eAw/exec')
+      var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNE-S8fg48jc8PgLDFCTBSj6T126dzX6C6nkaSB4SZ7SDKnE-aTD5Be_ae-8kwUA5eAw/exec';
+      var countEl = document.getElementById('pledge-count');
+
+      function updateCount(n) {
+        if (typeof n === 'number' && !isNaN(n)) {
+          countEl.textContent = n;
+        }
+      }
+
+      // JSONP callback — called by the <script> fallback below
+      window._pledgeCountCallback = function(data) {
+        if (data && data.count !== undefined) updateCount(data.count);
+      };
+
+      // Primary: fetch (works when CORS headers are present)
+      fetch(SCRIPT_URL + '?t=' + Date.now())
         .then(function(r) { return r.json(); })
         .then(function(data) {
-          if (data.count) {
-            document.getElementById('pledge-count').textContent = data.count;
-          }
+          if (data && data.count !== undefined) updateCount(data.count);
         })
-        .catch(function() {});
+        .catch(function() {
+          // Fallback: JSONP via <script> tag — bypasses CORS entirely
+          var s = document.createElement('script');
+          s.src = SCRIPT_URL + '?callback=_pledgeCountCallback&t=' + Date.now();
+          document.body.appendChild(s);
+        });
     })();
   </script>
 
