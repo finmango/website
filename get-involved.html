@@ -2338,10 +2338,13 @@
       if (!firstName || !email) return;
 
       try {
+        // NOTE: mode:'no-cors' only allows simple headers.
+        // 'application/json' triggers a preflight and gets dropped — use 'text/plain'.
+        // Apps Script reads this via e.postData.contents and parses the JSON string.
         await fetch(PLEDGE_WEBHOOK_URL, {
           method: 'POST',
           mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain' },
           body: JSON.stringify({ firstName, email, location, timestamp: new Date().toISOString() })
         });
 
