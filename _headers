@@ -39,6 +39,15 @@
 /*.eot
   Cache-Control: public, max-age=31536000, immutable
 
+# Dashboard data JS — short TTL so Cloudflare edge serves fresh data after daily updates.
+# The frontend also appends ?v=<timestamp> as a cache-buster for the browser layer.
+/data/dashboard-data.js
+  Cache-Control: public, max-age=300, must-revalidate
+
+# Other JS files - Cache for 1 hour
+/*.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
 # JSON data - Cache for 1 hour
 /*.json
   Cache-Control: public, max-age=3600, must-revalidate
