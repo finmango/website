@@ -2639,11 +2639,13 @@
                                 <td>FHFA All-Transactions Index / Quarterly</td>
                                 <td>Measures price volatility for <em>Housing Stress</em>.</td>
                             </tr>
-                            <tr>
+                            <tr style="background: rgba(255, 107, 53, 0.05);">
                                 <td><strong>Search Trends</strong></td>
-                                <td>Google Trends</td>
-                                <td>Real-Time Search Volume / Daily</td>
-                                <td>Used as a "Volatility Boost" (+0-10pts) to capture immediate stress spikes.</td>
+                                <td>Google Health Trends API <em>(exclusive access)</em></td>
+                                <td>Probability-scaled search volume / Daily</td>
+                                <td>Real-time "Volatility Boost" (+0&ndash;10 pts). Unlike the public Google Trends
+                                    site, this API returns absolute search probabilities &mdash; enabling
+                                    comparison across time and geography.</td>
                             </tr>
                             <tr style="background: rgba(255, 107, 53, 0.05);">
                                 <td><strong>Housing Cost Burden</strong></td>
@@ -2679,9 +2681,14 @@
                     <p><strong>Regional Multipliers</strong> (0.85&ndash;1.35&times;) are applied to each state based on
                         structural economic factors (cost of living, historical poverty rates, labor market conditions).
                         These are heuristic adjustments, not derived from a single dataset.</p>
-                    <p><strong>Google Trends Boost</strong> (+0&ndash;10 pts): Relative search interest (0&ndash;100 scale)
-                        is divided by 10 to add a real-time volatility component. Applied only when Trends data is
-                        available.</p>
+                    <p><strong>Health Trends API Boost</strong> (+0&ndash;10 pts): FinMango has exclusive access to the
+                        <strong>Google Health Trends API</strong>, which returns absolute search probabilities
+                        (P(term) &times; 10,000,000) rather than the relative 0&ndash;100 scale on the public
+                        Google Trends website. This means a value of 5 indicates that 5 out of every
+                        10 million search sessions included that term &mdash; an absolute measure that is
+                        comparable across time periods and geographies. The raw API value is used directly
+                        as the boost (capped at 10 pts), providing a real-time signal of financial stress
+                        that moves faster than monthly government data releases.</p>
                 </div>
 
                 <div class="methodology-item">
@@ -2697,13 +2704,14 @@
 
                 <div class="methodology-item">
                     <h4>Trend Chart</h4>
-                    <p>The historical trend chart uses <strong>Google Trends search-interest data</strong> to show how
-                        stress indicators have changed over time. The shape of each curve reflects relative search
-                        volume for indicator-specific terms (e.g., "debt help", "food bank near me", "eviction help").</p>
+                    <p>The historical trend chart uses data from the <strong>Google Health Trends API</strong>
+                        to show how stress indicators have changed over time. The shape of each curve reflects
+                        absolute search probability for indicator-specific terms (e.g., "debt help",
+                        "food bank near me", "eviction help").</p>
                     <p>Historical values are scaled so that the most recent month equals today's composite index,
-                        preserving the trend shape while keeping the chart on the same scale as the map. Because
-                        Google Trends data is inherently volatile, month-to-month fluctuations may be large &mdash;
-                        focus on longer-term direction rather than individual data points.</p>
+                        preserving the trend shape while keeping the chart on the same scale as the map.
+                        Because search data is inherently volatile, month-to-month fluctuations may be large
+                        &mdash; focus on longer-term direction rather than individual data points.</p>
                 </div>
 
                 <div class="methodology-item full-width">
