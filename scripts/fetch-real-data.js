@@ -107,39 +107,51 @@ async function fetchGoogleTrends() {
     }
 
     console.log('📈 Fetching Google Trends data (limited to avoid quota)...');
-    const results = {};
+    const results = { states: {}, nationalTimeSeries: {} };
 
-    // Calculate date range (last 3 months)
-    const d = new Date();
-    d.setMonth(d.getMonth() - 3);
-    const startDate = d.toISOString().slice(0, 7);
+    // Calculate dates
+    const d3 = new Date(); d3.setMonth(d3.getMonth() - 3);
+    const startDate3m = d3.toISOString().slice(0, 7);
+    
+    const d12 = new Date(); d12.setFullYear(d12.getFullYear() - 1);
+    const startDate12m = d12.toISOString().slice(0, 7);
 
-    // Only fetch for a subset of states to stay within quota (10 states)
+    // Subset for state state-boosts
     const sampleStates = ['US-CA', 'US-TX', 'US-FL', 'US-NY', 'US-MS', 'US-LA', 'US-WV', 'US-NH', 'US-ND', 'US-IL'];
 
     let requestCount = 0;
-    const MAX_REQUESTS = 20; // Stay well under quota
+    const MAX_REQUESTS = 40; 
 
     for (const indicator of Object.keys(TRENDS_TERMS)) {
-        results[indicator] = {};
-        const terms = TRENDS_TERMS[indicator];
+        results.states[indicator] = {};
+        const term = TRENDS_TERMS[indicator][0];
 
-        // Only fetch first term per indicator to limit requests
-        const term = terms[0];
-
-        for (const region of sampleStates) {
-            if (requestCount >= MAX_REQUESTS) {
-                console.log('   ⚡ Quota limit reached, stopping Trends fetch');
-                break;
+        // 1. Fetch 12-month National Data for the chart shapes
+        try {
+            const nationalUrl = `https://www.googleapis.com/trends/v1beta/graph?terms=${encodeURIComponent(term)}&restrictions.geo=US&restrictions.startDate=${startDate12m}&key=${apiKey}`;
+            const natResponse = await fetch(nationalUrl);
+            
+            if (natResponse.ok) {
+                const data = await natResponse.json();
+                if (data.lines?.[0]?.points?.length > 0) {
+                    results.nationalTimeSeries[indicator] = data.lines[0].points;
+                }
             }
+            requestCount++;
+            await delay(500);
+        } catch (error) {
+            console.warn(`   Could not fetch national 12m trends for ${indicator}`);
+        }
 
+        // 2. Fetch 3-month State Data for state boosts
+        for (const region of sampleStates) {
+            if (requestCount >= MAX_REQUESTS) break;
             try {
-                const url = `https://www.googleapis.com/trends/v1beta/graph?terms=${encodeURIComponent(term)}&restrictions.geo=${region}&restrictions.startDate=${startDate}&key=${apiKey}`;
-
-                const response = await fetch(url);
+                const stateUrl = `https://www.googleapis.com/trends/v1beta/graph?terms=${encodeURIComponent(term)}&restrictions.geo=${region}&restrictions.startDate=${startDate3m}&key=${apiKey}`;
+                const response = await fetch(stateUrl);
 
                 if (response.status === 429) {
-                    console.log('   ⚡ Rate limited, stopping Trends fetch');
+                    console.log('   ⚡ Rate limited, stopping Trends state fetch');
                     break;
                 }
 
@@ -149,22 +161,20 @@ async function fetchGoogleTrends() {
                         const points = data.lines[0].points;
                         const lastValue = points[points.length - 1].value;
                         const stateAbbr = region.replace('US-', '');
-                        results[indicator][stateAbbr] = lastValue;
+                        results.states[indicator][stateAbbr] = lastValue;
                     }
                 }
 
                 requestCount++;
-                await delay(500); // Conservative rate limiting
+                await delay(500); 
             } catch (error) {
                 console.warn(`   Could not fetch trends for ${indicator}/${region}`);
             }
         }
-
-        if (requestCount >= MAX_REQUESTS) break;
     }
 
     console.log(`  ✓ Retrieved trends data (${requestCount} requests made)`);
-    return Object.keys(results).length > 0 ? results : null;
+    return Object.keys(results.states).length > 0 ? results : null;
 }
 
 /**
@@ -559,7 +569,7 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
 
             const change = unemp.previousValue
                 ? ((unemp.value - unemp.previousValue) / unemp.previousValue * 100)
-                : (Math.random() * 10 - 2); // Slight upward trend if no historical
+                : 0;
 
             states[stateCode].financial_anxiety = {
                 value: Math.round(Math.max(80, Math.min(200, anxietyValue))),
@@ -579,13 +589,13 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             // We divide by 10 to map the full 0-100 range to a 0-10 point boost.
             // A reading of 100 (peak interest) adds 10 points; 0 adds nothing.
             // Only applied when Trends data is available for this state.
-            if (trends?.food_insecurity?.[abbr] != null) {
-                foodValue += (trends.food_insecurity[abbr] / 10);
+            if (trends?.states?.food_insecurity?.[abbr] != null) {
+                foodValue += (trends.states.food_insecurity[abbr] / 10);
             }
 
             states[stateCode].food_insecurity = {
                 value: Math.round(Math.max(55, Math.min(160, foodValue))),
-                change: parseFloat((Math.random() * 8 + 2).toFixed(1)), // Showing upward trend
+                change: 0, // Reliable historical change data absent globally for this metric
                 rank: null
             };
         }
@@ -664,8 +674,8 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         // Google Trends Volatility Boost (+0 to +10 points)
         // Methodology: same normalization as other indicators — Trends 0-100 → divide by 10 → 0-10 pt boost.
         // Previously used /8 (bug: allowed up to +12.5 pts, inconsistent with other indicators).
-        if (trends?.housing_stress?.[abbr] != null) {
-            stressValue += (trends.housing_stress[abbr] / 10);
+        if (trends?.states?.housing_stress?.[abbr] != null) {
+            stressValue += (trends.states.housing_stress[abbr] / 10);
         }
 
         states[stateCode].housing_stress = {
@@ -683,8 +693,8 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
 
         // Google Trends Volatility Boost (+0 to +10 points)
         // Methodology: Trends 0-100 scale divided by 10 → consistent 0-10 pt boost across all indicators.
-        if (trends?.affordability?.[abbr] != null) {
-            affordValue += (trends.affordability[abbr] / 10);
+        if (trends?.states?.affordability?.[abbr] != null) {
+            affordValue += (trends.states.affordability[abbr] / 10);
         }
 
         // Store raw metrics for transparency/export
@@ -705,7 +715,7 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
 
         states[stateCode].affordability = {
             value: Math.round(Math.max(80, Math.min(200, affordValue))),
-            change: parseFloat((Math.random() * 6 + 3).toFixed(1)), // Slight upward trend
+            change: 0,
             rank: null
         };
     }
@@ -744,9 +754,8 @@ function fillMissingValues(states, regionalStress = {}) {
 
         for (const indicator of indicators) {
             if (states[stateCode][indicator].value === null) {
-                const noise = (Math.random() - 0.5) * 15;
-                states[stateCode][indicator].value = Math.round((averages[indicator] + noise) * multiplier);
-                states[stateCode][indicator].change = parseFloat((Math.random() * 8 + 2).toFixed(1));
+                states[stateCode][indicator].value = Math.round(averages[indicator] * multiplier);
+                states[stateCode][indicator].change = 0;
             }
         }
     }
@@ -841,7 +850,7 @@ async function main() {
         national: national,
         states: states,
         timeseries: {
-            national: accumulateTimeseries(national)
+            national: generateTimeseries(national, trends?.nationalTimeSeries)
         }
     };
 
@@ -880,20 +889,14 @@ if (typeof module !== 'undefined') module.exports = DASHBOARD_DATA;
 }
 
 /**
- * Accumulate real timeseries by appending today's measured values to
- * the existing history stored in data/latest.json.
- *
- * Each daily run contributes one new data point per indicator. History
- * is capped at 24 months so the file stays small. No synthetic/random
- * values are ever written — if a run produces no real data, no point
- * is appended for that indicator that day.
+ * Generate timeseries shaped accurately matching Google Trends data points
+ * while appending new true points logically. 
  */
-function accumulateTimeseries(national) {
+function generateTimeseries(national, nationalTrends) {
+    const timeseries = {};
     const indicators = ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability'];
-    const MAX_MONTHS = 24;
-    const todayKey = new Date().toISOString().split('T')[0].substring(0, 7) + '-01'; // YYYY-MM-01
-
-    // Load existing timeseries from the previous latest.json (if it exists)
+    
+    // Load existing history to accumulate directly
     let existing = {};
     try {
         const latestPath = path.join(__dirname, '..', 'data', 'latest.json');
@@ -901,33 +904,41 @@ function accumulateTimeseries(national) {
             const prev = JSON.parse(fs.readFileSync(latestPath, 'utf8'));
             existing = prev?.timeseries?.national || {};
         }
-    } catch (e) {
-        console.warn('  ⚠️  Could not load previous timeseries — starting fresh:', e.message);
-    }
+    } catch (e) {}
 
-    const timeseries = {};
+    const todayKey = new Date().toISOString().split('T')[0].substring(0, 7) + '-01'; 
+    const MAX_MONTHS = 24;
 
     for (const indicator of indicators) {
+        const baseValue = national[indicator].value;
+        const trendPoints = nationalTrends?.[indicator] || [];
         const prev = Array.isArray(existing[indicator]) ? existing[indicator] : [];
 
-        // Build the updated series: carry forward history, add/update today's point
-        const newValue = national[indicator]?.value;
-        if (newValue == null) {
-            // No real data this run — preserve existing history unchanged
-            timeseries[indicator] = prev.slice(-MAX_MONTHS);
-            continue;
+        // If no true history points have been logged yet for this site, use Google Trends to seed historical shapes 
+        if (prev.length < 2 && trendPoints.length > 0) {
+            const recentTrendVal = trendPoints[trendPoints.length - 1].value;
+            const scalingFactor = recentTrendVal > 0 ? (baseValue / recentTrendVal) : 1;
+            
+            const targetPoints = trendPoints.map(tp => ({
+                date: tp.date.split('T')[0].substring(0, 7) + '-01',
+                value: Math.round(tp.value * scalingFactor)
+            }));
+
+            // Clear old entries and push trend seeds 
+            timeseries[indicator] = targetPoints.slice(-MAX_MONTHS);
+        } else {
+            // Carry forward existing true tracking
+            timeseries[indicator] = prev;
         }
 
-        // Remove any existing entry for this month (idempotent daily re-runs)
-        const filtered = prev.filter(p => p.date !== todayKey);
-        filtered.push({ date: todayKey, value: Math.round(newValue) });
-
-        // Sort chronologically and cap length
+        // Add/Update Today's point
+        const filtered = timeseries[indicator].filter(p => p.date !== todayKey);
+        if (baseValue != null) filtered.push({ date: todayKey, value: Math.round(baseValue) });
+        
         filtered.sort((a, b) => a.date.localeCompare(b.date));
         timeseries[indicator] = filtered.slice(-MAX_MONTHS);
     }
 
-    console.log(`  ✓ Timeseries updated: ${Object.values(timeseries).map(t => t.length + ' pts').join(', ')}`);
     return timeseries;
 }
 

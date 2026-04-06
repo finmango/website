@@ -388,72 +388,38 @@ document.addEventListener('DOMContentLoaded', async () => {
         const indicator = els.chartIndicatorSelect.value;
         const period = els.chartPeriodSelect.value;
 
-        let dataPoints = [];
-        const indicatorLabel = indicator.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' (National)';
-
-        // --- Primary path: use real timeseries from dashboard data ---
-        const timeseries = DASHBOARD_DATA.timeseries?.national?.[indicator];
-        if (timeseries && timeseries.length > 0) {
-            // Filter by period (best-effort for available months)
-            const now = new Date();
-            const periodMonths = { '1d': 0, '1w': 0, '1m': 1, '3m': 3, '6m': 6, '12m': 12, '5y': 60, '10y': 120, '15y': 180 };
-            const monthsBack = periodMonths[period] ?? 6;
-            const cutoff = new Date(now);
-            cutoff.setMonth(cutoff.getMonth() - monthsBack);
-
-            const filtered = monthsBack === 0
-                ? timeseries.slice(-1) // 1d/1w: just show the latest point
-                : timeseries.filter(p => new Date(p.date) >= cutoff);
-
-            const source = filtered.length > 0 ? filtered : timeseries; // fallback to all data
-            dataPoints = source.map(p => {
-                const d = new Date(p.date);
-                return {
-                    label: d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
-                    value: p.value
-                };
-            });
-        } else {
-            // --- Fallback: simulate historical trend if no timeseries available ---
-            // NOTE: This is estimated data, not measured. Shown only when no real history exists.
-            const now = new Date();
-            const periodConfig = {
-                '1d': { points: 24, unit: 'hour', format: { hour: 'numeric' } },
-                '1w': { points: 7, unit: 'day', format: { weekday: 'short' } },
-                '1m': { points: 30, unit: 'day', format: { month: 'short', day: 'numeric' } },
-                '3m': { points: 12, unit: 'week', format: { month: 'short', day: 'numeric' } },
-                '6m': { points: 6, unit: 'month', format: { month: 'short' } },
-                '12m': { points: 12, unit: 'month', format: { month: 'short' } },
-                '5y': { points: 20, unit: 'quarter', format: { year: 'numeric', month: 'short' } },
-                '10y': { points: 40, unit: 'quarter', format: { year: 'numeric' } },
-                '15y': { points: 15, unit: 'year', format: { year: 'numeric' } }
-            };
-            const config = periodConfig[period] || periodConfig['12m'];
-            const baseValue = DASHBOARD_DATA.national[indicator]?.value ?? 100;
-
-            for (let i = config.points - 1; i >= 0; i--) {
-                const date = new Date(now);
-                switch (config.unit) {
-                    case 'hour': date.setHours(date.getHours() - i); break;
-                    case 'day': date.setDate(date.getDate() - i); break;
-                    case 'week': date.setDate(date.getDate() - (i * 7)); break;
-                    case 'month': date.setMonth(date.getMonth() - i); break;
-                    case 'quarter': date.setMonth(date.getMonth() - (i * 3)); break;
-                    case 'year': date.setFullYear(date.getFullYear() - i); break;
-                }
-                const trendFactor = 1 - (i / config.points) * 0.3;
-                const randomVariation = (Math.random() - 0.5) * 10;
-                dataPoints.push({
-                    label: date.toLocaleDateString('en-US', config.format),
-                    value: Math.max(50, baseValue * trendFactor + randomVariation)
-                });
-            }
-            console.warn(`[Chart] No real timeseries for "${indicator}" — displaying estimated trend.`);
+        // Get actual data points from the static dataset
+        const rawPoints = (DASHBOARD_DATA.timeseries && DASHBOARD_DATA.timeseries.national && DASHBOARD_DATA.timeseries.national[indicator]) || [];
+        
+        const now = new Date();
+        let cutoffDate = new Date();
+        
+        switch (period) {
+            case '1d': cutoffDate.setDate(now.getDate() - 1); break;
+            case '1w': cutoffDate.setDate(now.getDate() - 7); break;
+            case '1m': cutoffDate.setMonth(now.getMonth() - 1); break;
+            case '3m': cutoffDate.setMonth(now.getMonth() - 3); break;
+            case '6m': cutoffDate.setMonth(now.getMonth() - 6); break;
+            case '12m': cutoffDate.setFullYear(now.getFullYear() - 1); break;
+            case '5y': cutoffDate.setFullYear(now.getFullYear() - 5); break;
+            case '10y': cutoffDate.setFullYear(now.getFullYear() - 10); break;
+            case '15y': cutoffDate.setFullYear(now.getFullYear() - 15); break;
+            default: cutoffDate.setFullYear(now.getFullYear() - 1); break;
         }
 
-        APP_STATE.chartInstance.data.labels = dataPoints.map(d => d.label);
-        APP_STATE.chartInstance.data.datasets[0].data = dataPoints.map(d => parseFloat(d.value).toFixed(1));
-        APP_STATE.chartInstance.data.datasets[0].label = indicatorLabel;
+        // Filter points based on selected period
+        const filteredPoints = rawPoints.filter(p => new Date(p.date) >= cutoffDate);
+        // Ensure we always show some data if the filter is too narrow
+        const displayPoints = filteredPoints.length > 0 ? filteredPoints : rawPoints.slice(-2);
+
+        // Format labels based on period length
+        const labelFormat = ['1d', '1w'].includes(period) ? { weekday: 'short' } :
+                            ['1m', '3m'].includes(period) ? { month: 'short', day: 'numeric' } : 
+                            { month: 'short', year: '2-digit' };
+
+        APP_STATE.chartInstance.data.labels = displayPoints.map(d => new Date(d.date).toLocaleDateString('en-US', labelFormat));
+        APP_STATE.chartInstance.data.datasets[0].data = displayPoints.map(d => d.value.toFixed(1));
+        APP_STATE.chartInstance.data.datasets[0].label = indicator.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' (National)';
         APP_STATE.chartInstance.update();
     }
 
