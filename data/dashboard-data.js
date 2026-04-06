@@ -1,10 +1,10 @@
 // Financial Health Barometer Data
-// Auto-generated: 2026-04-06T15:47:59.865Z
+// Auto-generated: 2026-04-06T16:13:20.166Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
   "meta": {
-    "generated": "2026-04-06T15:47:59.854Z",
+    "generated": "2026-04-06T16:13:20.123Z",
     "version": "2.4",
     "source": "BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs",
     "update_frequency": "daily",
@@ -30,12 +30,12 @@ const DASHBOARD_DATA = {
       "trend": "up"
     },
     "housing_stress": {
-      "value": 156.6,
+      "value": 156.7,
       "change": 15.8,
       "trend": "up"
     },
     "affordability": {
-      "value": 143.4,
+      "value": 143.5,
       "change": 0,
       "trend": "up"
     }
@@ -321,7 +321,7 @@ const DASHBOARD_DATA = {
       "affordability": {
         "value": 138,
         "change": 0,
-        "rank": 33
+        "rank": 34
       },
       "metrics": {
         "unemployment_rate": 5.2,
@@ -388,12 +388,12 @@ const DASHBOARD_DATA = {
         "rank": 10
       },
       "housing_stress": {
-        "value": 187,
+        "value": 188,
         "change": 8.7,
         "rank": 4
       },
       "affordability": {
-        "value": 169,
+        "value": 170,
         "change": 0,
         "rank": 4
       },
@@ -982,7 +982,7 @@ const DASHBOARD_DATA = {
       "housing_stress": {
         "value": 144,
         "change": 18.2,
-        "rank": 40
+        "rank": 41
       },
       "affordability": {
         "value": 135,
@@ -1468,7 +1468,7 @@ const DASHBOARD_DATA = {
       "affordability": {
         "value": 139,
         "change": 0,
-        "rank": 31
+        "rank": 32
       },
       "metrics": {
         "unemployment_rate": 4.2,
@@ -1646,14 +1646,14 @@ const DASHBOARD_DATA = {
         "rank": 29
       },
       "housing_stress": {
-        "value": 142,
+        "value": 148,
         "change": 6.8,
-        "rank": 41
+        "rank": 40
       },
       "affordability": {
-        "value": 138,
+        "value": 142,
         "change": 0,
-        "rank": 34
+        "rank": 30
       },
       "metrics": {
         "unemployment_rate": 4.3,
@@ -1764,7 +1764,7 @@ const DASHBOARD_DATA = {
       "affordability": {
         "value": 139,
         "change": 0,
-        "rank": 32
+        "rank": 33
       },
       "metrics": {
         "unemployment_rate": 3.6,
@@ -1801,7 +1801,7 @@ const DASHBOARD_DATA = {
       "affordability": {
         "value": 141,
         "change": 0,
-        "rank": 30
+        "rank": 31
       },
       "metrics": {
         "unemployment_rate": 4.7,
@@ -3856,7 +3856,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2026-04-01",
-          "value": 143
+          "value": 144
         }
       ]
     }
