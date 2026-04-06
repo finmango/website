@@ -2659,45 +2659,64 @@
                 </div>
 
                 <div class="methodology-item">
-                    <h4>Housing Stress Calculation (Data-Driven)</h4>
-                    <p>Housing Stress is calculated using three data-driven components, with <strong>Harvard JCHS 2025
-                            data</strong> as an authoritative fallback when Census/HUD API data is unavailable:</p>
+                    <h4>Index Formulas</h4>
+                    <p>Each indicator combines a government data source with a base index, scaling factor, and regional adjustment:</p>
                     <ul>
-                        <li><strong>Rent Burden Score:</strong> (State Rent Burden % - 25%) × 3<br>
-                            <em>Primary: Census ACS B25071. Fallback: Harvard JCHS renter cost burden data.</em>
-                        </li>
-                        <li><strong>FMR Score:</strong> (State FMR / National Avg FMR - 1) × 40<br>
-                            <em>Primary: HUD Fair Market Rents. Fallback: Harvard JCHS median rent by state.</em>
-                        </li>
-                        <li><strong>HPI Score:</strong> Housing Price Change % × 2<br>
-                            <em>Year-over-year home price appreciation from FRED.</em>
-                        </li>
+                        <li><strong>Financial Anxiety</strong> = (120 + (Unemployment Rate - 3.5%) &times; 18) &times; Regional Multiplier + Trends Boost</li>
+                        <li><strong>Food Insecurity</strong> = (85 + (Poverty Rate - 10%) &times; 6) &times; Regional Multiplier + Trends Boost</li>
+                        <li><strong>Housing Stress</strong> = (100 + Rent Burden Score + FMR Score + HPI Score) &times; Regional Multiplier + Trends Boost</li>
+                        <li><strong>Affordability</strong> = (Housing Stress &times; 0.60 + Food Insecurity &times; 0.40) + Trends Boost</li>
                     </ul>
-                    <p><strong>Formula:</strong> Housing Stress = (100 + Rent Burden Score + FMR Score + HPI Score) ×
-                        Regional Multiplier</p>
+                    <p><strong>Housing sub-scores:</strong> Rent Burden Score = (Rent Burden % - 25%) &times; 3; FMR Score = (State FMR / National Avg FMR - 1) &times; 40; HPI Score = Housing Price Change % &times; 2.<br>
+                    <em>Primary sources: Census ACS B25071 for rent burden, HUD FMR API for fair market rents, FRED for HPI. Fallback: Harvard JCHS 2025 data.</em></p>
+                </div>
+
+                <div class="methodology-item">
+                    <h4>Scaling &amp; Regional Adjustment</h4>
+                    <p>The base index values (120 for Financial Anxiety, 85 for Food Insecurity, 100 for Housing Stress)
+                        are chosen to place typical economic conditions in the "Moderate" range, amplifying relative
+                        differences between states for visualization purposes.</p>
+                    <p><strong>Regional Multipliers</strong> (0.85&ndash;1.35&times;) are applied to each state based on
+                        structural economic factors (cost of living, historical poverty rates, labor market conditions).
+                        These are heuristic adjustments, not derived from a single dataset.</p>
+                    <p><strong>Google Trends Boost</strong> (+0&ndash;10 pts): Relative search interest (0&ndash;100 scale)
+                        is divided by 10 to add a real-time volatility component. Applied only when Trends data is
+                        available.</p>
                 </div>
 
                 <div class="methodology-item">
                     <h4>Index Interpretation</h4>
-                    <p>Indices are relative measures of economic stress, scaled 0-250:</p>
+                    <p>Indices are relative measures of economic stress, scaled 0&ndash;200:</p>
                     <ul>
-                        <li><strong>
-                                < 90 (Green):</strong> Low Stress / Stable</li>
-                        <li><strong>90 - 120 (Yellow):</strong> Moderate Stress</li>
-                        <li><strong>120 - 150 (Orange):</strong> Elevated Stress - Warning Signs</li>
-                        <li><strong>> 150 (Red):</strong> Crisis Level - Immediate Attention Needed</li>
+                        <li><strong>&lt; 90 (Green):</strong> Low Stress / Stable</li>
+                        <li><strong>90&ndash;120 (Yellow):</strong> Moderate Stress</li>
+                        <li><strong>120&ndash;150 (Orange):</strong> Elevated Stress &mdash; Warning Signs</li>
+                        <li><strong>&gt; 150 (Red):</strong> Crisis Level &mdash; Immediate Attention Needed</li>
                     </ul>
+                </div>
+
+                <div class="methodology-item">
+                    <h4>Trend Chart</h4>
+                    <p>The historical trend chart uses <strong>Google Trends search-interest data</strong> to show how
+                        stress indicators have changed over time. The shape of each curve reflects relative search
+                        volume for indicator-specific terms (e.g., "debt help", "food bank near me", "eviction help").</p>
+                    <p>Historical values are scaled so that the most recent month equals today's composite index,
+                        preserving the trend shape while keeping the chart on the same scale as the map. Because
+                        Google Trends data is inherently volatile, month-to-month fluctuations may be large &mdash;
+                        focus on longer-term direction rather than individual data points.</p>
                 </div>
 
                 <div class="methodology-item full-width">
                     <h4>Academic Note: Heuristic Stress Model (HSM)</h4>
                     <p>The indices presented here utilize a <strong>Heuristic Stress Model</strong> to quantify economic
                         pressure. Unlike raw economic indicators, the HSM standardizes disparate metrics (unemployment,
-                        rent burden, search volatility) into a unified 0-250 stress index. This allows for
+                        rent burden, search volatility) into a unified 0&ndash;200 stress index. This allows for
                         cross-variable comparison similar to the "Misery Index" but with state-level granularity.</p>
-                    <p><em>Researcher Note: Indices are heuristic composites designed for relative comparison. For
-                            econometric modeling, researchers are advised to use the raw underlying metrics (provided in
-                            the full CSV export) rather than the composite index scores.</em></p>
+                    <p><em>Researcher Note: Composite indices are heuristic &mdash; designed for relative comparison
+                            between states, not as absolute measures of economic hardship. The base indices, scaling
+                            factors, and regional multipliers are editorial choices that amplify differences for
+                            visualization. For econometric modeling, use the raw underlying metrics (provided in the
+                            full CSV export) rather than the composite index scores.</em></p>
                 </div>
 
                 <div class="methodology-item full-width"

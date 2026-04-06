@@ -889,54 +889,47 @@ if (typeof module !== 'undefined') module.exports = DASHBOARD_DATA;
 }
 
 /**
- * Generate timeseries shaped accurately matching Google Trends data points
- * while appending new true points logically. 
+ * Generate timeseries from Google Trends historical shape, scaled to today's index.
+ *
+ * The timeseries uses Google Trends search-interest data to show the *shape*
+ * of how stress has changed over time, but re-anchors it each run so the most
+ * recent point equals today's composite index value.  This avoids the scaling
+ * discontinuity that previously caused a false cliff between the backfilled
+ * history and the current data point.
  */
 function generateTimeseries(national, nationalTrends) {
     const timeseries = {};
     const indicators = ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability'];
-    
-    // Load existing history to accumulate directly
-    let existing = {};
-    try {
-        const latestPath = path.join(__dirname, '..', 'data', 'latest.json');
-        if (fs.existsSync(latestPath)) {
-            const prev = JSON.parse(fs.readFileSync(latestPath, 'utf8'));
-            existing = prev?.timeseries?.national || {};
-        }
-    } catch (e) {}
 
-    const todayKey = new Date().toISOString().split('T')[0].substring(0, 7) + '-01'; 
+    const todayKey = new Date().toISOString().split('T')[0].substring(0, 7) + '-01';
     const MAX_MONTHS = 120;
 
     for (const indicator of indicators) {
         const baseValue = national[indicator].value;
         const trendPoints = nationalTrends?.[indicator] || [];
-        const prev = Array.isArray(existing[indicator]) ? existing[indicator] : [];
 
-        // If true history points are incomplete (< 120), use 10-year Google Trends trajectory backward to backfill
-        if (prev.length < 120 && trendPoints.length > 0) {
+        if (trendPoints.length > 0) {
+            // Scale the entire Google Trends curve so the most recent month
+            // equals today's composite index.  This keeps the historical
+            // *shape* intact while ensuring continuity with the live value.
             const recentTrendVal = trendPoints[trendPoints.length - 1].value;
             const scalingFactor = recentTrendVal > 0 ? (baseValue / recentTrendVal) : 1;
-            
-            const targetPoints = trendPoints.map(tp => ({
+
+            const scaled = trendPoints.map(tp => ({
                 date: tp.date.split('T')[0].substring(0, 7) + '-01',
                 value: Math.round(tp.value * scalingFactor)
             }));
 
-            // Clear old entries and push trend seeds 
-            timeseries[indicator] = targetPoints.slice(-MAX_MONTHS);
-        } else {
-            // Carry forward existing true tracking
-            timeseries[indicator] = prev;
-        }
+            // Replace today's month with the exact composite index (avoid rounding drift)
+            const withoutToday = scaled.filter(p => p.date !== todayKey);
+            withoutToday.push({ date: todayKey, value: Math.round(baseValue) });
+            withoutToday.sort((a, b) => a.date.localeCompare(b.date));
 
-        // Add/Update Today's point
-        const filtered = timeseries[indicator].filter(p => p.date !== todayKey);
-        if (baseValue != null) filtered.push({ date: todayKey, value: Math.round(baseValue) });
-        
-        filtered.sort((a, b) => a.date.localeCompare(b.date));
-        timeseries[indicator] = filtered.slice(-MAX_MONTHS);
+            timeseries[indicator] = withoutToday.slice(-MAX_MONTHS);
+        } else {
+            // No trends data available — carry forward a single point
+            timeseries[indicator] = [{ date: todayKey, value: Math.round(baseValue) }];
+        }
     }
 
     return timeseries;
