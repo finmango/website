@@ -1933,6 +1933,8 @@ const DASHBOARD_DATA = {
     "national": {
       "financial_anxiety": [
         {
+          "date": "2026-04-01",
+          "value": 139
           "date": "2025-11-01",
           "value": 119
         },
@@ -1980,11 +1982,13 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2026-04-01",
-          "value": 130
+          "value": 129
         }
       ],
       "housing_stress": [
         {
+          "date": "2026-04-01",
+          "value": 157
           "date": "2025-11-01",
           "value": 134
         },
