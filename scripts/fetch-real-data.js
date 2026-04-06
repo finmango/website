@@ -549,7 +549,13 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             const unemp = unemployment[abbr];
             // Higher base + unemployment impact + regional factor
             const rawValue = BASE_INDEX + (unemp.value - BASELINE_UNEMPLOYMENT) * UNEMPLOYMENT_MULTIPLIER;
-            const anxietyValue = rawValue * regionalMultiplier;
+            let anxietyValue = rawValue * regionalMultiplier;
+
+            // Google Trends Volatility Boost (+0 to +10 points)
+            // Methodology: Trends 0-100 scale divided by 10 → 0-10 pt boost.
+            if (trends?.financial_anxiety?.[abbr] != null) {
+                anxietyValue += (trends.financial_anxiety[abbr] / 10);
+            }
 
             const change = unemp.previousValue
                 ? ((unemp.value - unemp.previousValue) / unemp.previousValue * 100)
@@ -568,8 +574,12 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             const rawValue = 85 + (pov.povertyRate - BASELINE_POVERTY) * POVERTY_MULTIPLIER;
             let foodValue = rawValue * regionalMultiplier;
 
-            // Apply trends boost if available (0-10 scale added to score)
-            if (trends?.food_insecurity?.[abbr]) {
+            // Google Trends Volatility Boost (+0 to +10 points)
+            // Methodology: Google Trends returns relative search interest on a 0-100 scale.
+            // We divide by 10 to map the full 0-100 range to a 0-10 point boost.
+            // A reading of 100 (peak interest) adds 10 points; 0 adds nothing.
+            // Only applied when Trends data is available for this state.
+            if (trends?.food_insecurity?.[abbr] != null) {
                 foodValue += (trends.food_insecurity[abbr] / 10);
             }
 
@@ -651,9 +661,11 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         const rawHousingStress = 100 + rentBurdenScore + fmrScore + hpiScore;
         let stressValue = rawHousingStress * regionalMultiplier;
 
-        // Apply trends boost if available
-        if (trends?.housing_stress?.[abbr]) {
-            stressValue += (trends.housing_stress[abbr] / 8);
+        // Google Trends Volatility Boost (+0 to +10 points)
+        // Methodology: same normalization as other indicators — Trends 0-100 → divide by 10 → 0-10 pt boost.
+        // Previously used /8 (bug: allowed up to +12.5 pts, inconsistent with other indicators).
+        if (trends?.housing_stress?.[abbr] != null) {
+            stressValue += (trends.housing_stress[abbr] / 10);
         }
 
         states[stateCode].housing_stress = {
@@ -663,14 +675,15 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         };
 
         // Affordability: Composite of housing costs, poverty, and regional cost of living
-        // Housing weight increased slightly to reflect cost of living crisis
-        const housingVal = states[stateCode].housing_stress.value || (130 * regionalMultiplier);
-        // Fallback baseline increased to 115 to align with filled values and prevent artificial deflation
-        const povertyVal = states[stateCode].food_insecurity.value || (115 * regionalMultiplier);
+        // Housing weight: 60%, Food/Poverty proxy: 40%
+        // Uses null-coalescing (??), not || , to avoid treating a valid score of 0 as missing.
+        const housingVal = states[stateCode].housing_stress.value ?? (130 * regionalMultiplier);
+        const povertyVal = states[stateCode].food_insecurity.value ?? (115 * regionalMultiplier);
         let affordValue = (housingVal * 0.60 + povertyVal * 0.40);
 
-        // Apply trends boost
-        if (trends?.affordability?.[abbr]) {
+        // Google Trends Volatility Boost (+0 to +10 points)
+        // Methodology: Trends 0-100 scale divided by 10 → consistent 0-10 pt boost across all indicators.
+        if (trends?.affordability?.[abbr] != null) {
             affordValue += (trends.affordability[abbr] / 10);
         }
 

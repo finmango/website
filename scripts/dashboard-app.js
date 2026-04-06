@@ -3,7 +3,31 @@
  * Handles map interaction, data visualization, animations, and UI updates
  */
 
-document.addEventListener('DOMContentLoaded', async () => {
+// Wait for both DOMContentLoaded and the cache-busted dashboard-data.js to be ready.
+// Whichever fires last triggers init(). This handles the race between dynamic script
+// injection (cache-busting) and the DOM being ready.
+(function() {
+    let domReady = false;
+    let dataReady = false;
+
+    function tryInit() {
+        if (domReady && dataReady) startDashboard();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        domReady = true;
+        // If data was already loaded before DOMContentLoaded (cached/fast network), proceed.
+        if (typeof DASHBOARD_DATA !== 'undefined') dataReady = true;
+        tryInit();
+    });
+
+    document.addEventListener('dashboard-data-ready', function() {
+        dataReady = true;
+        tryInit();
+    });
+})();
+
+async function startDashboard() {
     // --- State Management ---
     const APP_STATE = {
         currentIndicator: 'financial_anxiety',
@@ -15,6 +39,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- DOM Elements ---
     const els = {
         lastUpdated: document.getElementById('last-updated-date'),
+        liveIndicator: document.getElementById('live-indicator'),
+        staleDataBanner: document.getElementById('stale-data-banner'),
         indicatorCards: document.querySelectorAll('.indicator-card'),
         valAnxiety: document.getElementById('val-financial_anxiety'),
         changeAnxiety: document.getElementById('change-financial_anxiety'),
@@ -97,11 +123,48 @@ document.addEventListener('DOMContentLoaded', async () => {
         return '#EF4444'; // Red (High)
     }
 
+    // --- Data Freshness Check ---
+    function checkDataFreshness() {
+        if (!DASHBOARD_DATA.meta?.generated) {
+            console.warn('[Freshness] No generated timestamp in DASHBOARD_DATA.meta');
+            return;
+        }
+
+        const generated = new Date(DASHBOARD_DATA.meta.generated);
+        const now = new Date();
+        const ageMs = now - generated;
+        const ageHours = ageMs / (1000 * 60 * 60);
+
+        console.log(`[Freshness] Data age: ${ageHours.toFixed(1)} hours (generated: ${generated.toISOString()})`);
+
+        if (ageHours > 72) {
+            // Critical: show prominent red banner
+            const dateStr = generated.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            if (els.staleDataBanner) {
+                els.staleDataBanner.textContent = `⚠️ Data has not updated since ${dateStr}. Results may be inaccurate.`;
+                els.staleDataBanner.style.display = 'block';
+            }
+            console.error(`[Freshness] CRITICAL: Data is ${ageHours.toFixed(0)} hours old (>72h). Banner displayed.`);
+        }
+
+        if (ageHours > 26) {
+            // Stale: replace LIVE badge with amber warning
+            if (els.liveIndicator) {
+                els.liveIndicator.innerHTML = '⚠ STALE DATA';
+                els.liveIndicator.style.cssText = 'color:#92400E; background:#FEF3C7; border:1px solid #F59E0B; border-radius:4px; padding:2px 8px; font-weight:600; font-size:0.8rem;';
+            }
+            console.warn(`[Freshness] Data is ${ageHours.toFixed(0)} hours old (>26h). LIVE badge replaced with STALE DATA.`);
+        } else {
+            console.log(`[Freshness] Data is current (${ageHours.toFixed(1)}h old).`);
+        }
+    }
+
     // --- Header & Top Stats ---
     function updateHeader() {
         if (!DASHBOARD_DATA.meta) return;
         const date = new Date(DASHBOARD_DATA.meta.generated);
         els.lastUpdated.textContent = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        checkDataFreshness();
     }
 
     function updateIndicatorCards() {
@@ -349,57 +412,72 @@ document.addEventListener('DOMContentLoaded', async () => {
         const indicator = els.chartIndicatorSelect.value;
         const period = els.chartPeriodSelect.value;
 
-        // Generate data points based on period
-        const now = new Date();
         let dataPoints = [];
-        let labelFormat = { month: 'short' };
+        const indicatorLabel = indicator.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' (National)';
 
-        // Define period configurations: [numberOfPoints, dateUnit, labelFormat]
-        const periodConfig = {
-            '1d': { points: 24, unit: 'hour', format: { hour: 'numeric' } },
-            '1w': { points: 7, unit: 'day', format: { weekday: 'short' } },
-            '1m': { points: 30, unit: 'day', format: { month: 'short', day: 'numeric' } },
-            '3m': { points: 12, unit: 'week', format: { month: 'short', day: 'numeric' } },
-            '6m': { points: 6, unit: 'month', format: { month: 'short' } },
-            '12m': { points: 12, unit: 'month', format: { month: 'short' } },
-            '5y': { points: 20, unit: 'quarter', format: { year: 'numeric', month: 'short' } },
-            '10y': { points: 40, unit: 'quarter', format: { year: 'numeric' } },
-            '15y': { points: 15, unit: 'year', format: { year: 'numeric' } }
-        };
+        // --- Primary path: use real timeseries from dashboard data ---
+        const timeseries = DASHBOARD_DATA.timeseries?.national?.[indicator];
+        if (timeseries && timeseries.length > 0) {
+            // Filter by period (best-effort for available months)
+            const now = new Date();
+            const periodMonths = { '1d': 0, '1w': 0, '1m': 1, '3m': 3, '6m': 6, '12m': 12, '5y': 60, '10y': 120, '15y': 180 };
+            const monthsBack = periodMonths[period] ?? 6;
+            const cutoff = new Date(now);
+            cutoff.setMonth(cutoff.getMonth() - monthsBack);
 
-        const config = periodConfig[period] || periodConfig['12m'];
-        const baseValue = DASHBOARD_DATA.national[indicator].value;
+            const filtered = monthsBack === 0
+                ? timeseries.slice(-1) // 1d/1w: just show the latest point
+                : timeseries.filter(p => new Date(p.date) >= cutoff);
 
-        // Generate data points going backwards from now
-        for (let i = config.points - 1; i >= 0; i--) {
-            const date = new Date(now);
-
-            // Subtract time based on unit
-            switch (config.unit) {
-                case 'hour': date.setHours(date.getHours() - i); break;
-                case 'day': date.setDate(date.getDate() - i); break;
-                case 'week': date.setDate(date.getDate() - (i * 7)); break;
-                case 'month': date.setMonth(date.getMonth() - i); break;
-                case 'quarter': date.setMonth(date.getMonth() - (i * 3)); break;
-                case 'year': date.setFullYear(date.getFullYear() - i); break;
-            }
-
-            // Simulate historical data with slight variation and trend
-            // Older data is generally lower (showing upward trend over time)
-            const trendFactor = 1 - (i / config.points) * 0.3; // 30% lower at start
-            const randomVariation = (Math.random() - 0.5) * 10;
-            const value = baseValue * trendFactor + randomVariation;
-
-            dataPoints.push({
-                date: date,
-                label: date.toLocaleDateString('en-US', config.format),
-                value: Math.max(50, value) // Ensure positive values
+            const source = filtered.length > 0 ? filtered : timeseries; // fallback to all data
+            dataPoints = source.map(p => {
+                const d = new Date(p.date);
+                return {
+                    label: d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+                    value: p.value
+                };
             });
+        } else {
+            // --- Fallback: simulate historical trend if no timeseries available ---
+            // NOTE: This is estimated data, not measured. Shown only when no real history exists.
+            const now = new Date();
+            const periodConfig = {
+                '1d': { points: 24, unit: 'hour', format: { hour: 'numeric' } },
+                '1w': { points: 7, unit: 'day', format: { weekday: 'short' } },
+                '1m': { points: 30, unit: 'day', format: { month: 'short', day: 'numeric' } },
+                '3m': { points: 12, unit: 'week', format: { month: 'short', day: 'numeric' } },
+                '6m': { points: 6, unit: 'month', format: { month: 'short' } },
+                '12m': { points: 12, unit: 'month', format: { month: 'short' } },
+                '5y': { points: 20, unit: 'quarter', format: { year: 'numeric', month: 'short' } },
+                '10y': { points: 40, unit: 'quarter', format: { year: 'numeric' } },
+                '15y': { points: 15, unit: 'year', format: { year: 'numeric' } }
+            };
+            const config = periodConfig[period] || periodConfig['12m'];
+            const baseValue = DASHBOARD_DATA.national[indicator]?.value ?? 100;
+
+            for (let i = config.points - 1; i >= 0; i--) {
+                const date = new Date(now);
+                switch (config.unit) {
+                    case 'hour': date.setHours(date.getHours() - i); break;
+                    case 'day': date.setDate(date.getDate() - i); break;
+                    case 'week': date.setDate(date.getDate() - (i * 7)); break;
+                    case 'month': date.setMonth(date.getMonth() - i); break;
+                    case 'quarter': date.setMonth(date.getMonth() - (i * 3)); break;
+                    case 'year': date.setFullYear(date.getFullYear() - i); break;
+                }
+                const trendFactor = 1 - (i / config.points) * 0.3;
+                const randomVariation = (Math.random() - 0.5) * 10;
+                dataPoints.push({
+                    label: date.toLocaleDateString('en-US', config.format),
+                    value: Math.max(50, baseValue * trendFactor + randomVariation)
+                });
+            }
+            console.warn(`[Chart] No real timeseries for "${indicator}" — displaying estimated trend.`);
         }
 
         APP_STATE.chartInstance.data.labels = dataPoints.map(d => d.label);
-        APP_STATE.chartInstance.data.datasets[0].data = dataPoints.map(d => d.value.toFixed(1));
-        APP_STATE.chartInstance.data.datasets[0].label = indicator.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' (National)';
+        APP_STATE.chartInstance.data.datasets[0].data = dataPoints.map(d => parseFloat(d.value).toFixed(1));
+        APP_STATE.chartInstance.data.datasets[0].label = indicatorLabel;
         APP_STATE.chartInstance.update();
     }
 
@@ -595,4 +673,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Run
     init();
-});
+}

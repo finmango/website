@@ -19,24 +19,37 @@ jobs:
           node-version: '20'
 
       - name: Update Data Pipeline
+        id: data_pipeline
         env:
           GOOGLE_TRENDS_API_KEY: ${{ secrets.GOOGLE_TRENDS_API_KEY }}
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
           CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
           HUD_API_KEY: ${{ secrets.HUD_API_KEY }}
         run: |
+          set -e  # Exit on first error so failures are not silently swallowed
+
           # Create data directories if missing
           mkdir -p data/raw
-          
+
           # Fetch real economic data from BLS, FRED, Census, HUD APIs
           # Note: JCHS reference data is loaded from data/jchs-reference-2025.json
+          echo "::group::Real data fetch"
           node scripts/fetch-real-data.js
-          
-          # Fallback: If real data fetch had issues, run legacy pipeline
-          if [ ! -s data/dashboard-data.js ]; then
-            echo "Real data fetch incomplete, running legacy pipeline..."
+          echo "::endgroup::"
+
+          # Validate that the output file is non-empty and contains DASHBOARD_DATA
+          if [ ! -s data/dashboard-data.js ] || ! grep -q "DASHBOARD_DATA" data/dashboard-data.js; then
+            echo "::warning::Real data fetch produced incomplete output — running legacy pipeline as fallback"
+            echo "::group::Legacy pipeline fallback"
             node scripts/fetch-trends.js || true
             node scripts/calculate-indices.js || true
+            echo "::endgroup::"
+          fi
+
+          # Final validation: fail the step if we still have no usable data file
+          if [ ! -s data/dashboard-data.js ]; then
+            echo "::error::dashboard-data.js is missing or empty after both pipelines. Dashboard will serve stale data."
+            exit 1
           fi
 
           # Update Student Health Map Data (Young Adult Specific)
@@ -47,12 +60,39 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
+
           git add data/
-          
+
           if git diff --staged --quiet; then
             echo "No changes to commit"
+            echo "::notice::Data pipeline ran but produced no new data. Possible upstream data freeze."
           else
             git commit -m "📊 Update financial health data $(date +%Y-%m-%d)"
             git push
           fi
+
+      - name: Write job summary
+        if: always()
+        run: |
+          STATUS="${{ steps.data_pipeline.outcome }}"
+          DATE="$(date -u '+%Y-%m-%d %H:%M UTC')"
+
+          echo "## Financial Health Data Update — ${DATE}" >> $GITHUB_STEP_SUMMARY
+          if [ "$STATUS" = "success" ]; then
+            echo "✅ **Status:** Pipeline completed successfully" >> $GITHUB_STEP_SUMMARY
+          elif [ "$STATUS" = "failure" ]; then
+            echo "❌ **Status:** Pipeline FAILED — dashboard-data.js was not updated" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Action required:** Check the 'Update Data Pipeline' step logs above." >> $GITHUB_STEP_SUMMARY
+            echo "The dashboard will continue serving the last successful data, but the" >> $GITHUB_STEP_SUMMARY
+            echo "staleness check in the frontend will surface a warning to users." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **Status:** ${STATUS}" >> $GITHUB_STEP_SUMMARY
+          fi
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Secret | Configured |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-----------|" >> $GITHUB_STEP_SUMMARY
+          echo "| GOOGLE_TRENDS_API_KEY | ${{ secrets.GOOGLE_TRENDS_API_KEY != '' && '✅' || '❌ missing' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| FRED_API_KEY | ${{ secrets.FRED_API_KEY != '' && '✅' || '❌ missing' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| CENSUS_API_KEY | ${{ secrets.CENSUS_API_KEY != '' && '✅' || '❌ missing' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| HUD_API_KEY | ${{ secrets.HUD_API_KEY != '' && '✅' || '❌ missing' }} |" >> $GITHUB_STEP_SUMMARY
