@@ -3,31 +3,7 @@
  * Handles map interaction, data visualization, animations, and UI updates
  */
 
-// Wait for both DOMContentLoaded and the cache-busted dashboard-data.js to be ready.
-// Whichever fires last triggers init(). This handles the race between dynamic script
-// injection (cache-busting) and the DOM being ready.
-(function() {
-    let domReady = false;
-    let dataReady = false;
-
-    function tryInit() {
-        if (domReady && dataReady) startDashboard();
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        domReady = true;
-        // If data was already loaded before DOMContentLoaded (cached/fast network), proceed.
-        if (typeof DASHBOARD_DATA !== 'undefined') dataReady = true;
-        tryInit();
-    });
-
-    document.addEventListener('dashboard-data-ready', function() {
-        dataReady = true;
-        tryInit();
-    });
-})();
-
-async function startDashboard() {
+document.addEventListener('DOMContentLoaded', async () => {
     // --- State Management ---
     const APP_STATE = {
         currentIndicator: 'financial_anxiety',
@@ -673,4 +649,4 @@ async function startDashboard() {
 
     // Run
     init();
-}
+});

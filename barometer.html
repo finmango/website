@@ -2738,22 +2738,9 @@
         </div>
     </footer>
 
-    <!-- Cache-bust dashboard data with current timestamp so browsers always fetch fresh data.
-         Dispatches 'dashboard-data-ready' event when the file has loaded; dashboard-app.js
-         listens for this event before initializing so there is no race condition. -->
-    <script>
-        (function() {
-            var s = document.createElement('script');
-            s.src = 'data/dashboard-data.js?v=' + Date.now();
-            s.onload = function() {
-                document.dispatchEvent(new Event('dashboard-data-ready'));
-            };
-            s.onerror = function() {
-                console.error('[Cache-bust] Failed to load dashboard-data.js');
-            };
-            document.head.appendChild(s);
-        })();
-    </script>
+    <!-- dashboard-data.js has Cache-Control: max-age=300 (5 min) via _headers,
+         so Cloudflare edge + browsers will serve fresh data after each daily update. -->
+    <script src="data/dashboard-data.js"></script>
     <script src="scripts/us-map-content.js"></script>
     <script src="scripts/dashboard-app.js"></script>
 
