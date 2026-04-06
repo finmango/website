@@ -113,8 +113,8 @@ async function fetchGoogleTrends() {
     const d3 = new Date(); d3.setMonth(d3.getMonth() - 3);
     const startDate3m = d3.toISOString().slice(0, 7);
     
-    const d5y = new Date(); d5y.setFullYear(d5y.getFullYear() - 5);
-    const startDate5y = d5y.toISOString().slice(0, 7);
+    const d10y = new Date(); d10y.setFullYear(d10y.getFullYear() - 10);
+    const startDate10y = d10y.toISOString().slice(0, 7);
 
     // Subset for state state-boosts
     const sampleStates = ['US-CA', 'US-TX', 'US-FL', 'US-NY', 'US-MS', 'US-LA', 'US-WV', 'US-NH', 'US-ND', 'US-IL'];
@@ -128,7 +128,7 @@ async function fetchGoogleTrends() {
 
         // 1. Fetch 12-month National Data for the chart shapes
         try {
-            const nationalUrl = `https://www.googleapis.com/trends/v1beta/graph?terms=${encodeURIComponent(term)}&restrictions.geo=US&restrictions.startDate=${startDate5y}&key=${apiKey}`;
+            const nationalUrl = `https://www.googleapis.com/trends/v1beta/graph?terms=${encodeURIComponent(term)}&restrictions.geo=US&restrictions.startDate=${startDate10y}&key=${apiKey}`;
             const natResponse = await fetch(nationalUrl);
             
             if (natResponse.ok) {
@@ -907,15 +907,15 @@ function generateTimeseries(national, nationalTrends) {
     } catch (e) {}
 
     const todayKey = new Date().toISOString().split('T')[0].substring(0, 7) + '-01'; 
-    const MAX_MONTHS = 60;
+    const MAX_MONTHS = 120;
 
     for (const indicator of indicators) {
         const baseValue = national[indicator].value;
         const trendPoints = nationalTrends?.[indicator] || [];
         const prev = Array.isArray(existing[indicator]) ? existing[indicator] : [];
 
-        // If true history points are incomplete (< 60), use 5-year Google Trends trajectory backward to backfill
-        if (prev.length < 60 && trendPoints.length > 0) {
+        // If true history points are incomplete (< 120), use 10-year Google Trends trajectory backward to backfill
+        if (prev.length < 120 && trendPoints.length > 0) {
             const recentTrendVal = trendPoints[trendPoints.length - 1].value;
             const scalingFactor = recentTrendVal > 0 ? (baseValue / recentTrendVal) : 1;
             
