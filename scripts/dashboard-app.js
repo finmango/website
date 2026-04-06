@@ -398,8 +398,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             case '3m': cutoffDate.setMonth(now.getMonth() - 3); break;
             case '6m': cutoffDate.setMonth(now.getMonth() - 6); break;
             case '12m': cutoffDate.setFullYear(now.getFullYear() - 1); break;
-            case '24m': cutoffDate.setFullYear(now.getFullYear() - 2); break;
-            default: cutoffDate.setFullYear(now.getFullYear() - 2); break;
+            case '5y': cutoffDate.setFullYear(now.getFullYear() - 5); break;
+            case '10y': cutoffDate.setFullYear(now.getFullYear() - 10); break;
+            case '15y': cutoffDate.setFullYear(now.getFullYear() - 15); break;
+            default: cutoffDate.setFullYear(now.getFullYear() - 5); break;
         }
 
         // Filter points based on selected period
