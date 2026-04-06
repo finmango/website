@@ -841,7 +841,7 @@ async function main() {
         national: national,
         states: states,
         timeseries: {
-            national: generateTimeseries(national)
+            national: accumulateTimeseries(national)
         }
     };
 
@@ -880,33 +880,54 @@ if (typeof module !== 'undefined') module.exports = DASHBOARD_DATA;
 }
 
 /**
- * Generate simple timeseries for charts
+ * Accumulate real timeseries by appending today's measured values to
+ * the existing history stored in data/latest.json.
+ *
+ * Each daily run contributes one new data point per indicator. History
+ * is capped at 24 months so the file stays small. No synthetic/random
+ * values are ever written — if a run produces no real data, no point
+ * is appended for that indicator that day.
  */
-function generateTimeseries(national) {
-    const timeseries = {};
+function accumulateTimeseries(national) {
     const indicators = ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability'];
-    const now = new Date();
+    const MAX_MONTHS = 24;
+    const todayKey = new Date().toISOString().split('T')[0].substring(0, 7) + '-01'; // YYYY-MM-01
 
-    for (const indicator of indicators) {
-        const baseValue = national[indicator].value;
-        const points = [];
-
-        // Generate 6 months of simulated historical data
-        for (let i = 5; i >= 0; i--) {
-            const date = new Date(now);
-            date.setMonth(date.getMonth() - i);
-
-            // Slight variation for historical points
-            const variation = 1 - (i * 0.03) + (Math.random() * 0.02);
-            points.push({
-                date: date.toISOString().split('T')[0].substring(0, 7) + '-01',
-                value: Math.round(baseValue * variation)
-            });
+    // Load existing timeseries from the previous latest.json (if it exists)
+    let existing = {};
+    try {
+        const latestPath = path.join(__dirname, '..', 'data', 'latest.json');
+        if (fs.existsSync(latestPath)) {
+            const prev = JSON.parse(fs.readFileSync(latestPath, 'utf8'));
+            existing = prev?.timeseries?.national || {};
         }
-
-        timeseries[indicator] = points;
+    } catch (e) {
+        console.warn('  ⚠️  Could not load previous timeseries — starting fresh:', e.message);
     }
 
+    const timeseries = {};
+
+    for (const indicator of indicators) {
+        const prev = Array.isArray(existing[indicator]) ? existing[indicator] : [];
+
+        // Build the updated series: carry forward history, add/update today's point
+        const newValue = national[indicator]?.value;
+        if (newValue == null) {
+            // No real data this run — preserve existing history unchanged
+            timeseries[indicator] = prev.slice(-MAX_MONTHS);
+            continue;
+        }
+
+        // Remove any existing entry for this month (idempotent daily re-runs)
+        const filtered = prev.filter(p => p.date !== todayKey);
+        filtered.push({ date: todayKey, value: Math.round(newValue) });
+
+        // Sort chronologically and cap length
+        filtered.sort((a, b) => a.date.localeCompare(b.date));
+        timeseries[indicator] = filtered.slice(-MAX_MONTHS);
+    }
+
+    console.log(`  ✓ Timeseries updated: ${Object.values(timeseries).map(t => t.length + ' pts').join(', ')}`);
     return timeseries;
 }
 
