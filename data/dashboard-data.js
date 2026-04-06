@@ -1,5 +1,5 @@
 // Financial Health Barometer Data
-// Auto-generated: 2026-04-06T05:47:56.875Z
+// Auto-generated: 2026-04-06T15:29:16.041Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
@@ -1933,8 +1933,6 @@ const DASHBOARD_DATA = {
     "national": {
       "financial_anxiety": [
         {
-          "date": "2026-04-01",
-          "value": 139
           "date": "2025-11-01",
           "value": 119
         },
@@ -1987,8 +1985,6 @@ const DASHBOARD_DATA = {
       ],
       "housing_stress": [
         {
-          "date": "2026-04-01",
-          "value": 157
           "date": "2025-11-01",
           "value": 134
         },
