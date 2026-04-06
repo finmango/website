@@ -166,6 +166,46 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         els.valAfford.textContent = formatValue(national.affordability.value);
         els.changeAfford.innerHTML = formatChange(national.affordability.change);
+
+        // Render sparklines
+        renderSparklines();
+    }
+
+    // --- Sparklines ---
+    function renderSparklines() {
+        const indicators = ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability'];
+        indicators.forEach(indicator => {
+            const container = document.getElementById('spark-' + indicator);
+            if (!container) return;
+
+            const rawPoints = (DASHBOARD_DATA.timeseries && DASHBOARD_DATA.timeseries.national && DASHBOARD_DATA.timeseries.national[indicator]) || [];
+            // Use last 12 points for sparkline
+            const points = rawPoints.slice(-12);
+            if (points.length < 2) return;
+
+            const values = points.map(p => p.value);
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            const range = max - min || 1;
+
+            const w = 120;
+            const h = 28;
+            const padding = 1;
+
+            const coords = values.map((v, i) => {
+                const x = padding + (i / (values.length - 1)) * (w - padding * 2);
+                const y = h - padding - ((v - min) / range) * (h - padding * 2);
+                return `${x},${y}`;
+            });
+
+            const card = container.closest('.indicator-card');
+            const isActive = card && card.classList.contains('active');
+            const strokeColor = isActive ? 'rgba(255,255,255,0.8)' : 'var(--orange)';
+
+            container.innerHTML = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+                <polyline points="${coords.join(' ')}" fill="none" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>`;
+        });
     }
 
     // --- Map Implementation ---
@@ -315,6 +355,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         indicators.forEach(ind => {
             const indData = data[ind.key];
+            const nationalVal = DASHBOARD_DATA.national[ind.key].value;
+            const maxVal = 200; // scale max
+            const statePercent = Math.min((indData.value / maxVal) * 100, 100);
+            const nationalPercent = Math.min((nationalVal / maxVal) * 100, 100);
             const div = document.createElement('div');
             div.className = 'panel-indicator';
             div.innerHTML = `
@@ -324,6 +368,18 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="panel-indicator-meta">
                         <div class="panel-rank">Rank #${indData.rank}</div>
                         <div class="panel-change">${formatChange(indData.change)}</div>
+                    </div>
+                </div>
+                <div class="panel-comparison">
+                    <div class="panel-comparison-label">vs National Avg (${formatValue(nationalVal)})</div>
+                    <div class="panel-comparison-bar-track">
+                        <div class="panel-comparison-bar-fill" style="width: ${statePercent}%; background: ${getColorForValue(indData.value, ind.key)};"></div>
+                        <div class="panel-comparison-marker" style="left: ${nationalPercent}%;" title="National Average"></div>
+                    </div>
+                    <div class="panel-comparison-values">
+                        <span>0</span>
+                        <span>${indData.value > nationalVal ? '+' : ''}${(indData.value - nationalVal).toFixed(1)} vs avg</span>
+                        <span>200</span>
                     </div>
                 </div>
             `;
@@ -467,11 +523,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    function getValueBarWidth(value) {
+        // Scale value 0-200 to percentage width
+        return Math.min((value / 200) * 100, 100);
+    }
+
+    function renderValueCell(value, indicator) {
+        const color = getColorForValue(value, indicator);
+        const width = getValueBarWidth(value);
+        return `<td class="value-cell" style="position:relative;">
+            <div class="value-bar" style="width:${width}%; background:${color};"></div>
+            <span class="value-text">${value.toFixed(1)}</span>
+        </td>`;
+    }
+
     function updateRankingsTable() {
         const indicator = APP_STATE.currentIndicator;
-        const states = Object.values(DASHBOARD_DATA.states)
-            .sort((a, b) => b[indicator].value - a[indicator].value);
+        const searchTerm = (document.getElementById('rankings-search')?.value || '').toLowerCase().trim();
 
+        let states = Object.entries(DASHBOARD_DATA.states).map(([code, s]) => ({ ...s, code }));
+
+        // Filter by search
+        if (searchTerm) {
+            states = states.filter(s => s.name.toLowerCase().includes(searchTerm));
+        }
+
+        states.sort((a, b) => b[indicator].value - a[indicator].value);
+
+        const totalStates = states.length;
         const start = (currentPage - 1) * itemsPerPage;
         const end = start + itemsPerPage;
         const pageData = states.slice(start, end);
@@ -482,20 +561,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             tr.innerHTML = `
                 <td><span class="rank-badge">${start + idx + 1}</span></td>
                 <td><strong>${s.name}</strong></td>
-                <td>${s.financial_anxiety.value.toFixed(1)}</td>
-                <td>${s.food_insecurity.value.toFixed(1)}</td>
-                <td>${s.housing_stress.value.toFixed(1)}</td>
-                <td>${s.affordability.value.toFixed(1)}</td>
+                ${renderValueCell(s.financial_anxiety.value, 'financial_anxiety')}
+                ${renderValueCell(s.food_insecurity.value, 'food_insecurity')}
+                ${renderValueCell(s.housing_stress.value, 'housing_stress')}
+                ${renderValueCell(s.affordability.value, 'affordability')}
             `;
-            // Highlight current column?
             els.rankingsBody.appendChild(tr);
         });
 
-        els.pageStart.textContent = start + 1;
-        els.pageEnd.textContent = Math.min(end, states.length);
+        els.pageStart.textContent = totalStates > 0 ? start + 1 : 0;
+        els.pageEnd.textContent = Math.min(end, totalStates);
 
         els.prevBtn.disabled = currentPage === 1;
-        els.nextBtn.disabled = end >= states.length;
+        els.nextBtn.disabled = end >= totalStates;
     }
 
 
@@ -520,6 +598,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Update View
                 updateMapView(APP_STATE.currentIndicator);
                 updateRankingsTable();
+                renderSparklines();
 
                 // Update Chart Select to match
                 els.chartIndicatorSelect.value = APP_STATE.currentIndicator;
@@ -545,6 +624,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Update View
                 updateMapView(APP_STATE.currentIndicator);
                 updateRankingsTable();
+                renderSparklines();
 
                 // Update Chart Select to match
                 els.chartIndicatorSelect.value = APP_STATE.currentIndicator;
@@ -559,6 +639,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Chart Controls
         els.chartIndicatorSelect.addEventListener('change', updateChart);
         els.chartPeriodSelect.addEventListener('change', updateChart);
+
+        // Rankings Search
+        const searchInput = document.getElementById('rankings-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                currentPage = 1;
+                updateRankingsTable();
+            });
+        }
 
         // Tools (with null checks for optional elements)
         // Download CSV
