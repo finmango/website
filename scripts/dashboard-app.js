@@ -395,16 +395,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         let cutoffDate = new Date();
         
         switch (period) {
-            case '1d': cutoffDate.setDate(now.getDate() - 1); break;
-            case '1w': cutoffDate.setDate(now.getDate() - 7); break;
-            case '1m': cutoffDate.setMonth(now.getMonth() - 1); break;
             case '3m': cutoffDate.setMonth(now.getMonth() - 3); break;
             case '6m': cutoffDate.setMonth(now.getMonth() - 6); break;
             case '12m': cutoffDate.setFullYear(now.getFullYear() - 1); break;
-            case '5y': cutoffDate.setFullYear(now.getFullYear() - 5); break;
-            case '10y': cutoffDate.setFullYear(now.getFullYear() - 10); break;
-            case '15y': cutoffDate.setFullYear(now.getFullYear() - 15); break;
-            default: cutoffDate.setFullYear(now.getFullYear() - 1); break;
+            case '24m': cutoffDate.setFullYear(now.getFullYear() - 2); break;
+            default: cutoffDate.setFullYear(now.getFullYear() - 2); break;
         }
 
         // Filter points based on selected period
@@ -412,14 +407,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Ensure we always show some data if the filter is too narrow
         const displayPoints = filteredPoints.length > 0 ? filteredPoints : rawPoints.slice(-2);
 
-        // Format labels based on period length
-        const labelFormat = ['1d', '1w'].includes(period) ? { weekday: 'short' } :
-                            ['1m', '3m'].includes(period) ? { month: 'short', day: 'numeric' } : 
-                            { month: 'short', year: '2-digit' };
+        const labelFormat = { month: 'short', year: '2-digit' };
+
+        let labelSuffix = ' (National)';
+        if (displayPoints.length < 4 && period !== '3m') {
+             labelSuffix += ` - Limited History (${displayPoints.length} updates)`;
+        } else if (displayPoints.length === rawPoints.length && rawPoints.length > 0) {
+             labelSuffix += ` - All Available History`;
+        }
 
         APP_STATE.chartInstance.data.labels = displayPoints.map(d => new Date(d.date).toLocaleDateString('en-US', labelFormat));
         APP_STATE.chartInstance.data.datasets[0].data = displayPoints.map(d => d.value.toFixed(1));
-        APP_STATE.chartInstance.data.datasets[0].label = indicator.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' (National)';
+        APP_STATE.chartInstance.data.datasets[0].label = indicator.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) + labelSuffix;
         APP_STATE.chartInstance.update();
     }
 
