@@ -58,17 +58,26 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        // Initialize UI
-        updateHeader();
-        updateIndicatorCards();
-        initMapInteraction();
-        initChart();
-        initRankings();
-        setupEventListeners();
+        // Initialize each component independently so a single failure
+        // (e.g. Chart.js CDN down) doesn't take down the whole dashboard.
+        const steps = [
+            ['updateHeader', updateHeader],
+            ['updateIndicatorCards', updateIndicatorCards],
+            ['initMapInteraction', initMapInteraction],
+            ['initChart', initChart],
+            ['initRankings', initRankings],
+            ['setupEventListeners', setupEventListeners],
+            ['updateMapView', () => updateMapView(APP_STATE.currentIndicator)],
+            ['updateRankingsTable', updateRankingsTable]
+        ];
 
-        // Initial View Update
-        updateMapView(APP_STATE.currentIndicator);
-        updateRankingsTable();
+        for (const [name, fn] of steps) {
+            try {
+                fn();
+            } catch (err) {
+                console.error(`[init] ${name} failed:`, err);
+            }
+        }
 
         console.log('Dashboard initialized successfully');
     }
@@ -355,6 +364,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Charts ---
     function initChart() {
+        if (typeof Chart === 'undefined') {
+            console.warn('[initChart] Chart.js not loaded — chart disabled');
+            return;
+        }
         const ctx = els.chartCanvas.getContext('2d');
         APP_STATE.chartInstance = new Chart(ctx, {
             type: 'line',
@@ -385,6 +398,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function updateChart() {
+        if (!APP_STATE.chartInstance) return;
         const indicator = els.chartIndicatorSelect.value;
         const period = els.chartPeriodSelect.value;
 
