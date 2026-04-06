@@ -49,7 +49,10 @@ const STATE_NAMES = {
     'WV': 'West Virginia', 'WI': 'Wisconsin', 'WY': 'Wyoming'
 };
 
-// Google Trends search terms (limited set to avoid quota)
+// Google Health Trends API search terms (limited set to avoid quota)
+// The Health Trends API returns: P(term | time, geo) × 10,000,000
+// Values are absolute probabilities (typically 1-20 for these terms),
+// NOT the 0-100 relative scale from the public Google Trends website.
 const TRENDS_TERMS = {
     financial_anxiety: ["debt help", "bankruptcy", "can't pay rent"],
     food_insecurity: ["food stamps", "food bank near me"],
@@ -96,8 +99,11 @@ function loadJCHSReferenceData() {
 }
 
 /**
- * Fetch Google Trends data for key indicators (LIMITED to avoid quota)
- * Only fetches national-level data for a few key terms
+ * Fetch data from the Google Health Trends API (exclusive, approved access only).
+ * Unlike the public Google Trends website (relative 0-100 scale), this API returns
+ * absolute probability values: P(term | time, geography) × 10,000,000.
+ * A value of 5 means 5 out of every 10 million search sessions included that term.
+ * Values for our financial stress terms typically range from 1-20.
  */
 async function fetchGoogleTrends() {
     const apiKey = process.env.GOOGLE_TRENDS_API_KEY;
@@ -561,10 +567,11 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             const rawValue = BASE_INDEX + (unemp.value - BASELINE_UNEMPLOYMENT) * UNEMPLOYMENT_MULTIPLIER;
             let anxietyValue = rawValue * regionalMultiplier;
 
-            // Google Trends Volatility Boost (+0 to +10 points)
-            // Methodology: Trends 0-100 scale divided by 10 → 0-10 pt boost.
+            // Google Health Trends API Volatility Boost (+0 to +10 points)
+            // The API returns P(term) × 10M — values typically 1-20 for our terms.
+            // We use the raw value directly (capped at 10) as the boost.
             if (trends?.financial_anxiety?.[abbr] != null) {
-                anxietyValue += (trends.financial_anxiety[abbr] / 10);
+                anxietyValue += Math.min(trends.financial_anxiety[abbr], 10);
             }
 
             const change = unemp.previousValue
@@ -584,13 +591,10 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             const rawValue = 85 + (pov.povertyRate - BASELINE_POVERTY) * POVERTY_MULTIPLIER;
             let foodValue = rawValue * regionalMultiplier;
 
-            // Google Trends Volatility Boost (+0 to +10 points)
-            // Methodology: Google Trends returns relative search interest on a 0-100 scale.
-            // We divide by 10 to map the full 0-100 range to a 0-10 point boost.
-            // A reading of 100 (peak interest) adds 10 points; 0 adds nothing.
-            // Only applied when Trends data is available for this state.
+            // Google Health Trends API Volatility Boost (+0 to +10 points)
+            // Raw API value used directly (capped at 10) as real-time stress signal.
             if (trends?.states?.food_insecurity?.[abbr] != null) {
-                foodValue += (trends.states.food_insecurity[abbr] / 10);
+                foodValue += Math.min(trends.states.food_insecurity[abbr], 10);
             }
 
             states[stateCode].food_insecurity = {
@@ -671,11 +675,10 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         const rawHousingStress = 100 + rentBurdenScore + fmrScore + hpiScore;
         let stressValue = rawHousingStress * regionalMultiplier;
 
-        // Google Trends Volatility Boost (+0 to +10 points)
-        // Methodology: same normalization as other indicators — Trends 0-100 → divide by 10 → 0-10 pt boost.
-        // Previously used /8 (bug: allowed up to +12.5 pts, inconsistent with other indicators).
+        // Google Health Trends API Volatility Boost (+0 to +10 points)
+        // Raw API value used directly (capped at 10) as real-time stress signal.
         if (trends?.states?.housing_stress?.[abbr] != null) {
-            stressValue += (trends.states.housing_stress[abbr] / 10);
+            stressValue += Math.min(trends.states.housing_stress[abbr], 10);
         }
 
         states[stateCode].housing_stress = {
@@ -691,10 +694,10 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         const povertyVal = states[stateCode].food_insecurity.value ?? (115 * regionalMultiplier);
         let affordValue = (housingVal * 0.60 + povertyVal * 0.40);
 
-        // Google Trends Volatility Boost (+0 to +10 points)
-        // Methodology: Trends 0-100 scale divided by 10 → consistent 0-10 pt boost across all indicators.
+        // Google Health Trends API Volatility Boost (+0 to +10 points)
+        // Raw API value used directly (capped at 10) as real-time stress signal.
         if (trends?.states?.affordability?.[abbr] != null) {
-            affordValue += (trends.states.affordability[abbr] / 10);
+            affordValue += Math.min(trends.states.affordability[abbr], 10);
         }
 
         // Store raw metrics for transparency/export
