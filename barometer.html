@@ -2433,11 +2433,14 @@
                 </div>
             </div>
             <div class="header-right">
-                <div class="live-indicator"><span class="live-dot"></span> LIVE</div>
+                <div class="live-indicator" id="live-indicator"><span class="live-dot"></span> LIVE</div>
                 <div class="last-updated">Last updated: <span id="last-updated-date">Loading...</span></div>
             </div>
         </div>
     </header>
+
+    <!-- Staleness Banner (shown by JS when data is >72h old) -->
+    <div id="stale-data-banner" style="display:none; background:#DC2626; color:#fff; text-align:center; padding:0.75rem 1rem; font-weight:600; font-size:0.95rem; position:sticky; top:0; z-index:999;"></div>
 
     <!-- Main Dashboard -->
     <main class="dashboard-main">
@@ -2735,7 +2738,22 @@
         </div>
     </footer>
 
-    <script src="data/dashboard-data.js?v=20251219"></script>
+    <!-- Cache-bust dashboard data with current timestamp so browsers always fetch fresh data.
+         Dispatches 'dashboard-data-ready' event when the file has loaded; dashboard-app.js
+         listens for this event before initializing so there is no race condition. -->
+    <script>
+        (function() {
+            var s = document.createElement('script');
+            s.src = 'data/dashboard-data.js?v=' + Date.now();
+            s.onload = function() {
+                document.dispatchEvent(new Event('dashboard-data-ready'));
+            };
+            s.onerror = function() {
+                console.error('[Cache-bust] Failed to load dashboard-data.js');
+            };
+            document.head.appendChild(s);
+        })();
+    </script>
     <script src="scripts/us-map-content.js"></script>
     <script src="scripts/dashboard-app.js"></script>
 
