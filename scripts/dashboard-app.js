@@ -152,6 +152,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         checkDataFreshness();
     }
 
+    function getSeverityClass(value) {
+        if (value < 90) return 'severity-low';
+        if (value < 120) return 'severity-moderate';
+        if (value < 150) return 'severity-elevated';
+        return 'severity-high';
+    }
+
+    function applyCardSeverity() {
+        const national = DASHBOARD_DATA.national;
+        const indicators = ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability'];
+        indicators.forEach(indicator => {
+            const card = document.querySelector(`.indicator-card[data-indicator="${indicator}"]`);
+            if (!card) return;
+            card.classList.remove('severity-low', 'severity-moderate', 'severity-elevated', 'severity-high');
+            card.classList.add(getSeverityClass(national[indicator].value));
+        });
+    }
+
     function updateIndicatorCards() {
         const national = DASHBOARD_DATA.national;
 
@@ -166,6 +184,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         els.valAfford.textContent = formatValue(national.affordability.value);
         els.changeAfford.innerHTML = formatChange(national.affordability.change);
+
+        // Apply severity border classes
+        applyCardSeverity();
 
         // Render sparklines
         renderSparklines();
@@ -579,44 +600,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Event Listeners Central ---
     function setupEventListeners() {
-        // Segmented Toggle Buttons (new)
-        const toggleBtns = document.querySelectorAll('.toggle-btn');
-        toggleBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Update toggle button active state
-                toggleBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-
-                // Also update indicator cards to match
-                els.indicatorCards.forEach(c => c.classList.remove('active'));
-                const matchingCard = document.querySelector(`.indicator-card[data-indicator="${btn.dataset.indicator}"]`);
-                if (matchingCard) matchingCard.classList.add('active');
-
-                // Update State
-                APP_STATE.currentIndicator = btn.dataset.indicator;
-
-                // Update View
-                updateMapView(APP_STATE.currentIndicator);
-                updateRankingsTable();
-                renderSparklines();
-
-                // Update Chart Select to match
-                els.chartIndicatorSelect.value = APP_STATE.currentIndicator;
-                updateChart();
-            });
-        });
-
-        // Cards (keep existing functionality, also sync toggle)
+        // Indicator Cards — sole map/chart selector (toggle removed)
         els.indicatorCards.forEach(card => {
             card.addEventListener('click', () => {
                 // Active State
                 els.indicatorCards.forEach(c => c.classList.remove('active'));
                 card.classList.add('active');
-
-                // Also update toggle buttons to match
-                toggleBtns.forEach(b => b.classList.remove('active'));
-                const matchingToggle = document.querySelector(`.toggle-btn[data-indicator="${card.dataset.indicator}"]`);
-                if (matchingToggle) matchingToggle.classList.add('active');
 
                 // Update State
                 APP_STATE.currentIndicator = card.dataset.indicator;
