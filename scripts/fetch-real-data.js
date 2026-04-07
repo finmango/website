@@ -912,11 +912,12 @@ function generateTimeseries(national, nationalTrends) {
         const trendPoints = nationalTrends?.[indicator] || [];
 
         if (trendPoints.length > 0) {
-            // Scale the entire Google Trends curve so the most recent month
-            // equals today's composite index.  This keeps the historical
-            // *shape* intact while ensuring continuity with the live value.
-            const recentTrendVal = trendPoints[trendPoints.length - 1].value;
-            const scalingFactor = recentTrendVal > 0 ? (baseValue / recentTrendVal) : 1;
+            // Use the average of the last 3 trend points for the scaling factor.
+            // A single anomalous month (spike or dip in Google search interest)
+            // no longer whipsaws the entire historical curve.
+            const recentSlice = trendPoints.slice(-3);
+            const avgRecentTrend = recentSlice.reduce((s, p) => s + p.value, 0) / recentSlice.length;
+            const scalingFactor = avgRecentTrend > 0 ? (baseValue / avgRecentTrend) : 1;
 
             const scaled = trendPoints.map(tp => ({
                 date: tp.date.split('T')[0].substring(0, 7) + '-01',
@@ -928,7 +929,22 @@ function generateTimeseries(national, nationalTrends) {
             withoutToday.push({ date: todayKey, value: Math.round(baseValue) });
             withoutToday.sort((a, b) => a.date.localeCompare(b.date));
 
-            timeseries[indicator] = withoutToday.slice(-MAX_MONTHS);
+            // 3-month trailing average to smooth Google Trends volatility.
+            // Raw search-interest data is inherently spiky; smoothing produces
+            // a chart that better represents the composite index trajectory.
+            const smoothed = withoutToday.map((p, i, arr) => {
+                if (i < 2) return { ...p };
+                const avg = (arr[i - 2].value + arr[i - 1].value + p.value) / 3;
+                return { date: p.date, value: Math.round(avg) };
+            });
+
+            // Re-pin today so the chart endpoint matches the live card value
+            const last = smoothed[smoothed.length - 1];
+            if (last && last.date === todayKey) {
+                last.value = Math.round(baseValue);
+            }
+
+            timeseries[indicator] = smoothed.slice(-MAX_MONTHS);
         } else {
             // No trends data available — carry forward a single point
             timeseries[indicator] = [{ date: todayKey, value: Math.round(baseValue) }];
