@@ -132,74 +132,26 @@
             font-weight: 400;
         }
 
-        /* Clean Header */
-        .dashboard-header {
-            background: var(--white);
-            border-bottom: 1px solid var(--border);
-            padding: 1.75rem 2rem 2rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: var(--container-max);
-            margin: 0 auto;
+        /* Inline Dashboard Header — lives inside the first section-band */
+        .dashboard-inline-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: baseline;
+            margin-bottom: 1.25rem;
         }
 
-        .header-left {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .logo-link {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .logo-link img {
-            height: 36px;
-        }
-
-        .header-title {
-            position: relative;
-        }
-
-        .header-title h1 {
-            font-size: clamp(1.5rem, 3vw, 2rem);
+        .dashboard-title {
+            font-size: clamp(1.3rem, 2.5vw, 1.65rem);
             font-weight: 800;
             color: var(--text);
             letter-spacing: -0.02em;
-            line-height: 1.2;
-            margin-bottom: 0.5rem;
+            line-height: 1;
         }
 
-        .header-subtitle {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .header-title::after {
-            content: '';
-            display: block;
-            width: 50px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--orange) 0%, var(--orange-dark) 100%);
-            border-radius: 3px;
-            margin-top: 0.85rem;
-        }
-
-        .header-right {
+        .dashboard-meta {
             display: flex;
             align-items: center;
-            gap: 1.25rem;
+            gap: 1rem;
         }
 
         .live-indicator {
@@ -249,6 +201,7 @@
             max-width: var(--container-max);
             margin: 0 auto;
             padding: 0 2rem 3rem;
+            margin-top: 80px;
         }
 
         /* Alternating section backgrounds */
@@ -1233,10 +1186,11 @@
                 scroll-snap-align: start;
             }
 
-            .header-content {
+            .dashboard-inline-header {
                 flex-direction: column;
-                gap: 1rem;
-                text-align: center;
+                align-items: flex-start;
+                gap: 0.5rem;
+                margin-bottom: 1rem;
             }
 
             .dashboard-main {
@@ -1563,11 +1517,7 @@
             }
         }
 
-        /* Adjust Dashboard Header to sit below Nav */
-        .dashboard-header {
-            margin-top: 80px;
-            z-index: 10;
-        }
+        /* Dashboard main sits below fixed nav */
 
         @media (max-width: 968px) {
             .nav-container {
@@ -1587,9 +1537,8 @@
                 display: flex;
             }
 
-            .dashboard-header {
+            .dashboard-main {
                 margin-top: 100px;
-                top: 0;
             }
         }
     </style>
@@ -1664,8 +1613,8 @@
         }
 
         /* Adjust sticky header if present */
-        body.has-announcement .dashboard-header {
-            top: var(--announcement-height) !important;
+        body.has-announcement .dashboard-main {
+            margin-top: calc(80px + var(--announcement-height)) !important;
         }
 
         @media (max-width: 768px) {
@@ -2688,30 +2637,21 @@
   </div>
 
 
-    <!-- Header -->
-    <header class="dashboard-header">
-        <div class="header-content">
-            <div class="header-left">
-                <div class="header-title">
-                    <h1>Financial Health Barometer</h1>
-                    <div class="header-subtitle">Real-Time Economic Stress Indicators</div>
-                </div>
-            </div>
-            <div class="header-right">
-                <div class="live-indicator" id="live-indicator"><span class="live-dot"></span> LIVE</div>
-                <div class="last-updated">Last updated: <span id="last-updated-date">Loading...</span></div>
-            </div>
-        </div>
-    </header>
-
     <!-- Staleness Banner (shown by JS when data is >72h old) -->
     <div id="stale-data-banner" style="display:none; background:#DC2626; color:#fff; text-align:center; padding:0.75rem 1rem; font-weight:600; font-size:0.95rem; position:sticky; top:0; z-index:999;"></div>
 
     <!-- Main Dashboard -->
     <main class="dashboard-main">
 
-        <!-- Indicator Cards -->
+        <!-- Inline Header + Indicator Cards -->
         <div class="section-band">
+        <div class="dashboard-inline-header">
+            <h1 class="dashboard-title">Financial Health Barometer</h1>
+            <div class="dashboard-meta">
+                <div class="live-indicator" id="live-indicator"><span class="live-dot"></span> LIVE</div>
+                <span class="last-updated">Last updated: <span id="last-updated-date">Loading...</span></span>
+            </div>
+        </div>
         <section class="indicator-cards" id="indicator-cards">
             <div class="indicator-card active" data-indicator="financial_anxiety">
                 <div class="indicator-label">Financial Anxiety</div>
