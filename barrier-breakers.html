@@ -1078,84 +1078,98 @@
            PHOTO GALLERY
            ============================================ */
         .gallery-section {
-            background: #111;
-            padding: 0 0 80px;
+            background: #0a0a0a;
+            padding: 0 0 100px;
             overflow: hidden;
         }
 
         .gallery-header {
-            padding: 100px 24px 48px;
+            padding: 120px 24px 56px;
+        }
+
+        .gallery-header-line {
+            width: 48px;
+            height: 3px;
+            background: var(--orange);
+            margin: 0 auto 20px;
+            border-radius: 2px;
         }
 
         .gallery-masonry {
-            padding: 0 6px 6px;
+            columns: 4;
+            column-gap: 10px;
+            padding: 0 24px;
             max-width: 1400px;
             margin: 0 auto;
         }
-
-        .gallery-row {
-            display: grid;
-            gap: 6px;
-            margin-bottom: 6px;
-        }
-
-        .gallery-row-3:nth-child(odd) { grid-template-columns: 2fr 1fr 1fr; }
-        .gallery-row-3:nth-child(even) { grid-template-columns: 1fr 2fr 1fr; }
-        .gallery-row-2 { grid-template-columns: 1fr 1fr; }
 
         .gallery-item {
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            aspect-ratio: 4/3;
             background: #1a1a1a;
+            border-radius: 10px;
+            break-inside: avoid;
+            margin-bottom: 10px;
         }
-
-        .gallery-item-wide { aspect-ratio: 16/9; }
 
         .gallery-item img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
             display: block;
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
-            filter: brightness(0.85) saturate(0.9);
+            border-radius: 10px;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+            filter: brightness(0.88) saturate(0.95);
         }
 
         .gallery-item:hover img {
-            transform: scale(1.04);
-            filter: brightness(1) saturate(1);
+            transform: scale(1.03);
+            filter: brightness(1) saturate(1.05);
         }
 
         .gallery-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.6) 100%);
+            background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.55) 100%);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.35s ease;
             display: flex;
             align-items: flex-end;
-            justify-content: flex-end;
+            justify-content: space-between;
             padding: 16px;
+            border-radius: 10px;
         }
 
         .gallery-item:hover .gallery-overlay { opacity: 1; }
 
+        .gallery-caption {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            max-width: 70%;
+            line-height: 1.3;
+        }
+
         .gallery-expand-icon {
             color: white;
-            font-size: 1.2rem;
-            width: 36px;
-            height: 36px;
+            font-size: 1rem;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(8px);
-            border-radius: 50%;
-            transition: background 0.2s ease;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
         }
 
-        .gallery-item:hover .gallery-expand-icon { background: var(--orange); }
+        .gallery-item:hover .gallery-expand-icon {
+            background: var(--orange);
+            transform: scale(1.1);
+        }
 
         /* Lightbox */
         .lightbox {
@@ -1163,8 +1177,8 @@
             position: fixed;
             inset: 0;
             z-index: 9999;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.96);
+            backdrop-filter: blur(24px);
             align-items: center;
             justify-content: center;
         }
@@ -1188,19 +1202,19 @@
             max-width: 90vw;
             max-height: 80vh;
             object-fit: contain;
-            border-radius: 2px;
+            border-radius: 8px;
             animation: lightboxImgIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes lightboxImgIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.95) translateY(8px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .lightbox-caption {
             color: rgba(255,255,255,0.7);
             font-size: 0.9rem;
-            margin-top: 16px;
+            margin-top: 20px;
             text-align: center;
             font-weight: 500;
         }
@@ -1215,85 +1229,97 @@
 
         .lightbox-close {
             position: absolute;
-            top: 24px;
-            right: 28px;
-            background: none;
-            border: none;
+            top: 20px;
+            right: 24px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
             color: white;
-            font-size: 2rem;
+            font-size: 1.5rem;
             cursor: pointer;
             z-index: 10;
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            transition: background 0.2s ease;
+            border-radius: 12px;
+            transition: all 0.2s ease;
         }
 
-        .lightbox-close:hover { background: rgba(255,255,255,0.1); }
+        .lightbox-close:hover {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.2);
+        }
 
         .lightbox-prev,
         .lightbox-next {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255,255,255,0.08);
-            border: none;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
             color: white;
-            font-size: 2.5rem;
+            font-size: 2rem;
             cursor: pointer;
             z-index: 10;
-            width: 56px;
-            height: 56px;
+            width: 52px;
+            height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            transition: all 0.2s ease;
+            border-radius: 14px;
+            transition: all 0.25s ease;
             line-height: 1;
         }
 
-        .lightbox-prev { left: 24px; }
-        .lightbox-next { right: 24px; }
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
 
         .lightbox-prev:hover,
         .lightbox-next:hover {
             background: var(--orange);
+            border-color: var(--orange);
             transform: translateY(-50%) scale(1.05);
         }
 
-        @media (max-width: 768px) {
-            .gallery-masonry {
-                padding: 0 16px 16px;
-                overflow-x: auto;
-                overflow-y: hidden;
-                -webkit-overflow-scrolling: touch;
-                scroll-snap-type: x mandatory;
-                display: flex;
-                gap: 4px;
-            }
+        @media (max-width: 1100px) {
+            .gallery-masonry { columns: 3; }
+        }
 
-            .gallery-row { display: contents; }
+        @media (max-width: 768px) {
+            .gallery-header { padding: 80px 20px 40px; }
+
+            .gallery-masonry {
+                columns: 2;
+                column-gap: 8px;
+                padding: 0 16px;
+            }
 
             .gallery-item {
-                flex: 0 0 80vw;
-                scroll-snap-align: center;
-                aspect-ratio: 4/3;
-                border-radius: 4px;
+                margin-bottom: 8px;
+                border-radius: 8px;
             }
 
-            .gallery-item-wide { aspect-ratio: 4/3; }
+            .gallery-item img { border-radius: 8px; }
+            .gallery-overlay { border-radius: 8px; padding: 12px; }
+            .gallery-caption { font-size: 0.7rem; }
 
-            .gallery-overlay {
-                opacity: 1;
-                background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.5) 100%);
+            .lightbox-prev, .lightbox-next {
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
+                border-radius: 10px;
             }
+            .lightbox-prev { left: 10px; }
+            .lightbox-next { right: 10px; }
+            .lightbox-close { width: 38px; height: 38px; font-size: 1.3rem; border-radius: 10px; }
+        }
 
-            .lightbox-prev, .lightbox-next { width: 44px; height: 44px; font-size: 1.8rem; }
-            .lightbox-prev { left: 12px; }
-            .lightbox-next { right: 12px; }
+        @media (max-width: 480px) {
+            .gallery-masonry {
+                columns: 1;
+                padding: 0 16px;
+            }
         }
 
         /* ============================================
@@ -1669,41 +1695,178 @@
             <div class="gallery-header">
                 <div class="container-narrow" style="text-align: center;">
                     <div class="bb-section-label fade-in" style="color: var(--orange);">March 20, 2026</div>
-                    <h2 class="fade-in delay-1" style="color: var(--white); font-size: clamp(2rem, 4.5vw, 3.25rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 12px;">The Day In Pictures</h2>
-                    <p class="fade-in delay-2" style="color: rgba(255,255,255,0.5); font-size: 1rem; max-width: 440px; margin: 0 auto;">Barrier Breakers 2026 at Kent State University. Students showed up, showed out, and broke through.</p>
+                    <div class="gallery-header-line fade-in delay-1"></div>
+                    <h2 class="fade-in delay-1" style="color: var(--white); font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px;">The Day In Pictures</h2>
+                    <p class="fade-in delay-2" style="color: rgba(255,255,255,0.45); font-size: 1.05rem; max-width: 480px; margin: 0 auto; line-height: 1.6;">Barrier Breakers 2026 at Kent State University. Students showed up, showed out, and broke through.</p>
                 </div>
             </div>
 
             <div class="gallery-masonry fade-in delay-2">
-                <div class="gallery-row gallery-row-3">
-                    <div class="gallery-item gallery-item-wide" data-caption="Barrier Breakers 2026 at Kent State University">
-                        <img src="Barrier%20Breakers%202026%20Pics/IMG_3695.jpg" alt="Barrier Breakers 2026 event" loading="lazy">
-                        <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
-                    </div>
-                    <div class="gallery-item" data-caption="Students competing at Barrier Breakers 2026">
-                        <img src="Barrier%20Breakers%202026%20Pics/IMG_3777.jpg" alt="Students competing" loading="lazy">
-                        <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
-                    </div>
-                    <div class="gallery-item" data-caption="Innovation and collaboration on display">
-                        <img src="Barrier%20Breakers%202026%20Pics/IMG_3779.jpg" alt="Innovation on display" loading="lazy">
-                        <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                <div class="gallery-item" data-caption="Barrier Breakers 2026 at Kent State University">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3695.jpg" alt="Barrier Breakers 2026 event" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Opening event</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
                     </div>
                 </div>
-
-                <div class="gallery-row gallery-row-2">
-                    <div class="gallery-item" data-caption="Teams presenting their solutions">
-                        <img src="Barrier%20Breakers%202026%20Pics/IMG_3780.jpg" alt="Teams presenting solutions" loading="lazy">
-                        <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                <div class="gallery-item" data-caption="Students competing at Barrier Breakers 2026">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3777.jpg" alt="Students competing" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Students competing</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
                     </div>
-                    <div class="gallery-item" data-caption="Breaking barriers at Kent State">
-                        <img src="Barrier%20Breakers%202026%20Pics/IMG_3788.JPEG" alt="Breaking barriers at Kent State" loading="lazy">
-                        <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                </div>
+                <div class="gallery-item" data-caption="Innovation and collaboration on display">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3779.jpg" alt="Innovation on display" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Innovation on display</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Teams presenting their solutions">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3780.jpg" alt="Teams presenting solutions" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Team presentations</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Breaking barriers at Kent State">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3788.JPEG" alt="Breaking barriers at Kent State" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Breaking barriers</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Community engagement at Barrier Breakers">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3817.jpg" alt="Community engagement" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Community engagement</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Collaboration and teamwork">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3825.JPEG" alt="Collaboration and teamwork" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Teamwork in action</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Working on innovative solutions">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3829.jpg" alt="Working on solutions" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Building solutions</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Students brainstorming ideas">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3834.jpg" alt="Students brainstorming" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Brainstorming ideas</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Mentors and students collaborating">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3837.jpg" alt="Mentors and students" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Mentorship moments</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Hackathon energy at Kent State">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3838.JPEG" alt="Hackathon energy" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Hackathon energy</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Teams deep in development">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3840.jpg" alt="Teams in development" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Deep in development</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Creative problem solving">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3842.jpg" alt="Creative problem solving" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Problem solving</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Celebrating breakthroughs">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3845.jpg" alt="Celebrating breakthroughs" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Celebrating breakthroughs</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Judges reviewing projects">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9133.jpg" alt="Judges reviewing projects" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Judges reviewing</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Innovation showcase">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9137.jpg" alt="Innovation showcase" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Innovation showcase</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Students presenting final projects">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9143.jpg" alt="Final presentations" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Final presentations</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Award-winning solutions">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9144.jpg" alt="Award-winning solutions" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Award-winning solutions</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Networking and connections">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9151.jpg" alt="Networking" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Networking</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="The Barrier Breakers community">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9155.jpg" alt="The community" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">The community</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Celebrating together">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9160.jpg" alt="Celebrating together" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Celebrating together</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="Group photo at Barrier Breakers 2026">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9165.jpg" alt="Group photo" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Group photo</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
+                    </div>
+                </div>
+                <div class="gallery-item" data-caption="The energy of Barrier Breakers">
+                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9173.jpg" alt="Event energy" loading="lazy">
+                    <div class="gallery-overlay">
+                        <span class="gallery-caption">Event energy</span>
+                        <span class="gallery-expand-icon">&#x2197;</span>
                     </div>
                 </div>
             </div>
 
-            <div class="gallery-counter fade-in" style="text-align: center; padding: 32px 24px 0;">
-                <span style="font-size: 0.75rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600;">5 photos from the event</span>
+            <div class="gallery-counter fade-in" style="text-align: center; padding: 40px 24px 0;">
+                <span style="font-size: 0.75rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">23 photos from the event</span>
             </div>
         </section>
 
