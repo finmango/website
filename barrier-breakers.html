@@ -12,7 +12,9 @@
     <!-- Fonts: DM Sans + Caveat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=Caveat:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -37,9 +39,15 @@
             --font-accent: 'Caveat', cursive;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             font-family: var(--font-body);
@@ -53,8 +61,17 @@
         /* ============================================
            UTILITY
            ============================================ */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-        .container-narrow { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .container-narrow {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
 
         /* ============================================
            FADE-IN ON SCROLL
@@ -64,24 +81,39 @@
             transform: translateY(32px);
             transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
+
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        .fade-in.delay-1 { transition-delay: 0.1s; }
-        .fade-in.delay-2 { transition-delay: 0.2s; }
-        .fade-in.delay-3 { transition-delay: 0.3s; }
+
+        .fade-in.delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .fade-in.delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .fade-in.delay-3 {
+            transition-delay: 0.3s;
+        }
 
         /* ============================================
            SHARED NAV OVERRIDES
            ============================================ */
         nav {
-            position: fixed; top: 0; width: 100%;
-            background: var(--bg); z-index: 1050;
-            padding: 1.5rem 0; transition: all 0.3s ease;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg);
+            z-index: 1050;
+            padding: 1.5rem 0;
+            transition: all 0.3s ease;
             border-bottom: 1px solid rgba(0, 0, 0, 0.06);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
         }
+
         nav.scrolled {
             padding: 1rem 0;
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -89,80 +121,495 @@
             backdrop-filter: blur(10px);
             background: rgba(249, 245, 240, 0.97);
         }
-        .nav-container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-        .logo { display: flex; align-items: center; text-decoration: none; transition: transform 0.3s ease; justify-self: start; }
-        .logo:hover { transform: rotate(-2deg) scale(1.05); }
-        .logo img { height: 46px; transition: height 0.3s ease; }
-        nav.scrolled .logo img { height: 38px; }
 
-        .nav-right { display: flex; gap: 1.75rem; align-items: center; justify-self: end; }
-        .nav-right a { color: var(--black); text-decoration: none; font-weight: 600; font-size: 1rem; transition: all 0.2s ease; position: relative; white-space: nowrap; letter-spacing: -0.01em; }
-        .nav-right a:not(.btn-donate):not(.btn-get-involved)::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--orange); transition: width 0.3s ease; }
-        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after { width: 100%; }
-        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover { color: var(--orange); }
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
 
-        .dropdown { position: relative; display: inline-block; height: 100%; }
-        .dropdown-content { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background-color: var(--bg); min-width: 240px; box-shadow: 8px 8px 0 var(--black); border: 3px solid var(--black); z-index: 1001; padding: 0.5rem 0; }
-        .dropdown::after { content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; height: 10px; }
-        .dropdown-content::after { content: ''; position: absolute; top: -15px; left: 0; width: 100%; height: 15px; }
-        .dropdown-content::before { content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%); border-width: 0 8px 8px 8px; border-style: solid; border-color: transparent transparent var(--black) transparent; z-index: 1002; }
-        .dropdown:hover .dropdown-content { display: block; animation: fadeIn 0.2s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateX(-50%) translateY(-5px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            justify-self: start;
+        }
 
-        .dropdown-item { color: var(--black) !important; padding: 0.85rem 1.5rem; text-decoration: none; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s ease; font-weight: 600; font-size: 0.95rem !important; text-align: left; border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
-        .dropdown-item:last-child { border-bottom: none; }
-        .nav-right .dropdown-item::after { display: none !important; }
-        .dropdown-item:hover { background-color: rgba(0, 0, 0, 0.05); padding-left: 1.75rem; color: var(--orange) !important; }
+        .logo:hover {
+            transform: rotate(-2deg) scale(1.05);
+        }
 
-        .btn-donate { background: var(--orange); color: white !important; padding: 0.5rem 1rem; text-decoration: none; font-weight: 700; transition: all 0.2s ease; border: 2px solid var(--black); position: relative; overflow: hidden; font-size: 0.85rem; white-space: nowrap; }
-        .btn-donate::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--black); transition: left 0.3s ease; z-index: -1; }
-        .btn-donate:hover::before { left: 0; }
-        .btn-donate:hover { transform: scale(1.05); }
+        .logo img {
+            height: 46px;
+            transition: height 0.3s ease;
+        }
 
-        .btn-get-involved { background: transparent; color: var(--black) !important; padding: 0.5rem 1rem; text-decoration: none; font-weight: 700; transition: all 0.2s ease; border: 2px solid var(--black); position: relative; overflow: hidden; font-size: 0.85rem; white-space: nowrap; }
-        .btn-get-involved::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--black); transition: left 0.3s ease; z-index: -1; }
-        .btn-get-involved:hover::before { left: 0; }
-        .btn-get-involved:hover { color: white !important; transform: scale(1.05); }
+        nav.scrolled .logo img {
+            height: 38px;
+        }
 
-        .mobile-controls { display: none; gap: 1rem; align-items: center; justify-self: end; }
-        .mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; min-width: 48px; min-height: 48px; flex-direction: column; align-items: center; justify-content: center; border-radius: 8px; transition: background 0.3s ease; }
-        .mobile-menu-btn:hover { background: rgba(0, 0, 0, 0.05); }
-        .mobile-menu-btn span { display: block; width: 28px; height: 3px; background: var(--black); margin: 3px 0; transition: all 0.3s ease; border-radius: 2px; }
-        .mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-        .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
-        .mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
-        .mobile-get-involved { display: none; }
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+            justify-self: end;
+        }
 
-        .mobile-menu { display: none; position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background: var(--bg); z-index: 1040; padding: 5rem 1.5rem 2rem; transition: right 0.3s ease; overflow-y: auto; }
-        .mobile-menu.active { display: block; right: 0; }
-        .mobile-menu a { display: block; padding: 1rem 0; font-size: 1.5rem; font-weight: 700; color: var(--black); text-decoration: none; border-bottom: 1px solid rgba(0, 0, 0, 0.1); transition: all 0.2s ease; }
-        .mobile-menu a:hover { color: var(--orange); padding-left: 1rem; }
+        .nav-right a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+        }
 
-        .mobile-dropdown-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.1); padding: 1rem 0; font-size: 1.5rem; font-weight: 700; color: var(--black); cursor: pointer; text-align: left; font-family: inherit; }
-        .mobile-dropdown-toggle .arrow { transition: transform 0.3s ease; font-size: 1.2rem; }
-        .mobile-dropdown-toggle.active .arrow { transform: rotate(180deg); color: var(--orange); }
-        .mobile-dropdown-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: rgba(0,0,0,0.02); margin: 0 -1.5rem; padding: 0 1.5rem; }
-        .mobile-dropdown-content.open { max-height: 500px; border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
-        .mobile-dropdown-content a { font-size: 1.1rem !important; padding: 0.75rem 0 !important; border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important; color: var(--muted) !important; padding-left: 1rem !important; }
-        .mobile-dropdown-content a:hover { color: var(--orange) !important; padding-left: 1.5rem !important; }
+        .nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
+            width: 100%;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
+            color: var(--orange);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            height: 100%;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--bg);
+            min-width: 240px;
+            box-shadow: 8px 8px 0 var(--black);
+            border: 3px solid var(--black);
+            z-index: 1001;
+            padding: 0.5rem 0;
+        }
+
+        .dropdown::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+        }
+
+        .dropdown-content::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+        }
+
+        .dropdown-content::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent var(--black) transparent;
+            z-index: 1002;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            color: var(--black) !important;
+            padding: 0.85rem 1.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 0.95rem !important;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .nav-right .dropdown-item::after {
+            display: none !important;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            padding-left: 1.75rem;
+            color: var(--orange) !important;
+        }
+
+        .btn-donate {
+            background: var(--orange);
+            color: white !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--black);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .btn-donate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-donate:hover::before {
+            left: 0;
+        }
+
+        .btn-donate:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-get-involved {
+            background: transparent;
+            color: var(--black) !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--black);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .btn-get-involved::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn-get-involved:hover::before {
+            left: 0;
+        }
+
+        .btn-get-involved:hover {
+            color: white !important;
+            transform: scale(1.05);
+        }
+
+        .mobile-controls {
+            display: none;
+            gap: 1rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            min-width: 48px;
+            min-height: 48px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: var(--black);
+            margin: 3px 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        .mobile-get-involved {
+            display: none;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg);
+            z-index: 1040;
+            padding: 5rem 1.5rem 2rem;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            display: block;
+            right: 0;
+        }
+
+        .mobile-menu a {
+            display: block;
+            padding: 1rem 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--black);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--orange);
+            padding-left: 1rem;
+        }
+
+        .mobile-dropdown-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--black);
+            cursor: pointer;
+            text-align: left;
+            font-family: inherit;
+        }
+
+        .mobile-dropdown-toggle .arrow {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .mobile-dropdown-toggle.active .arrow {
+            transform: rotate(180deg);
+            color: var(--orange);
+        }
+
+        .mobile-dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: rgba(0, 0, 0, 0.02);
+            margin: 0 -1.5rem;
+            padding: 0 1.5rem;
+        }
+
+        .mobile-dropdown-content.open {
+            max-height: 500px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .mobile-dropdown-content a {
+            font-size: 1.1rem !important;
+            padding: 0.75rem 0 !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+            color: var(--muted) !important;
+            padding-left: 1rem !important;
+        }
+
+        .mobile-dropdown-content a:hover {
+            color: var(--orange) !important;
+            padding-left: 1.5rem !important;
+        }
 
         /* ============================================
            MEGA DROPDOWN
            ============================================ */
-        .dropdown-mega .dropdown-content-mega { min-width: 620px; padding: 1rem 0; right: 0; left: auto; transform: none; display: none; position: absolute; top: 100%; background-color: var(--bg); box-shadow: 8px 8px 0 var(--black); border: 3px solid var(--black); z-index: 1001; }
-        .dropdown-content-mega::before { content: ''; position: absolute; top: -8px; right: 40px; left: auto !important; transform: none !important; border-width: 0 8px 8px 8px; border-style: solid; border-color: transparent transparent var(--black) transparent; z-index: 1002; }
-        .dropdown-content-mega::after { content: ''; position: absolute; top: -15px; left: auto; right: 0; width: 100%; height: 15px; }
-        .dropdown-mega:hover .dropdown-content-mega { display: block; animation: fadeInMega 0.2s ease; }
-        @keyframes fadeInMega { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .dropdown-mega-grid { display: grid; grid-template-columns: 1fr 1fr; }
-        .dropdown-mega-col:first-child { border-right: 1px solid rgba(0, 0, 0, 0.06); }
-        .dropdown-mega-col-label { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 0.5rem 1.25rem 0.4rem; opacity: 0.6; }
-        .dropdown-content-mega .dropdown-item { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1.25rem; gap: 0.75rem; border-bottom: none; }
-        .dropdown-item-text { display: flex; flex-direction: column; gap: 0.1rem; }
-        .dropdown-item-name { font-size: 0.88rem; font-weight: 700; color: var(--black); transition: color 0.2s ease; }
-        .dropdown-item-desc { font-size: 0.68rem; font-weight: 500; color: var(--muted); transition: color 0.2s ease; letter-spacing: 0.01em; }
-        .dropdown-content-mega .dropdown-item:hover { background-color: rgba(0,0,0,0.04); padding-left: 1.4rem; }
-        .dropdown-content-mega .dropdown-item:hover .dropdown-item-name { color: var(--orange); }
+        .dropdown-mega .dropdown-content-mega {
+            min-width: 620px;
+            padding: 1rem 0;
+            right: 0;
+            left: auto;
+            transform: none;
+            display: none;
+            position: absolute;
+            top: 100%;
+            background-color: var(--bg);
+            box-shadow: 8px 8px 0 var(--black);
+            border: 3px solid var(--black);
+            z-index: 1001;
+        }
+
+        .dropdown-content-mega::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 40px;
+            left: auto !important;
+            transform: none !important;
+            border-width: 0 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent var(--black) transparent;
+            z-index: 1002;
+        }
+
+        .dropdown-content-mega::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: auto;
+            right: 0;
+            width: 100%;
+            height: 15px;
+        }
+
+        .dropdown-mega:hover .dropdown-content-mega {
+            display: block;
+            animation: fadeInMega 0.2s ease;
+        }
+
+        @keyframes fadeInMega {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-mega-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .dropdown-mega-col:first-child {
+            border-right: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .dropdown-mega-col-label {
+            font-size: 0.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            padding: 0.5rem 1.25rem 0.4rem;
+            opacity: 0.6;
+        }
+
+        .dropdown-content-mega .dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 1.25rem;
+            gap: 0.75rem;
+            border-bottom: none;
+        }
+
+        .dropdown-item-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+
+        .dropdown-item-name {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--black);
+            transition: color 0.2s ease;
+        }
+
+        .dropdown-item-desc {
+            font-size: 0.68rem;
+            font-weight: 500;
+            color: var(--muted);
+            transition: color 0.2s ease;
+            letter-spacing: 0.01em;
+        }
+
+        .dropdown-content-mega .dropdown-item:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+            padding-left: 1.4rem;
+        }
+
+        .dropdown-content-mega .dropdown-item:hover .dropdown-item-name {
+            color: var(--orange);
+        }
 
         /* ============================================
            HERO
@@ -195,9 +642,17 @@
         }
 
         @keyframes auroraShift {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-2%, 3%) scale(1.02); }
-            100% { transform: translate(2%, -2%) scale(1); }
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(-2%, 3%) scale(1.02);
+            }
+
+            100% {
+                transform: translate(2%, -2%) scale(1);
+            }
         }
 
         .hero-bb-inner {
@@ -281,7 +736,7 @@
         .hero-bb-meta-divider {
             width: 1px;
             height: 32px;
-            background: rgba(0,0,0,0.1);
+            background: rgba(0, 0, 0, 0.1);
         }
 
         .hero-bb-cta {
@@ -325,8 +780,15 @@
         }
 
         @keyframes scrollBounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(6px); }
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(6px);
+            }
         }
 
         /* ============================================
@@ -368,7 +830,7 @@
         }
 
         .problem-section .bb-section-body {
-            color: rgba(255,255,255,0.65);
+            color: rgba(255, 255, 255, 0.65);
             max-width: 600px;
         }
 
@@ -390,7 +852,7 @@
 
         .problem-stat {
             padding: 28px 24px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 2px;
         }
 
@@ -405,7 +867,7 @@
 
         .problem-stat-label {
             font-size: 0.82rem;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
             line-height: 1.4;
         }
 
@@ -488,9 +950,9 @@
             display: flex;
             flex-direction: column;
             gap: 1px;
-            background: rgba(0,0,0,0.06);
-            border-top: 1px solid rgba(0,0,0,0.06);
-            border-bottom: 1px solid rgba(0,0,0,0.06);
+            background: rgba(0, 0, 0, 0.06);
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         }
 
         .track-row {
@@ -559,7 +1021,7 @@
             margin: 0 auto;
         }
 
-        .prizes-divisions > .prize-division:first-child {
+        .prizes-divisions>.prize-division:first-child {
             grid-column: 1 / -1;
         }
 
@@ -567,7 +1029,7 @@
             background: var(--white);
             padding: 36px 32px;
             border-radius: 4px;
-            border: 1px solid rgba(0,0,0,0.06);
+            border: 1px solid rgba(0, 0, 0, 0.06);
         }
 
         .prize-division h3 {
@@ -596,6 +1058,7 @@
         .prize-row:nth-child(1) {
             background: linear-gradient(135deg, #FFF9D9, #FFF0B3);
         }
+
         .prize-row:nth-child(1) .prize-row-place {
             color: #B38F00;
             font-weight: 800;
@@ -604,6 +1067,7 @@
         .prize-row:nth-child(2) {
             background: linear-gradient(135deg, #F5F5F7, #E8E8EB);
         }
+
         .prize-row:nth-child(2) .prize-row-place {
             color: #757575;
             font-weight: 800;
@@ -612,14 +1076,16 @@
         .prize-row:nth-child(3) {
             background: linear-gradient(135deg, #FFF0E0, #FFE0CC);
         }
+
         .prize-row:nth-child(3) .prize-row-place {
             color: #A05A20;
             font-weight: 800;
         }
 
         .prize-row:nth-child(n+4) {
-            background: rgba(0,0,0,0.02);
+            background: rgba(0, 0, 0, 0.02);
         }
+
         .prize-row:nth-child(n+4) .prize-row-place {
             font-weight: 700;
             color: var(--muted);
@@ -666,7 +1132,7 @@
             gap: 6px;
             padding: 10px 20px;
             background: transparent;
-            border: 1.5px solid rgba(0,0,0,0.12);
+            border: 1.5px solid rgba(0, 0, 0, 0.12);
             color: var(--black);
             font-size: 0.85rem;
             font-weight: 600;
@@ -756,7 +1222,7 @@
             border-radius: 50%;
             object-fit: cover;
             margin-bottom: 14px;
-            border: 2px solid rgba(0,0,0,0.04);
+            border: 2px solid rgba(0, 0, 0, 0.04);
             filter: grayscale(15%);
             transition: all 0.3s ease;
         }
@@ -864,9 +1330,20 @@
             letter-spacing: 0.04em;
         }
 
-        .winner-card-bb.gold .winner-card-bb-header { background: linear-gradient(135deg, #FFF9D9, #FFF0B3); color: #B38F00; }
-        .winner-card-bb.silver .winner-card-bb-header { background: linear-gradient(135deg, #F5F5F7, #E8E8EB); color: #757575; }
-        .winner-card-bb.bronze .winner-card-bb-header { background: linear-gradient(135deg, #FFF0E0, #FFE0CC); color: #A05A20; }
+        .winner-card-bb.gold .winner-card-bb-header {
+            background: linear-gradient(135deg, #FFF9D9, #FFF0B3);
+            color: #B38F00;
+        }
+
+        .winner-card-bb.silver .winner-card-bb-header {
+            background: linear-gradient(135deg, #F5F5F7, #E8E8EB);
+            color: #757575;
+        }
+
+        .winner-card-bb.bronze .winner-card-bb-header {
+            background: linear-gradient(135deg, #FFF0E0, #FFE0CC);
+            color: #A05A20;
+        }
 
         .winner-card-bb-body {
             padding: 16px;
@@ -903,7 +1380,7 @@
             padding: 40px 36px;
             border-radius: 4px;
             text-align: center;
-            border: 1px solid rgba(0,0,0,0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
         }
 
         .sponsor-tier-label {
@@ -945,7 +1422,7 @@
             padding: 32px 24px;
             border-radius: 4px;
             text-align: center;
-            border: 1px solid rgba(0,0,0,0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
         }
 
         .sponsor-silver-item img {
@@ -1014,7 +1491,7 @@
         }
 
         .final-cta p {
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 1.05rem;
             max-width: 480px;
             margin: 0 auto 40px;
@@ -1049,7 +1526,7 @@
 
         .final-cta-btn.outline {
             background: transparent;
-            border-color: rgba(255,255,255,0.3);
+            border-color: rgba(255, 255, 255, 0.3);
             color: var(--white);
         }
 
@@ -1062,11 +1539,11 @@
         .final-cta-contact {
             margin-top: 24px;
             font-size: 0.82rem;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255, 255, 255, 0.4);
         }
 
         .final-cta-contact a {
-            color: rgba(255,255,255,0.6);
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
         }
 
@@ -1130,7 +1607,7 @@
         .gallery-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.55) 100%);
+            background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.55) 100%);
             opacity: 0;
             transition: opacity 0.35s ease;
             display: flex;
@@ -1140,10 +1617,12 @@
             border-radius: 10px;
         }
 
-        .gallery-item:hover .gallery-overlay { opacity: 1; }
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
 
         .gallery-caption {
-            color: rgba(255,255,255,0.9);
+            color: rgba(255, 255, 255, 0.9);
             font-size: 0.8rem;
             font-weight: 600;
             letter-spacing: 0.01em;
@@ -1159,7 +1638,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,0.12);
+            background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(10px);
             border-radius: 8px;
             transition: all 0.25s ease;
@@ -1188,7 +1667,15 @@
             animation: lightboxFadeIn 0.3s ease;
         }
 
-        @keyframes lightboxFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes lightboxFadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
 
         .lightbox-content {
             max-width: 90vw;
@@ -1207,12 +1694,19 @@
         }
 
         @keyframes lightboxImgIn {
-            from { opacity: 0; transform: scale(0.95) translateY(8px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .lightbox-caption {
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 0.9rem;
             margin-top: 20px;
             text-align: center;
@@ -1220,7 +1714,7 @@
         }
 
         .lightbox-counter {
-            color: rgba(255,255,255,0.3);
+            color: rgba(255, 255, 255, 0.3);
             font-size: 0.75rem;
             margin-top: 6px;
             font-weight: 600;
@@ -1231,8 +1725,8 @@
             position: absolute;
             top: 20px;
             right: 24px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
@@ -1247,8 +1741,8 @@
         }
 
         .lightbox-close:hover {
-            background: rgba(255,255,255,0.12);
-            border-color: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .lightbox-prev,
@@ -1256,8 +1750,8 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
             font-size: 2rem;
             cursor: pointer;
@@ -1272,8 +1766,13 @@
             line-height: 1;
         }
 
-        .lightbox-prev { left: 20px; }
-        .lightbox-next { right: 20px; }
+        .lightbox-prev {
+            left: 20px;
+        }
+
+        .lightbox-next {
+            right: 20px;
+        }
 
         .lightbox-prev:hover,
         .lightbox-next:hover {
@@ -1283,11 +1782,15 @@
         }
 
         @media (max-width: 1100px) {
-            .gallery-masonry { columns: 3; }
+            .gallery-masonry {
+                columns: 3;
+            }
         }
 
         @media (max-width: 768px) {
-            .gallery-header { padding: 80px 20px 40px; }
+            .gallery-header {
+                padding: 80px 20px 40px;
+            }
 
             .gallery-masonry {
                 columns: 2;
@@ -1300,19 +1803,41 @@
                 border-radius: 8px;
             }
 
-            .gallery-item img { border-radius: 8px; }
-            .gallery-overlay { border-radius: 8px; padding: 12px; }
-            .gallery-caption { font-size: 0.7rem; }
+            .gallery-item img {
+                border-radius: 8px;
+            }
 
-            .lightbox-prev, .lightbox-next {
+            .gallery-overlay {
+                border-radius: 8px;
+                padding: 12px;
+            }
+
+            .gallery-caption {
+                font-size: 0.7rem;
+            }
+
+            .lightbox-prev,
+            .lightbox-next {
                 width: 40px;
                 height: 40px;
                 font-size: 1.5rem;
                 border-radius: 10px;
             }
-            .lightbox-prev { left: 10px; }
-            .lightbox-next { right: 10px; }
-            .lightbox-close { width: 38px; height: 38px; font-size: 1.3rem; border-radius: 10px; }
+
+            .lightbox-prev {
+                left: 10px;
+            }
+
+            .lightbox-next {
+                right: 10px;
+            }
+
+            .lightbox-close {
+                width: 38px;
+                height: 38px;
+                font-size: 1.3rem;
+                border-radius: 10px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1340,108 +1865,502 @@
         /* ============================================
            FOOTER (shared)
            ============================================ */
-        footer { padding: 0; border-top: 4px solid var(--orange); background: var(--black); color: var(--white); }
-        .footer-newsletter { padding: 2.5rem 2rem; background: rgba(255, 107, 53, 0.08); border-bottom: 1px solid rgba(255, 255, 255, 0.08); text-align: center; }
-        .footer-newsletter-container { max-width: 850px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; }
-        .footer-newsletter-text { text-align: left; }
-        .footer-newsletter h3 { font-size: 1.2rem; font-weight: 900; margin-bottom: 0.2rem; }
-        .footer-newsletter p { font-size: 0.9rem; opacity: 0.7; margin: 0; line-height: 1.4; }
-        .footer-newsletter-btn { display: inline-block; padding: 0.75rem 1.75rem; font-size: 0.9rem; font-weight: 700; background: var(--orange); color: var(--white); text-decoration: none; border: 2px solid var(--orange); transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; }
-        .footer-newsletter-btn:hover { background: var(--white); color: var(--black); border-color: var(--white); transform: translateY(-2px); }
-        .footer-container { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem 0; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
-        .footer-brand-col { display: flex; flex-direction: column; gap: 1rem; }
-        .footer-brand img { height: 32px; filter: brightness(0) invert(1); }
-        .footer-tagline { opacity: 0.7; line-height: 1.6; font-size: 0.95rem; }
-        .footer-ein { opacity: 0.4; font-size: 0.8rem; }
-        .footer-social { display: flex; gap: 0.75rem; margin-top: 0.25rem; }
-        .footer-social a { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: var(--white); text-decoration: none; transition: all 0.2s ease; }
-        .footer-social a:hover { background: var(--orange); transform: translateY(-2px); }
-        .footer-social a svg { width: 16px; height: 16px; fill: currentColor; }
-        .footer-section h4 { font-size: 0.75rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.25rem; color: var(--orange); opacity: 0.8; }
-        .footer-section a { display: block; color: var(--white); text-decoration: none; margin-bottom: 0.65rem; transition: all 0.2s ease; font-size: 0.95rem; opacity: 0.8; }
-        .footer-section a:hover { color: var(--orange); opacity: 1; transform: translateX(4px); }
-        .footer-squiggle { display: block; margin: 0 auto; width: 80px; height: 8px; opacity: 0.2; }
-        .footer-bottom { max-width: 1200px; margin: 0 auto; padding: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; opacity: 0.5; font-size: 0.85rem; }
-        .footer-bottom a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s ease; margin: 0 0.75rem; }
-        .footer-bottom a:hover { color: var(--orange); }
+        footer {
+            padding: 0;
+            border-top: 4px solid var(--orange);
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .footer-newsletter {
+            padding: 2.5rem 2rem;
+            background: rgba(255, 107, 53, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            text-align: center;
+        }
+
+        .footer-newsletter-container {
+            max-width: 850px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-newsletter-text {
+            text-align: left;
+        }
+
+        .footer-newsletter h3 {
+            font-size: 1.2rem;
+            font-weight: 900;
+            margin-bottom: 0.2rem;
+        }
+
+        .footer-newsletter p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .footer-newsletter-btn {
+            display: inline-block;
+            padding: 0.75rem 1.75rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            background: var(--orange);
+            color: var(--white);
+            text-decoration: none;
+            border: 2px solid var(--orange);
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        .footer-newsletter-btn:hover {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem 0;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-brand img {
+            height: 32px;
+            filter: brightness(0) invert(1);
+        }
+
+        .footer-tagline {
+            opacity: 0.7;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .footer-ein {
+            opacity: 0.4;
+            font-size: 0.8rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .footer-social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .footer-social a:hover {
+            background: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        .footer-social a svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .footer-section h4 {
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+            color: var(--orange);
+            opacity: 0.8;
+        }
+
+        .footer-section a {
+            display: block;
+            color: var(--white);
+            text-decoration: none;
+            margin-bottom: 0.65rem;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        .footer-section a:hover {
+            color: var(--orange);
+            opacity: 1;
+            transform: translateX(4px);
+        }
+
+        .footer-squiggle {
+            display: block;
+            margin: 0 auto;
+            width: 80px;
+            height: 8px;
+            opacity: 0.2;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0.5;
+            font-size: 0.85rem;
+        }
+
+        .footer-bottom a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            margin: 0 0.75rem;
+        }
+
+        .footer-bottom a:hover {
+            color: var(--orange);
+        }
 
         /* ============================================
            MOBILE MENU (shared)
            ============================================ */
-        .mobile-menu::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--orange); z-index: 1; }
-        .mobile-menu-nav { flex: none; }
-        .mobile-menu-nav > a { opacity: 0; transform: translateX(20px); animation: mobileSlideIn 0.3s ease forwards; }
-        .mobile-menu.active .mobile-menu-nav > a:nth-child(1) { animation-delay: 0.05s; }
-        .mobile-menu.active .mobile-menu-nav > a:nth-child(2) { animation-delay: 0.08s; }
-        .mobile-menu.active .mobile-menu-nav > a:nth-child(3) { animation-delay: 0.11s; }
-        @keyframes mobileSlideIn { to { opacity: 1; transform: translateX(0); } }
+        .mobile-menu::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--orange);
+            z-index: 1;
+        }
 
-        .mobile-dropdown { opacity: 0; transform: translateX(20px); }
-        .mobile-menu.active .mobile-dropdown { animation: mobileSlideIn 0.3s ease forwards; animation-delay: 0.14s; }
+        .mobile-menu-nav {
+            flex: none;
+        }
 
-        .mobile-cards-group { margin-bottom: 0.5rem; }
-        .mobile-cards-label { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); padding: 0.6rem 0 0.35rem; }
-        .mobile-card { display: flex !important; flex-direction: column; gap: 0.15rem; padding: 0.75rem 0.85rem !important; margin-bottom: 0.4rem; background: var(--white); border: 1.5px solid rgba(0, 0, 0, 0.06); border-radius: 8px; text-decoration: none !important; transition: all 0.15s ease; border-bottom: none !important; }
-        .mobile-card-name { font-size: 0.95rem !important; font-weight: 700; color: var(--black) !important; display: flex; align-items: center; gap: 0.35rem; }
-        .mobile-card-desc { font-size: 0.75rem; font-weight: 500; color: var(--muted); line-height: 1.3; }
-        .mobile-card-external { font-size: 0.8rem; opacity: 0.4; }
-        .mobile-dropdown-content .mobile-card { font-size: unset !important; border-bottom: none !important; }
+        .mobile-menu-nav>a {
+            opacity: 0;
+            transform: translateX(20px);
+            animation: mobileSlideIn 0.3s ease forwards;
+        }
 
-        .mobile-menu-footer { padding-top: 0.75rem; margin-top: 0.75rem; border-top: 2px solid var(--black); display: flex; flex-direction: column; gap: 0.75rem; opacity: 0; transform: translateY(10px); animation: mobileSlideUp 0.3s ease forwards; animation-delay: 0.25s; }
-        @keyframes mobileSlideUp { to { opacity: 1; transform: translateY(0); } }
-        .btn-mobile-cta { display: block; text-align: center; padding: 0.9rem 1.5rem; font-size: 1rem; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 0.02em; transition: all 0.2s ease; background: var(--orange); color: var(--white); border: 2px solid var(--orange); }
-        .mobile-menu-footer-links { display: flex; justify-content: center; gap: 1.5rem; padding-top: 0.75rem; }
-        .mobile-menu-footer-links a { font-size: 0.85rem !important; color: var(--muted) !important; border-bottom: none !important; padding: 0.25rem 0 !important; font-weight: 600 !important; }
+        .mobile-menu.active .mobile-menu-nav>a:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .mobile-menu.active .mobile-menu-nav>a:nth-child(2) {
+            animation-delay: 0.08s;
+        }
+
+        .mobile-menu.active .mobile-menu-nav>a:nth-child(3) {
+            animation-delay: 0.11s;
+        }
+
+        @keyframes mobileSlideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .mobile-dropdown {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        .mobile-menu.active .mobile-dropdown {
+            animation: mobileSlideIn 0.3s ease forwards;
+            animation-delay: 0.14s;
+        }
+
+        .mobile-cards-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .mobile-cards-label {
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--orange);
+            padding: 0.6rem 0 0.35rem;
+        }
+
+        .mobile-card {
+            display: flex !important;
+            flex-direction: column;
+            gap: 0.15rem;
+            padding: 0.75rem 0.85rem !important;
+            margin-bottom: 0.4rem;
+            background: var(--white);
+            border: 1.5px solid rgba(0, 0, 0, 0.06);
+            border-radius: 8px;
+            text-decoration: none !important;
+            transition: all 0.15s ease;
+            border-bottom: none !important;
+        }
+
+        .mobile-card-name {
+            font-size: 0.95rem !important;
+            font-weight: 700;
+            color: var(--black) !important;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .mobile-card-desc {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--muted);
+            line-height: 1.3;
+        }
+
+        .mobile-card-external {
+            font-size: 0.8rem;
+            opacity: 0.4;
+        }
+
+        .mobile-dropdown-content .mobile-card {
+            font-size: unset !important;
+            border-bottom: none !important;
+        }
+
+        .mobile-menu-footer {
+            padding-top: 0.75rem;
+            margin-top: 0.75rem;
+            border-top: 2px solid var(--black);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: mobileSlideUp 0.3s ease forwards;
+            animation-delay: 0.25s;
+        }
+
+        @keyframes mobileSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn-mobile-cta {
+            display: block;
+            text-align: center;
+            padding: 0.9rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            transition: all 0.2s ease;
+            background: var(--orange);
+            color: var(--white);
+            border: 2px solid var(--orange);
+        }
+
+        .mobile-menu-footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            padding-top: 0.75rem;
+        }
+
+        .mobile-menu-footer-links a {
+            font-size: 0.85rem !important;
+            color: var(--muted) !important;
+            border-bottom: none !important;
+            padding: 0.25rem 0 !important;
+            font-weight: 600 !important;
+        }
 
         /* ============================================
            RESPONSIVE
            ============================================ */
         @media (max-width: 1200px) {
-            .nav-right { gap: 1.5rem; }
-            .nav-right a { font-size: 0.95rem; }
+            .nav-right {
+                gap: 1.5rem;
+            }
+
+            .nav-right a {
+                font-size: 0.95rem;
+            }
         }
 
         @media (max-width: 1080px) {
-            nav { padding: 1.25rem 0; }
-            nav.scrolled { padding: 0.875rem 0; }
-            .logo img { height: 42px; }
-            nav.scrolled .logo img { height: 36px; }
-            .nav-right { gap: 1.25rem; }
-            .nav-right a { font-size: 0.9rem; }
-            .btn-donate, .btn-get-involved { padding: 0.6rem 1.25rem; font-size: 0.85rem; }
+            nav {
+                padding: 1.25rem 0;
+            }
+
+            nav.scrolled {
+                padding: 0.875rem 0;
+            }
+
+            .logo img {
+                height: 42px;
+            }
+
+            nav.scrolled .logo img {
+                height: 36px;
+            }
+
+            .nav-right {
+                gap: 1.25rem;
+            }
+
+            .nav-right a {
+                font-size: 0.9rem;
+            }
+
+            .btn-donate,
+            .btn-get-involved {
+                padding: 0.6rem 1.25rem;
+                font-size: 0.85rem;
+            }
         }
 
         @media (max-width: 968px) {
-            .nav-container { grid-template-columns: 1fr auto; gap: 1rem; }
-            .nav-right { display: none; }
-            .mobile-controls { display: flex; }
-            .mobile-menu-btn { display: flex; }
-            .mobile-get-involved { display: inline-block; padding: 0.35rem 0.85rem; font-size: 0.72rem; }
-            .mobile-menu { display: block; }
+            .nav-container {
+                grid-template-columns: 1fr auto;
+                gap: 1rem;
+            }
 
-            .problem-grid { grid-template-columns: 1fr; gap: 48px; }
-            .steps-grid { grid-template-columns: 1fr; gap: 32px; }
-            .prizes-divisions { grid-template-columns: 1fr; }
-            .winners-grid-bb { grid-template-columns: 1fr; }
-            .sponsor-silver-row { grid-template-columns: 1fr; }
-            .scoring-grid { grid-template-columns: repeat(2, 1fr); }
-            .judges-grid-bb { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+            .nav-right {
+                display: none;
+            }
 
-            .footer-newsletter-container { flex-direction: column; text-align: center; }
-            .footer-newsletter-text { text-align: center; }
-            .footer-container { grid-template-columns: 1fr 1fr; gap: 2rem; }
-            .footer-brand-col { grid-column: 1 / -1; }
-            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            .mobile-controls {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .mobile-get-involved {
+                display: inline-block;
+                padding: 0.35rem 0.85rem;
+                font-size: 0.72rem;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .prizes-divisions {
+                grid-template-columns: 1fr;
+            }
+
+            .winners-grid-bb {
+                grid-template-columns: 1fr;
+            }
+
+            .sponsor-silver-row {
+                grid-template-columns: 1fr;
+            }
+
+            .scoring-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .judges-grid-bb {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            .footer-newsletter-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-newsletter-text {
+                text-align: center;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .footer-brand-col {
+                grid-column: 1 / -1;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
         }
 
         @media (max-width: 640px) {
-            .hero-bb { padding: 120px 20px 60px; min-height: auto; }
-            .hero-bb h1 { font-size: 2.5rem; }
-            .hero-bb-meta { gap: 20px; }
-            .bb-section { padding: 80px 20px; }
-            .problem-stats { grid-template-columns: 1fr; }
-            .judges-grid-bb { grid-template-columns: repeat(2, 1fr); }
-            .hero-scroll-hint { display: none; }
+            .hero-bb {
+                padding: 120px 20px 60px;
+                min-height: auto;
+            }
+
+            .hero-bb h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-bb-meta {
+                gap: 20px;
+            }
+
+            .bb-section {
+                padding: 80px 20px;
+            }
+
+            .problem-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .judges-grid-bb {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-scroll-hint {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -1465,19 +2384,46 @@
                         <div class="dropdown-mega-grid">
                             <div class="dropdown-mega-col">
                                 <div class="dropdown-mega-col-label">Build</div>
-                                <a href="education.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Millionaire Mindset</span><span class="dropdown-item-desc">In-school programming</span></span></a>
-                                <a href="barrier-breakers.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Barrier Breakers</span><span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span></span></a>
-                                <a href="ambassadors.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Ambassador Program</span><span class="dropdown-item-desc">Powered by young adults globally</span></span></a>
-                                <a href="intelligence-platform.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Intelligence Platform</span><span class="dropdown-item-desc">Early warning across food, housing, health &amp; jobs</span></span></a>
-                                <a href="talent.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Talent</span><span class="dropdown-item-desc">Hire mission-driven young professionals</span></span></a>
+                                <a href="education.html" class="dropdown-item"><span class="dropdown-item-text"><span
+                                            class="dropdown-item-name">Millionaire Mindset</span><span
+                                            class="dropdown-item-desc">In-school programming</span></span></a>
+                                <a href="barrier-breakers.html" class="dropdown-item"><span
+                                        class="dropdown-item-text"><span class="dropdown-item-name">Barrier
+                                            Breakers</span><span class="dropdown-item-desc">Powered by Valmark · $20k+
+                                            in prizes</span></span></a>
+                                <a href="ambassadors.html" class="dropdown-item"><span class="dropdown-item-text"><span
+                                            class="dropdown-item-name">Ambassador Program</span><span
+                                            class="dropdown-item-desc">Powered by young adults
+                                            globally</span></span></a>
+                                <a href="intelligence-platform.html" class="dropdown-item"><span
+                                        class="dropdown-item-text"><span class="dropdown-item-name">Intelligence
+                                            Platform</span><span class="dropdown-item-desc">Early warning across food,
+                                            housing, health &amp; jobs</span></span></a>
+                                <a href="talent.html" class="dropdown-item"><span class="dropdown-item-text"><span
+                                            class="dropdown-item-name">Talent</span><span
+                                            class="dropdown-item-desc">Hire mission-driven young
+                                            professionals</span></span></a>
                             </div>
                             <div class="dropdown-mega-col">
                                 <div class="dropdown-mega-col-label">Measure</div>
-                                <a href="barometer.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Financial Health Barometer</span><span class="dropdown-item-desc">Real-Time Economic Pulse</span></span></a>
-                                <a href="affordability-lab.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Affordability Lab</span><span class="dropdown-item-desc">Addressing the affordability crisis</span></span></a>
-                                <a href="https://finmango.org/ai-ready/" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">AI Readiness</span><span class="dropdown-item-desc">Practical Guidance</span></span></a>
-                                <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer"><span class="dropdown-item-text"><span class="dropdown-item-name">GitHub</span><span class="dropdown-item-desc">Research to Reality</span></span></a>
-                                <a href="resources.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Resources</span><span class="dropdown-item-desc">Guides, tools & worksheets</span></span></a>
+                                <a href="barometer.html" class="dropdown-item"><span class="dropdown-item-text"><span
+                                            class="dropdown-item-name">Financial Health Barometer</span><span
+                                            class="dropdown-item-desc">Real-Time Economic Pulse</span></span></a>
+                                <a href="affordability-lab.html" class="dropdown-item"><span
+                                        class="dropdown-item-text"><span class="dropdown-item-name">Affordability
+                                            Lab</span><span class="dropdown-item-desc">Addressing the affordability
+                                            crisis</span></span></a>
+                                <a href="https://finmango.org/ai-ready/" class="dropdown-item"><span
+                                        class="dropdown-item-text"><span class="dropdown-item-name">AI
+                                            Readiness</span><span class="dropdown-item-desc">Practical
+                                            Guidance</span></span></a>
+                                <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank"
+                                    rel="noopener noreferrer"><span class="dropdown-item-text"><span
+                                            class="dropdown-item-name">GitHub</span><span
+                                            class="dropdown-item-desc">Research to Reality</span></span></a>
+                                <a href="resources.html" class="dropdown-item"><span class="dropdown-item-text"><span
+                                            class="dropdown-item-name">Resources</span><span
+                                            class="dropdown-item-desc">Guides, tools & worksheets</span></span></a>
                             </div>
                         </div>
                     </div>
@@ -1505,28 +2451,47 @@
                 <div class="mobile-dropdown-content">
                     <div class="mobile-cards-group">
                         <div class="mobile-cards-label">Build</div>
-                        <a href="education.html" class="mobile-card"><span class="mobile-card-name">Millionaire Mindset</span><span class="mobile-card-desc">In-school programming</span></a>
-                        <a href="barrier-breakers.html" class="mobile-card"><span class="mobile-card-name">Barrier Breakers</span><span class="mobile-card-desc">Powered by Valmark · $20k+ in prizes</span></a>
-                        <a href="ambassadors.html" class="mobile-card"><span class="mobile-card-name">Ambassador Program</span><span class="mobile-card-desc">Powered by young adults globally</span></a>
-                        <a href="intelligence-platform.html" class="mobile-card"><span class="mobile-card-name">Intelligence Platform</span><span class="mobile-card-desc">Early warning across food, housing, health &amp; jobs</span></a>
-                        <a href="talent.html" class="mobile-card"><span class="mobile-card-name">Talent</span><span class="mobile-card-desc">Hire mission-driven young professionals</span></a>
+                        <a href="education.html" class="mobile-card"><span class="mobile-card-name">Millionaire
+                                Mindset</span><span class="mobile-card-desc">In-school programming</span></a>
+                        <a href="barrier-breakers.html" class="mobile-card"><span class="mobile-card-name">Barrier
+                                Breakers</span><span class="mobile-card-desc">Powered by Valmark · $20k+ in
+                                prizes</span></a>
+                        <a href="ambassadors.html" class="mobile-card"><span class="mobile-card-name">Ambassador
+                                Program</span><span class="mobile-card-desc">Powered by young adults globally</span></a>
+                        <a href="intelligence-platform.html" class="mobile-card"><span
+                                class="mobile-card-name">Intelligence Platform</span><span
+                                class="mobile-card-desc">Early warning across food, housing, health &amp;
+                                jobs</span></a>
+                        <a href="talent.html" class="mobile-card"><span class="mobile-card-name">Talent</span><span
+                                class="mobile-card-desc">Hire mission-driven young professionals</span></a>
                     </div>
                     <div class="mobile-cards-group">
                         <div class="mobile-cards-label">Measure</div>
-                        <a href="barometer.html" class="mobile-card"><span class="mobile-card-name">Financial Health Barometer</span><span class="mobile-card-desc">Real-Time Economic Pulse</span></a>
-                        <a href="affordability-lab.html" class="mobile-card"><span class="mobile-card-name">Affordability Lab</span><span class="mobile-card-desc">Addressing the affordability crisis</span></a>
-                        <a href="https://finmango.org/ai-ready/" class="mobile-card"><span class="mobile-card-name">AI Readiness</span><span class="mobile-card-desc">Practical Guidance</span></a>
-                        <a href="https://github.com/finmango/research" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">GitHub <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Research to Reality</span></a>
-                        <a href="resources.html" class="mobile-card"><span class="mobile-card-name">Resources</span><span class="mobile-card-desc">Guides, tools & worksheets</span></a>
+                        <a href="barometer.html" class="mobile-card"><span class="mobile-card-name">Financial Health
+                                Barometer</span><span class="mobile-card-desc">Real-Time Economic Pulse</span></a>
+                        <a href="affordability-lab.html" class="mobile-card"><span
+                                class="mobile-card-name">Affordability Lab</span><span
+                                class="mobile-card-desc">Addressing the affordability crisis</span></a>
+                        <a href="https://finmango.org/ai-ready/" class="mobile-card"><span class="mobile-card-name">AI
+                                Readiness</span><span class="mobile-card-desc">Practical Guidance</span></a>
+                        <a href="https://github.com/finmango/research" class="mobile-card" target="_blank"
+                            rel="noopener noreferrer"><span class="mobile-card-name">GitHub <span
+                                    class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Research
+                                to Reality</span></a>
+                        <a href="resources.html" class="mobile-card"><span
+                                class="mobile-card-name">Resources</span><span class="mobile-card-desc">Guides, tools &
+                                worksheets</span></a>
                     </div>
                 </div>
             </div>
         </div>
         <div class="mobile-menu-footer">
-            <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-mobile#/donate" target="_blank" rel="noopener noreferrer" class="btn-mobile-cta">Donate</a>
+            <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-mobile#/donate"
+                target="_blank" rel="noopener noreferrer" class="btn-mobile-cta">Donate</a>
             <div class="mobile-menu-footer-links">
                 <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
-                <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="https://www.linkedin.com/company/finmango/" target="_blank"
+                    rel="noopener noreferrer">LinkedIn</a>
                 <a href="mailto:info@finmango.org">Contact</a>
             </div>
         </div>
@@ -1540,12 +2505,16 @@
             <div class="hero-bb-inner">
                 <div class="hero-bb-kicker fade-in">FinMango × Kent State University</div>
                 <h1 class="fade-in delay-1">Tear Down the<br><em>Barriers
-                    <svg viewBox="0 0 200 12" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2 8 C 30 3, 50 10, 80 6 S 130 2, 160 7 S 185 4, 198 6" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.6"/>
-                        <path d="M4 10 C 35 5, 55 11, 85 7 S 135 3, 165 8 S 188 5, 196 8" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.3"/>
-                    </svg>
-                </em></h1>
-                <p class="hero-bb-sub fade-in delay-2">High school students build real solutions to the systemic forces that keep communities from financial stability. $20,000+ in prizes.</p>
+                        <svg viewBox="0 0 200 12" preserveAspectRatio="none" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2 8 C 30 3, 50 10, 80 6 S 130 2, 160 7 S 185 4, 198 6" stroke="#FF6B35"
+                                stroke-width="3" stroke-linecap="round" fill="none" opacity="0.6" />
+                            <path d="M4 10 C 35 5, 55 11, 85 7 S 135 3, 165 8 S 188 5, 196 8" stroke="#FF6B35"
+                                stroke-width="2" stroke-linecap="round" fill="none" opacity="0.3" />
+                        </svg>
+                    </em></h1>
+                <p class="hero-bb-sub fade-in delay-2">High school students build real solutions to the systemic forces
+                    that keep communities from financial stability. $20,000+ in prizes.</p>
                 <div class="hero-bb-meta fade-in delay-2">
                     <div class="hero-bb-meta-item">
                         <span class="hero-bb-meta-value">$20,000+</span>
@@ -1562,11 +2531,15 @@
                         <span class="hero-bb-meta-label">Running strong</span>
                     </div>
                 </div>
-                <a href="mailto:competition@finmango.org?subject=Barrier Breakers 2027 Interest" class="hero-bb-cta fade-in delay-3">Get Notified for 2027 →</a>
+                <a href="mailto:competition@finmango.org?subject=Barrier Breakers 2027 Interest"
+                    class="hero-bb-cta fade-in delay-3">Get Notified for 2027 →</a>
             </div>
             <div class="hero-scroll-hint">
                 Scroll
-                <svg width="16" height="24" viewBox="0 0 16 24" fill="none"><path d="M8 4v12m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+                    <path d="M8 4v12m0 0l-4-4m4 4l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
             </div>
         </section>
 
@@ -1577,9 +2550,12 @@
             <div class="problem-grid">
                 <div class="fade-in">
                     <div class="bb-section-label">The Problem</div>
-                    <h2 style="color: var(--white);">Financial health isn't about knowing more. It's about facing fewer walls.</h2>
+                    <h2 style="color: var(--white);">Financial health isn't about knowing more. It's about facing fewer
+                        walls.</h2>
                     <div class="bb-section-body">
-                        The barriers are systemic: transportation that costs more than the job pays, rent that eats 60% of a paycheck, medical debt from a single ER visit. These aren't problems you budget your way out of. They're problems you have to build your way through.
+                        The barriers are systemic: transportation that costs more than the job pays, rent that eats 60%
+                        of a paycheck, medical debt from a single ER visit. These aren't problems you budget your way
+                        out of. They're problems you have to build your way through.
                     </div>
                     <div class="problem-stats">
                         <div class="problem-stat fade-in delay-1">
@@ -1619,24 +2595,28 @@
                 <div class="step-item">
                     <div class="step-number">01</div>
                     <div class="step-title">Pick a barrier</div>
-                    <div class="step-desc">Choose a track: transportation, housing, healthcare, financial literacy, or bring your own. Research why it exists and who it hurts most.</div>
+                    <div class="step-desc">Choose a track: transportation, housing, healthcare, financial literacy, or
+                        bring your own. Research why it exists and who it hurts most.</div>
                 </div>
                 <div class="step-item">
                     <div class="step-number">02</div>
                     <div class="step-title">Build a solution</div>
-                    <div class="step-desc">Policy proposal, app prototype, community tool, financial literacy campaign. Use AI tools. Prototype fast. Make it real.</div>
+                    <div class="step-desc">Policy proposal, app prototype, community tool, financial literacy campaign.
+                        Use AI tools. Prototype fast. Make it real.</div>
                 </div>
                 <div class="step-item">
                     <div class="step-number">03</div>
                     <div class="step-title">Present and compete</div>
-                    <div class="step-desc">Demo Day for oral presentations. Innovation Gallery for posters. Knowledge Track for financial literacy. Everyone who applies competes.</div>
+                    <div class="step-desc">Demo Day for oral presentations. Innovation Gallery for posters. Knowledge
+                        Track for financial literacy. Everyone who applies competes.</div>
                 </div>
             </div>
         </section>
 
         <div class="squiggle-break">
             <svg viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/>
+                <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35"
+                    stroke-width="2" stroke-linecap="round" fill="none" />
             </svg>
         </div>
 
@@ -1647,14 +2627,16 @@
             <div class="container-narrow">
                 <div class="bb-section-label fade-in">Innovation Tracks</div>
                 <h2 class="fade-in delay-1">Pick your fight.</h2>
-                <div class="bb-section-body fade-in delay-2" style="margin: 0 auto;">Choose one challenge. Research it. Solve it.</div>
+                <div class="bb-section-body fade-in delay-2" style="margin: 0 auto;">Choose one challenge. Research it.
+                    Solve it.</div>
             </div>
             <div class="tracks-list fade-in delay-2" style="text-align: left;">
                 <div class="track-row">
                     <div class="track-row-icon">🚗</div>
                     <div>
                         <div class="track-row-title">Transportation</div>
-                        <div class="track-row-desc">Car costs, insurance, and transit gaps blocking stable employment.</div>
+                        <div class="track-row-desc">Car costs, insurance, and transit gaps blocking stable employment.
+                        </div>
                     </div>
                 </div>
                 <div class="track-row">
@@ -1682,7 +2664,8 @@
                     <div class="track-row-icon">🌟</div>
                     <div>
                         <div class="track-row-title">Open Track</div>
-                        <div class="track-row-desc">Any financial barrier. Childcare, food insecurity, student debt, or your own idea.</div>
+                        <div class="track-row-desc">Any financial barrier. Childcare, food insecurity, student debt, or
+                            your own idea.</div>
                     </div>
                 </div>
             </div>
@@ -1696,177 +2679,54 @@
                 <div class="container-narrow" style="text-align: center;">
                     <div class="bb-section-label fade-in" style="color: var(--orange);">March 20, 2026</div>
                     <div class="gallery-header-line fade-in delay-1"></div>
-                    <h2 class="fade-in delay-1" style="color: var(--white); font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px;">The Day In Pictures</h2>
-                    <p class="fade-in delay-2" style="color: rgba(255,255,255,0.45); font-size: 1.05rem; max-width: 480px; margin: 0 auto; line-height: 1.6;">Barrier Breakers 2026 at Kent State University. Students showed up, showed out, and broke through.</p>
+                    <h2 class="fade-in delay-1"
+                        style="color: var(--white); font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px;">
+                        The Day In Pictures</h2>
+                    <p class="fade-in delay-2"
+                        style="color: rgba(255,255,255,0.45); font-size: 1.05rem; max-width: 480px; margin: 0 auto; line-height: 1.6;">
+                        Barrier Breakers 2026 at Kent State University. Students showed up, showed out, and broke
+                        through.</p>
                 </div>
             </div>
 
             <div class="gallery-masonry fade-in delay-2">
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 at Kent State University">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3695.jpg" alt="Barrier Breakers 2026 event" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Opening event</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
+                <div class="gallery-row gallery-row-3">
+                    <div class="gallery-item gallery-item-wide"
+                        data-caption="Barrier Breakers 2026 at Kent State University">
+                        <img src="Barrier%20Breakers%202026%20Pics/IMG_3695.jpg" alt="Barrier Breakers 2026 event"
+                            loading="lazy">
+                        <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    </div>
+                    <div class="gallery-item" data-caption="Students competing at Barrier Breakers 2026">
+                        <img src="Barrier%20Breakers%202026%20Pics/IMG_3777.jpg" alt="Students competing"
+                            loading="lazy">
+                        <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    </div>
+                    <div class="gallery-item" data-caption="Innovation and collaboration on display">
+                        <img src="Barrier%20Breakers%202026%20Pics/IMG_3779.jpg" alt="Innovation on display"
+                            loading="lazy">
+                        <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
                     </div>
                 </div>
-                <div class="gallery-item" data-caption="Students competing at Barrier Breakers 2026">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3777.jpg" alt="Students competing" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Students competing</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
+
+                <div class="gallery-row gallery-row-2">
+                    <div class="gallery-item" data-caption="Teams presenting their solutions">
+                        <img src="Barrier%20Breakers%202026%20Pics/IMG_3780.jpg" alt="Teams presenting solutions"
+                            loading="lazy">
+                        <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
                     </div>
-                </div>
-                <div class="gallery-item" data-caption="Innovation and collaboration on display">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3779.jpg" alt="Innovation on display" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Innovation on display</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Teams presenting their solutions">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3780.jpg" alt="Teams presenting solutions" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Team presentations</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Breaking barriers at Kent State">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3788.JPEG" alt="Breaking barriers at Kent State" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Breaking barriers</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Community engagement at Barrier Breakers">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3817.jpg" alt="Community engagement" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Community engagement</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Collaboration and teamwork">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3825.JPEG" alt="Collaboration and teamwork" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Teamwork in action</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Working on innovative solutions">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3829.jpg" alt="Working on solutions" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Building solutions</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Students brainstorming ideas">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3834.jpg" alt="Students brainstorming" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Brainstorming ideas</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Mentors and students collaborating">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3837.jpg" alt="Mentors and students" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Mentorship moments</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Hackathon energy at Kent State">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3838.JPEG" alt="Hackathon energy" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Hackathon energy</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Teams deep in development">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3840.jpg" alt="Teams in development" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Deep in development</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Creative problem solving">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3842.jpg" alt="Creative problem solving" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Problem solving</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Celebrating breakthroughs">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3845.jpg" alt="Celebrating breakthroughs" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Celebrating breakthroughs</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Judges reviewing projects">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9133.jpg" alt="Judges reviewing projects" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Judges reviewing</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Innovation showcase">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9137.jpg" alt="Innovation showcase" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Innovation showcase</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Students presenting final projects">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9143.jpg" alt="Final presentations" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Final presentations</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Award-winning solutions">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9144.jpg" alt="Award-winning solutions" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Award-winning solutions</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Networking and connections">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9151.jpg" alt="Networking" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Networking</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="The Barrier Breakers community">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9155.jpg" alt="The community" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">The community</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Celebrating together">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9160.jpg" alt="Celebrating together" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Celebrating together</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="Group photo at Barrier Breakers 2026">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9165.jpg" alt="Group photo" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Group photo</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
-                    </div>
-                </div>
-                <div class="gallery-item" data-caption="The energy of Barrier Breakers">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9173.jpg" alt="Event energy" loading="lazy">
-                    <div class="gallery-overlay">
-                        <span class="gallery-caption">Event energy</span>
-                        <span class="gallery-expand-icon">&#x2197;</span>
+                    <div class="gallery-item" data-caption="Breaking barriers at Kent State">
+                        <img src="Barrier%20Breakers%202026%20Pics/IMG_3788.JPEG" alt="Breaking barriers at Kent State"
+                            loading="lazy">
+                        <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
                     </div>
                 </div>
             </div>
 
-            <div class="gallery-counter fade-in" style="text-align: center; padding: 40px 24px 0;">
-                <span style="font-size: 0.75rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;">23 photos from the event</span>
+            <div class="gallery-counter fade-in" style="text-align: center; padding: 32px 24px 0;">
+                <span
+                    style="font-size: 0.75rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600;">5
+                    photos from the event</span>
             </div>
         </section>
 
@@ -1889,8 +2749,11 @@
             <div class="container">
                 <div class="bb-section-label fade-in">
                     Rewards
-                    <span style="font-size: 0.7rem; color: var(--muted); margin-left: 12px; font-family: var(--font-body); opacity: 0.6;">Sponsored by</span>
-                    <img src="valmark.svg" alt="Valmark Financial Group" style="height: 14px; opacity: 0.4; margin-left: 6px; vertical-align: middle;">
+                    <span
+                        style="font-size: 0.7rem; color: var(--muted); margin-left: 12px; font-family: var(--font-body); opacity: 0.6;">Sponsored
+                        by</span>
+                    <img src="valmark.svg" alt="Valmark Financial Group"
+                        style="height: 14px; opacity: 0.4; margin-left: 6px; vertical-align: middle;">
                 </div>
                 <div class="prizes-hero-number fade-in delay-1">$20,000+</div>
                 <div class="prizes-hero-sub fade-in delay-1">In cash prizes, scholarships, and school grants.</div>
@@ -1899,31 +2762,49 @@
                     <!-- Demo Day -->
                     <div class="prize-division">
                         <h3>🚀 Demo Day</h3>
-                        <div class="prize-division-desc">Top team per track. 5-min pitch + 2-min Q&A. Cash + scholarships + school grants.</div>
-                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span><span class="prize-row-amount">$7,500</span><span class="prize-row-breakdown">($4k cash + $2.5k scholarship + $1k school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span><span class="prize-row-amount">$4,650</span><span class="prize-row-breakdown">($2.5k cash + $1.5k scholarship + $650 school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span><span class="prize-row-amount">$2,750</span><span class="prize-row-breakdown">($1.25k cash + $1k scholarship + $500 school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">4th Place</span><span><span class="prize-row-amount">$1,850</span><span class="prize-row-breakdown">($750 cash + $750 scholarship + $350 school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">5th Place</span><span><span class="prize-row-amount">$1,250</span><span class="prize-row-breakdown">($500 cash + $500 scholarship + $250 school)</span></span></div>
-                        <p class="prize-note">Cash & scholarships split among team members. Scholarships require attending KSU & selecting ACCBE major/minor. School grants go directly to the school.</p>
+                        <div class="prize-division-desc">Top team per track. 5-min pitch + 2-min Q&A. Cash +
+                            scholarships + school grants.</div>
+                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span><span
+                                    class="prize-row-amount">$7,500</span><span class="prize-row-breakdown">($4k cash +
+                                    $2.5k scholarship + $1k school)</span></span></div>
+                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span><span
+                                    class="prize-row-amount">$4,650</span><span class="prize-row-breakdown">($2.5k cash
+                                    + $1.5k scholarship + $650 school)</span></span></div>
+                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span><span
+                                    class="prize-row-amount">$2,750</span><span class="prize-row-breakdown">($1.25k cash
+                                    + $1k scholarship + $500 school)</span></span></div>
+                        <div class="prize-row"><span class="prize-row-place">4th Place</span><span><span
+                                    class="prize-row-amount">$1,850</span><span class="prize-row-breakdown">($750 cash +
+                                    $750 scholarship + $350 school)</span></span></div>
+                        <div class="prize-row"><span class="prize-row-place">5th Place</span><span><span
+                                    class="prize-row-amount">$1,250</span><span class="prize-row-breakdown">($500 cash +
+                                    $500 scholarship + $250 school)</span></span></div>
+                        <p class="prize-note">Cash & scholarships split among team members. Scholarships require
+                            attending KSU & selecting ACCBE major/minor. School grants go directly to the school.</p>
                     </div>
 
                     <!-- Innovation Gallery -->
                     <div class="prize-division">
                         <h3>📊 Innovation Gallery</h3>
                         <div class="prize-division-desc">Poster presentations. 1-on-1 with judges.</div>
-                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span class="prize-row-amount">$1,250</span></div>
-                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span class="prize-row-amount">$750</span></div>
-                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span class="prize-row-amount">$250</span></div>
+                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span
+                                class="prize-row-amount">$1,250</span></div>
+                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span
+                                class="prize-row-amount">$750</span></div>
+                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span
+                                class="prize-row-amount">$250</span></div>
                     </div>
 
                     <!-- Knowledge Track -->
                     <div class="prize-division">
                         <h3>🧠 Knowledge Track</h3>
                         <div class="prize-division-desc">20-30 min financial literacy test. Open to all.</div>
-                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span class="prize-row-amount">$250</span></div>
-                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span class="prize-row-amount">$150</span></div>
-                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span class="prize-row-amount">$100</span></div>
+                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span
+                                class="prize-row-amount">$250</span></div>
+                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span
+                                class="prize-row-amount">$150</span></div>
+                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span
+                                class="prize-row-amount">$100</span></div>
                     </div>
                 </div>
             </div>
@@ -1932,14 +2813,16 @@
         <!-- ============================================
              RESOURCES & SCORING
              ============================================ -->
-        <section class="bb-section resources-section" style="text-align: center; padding-top: 80px; padding-bottom: 80px;">
+        <section class="bb-section resources-section"
+            style="text-align: center; padding-top: 80px; padding-bottom: 80px;">
             <div class="container-narrow">
                 <div class="bb-section-label fade-in">Prepare to Win</div>
                 <h2 class="fade-in delay-1">Resources & Scoring</h2>
 
                 <div class="resources-links fade-in delay-2">
                     <a href="barrier-breakers-schedule.pdf" target="_blank" class="resource-link">📋 Event Schedule</a>
-                    <a href="barrier-breakers-one-pager-2026.pdf" target="_blank" class="resource-link">📝 Teacher One-Pager</a>
+                    <a href="barrier-breakers-one-pager-2026.pdf" target="_blank" class="resource-link">📝 Teacher
+                        One-Pager</a>
                     <a href="barrier-breakers-flyer.pdf" target="_blank" class="resource-link">📄 Class Flyer</a>
                     <a href="barrier-breakers-rubric.pdf" target="_blank" class="resource-link">⭐ Judging Rubric</a>
                 </div>
@@ -1950,10 +2833,22 @@
                         <span>100 pts total · Each criterion 1-5</span>
                     </div>
                     <div class="scoring-grid">
-                        <div class="scoring-item"><div class="scoring-item-name">Problem</div><div class="scoring-item-pts">25 pts</div></div>
-                        <div class="scoring-item"><div class="scoring-item-name">Solution</div><div class="scoring-item-pts">25 pts</div></div>
-                        <div class="scoring-item"><div class="scoring-item-name">Presentation</div><div class="scoring-item-pts">25 pts</div></div>
-                        <div class="scoring-item"><div class="scoring-item-name">Impact</div><div class="scoring-item-pts">25 pts</div></div>
+                        <div class="scoring-item">
+                            <div class="scoring-item-name">Problem</div>
+                            <div class="scoring-item-pts">25 pts</div>
+                        </div>
+                        <div class="scoring-item">
+                            <div class="scoring-item-name">Solution</div>
+                            <div class="scoring-item-pts">25 pts</div>
+                        </div>
+                        <div class="scoring-item">
+                            <div class="scoring-item-name">Presentation</div>
+                            <div class="scoring-item-pts">25 pts</div>
+                        </div>
+                        <div class="scoring-item">
+                            <div class="scoring-item-name">Impact</div>
+                            <div class="scoring-item-pts">25 pts</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2062,21 +2957,59 @@
                 <div style="max-width: 900px; margin: 56px auto 0;">
                     <div class="winner-year-block-bb fade-in">
                         <div class="winner-year-label-bb">2025</div>
-                        <div class="winner-photo-bb"><img src="2025-winner.jpg" alt="2025 Barrier Breakers Winners" loading="lazy"></div>
+                        <div class="winner-photo-bb"><img src="2025-winner.jpg" alt="2025 Barrier Breakers Winners"
+                                loading="lazy"></div>
                         <div class="winners-grid-bb">
-                            <div class="winner-card-bb gold"><div class="winner-card-bb-header"><span>1st Place</span><span>🥇</span></div><div class="winner-card-bb-body"><div class="winner-card-bb-name">Dylan Quinones</div><div class="winner-card-bb-school">Polaris Career Center</div></div></div>
-                            <div class="winner-card-bb silver"><div class="winner-card-bb-header"><span>2nd Place</span><span>🥈</span></div><div class="winner-card-bb-body"><div class="winner-card-bb-name">Rogan Allen</div><div class="winner-card-bb-school">Stow-Munroe Falls High</div></div></div>
-                            <div class="winner-card-bb bronze"><div class="winner-card-bb-header"><span>3rd Place</span><span>🥉</span></div><div class="winner-card-bb-body"><div class="winner-card-bb-name">Katherine Rosner</div><div class="winner-card-bb-school">Chagrin Falls High School</div></div></div>
+                            <div class="winner-card-bb gold">
+                                <div class="winner-card-bb-header"><span>1st Place</span><span>🥇</span></div>
+                                <div class="winner-card-bb-body">
+                                    <div class="winner-card-bb-name">Dylan Quinones</div>
+                                    <div class="winner-card-bb-school">Polaris Career Center</div>
+                                </div>
+                            </div>
+                            <div class="winner-card-bb silver">
+                                <div class="winner-card-bb-header"><span>2nd Place</span><span>🥈</span></div>
+                                <div class="winner-card-bb-body">
+                                    <div class="winner-card-bb-name">Rogan Allen</div>
+                                    <div class="winner-card-bb-school">Stow-Munroe Falls High</div>
+                                </div>
+                            </div>
+                            <div class="winner-card-bb bronze">
+                                <div class="winner-card-bb-header"><span>3rd Place</span><span>🥉</span></div>
+                                <div class="winner-card-bb-body">
+                                    <div class="winner-card-bb-name">Katherine Rosner</div>
+                                    <div class="winner-card-bb-school">Chagrin Falls High School</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="winner-year-block-bb fade-in">
                         <div class="winner-year-label-bb">2024</div>
-                        <div class="winner-photo-bb"><img src="2024-winner.jpg" alt="2024 Barrier Breakers Winners" loading="lazy"></div>
+                        <div class="winner-photo-bb"><img src="2024-winner.jpg" alt="2024 Barrier Breakers Winners"
+                                loading="lazy"></div>
                         <div class="winners-grid-bb">
-                            <div class="winner-card-bb gold"><div class="winner-card-bb-header"><span>1st Place</span><span>🥇</span></div><div class="winner-card-bb-body"><div class="winner-card-bb-name">Brianna Johnson</div><div class="winner-card-bb-school">Stow-Munroe Falls High</div></div></div>
-                            <div class="winner-card-bb silver"><div class="winner-card-bb-header"><span>2nd Place</span><span>🥈</span></div><div class="winner-card-bb-body"><div class="winner-card-bb-name">Samuel Denys</div><div class="winner-card-bb-school">Westlake High School</div></div></div>
-                            <div class="winner-card-bb bronze"><div class="winner-card-bb-header"><span>3rd Place</span><span>🥉</span></div><div class="winner-card-bb-body"><div class="winner-card-bb-name">Cullen Rooney</div><div class="winner-card-bb-school">Normandy High School</div></div></div>
+                            <div class="winner-card-bb gold">
+                                <div class="winner-card-bb-header"><span>1st Place</span><span>🥇</span></div>
+                                <div class="winner-card-bb-body">
+                                    <div class="winner-card-bb-name">Brianna Johnson</div>
+                                    <div class="winner-card-bb-school">Stow-Munroe Falls High</div>
+                                </div>
+                            </div>
+                            <div class="winner-card-bb silver">
+                                <div class="winner-card-bb-header"><span>2nd Place</span><span>🥈</span></div>
+                                <div class="winner-card-bb-body">
+                                    <div class="winner-card-bb-name">Samuel Denys</div>
+                                    <div class="winner-card-bb-school">Westlake High School</div>
+                                </div>
+                            </div>
+                            <div class="winner-card-bb bronze">
+                                <div class="winner-card-bb-header"><span>3rd Place</span><span>🥉</span></div>
+                                <div class="winner-card-bb-body">
+                                    <div class="winner-card-bb-name">Cullen Rooney</div>
+                                    <div class="winner-card-bb-school">Normandy High School</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2094,7 +3027,9 @@
                     <img src="kent-state-logo.jpg" alt="Kent State University" style="height: 56px;">
                 </div>
                 <h2 class="fade-in delay-1" style="font-size: 1.5rem;">In Collaboration With Kent State University</h2>
-                <div class="bb-section-body fade-in delay-2" style="margin: 12px auto 0; text-align: center;">FinMango's mission of financial health equity meets KSU's commitment to transformative education and community impact.</div>
+                <div class="bb-section-body fade-in delay-2" style="margin: 12px auto 0; text-align: center;">FinMango's
+                    mission of financial health equity meets KSU's commitment to transformative education and community
+                    impact.</div>
             </div>
         </section>
 
@@ -2121,7 +3056,8 @@
                         </div>
                         <div class="sponsor-silver-item">
                             <div class="sponsor-tier-label">🥈 Silver Sponsor</div>
-                            <img src="gilly.jpg" alt="Bob Gillingham" style="border-radius: 50%; max-width: 100px; border: 2px solid rgba(192,192,192,0.2);">
+                            <img src="gilly.jpg" alt="Bob Gillingham"
+                                style="border-radius: 50%; max-width: 100px; border: 2px solid rgba(192,192,192,0.2);">
                             <div class="sponsor-silver-name">Bob Gillingham</div>
                             <div class="sponsor-silver-sub">Executive Board Member & Lead Instructor</div>
                             <div class="sponsor-tier-amount">$2,500 Commitment</div>
@@ -2138,10 +3074,13 @@
             <h2 class="fade-in">Ready to Break<br>Some Barriers?</h2>
             <p class="fade-in delay-1">The 2026 competition has wrapped. Applications for 2027 open soon.</p>
             <div class="final-cta-buttons fade-in delay-2">
-                <a href="mailto:competition@finmango.org?subject=Barrier Breakers 2027 Interest" class="final-cta-btn primary">Get Notified for 2027</a>
-                <a href="mailto:competition@finmango.org?subject=Sponsorship Inquiry" class="final-cta-btn outline">Become a Sponsor</a>
+                <a href="mailto:competition@finmango.org?subject=Barrier Breakers 2027 Interest"
+                    class="final-cta-btn primary">Get Notified for 2027</a>
+                <a href="mailto:competition@finmango.org?subject=Sponsorship Inquiry"
+                    class="final-cta-btn outline">Become a Sponsor</a>
             </div>
-            <div class="final-cta-contact fade-in delay-3">Questions? <a href="mailto:competition@finmango.org">competition@finmango.org</a></div>
+            <div class="final-cta-contact fade-in delay-3">Questions? <a
+                    href="mailto:competition@finmango.org">competition@finmango.org</a></div>
         </section>
     </main>
 
@@ -2155,19 +3094,38 @@
                     <h3>Stay Updated</h3>
                     <p>Research, education, and advocacy updates. No spam.</p>
                 </div>
-                <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a>
+                <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank"
+                    rel="noopener noreferrer">Subscribe</a>
             </div>
         </div>
         <div class="footer-container">
             <div class="footer-brand-col">
                 <div class="footer-brand"><img src="finmango.png" alt="FinMango" loading="lazy"></div>
-                <p class="footer-tagline">A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.</p>
+                <p class="footer-tagline">A 501(c)(3) non-profit solving complex problems that endanger the financial
+                    health of young adults.</p>
                 <p class="footer-ein">EIN: 81-2543425</p>
                 <div class="footer-social">
-                    <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
-                    <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-                    <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
-                    <a href="mailto:info@finmango.org" aria-label="Email"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg></a>
+                    <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer"
+                        aria-label="LinkedIn"><svg viewBox="0 0 24 24">
+                            <path
+                                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                        </svg></a>
+                    <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer"
+                        aria-label="X / Twitter"><svg viewBox="0 0 24 24">
+                            <path
+                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg></a>
+                    <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer"
+                        aria-label="Instagram"><svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+                        </svg></a>
+                    <a href="mailto:info@finmango.org" aria-label="Email"><svg viewBox="0 0 24 24">
+                            <path
+                                d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
+                            <path
+                                d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
+                        </svg></a>
                 </div>
             </div>
             <div class="footer-section">
@@ -2191,12 +3149,14 @@
                 <a href="donate.html">Donate</a>
                 <a href="ambassadors.html">Become an Ambassador</a>
                 <a href="mailto:info@finmango.org">Partner With Us</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform"
+                    target="_blank" rel="noopener noreferrer">Volunteer</a>
                 <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
             </div>
         </div>
         <svg class="footer-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/>
+            <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35"
+                stroke-width="2" stroke-linecap="round" fill="none" />
         </svg>
         <div class="footer-bottom">
             <div>&copy; 2026 FinMango. All rights reserved.</div>
@@ -2209,16 +3169,16 @@
          ============================================ -->
     <!-- Scroll fade-in observer -->
     <script>
-        (function() {
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
+        (function () {
+            const observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
                     }
                 });
             }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
-            document.querySelectorAll('.fade-in').forEach(function(el) {
+            document.querySelectorAll('.fade-in').forEach(function (el) {
                 observer.observe(el);
             });
         })();
@@ -2226,7 +3186,7 @@
 
     <!-- Gallery Lightbox -->
     <script>
-        (function() {
+        (function () {
             var lightbox = document.getElementById('lightbox');
             var lbImg = document.getElementById('lightbox-img');
             var lbCaption = document.getElementById('lightbox-caption');
@@ -2266,19 +3226,19 @@
                 updateLightbox();
             }
 
-            items.forEach(function(item, i) {
-                item.addEventListener('click', function() { openLightbox(i); });
+            items.forEach(function (item, i) {
+                item.addEventListener('click', function () { openLightbox(i); });
             });
 
             document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
-            document.querySelector('.lightbox-prev').addEventListener('click', function() { navigate(-1); });
-            document.querySelector('.lightbox-next').addEventListener('click', function() { navigate(1); });
+            document.querySelector('.lightbox-prev').addEventListener('click', function () { navigate(-1); });
+            document.querySelector('.lightbox-next').addEventListener('click', function () { navigate(1); });
 
-            lightbox.addEventListener('click', function(e) {
+            lightbox.addEventListener('click', function (e) {
                 if (e.target === lightbox) closeLightbox();
             });
 
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 if (!lightbox.classList.contains('active')) return;
                 if (e.key === 'Escape') closeLightbox();
                 if (e.key === 'ArrowLeft') navigate(-1);
@@ -2290,4 +3250,5 @@
     <!-- Shared Navbar JavaScript -->
     <script src="js/navbar.js"></script>
 </body>
+
 </html>
