@@ -105,9 +105,9 @@ const stories = [
     icon: "💥",
     description: "How does the housing crisis affect individuals and communities on a daily basis?",
     lessons: 4,
-    time: “2 min”,
+    time: "2 min",
     slides: [
-      { emoji: “⚖️”, title: “Definition of “Unaffordable Housing””, text: "Housing is generally defined as unaffordable when payments on rent or mortgage and utilities exceed 30% of household income. Families paying above this threshold typically struggle to cover other essential living expenses. This widely-used benchmark helps quickly compare the housing crisis in different cities or areas." },
+      { emoji: "⚖️", title: "Definition of “Unaffordable Housing”", text: "Housing is generally defined as unaffordable when payments on rent or mortgage and utilities exceed 30% of household income. Families paying above this threshold typically struggle to cover other essential living expenses. This widely-used benchmark helps quickly compare the housing crisis in different cities or areas." },
       { emoji: "📉", title: "Consequences of Spending Over 30%", text: "When households spend a large portion of income on housing, they may cut back on other essential costs like food or healthcare. They may rely on credit or deplete savings, hindering their ability to deal with emergency costs like medical bills or repairs. Over time, limited savings impact a household’s ability to invest in education, start a business, or buy a home. These constraints make it harder for a household to achieve upward mobility and reach financial stability." },
       { emoji: "🌪️", title: "Dangers of Inconsistent Housing", text: "Unaffordable housing can make families move around frequently or overcrowd housing. Frequent moving disrupts education and work, and may pull families out of local communities. Extended housing instability can lead to stress, with lasting social and economic consequences." },
       { emoji: "🔍", title: "Challenges of Finding Affordable Housing", text: "Searching for affordable housing may force households to choose between unsafe neighborhoods or long commutes. In some areas, the only affordable units are far away from jobs and necessary services, limiting access to economic opportunity and decreasing overall quality of life." }
