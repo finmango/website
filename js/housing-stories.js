@@ -58,7 +58,7 @@ const stories = [
     icon: "🏠",
     description: "Understand the basics of the housing crisis and why it matters to everyone.",
     lessons: 4,
-    time: "8 min",
+    time: "4 min",
     slides: [
       { emoji: "📊", title: "What is it?", text: "Housing is considered affordable when a household spends no more than 30% of its income on housing costs.\n\nToday, nearly half of American renters are 'cost-burdened,' paying far more than that. Rising rents, stagnant wages, and a shortage of homes have pushed millions to the financial edge.\n\n49% are cost burdened, and there is a 7M+ unit shortage in the U.S." },
       { emoji: "🌊", title: "Why is it important?", text: "Housing affordability goes far beyond housing: It affects health, education, and the economy.\n\nFamilies who spend too much on rent have less for food, healthcare, and savings. Children in unstable housing have worse school outcomes. Communities lose workers when housing costs force people out." },
@@ -73,9 +73,9 @@ const stories = [
     icon: "📈",
     description: "Why does housing feel so expensive right now? Let's break down the main causes.",
     lessons: 6,
-    time: "12 min",
+    time: "6 min",
     slides: [
-      { emoji: "🤔", title: "Why does housing feel so expensive right now?", text: "If it feels like rent is draining your paycheck, or buying a home is out of reach, you aren't imagining it. There are a few big reasons for that– let's walk through them." },
+      { emoji: "🤔", title: "Why does housing feel so expensive right now?", text: "If it feels like rent is draining your paycheck, or buying a home is out of reach, you aren't imagining it. There are a few big reasons for that—let's walk through them." },
       { emoji: "📉", title: "Not Enough Homes", text: "For over a decade, the U.S. has not built enough homes to keep up with demand. Experts estimate that we're short by millions of homes, which means that more people are competing for fewer places to live. When that happens, prices naturally rise." },
       { emoji: "🚧", title: "Zoning Limits What Can Be Built", text: "In many cities, 70-80% of residential land allows only single-family homes. That means that apartments, duplexes, and other more affordable options often can't be built, even when there is demand. This prevents growth of the number of available homes, which pushes prices higher." },
       { emoji: "📈", title: "Rising Mortgage Rates", text: "Even if home prices didn't increase, higher mortgage rates have made monthly payments more expensive. On top of that, many current homeowners are holding on to the low interest rates they locked in many years ago, which means fewer people are selling. Fewer homes make it hard to find something affordable." },
@@ -90,7 +90,7 @@ const stories = [
     icon: "🏘️",
     description: "Suburbs were once affordable alternatives to cities, but no longer.",
     lessons: 4,
-    time: "8 min",
+    time: "4 min",
     slides: [
       { emoji: "🚗", title: "Specific drivers", text: "Suburbs were once affordable alternatives to cities, but no longer. Zoning laws that ban apartments, rising land costs, and an influx of remote workers have driven suburban home prices up 40% since 2020. Long commutes and car dependency add up to $10,000 per year in hidden transportation costs." },
       { emoji: "🛠️", title: "Specific solutions", text: "Communities have already attempted to rezone for “missing middle” housing, including duplexes, townhomes, and ADUs that fit suburban neighborhoods without introducing high-rises. Transit oriented development clusters homes near train stops to cut car costs. First-time buy programs and down payment assistance can also help." },
@@ -105,10 +105,10 @@ const stories = [
     icon: "💥",
     description: "How does the housing crisis affect individuals and communities on a daily basis?",
     lessons: 4,
-    time: "8 min",
+    time: "4 min",
     slides: [
       { emoji: "⚖️", title: "Definition of “Unaffordable Housing”", text: "Housing is generally defined as unaffordable when payments on rent or mortgage and utilities exceed 30% of household income. Families paying above this threshold typically struggle to cover other essential living expenses. This widely-used benchmark helps quickly compare the housing crisis in different cities or areas." },
-      { emoji: "📉", title: "Consequences of Spending Over 30%", text: "When households spend a large portion of income on housing, they may cut back on other essential costs like food or healthcare. They may rely on credit or deplete savings, hindering their ability to deal with emergency costs like medical bills or repairs. Over time, minimal savings limits a household’s opportunity to invest in education, start a business, or buy a home. These constraints make it harder for a household to achieve upward mobility and reach financial stability." },
+      { emoji: "📉", title: "Consequences of Spending Over 30%", text: "When households spend a large portion of income on housing, they may cut back on other essential costs like food or healthcare. They may rely on credit or deplete savings, hindering their ability to deal with emergency costs like medical bills or repairs. Over time, limited savings impact a household’s ability to invest in education, start a business, or buy a home. These constraints make it harder for a household to achieve upward mobility and reach financial stability." },
       { emoji: "🌪️", title: "Dangers of Inconsistent Housing", text: "Unaffordable housing can make families move around frequently or overcrowd housing. Frequent moving disrupts education and work, and may pull families out of local communities. Extended housing instability can lead to stress, with lasting social and economic consequences." },
       { emoji: "🔍", title: "Challenges of Finding Affordable Housing", text: "Searching for affordable housing may force households to choose between unsafe neighborhoods or long commutes. In some areas, the only affordable units are far away from jobs and necessary services, limiting access to economic opportunity and decreasing overall quality of life." }
     ]
@@ -120,7 +120,7 @@ const stories = [
     icon: "🔍",
     description: "Strategies and resources to secure affordable housing in a difficult market.",
     lessons: 5,
-    time: "10 min",
+    time: "5 min",
     slides: [
       { emoji: "🏢", title: "Types of Affordable Housing", text: "Affordable housing can be through both private markets and government-supported programs. Private affordable housing includes units with rents below market rates, typically based on tenant income and managed by bigger developers. Government support might include housing vouchers, known as “Section 8,” that cover a portion of rent in private units." },
       { emoji: "🤝", title: "Strategies for Finding Private Housing", text: "Contacting property managers directly may reveal special income-restricted units that aren’t widely advertised. Housing nonprofits often maintain lists of affordable nearby rentals. In addition, leveraging personal networks and word-of-mouth may uncover housing opportunities." },
@@ -136,7 +136,7 @@ const stories = [
     icon: "🏙️",
     description: "Why cities are facing extreme housing shortages and what can be done.",
     lessons: 5,
-    time: "10 min",
+    time: "5 min",
     slides: [
       { emoji: "🏙️", title: "Why Are Urban Areas More Expensive?", text: "Cities are generally wealthier, as high-paying jobs drive up housing demand. Furthermore, developers typically deal with limited land and a desire for high-quality amenities in apartments. As urban areas develop, many residents can move in quickly, creating sudden competition for housing while supply takes a while to catch up." },
       { emoji: "🧱", title: "Ongoing Challenges", text: "Local governments can play a big role in housing development, particularly through zoning restrictions that limit where new housing can be built or how large buildings can be. Construction delays and high material costs, particularly with global trade uncertainty, can slow the development of new units. Local opposition through “NIMBY” movements also slow housing development in certain areas." },
@@ -148,14 +148,14 @@ const stories = [
   {
     id: 7,
     title: "Rural Housing Crisis",
-    author: "Christopher Wang",
+    author: "Claudia Dean",
     icon: "🌾",
     description: "The unique challenges making homeownership and renting difficult in rural communities.",
     lessons: 6,
-    time: "12 min",
+    time: "6 min",
     slides: [
-      { emoji: "🚜", title: "Definition & Rural Specifics", text: "Median home sale price has increased by 61% in rural areas, it currently sits at ~$280K (compared w/ 49% in suburban areas, 46% in urban areas).\n\nHomebuyers need to earn an annual income of ~$75K to afford a median-priced home (105% increase compared to pre-pandemic numbers). Pre-pandemic, rural residents needed an annual income of ~$36K." },
-      { emoji: "🧩", title: "Specific Drivers of the Rural Crisis", text: "", html: "<div class='interactive-drivers'><p class='drivers-intro'>Click on a driver to learn more about why rural housing remains unaffordable.</p><div class='drivers-grid'><button class='driver-btn' onclick='toggleDriver(1)'>Pandemic-era Surge</button><button class='driver-btn' onclick='toggleDriver(2)'>Stagnant Wages</button><button class='driver-btn' onclick='toggleDriver(3)'>Limited Supply</button><button class='driver-btn' onclick='toggleDriver(4)'>Construction Costs</button><button class='driver-btn' onclick='toggleDriver(5)'>Cookie-Cutter Policies</button></div><div id='driverInfoBox' class='driver-info-box hidden'></div></div>" },
+      { emoji: "🚜", title: "Definition & Rural Specifics", text: "Median home sale price has increased by 61% in rural areas, it currently sits at ~$280K (Compared with a 49% increase in suburban areas and a 46% increase in urban areas).\n\nHomebuyers need to earn an annual income of ~$75K to afford a median-priced home (105% increase compared to pre-pandemic numbers). Pre-pandemic, rural residents needed an annual income of ~$36K." },
+      { emoji: "🧩", title: "Specific Drivers of the Rural Crisis", text: "", html: "<div class='interactive-drivers'><p class='drivers-intro'>Click on a driver to learn more about why rural housing remains unaffordable.</p><div class='drivers-grid'><button class='driver-btn' onclick='toggleDriver(1)'>Pandemic-era Surge</button><button class='driver-btn' onclick='toggleDriver(2)'>Stagnant Wages</button><button class='driver-btn' onclick='toggleDriver(3)'>Limited Supply</button><button class='driver-btn' onclick='toggleDriver(4)'>Construction Costs</button><button class='driver-btn' onclick='toggleDriver(5)'>Cookie-Cutter Policies</button></div></div>" },
       { emoji: "🛠️", title: "Specific Solutions", text: "• ROAD to Housing Act (2025 bipartisan senate bill)\n• Grants to local govts to implement pre-approved housing designs (10% of funding reserved for rural areas)\n• Preserve existing affordable units by decoupling rental assistance from maturing USDA mortgages.\n• Reduce regulatory barriers." },
       { emoji: "📚", title: "Specific Resources", text: "• USDA Rural Housing Service (loans, grants)\n• Housing Assistance Council (credit, maintaining stock, building housing)\n• National Low Income Housing Coalition (NLIHC) rural renter’s factsheet." },
       { emoji: "🤖", title: "Find Rural Resources", text: "", html: "<div class='ai-search-tool' id='aiSearch5'><h3>Find USDA & Rural Housing Assistance</h3><p>Enter your zip code to discover rural housing resources.</p><div class='ai-input-group'><input type='text' id='zip5' placeholder='ZIP Code' maxlength='5'><select id='type5'><option value='rent'>I am renting</option><option value='own'>I own a home</option></select><button onclick='performAISearch(5)' class='ai-btn'>Search</button></div><div id='aiResults5' class='ai-results hidden'><div class='loader'>Searching local databases...</div></div></div>" },
@@ -165,32 +165,32 @@ const stories = [
   {
     id: 8,
     title: "Looking Forward",
-    author: "Christopher Wang",
+    author: "Claudia Dean",
     icon: "🔭",
     description: "Where we stand now, problematic headwinds, and hopeful news on the horizon.",
     lessons: 4,
-    time: "8 min",
+    time: "4 min",
     slides: [
       { emoji: "📍", title: "Where we stand now", text: "• 53% of Americans spend more than ½ of their household income on housing\n• Shortage of 3-4 million homes\n• Median first-time home buyer is 40 yrs old (up from 33 in 2021)\n• 18% of Americans experiencing homelessness\n• ⅓ of young adults (18-34) live in their parents’ home" },
-      { emoji: "⚠️", title: "Problematic Headwinds", text: "Federal budget cuts threaten housing safety nets. Climate disasters are increasing in frequency and strength, destroying housing stock and sending insurance rates skyrocketing (up 11% in 2023 alone). Homelessness is at a record high, concentrated in urban areas where current resources cannot match the demand." },
-      { emoji: "🌱", title: "Some Hopeful News", text: "• Momentum! Over 400 land-use change bills introduced in early 2025.\n• Housing finance reforms like permanently raising 9% credit allocations and cutting bond financing thresholds from 50% to 25%.\n• Wages rising (a 3.5% projected increase in 2026) and 19 states raised their minimum wages." },
+      { emoji: "⚠️", title: "Problematic Headwinds", text: "• Federal budget cuts threaten housing safety nets.\n• Climate disasters are increasing in frequency and strength, destroying housing stock and sending insurance rates skyrocketing (up 11% in 2023 alone).\n• Homelessness is at a record high, concentrated in urban areas where current resources cannot match the demand." },
+      { emoji: "🌱", title: "Some Hopeful News", text: "", html: "<div class='slide-bullets'><p>• Momentum! Over 400 land-use change bills introduced in early 2025.</p><p>• Housing finance reforms enacted through the One Big Beautiful Bill Act, like permanently raising 9% credit allocations and cutting bond financing thresholds from 50% to 25%.</p><p>• Wages rising (a 3.5% projected increase in 2026) and 19 states raised their <a href='https://www.epi.org/minimum-wage-tracker/#/min_wage/Washington' target='_blank' rel='noopener' style='color:#FF6B35;font-weight:700;text-decoration:underline;'>minimum wages</a>.</p></div>" },
       { emoji: "⚙️", title: "What Needs to Happen", text: "• Housing regulation reform (zoning, density)\n• Adaptive (re)use of empty commercial spaces\n• Financial reforms supporting construction without cuts to HUD programs\n• Modular construction and off-site building to reduce construction costs and timelines." }
     ]
   },
   {
     id: 9,
     title: "What YOU can do",
-    author: "Tyler George",
+    author: "Claudia Dean",
     icon: "🫵",
     description: "Actionable steps you can take today to protect yourself and advocate for your community.",
     lessons: 5,
-    time: "10 min",
+    time: "5 min",
     slides: [
       { emoji: "🔍", title: "Locate housing assistance programs", text: "Local, state, and the federal government have housing assistance programs available to those struggling to find affordable housing. These are available for first-time home buyers, renters, and those who already own a home." },
-      { emoji: "👤", title: "Use a HUD-approved housing counselor", text: "Get expert advice from a HUD-approved counselor or agency to help guide your decision." },
-      { emoji: "🗣️", title: "Advocate", text: "Advocate for yourself and your community’s housing needs through attending zoning meetings or speaking with your member of congress." },
-      { emoji: "📖", title: "Know your rights (renters)", text: "Eviction requirements, habitability standards, and rent increase limits vary by city and state. Knowing the laws surrounding housing will help you protect yourself! Check out the NHLP Green Book." },
-      { emoji: "⏱️", title: "Ownership Timeline calculator", text: "Determining the right type of housing, the appropriate down payment, or how much to save each month can be daunting. Use online calculators or spreadsheets to help you plan properly!" }
+      { emoji: "👤", title: "Use a HUD-approved housing counselor", text: "", html: "<div class=’slide-bullets’><p>Get expert advice from a HUD-approved counselor or agency to help guide your decision.</p><p><a href=’https://answers.hud.gov/housingcounseling/s/?language=en_US’ target=’_blank’ rel=’noopener’ style=’color:#FF6B35;font-weight:700;text-decoration:underline;’>Find a HUD-approved housing counselor near you →</a></p></div>" },
+      { emoji: "🗣️", title: "Advocate", text: "", html: "<div class=’slide-bullets’><p>Advocate for yourself and your community’s housing needs through attending zoning meetings or speaking with your member of congress.</p><p><a href=’https://nlihc.org/take-action’ target=’_blank’ rel=’noopener’ style=’color:#FF6B35;font-weight:700;text-decoration:underline;’>Take action with NLIHC →</a></p></div>" },
+      { emoji: "📖", title: "Know your rights (renters)", text: "", html: "<div class=’renters-rights-search ai-search-tool’ id=’rentersRightsSearch’><h3>Find Your Renters’ Rights</h3><p>Enter your zip code to find renter protections and legal resources in your area.</p><div class=’ai-input-group’><input type=’text’ id=’zipRR’ placeholder=’ZIP Code’ maxlength=’5’><button onclick=’performRentersRightsSearch()’ class=’ai-btn’>Search</button></div><div id=’aiResultsRR’ class=’ai-results hidden’><div class=’loader’>Looking up tenant rights resources...</div></div></div>" },
+      { emoji: "⏱️", title: "Ownership Timeline calculator", text: "", html: "<div class=’slide-bullets’><p>Determining the right type of housing, the appropriate down payment, or how much to save each month can be daunting. Use our calculator to help you plan!</p><p><a href=’https://finmango.org/housing-calculator’ target=’_blank’ rel=’noopener’ style=’color:#FF6B35;font-weight:700;text-decoration:underline;’>Open the Ownership Timeline Calculator →</a></p></div>" }
     ]
   }
 ];
@@ -327,13 +327,29 @@ const ruralDriversData = {
 };
 
 window.toggleDriver = function(driverId) {
-  const box = document.getElementById('driverInfoBox');
   const data = ruralDriversData[driverId];
-  if (data) {
-    box.innerHTML = "<h4>" + data.title + "</h4><p>" + data.text + "</p>";
-    box.classList.remove('hidden');
-    box.classList.add('visible');
-  }
+  if (!data) return;
+
+  // Remove any existing popup
+  const existing = document.getElementById('driverPopupOverlay');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'driverPopupOverlay';
+  overlay.className = 'driver-popup-overlay';
+  overlay.innerHTML =
+    "<div class='driver-popup-card'>" +
+      "<button class='driver-popup-close' onclick='document.getElementById(\"driverPopupOverlay\").remove()' aria-label='Close'>×</button>" +
+      "<h4>" + data.title + "</h4>" +
+      "<p>" + data.text + "</p>" +
+    "</div>";
+
+  // Close when clicking outside the card
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) overlay.remove();
+  });
+
+  document.getElementById('storyViewer').appendChild(overlay);
 };
 
 // Interactive Feature: AI Search Tool
@@ -397,6 +413,59 @@ window.performAISearch = async function(instanceId) {
     
   } catch (err) {
     resultsDiv.innerHTML = "<p style='color: #ef4444; font-weight: 600; text-align: center;'>Sorry, we couldn't find data for ZIP code: " + zip + ". Please try another one.</p>";
+  }
+};
+
+// Interactive Feature: Renters' Rights Search
+window.performRentersRightsSearch = async function() {
+  const zipInput = document.getElementById('zipRR');
+  const resultsDiv = document.getElementById('aiResultsRR');
+
+  const zip = zipInput.value.trim();
+  if (zip.length < 5) {
+    alert("Please enter a valid 5-digit ZIP code.");
+    return;
+  }
+
+  resultsDiv.innerHTML = "<div class='loader'>Looking up tenant rights for " + zip + "...</div>";
+  resultsDiv.classList.remove('hidden');
+  resultsDiv.classList.add('visible');
+
+  try {
+    const response = await fetch(`https://api.zippopotam.us/us/${zip}`);
+    if (!response.ok) throw new Error("Invalid ZIP code");
+
+    const data = await response.json();
+    const place = data.places[0];
+    const city = place["place name"];
+    const state = place["state"];
+    const stateAbbr = place["state abbreviation"];
+
+    const formattedCity = encodeURIComponent(city);
+    const formattedState = encodeURIComponent(state);
+
+    let html = "<h4>📍 Renter Protections for " + city + ", " + stateAbbr + "</h4>";
+    html += "<ul class='ai-resource-list'>";
+
+    const agLink = `https://www.google.com/search?q=${formattedState}+tenant+rights+attorney+general`;
+    html += `<li><a href='${agLink}' target='_blank'><strong>${state} Tenant Rights</strong> - State Attorney General renters' protections</a></li>`;
+
+    const hudState = state.toLowerCase().replace(/ /g, "_");
+    html += `<li><a href='https://www.hud.gov/states/${hudState}/renting' target='_blank'><strong>HUD ${state} Renting Resources</strong> - Federal renter guidance for your state</a></li>`;
+
+    const localLink = `https://www.google.com/search?q=tenant+rights+organization+${formattedCity}+${formattedState}`;
+    html += `<li><a href='${localLink}' target='_blank'><strong>Local Tenant Organizations</strong> - Find tenant advocacy groups near you</a></li>`;
+
+    html += "<li><a href='https://www.nhlp.org/resource-center/' target='_blank'><strong>NHLP Resource Center</strong> - National Housing Law Project tenant rights guides</a></li>";
+
+    html += "<li><a href='https://www.211.org/' target='_blank'><strong>211 Local Help</strong> - Housing & legal assistance in " + stateAbbr + "</a></li>";
+
+    html += "</ul><p class='ai-footnote'>Results generated based on your location. Laws vary — consult a local attorney for legal advice.</p>";
+
+    resultsDiv.innerHTML = html;
+
+  } catch (err) {
+    resultsDiv.innerHTML = "<p style='color:#ef4444;font-weight:600;text-align:center;'>Sorry, we couldn't find data for ZIP code: " + zip + ". Please try another one.</p>";
   }
 };
 
