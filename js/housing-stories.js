@@ -277,6 +277,24 @@ function showSlide(index) {
     slideText.textContent = slide.text || '';
   }
 
+  // Bind Enter-key support on any dynamically injected search inputs
+  requestAnimationFrame(() => {
+    const zipRR = document.getElementById('zipRR');
+    if (zipRR) {
+      zipRR.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); performRentersRightsSearch(); }
+      });
+    }
+    [1, 3, 4, 5].forEach(id => {
+      const zipEl = document.getElementById('zip' + id);
+      if (zipEl) {
+        zipEl.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') { e.preventDefault(); performAISearch(id); }
+        });
+      }
+    });
+  });
+
   // Trigger Entrance Animations
   const elementsToAnimate = ['slideEmoji', 'slideTitle', 'slideText'];
   elementsToAnimate.forEach(id => {
@@ -464,6 +482,11 @@ window.performRentersRightsSearch = async function() {
 
     resultsDiv.innerHTML = html;
 
+    // Auto-scroll results into view
+    requestAnimationFrame(() => {
+      resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
   } catch (err) {
     resultsDiv.innerHTML = "<p style='color:#ef4444;font-weight:600;text-align:center;'>Sorry, we couldn't find data for ZIP code: " + zip + ". Please try another one.</p>";
   }
@@ -530,7 +553,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     viewer.addEventListener('touchend', function(e) {
       if (!currentStory) return;
-      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select') || e.target.closest('a') || e.target.closest('.interactive-drivers')) {
+      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select') || e.target.closest('a') || e.target.closest('.interactive-drivers') || e.target.closest('.ai-search-tool')) {
         return;
       }
       const deltaX = e.changedTouches[0].clientX - touchStartX;
@@ -556,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       // Ignore clicks on interactive elements inside the slide
-      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select') || e.target.closest('a') || e.target.closest('.interactive-drivers')) {
+      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select') || e.target.closest('a') || e.target.closest('.interactive-drivers') || e.target.closest('.ai-search-tool')) {
         return;
       }
 
