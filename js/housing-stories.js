@@ -410,8 +410,8 @@ window.performAISearch = async function(instanceId) {
     html += `<li><a href='${phaLink}' target='_blank'><strong>Local Public Housing Authority</strong> - Contact for local housing lists</a></li>`;
     
     // State HUD Page
-    const hudState = state.toLowerCase().replace(/ /g, "-");
-    html += `<li><a href='https://www.hud.gov/states/${hudState}' target='_blank'><strong>HUD ${state} Office</strong> - Federal housing programs & info</a></li>`;
+    const hudLink = `https://www.google.com/search?q=HUD+housing+programs+${formattedState}`;
+    html += `<li><a href='${hudLink}' target='_blank'><strong>HUD ${state} Office</strong> - Federal housing programs &amp; info</a></li>`;
     
     html += `<li><a href='https://www.211.org/' target='_blank'><strong>211 Local Help</strong> - Community services in ${stateAbbr}</a></li>`;
     
@@ -468,8 +468,8 @@ window.performRentersRightsSearch = async function() {
     const agLink = `https://www.google.com/search?q=${formattedState}+tenant+rights+attorney+general`;
     html += `<li><a href='${agLink}' target='_blank'><strong>${state} Tenant Rights</strong> - State Attorney General renters' protections</a></li>`;
 
-    const hudState = state.toLowerCase().replace(/ /g, "-");
-    html += `<li><a href='https://www.hud.gov/states/${hudState}' target='_blank'><strong>HUD ${state} Resources</strong> - Federal housing programs &amp; renter guidance for your state</a></li>`;
+    const hudLink = `https://www.google.com/search?q=HUD+renter+housing+programs+${formattedState}`;
+    html += `<li><a href='${hudLink}' target='_blank'><strong>HUD ${state} Resources</strong> - Federal housing programs &amp; renter guidance for your state</a></li>`;
 
     const localLink = `https://www.google.com/search?q=tenant+rights+organization+${formattedCity}+${formattedState}`;
     html += `<li><a href='${localLink}' target='_blank'><strong>Local Tenant Organizations</strong> - Find tenant advocacy groups near you</a></li>`;
