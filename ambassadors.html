@@ -980,6 +980,65 @@
       transform: translateY(-2px);
     }
 
+    /* Rolling Basis Section */
+    .rolling-basis {
+      padding: 6rem 2rem;
+      background: var(--light-gray, #f8f8f8);
+      border-top: 4px solid var(--orange);
+    }
+
+    .rolling-basis-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .rolling-basis-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .rolling-badge {
+      display: inline-block;
+      background: var(--orange);
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .rolling-basis-header h2 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .rolling-basis-header p {
+      font-size: 1.1rem;
+      color: #555;
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+
+    .rolling-iframe-wrapper {
+      background: #fff;
+      border: 3px solid var(--black);
+      box-shadow: 6px 6px 0 var(--black);
+      overflow: hidden;
+    }
+
+    .rolling-iframe-wrapper iframe {
+      display: block;
+      width: 100%;
+      border: none;
+      min-height: 600px;
+    }
+
     /* Footer */
     footer {
       padding: 0;
@@ -3001,14 +3060,35 @@
     </div>
   </section>
 
+  <!-- Rolling Basis Application Section -->
+  <section class="rolling-basis" id="rolling-apply">
+    <div class="rolling-basis-container">
+      <div class="rolling-basis-header">
+        <div class="rolling-badge">Still Accepting Applications</div>
+        <h2>Rolling Basis Ambassador Form</h2>
+        <p>We've already selected our top 2026 candidates — but we keep the door open for truly exceptional
+          individuals. If you have remarkable achievements and a genuine passion for financial health, we'd love to
+          hear from you. A few spots remain.</p>
+      </div>
+      <div class="rolling-iframe-wrapper">
+        <iframe
+          id="rollingApplyFrame"
+          src="ambassador-apply.html?embed=true&rolling=true"
+          title="Rolling Basis Ambassador Application"
+          scrolling="no"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA Section -->
   <section class="cta">
     <div class="cta-container">
-      <h2>Ready to Make an Impact?</h2>
+      <h2>Believe You Belong Here?</h2>
       <p class="cta-text">
-        Join the next cohort of Global Ambassadors and help champion financial health as a fundamental right.
+        Our 2026 cohort is set — but exceptional achievers can still apply on a rolling basis. The door is never fully closed.
       </p>
-      <a href="ambassador-apply.html" class="btn-primary">Apply Now</a>
+      <a href="#rolling-apply" class="btn-primary">Apply on a Rolling Basis</a>
     </div>
   </section>
 
@@ -3097,6 +3177,14 @@
 
   <!-- Page-specific scripts -->
   <script>
+    // Rolling basis iframe auto-resize
+    window.addEventListener('message', function (e) {
+      if (e.data && e.data.type === 'rbIframeHeight') {
+        var frame = document.getElementById('rollingApplyFrame');
+        if (frame) frame.style.height = (e.data.height + 40) + 'px';
+      }
+    });
+
     // FAQ Accordion
     document.querySelectorAll('.faq-question').forEach(question => {
       question.addEventListener('click', () => {
