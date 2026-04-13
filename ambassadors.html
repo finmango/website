@@ -921,7 +921,8 @@
       display: block;
       width: 100%;
       border: none;
-      min-height: 550px;
+      height: 200px;
+      transition: height 0.2s ease;
     }
 
     /* Button resets for modal triggers */
@@ -931,11 +932,34 @@
     }
 
     @media (max-width: 768px) {
-      .modal-overlay { padding: 1rem; }
-      .modal { max-height: 95vh; }
-      .modal-header { padding: 1.25rem 1.5rem 1rem; }
-      .modal-title { font-size: 1.15rem; }
-      .modal-body iframe { min-height: 450px; }
+      .modal-overlay {
+        padding: 0;
+        align-items: flex-end;
+      }
+      .modal {
+        max-width: 100%;
+        max-height: 100vh;
+        max-height: 100dvh;
+        height: 100vh;
+        height: 100dvh;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        transform: translateY(100%);
+      }
+      .modal-overlay.active .modal {
+        transform: translateY(0);
+      }
+      .modal-header {
+        padding: 1rem 1.25rem;
+        position: sticky;
+        top: 0;
+        background: var(--white);
+        z-index: 2;
+        border-bottom: 2px solid var(--light-gray);
+      }
+      .modal-title { font-size: 1.05rem; margin-top: 0.25rem; }
+      .modal-body { flex: 1; overflow-y: auto; }
     }
 
     /* ============================================
@@ -979,9 +1003,32 @@
     /* ============================================
        RESPONSIVE
        ============================================ */
+    @media (max-width: 1200px) {
+      .nav-right { gap: 1.5rem; }
+      .nav-right a { font-size: 0.95rem; }
+      .btn-donate, .btn-get-involved { padding: 0.65rem 1.5rem; font-size: 0.9rem; }
+    }
+
+    @media (max-width: 1080px) {
+      nav { padding: 1.25rem 0; }
+      nav.scrolled { padding: 0.875rem 0; }
+      .logo img { height: 42px; }
+      nav.scrolled .logo img { height: 36px; }
+      .nav-right { gap: 1.25rem; }
+      .nav-right a { font-size: 0.9rem; }
+      .btn-donate, .btn-get-involved { padding: 0.6rem 1.25rem; font-size: 0.85rem; text-transform: none; }
+    }
+
     @media (max-width: 968px) {
       :root { font-size: 16px; }
       body { overflow-x: hidden; max-width: 100vw; }
+
+      .nav-container { grid-template-columns: 1fr auto; gap: 1rem; }
+      .nav-right { display: none; }
+      .mobile-controls { display: flex; }
+      .mobile-menu-btn { display: block; }
+      .mobile-get-involved { display: inline-block; padding: 0.35rem 0.85rem; font-size: 0.72rem; }
+      .mobile-menu { display: block; }
 
       .hero { padding: 7rem 2rem 3rem; min-height: auto; }
       .hero-content { grid-template-columns: 1fr; gap: 3rem; }
@@ -1471,12 +1518,24 @@
     document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => revealObserver.observe(el));
 
     // Iframe auto-resize
+    const applyFrame = document.getElementById('rollingApplyFrame');
+
+    // Resize via postMessage from embedded form
     window.addEventListener('message', (e) => {
-      if (e.data && e.data.type === 'rbIframeHeight') {
-        const frame = document.getElementById('rollingApplyFrame');
-        if (frame) frame.style.height = (e.data.height + 40) + 'px';
+      if (e.data && e.data.type === 'rbIframeHeight' && applyFrame) {
+        applyFrame.style.height = Math.max(e.data.height + 20, 200) + 'px';
       }
     });
+
+    // Fallback: try to measure iframe content on load (same-origin only)
+    if (applyFrame) {
+      applyFrame.addEventListener('load', () => {
+        try {
+          const h = applyFrame.contentDocument.body.scrollHeight;
+          if (h > 100) applyFrame.style.height = (h + 20) + 'px';
+        } catch (e) { /* cross-origin, rely on postMessage */ }
+      });
+    }
 
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(a => {
