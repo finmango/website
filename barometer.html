@@ -1215,11 +1215,6 @@
             }
         }
 
-        /* Dashboard-specific: announcement bar offset */
-        body.has-announcement .dashboard-main {
-            margin-top: calc(80px + var(--announcement-height)) !important;
-        }
-
         @media (max-width: 968px) {
             .dashboard-main {
                 margin-top: 100px;
@@ -1230,28 +1225,11 @@
     <!-- Shared Navbar Styles (nav, dropdowns, mobile menu, footer, announcement bar) -->
     <link rel="stylesheet" href="css/navbar.css">
 
-    <!-- Early announcement bar dismissal check (prevents flash) -->
-  <script>
-    (function() {
-      var key = 'ambassadorAnnouncementClosedAt_v1';
-      var closedAt = localStorage.getItem(key);
-      if (closedAt && (Date.now() - parseInt(closedAt)) / 36e5 < 24) {
-        document.documentElement.classList.add('announcement-dismissed');
-      } else if (closedAt) {
-        localStorage.removeItem(key);
-      }
-    })();
-  </script>
 
 </head>
 
-<body class="has-announcement">
+<body>
 
-      <div class="announcement-bar" id="announcementBar">
-    🌍 <strong>Become a FinMango Ambassador:</strong> Join our global movement!
-    <a href="ambassadors.html">Apply Now →</a>
-    <button class="announcement-close" id="closeAnnouncement" aria-label="Close announcement">×</button>
-  </div>
 
 
       <nav id="nav">
@@ -1779,54 +1757,6 @@
     <script src="scripts/us-map-content.js"></script>
     <script src="scripts/dashboard-app.js"></script>
 
-
-    <script>
-        // Consolidated Mobile Logic & Announcement Bar
-        document.addEventListener('DOMContentLoaded', function () {
-            // 1. Announcement Bar Logic
-            (function () {
-                var announcementBar = document.getElementById('announcementBar');
-                var closeBtn = document.getElementById('closeAnnouncement');
-                var storageKey = 'ambassadorAnnouncementClosedAt_v1';
-                var expiryHours = 24; // Hours until bar reappears
-
-                if (announcementBar && closeBtn) {
-                    // Check if user has closed it and if 24 hours have passed
-                    var closedAt = localStorage.getItem(storageKey);
-                    if (closedAt) {
-                        var hoursSinceClosed = (Date.now() - parseInt(closedAt)) / (1000 * 60 * 60);
-                        if (hoursSinceClosed < expiryHours) {
-                            announcementBar.classList.add('hidden');
-                            document.body.classList.remove('has-announcement');
-                        } else {
-                            localStorage.removeItem(storageKey);
-                        }
-                    }
-
-                    closeBtn.addEventListener('click', function () {
-                        announcementBar.classList.add('hidden');
-                        document.body.classList.remove('has-announcement');
-                        localStorage.setItem(storageKey, Date.now().toString());
-                    });
-
-                    // Update height CSS variable
-                    var updateHeight = function () {
-                        if (!announcementBar.classList.contains('hidden')) {
-                            var height = announcementBar.offsetHeight;
-                            document.documentElement.style.setProperty('--announcement-height', height + 'px');
-                        }
-                    };
-
-                    // Initial update & resize listener
-                    updateHeight();
-                    window.addEventListener('resize', updateHeight);
-                }
-            })();
-
-            // 2. Mobile Menu & Accordion Logic - HANDLED BY navbar.js
-            // (Removed duplicate code to prevent double event listeners)
-        });
-    </script>
 
 
     <!-- Shared Navbar JavaScript -->

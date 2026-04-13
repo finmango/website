@@ -807,15 +807,14 @@
     <main>
         <!-- Header -->
         <div class="form-header">
-            <div class="cohort-badge">🌍 2026 Cohort Applications Open</div>
-            <h1>Global Ambassador Application</h1>
-            <p>Join a worldwide network of young leaders championing financial health as a fundamental right.</p>
+            <div class="cohort-badge">⭐ Rolling Basis — Applications Open Year-Round</div>
+            <h1>Rolling Basis Ambassador Application</h1>
+            <p>We've selected our top 2026 candidates, but we keep the door open for truly exceptional individuals. If you have remarkable achievements and a genuine passion for financial health, we'd love to hear from you.</p>
             <div class="deadline-banner">
-                <span class="deadline-icon">⏰</span>
+                <span class="deadline-icon">⭐</span>
                 <div class="deadline-content">
-                    <span class="deadline-text">Applications due <strong>April 10, 2026</strong></span>
-                    <span class="deadline-hint">Apply early — earlier applicants have a better chance of
-                        selection!</span>
+                    <span class="deadline-text">Reviewed on a <strong>rolling basis</strong></span>
+                    <span class="deadline-hint">A few spots remain for standout candidates — apply anytime.</span>
                 </div>
             </div>
         </div>
@@ -1129,6 +1128,50 @@
     </footer>
 
     <script>
+        // Embed / Rolling-basis mode
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            const isEmbed   = params.get('embed')   === 'true';
+            const isRolling = params.get('rolling') === 'true';
+
+            if (isEmbed) {
+                document.querySelector('nav')?.remove();
+                document.querySelector('footer')?.remove();
+                document.documentElement.style.setProperty('--bg', '#ffffff');
+            }
+
+            if (isRolling) {
+                const badge = document.querySelector('.cohort-badge');
+                if (badge) badge.textContent = '⭐ Rolling Basis — Applications Open Year-Round';
+
+                const h1 = document.querySelector('.form-header h1');
+                if (h1) h1.textContent = 'Rolling Basis Ambassador Application';
+
+                const desc = document.querySelector('.form-header > p');
+                if (desc) desc.textContent = "We've already selected our top 2026 candidates — but we keep the door open for truly exceptional individuals. If you have remarkable achievements and a genuine passion for financial health, we'd love to hear from you.";
+
+                const banner = document.querySelector('.form-header .deadline-banner');
+                if (banner) {
+                    const icon = banner.querySelector('.deadline-icon');
+                    const text = banner.querySelector('.deadline-text');
+                    const hint = banner.querySelector('.deadline-hint');
+                    if (icon) icon.textContent = '⭐';
+                    if (text) text.innerHTML = 'Reviewed on a <strong>rolling basis</strong>';
+                    if (hint) hint.textContent = 'A few spots remain for standout candidates — apply anytime.';
+                }
+            }
+
+            if (isEmbed) {
+                // Keep parent iframe sized to content
+                function postHeight() {
+                    window.parent.postMessage({ type: 'rbIframeHeight', height: document.body.scrollHeight }, '*');
+                }
+                window.addEventListener('load', postHeight);
+                window.addEventListener('resize', postHeight);
+                new MutationObserver(postHeight).observe(document.body, { childList: true, subtree: true });
+            }
+        })();
+
         // Character counters
         function setupCharCounter(textareaId, counterId, maxLength) {
             const textarea = document.getElementById(textareaId);
