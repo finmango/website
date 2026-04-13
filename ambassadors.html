@@ -1543,88 +1543,7 @@
     }
   </style>
   <style>
-    /* Announcement Bar */
-    .announcement-bar {
-      background: linear-gradient(135deg, var(--orange), #ff8c5a);
-      color: white;
-      text-align: center;
-      padding: 12px 48px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
-    }
 
-    .announcement-bar a {
-      color: white;
-      text-decoration: underline;
-      font-weight: 700;
-    }
-
-    .announcement-bar a:hover {
-      opacity: 0.9;
-    }
-
-    .announcement-close {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 4px 8px;
-      opacity: 0.8;
-      transition: opacity 0.2s, transform 0.2s;
-      line-height: 1;
-    }
-
-    .announcement-close:hover {
-      opacity: 1;
-      transform: translateY(-50%) scale(1.2);
-    }
-
-    .announcement-bar.hidden {
-      display: none;
-    }
-
-    body.has-announcement nav {
-      top: var(--announcement-height) !important;
-    }
-
-    body.has-announcement .mobile-menu {
-      top: var(--announcement-height) !important;
-      height: calc(100vh - var(--announcement-height)) !important;
-    }
-
-    body.has-announcement .hero {
-      padding-top: calc(11rem + var(--announcement-height)) !important;
-    }
-
-    @media (max-width: 768px) {
-      .announcement-bar {
-        font-size: 0.85rem;
-        padding: 10px 40px 10px 16px;
-      }
-
-      .announcement-close {
-        right: 8px;
-      }
-
-      body.has-announcement .hero {
-        padding-top: calc(7rem + var(--announcement-height)) !important;
-      }
-    }
   </style>
   <style>
     /* Mobile Menu Accordion Overrides */
@@ -2521,73 +2440,6 @@
 
 
     /* ============================================
-       ANNOUNCEMENT BAR
-       ============================================ */
-    .announcement-bar {
-      background: linear-gradient(135deg, var(--orange), #FF8C61);
-      color: white;
-      text-align: center;
-      padding: 12px 48px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
-    }
-
-    .announcement-bar a {
-      color: white;
-      text-decoration: underline;
-      font-weight: 700;
-    }
-
-    .announcement-bar a:hover { opacity: 0.9; }
-
-    .announcement-close {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 4px 8px;
-      opacity: 0.8;
-      transition: opacity 0.2s, transform 0.2s;
-      line-height: 1;
-    }
-
-    .announcement-close:hover {
-      opacity: 1;
-      transform: translateY(-50%) scale(1.2);
-    }
-
-    .announcement-bar.hidden { display: none; }
-
-    /* Early dismissal — set in <head> before paint */
-    html.announcement-dismissed .announcement-bar { display: none; }
-    html.announcement-dismissed body.has-announcement nav { top: 0 !important; }
-    html.announcement-dismissed body.has-announcement .mobile-menu { top: 0 !important; height: 100vh !important; }
-    html.announcement-dismissed body.has-announcement .hero { padding-top: 100px !important; }
-
-    body.has-announcement nav { top: var(--announcement-height) !important; }
-    body.has-announcement .mobile-menu { top: var(--announcement-height) !important; height: calc(100vh - var(--announcement-height)) !important; }
-    body.has-announcement .hero { padding-top: calc(100px + var(--announcement-height)) !important; }
-
-    @media (max-width: 768px) {
-      .announcement-bar { font-size: 0.85rem; padding: 10px 40px 10px 16px; }
-      .announcement-close { right: 8px; }
-    }
-    /* ============================================
        RESPONSIVE — SHARED COMPONENTS ONLY
        ============================================ */
     @media (max-width: 1200px) {
@@ -2631,28 +2483,11 @@
     }
   </style>
 
-    <!-- Early announcement bar dismissal check (prevents flash) -->
-  <script>
-    (function() {
-      var key = 'ambassadorAnnouncementClosedAt_v1';
-      var closedAt = localStorage.getItem(key);
-      if (closedAt && (Date.now() - parseInt(closedAt)) / 36e5 < 24) {
-        document.documentElement.classList.add('announcement-dismissed');
-      } else if (closedAt) {
-        localStorage.removeItem(key);
-      }
-    })();
-  </script>
 
 </head>
 
-<body class="has-announcement">
+<body>
 
-    <div class="announcement-bar" id="announcementBar">
-    🌍 <strong>Become a FinMango Ambassador:</strong> Join our global movement!
-    <a href="ambassadors.html">Apply Now →</a>
-    <button class="announcement-close" id="closeAnnouncement" aria-label="Close announcement">×</button>
-  </div>
 
 
     <nav id="nav">
@@ -2840,13 +2675,12 @@
         financial health means across communities.
       </p>
       <div class="deadline-banner">
-        <span class="deadline-icon">⏰</span>
+        <span class="deadline-icon">📋</span>
         <div class="deadline-content">
-          <span class="deadline-text">Applications due <strong>April 10, 2026</strong></span>
-          <span class="deadline-hint">Apply early — earlier applications have a better chance of selection!</span>
+          <span class="deadline-text">Applications for <strong>2026</strong> are now closed</span>
+          <span class="deadline-hint">Check back next year to apply for the 2027 cohort!</span>
         </div>
       </div>
-      <a href="ambassador-apply.html" class="hero-cta">Apply Now →</a>
     </div>
   </section>
 

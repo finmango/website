@@ -11,7 +11,6 @@
         initNavScroll();
         initMobileMenu();
         initMobileAccordion();
-        initAnnouncementBar();
     });
 
     /* ============================================
@@ -76,59 +75,5 @@
         });
     }
 
-    /* ============================================
-       ANNOUNCEMENT BAR
-       With 24-hour dismissal expiry
-       ============================================ */
-    function initAnnouncementBar() {
-        var announcementBar = document.getElementById('announcementBar');
-        var closeBtn = document.getElementById('closeAnnouncement');
-
-        if (!announcementBar || !closeBtn) return;
-
-        // Early dismissal already applied by inline <head> script
-        if (document.documentElement.classList.contains('announcement-dismissed')) {
-            announcementBar.classList.add('hidden');
-            document.body.classList.remove('has-announcement');
-            return;
-        }
-
-        var storageKey = 'ambassadorAnnouncementClosedAt_v1';
-        var expiryHours = 24;
-
-        // Check if user has closed it and if 24 hours have passed
-        var closedAt = localStorage.getItem(storageKey);
-        if (closedAt) {
-            var hoursSinceClosed = (Date.now() - parseInt(closedAt)) / (1000 * 60 * 60);
-            if (hoursSinceClosed < expiryHours) {
-                announcementBar.classList.add('hidden');
-                document.body.classList.remove('has-announcement');
-            } else {
-                // Expired, remove the stored value
-                localStorage.removeItem(storageKey);
-            }
-        }
-
-        // Close button click handler
-        closeBtn.addEventListener('click', function () {
-            announcementBar.classList.add('hidden');
-            document.body.classList.remove('has-announcement');
-            localStorage.setItem(storageKey, Date.now().toString());
-        });
-
-        // Update height CSS variable for proper spacing
-        if (!announcementBar.classList.contains('hidden')) {
-            var updateHeight = function () {
-                var height = announcementBar.offsetHeight;
-                document.documentElement.style.setProperty('--announcement-height', height + 'px');
-            };
-
-            // Initial update
-            updateHeight();
-
-            // Update on resize
-            window.addEventListener('resize', updateHeight);
-        }
-    }
 
 })();

@@ -246,15 +246,6 @@
     .mobile-dropdown-content a:hover { color: var(--orange) !important; padding-left: 1.5rem !important; }
 
     /* Announcement */
-    .announcement-bar { background: linear-gradient(135deg, var(--orange), #FF8C61); color: white; text-align: center; padding: 12px 48px; font-size: 0.95rem; font-weight: 600; position: fixed; top: 0; left: 0; right: 0; z-index: 1100; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 2px 10px rgba(255,107,53,0.3); }
-    .announcement-bar a { color: white; text-decoration: underline; font-weight: 700; }
-    .announcement-close { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; padding: 4px 8px; opacity: 0.8; transition: opacity 0.2s, transform 0.2s; line-height: 1; }
-    .announcement-close:hover { opacity: 1; transform: translateY(-50%) scale(1.2); }
-    .announcement-bar.hidden { display: none; }
-    body.has-announcement nav { top: var(--announcement-height) !important; }
-    body.has-announcement .mobile-menu { top: var(--announcement-height) !important; height: calc(100vh - var(--announcement-height)) !important; }
-    body.has-announcement .hero { padding-top: calc(100px + var(--announcement-height)) !important; }
-    @media (max-width: 768px) { .announcement-bar { font-size: 0.85rem; padding: 10px 40px 10px 16px; } .announcement-close { right: 8px; } }
 
     /* Research Stats Bar */
     .research-stats-bar { background: var(--black); color: var(--white); padding: 3rem 2rem; }
@@ -915,73 +906,6 @@
 
 
     /* ============================================
-       ANNOUNCEMENT BAR
-       ============================================ */
-    .announcement-bar {
-      background: linear-gradient(135deg, var(--orange), #FF8C61);
-      color: white;
-      text-align: center;
-      padding: 12px 48px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
-    }
-
-    .announcement-bar a {
-      color: white;
-      text-decoration: underline;
-      font-weight: 700;
-    }
-
-    .announcement-bar a:hover { opacity: 0.9; }
-
-    .announcement-close {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 4px 8px;
-      opacity: 0.8;
-      transition: opacity 0.2s, transform 0.2s;
-      line-height: 1;
-    }
-
-    .announcement-close:hover {
-      opacity: 1;
-      transform: translateY(-50%) scale(1.2);
-    }
-
-    .announcement-bar.hidden { display: none; }
-
-    /* Early dismissal — set in <head> before paint */
-    html.announcement-dismissed .announcement-bar { display: none; }
-    html.announcement-dismissed body.has-announcement nav { top: 0 !important; }
-    html.announcement-dismissed body.has-announcement .mobile-menu { top: 0 !important; height: 100vh !important; }
-    html.announcement-dismissed body.has-announcement .hero { padding-top: 100px !important; }
-
-    body.has-announcement nav { top: var(--announcement-height) !important; }
-    body.has-announcement .mobile-menu { top: var(--announcement-height) !important; height: calc(100vh - var(--announcement-height)) !important; }
-    body.has-announcement .hero { padding-top: calc(100px + var(--announcement-height)) !important; }
-
-    @media (max-width: 768px) {
-      .announcement-bar { font-size: 0.85rem; padding: 10px 40px 10px 16px; }
-      .announcement-close { right: 8px; }
-    }
-    /* ============================================
        RESPONSIVE — SHARED COMPONENTS ONLY
        ============================================ */
     @media (max-width: 1200px) {
@@ -1030,28 +954,11 @@
     ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }
   </style>
 
-    <!-- Early announcement bar dismissal check (prevents flash) -->
-  <script>
-    (function() {
-      var key = 'ambassadorAnnouncementClosedAt_v1';
-      var closedAt = localStorage.getItem(key);
-      if (closedAt && (Date.now() - parseInt(closedAt)) / 36e5 < 24) {
-        document.documentElement.classList.add('announcement-dismissed');
-      } else if (closedAt) {
-        localStorage.removeItem(key);
-      }
-    })();
-  </script>
 
 </head>
 
-<body class="has-announcement">
+<body>
 
-    <div class="announcement-bar" id="announcementBar">
-    🌍 <strong>Become a FinMango Ambassador:</strong> Join our global movement!
-    <a href="ambassadors.html">Apply Now →</a>
-    <button class="announcement-close" id="closeAnnouncement" aria-label="Close announcement">×</button>
-  </div>
 
     <nav id="nav">
     <div class="nav-container">
@@ -1549,27 +1456,5 @@
   </footer>
 
   <script src="js/navbar.js"></script>
-  <script>
-    (function () {
-      var announcementBar = document.getElementById('announcementBar');
-      var closeBtn = document.getElementById('closeAnnouncement');
-      var storageKey = 'barrierBreakersAnnouncementClosedAt_v5';
-      var expiryHours = 24;
-      var closedAt = localStorage.getItem(storageKey);
-      if (closedAt) {
-        var hoursSinceClosed = (Date.now() - parseInt(closedAt)) / (1000 * 60 * 60);
-        if (hoursSinceClosed < expiryHours) { announcementBar.classList.add('hidden'); document.body.classList.remove('has-announcement'); }
-        else { localStorage.removeItem(storageKey); }
-      }
-      closeBtn.addEventListener('click', function () {
-        announcementBar.classList.add('hidden'); document.body.classList.remove('has-announcement');
-        localStorage.setItem(storageKey, Date.now().toString());
-      });
-      if (!announcementBar.classList.contains('hidden')) {
-        var updateHeight = function () { document.documentElement.style.setProperty('--announcement-height', announcementBar.offsetHeight + 'px'); };
-        updateHeight(); window.addEventListener('resize', updateHeight);
-      }
-    })();
-  </script>
 </body>
 </html>

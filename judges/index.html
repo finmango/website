@@ -2055,68 +2055,6 @@
     .alert--info { background: rgba(59, 130, 246, 0.1); border-color: var(--info); color: #1e40af; }
 
     /* ============================================
-       ANNOUNCEMENT BAR
-       ============================================ */
-    .announcement-bar {
-      background: linear-gradient(135deg, var(--orange), #FF8C61);
-      color: white;
-      text-align: center;
-      padding: 12px 48px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      box-shadow: 0 2px 10px rgba(255, 107, 53, 0.3);
-    }
-
-    .announcement-bar a {
-      color: white;
-      text-decoration: underline;
-      font-weight: 700;
-    }
-
-    .announcement-bar a:hover { opacity: 0.9; }
-
-    .announcement-close {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 4px 8px;
-      opacity: 0.8;
-      transition: opacity 0.2s, transform 0.2s;
-      line-height: 1;
-    }
-
-    .announcement-close:hover {
-      opacity: 1;
-      transform: translateY(-50%) scale(1.2);
-    }
-
-    .announcement-bar.hidden { display: none; }
-
-    body.has-announcement nav { top: var(--announcement-height) !important; }
-    body.has-announcement .mobile-menu { top: var(--announcement-height) !important; height: calc(100vh - var(--announcement-height)) !important; }
-    body.has-announcement .hero { padding-top: calc(100px + var(--announcement-height)) !important; }
-
-    @media (max-width: 768px) {
-      .announcement-bar { font-size: 0.85rem; padding: 10px 40px 10px 16px; }
-      .announcement-close { right: 8px; }
-    }
-
-    /* ============================================
        AURORA / AMBIENT BACKGROUND
        ============================================ */
     .aurora-background {
@@ -2242,13 +2180,8 @@
   </style>
 </head>
 
-<body class="has-announcement">
+<body>
 
-  <div class="announcement-bar" id="announcementBar">
-    🚀 <strong>Barrier Breakers on March 20th:</strong> over $20,000 in prizes!
-    <a href="barrier-breakers.html">Event Details →</a>
-    <button class="announcement-close" id="closeAnnouncement" aria-label="Close announcement">×</button>
-  </div>
 
   <nav id="nav">
     <div class="nav-container">
@@ -2934,41 +2867,6 @@
   <!-- Barometer Preview Script -->
   <script src="data/dashboard-data.js?v=20251219"></script>
   <script src="scripts/us-map-content.js"></script>
-  <script>
-    // Announcement Bar
-    (function () {
-      var announcementBar = document.getElementById('announcementBar');
-      var closeBtn = document.getElementById('closeAnnouncement');
-      var storageKey = 'barrierBreakersAnnouncementClosedAt_v5';
-      var expiryHours = 24;
-
-      var closedAt = localStorage.getItem(storageKey);
-      if (closedAt) {
-        var hoursSinceClosed = (Date.now() - parseInt(closedAt)) / (1000 * 60 * 60);
-        if (hoursSinceClosed < expiryHours) {
-          announcementBar.classList.add('hidden');
-          document.body.classList.remove('has-announcement');
-        } else {
-          localStorage.removeItem(storageKey);
-        }
-      }
-
-      closeBtn.addEventListener('click', function () {
-        announcementBar.classList.add('hidden');
-        document.body.classList.remove('has-announcement');
-        localStorage.setItem(storageKey, Date.now().toString());
-      });
-
-      if (!announcementBar.classList.contains('hidden')) {
-        var updateHeight = function () {
-          var height = announcementBar.offsetHeight;
-          document.documentElement.style.setProperty('--announcement-height', height + 'px');
-        };
-        updateHeight();
-        window.addEventListener('resize', updateHeight);
-      }
-    })();
-  </script>
   <script>
     // Initialize Barometer Preview on Homepage
     document.addEventListener('DOMContentLoaded', async function () {
