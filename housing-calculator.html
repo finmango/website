@@ -1,4 +1,74 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Housing Affordability Calculator | FinMango</title> <meta name="description" content="Find out if you can afford a home. Real math, clear results, no jargon."> <link rel="icon" type="image/png" href="favicon.png"> <link rel="preconnect" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet"> <link rel="stylesheet" href="css/navbar.css"> <style> :root{--bg:#f9f5f0;--white:#fff;--black:#1a1a1a;--orange:#FF6B35;--ol:rgba(255,107,53,.08);--muted:#6b655b;--bdr:rgba(0,0,0,.07);--green:#16a34a;--yellow:#d97706;--red:#dc2626;--fb:'DM Sans',-apple-system,sans-serif;--fa:'Caveat',cursive} *{margin:0;padding:0;box-sizing:border-box} html,body{font-family:var(--fb);background:var(--bg);color:var(--black);line-height:1.6;-webkit-font-smoothing:antialiased} a{color:inherit;text-decoration:none} input[type=number]{-moz-appearance:textfield} input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Housing Affordability Calculator | FinMango</title>
+<meta name="description" content="Find out if you can afford a home. Real math, clear results, no jargon.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/navbar.css">
+<style>
+:root{--bg:#f9f5f0;--white:#fff;--black:#1a1a1a;--orange:#FF6B35;--ol:rgba(255,107,53,.08);--muted:#6b655b;--bdr:rgba(0,0,0,.07);--green:#16a34a;--yellow:#d97706;--red:#dc2626;--fb:'DM Sans',-apple-system,sans-serif;--fa:'Caveat',cursive}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:var(--fb);background:var(--bg);color:var(--black);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:inherit;text-decoration:none}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;background:var(--white);z-index:1050;padding:1.5rem 0;transition:padding .3s ease,box-shadow .3s ease;border-bottom:1px solid rgba(0,0,0,.06);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+nav.scrolled{padding:1rem 0;border-bottom:1px solid rgba(0,0,0,.1);box-shadow:0 2px 10px rgba(0,0,0,.08);backdrop-filter:blur(10px)}
+.nav-container{max-width:1280px;margin:0 auto;padding:0 2rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.logo{display:flex;align-items:center;text-decoration:none;transition:transform .3s ease;justify-self:start}
+.logo:hover{transform:rotate(-2deg) scale(1.05)}
+.logo img{height:46px;transition:height .3s ease}
+nav.scrolled .logo img{height:38px}
+.nav-right{display:flex;gap:1.75rem;align-items:center;justify-self:end}
+.nav-right a{color:var(--black);text-decoration:none;font-weight:600;font-size:1rem;transition:all .2s ease;position:relative;white-space:nowrap;letter-spacing:-.01em}
+.nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item)::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--orange);transition:width .3s ease}
+.nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item):hover::after{width:100%}
+.nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item):hover{color:var(--orange)}
+.btn-donate{background:var(--orange);color:var(--white)!important;padding:.5rem 1rem;text-decoration:none;font-weight:700;transition:all .2s ease;border:2px solid var(--black);position:relative;overflow:hidden;font-size:.85rem;white-space:nowrap}
+.btn-donate::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--black);transition:left .3s ease;z-index:-1}
+.btn-donate:hover::before{left:0}.btn-donate:hover{transform:scale(1.05)}
+.btn-get-involved{background:transparent;color:var(--black)!important;padding:.5rem 1rem;text-decoration:none;font-weight:700;transition:all .2s ease;border:2px solid var(--black);position:relative;overflow:hidden;font-size:.85rem;white-space:nowrap}
+.btn-get-involved::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--black);transition:left .3s ease;z-index:-1}
+.btn-get-involved:hover::before{left:0}.btn-get-involved:hover{color:var(--white)!important;transform:scale(1.05)}
+
+/* DROPDOWN */
+.dropdown{position:relative;display:inline-block;height:100%}
+.nav-right a.dropdown-trigger{display:flex;align-items:center;height:100%}
+.dropdown-content{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);background-color:var(--white);min-width:240px;box-shadow:8px 8px 0 var(--black);border:3px solid var(--black);z-index:1001;padding:.5rem 0}
+.dropdown::after{content:'';position:absolute;bottom:-10px;left:0;width:100%;height:10px}
+.dropdown-content::after{content:'';position:absolute;top:-15px;left:0;width:100%;height:15px}
+.dropdown-content::before{content:'';position:absolute;top:-8px;left:50%;transform:translateX(-50%);border-width:0 8px 8px 8px;border-style:solid;border-color:transparent transparent var(--black) transparent;z-index:1002}
+.dropdown:hover .dropdown-content{display:block;animation:fadeIn .2s ease}
+.dropdown-item{color:var(--black)!important;padding:.85rem 1.5rem;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:all .2s ease;font-weight:600;font-size:.95rem!important;text-align:left;border-bottom:1px solid rgba(0,0,0,.05)}
+.dropdown-item:last-child{border-bottom:none}
+.nav-right .dropdown-item::after{display:none!important}
+.dropdown-item:hover{background-color:#f5f5f5;padding-left:1.75rem;color:var(--orange)!important}
+@keyframes fadeIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* MEGA DROPDOWN */
+.dropdown-mega .dropdown-content-mega{min-width:620px;padding:1rem 0;right:0;left:auto;transform:none}
+.dropdown-content-mega::before{left:auto!important;right:40px;transform:none!important}
+.dropdown-content-mega::after{left:auto;right:0}
+.dropdown-mega-grid{display:grid;grid-template-columns:1fr 1fr}
+.dropdown-mega-col:first-child{border-right:1px solid rgba(0,0,0,.06)}
+.dropdown-mega-col-label{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#666;padding:.5rem 1.25rem .4rem;opacity:.6}
+.dropdown-content-mega .dropdown-item{padding:.6rem 1.25rem;gap:.75rem;border-bottom:none}
+.dropdown-item-text{display:flex;flex-direction:column;gap:.1rem}
+.dropdown-item-name{font-size:.88rem;font-weight:700;color:var(--black);transition:color .2s ease}
+.dropdown-item-desc{font-size:.68rem;font-weight:500;color:#666;transition:color .2s ease}
+.dropdown-content-mega .dropdown-item:hover{background-color:#f5f5f5;padding-left:1.4rem}
+.dropdown-content-mega .dropdown-item:hover .dropdown-item-name{color:var(--orange)}
+.dropdown-content-mega .dropdown-item:hover .dropdown-item-desc{color:var(--muted)}
+@keyframes fadeInMega{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.dropdown-mega:hover .dropdown-content-mega{animation:fadeInMega .2s ease}
+
 /* LAYOUT */
 .page-layout{max-width:1200px;margin:0 auto;padding:110px 32px 80px;display:grid;grid-template-columns:360px 1fr;gap:72px;align-items:start}
 .hero-col{align-self:center;padding-top:0}
@@ -17,7 +87,7 @@
 /* STEP TRACK */
 .step-track{display:flex;align-items:center;margin-bottom:22px}
 .sn{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0}
-.sn-b{width:32px;height:32px;border-radius:50%;border:2px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:#ccc;background:var(--bg);transition:all .3s}
+.sn-b{width:32px;height:32px;border-radius:50%;border:2px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:800;color:#ccc;background:var(--bg);transition:all .3s cubic-bezier(.16,1,.3,1)}
 .sn.active .sn-b{border-color:var(--orange);background:var(--orange);color:#fff}
 .sn.done .sn-b{border-color:var(--black);background:var(--black);color:#fff}
 .sn-l{font-size:.57rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#ccc}
@@ -26,7 +96,7 @@
 .sc.done{background:var(--black)}
 
 /* CARD */
-.ccard{background:var(--white);border:1px solid var(--bdr);border-radius:16px;padding:32px;display:none;box-shadow:0 4px 24px rgba(0,0,0,.03)}
+.ccard{background:var(--white);border:1px solid var(--bdr);border-radius:14px;padding:32px;display:none;box-shadow:0 2px 16px rgba(0,0,0,.03)}
 .ccard.active{display:block}
 .eyebrow{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:4px}
 .ccard h2{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;line-height:1.15;margin-bottom:8px}
@@ -55,9 +125,9 @@
 
 /* BUTTONS */
 .brow{display:flex;gap:12px;margin-top:26px;padding-top:18px;border-top:1px solid var(--bdr)}
-.btn-p,.btn-s,.btn-r{font-family:inherit;cursor:pointer;transition:all .2s}
+.btn-p,.btn-s,.btn-r{font-family:inherit;cursor:pointer;transition:all .25s cubic-bezier(.16,1,.3,1)}
 .btn-p{flex:1;padding:14px 20px;background:var(--black);color:#fff;border:2px solid var(--black);font-size:.85rem;font-weight:700;border-radius:10px}
-.btn-p:hover{background:var(--orange);border-color:var(--orange);transform:translateY(-1px);box-shadow:0 4px 16px rgba(255,107,53,.2)}
+.btn-p:hover{background:var(--orange);border-color:var(--orange);transform:translateY(-2px);box-shadow:0 4px 16px rgba(255,107,53,.18)}
 .btn-s{padding:14px 20px;background:transparent;color:var(--muted);border:1.5px solid var(--bdr);font-size:.85rem;font-weight:600;border-radius:10px}
 .btn-s:hover{border-color:var(--black);color:var(--black)}
 
@@ -81,24 +151,24 @@
 /* METRICS STRIP */
 .mstrip{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;background:var(--white);border:1px solid var(--bdr);border-radius:12px;margin-bottom:14px;gap:6px}
 .ms-item{text-align:center;flex:1;min-width:65px}
-.ms-val{font-size:1.05rem;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.ms-val{font-size:1.05rem;font-weight:800;letter-spacing:-.03em;line-height:1.2}
 .ms-lbl{font-size:.56rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:1px}
 .ms-div{width:1px;height:26px;background:var(--bdr);flex-shrink:0}
 
 /* DASHBOARD */
 .dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
 .dash-col{display:flex;flex-direction:column;gap:12px}
-.rsec{background:var(--white);border:1px solid var(--bdr);border-radius:12px;padding:18px}
+.rsec{background:var(--white);border:1px solid var(--bdr);border-radius:12px;padding:18px;transition:all .25s cubic-bezier(.16,1,.3,1)}
 .rsec-compact{padding:14px 18px}
 .stit{font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-bottom:7px;border-bottom:1px solid var(--bdr)}
 
 /* DOWN PAYMENT */
 .dp-progress{margin-top:4px}
 .dp-nums{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
-.dp-have{font-size:1.15rem;font-weight:800;letter-spacing:-.02em}
+.dp-have{font-size:1.15rem;font-weight:800;letter-spacing:-.03em}
 .dp-need{font-size:.76rem;color:var(--muted);font-weight:500}
 .ptr{height:8px;background:rgba(0,0,0,.04);border-radius:100px;margin-bottom:5px;overflow:hidden}
-.pfil{height:100%;background:var(--orange);transition:width .7s;border-radius:100px}
+.pfil{height:100%;background:var(--orange);transition:width .7s cubic-bezier(.16,1,.3,1);border-radius:100px}
 .dp-meta{display:flex;justify-content:space-between;font-size:.66rem;font-weight:600;color:var(--muted)}
 
 /* BREAKDOWN */
@@ -115,7 +185,7 @@
 .rvb-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .rvb-col{flex:1;min-width:65px}
 .rvb-lbl{font-size:.58rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
-.rvb-val{font-size:1.05rem;font-weight:800;letter-spacing:-.02em}
+.rvb-val{font-size:1.05rem;font-weight:800;letter-spacing:-.03em}
 .rvb-val small{font-size:.63rem;color:var(--muted);font-weight:500}
 .rvb-arrow{font-size:.95rem;color:var(--muted);opacity:.3}
 .rvb-diff{font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:100px}
@@ -128,13 +198,13 @@
 .gzg{background:#bbf7d0;border-radius:100px 0 0 100px}.gzy{background:#fef08a}.gzr{background:#fecaca;border-radius:0 100px 100px 0}
 .gln{position:absolute;top:-4px;width:1px;height:calc(100% + 8px);background:rgba(0,0,0,.15)}
 .glnl{position:absolute;top:-17px;transform:translateX(-50%);font-size:.53rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;color:#aaa}
-.gpv{position:absolute;top:-8px;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:9px solid var(--black);transition:left .7s}
+.gpv{position:absolute;top:-8px;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:9px solid var(--black);transition:left .7s cubic-bezier(.16,1,.3,1)}
 .gpvl{position:absolute;bottom:-23px;transform:translateX(-50%);background:var(--black);color:#fff;font-size:.58rem;font-weight:700;padding:2px 6px;white-space:nowrap;border-radius:4px}
 .gsc{display:flex;justify-content:space-between;font-size:.53rem;font-weight:600;color:#ccc}
 
 /* DTI */
 .dti-row{display:flex;align-items:center;gap:10px}
-.dti-pct{font-size:1.3rem;font-weight:800;letter-spacing:-.02em}
+.dti-pct{font-size:1.3rem;font-weight:800;letter-spacing:-.03em}
 .dti-pct.ok{color:var(--green)}.dti-pct.warn{color:var(--yellow)}.dti-pct.bad{color:var(--red)}
 .dti-info{font-size:.76rem;color:var(--muted);line-height:1.4}
 
@@ -160,15 +230,15 @@
 .btn-r:hover{border-color:var(--orange);color:var(--orange)}
 
 /* RELATED TOOLS */
-.related-tools{background:var(--black);padding:56px 32px;border-top:4px solid var(--orange)}
+.related-tools{background:var(--black);padding:48px 32px;border-top:4px solid var(--orange)}
 .related-inner{max-width:960px;margin:0 auto}
 .related-header{text-align:center;margin-bottom:28px}
 .related-tag{display:inline-block;background:var(--orange);color:#fff;font-size:.58rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:4px 11px;border-radius:100px;margin-bottom:10px}
 .related-header h2{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;color:#fff;margin-bottom:5px}
 .related-header p{font-size:.88rem;color:rgba(255,255,255,.4)}
 .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
-.related-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:18px;text-decoration:none;transition:all .2s;display:flex;flex-direction:column;gap:5px;border-radius:12px}
-.related-card:hover{background:rgba(255,255,255,.08);border-color:var(--orange);transform:translateY(-2px)}
+.related-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:18px;text-decoration:none;transition:all .25s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;gap:5px;border-radius:12px}
+.related-card:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
 .rc-icon{font-size:1.3rem}.rc-title{font-size:.85rem;font-weight:700;color:#fff}.rc-desc{font-size:.7rem;color:rgba(255,255,255,.38);line-height:1.4}
 
 /* FOOTER */
@@ -197,15 +267,70 @@ footer{padding:0;border-top:4px solid var(--orange);background:var(--black);colo
 .footer-bottom a{color:rgba(255,255,255,.7);text-decoration:none;transition:color .2s;margin:0 .6rem}
 .footer-bottom a:hover{color:var(--orange)}
 
+/* SCROLLBAR */
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.2)}
+
+/* NAV SHARED */
+.mobile-controls{display:none;gap:1rem;align-items:center;justify-self:end}
+.mobile-menu-btn{display:none;background:none;border:none;cursor:pointer;padding:0}
+.mobile-get-involved{display:none}
+.mobile-menu-btn span{display:block;width:28px;height:3px;background:var(--black);margin:6px 0;transition:all .3s ease}
+.mobile-menu-btn.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.mobile-menu-btn.active span:nth-child(2){opacity:0}
+.mobile-menu-btn.active span:nth-child(3){transform:rotate(-45deg) translate(7px,-6px)}
+.mobile-menu{display:none;position:fixed;top:0;right:-100%;width:100%;height:100vh;height:100dvh;background:var(--white);z-index:1040;padding:5rem 1.5rem 1.5rem;transition:right .3s ease;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.mobile-menu.active{display:flex;flex-direction:column;right:0}
+.mobile-menu::before{content:'';position:fixed;top:0;left:0;right:0;height:4px;background:var(--orange);z-index:1}
+.mobile-menu-nav{flex:none}
+.mobile-menu-nav>a{display:block;padding:.85rem 0;font-size:1.5rem;font-weight:700;color:var(--black);text-decoration:none;border-bottom:1px solid rgba(0,0,0,.08);transition:all .2s ease;opacity:0;transform:translateX(20px);animation:mobileSlideIn .3s ease forwards}
+.mobile-menu.active .mobile-menu-nav>a:nth-child(1){animation-delay:.05s}
+.mobile-menu.active .mobile-menu-nav>a:nth-child(2){animation-delay:.08s}
+.mobile-menu.active .mobile-menu-nav>a:nth-child(3){animation-delay:.11s}
+.mobile-menu.active .mobile-menu-nav>.mobile-dropdown{animation-delay:.14s}
+.mobile-menu.active .mobile-dropdown{opacity:0;transform:translateX(20px);animation:mobileSlideIn .3s ease forwards;animation-delay:.14s}
+@keyframes mobileSlideIn{to{opacity:1;transform:translateX(0)}}
+.mobile-menu-nav>a:hover,.mobile-menu-nav>a:active{color:var(--orange);padding-left:.5rem}
+.mobile-dropdown-toggle{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;border-bottom:1px solid rgba(0,0,0,.08);padding:.85rem 0;font-size:1.5rem;font-weight:700;color:var(--black);cursor:pointer;text-align:left;font-family:inherit;transition:color .2s ease}
+.mobile-dropdown-toggle:active,.mobile-dropdown-toggle.active{color:var(--orange)}
+.mobile-dropdown-toggle .arrow{transition:transform .3s ease;font-size:1rem;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#f5f5f5}
+.mobile-dropdown-toggle.active .arrow{transform:rotate(180deg);color:#fff;background:var(--orange)}
+.mobile-dropdown-content{max-height:0;overflow:hidden;transition:max-height .4s ease-out;margin:0 -1.5rem;padding:0 1.5rem}
+.mobile-dropdown-content.open{max-height:1200px;padding-top:.75rem;padding-bottom:.75rem}
+.mobile-cards-group{margin-bottom:.5rem}
+.mobile-cards-group:last-child{margin-bottom:0}
+.mobile-cards-label{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--orange);padding:.6rem 0 .35rem}
+.mobile-card{display:flex!important;flex-direction:column;gap:.15rem;padding:.75rem .85rem!important;margin-bottom:.4rem;background:var(--white);border:1.5px solid rgba(0,0,0,.06);border-radius:8px;text-decoration:none!important;transition:all .15s ease;border-bottom:none!important}
+.mobile-card:last-child{margin-bottom:0}
+.mobile-card:active{background:var(--ol);border-color:var(--orange);transform:scale(.98)}
+.mobile-card-name{font-size:.95rem!important;font-weight:700;color:var(--black)!important;display:flex;align-items:center;gap:.35rem}
+.mobile-card:active .mobile-card-name{color:var(--orange)!important}
+.mobile-card-desc{font-size:.75rem;font-weight:500;color:#666;line-height:1.3}
+.mobile-card-external{font-size:.8rem;opacity:.4;font-weight:400}
+.mobile-card:active .mobile-card-external{opacity:1;color:var(--orange)}
+.mobile-dropdown-content .mobile-card{font-size:unset!important;border-bottom:none!important}
+.mobile-menu-footer{padding-top:.75rem;margin-top:.75rem;border-top:2px solid var(--black);display:flex;flex-direction:column;gap:.75rem;opacity:0;transform:translateY(10px);animation:mobileSlideUp .3s ease forwards;animation-delay:.25s}
+@keyframes mobileSlideUp{to{opacity:1;transform:translateY(0)}}
+.mobile-menu-footer .btn-mobile-cta{display:block;text-align:center;padding:.9rem 1.5rem;font-size:1rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.02em;transition:all .2s ease;background:var(--orange);color:#fff;border:2px solid var(--orange)}
+.mobile-menu-footer .btn-mobile-cta:active{background:#E55A2B}
+.mobile-menu-footer-links{display:flex;justify-content:center;gap:1.5rem;padding-top:.75rem}
+.mobile-menu-footer-links a{font-size:.85rem!important;color:#666!important;border-bottom:none!important;padding:.25rem 0!important;font-weight:600!important}
+.mobile-menu-footer-links a:hover{color:var(--orange)!important}
+
+/* NAV SHARED */
+.mobile-controls{display:none;gap:1rem;align-items:center;justify-self:end}
+
 /* RESPONSIVE */
 @media(max-width:968px){
+.nav-right{display:none}
+.mobile-controls{display:flex}
+.mobile-menu-btn{display:block}
+.mobile-get-involved{display:inline-block;padding:.35rem .85rem;font-size:.72rem}
+.mobile-menu{display:block}
 .page-layout{grid-template-columns:1fr;gap:28px;padding:100px 20px 60px}
-.hero-col{position:static;text-align:center;padding-top:0;transform:none}
-.hero-desc{margin:0 auto 20px}
-.hero-features{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:6px 10px;margin-bottom:24px}
-.hero-feature{background:rgba(255,107,53,0.06);color:var(--orange);border:1px solid rgba(255,107,53,0.15);padding:5px 12px;border-radius:100px;font-size:0.75rem;font-weight:700}
-.hero-feature::before{display:none}
-.hero-trust{justify-content:center}
+.hero-col{display:none}
 .page-layout.results-mode{padding-top:90px}
 .dash-grid{grid-template-columns:1fr}
 .footer-newsletter-container{flex-direction:column;text-align:center}
@@ -230,151 +355,69 @@ footer{padding:0;border-top:4px solid var(--orange);background:var(--black);colo
 @media(max-width:480px){.related-grid{grid-template-columns:1fr}.rvb-row{flex-direction:column;align-items:flex-start}}
 </style>
 
-</head> <body> <nav id="nav">
+</head>
+<body>
+<nav id="nav">
     <div class="nav-container">
-      <a href="index.html" class="logo">
-        <img src="finmango.png" alt="FinMango">
-      </a>
-
+      <a href="index.html" class="logo"><img src="finmango.png" alt="FinMango"></a>
       <div class="nav-right">
         <a href="about.html">About</a>
         <a href="research.html">Research</a>
         <a href="education.html">Education</a>
-
         <div class="dropdown dropdown-mega">
           <a href="#" class="dropdown-trigger" onclick="event.preventDefault()">Our Work ▾</a>
           <div class="dropdown-content dropdown-content-mega">
             <div class="dropdown-mega-grid">
               <div class="dropdown-mega-col">
                 <div class="dropdown-mega-col-label">Build</div>
-                <a href="education.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Millionaire Mindset</span>
-                    <span class="dropdown-item-desc">In-school programming | 100k+ taught</span>
-                  </span>
-                </a>
-                <a href="barrier-breakers.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Barrier Breakers</span>
-                    <span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span>
-                  </span>
-                </a>
-                <a href="ambassadors.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Ambassador Program</span>
-                    <span class="dropdown-item-desc">Powered by young adults globally</span>
-                  </span>
-                </a>
-                <a href="intelligence-platform.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Intelligence Platform</span>
-                    <span class="dropdown-item-desc">Early warning across food, housing, health &amp; jobs</span>
-                  </span>
-                  
-                </a>
-
+                <a href="education.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Millionaire Mindset</span><span class="dropdown-item-desc">In-school programming | 100k+ taught</span></span></a>
+                <a href="barrier-breakers.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Barrier Breakers</span><span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span></span></a>
+                <a href="ambassadors.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Ambassador Program</span><span class="dropdown-item-desc">Powered by young adults globally</span></span></a>
+                <a href="intelligence-platform.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Intelligence Platform</span><span class="dropdown-item-desc">Early warning across food, housing, health &amp; jobs</span></span></a>
               </div>
               <div class="dropdown-mega-col">
                 <div class="dropdown-mega-col-label">Measure</div>
-                <a href="barometer.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Financial Health Barometer</span>
-                    <span class="dropdown-item-desc">Real-Time Economic Pulse</span>
-                  </span>
-                </a>
-
-                <a href="https://finmango.org/ai-ready/" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">AI Readiness</span>
-                    <span class="dropdown-item-desc">Practical Guidance</span>
-                  </span>
-                </a>
-                <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">GitHub</span>
-                    <span class="dropdown-item-desc">Research to Reality</span>
-                  </span>
-                  
-                </a>
-                <a href="resources.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Resources</span>
-                    <span class="dropdown-item-desc">Guides, tools & worksheets</span>
-                  </span>
-                </a>
+                <a href="barometer.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Financial Health Barometer</span><span class="dropdown-item-desc">Real-Time Economic Pulse</span></span></a>
+                <a href="https://finmango.org/ai-ready/" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">AI Readiness</span><span class="dropdown-item-desc">Practical Guidance</span></span></a>
+                <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer"><span class="dropdown-item-text"><span class="dropdown-item-name">GitHub</span><span class="dropdown-item-desc">Research to Reality</span></span></a>
+                <a href="resources.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Resources</span><span class="dropdown-item-desc">Guides, tools & worksheets</span></span></a>
               </div>
             </div>
           </div>
         </div>
-
         <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
         <a href="donate.html" class="btn-donate">Donate</a>
       </div>
-
       <div class="mobile-controls">
         <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
       </div>
     </div>
   </nav>
 
 <div class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-nav">
-      <a href="about.html">About</a>
-      <a href="research.html">Research</a>
-      <a href="education.html">Education</a>
-
+      <a href="about.html">About</a><a href="research.html">Research</a><a href="education.html">Education</a>
       <div class="mobile-dropdown">
         <button class="mobile-dropdown-toggle">Our Work <span class="arrow">▾</span></button>
         <div class="mobile-dropdown-content">
           <div class="mobile-cards-group">
             <div class="mobile-cards-label">Build</div>
-            <a href="education.html" class="mobile-card">
-              <span class="mobile-card-name">Millionaire Mindset</span>
-              <span class="mobile-card-desc">In-school programming | 100k+ taught</span>
-            </a>
-            <a href="barrier-breakers.html" class="mobile-card">
-              <span class="mobile-card-name">Barrier Breakers</span>
-              <span class="mobile-card-desc">Powered by Valmark · $20k+ in prizes</span>
-            </a>
-            <a href="ambassadors.html" class="mobile-card">
-              <span class="mobile-card-name">Ambassador Program</span>
-              <span class="mobile-card-desc">Powered by young adults globally</span>
-            </a>
-            <a href="intelligence-platform.html" class="mobile-card">
-              <span class="mobile-card-name">Intelligence Platform</span>
-              <span class="mobile-card-desc">Early warning across food, housing, health &amp; jobs</span>
-            </a>
-
+            <a href="education.html" class="mobile-card"><span class="mobile-card-name">Millionaire Mindset</span><span class="mobile-card-desc">In-school programming | 100k+ taught</span></a>
+            <a href="barrier-breakers.html" class="mobile-card"><span class="mobile-card-name">Barrier Breakers</span><span class="mobile-card-desc">Powered by Valmark · $20k+ in prizes</span></a>
+            <a href="ambassadors.html" class="mobile-card"><span class="mobile-card-name">Ambassador Program</span><span class="mobile-card-desc">Powered by young adults globally</span></a>
+            <a href="intelligence-platform.html" class="mobile-card"><span class="mobile-card-name">Intelligence Platform</span><span class="mobile-card-desc">Early warning across food, housing, health &amp; jobs</span></a>
           </div>
           <div class="mobile-cards-group">
             <div class="mobile-cards-label">Measure</div>
-            <a href="barometer.html" class="mobile-card">
-              <span class="mobile-card-name">Financial Health Barometer</span>
-              <span class="mobile-card-desc">Real-Time Economic Pulse</span>
-            </a>
-
-            <a href="https://finmango.org/ai-ready/" class="mobile-card">
-              <span class="mobile-card-name">AI Readiness</span>
-              <span class="mobile-card-desc">Practical Guidance</span>
-            </a>
-            <a href="https://github.com/finmango/research" class="mobile-card" target="_blank" rel="noopener noreferrer">
-              <span class="mobile-card-name">GitHub <span class="mobile-card-external">↗</span></span>
-              <span class="mobile-card-desc">Research to Reality</span>
-            </a>
-            <a href="resources.html" class="mobile-card">
-              <span class="mobile-card-name">Resources</span>
-              <span class="mobile-card-desc">Guides, tools & worksheets</span>
-            </a>
+            <a href="barometer.html" class="mobile-card"><span class="mobile-card-name">Financial Health Barometer</span><span class="mobile-card-desc">Real-Time Economic Pulse</span></a>
+            <a href="https://finmango.org/ai-ready/" class="mobile-card"><span class="mobile-card-name">AI Readiness</span><span class="mobile-card-desc">Practical Guidance</span></a>
+            <a href="https://github.com/finmango/research" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">GitHub <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Research to Reality</span></a>
+            <a href="resources.html" class="mobile-card"><span class="mobile-card-name">Resources</span><span class="mobile-card-desc">Guides, tools & worksheets</span></a>
           </div>
         </div>
       </div>
     </div>
-
     <div class="mobile-menu-footer">
       <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-mobile#/donate" target="_blank" rel="noopener noreferrer" class="btn-mobile-cta">Donate</a>
       <div class="mobile-menu-footer-links">
@@ -383,4 +426,66 @@ footer{padding:0;border-top:4px solid var(--orange);background:var(--black);colo
         <a href="/cdn-cgi/l/email-protection#0a626f6666654a6c6364676b646d652465786d">Contact</a>
       </div>
     </div>
-  </div> <div class="page-layout" id="pageLayout"> <div class="hero-col"> <div class="hero-kicker">Free tool · No account needed</div> <h1>What can you<br><span>actually afford?<svg viewBox="0 0 200 12" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 8C30 3,50 10,80 6S130 2,160 7S185 4,198 6" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.5"/><path d="M4 10C35 5,55 11,85 7S135 3,165 8S188 5,196 8" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.25"/></svg></span></h1> <p class="hero-desc">Real math. Clear results. No jargon. Find out what you can afford and how long it'll take to get there.</p> <div class="hero-features"> <div class="hero-feature">Mortgage, taxes, insurance & PMI</div> <div class="hero-feature">Down payment savings timeline</div> <div class="hero-feature">Personalized next steps</div> <div class="hero-feature">Nothing stored or shared</div> </div> <div class="hero-trust"><span>501(c)(3) nonprofit</span><span>No ads</span><span>No data collection</span></div> </div> <div class="calc-col"> <div class="step-track"><div class="sn active" id="sn1"><div class="sn-b">01</div><div class="sn-l">Finances</div></div><div class="sc" id="sc1"></div><div class="sn" id="sn2"><div class="sn-b">02</div><div class="sn-l">Goals</div></div><div class="sc" id="sc2"></div><div class="sn" id="sn3"><div class="sn-b">03</div><div class="sn-l">Results</div></div></div> <div class="ccard active" id="step1"> <div class="eyebrow">Step 01 of 03</div><h2>Financial Snapshot</h2><p class="cdesc">Tell us about your current situation. Everything stays on your device.</p> <div class="fg"><label class="fl" for="annualIncome">Annual Household Income *</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="annualIncome" placeholder="75,000" min="0" value="75000"></div><span class="fh">Total yearly income before taxes</span><span class="fe" id="err-income">Please enter your annual income to continue.</span></div> <div class="frow"><div class="fg"><label class="fl" for="currentSavings">Current Savings</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="currentSavings" placeholder="10,000" min="0" value="10000"></div><span class="fh">Cash available for down payment</span></div><div class="fg"><label class="fl" for="monthlySavings">Monthly Savings</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="monthlySavings" placeholder="500" min="0" value="500"></div><span class="fh">How much you save each month</span></div></div> <div class="frow"><div class="fg"><label class="fl" for="currentRent">Current Housing Cost</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="currentRent" placeholder="1,400" min="0" value="1400"></div><span class="fh">Your current rent or mortgage</span></div><div class="fg"><label class="fl" for="monthlyDebt">Monthly Debt Payments</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="monthlyDebt" placeholder="400" min="0" value="400"></div><span class="fh">Car, student loans, credit cards</span></div></div> <div class="brow"><button class="btn-p" onclick="goStep(2)">Next: Housing Goals →</button></div> </div> <div class="ccard" id="step2"> <div class="eyebrow">Step 02 of 03</div><h2>Housing Goals</h2><p class="cdesc">Tell us about the home you want. The national median is about $420,800.</p> <div class="fg"><label class="fl" for="homePrice">Target Home Price *</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="homePrice" placeholder="420,000" min="0" value="420000"></div><span class="fh">The price of the home you'd like to buy</span><span class="fe" id="err-price">Please enter a home price to continue.</span></div> <div class="fg"><label class="fl">Property Type</label><div class="pills" id="grpPropertyType"><button class="pill on" data-val="single">Single Family</button><button class="pill" data-val="townhouse">Townhouse</button><button class="pill" data-val="condo">Condo</button></div></div> <div class="fg"><label class="fl">Down Payment</label><div class="pills" id="grpDownPayment"><button class="pill" data-val="3.5">3.5% FHA</button><button class="pill" data-val="5">5%</button><button class="pill" data-val="10">10%</button><button class="pill" data-val="15">15%</button><button class="pill on" data-val="20">20%</button><button class="pill" data-val="25">25%</button></div><span class="fh" id="dpHint">20% → no PMI required</span></div> <div class="frow"><div class="fg"><label class="fl">Mortgage Term</label><div class="pills" id="grpTerm"><button class="pill" data-val="15">15 yr</button><button class="pill" data-val="20">20 yr</button><button class="pill on" data-val="30">30 yr</button></div></div><div class="fg"><label class="fl" for="interestRate">Interest Rate</label><div class="iw"><input class="fi sx" type="number" id="interestRate" value="6.8" min="0" max="20" step="0.1"><span class="is">%</span></div><span class="fh">Current 30-yr avg ≈ 6.8%</span></div></div> <div class="brow"><button class="btn-s" onclick="goStep(1)">← Back</button><button class="btn-p" onclick="calculate()">See My Results →</button></div> </div> <div class="ccard" id="step3"><div id="resultsOut"></div></div> </div> </div> <section class="related-tools"><div class="related-inner"><div class="related-header"><div class="related-tag">More Free Tools</div><h2>Keep Building Your Financial Future</h2><p>Free calculators and lessons from FinMango.</p></div><div class="related-grid"><a href="housing-affordability-stories.html" class="related-card"><div class="rc-icon">🏠</div><div class="rc-title">Housing Stories</div><div class="rc-desc">9 interactive lessons on the crisis</div></a><a href="rent-vs-buy.html" class="related-card"><div class="rc-icon">⚖️</div><div class="rc-title">Rent vs. Buy</div><div class="rc-desc">Compare the true costs</div></a><a href="budget-balancer.html" class="related-card"><div class="rc-icon">💰</div><div class="rc-title">Budget Balancer</div><div class="rc-desc">Build a budget that works</div></a><a href="compound-interest.html" class="related-card"><div class="rc-icon">📈</div><div class="rc-title">Compound Interest</div><div class="rc-desc">See your savings grow</div></a></div></div></section> <footer> <div class="footer-newsletter"><div class="footer-newsletter-container"><div class="footer-newsletter-text"><h3>Stay Updated</h3><p>Research, education, and advocacy. No spam.</p></div><a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a></div></div> <div class="footer-container"><div class="footer-brand-col"><div class="footer-brand"><img src="finmango.png" alt="FinMango" loading="lazy"></div><p class="footer-tagline">A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.</p><p class="footer-ein">EIN: 81-2543425</p><div class="footer-social"><a href="https://www.linkedin.com/company/finmango/" target="_blank" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a><a href="https://x.com/finmango" target="_blank" aria-label="X"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a href="mailto:info@finmango.org" aria-label="Email"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg></a></div></div><div class="footer-section"><h4>Our Work</h4><a href="research.html">Research</a><a href="education.html">Education</a><a href="barometer.html">Barometer</a><a href="affordability-lab.html">Affordability Lab</a><a href="resources.html">Resources</a></div><div class="footer-section"><h4>Initiatives</h4><a href="barrier-breakers.html">Barrier Breakers</a><a href="ambassadors.html">Ambassador Program</a><a href="intelligence-platform.html">Intelligence Platform</a><a href="talent.html">Talent</a></div><div class="footer-section"><h4>Get Involved</h4><a href="donate.html">Donate</a><a href="ambassadors.html">Become an Ambassador</a><a href="mailto:info@finmango.org">Partner With Us</a><a href="https://blogs.finmango.org/" target="_blank">Blog</a></div></div> <svg class="footer-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6C12 2,22 10,32 6S52 2,62 6S82 10,92 6S108 2,118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/></svg> <div class="footer-bottom"><div>&copy; 2026 FinMango. All rights reserved.</div><div><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div> </footer> <script src="js/navbar.js"></script> <script> const TAX_RATE=0.012,INS_RATE=0.0035,PMI_RATE=0.007,APPR_RATE=0.035; const S={propertyType:'single',downPaymentPct:20,mortgageYears:30}; function $f(n){if(!isFinite(n)||isNaN(n))return'\u2014';if(n>=1e6)return'$'+(n/1e6).toFixed(2)+'M';return'$'+Math.round(n).toLocaleString()} function pct(n){return(n*100).toFixed(1)+'%'} function fmtMo(n){if(!isFinite(n)||n<=0)return'\u2014';var y=Math.floor(n/12),m=n%12;if(y===0)return m+' mo';if(m===0)return y+(y===1?' yr':' yrs');return y+' yr '+m+' mo'} function calcPI(p,r,y){var mr=r/12,n=y*12;if(mr===0)return p/n;return(p*mr*Math.pow(1+mr,n))/(Math.pow(1+mr,n)-1)} function goStep(n){if(n===2&&!v1())return;var layout=document.getElementById('pageLayout');document.querySelectorAll('.ccard').forEach(function(c){c.classList.remove('active')});document.getElementById('step'+n).classList.add('active');if(n===3){layout.classList.add('results-mode')}else{layout.classList.remove('results-mode')}[1,2,3].forEach(function(i){var nd=document.getElementById('sn'+i);nd.classList.remove('active','done');if(i<n)nd.classList.add('done');else if(i===n)nd.classList.add('active')});[1,2].forEach(function(i){document.getElementById('sc'+i).classList.toggle('done',i<n)});window.scrollTo({top:0,behavior:'smooth'})} function v1(){var v=parseFloat(document.getElementById('annualIncome').value);var err=document.getElementById('err-income');var inp=document.getElementById('annualIncome');if(!v||v<=0){err.style.display='block';inp.classList.add('err');inp.focus();return false}err.style.display='none';inp.classList.remove('err');return true} function initPills(id,key,cb){document.getElementById(id).querySelectorAll('.pill').forEach(function(btn){btn.addEventListener('click',function(){document.getElementById(id).querySelectorAll('.pill').forEach(function(b){b.classList.remove('on')});btn.classList.add('on');S[key]=parseFloat(btn.dataset.val)||btn.dataset.val;if(cb)cb(S[key])})})} initPills('grpPropertyType','propertyType');initPills('grpTerm','mortgageYears');initPills('grpDownPayment','downPaymentPct',function(v){document.getElementById('dpHint').textContent=v<20?v+'% \u2192 PMI required \u2014 adds ~0.7%/yr':v+'% \u2192 no PMI required'}); function calculate(){var price=parseFloat(document.getElementById('homePrice').value);var pErr=document.getElementById('err-price');var pInp=document.getElementById('homePrice');if(!price||price<=0){pErr.style.display='block';pInp.classList.add('err');pInp.focus();return}pErr.style.display='none';pInp.classList.remove('err');var income=parseFloat(document.getElementById('annualIncome').value)||0,savings=parseFloat(document.getElementById('currentSavings').value)||0,monthlySave=parseFloat(document.getElementById('monthlySavings').value)||0,currentRent=parseFloat(document.getElementById('currentRent').value)||0,monthlyDebt=parseFloat(document.getElementById('monthlyDebt').value)||0,rate=(parseFloat(document.getElementById('interestRate').value)||6.8)/100,dpPct=S.downPaymentPct/100,years=parseInt(S.mortgageYears),monthlyIncome=income/12,downPayment=price*dpPct,loan=price-downPayment;var pi=calcPI(loan,rate,years),propTax=(price*TAX_RATE)/12,insurance=(price*INS_RATE)/12,pmi=dpPct<0.2?(loan*PMI_RATE)/12:0,total=pi+propTax+insurance+pmi,ratio=monthlyIncome>0?total/monthlyIncome:0,dti=monthlyIncome>0?(total+monthlyDebt)/monthlyIncome:0;var remaining=Math.max(downPayment-savings,0),monthsToSave=monthlySave>0?Math.ceil(remaining/monthlySave):Infinity,savingsProgress=downPayment>0?Math.min(savings/downPayment,1):0;var maxPrice=0;if(monthlyIncome>0&&rate>0){var maxPI=monthlyIncome*0.28*0.72,r=rate/12,n=years*12;maxPrice=(maxPI*(Math.pow(1+r,n)-1))/(r*Math.pow(1+r,n))/(1-dpPct)}var futurePrice=price*Math.pow(1+APPR_RATE,5),equity5yr=futurePrice-price,totalPayments=pi*years*12,totalInterest=totalPayments-loan,monthlyDiff=total-currentRent;var cls,statusLabel,statusCircle,headline,statusSub;if(ratio<=0.28){cls='ok';statusLabel='Affordable';statusCircle='\u2713';headline='This home fits within your budget.';statusSub='Your housing costs would be <strong>'+pct(ratio)+'</strong> of gross income \u2014 below the recommended 28% threshold.'}else if(ratio<=0.36){cls='ok2';statusLabel='Manageable \u2014 watch expenses';statusCircle='~';headline='Possible, but budget carefully.';statusSub='At <strong>'+pct(ratio)+'</strong> of your income, this is above ideal (28%) but within lender limits (36%).'}else{cls='bad';statusLabel='Stretch \u2014 consider alternatives';statusCircle='!';headline='This may be a financial stretch.';statusSub='<strong>'+pct(ratio)+'</strong> of income toward housing exceeds most lenders\u2019 36% threshold.'}var gaugeMax=0.50,g28=0.28/gaugeMax*100,g36=0.36/gaugeMax*100,gUser=Math.min(ratio/gaugeMax*100,99),savedPct=Math.min(Math.round(savingsProgress*100),100); var html='<div class="r-header"><div><div class="eyebrow">Step 03 \u2014 Results</div><h2>Your Affordability Report</h2></div><button class="btn-restart-sm" onclick="restart()">\u21bb Start Over</button></div><div class="rstat '+cls+'"><div class="sdot">'+statusCircle+'</div><div><div class="spill">'+statusLabel+'</div><div class="shead">'+headline+'</div><div class="ssub">'+statusSub+'</div></div></div><div class="mstrip"><div class="ms-item"><div class="ms-val">'+$f(total)+'</div><div class="ms-lbl">Monthly Cost</div></div><div class="ms-div"></div><div class="ms-item"><div class="ms-val">'+$f(downPayment)+'</div><div class="ms-lbl">'+S.downPaymentPct+'% Down</div></div><div class="ms-div"></div><div class="ms-item"><div class="ms-val">'+(ratio*100).toFixed(1)+'%</div><div class="ms-lbl">of Income</div></div><div class="ms-div"></div><div class="ms-item"><div class="ms-val">'+fmtMo(monthsToSave)+'</div><div class="ms-lbl">to Save</div></div><div class="ms-div"></div><div class="ms-item"><div class="ms-val">'+$f(maxPrice)+'</div><div class="ms-lbl">Max @28%</div></div></div><div class="dash-grid"><div class="dash-col"><div class="rsec"><div class="stit">Monthly Payment Breakdown</div><div class="bkr"><div class="bkl">Principal & Interest<small>'+$f(loan)+' @ '+(rate*100).toFixed(1)+'% \u00b7 '+years+' yr</small></div><div class="bkv">'+$f(pi)+'</div></div><div class="bkr"><div class="bkl">Property Tax<small>~1.2%/yr</small></div><div class="bkv">'+$f(propTax)+'</div></div><div class="bkr"><div class="bkl">Insurance<small>~0.35%/yr</small></div><div class="bkv">'+$f(insurance)+'</div></div>'+(pmi>0?'<div class="bkr"><div class="bkl">PMI<small>Down < 20%</small></div><div class="bkv">'+$f(pmi)+'</div></div>':'')+'<div class="bkr tot"><div class="bkl">Total Monthly</div><div class="bkv">'+$f(total)+'</div></div><div class="loan-summary-inline"><div class="lsi"><span>Total Interest</span><strong>'+$f(totalInterest)+'</strong></div><div class="lsi"><span>Total Loan Cost</span><strong>'+$f(totalPayments)+'</strong></div></div></div>'+(currentRent>0?'<div class="rsec rsec-compact"><div class="stit">Rent vs. Buy</div><div class="rvb-row"><div class="rvb-col"><div class="rvb-lbl">Current Rent</div><div class="rvb-val">'+$f(currentRent)+'<small>/mo</small></div></div><div class="rvb-arrow">\u2192</div><div class="rvb-col"><div class="rvb-lbl">Ownership</div><div class="rvb-val">'+$f(total)+'<small>/mo</small></div></div><div class="rvb-diff '+(monthlyDiff>=0?'neg':'pos')+'">'+(monthlyDiff>=0?'+':'-')+$f(Math.abs(monthlyDiff))+'</div></div></div>':'')+'</div><div class="dash-col"><div class="rsec"><div class="stit">Down Payment Progress</div><div class="dp-progress"><div class="dp-nums"><span class="dp-have">'+$f(savings)+'</span><span class="dp-need">of '+$f(downPayment)+'</span></div><div class="ptr"><div class="pfil" id="pBar" style="width:0%"></div></div><div class="dp-meta"><span>'+savedPct+'% saved</span>'+(remaining>0&&isFinite(monthsToSave)?'<span>'+fmtMo(monthsToSave)+' to go</span>':remaining<=0?'<span style="color:#16a34a;font-weight:700">\u2713 Ready!</span>':'')+'</div></div></div><div class="rsec"><div class="stit">Housing-to-Income Ratio</div><div class="gw"><div class="gz gzg" style="left:0;width:'+g28+'%"></div><div class="gz gzy" style="left:'+g28+'%;width:'+(g36-g28)+'%"></div><div class="gz gzr" style="left:'+g36+'%;width:'+(100-g36)+'%"></div><div class="gln" style="left:'+g28+'%"><div class="glnl">28%</div></div><div class="gln" style="left:'+g36+'%;background:rgba(26,26,26,0.3)"><div class="glnl" style="color:#aaa">36%</div></div><div class="gpv" id="gaugePtr" style="left:0%"><div class="gpvl">'+pct(ratio)+'</div></div></div><div class="gsc"><span>0%</span><span>10%</span><span>20%</span><span>30%</span><span>40%</span><span>50%+</span></div></div>'+(monthlyDebt>0?'<div class="rsec rsec-compact dti-compact"><div class="stit">Debt-to-Income (Total)</div><div class="dti-row"><div class="dti-pct '+(dti<=0.36?'ok':dti<=0.43?'warn':'bad')+'">'+(dti*100).toFixed(1)+'%</div><div class="dti-info">'+(dti<=0.36?'Within ideal range \u2014 lenders view favorably':dti<=0.43?'Above 36% \u2014 some lenders may flag':'Exceeds 43% max \u2014 reduce debt first')+'</div></div></div>':'')+'<div class="rsec rsec-compact"><div class="stit">5-Year Appreciation</div><div class="outlook-compact"><div class="outlook-vals"><span>'+$f(price)+'</span><span class="outlook-arrow">\u2192</span><span class="outlook-future">'+$f(futurePrice)+'</span></div><div class="ob outlook-badge">+'+$f(equity5yr)+'</div></div><div class="on">Based on 3.5%/yr national avg. Not guaranteed.</div></div></div></div><div class="rsec next-steps-card"><div class="stit">Recommended Next Steps</div><div class="ns-grid">'+(ratio>0.36?'<div class="ns-chip"><strong>Target lower:</strong> Max at 28% is '+$f(maxPrice)+'</div>':'')+(remaining>0&&isFinite(monthsToSave)?'<div class="ns-chip"><strong>Save '+$f(remaining)+' more</strong> \u2014 '+fmtMo(monthsToSave)+' at current rate</div>':'')+(dpPct<0.2?'<div class="ns-chip"><strong>Increase to 20% down</strong> to eliminate '+$f(pmi)+'/mo PMI</div>':'')+'<a href="https://answers.hud.gov/housingcounseling/s/?language=en_US" target="_blank" rel="noopener noreferrer" class="ns-chip ns-chip-cta"><strong>Find a HUD housing counselor</strong> \u2014 free expert guidance \u2192</a></div></div><div class="disc">Estimates for educational purposes only. Consult a licensed housing counselor before making decisions. <strong>FinMango</strong> \u00b7 501(c)(3) \u00b7 <a href="index.html" style="color:var(--orange)">finmango.org</a></div>'; document.getElementById('resultsOut').innerHTML=html;goStep(3);setTimeout(function(){var bar=document.getElementById('pBar');if(bar)bar.style.width=savedPct+'%';var ptr=document.getElementById('gaugePtr');if(ptr)ptr.style.left=gUser+'%'},150)} function restart(){document.getElementById('annualIncome').value='75000';document.getElementById('currentSavings').value='10000';document.getElementById('monthlySavings').value='500';document.getElementById('currentRent').value='1400';document.getElementById('monthlyDebt').value='400';document.getElementById('homePrice').value='420000';document.getElementById('interestRate').value='6.8';['grpPropertyType','grpDownPayment','grpTerm'].forEach(function(id){document.getElementById(id).querySelectorAll('.pill').forEach(function(b){b.classList.remove('on')})});document.querySelector('#grpPropertyType [data-val="single"]').classList.add('on');document.querySelector('#grpDownPayment [data-val="20"]').classList.add('on');document.querySelector('#grpTerm [data-val="30"]').classList.add('on');S.propertyType='single';S.downPaymentPct=20;S.mortgageYears=30;goStep(1)} </script> </body> </html>
+  </div>
+
+<div class="page-layout" id="pageLayout">
+<div class="hero-col">
+<div class="hero-kicker">Free tool · No account needed</div>
+<h1>What can you<br><span>actually afford?<svg viewBox="0 0 200 12" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 8C30 3,50 10,80 6S130 2,160 7S185 4,198 6" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.5"/><path d="M4 10C35 5,55 11,85 7S135 3,165 8S188 5,196 8" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.25"/></svg></span></h1>
+<p class="hero-desc">Real math. Clear results. No jargon. Find out what you can afford and how long it'll take to get there.</p>
+<div class="hero-features"><div class="hero-feature">Mortgage, taxes, insurance & PMI</div><div class="hero-feature">Down payment savings timeline</div><div class="hero-feature">Personalized next steps</div><div class="hero-feature">Nothing stored or shared</div></div>
+<div class="hero-trust"><span>501(c)(3) nonprofit</span><span>No ads</span><span>No data collection</span></div>
+</div>
+<div class="calc-col">
+<div class="step-track"><div class="sn active" id="sn1"><div class="sn-b">01</div><div class="sn-l">Finances</div></div><div class="sc" id="sc1"></div><div class="sn" id="sn2"><div class="sn-b">02</div><div class="sn-l">Goals</div></div><div class="sc" id="sc2"></div><div class="sn" id="sn3"><div class="sn-b">03</div><div class="sn-l">Results</div></div></div>
+<div class="ccard active" id="step1">
+<div class="eyebrow">Step 01 of 03</div><h2>Financial Snapshot</h2><p class="cdesc">Tell us about your current situation. Everything stays on your device.</p>
+<div class="fg"><label class="fl" for="annualIncome">Annual Household Income *</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="annualIncome" placeholder="75,000" min="0" value="75000"></div><span class="fh">Total yearly income before taxes</span><span class="fe" id="err-income">Please enter your annual income to continue.</span></div>
+<div class="frow"><div class="fg"><label class="fl" for="currentSavings">Current Savings</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="currentSavings" placeholder="10,000" min="0" value="10000"></div><span class="fh">Cash available for down payment</span></div><div class="fg"><label class="fl" for="monthlySavings">Monthly Savings</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="monthlySavings" placeholder="500" min="0" value="500"></div><span class="fh">How much you save each month</span></div></div>
+<div class="frow"><div class="fg"><label class="fl" for="currentRent">Current Housing Cost</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="currentRent" placeholder="1,400" min="0" value="1400"></div><span class="fh">Your current rent or mortgage</span></div><div class="fg"><label class="fl" for="monthlyDebt">Monthly Debt Payments</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="monthlyDebt" placeholder="400" min="0" value="400"></div><span class="fh">Car, student loans, credit cards</span></div></div>
+<div class="brow"><button class="btn-p" onclick="goStep(2)">Next: Housing Goals →</button></div>
+</div>
+<div class="ccard" id="step2">
+<div class="eyebrow">Step 02 of 03</div><h2>Housing Goals</h2><p class="cdesc">Tell us about the home you want. The national median is about $420,800.</p>
+<div class="fg"><label class="fl" for="homePrice">Target Home Price *</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="homePrice" placeholder="420,000" min="0" value="420000"></div><span class="fh">The price of the home you'd like to buy</span><span class="fe" id="err-price">Please enter a home price to continue.</span></div>
+<div class="fg"><label class="fl">Property Type</label><div class="pills" id="grpPropertyType"><button class="pill on" data-val="single">Single Family</button><button class="pill" data-val="townhouse">Townhouse</button><button class="pill" data-val="condo">Condo</button></div></div>
+<div class="fg"><label class="fl">Down Payment</label><div class="pills" id="grpDownPayment"><button class="pill" data-val="3.5">3.5% FHA</button><button class="pill" data-val="5">5%</button><button class="pill" data-val="10">10%</button><button class="pill" data-val="15">15%</button><button class="pill on" data-val="20">20%</button><button class="pill" data-val="25">25%</button></div><span class="fh" id="dpHint">20% → no PMI required</span></div>
+<div class="frow"><div class="fg"><label class="fl">Mortgage Term</label><div class="pills" id="grpTerm"><button class="pill" data-val="15">15 yr</button><button class="pill" data-val="20">20 yr</button><button class="pill on" data-val="30">30 yr</button></div></div><div class="fg"><label class="fl" for="interestRate">Interest Rate</label><div class="iw"><input class="fi sx" type="number" id="interestRate" value="6.8" min="0" max="20" step="0.1"><span class="is">%</span></div><span class="fh">Current 30-yr avg ≈ 6.8%</span></div></div>
+<div class="brow"><button class="btn-s" onclick="goStep(1)">← Back</button><button class="btn-p" onclick="calculate()">See My Results →</button></div>
+</div>
+<div class="ccard" id="step3"><div id="resultsOut"></div></div>
+</div>
+</div>
+
+<section class="related-tools"><div class="related-inner"><div class="related-header"><div class="related-tag">More Free Tools</div><h2>Keep Building Your Financial Future</h2><p>Free calculators and lessons from FinMango.</p></div><div class="related-grid"><a href="housing-affordability-stories.html" class="related-card"><div class="rc-icon">🏠</div><div class="rc-title">Housing Stories</div><div class="rc-desc">9 interactive lessons on the crisis</div></a><a href="rent-vs-buy.html" class="related-card"><div class="rc-icon">⚖️</div><div class="rc-title">Rent vs. Buy</div><div class="rc-desc">Compare the true costs</div></a><a href="budget-balancer.html" class="related-card"><div class="rc-icon">💰</div><div class="rc-title">Budget Balancer</div><div class="rc-desc">Build a budget that works</div></a><a href="compound-interest.html" class="related-card"><div class="rc-icon">📈</div><div class="rc-title">Compound Interest</div><div class="rc-desc">See your savings grow</div></a></div></div></section>
+
+<footer>
+<div class="footer-newsletter"><div class="footer-newsletter-container"><div class="footer-newsletter-text"><h3>Stay Updated</h3><p>Research, education, and advocacy. No spam.</p></div><a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a></div></div>
+<div class="footer-container"><div class="footer-brand-col"><div class="footer-brand"><img src="finmango.png" alt="FinMango" loading="lazy"></div><p class="footer-tagline">A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.</p><p class="footer-ein">EIN: 81-2543425</p><div class="footer-social"><a href="https://www.linkedin.com/company/finmango/" target="_blank" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a><a href="https://x.com/finmango" target="_blank" aria-label="X"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a href="mailto:info@finmango.org" aria-label="Email"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg></a></div></div><div class="footer-section"><h4>Our Work</h4><a href="research.html">Research</a><a href="education.html">Education</a><a href="barometer.html">Barometer</a><a href="affordability-lab.html">Affordability Lab</a><a href="resources.html">Resources</a></div><div class="footer-section"><h4>Initiatives</h4><a href="barrier-breakers.html">Barrier Breakers</a><a href="ambassadors.html">Ambassador Program</a><a href="intelligence-platform.html">Intelligence Platform</a><a href="talent.html">Talent</a></div><div class="footer-section"><h4>Get Involved</h4><a href="donate.html">Donate</a><a href="ambassadors.html">Become an Ambassador</a><a href="mailto:info@finmango.org">Partner With Us</a><a href="https://blogs.finmango.org/" target="_blank">Blog</a></div></div>
+<svg class="footer-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6C12 2,22 10,32 6S52 2,62 6S82 10,92 6S108 2,118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+<div class="footer-bottom"><div>&copy; 2026 FinMango. All rights reserved.</div><div><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+</footer>
+
+<script src="js/navbar.js"></script>
+<script>
+const TAX_RATE=0.012,INS_RATE=0.0035,PMI_RATE=0.007,APPR_RATE=0.035;
+const S={propertyType:'single',downPaymentPct:20,mortgageYears:30};
+function $f(n){if(!isFinite(n)||isNaN(n))return'\u2014';if(n>=1e6)return'$'+(n/1e6).toFixed(2)+'M';return'$'+Math.round(n).toLocaleString()}
+function pct(n){return(n*100).toFixed(1)+'%'}
+function fmtMo(n){if(!isFinite(n)||n<=0)return'\u2014';var y=Math.floor(n/12),m=n%12;if(y===0)return m+' mo';if(m===0)return y+(y===1?' yr':' yrs');return y+' yr '+m+' mo'}
+function calcPI(p,r,y){var mr=r/12,n=y*12;if(mr===0)return p/n;return(p*mr*Math.pow(1+mr,n))/(Math.pow(1+mr,n)-1)}
+function goStep(n){if(n===2&&!v1())return;var layout=document.getElementById('pageLayout');document.querySelectorAll('.ccard').forEach(function(c){c.classList.remove('active')});document.getElementById('step'+n).classList.add('active');if(n===3){layout.classList.add('results-mode')}else{layout.classList.remove('results-mode')}[1,2,3].forEach(function(i){var nd=document.getElementById('sn'+i);nd.classList.remove('active','done');if(i<n)nd.classList.add('done');else if(i===n)nd.classList.add('active')});[1,2].forEach(function(i){document.getElementById('sc'+i).classList.toggle('done',i<n)});window.scrollTo({top:0,behavior:'smooth'})}
+function v1(){var v=parseFloat(document.getElementById('annualIncome').value);var err=document.getElementById('err-income');var inp=document.getElementById('annualIncome');if(!v||v<=0){err.style.display='block';inp.classList.add('err');inp.focus();return false}err.style.display='none';inp.classList.remove('err');return true}
+function initPills(id,key,cb){document.getElementById(id).querySelectorAll('.pill').forEach(function(btn){btn.addEventListener('click',function(){document.getElementById(id).querySelectorAll('.pill').forEach(function(b){b.classList.remove('on')});btn.classList.add('on');S[key]=parseFloat(btn.dataset.val)||btn.dataset.val;if(cb)cb(S[key])})})}
+initPills('grpPropertyType','propertyType');initPills('grpTerm','mortgageYears');initPills('grpDownPayment','downPaymentPct',function(v){document.getElementById('dpHint').textContent=v<20?v+'% \u2192 PMI required \u2014 adds ~0.7%/yr':v+'% \u2192 no PMI required'});
+function calculate(){var price=parseFloat(document.getElementById('homePrice').value);var pErr=document.getElementById('err-price');var pInp=document.getElementById('homePrice');if(!price||price<=0){pErr.style.display='block';pInp.classList.add('err');pInp.focus();return}pErr.style.display='none';pInp.classList.remove('err');var income=parseFloat(document.getElementById('annualIncome').value)||0,savings=parseFloat(document.getElementById('currentSavings').value)||0,monthlySave=parseFloat(document.getElementById('monthlySavings').value)||0,currentRent=parseFloat(document.getElementById('currentRent').value)||0,monthlyDebt=parseFloat(document.getElementById('monthlyDebt').value)||0,rate=(parseFloat(document.getElementById('interestRate').value)||6.8)/100,dpPct=S.downPaymentPct/100,years=parseInt(S.mortgageYears),monthlyIncome=income/12,downPayment=price*dpPct,loan=price-downPayment;var pi=calcPI(loan,rate,years),propTax=(price*TAX_RATE)/12,insurance=(price*INS_RATE)/12,pmi=dpPct<0.2?(loan*PMI_RATE)/12:0,total=pi+propTax+insurance+pmi,ratio=monthlyIncome>0?total/monthlyIncome:0,dti=monthlyIncome>0?(total+monthlyDebt)/monthlyIncome:0;var remaining=Math.max(downPayment-savings,0),monthsToSave=monthlySave>0?Math.ceil(remaining/monthlySave):Infinity,savingsProgress=downPayment>0?Math.min(savings/downPayment,1):0;var maxPrice=0;if(monthlyIncome>0&&rate>0){var maxPI=monthlyIncome*0.28*0.72,r=rate/12,n=years*12;maxPrice=(maxPI*(Math.pow(1+r,n)-1))/(r*Math.pow(1+r,n))/(1-dpPct)}var futurePrice=price*Math.pow(1+APPR_RATE,5),equity5yr=futurePrice-price,totalPayments=pi*years*12,totalInterest=totalPayments-loan,monthlyDiff=total-currentRent;var cls,statusLabel,statusCircle,headline,statusSub;if(ratio<=0.28){cls='ok';statusLabel='Affordable';statusCircle='\u2713';headline='This home fits within your budget.';statusSub='Your housing costs would be <strong>'+pct(ratio)+'</strong> of gross income \u2014 below the recommended 28% threshold.'}else if(ratio<=0.36){cls='ok2';statusLabel='Manageable \u2014 watch expenses';statusCircle='~';headline='Possible, but budget carefully.';statusSub='At <strong>'+pct(ratio)+'</strong> of your income, this is above ideal (28%) but within lender limits (36%).'}else{cls='bad';statusLabel='Stretch \u2014 consider alternatives';statusCircle='!';headline='This may be a financial stretch.';statusSub='<strong>'+pct(ratio)+'</strong> of income toward housing exceeds most lenders\u2019 36% threshold.'}var gaugeMax=0.50,g28=0.28/gaugeMax*100,g36=0.36/gaugeMax*100,gUser=Math.min(ratio/gaugeMax*100,99),savedPct=Math.min(Math.round(savingsProgress*100),100);
+var html='<div class="r-header"><div><div class="eyebrow">Step 03 \u2014 Results</div><h2>Your Affordability Report</h2></div><button class="btn-restart-sm" onclick="restart()">\u21bb Start Over</button></div><div class="rstat '+cls+'"><div class="sdot">'+statusCircle+'</div><div><div class="spill">'+statusLabel+'</div><div class="shead">'+headline+'</div><div class="ssub">'+statusSub+'</div></div></div><div class="mstrip"><div class="ms-item"><div class="ms-val">'+$f(total)+'</div><div class="ms-lbl">Monthly Cost</div></div><div class="ms-div"></div><div class="ms-item"><div class="ms-val">'+$f(downPayment)+'</div><div class="ms-lbl">'+S.downPaymentPct+'% Down</div></div><div class="ms-div"></div><div class="ms-item"><div class="ms-val">'+(ratio*100).toFixed(1)+'%</div><div class="ms-lbl">of Income</div></div><div class="ms-div"></div><div class="ms-item"><div class="ms-val">'+fmtMo(monthsToSave)+'</div><div class="ms-lbl">to Save</div></div><div class="ms-div"></div><div class="ms-item"><div class="ms-val">'+$f(maxPrice)+'</div><div class="ms-lbl">Max @28%</div></div></div><div class="dash-grid"><div class="dash-col"><div class="rsec"><div class="stit">Monthly Payment Breakdown</div><div class="bkr"><div class="bkl">Principal & Interest<small>'+$f(loan)+' @ '+(rate*100).toFixed(1)+'% \u00b7 '+years+' yr</small></div><div class="bkv">'+$f(pi)+'</div></div><div class="bkr"><div class="bkl">Property Tax<small>~1.2%/yr</small></div><div class="bkv">'+$f(propTax)+'</div></div><div class="bkr"><div class="bkl">Insurance<small>~0.35%/yr</small></div><div class="bkv">'+$f(insurance)+'</div></div>'+(pmi>0?'<div class="bkr"><div class="bkl">PMI<small>Down < 20%</small></div><div class="bkv">'+$f(pmi)+'</div></div>':'')+'<div class="bkr tot"><div class="bkl">Total Monthly</div><div class="bkv">'+$f(total)+'</div></div><div class="loan-summary-inline"><div class="lsi"><span>Total Interest</span><strong>'+$f(totalInterest)+'</strong></div><div class="lsi"><span>Total Loan Cost</span><strong>'+$f(totalPayments)+'</strong></div></div></div>'+(currentRent>0?'<div class="rsec rsec-compact"><div class="stit">Rent vs. Buy</div><div class="rvb-row"><div class="rvb-col"><div class="rvb-lbl">Current Rent</div><div class="rvb-val">'+$f(currentRent)+'<small>/mo</small></div></div><div class="rvb-arrow">\u2192</div><div class="rvb-col"><div class="rvb-lbl">Ownership</div><div class="rvb-val">'+$f(total)+'<small>/mo</small></div></div><div class="rvb-diff '+(monthlyDiff>=0?'neg':'pos')+'">'+(monthlyDiff>=0?'+':'-')+$f(Math.abs(monthlyDiff))+'</div></div></div>':'')+'</div><div class="dash-col"><div class="rsec"><div class="stit">Down Payment Progress</div><div class="dp-progress"><div class="dp-nums"><span class="dp-have">'+$f(savings)+'</span><span class="dp-need">of '+$f(downPayment)+'</span></div><div class="ptr"><div class="pfil" id="pBar" style="width:0%"></div></div><div class="dp-meta"><span>'+savedPct+'% saved</span>'+(remaining>0&&isFinite(monthsToSave)?'<span>'+fmtMo(monthsToSave)+' to go</span>':remaining<=0?'<span style="color:#16a34a;font-weight:700">\u2713 Ready!</span>':'')+'</div></div></div><div class="rsec"><div class="stit">Housing-to-Income Ratio</div><div class="gw"><div class="gz gzg" style="left:0;width:'+g28+'%"></div><div class="gz gzy" style="left:'+g28+'%;width:'+(g36-g28)+'%"></div><div class="gz gzr" style="left:'+g36+'%;width:'+(100-g36)+'%"></div><div class="gln" style="left:'+g28+'%"><div class="glnl">28%</div></div><div class="gln" style="left:'+g36+'%;background:rgba(26,26,26,0.3)"><div class="glnl" style="color:#aaa">36%</div></div><div class="gpv" id="gaugePtr" style="left:0%"><div class="gpvl">'+pct(ratio)+'</div></div></div><div class="gsc"><span>0%</span><span>10%</span><span>20%</span><span>30%</span><span>40%</span><span>50%+</span></div></div>'+(monthlyDebt>0?'<div class="rsec rsec-compact dti-compact"><div class="stit">Debt-to-Income (Total)</div><div class="dti-row"><div class="dti-pct '+(dti<=0.36?'ok':dti<=0.43?'warn':'bad')+'">'+(dti*100).toFixed(1)+'%</div><div class="dti-info">'+(dti<=0.36?'Within ideal range \u2014 lenders view favorably':dti<=0.43?'Above 36% \u2014 some lenders may flag':'Exceeds 43% max \u2014 reduce debt first')+'</div></div></div>':'')+'<div class="rsec rsec-compact"><div class="stit">5-Year Appreciation</div><div class="outlook-compact"><div class="outlook-vals"><span>'+$f(price)+'</span><span class="outlook-arrow">\u2192</span><span class="outlook-future">'+$f(futurePrice)+'</span></div><div class="ob outlook-badge">+'+$f(equity5yr)+'</div></div><div class="on">Based on 3.5%/yr national avg. Not guaranteed.</div></div></div></div><div class="rsec next-steps-card"><div class="stit">Recommended Next Steps</div><div class="ns-grid">'+(ratio>0.36?'<div class="ns-chip"><strong>Target lower:</strong> Max at 28% is '+$f(maxPrice)+'</div>':'')+(remaining>0&&isFinite(monthsToSave)?'<div class="ns-chip"><strong>Save '+$f(remaining)+' more</strong> \u2014 '+fmtMo(monthsToSave)+' at current rate</div>':'')+(dpPct<0.2?'<div class="ns-chip"><strong>Increase to 20% down</strong> to eliminate '+$f(pmi)+'/mo PMI</div>':'')+'<a href="https://answers.hud.gov/housingcounseling/s/?language=en_US" target="_blank" rel="noopener noreferrer" class="ns-chip ns-chip-cta"><strong>Find a HUD housing counselor</strong> \u2014 free expert guidance \u2192</a></div></div><div class="disc">Estimates for educational purposes only. Consult a licensed housing counselor before making decisions. <strong>FinMango</strong> \u00b7 501(c)(3) \u00b7 <a href="index.html" style="color:var(--orange)">finmango.org</a></div>';
+document.getElementById('resultsOut').innerHTML=html;goStep(3);setTimeout(function(){var bar=document.getElementById('pBar');if(bar)bar.style.width=savedPct+'%';var ptr=document.getElementById('gaugePtr');if(ptr)ptr.style.left=gUser+'%'},150)}
+function restart(){document.getElementById('annualIncome').value='75000';document.getElementById('currentSavings').value='10000';document.getElementById('monthlySavings').value='500';document.getElementById('currentRent').value='1400';document.getElementById('monthlyDebt').value='400';document.getElementById('homePrice').value='420000';document.getElementById('interestRate').value='6.8';['grpPropertyType','grpDownPayment','grpTerm'].forEach(function(id){document.getElementById(id).querySelectorAll('.pill').forEach(function(b){b.classList.remove('on')})});document.querySelector('#grpPropertyType [data-val="single"]').classList.add('on');document.querySelector('#grpDownPayment [data-val="20"]').classList.add('on');document.querySelector('#grpTerm [data-val="30"]').classList.add('on');S.propertyType='single';S.downPaymentPct=20;S.mortgageYears=30;goStep(1)}
+</script>
+<script>
+// Mobile Accordion
+document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.mobile-dropdown-toggle').forEach(function(t){t.addEventListener('click',function(){this.classList.toggle('active');this.nextElementSibling.classList.toggle('open')})})});
+</script>
+</body>
+</html>
