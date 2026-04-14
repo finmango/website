@@ -31,12 +31,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Load fonts asynchronously (non-blocking) -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style"
-    onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap">
-  </noscript>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&display=swap" rel="stylesheet">
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
@@ -51,139 +46,45 @@
   <link rel="stylesheet" href="css/navbar.css">
 
   <style>
-    /* Font loaded asynchronously via preload link in <head> */
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      /* Colors */
-      --black: #000000;
+      --black: #111111;
       --white: #ffffff;
+      --cream: #FAF8F5;
       --orange: #FF6B35;
       --orange-dark: #E55A2B;
-      --orange-soft: #FF8C61;
-      --orange-light: rgba(255, 107, 53, 0.1);
-      --gray: #6B6560;
-      --gray-medium: #666666;
-      --light-gray: #f5f5f5;
+      --orange-glow: rgba(255, 107, 53, 0.08);
+      --orange-light: rgba(255, 107, 53, 0.06);
+      --gray-900: #1a1a1a;
+      --gray-700: #444;
+      --gray-500: #777;
+      --gray-400: #999;
+      --gray-200: #e5e5e5;
+      --gray-100: #f3f3f3;
 
-      /* Announcement bar default height (updated by JS) */
-      --announcement-height: 44px;
+      --cat-budget: #10B981;
+      --cat-investing: #7C5CFC;
+      --cat-business: #F59E0B;
+      --cat-education: #3B82F6;
+      --cat-lifestyle: #EC4899;
+      --cat-community: #EF4444;
 
-      /* Semantic Colors */
-      --success: #10B981;
-      --error: #EF4444;
-      --warning: #F59E0B;
-      --info: #3B82F6;
-
-      /* Layout */
       --max-width: 1200px;
-      --hero-max-width: 1400px;
-      --nav-max-width: 1280px;
-
-      /* Spacing Scale (8px base) */
-      --space-1: 0.25rem;
-      /* 4px */
-      --space-2: 0.5rem;
-      /* 8px */
-      --space-3: 0.75rem;
-      /* 12px */
-      --space-4: 1rem;
-      /* 16px */
-      --space-6: 1.5rem;
-      /* 24px */
-      --space-8: 2rem;
-      /* 32px */
-      --space-10: 2.5rem;
-      /* 40px */
-      --space-12: 3rem;
-      /* 48px */
-      --space-16: 4rem;
-      /* 64px */
-      --space-20: 5rem;
-      /* 80px */
-      --space-24: 6rem;
-      /* 96px */
-      --space-32: 8rem;
-      /* 128px */
-      --space-40: 10rem;
-      /* 160px */
-
-      /* Typography Scale */
-      --text-xs: 0.75rem;
-      /* 12px */
-      --text-sm: 0.875rem;
-      /* 14px */
-      --text-base: 1rem;
-      /* 16px */
-      --text-lg: 1.125rem;
-      /* 18px */
-      --text-xl: 1.25rem;
-      /* 20px */
-      --text-2xl: 1.5rem;
-      /* 24px */
-      --text-3xl: 2rem;
-      /* 32px */
-      --text-4xl: 3rem;
-      /* 48px */
-      --text-5xl: 4rem;
-      /* 64px */
-
-      /* Font Weights */
-      --font-normal: 400;
-      --font-medium: 500;
-      --font-semibold: 600;
-      --font-bold: 700;
-      --font-black: 900;
-
-      /* Border Radius */
-      --radius-sm: 4px;
-      --radius-md: 8px;
-      --radius-lg: 12px;
-      --radius-xl: 16px;
-
-      /* Shadows */
-      --shadow-sm: 4px 4px 0 var(--black);
-      --shadow-md: 8px 8px 0 var(--black);
-      --shadow-lg: 12px 12px 0 var(--black);
-      --shadow-xl: 16px 16px 0 var(--black);
-
-      /* Transitions */
-      --transition-fast: 0.15s ease;
-      --transition-base: 0.3s ease;
-      --transition-slow: 0.5s ease;
-
-      /* Borders */
-      --border-width-thin: 1px;
-      --border-width-base: 2px;
-      --border-width-thick: 3px;
-      --border-width-heavy: 4px;
+      --radius: 10px;
+      --radius-lg: 14px;
+      --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
+      --shadow-card-hover: 0 4px 20px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.06);
+      --transition: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-
-    /* Accessibility: Reduced Motion Support */
-    @media (prefers-reduced-motion: reduce) {
-
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-    }
-
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: var(--white);
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--cream);
       color: var(--black);
       line-height: 1.6;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* Navigation */
@@ -529,137 +430,193 @@
       padding-left: 1rem;
     }
 
-    /* Hero Section */
+    /* ============================================
+       HERO
+       ============================================ */
     .hero {
-      min-height: 40vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 9rem 2rem 1rem;
+      padding: 9rem 2rem 4rem;
       text-align: center;
-      background: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(255,107,53,0.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .hero-container {
-      max-width: 1000px;
+      max-width: 820px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
-    .hero-title {
-      font-size: clamp(2.5rem, 8vw, 5.5rem);
-      font-weight: 900;
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
       margin-bottom: 1.5rem;
-      letter-spacing: -0.03em;
-      line-height: 1;
-      color: var(--black);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.1s;
+    }
+
+    .hero-eyebrow .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+    }
+
+    .hero-eyebrow .count {
+      color: var(--orange);
+      font-weight: 800;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 5vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      margin-bottom: 1.25rem;
+      color: var(--gray-900);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--orange);
+      position: relative;
+    }
+
+    .hero h1 em::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: -2px;
+      right: -2px;
+      height: 8px;
+      background: rgba(255,107,53,0.15);
+      border-radius: 4px;
+      z-index: -1;
     }
 
     .hero-subtitle {
-      font-size: clamp(1.1rem, 2.2vw, 1.35rem);
-      color: var(--gray);
-      margin-bottom: 0;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.6;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      background: var(--orange);
-      color: var(--white);
-      padding: 1rem 2.5rem;
-      font-size: 1.1rem;
-      font-weight: 700;
-      text-decoration: none;
-      border: 3px solid var(--black);
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .hero-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 8px 8px 0 var(--black);
-    }
-
-    /* Features Section */
-    .features-section {
-      padding: 4rem 2rem;
-      background: var(--light-gray);
-    }
-
-    .features-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-    }
-
-    .section-title {
-      font-size: clamp(2rem, 6vw, 3rem);
-      font-weight: 900;
-      text-align: center;
-      margin-bottom: 1rem;
-      letter-spacing: -0.02em;
-    }
-
-    .section-subtitle {
-      font-size: 1.2rem;
-      color: var(--gray);
-      text-align: center;
+      font-size: 1.15rem;
+      color: var(--gray-500);
       max-width: 700px;
-      margin: 0 auto 3rem;
-      line-height: 1.6;
+      margin: 0 auto 2.5rem;
+      line-height: 1.65;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.3s;
     }
 
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2rem;
-      margin-top: 3rem;
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 1024px) {
-      .features-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    /* ============================================
+       SEARCH
+       ============================================ */
+    .search-container {
+      max-width: 520px;
+      margin: 0 auto 2rem;
+      position: relative;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.4s;
     }
 
-    .feature-card {
+    .search-input {
+      width: 100%;
+      padding: 0.9rem 3rem 0.9rem 1.25rem;
+      font-size: 0.95rem;
+      font-family: inherit;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 50px;
       background: var(--white);
-      border: 3px solid var(--black);
-      padding: 2rem;
-      text-align: center;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      color: var(--black);
     }
 
-    .feature-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 8px 8px 0 var(--orange);
+    .search-input:focus {
+      outline: none;
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px rgba(255,107,53,0.1), 0 2px 8px rgba(0,0,0,0.04);
     }
 
-    .feature-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
+    .search-input::placeholder { color: var(--gray-400); }
 
-    .feature-title {
-      font-size: 1.4rem;
-      font-weight: 900;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.01em;
-    }
-
-    .feature-description {
-      color: var(--gray);
-      line-height: 1.6;
+    .search-icon {
+      position: absolute;
+      right: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
       font-size: 1rem;
+      pointer-events: none;
+      opacity: 0.5;
     }
 
-    /* Modules Section */
-    .modules-section {
-      padding: 1.5rem 2rem 5rem;
+    /* ============================================
+       FILTERS
+       ============================================ */
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 0.35rem;
+      flex-wrap: nowrap;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.5s;
+    }
+
+    .filter-btn {
+      padding: 0.45rem 0.85rem;
+      background: transparent;
+      border: 1.5px solid var(--gray-200);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--gray-500);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-radius: 50px;
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--gray-400);
+      color: var(--black);
       background: var(--white);
+    }
+
+    .filter-btn.active {
+      background: var(--black);
+      color: var(--white);
+      border-color: var(--black);
+    }
+
+    /* ============================================
+       MODULES SECTION
+       ============================================ */
+    .modules-section {
+      padding: 3rem 2rem 6rem;
     }
 
     .modules-container {
@@ -669,129 +626,247 @@
 
     .modules-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
     }
 
+    /* ============================================
+       MODULE CARD
+       ============================================ */
     .module-card {
       background: var(--white);
-      border: 3px solid var(--black);
-      overflow: hidden;
-      transition: all 0.3s ease;
-      cursor: pointer;
+      border: 1px solid rgba(0,0,0,0.07);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.5rem 1.25rem;
       position: relative;
+      transition: all var(--transition);
       display: flex;
       flex-direction: column;
-      height: 100%;
+      cursor: pointer;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      opacity: 0;
+      transition: opacity var(--transition);
     }
 
     .module-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 8px 8px 0 var(--black);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card-hover);
+      border-color: rgba(0,0,0,0.1);
     }
 
-    .module-header {
-      padding: 2rem;
+    .module-card:hover::before { opacity: 1; }
+
+    /* Category accent top bars */
+    .module-card[data-category="budget"]::before     { background: var(--cat-budget); }
+    .module-card[data-category="investing"]::before   { background: var(--cat-investing); }
+    .module-card[data-category="business"]::before    { background: var(--cat-business); }
+    .module-card[data-category="education"]::before   { background: var(--cat-education); }
+    .module-card[data-category="lifestyle"]::before   { background: var(--cat-lifestyle); }
+    .module-card[data-category="community"]::before   { background: var(--cat-community); }
+
+    .card-top-row {
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      color: var(--white);
-      position: relative;
-      flex: 1;
-    }
-
-    /* Module color schemes */
-    .module-card.budget .module-header {
-      background: linear-gradient(135deg, #f56565 0%, #ed64a6 100%);
-    }
-
-    .module-card.credit .module-header {
-      background: linear-gradient(135deg, #48bb78 0%, #38b2ac 100%);
-    }
-
-    .module-card.investing .module-header {
-      background: linear-gradient(135deg, #ed64a6 0%, #f687b3 100%);
-    }
-
-    .module-card.business .module-header {
-      background: linear-gradient(135deg, #f6ad55 0%, #fbd38d 100%);
-    }
-
-    .module-card.college .module-header {
-      background: linear-gradient(135deg, #4299e1 0%, #4fd1c5 100%);
-    }
-
-    .module-card.real-estate .module-header {
-      background: linear-gradient(135deg, #48bb78 0%, #68d391 100%);
-    }
-
-    .module-card.entrepreneurship .module-header {
-      background: linear-gradient(135deg, #ed8936 0%, #fc8181 100%);
-    }
-
-    .module-card.goals .module-header {
-      background: linear-gradient(135deg, #9f7aea 0%, #d6bcfa 100%);
-    }
-
-    .module-card.crypto .module-header {
-      background: linear-gradient(135deg, #f6ad55 0%, #ed8936 100%);
-    }
-
-    .module-card.food-insecurity .module-header {
-      background: linear-gradient(135deg, #FF6B35 0%, #FF8C61 100%);
-    }
-
-    .module-card.housing-affordability .module-header {
-      background: linear-gradient(135deg, #4fd1c5 0%, #38b2ac 100%);
-    }
-
-    .module-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
     }
 
     .module-icon {
-      font-size: 3rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.3rem;
+    }
+
+    .module-card[data-category="budget"] .module-icon     { background: rgba(16,185,129,0.1); }
+    .module-card[data-category="investing"] .module-icon   { background: rgba(124,92,252,0.1); }
+    .module-card[data-category="business"] .module-icon    { background: rgba(245,158,11,0.1); }
+    .module-card[data-category="education"] .module-icon   { background: rgba(59,130,246,0.1); }
+    .module-card[data-category="lifestyle"] .module-icon   { background: rgba(236,72,153,0.1); }
+    .module-card[data-category="community"] .module-icon   { background: rgba(239,68,68,0.1); }
+
+    .module-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .module-card[data-category="budget"] .module-icon svg     { stroke: #059669; }
+    .module-card[data-category="investing"] .module-icon svg   { stroke: #6d48e5; }
+    .module-card[data-category="business"] .module-icon svg    { stroke: #b47409; }
+    .module-card[data-category="education"] .module-icon svg   { stroke: #2563eb; }
+    .module-card[data-category="lifestyle"] .module-icon svg   { stroke: #db2777; }
+    .module-card[data-category="community"] .module-icon svg   { stroke: #dc2626; }
+
+    .module-tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 0.2rem 0.55rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .module-card[data-category="budget"] .module-tag     { background: rgba(16,185,129,0.1); color: #059669; }
+    .module-card[data-category="investing"] .module-tag   { background: rgba(124,92,252,0.1); color: #6d48e5; }
+    .module-card[data-category="business"] .module-tag    { background: rgba(245,158,11,0.1); color: #b47409; }
+    .module-card[data-category="education"] .module-tag   { background: rgba(59,130,246,0.1); color: #2563eb; }
+    .module-card[data-category="lifestyle"] .module-tag   { background: rgba(236,72,153,0.1); color: #db2777; }
+    .module-card[data-category="community"] .module-tag   { background: rgba(239,68,68,0.1); color: #dc2626; }
+
+    .module-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--gray-900);
+      line-height: 1.3;
+      margin-bottom: 0.4rem;
+    }
+
+    .module-description {
+      color: var(--gray-500);
+      line-height: 1.6;
+      font-size: 0.85rem;
+      flex: 1;
+    }
+
+    .module-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.15rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .module-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--orange);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: gap 0.2s ease;
+    }
+
+    .module-link:hover { gap: 0.6rem; }
+
+    .module-link svg {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+
+    .module-card:hover .module-link svg {
+      transform: translateX(2px);
+    }
+
+    .module-stat-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: var(--gray-400);
+      background: var(--gray-100);
+      padding: 0.15rem 0.45rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ============================================
+       FEATURES SECTION
+       ============================================ */
+    .features-section {
+      padding: 5rem 2rem;
+      background: var(--white);
+    }
+
+    .features-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.03em;
+      color: var(--gray-900);
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--gray-500);
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      line-height: 1.65;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+
+    .feature-card {
+      background: var(--cream);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      text-align: center;
+      transition: all var(--transition);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-card-hover);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
       margin-bottom: 1rem;
       display: block;
     }
 
-    .module-title {
-      font-size: 1.5rem;
-      font-weight: 900;
-      margin-bottom: 0.75rem;
+    .feature-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
       letter-spacing: -0.01em;
-      color: var(--white);
+      color: var(--gray-900);
     }
 
-    .module-description {
-      font-size: 1rem;
-      line-height: 1.5;
-      margin-bottom: 1.5rem;
-      color: rgba(255, 255, 255, 0.95);
-      flex: 1;
+    .feature-description {
+      color: var(--gray-500);
+      line-height: 1.6;
+      font-size: 0.88rem;
     }
 
-    .module-stats {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: auto;
-      border-top: 2px solid rgba(255, 255, 255, 0.2);
-      padding-top: 1rem;
-    }
-
-    .stat {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--white);
-    }
-
-    /* CTA Section */
+    /* ============================================
+       CTA SECTION
+       ============================================ */
     .cta-section {
       padding: 5rem 2rem;
       background: var(--black);
@@ -805,16 +880,16 @@
     }
 
     .cta-title {
-      font-size: clamp(2rem, 5vw, 3rem);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
       font-weight: 900;
       margin-bottom: 1rem;
       letter-spacing: -0.02em;
     }
 
     .cta-description {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       margin-bottom: 2rem;
-      opacity: 0.9;
+      opacity: 0.8;
       line-height: 1.6;
     }
 
@@ -824,592 +899,35 @@
       gap: 0.75rem;
       background: var(--orange);
       color: var(--white);
-      padding: 1.2rem 2.5rem;
-      font-size: 1.1rem;
-      font-weight: 700;
-      text-decoration: none;
-      border: 3px solid var(--white);
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .cta-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 8px 8px 0 var(--white);
-    }
-
-    /* Footer */
-    footer {
-      padding: 0;
-      border-top: 4px solid var(--orange);
-      background: var(--black);
-      color: var(--white);
-    }
-
-    .footer-newsletter {
-      padding: 3rem 2rem;
-      background: rgba(255, 107, 53, 0.1);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      text-align: center;
-    }
-
-    .footer-newsletter-container {
-      max-width: 850px;
-      margin: 0 auto;
-    }
-
-    .footer-newsletter h3 {
-      font-size: 1.5rem;
-      font-weight: 900;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.02em;
-    }
-
-    .footer-newsletter p {
-      font-size: 1rem;
-      opacity: 0.8;
-      margin-bottom: 1.5rem;
-      line-height: 1.5;
-    }
-
-    .footer-newsletter-btn {
-      display: inline-block;
-      padding: 0.85rem 2rem;
+      padding: 0.9rem 2rem;
       font-size: 1rem;
       font-weight: 700;
-      background: var(--orange);
-      color: var(--white);
       text-decoration: none;
       border: 2px solid var(--orange);
+      border-radius: 50px;
       transition: all 0.2s ease;
-      font-family: 'Inter', sans-serif;
-      text-transform: uppercase;
       letter-spacing: 0.02em;
     }
 
-    .footer-newsletter-btn:hover {
+    .cta-btn:hover {
       background: var(--white);
       color: var(--black);
       border-color: var(--white);
       transform: translateY(-2px);
     }
 
-    .footer-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 4rem 2rem 0;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-
-    .footer-brand img {
-      height: 32px;
-      margin-bottom: 1rem;
-      filter: brightness(0) invert(1);
-    }
-
-    .footer-tagline {
-      font-size: 0.95rem;
-      color: #999;
-      line-height: 1.6;
-      max-width: 400px;
-    }
-
-    .footer-section h4 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .footer-section a {
-      display: block;
-      color: #999;
-      text-decoration: none;
-      margin-bottom: 0.75rem;
-      transition: all 0.2s ease;
-      font-size: 0.95rem;
-    }
-
-    .footer-section a:hover {
-      color: var(--orange);
-      padding-left: 0.5rem;
-    }
-
-    .footer-bottom {
-      border-top: 1px solid #333;
-      padding-top: 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    /* Animations */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Responsive Design */
-    @media (max-width: 1024px) {
-      .nav-container {
-        gap: 2rem;
-      }
-
-      .footer-container {
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-      }
-    }
-
-    @media (max-width: 968px) {
-      .nav-right {
-        display: none;
-      }
-
-      .mobile-controls {
-        display: flex;
-      }
-
-      .mobile-menu-btn {
-        display: block;
-      }
-
-      .mobile-get-involved {
-        display: inline-block;
-      }
-
-      .hero {
-        padding: 7rem 1.5rem 0.5rem;
-        min-height: 35vh;
-      }
-
-      .modules-section {
-        padding: 1rem 1.5rem 3rem;
-      }
-
-      .features-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-
-      .modules-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-      }
-
-      .footer-newsletter {
-        padding: 2.5rem 1.5rem;
-      }
-
-      .footer-newsletter h3 {
-        font-size: 1.25rem;
-      }
-
-      .footer-newsletter p {
-        font-size: 0.95rem;
-      }
-
-      .footer-newsletter-btn {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.9rem;
-      }
-
-      .footer-container {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .footer-bottom {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
-    }
-
     /* ============================================
-   BASE COMPONENT CLASSES
-   ============================================ */
-
-    /* Base Input Styles with Validation States */
-    input[type="text"],
-    input[type="email"],
-    input[type="number"],
-    textarea,
-    select {
-      font-family: 'Inter', sans-serif;
-      transition: var(--transition-base);
-    }
-
-    /* Input Validation States */
-    input.error,
-    textarea.error,
-    select.error {
-      border-color: var(--error) !important;
-      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-    }
-
-    input.success,
-    textarea.success,
-    select.success {
-      border-color: var(--success) !important;
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-    }
-
-    input.warning,
-    textarea.warning,
-    select.warning {
-      border-color: var(--warning) !important;
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
-    }
-
-    /* Base Card Component */
-    .card {
-      padding: var(--space-12);
-      background: var(--white);
-      transition: var(--transition-base);
-    }
-
-    .card--bordered {
-      border: var(--border-width-thick) solid var(--black);
-    }
-
-    .card--shadow {
-      box-shadow: var(--shadow-md);
-    }
-
-    .card--hover-lift:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-lg);
-    }
-
-    /* Utility Classes for Spacing */
-    .mb-1 {
-      margin-bottom: var(--space-1);
-    }
-
-    .mb-2 {
-      margin-bottom: var(--space-2);
-    }
-
-    .mb-3 {
-      margin-bottom: var(--space-3);
-    }
-
-    .mb-4 {
-      margin-bottom: var(--space-4);
-    }
-
-    .mb-6 {
-      margin-bottom: var(--space-6);
-    }
-
-    .mb-8 {
-      margin-bottom: var(--space-8);
-    }
-
-    .mt-1 {
-      margin-top: var(--space-1);
-    }
-
-    .mt-2 {
-      margin-top: var(--space-2);
-    }
-
-    .mt-3 {
-      margin-top: var(--space-3);
-    }
-
-    .mt-4 {
-      margin-top: var(--space-4);
-    }
-
-    .mt-6 {
-      margin-top: var(--space-6);
-    }
-
-    .mt-8 {
-      margin-top: var(--space-8);
-    }
-
-    /* Typography Utility Classes */
-    .text-xs {
-      font-size: var(--text-xs);
-    }
-
-    .text-sm {
-      font-size: var(--text-sm);
-    }
-
-    .text-base {
-      font-size: var(--text-base);
-    }
-
-    .text-lg {
-      font-size: var(--text-lg);
-    }
-
-    .text-xl {
-      font-size: var(--text-xl);
-    }
-
-    .text-2xl {
-      font-size: var(--text-2xl);
-    }
-
-    .font-medium {
-      font-weight: var(--font-medium);
-    }
-
-    .font-semibold {
-      font-weight: var(--font-semibold);
-    }
-
-    .font-bold {
-      font-weight: var(--font-bold);
-    }
-
-    .font-black {
-      font-weight: var(--font-black);
-    }
-
-    /* Alert/Message Components */
-    .alert {
-      padding: var(--space-4) var(--space-6);
-      border: var(--border-width-base) solid;
-      margin-bottom: var(--space-4);
-      border-radius: var(--radius-sm);
-    }
-
-    .alert--success {
-      background: rgba(16, 185, 129, 0.1);
-      border-color: var(--success);
-      color: #065f46;
-    }
-
-    .alert--error {
-      background: rgba(239, 68, 68, 0.1);
-      border-color: var(--error);
-      color: #991b1b;
-    }
-
-    .alert--warning {
-      background: rgba(245, 158, 11, 0.1);
-      border-color: var(--warning);
-      color: #92400e;
-    }
-
-    .alert--info {
-      background: rgba(59, 130, 246, 0.1);
-      border-color: var(--info);
-      color: #1e40af;
-    }
-  </style>
-  <style>
-
-  </style>
-  <style>
-    /* Mobile Menu Accordion Overrides */
-    .mobile-menu {
-      padding: 5rem 1.5rem 2rem !important;
-    }
-
-    .mobile-menu a {
-      font-size: 1.5rem !important;
-      /* Smaller than 2rem */
-      padding: 1rem 0 !important;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-    }
-
-    .mobile-dropdown-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      background: none;
-      border: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      padding: 1rem 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--black);
-      cursor: pointer;
-      text-align: left;
-      font-family: inherit;
-    }
-
-    .mobile-dropdown-toggle .arrow {
-      transition: transform 0.3s ease;
-      font-size: 1.2rem;
-    }
-
-    .mobile-dropdown-toggle.active .arrow {
-      transform: rotate(180deg);
-      color: var(--orange);
-    }
-
-    .mobile-dropdown-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-      background: #f9f9f9;
-      margin: 0 -1.5rem;
-      /* Full width background */
-      padding: 0 1.5rem;
-      /* Inner padding */
-    }
-
-    .mobile-dropdown-content.open {
-      max-height: 500px;
-      /* Arbitrary large height */
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    }
-
-    .mobile-dropdown-content a {
-      font-size: 1.1rem !important;
-      padding: 0.75rem 0 !important;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
-      color: var(--gray) !important;
-      padding-left: 1rem !important;
-    }
-
-    .mobile-dropdown-content a:hover {
-      color: var(--orange) !important;
-      padding-left: 1.5rem !important;
-      background: rgba(0, 0, 0, 0.02);
-    }
-  
-
-    /* ============================================
-       MEGA DROPDOWN (Initiatives)
+       EMPTY STATE
        ============================================ */
-    .dropdown-mega .dropdown-content-mega {
-      min-width: 620px;
-      padding: 1rem 0;
-      right: 0;
-      left: auto;
-      transform: none;
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--gray-400);
     }
 
-    .dropdown-content-mega::before {
-      left: auto !important;
-      right: 40px;
-      transform: none !important;
-    }
-
-    .dropdown-content-mega::after {
-      left: auto;
-      right: 0;
-    }
-
-    .dropdown-mega-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-    }
-
-    .dropdown-mega-col {
-      padding: 0;
-    }
-
-    .dropdown-mega-col:first-child {
-      border-right: 1px solid rgba(0, 0, 0, 0.06);
-    }
-
-    .dropdown-mega-col-label {
-      font-size: 0.6rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--gray-medium);
-      padding: 0.5rem 1.25rem 0.4rem;
-      opacity: 0.6;
-    }
-
-    .dropdown-content-mega .dropdown-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem 1.25rem;
-      gap: 0.75rem;
-      border-bottom: none;
-    }
-
-    .dropdown-item-text {
-      display: flex;
-      flex-direction: column;
-      gap: 0.1rem;
-    }
-
-    .dropdown-item-name {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--black);
-      transition: color 0.2s ease;
-    }
-
-    .dropdown-item-desc {
-      font-size: 0.68rem;
-      font-weight: 500;
-      color: var(--gray-medium);
-      transition: color 0.2s ease;
-      letter-spacing: 0.01em;
-    }
-
-    .dropdown-external {
-      font-size: 0.85rem;
-      opacity: 0.4;
-      transition: all 0.2s ease;
-      flex-shrink: 0;
-    }
-
-    .dropdown-content-mega .dropdown-item:hover {
-      background-color: var(--light-gray);
-      padding-left: 1.4rem;
-    }
-
-    .dropdown-content-mega .dropdown-item:hover .dropdown-item-name {
-      color: var(--orange);
-    }
-
-    .dropdown-content-mega .dropdown-item:hover .dropdown-item-desc {
-      color: var(--gray);
-    }
-
-    .dropdown-content-mega .dropdown-item:hover .dropdown-external {
-      opacity: 1;
-      color: var(--orange);
-      transform: translate(2px, -2px);
-    }
-
-    @keyframes fadeInMega {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .dropdown-mega:hover .dropdown-content-mega {
-      animation: fadeInMega 0.2s ease;
-    }
-
-    /* Mobile controls container */
-    .mobile-controls {
-      display: none;
-      gap: 1rem;
-      align-items: center;
-      justify-self: end;
+    .empty-state p {
+      font-size: 1rem;
+      margin-top: 0.5rem;
     }
 
     /* ============================================
@@ -1468,7 +986,7 @@
       text-decoration: none;
       border: 2px solid var(--orange);
       transition: all 0.2s ease;
-      font-family: var(--font-body);
+      font-family: 'DM Sans', sans-serif;
       text-transform: uppercase;
       letter-spacing: 0.02em;
       white-space: nowrap;
@@ -1574,7 +1092,6 @@
       transform: translateX(4px);
     }
 
-    /* Footer squiggle accent */
     .footer-squiggle {
       display: block;
       margin: 0 auto 0;
@@ -1606,345 +1123,15 @@
       color: var(--orange);
     }
 
-
     /* ============================================
-       MOBILE MENU
+       RESPONSIVE
        ============================================ */
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    .mobile-get-involved {
-      display: none;
-    }
-
-    .mobile-menu-btn span {
-      display: block;
-      width: 28px;
-      height: 3px;
-      background: var(--black);
-      margin: 6px 0;
-      transition: all 0.3s ease;
-    }
-
-    .mobile-menu-btn.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .mobile-menu-btn.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .mobile-menu-btn.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -6px);
-    }
-
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      background: var(--white);
-      z-index: 1040;
-      padding: 5rem 1.5rem 1.5rem;
-      transition: right 0.3s ease;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .mobile-menu.active {
-      display: flex;
-      flex-direction: column;
-      right: 0;
-    }
-
-    /* Orange accent strip at top */
-    .mobile-menu::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: var(--orange);
-      z-index: 1;
-    }
-
-    .mobile-menu-nav {
-      flex: none;
-    }
-
-    .mobile-menu-nav > a {
-      display: block;
-      padding: 0.85rem 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--black);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-      transition: all 0.2s ease;
-      opacity: 0;
-      transform: translateX(20px);
-      animation: mobileSlideIn 0.3s ease forwards;
-    }
-
-    .mobile-menu.active .mobile-menu-nav > a:nth-child(1) { animation-delay: 0.05s; }
-    .mobile-menu.active .mobile-menu-nav > a:nth-child(2) { animation-delay: 0.08s; }
-    .mobile-menu.active .mobile-menu-nav > a:nth-child(3) { animation-delay: 0.11s; }
-    .mobile-menu.active .mobile-menu-nav > .mobile-dropdown { animation-delay: 0.14s; }
-
-    .mobile-menu.active .mobile-dropdown {
-      opacity: 0;
-      transform: translateX(20px);
-      animation: mobileSlideIn 0.3s ease forwards;
-      animation-delay: 0.14s;
-    }
-
-    @keyframes mobileSlideIn {
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .mobile-menu-nav > a:hover,
-    .mobile-menu-nav > a:active {
-      color: var(--orange);
-      padding-left: 0.5rem;
-    }
-
-    /* Active page indicator */
-    .mobile-menu-nav > a.active-page {
-      color: var(--orange);
-      border-bottom-color: var(--orange);
-    }
-
-    .mobile-dropdown-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      background: none;
-      border: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-      padding: 0.85rem 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--black);
-      cursor: pointer;
-      text-align: left;
-      font-family: inherit;
-      transition: color 0.2s ease;
-    }
-
-    .mobile-dropdown-toggle:active,
-    .mobile-dropdown-toggle.active {
-      color: var(--orange);
-    }
-
-    .mobile-dropdown-toggle .arrow {
-      transition: transform 0.3s ease;
-      font-size: 1rem;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: var(--light-gray);
-    }
-
-    .mobile-dropdown-toggle.active .arrow {
-      transform: rotate(180deg);
-      color: var(--white);
-      background: var(--orange);
-    }
-
-    .mobile-dropdown-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease-out;
-      margin: 0 -1.5rem;
-      padding: 0 1.5rem;
-    }
-
-    .mobile-dropdown-content.open {
-      max-height: 1200px;
-      padding-top: 0.75rem;
-      padding-bottom: 0.75rem;
-    }
-
-    .mobile-cards-group {
-      margin-bottom: 0.5rem;
-    }
-
-    .mobile-cards-group:last-child {
-      margin-bottom: 0;
-    }
-
-    .mobile-cards-label {
-      font-size: 0.65rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--orange);
-      padding: 0.6rem 0 0.35rem;
-    }
-
-    .mobile-card {
-      display: flex !important;
-      flex-direction: column;
-      gap: 0.15rem;
-      padding: 0.75rem 0.85rem !important;
-      margin-bottom: 0.4rem;
-      background: var(--white);
-      border: 1.5px solid rgba(0, 0, 0, 0.06);
-      border-radius: 8px;
-      text-decoration: none !important;
-      transition: all 0.15s ease;
-      border-bottom: none !important;
-    }
-
-    .mobile-card:last-child {
-      margin-bottom: 0;
-    }
-
-    .mobile-card:active {
-      background: var(--orange-light);
-      border-color: var(--orange);
-      transform: scale(0.98);
-    }
-
-    .mobile-card-name {
-      font-size: 0.95rem !important;
-      font-weight: 700;
-      color: var(--black) !important;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .mobile-card:active .mobile-card-name {
-      color: var(--orange) !important;
-    }
-
-    .mobile-card-desc {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--gray-medium);
-      line-height: 1.3;
-    }
-
-    .mobile-card-external {
-      font-size: 0.8rem;
-      opacity: 0.4;
-      font-weight: 400;
-    }
-
-    .mobile-card:active .mobile-card-external {
-      opacity: 1;
-      color: var(--orange);
-    }
-
-    /* Override base mobile-menu a styles for cards */
-    .mobile-dropdown-content .mobile-card {
-      font-size: unset !important;
-      border-bottom: none !important;
-    }
-
-    /* Bottom CTA area */
-    .mobile-menu-footer {
-      padding-top: 0.75rem;
-      margin-top: 0.75rem;
-      border-top: 2px solid var(--black);
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      opacity: 0;
-      transform: translateY(10px);
-      animation: mobileSlideUp 0.3s ease forwards;
-      animation-delay: 0.25s;
-    }
-
-    @keyframes mobileSlideUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .mobile-menu-footer .btn-mobile-cta {
-      display: block;
-      text-align: center;
-      padding: 0.9rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      transition: all 0.2s ease;
-      background: var(--orange);
-      color: var(--white);
-      border: 2px solid var(--orange);
-    }
-
-    .mobile-menu-footer .btn-mobile-cta:active {
-      background: var(--orange-dark);
-    }
-
-    .mobile-menu-footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      padding-top: 0.75rem;
-    }
-
-    .mobile-menu-footer-links a {
-      font-size: 0.85rem !important;
-      color: var(--gray-medium) !important;
-      border-bottom: none !important;
-      padding: 0.25rem 0 !important;
-      font-weight: 600 !important;
-    }
-
-    .mobile-menu-footer-links a:hover {
-      color: var(--orange) !important;
-    }
-
-
-    /* ============================================
-       RESPONSIVE — SHARED COMPONENTS ONLY
-       ============================================ */
-    @media (max-width: 1200px) {
-      .nav-right { gap: 1.5rem; }
-      .nav-right a { font-size: 0.95rem; }
-      .btn-donate, .btn-get-involved { padding: 0.65rem 1.5rem; font-size: 0.9rem; }
-    }
-
-    @media (max-width: 1080px) {
-      nav { padding: 1.25rem 0; }
-      nav.scrolled { padding: 0.875rem 0; }
-      .logo img { height: 42px; }
-      nav.scrolled .logo img { height: 36px; }
-      .nav-right { gap: 1.25rem; }
-      .nav-right a { font-size: 0.9rem; }
-      .btn-donate, .btn-get-involved { padding: 0.6rem 1.25rem; font-size: 0.85rem; text-transform: none; }
-    }
-
     @media (max-width: 968px) {
-      .nav-container { grid-template-columns: 1fr auto; gap: 1rem; }
-      .nav-right { display: none; }
-      .mobile-controls { display: flex; }
-      .mobile-menu-btn { display: block; }
-      .mobile-get-involved { display: inline-block; padding: 0.35rem 0.85rem; font-size: 0.72rem; }
-      .mobile-menu { display: block; }
+      .hero { padding: 7rem 1.5rem 3rem; }
+      .hero h1 { font-size: 2.2rem; }
+      .hero-subtitle { font-size: 1rem; }
+      .modules-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
       .footer-newsletter { padding: 2rem 1.5rem; }
       .footer-newsletter-container { flex-direction: column; text-align: center; gap: 1rem; }
       .footer-newsletter-text { text-align: center; }
@@ -1958,12 +1145,21 @@
     }
 
     @media (max-width: 480px) {
-      .mobile-menu-nav > a { font-size: 1.3rem; }
-      .mobile-dropdown-toggle { font-size: 1.3rem; }
+      .hero { padding: 6.5rem 1.25rem 2.5rem; }
+      .hero h1 { font-size: 1.9rem; }
+      .filters { gap: 0.3rem; flex-wrap: wrap; }
+      .filter-btn { padding: 0.4rem 0.75rem; font-size: 0.72rem; }
+      .module-card { padding: 1.25rem; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
-
-
 </head>
 
 <body>
@@ -2120,256 +1316,42 @@
         <a href="/cdn-cgi/l/email-protection#0a626f6666654a6c6364676b646d652465786d">Contact</a>
       </div>
     </div>
-  </div>
-  </div>
-  <a href="ambassadors.html">Ambassadors</a>
-
-  <a href="donate.html">Donate</a>
-  </div>
-
+  <!-- HERO -->
   <section class="hero">
     <div class="hero-container">
-      <h1 class="hero-title">Mango Stories</h1>
+      <div class="hero-eyebrow">
+        <span class="dot"></span>
+        <span><span class="count" id="moduleCount">11</span> Interactive Modules</span>
+      </div>
+      <h1>Learn Finance<br>Through <em>Stories</em></h1>
       <p class="hero-subtitle">
-        10 interactive modules covering everything from budgeting basics to food security.<br>
+        Interactive, story-based modules covering budgeting, credit, investing, and more.
         Start wherever you need the most help.
       </p>
+
+      <div class="search-container">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search modules..." autocomplete="off">
+        <span class="search-icon">&#128269;</span>
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" data-category="all">All</button>
+        <button class="filter-btn" data-category="budget">Money & Budget</button>
+        <button class="filter-btn" data-category="investing">Investing</button>
+        <button class="filter-btn" data-category="business">Career</button>
+        <button class="filter-btn" data-category="education">Education</button>
+        <button class="filter-btn" data-category="lifestyle">Life Skills</button>
+        <button class="filter-btn" data-category="community">Community</button>
+      </div>
     </div>
   </section>
 
+  <!-- MODULES -->
   <section class="modules-section" id="modules">
     <div class="modules-container">
-
-      <div class="modules-grid">
-        <div class="module-card entrepreneurship" onclick="window.location.href='entrepreneurial-lessons.html'">
-          <div class="module-header">
-            <div class="module-content">
-              <span class="module-icon">🚀</span>
-              <h3 class="module-title">Entrepreneurship</h3>
-              <p class="module-description">Start and grow your business with essential knowledge, funding strategies,
-                and startup fundamentals.</p>
-              <div class="module-stats">
-                <div class="stat">
-                  <span>📖</span>
-                  <span>10 Lessons</span>
-                </div>
-                <div class="stat">
-                  <span>⏱</span>
-                  <span>20 min</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="module-card budget" onclick="window.location.href='budget-lessons.html'">
-          <div class="module-header">
-            <div class="module-content">
-              <span class="module-icon">💰</span>
-              <h3 class="module-title">Budgeting Basics</h3>
-              <p class="module-description">Master the foundation of financial health. Track spending, allocate income,
-                and build a budget that works.</p>
-              <div class="module-stats">
-                <div class="stat">
-                  <span>📖</span>
-                  <span>10 Lessons</span>
-                </div>
-                <div class="stat">
-                  <span>⏱</span>
-                  <span>20 min</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="module-card credit" onclick="window.location.href='credit-lessons.html'">
-          <div class="module-header">
-            <div class="module-content">
-              <span class="module-icon">💳</span>
-              <h3 class="module-title">Credit Score Mastery</h3>
-              <p class="module-description">Understand credit scores, build history, and unlock better financial
-                opportunities through smart management.</p>
-              <div class="module-stats">
-                <div class="stat">
-                  <span>📖</span>
-                  <span>11 Lessons</span>
-                </div>
-                <div class="stat">
-                  <span>⏱</span>
-                  <span>22 min</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="module-card investing" onclick="window.location.href='investing-lessons.html'">
-          <div class="module-header">
-            <div class="module-content">
-              <span class="module-icon">📈</span>
-              <h3 class="module-title">Investment Education</h3>
-              <p class="module-description">Learn investment fundamentals, market concepts, and build long-term wealth
-                through strategic allocation.</p>
-              <div class="module-stats">
-                <div class="stat">
-                  <span>📖</span>
-                  <span>12 Lessons</span>
-                </div>
-                <div class="stat">
-                  <span>⏱</span>
-                  <span>25 min</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="module-card college" onclick="window.location.href='college-lessons.html'">
-          <div class="module-header">
-            <div class="module-content">
-              <span class="module-icon">🎓</span>
-              <h3 class="module-title">College & Student Aid</h3>
-              <p class="module-description">Navigate college financing, student loans, FAFSA, and financial planning
-                without drowning in debt.</p>
-              <div class="module-stats">
-                <div class="stat">
-                  <span>📖</span>
-                  <span>9 Lessons</span>
-                </div>
-                <div class="stat">
-                  <span>⏱</span>
-                  <span>18 min</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="module-card real-estate" onclick="window.location.href='real-estate-lessons.html'">
-          <div class="module-header">
-            <div class="module-content">
-              <span class="module-icon">🏠</span>
-              <h3 class="module-title">Real Estate</h3>
-              <p class="module-description">Learn about home buying, mortgages, closing costs, and investment strategies
-                that build wealth.</p>
-              <div class="module-stats">
-                <div class="stat">
-                  <span>📖</span>
-                  <span>11 Lessons</span>
-                </div>
-                <div class="stat">
-                  <span>⏱</span>
-                  <span>22 min</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="module-card goals" onclick="window.location.href='financial-goals-lessons.html'">
-          <div class="module-header">
-            <div class="module-content">
-              <span class="module-icon">🎯</span>
-              <h3 class="module-title">Financial Goals</h3>
-              <p class="module-description">Set, plan, and achieve your financial objectives with strategic goal-setting
-                techniques and action plans.</p>
-              <div class="module-stats">
-                <div class="stat">
-                  <span>📖</span>
-                  <span>8 Lessons</span>
-                </div>
-                <div class="stat">
-                  <span>⏱</span>
-                  <span>16 min</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="module-card business" onclick="window.location.href='small-business-guide-lessons.html'">
-          <div class="module-header">
-            <div class="module-content">
-              <span class="module-icon">🏢</span>
-              <h3 class="module-title">Small Business Guide</h3>
-              <p class="module-description">Bring your business to the digital era with websites, online presence, and
-                marketing strategies.</p>
-              <div class="module-stats">
-                <div class="stat">
-                  <span>📖</span>
-                  <span>12 Lessons</span>
-                </div>
-                <div class="stat">
-                  <span>⏱</span>
-                  <span>25 min</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="module-card crypto" onclick="window.location.href='crypto-lessons.html'">
-          <div class="module-header">
-            <div class="module-content">
-              <span class="module-icon">₿</span>
-              <h3 class="module-title">Cryptocurrency</h3>
-              <p class="module-description">Understand blockchain technology, digital currencies, and crypto investment
-                basics in accessible format.</p>
-              <div class="module-stats">
-                <div class="stat">
-                  <span>📖</span>
-                  <span>9 Lessons</span>
-                </div>
-                <div class="stat">
-                  <span>⏱</span>
-                  <span>18 min</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="module-card food-insecurity" onclick="window.location.href='food-insecurity-stories.html'">
-          <div class="module-header">
-            <div class="module-content">
-              <span class="module-icon">🍎</span>
-              <h3 class="module-title">Food Insecurity</h3>
-              <p class="module-description">Understand food insecurity, food deserts, SNAP benefits, and resources for
-                eating healthy on a budget.</p>
-              <div class="module-stats">
-                <div class="stat">
-                  <span>📖</span>
-                  <span>8 Lessons</span>
-                </div>
-                <div class="stat">
-                  <span>⏱</span>
-                  <span>16 min</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="module-card housing-affordability" onclick="window.location.href='housing-affordability-stories.html'">
-          <div class="module-header">
-            <div class="module-content">
-              <span class="module-icon">🏠</span>
-              <h3 class="module-title">Housing Affordability</h3>
-              <p class="module-description">Understand the housing crisis, how it affects communities, and resources for renting and homeownership.</p>
-              <div class="module-stats">
-                <div class="stat">
-                  <span>📖</span>
-                  <span>9 Lessons</span>
-                </div>
-                <div class="stat">
-                  <span>⏱</span>
-                  <span>18 min</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="modules-grid" id="modulesGrid"></div>
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <p>No modules match your search.</p>
       </div>
     </div>
   </section>
@@ -2506,61 +1488,121 @@
     </div>
   </footer>
 
-  <script>
-    // Navigation scroll effect
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        nav.classList.add('scrolled');
-      } else {
-        nav.classList.remove('scrolled');
-      }
-    });
-
-    // Mobile Menu
-    function initializeMobileMenu() {
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const mobileMenu = document.getElementById('mobileMenu');
-
-      mobileMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
-        mobileMenuBtn.classList.toggle('active');
-        document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-      });
-
-      document.querySelectorAll('.mobile-menu a').forEach(link => {
-        link.addEventListener('click', () => {
-          mobileMenu.classList.remove('active');
-          mobileMenuBtn.classList.remove('active');
-          document.body.style.overflow = '';
-        });
-      });
-    }
-
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      });
-    });
-
-    // Initialize on load
-    document.addEventListener('DOMContentLoaded', function () {
-      initializeMobileMenu();
-    });
-  </script>
-
-
-
   <!-- Shared Navbar JavaScript -->
   <script src="js/navbar.js"></script>
+
+  <script>
+    // ============================================
+    // MODULE DATA
+    // ============================================
+    const moduleIcons = {
+      'entrepreneurship': `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3L6 28h20L16 3z"/><path d="M16 12v7"/><circle cx="16" cy="23" r="1"/></svg>`,
+      'budgeting':        `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="6" width="22" height="20" rx="2"/><path d="M16 12v8"/><path d="M13 14h6c1.5 0 2.5 1 2.5 2s-1 2-2.5 2h-3.5c-1.5 0-2.5 1-2.5 2s1 2 2.5 2h6"/></svg>`,
+      'credit':           `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="24" height="16" rx="2"/><path d="M4 14h24"/><path d="M8 20h6"/><path d="M20 20h4"/></svg>`,
+      'investing':        `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 26L4 6"/><path d="M4 26h24"/><path d="M8 20l5-6 4 3 7-9"/><circle cx="24" cy="8" r="2"/></svg>`,
+      'college':          `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4L3 10l13 6 13-6-13-6z"/><path d="M6 12v8c0 3 4.5 5 10 5s10-2 10-5v-8"/><path d="M27 10v12"/></svg>`,
+      'realestate':       `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16L16 6l11 10"/><path d="M8 14v12h16V14"/><path d="M13 26v-7h6v7"/></svg>`,
+      'goals':            `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="11"/><circle cx="16" cy="16" r="7"/><circle cx="16" cy="16" r="3"/></svg>`,
+      'smallbusiness':    `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="24" height="18" rx="2"/><path d="M4 12h24"/><circle cx="16" cy="19" r="1"/></svg>`,
+      'crypto':           `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="16" r="10"/><path d="M16 6c-2 3-2 6 0 10s2 7 0 10"/><path d="M16 6c2 3 2 6 0 10s-2 7 0 10"/><path d="M6 16h20"/></svg>`,
+      'food':             `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="16" cy="14" r="8"/><path d="M16 6c-1 3 0 6 0 8s-2 5 0 8"/><path d="M10 10c2 1 4 2 6 4"/><path d="M8 14h16"/></svg>`,
+      'housing':          `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16L16 6l11 10"/><path d="M8 14v12h16V14"/><path d="M13 26v-7h6v7"/><path d="M3 28h26"/></svg>`,
+    };
+
+    const modules = [
+      { title: 'Entrepreneurship', description: 'Start and grow your business with essential knowledge, funding strategies, and startup fundamentals.', link: 'entrepreneurial-lessons.html', iconKey: 'entrepreneurship', category: 'business', lessons: 10, time: '20 min' },
+      { title: 'Budgeting Basics', description: 'Master the foundation of financial health. Track spending, allocate income, and build a budget that works.', link: 'budget-lessons.html', iconKey: 'budgeting', category: 'budget', lessons: 10, time: '20 min' },
+      { title: 'Credit Score Mastery', description: 'Understand credit scores, build history, and unlock better financial opportunities through smart management.', link: 'credit-lessons.html', iconKey: 'credit', category: 'budget', lessons: 11, time: '22 min' },
+      { title: 'Investment Education', description: 'Learn investment fundamentals, market concepts, and build long-term wealth through strategic allocation.', link: 'investing-lessons.html', iconKey: 'investing', category: 'investing', lessons: 12, time: '25 min' },
+      { title: 'College & Student Aid', description: 'Navigate college financing, student loans, FAFSA, and financial planning without drowning in debt.', link: 'college-lessons.html', iconKey: 'college', category: 'education', lessons: 9, time: '18 min' },
+      { title: 'Real Estate', description: 'Learn about home buying, mortgages, closing costs, and investment strategies that build wealth.', link: 'real-estate-lessons.html', iconKey: 'realestate', category: 'lifestyle', lessons: 11, time: '22 min' },
+      { title: 'Financial Goals', description: 'Set, plan, and achieve your financial objectives with strategic goal-setting techniques and action plans.', link: 'financial-goals-lessons.html', iconKey: 'goals', category: 'budget', lessons: 8, time: '16 min' },
+      { title: 'Small Business Guide', description: 'Bring your business to the digital era with websites, online presence, and marketing strategies.', link: 'small-business-guide-lessons.html', iconKey: 'smallbusiness', category: 'business', lessons: 12, time: '25 min' },
+      { title: 'Cryptocurrency', description: 'Understand blockchain technology, digital currencies, and crypto investment basics in accessible format.', link: 'crypto-lessons.html', iconKey: 'crypto', category: 'investing', lessons: 9, time: '18 min' },
+      { title: 'Food Insecurity', description: 'Understand food insecurity, food deserts, SNAP benefits, and resources for eating healthy on a budget.', link: 'food-insecurity-stories.html', iconKey: 'food', category: 'community', lessons: 8, time: '16 min' },
+      { title: 'Housing Affordability', description: 'Understand the housing crisis, how it affects communities, and resources for renting and homeownership.', link: 'housing-affordability-stories.html', iconKey: 'housing', category: 'community', lessons: 9, time: '18 min' },
+    ];
+
+    const categoryLabels = {
+      budget: 'Money & Budget',
+      investing: 'Investing',
+      business: 'Career',
+      education: 'Education',
+      lifestyle: 'Life Skills',
+      community: 'Community',
+    };
+
+    // ============================================
+    // RENDER
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function () {
+      renderModules();
+      document.getElementById('moduleCount').textContent = modules.length;
+
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        searchInput.addEventListener('input', function () {
+          const activeBtn = document.querySelector('.filter-btn.active');
+          const category = activeBtn ? activeBtn.getAttribute('data-category') : 'all';
+          renderModules(category, this.value);
+        });
+      }
+
+      document.querySelectorAll('.filter-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var searchTerm = searchInput ? searchInput.value : '';
+          renderModules(btn.getAttribute('data-category'), searchTerm);
+        });
+      });
+    });
+
+    function renderModules(category, searchTerm) {
+      category = category || 'all';
+      searchTerm = searchTerm || '';
+      var grid = document.getElementById('modulesGrid');
+      var emptyState = document.getElementById('emptyState');
+      if (!grid) return;
+
+      grid.innerHTML = '';
+      var term = searchTerm.toLowerCase();
+      var count = 0;
+
+      modules.forEach(function (mod, index) {
+        var matchesCategory = category === 'all' || mod.category === category;
+        var matchesSearch = mod.title.toLowerCase().indexOf(term) !== -1 || mod.description.toLowerCase().indexOf(term) !== -1;
+
+        if (matchesCategory && matchesSearch) {
+          grid.innerHTML += createCardHTML(mod, count);
+          count++;
+        }
+      });
+
+      if (emptyState) {
+        emptyState.style.display = count === 0 ? 'block' : 'none';
+      }
+      grid.style.display = count === 0 ? 'none' : 'grid';
+    }
+
+    function createCardHTML(mod, index) {
+      var iconSVG = moduleIcons[mod.iconKey] || '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="16" cy="16" r="10"/></svg>';
+      var label = categoryLabels[mod.category] || mod.category;
+
+      return '<div class="module-card" onclick="window.location.href=\'' + mod.link + '\'" data-category="' + mod.category + '" style="animation: fadeUp 0.4s ease forwards ' + (0.05 * (index % 6)) + 's; opacity: 0;">' +
+        '<div class="card-top-row">' +
+          '<div class="module-icon">' + iconSVG + '</div>' +
+          '<span class="module-tag">' + label + '</span>' +
+        '</div>' +
+        '<h3 class="module-title">' + mod.title + '</h3>' +
+        '<p class="module-description">' + mod.description + '</p>' +
+        '<div class="module-meta">' +
+          '<a href="' + mod.link + '" class="module-link">Start Learning <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>' +
+          '<span class="module-stat-badge">' + mod.lessons + ' lessons · ' + mod.time + '</span>' +
+        '</div>' +
+      '</div>';
+    }
+  </script>
 
 </body>
 
