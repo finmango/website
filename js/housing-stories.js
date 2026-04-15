@@ -203,26 +203,25 @@ function initializeStories() {
   grid.innerHTML = '';
 
   stories.forEach((story, index) => {
+    const lessonNum = index + 1;
     const card = document.createElement('div');
-    card.className = 'story-card';
+    card.className = 'module-card';
+    card.setAttribute('data-lesson', lessonNum);
     card.onclick = () => openStory(story);
 
     card.innerHTML = `
-      <div class="story-header">
-        <span class="story-number">Lesson ${String(index + 1).padStart(2, '0')}</span>
-        <div class="story-icon">${iconImg(story.icon, 44)}</div>
-        <h3 class="story-title">${story.title}</h3>
-        <p class="story-author">by ${story.author}</p>
-        <div class="story-meta">
-          <div class="meta-item">
-            <img src="images/illustrations/icon_book.svg" alt="">
-            <span>${story.slides.length} slides</span>
-          </div>
-          <div class="meta-item">
-            <img src="images/illustrations/icon_clock.svg" alt="">
-            <span>${story.time}</span>
-          </div>
-        </div>
+      <div class="card-top-row">
+        <div class="module-icon">${iconImg(story.icon, 22)}</div>
+        <span class="module-tag">Lesson ${String(lessonNum).padStart(2, '0')}</span>
+      </div>
+      <h3 class="module-title">${story.title}</h3>
+      <p class="module-description">${story.description}</p>
+      <div class="module-meta">
+        <span class="module-link">
+          Start lesson
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+        <span class="module-stat-badge">${story.slides.length} slides · ${story.time}</span>
       </div>
     `;
 
