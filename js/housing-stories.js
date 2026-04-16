@@ -215,6 +215,7 @@ function initializeStories() {
         <span class="module-tag">Lesson ${String(lessonNum).padStart(2, '0')}</span>
       </div>
       <h3 class="module-title">${story.title}</h3>
+      <p class="module-author">by ${story.author}</p>
       <p class="module-description">${story.description}</p>
       <div class="module-meta">
         <span class="module-link">
