@@ -1,0 +1,2570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Housing Policy Lab | Policy What-If Simulator - FinMango</title>
+    <meta name="title" content="Housing Policy Lab | Policy What-If Simulator - FinMango">
+    <meta name="description"
+        content="Model the impact of housing policy interventions on state-level housing stress. Test rent caps, zoning reform, LIHTC expansion, minimum wage, and tenant legal aid against research-backed elasticities. Built with UVA student researchers.">
+    <meta name="keywords"
+        content="housing policy, policy simulator, rent control, zoning reform, LIHTC, housing stress, affordability, forecast, research, FinMango, UVA">
+    <meta name="author" content="FinMango Research Team">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://finmango.org/housing-policy-lab.html">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://finmango.org/housing-policy-lab.html">
+    <meta property="og:title" content="Housing Policy Lab | Policy What-If Simulator">
+    <meta property="og:description"
+        content="Model the impact of housing policy interventions on state-level housing stress. Built with UVA student researchers.">
+    <meta property="og:image" content="https://finmango.org/og-policy-lab.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="FinMango">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Housing Policy Lab | Policy What-If Simulator">
+    <meta name="twitter:description"
+        content="Model the impact of housing policy interventions on state-level housing stress. Built with UVA student researchers.">
+    <meta name="twitter:image" content="https://finmango.org/og-policy-lab.png">
+    <meta name="twitter:site" content="@finaboromanga">
+
+    <!-- Structured Data / JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Housing Policy Lab — Policy What-If Simulator",
+      "description": "An interactive tool that projects state-level housing stress under different policy scenarios, using elasticities drawn from peer-reviewed housing research.",
+      "url": "https://finmango.org/housing-policy-lab.html",
+      "applicationCategory": "Research Tool",
+      "operatingSystem": "Web Browser",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@type": "Organization", "name": "FinMango", "url": "https://finmango.org" },
+      "publisher": {
+        "@type": "Organization",
+        "name": "FinMango",
+        "logo": { "@type": "ImageObject", "url": "https://finmango.org/finmango.png" }
+      },
+      "datePublished": "2026-04-17",
+      "dateModified": "2026-04-17"
+    }
+    </script>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+
+    <!-- Fonts — DM Sans (nav/footer, site-wide) and Inter (simulator body, matches Barometer) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=optional" rel="stylesheet">
+
+    <!-- Google Analytics -->
+    <script async defer src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DW5HBYS9JW');
+    </script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            /* ─ Site-wide tokens (matches index.html — used by nav & footer) ─ */
+            --black: #1a1a1a;
+            --orange: #FF6B35;
+            --orange-dark: #E55A2B;
+            --orange-soft: #FF8C61;
+            --orange-light: rgba(255, 107, 53, 0.1);
+            --gray: #5a574f;
+            --gray-medium: #666666;
+            --light-gray: #f5f5f5;
+            --warm-white: #f9f5f0;
+            --max-width: 1200px;
+            --nav-max-width: 1280px;
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+            /* ─ Simulator tokens (matches Barometer — used by the Lab body) ─ */
+            --bg: #fafafa;
+            --text: #1a1a1a;
+            --text-muted: #666666;
+            --surface: #f0f0f0;
+            --border: rgba(0, 0, 0, 0.1);
+            --white: #ffffff;
+            --green: #10B981;
+            --yellow: #F59E0B;
+            --red: #EF4444;
+            --blue: #3B82F6;
+            --container-max: 1200px;
+            --gap: 32px;
+            --radius: 12px;
+            --radius-pill: 100px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        /* ─── Main layout ─────────────────────────────────────── */
+        .lab-main {
+            max-width: var(--container-max);
+            margin: 80px auto 0;
+            padding: 0 2rem 3rem;
+        }
+
+        .section-band { padding: 2rem 0; }
+
+        .section-band--alt {
+            background: #f5f5f5;
+            margin-left: calc(-50vw + 50%);
+            margin-right: calc(-50vw + 50%);
+            padding-left: calc(50vw - 50%);
+            padding-right: calc(50vw - 50%);
+        }
+
+        /* ─── Hero ────────────────────────────────────────────── */
+        .lab-hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .lab-hero-text { flex: 1 1 500px; }
+
+        .lab-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--orange);
+            background: rgba(255, 107, 53, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-pill);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
+        }
+
+        .lab-title {
+            font-size: clamp(2rem, 4.5vw, 3.4rem);
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin-bottom: 0.75rem;
+        }
+
+        .lab-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            max-width: 640px;
+            line-height: 1.6;
+        }
+
+        .lab-hero-badges {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .partner-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: var(--white);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-pill);
+        }
+
+        .partner-badge strong { color: var(--text); font-weight: 700; }
+
+        /* ─── State selector row ──────────────────────────────── */
+        .state-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .state-controls label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .state-select {
+            padding: 0.75rem 2.5rem 0.75rem 1.25rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            background: var(--white);
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text);
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path fill='%23666' d='M6 9L1 4h10z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            min-width: 220px;
+            transition: all 0.2s ease;
+        }
+
+        .state-select:hover { border-color: var(--orange); }
+        .state-select:focus {
+            outline: none;
+            border-color: var(--orange);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.15);
+        }
+
+        .horizon-toggle {
+            display: inline-flex;
+            background: var(--surface);
+            border-radius: var(--radius-pill);
+            padding: 4px;
+            gap: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .horizon-btn {
+            padding: 0.55rem 1.1rem;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-pill);
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .horizon-btn.active {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+            color: var(--white);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        /* ─── Quick-stat cards ────────────────────────────────── */
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--gap);
+        }
+
+        .stat-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border-left: 4px solid var(--orange);
+        }
+
+        .stat-card.stress-low    { border-left-color: #10B981; }
+        .stat-card.stress-mod    { border-left-color: #F59E0B; }
+        .stat-card.stress-elev   { border-left-color: #F97316; }
+        .stat-card.stress-high   { border-left-color: #EF4444; }
+
+        .stat-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        .stat-value.orange { color: var(--orange); }
+
+        .stat-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* ─── Simulator layout ────────────────────────────────── */
+        .simulator-grid {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* ─── Levers panel ────────────────────────────────────── */
+        .levers-panel {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.4rem 1.3rem 0.5rem;
+            position: sticky;
+            top: 90px;
+        }
+
+        .levers-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.9rem;
+            padding-bottom: 0.9rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .levers-title {
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .reset-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius-pill);
+            transition: all 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            color: var(--orange);
+            background: rgba(255, 107, 53, 0.08);
+        }
+
+        .preset-row {
+            display: flex;
+            gap: 0.4rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            flex: 1 1 auto;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            background: var(--white);
+            font-family: inherit;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .preset-btn:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+        }
+
+        .preset-btn.active {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+            border-color: transparent;
+            color: var(--white);
+            box-shadow: 0 3px 10px rgba(255, 107, 53, 0.25);
+        }
+
+        .lever {
+            padding: 0.9rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .lever:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0.75rem;
+        }
+
+        .lever-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.55rem;
+            gap: 0.5rem;
+        }
+
+        .lever-label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            line-height: 1.25;
+        }
+
+        .lever-value {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--orange);
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.01em;
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        .lever-desc {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+            line-height: 1.45;
+            opacity: 0.75;
+        }
+
+        /* Progressive orange fill on slider track */
+        input[type="range"] {
+            width: 100%;
+            appearance: none;
+            -webkit-appearance: none;
+            height: 4px;
+            background: linear-gradient(to right,
+                var(--orange) 0%,
+                var(--orange) var(--fill-pct, 0%),
+                var(--surface) var(--fill-pct, 0%),
+                var(--surface) 100%);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--white);
+            border: 2.5px solid var(--orange);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 1px 4px rgba(255, 107, 53, 0.3);
+            transition: transform 0.15s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: var(--white);
+            border: 2.5px solid var(--orange);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 1px 4px rgba(255, 107, 53, 0.3);
+        }
+
+        .lever-scale {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+            opacity: 0.65;
+            letter-spacing: 0.02em;
+        }
+
+        .lever-citation {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+            font-style: italic;
+            line-height: 1.4;
+            opacity: 0.55;
+        }
+
+        /* Tiered buttons (legal aid) */
+        .tier-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            background: var(--surface);
+            padding: 4px;
+            border-radius: var(--radius-pill);
+        }
+
+        .tier-btn {
+            padding: 0.45rem 0.25rem;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-pill);
+            font-family: inherit;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tier-btn.active {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+            color: var(--white);
+            box-shadow: 0 2px 6px rgba(255, 107, 53, 0.3);
+        }
+
+        /* ─── Chart panel ─────────────────────────────────────── */
+        .chart-panel {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+        }
+
+        .chart-panel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .chart-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.2rem;
+        }
+
+        .chart-legend {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.75rem;
+        }
+
+        .legend-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            margin-right: 0.4rem;
+            vertical-align: middle;
+        }
+
+        .legend-line {
+            display: inline-block;
+            width: 16px;
+            height: 2px;
+            margin-right: 0.4rem;
+            vertical-align: middle;
+        }
+
+        .chart-holder {
+            height: 340px;
+            position: relative;
+        }
+
+        /* ─── Narrative card ──────────────────────────────────── */
+        .narrative-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: var(--white);
+            border-radius: var(--radius);
+            padding: 2rem 2.25rem;
+            margin-bottom: 1.5rem;
+            border-left: 6px solid var(--orange);
+        }
+
+        .narrative-label {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--orange);
+            margin-bottom: 0.75rem;
+        }
+
+        .narrative-text {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .narrative-text .highlight-orange { color: var(--orange); font-weight: 700; }
+        .narrative-text .highlight-green  { color: #34D399; font-weight: 700; }
+        .narrative-text .highlight-red    { color: #F87171; font-weight: 700; }
+
+        /* ─── Outcome cards ───────────────────────────────────── */
+        .outcomes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--gap);
+        }
+
+        .outcome-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+
+        .outcome-card-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .outcome-card-compare {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .outcome-baseline {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+            font-weight: 600;
+        }
+
+        .outcome-arrow { color: var(--text-muted); font-size: 0.9rem; }
+
+        .outcome-final {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--orange);
+        }
+
+        .outcome-delta {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--green);
+        }
+
+        .outcome-delta.bad { color: var(--red); }
+
+        /* ─── Breakdown panel ─────────────────────────────────── */
+        .breakdown-section {
+            margin-top: 1rem;
+        }
+
+        .breakdown-panel {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem 2rem;
+        }
+
+        .breakdown-title {
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 1.25rem;
+        }
+
+        .breakdown-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .breakdown-item {
+            display: grid;
+            grid-template-columns: 150px 1fr 80px;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .breakdown-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .breakdown-bar-track {
+            height: 10px;
+            background: var(--surface);
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .breakdown-bar-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--orange) 0%, var(--orange-dark) 100%);
+            border-radius: 5px;
+            transition: width 0.4s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .breakdown-value {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--orange);
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .breakdown-total {
+            border-top: 1px solid var(--border);
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .breakdown-total-value {
+            color: var(--orange);
+            font-size: 1.5rem;
+        }
+
+        /* ─── Section titles (match Barometer) ────────────────── */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* ─── Methodology accordion (match Barometer exactly) ─── */
+        .methodology-section {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem 2.5rem;
+        }
+
+        .methodology-section h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0;
+            color: var(--text);
+        }
+
+        .methodology-accordion-item { border-bottom: 1px solid var(--border); }
+        .methodology-accordion-item:last-child { border-bottom: none; }
+
+        .methodology-accordion-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 1rem 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            text-align: left;
+        }
+
+        .methodology-accordion-btn h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--orange);
+            margin: 0;
+        }
+
+        .methodology-accordion-btn .accordion-arrow {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 1rem;
+        }
+
+        .methodology-accordion-btn.open .accordion-arrow { transform: rotate(180deg); }
+
+        .methodology-accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .methodology-accordion-body.open { max-height: 3000px; }
+
+        .methodology-accordion-content { padding: 0 0 1.25rem 0; }
+
+        .methodology-accordion-content p,
+        .methodology-accordion-content li {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .methodology-accordion-content ul { padding-left: 1.25rem; margin: 0.5rem 0; }
+        .methodology-accordion-content strong { color: var(--text); }
+
+        .elasticity-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .elasticity-table th,
+        .elasticity-table td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .elasticity-table th {
+            background: var(--surface);
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text);
+        }
+
+        .citation-block {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            color: var(--text);
+            user-select: all;
+        }
+
+        /* ─── Share toolbar ───────────────────────────────────── */
+        .tools-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: center;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.75rem 1rem;
+        }
+
+        .tool-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        .tool-btn:hover {
+            background: rgba(255, 107, 53, 0.08);
+            border-color: var(--orange);
+            color: var(--orange);
+        }
+
+        .tool-icon { font-size: 1rem; }
+        .tool-label { font-size: 0.8rem; font-weight: 600; }
+
+        /* ─── Toast ───────────────────────────────────────────── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--text);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-pill);
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 300;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ─── Responsive ──────────────────────────────────────── */
+        @media (max-width: 1100px) {
+            .simulator-grid { grid-template-columns: 1fr; }
+            .levers-panel { position: static; }
+            .stat-row { grid-template-columns: repeat(2, 1fr); }
+            .outcomes-grid { grid-template-columns: 1fr; }
+            .breakdown-item { grid-template-columns: 120px 1fr 70px; }
+        }
+
+        @media (max-width: 968px) {
+            .lab-main { margin-top: 100px; }
+        }
+
+        @media (max-width: 600px) {
+            .lab-main { padding: 0 1rem 2rem; }
+            .section-band { padding: 1.25rem 0; }
+            .section-band--alt { padding-left: 1rem; padding-right: 1rem; }
+            .lab-hero { flex-direction: column; align-items: flex-start; }
+            .lab-hero-badges { align-items: flex-start; }
+            .stat-row { grid-template-columns: 1fr; }
+            .levers-panel,
+            .chart-panel,
+            .methodology-section,
+            .breakdown-panel { padding: 1.25rem; }
+            .narrative-card { padding: 1.5rem; }
+            .narrative-text { font-size: 1rem; }
+            .breakdown-item { grid-template-columns: 100px 1fr 60px; gap: 0.5rem; }
+            .breakdown-name { font-size: 0.75rem; }
+        }
+        /* ════════════════════════════════════════════════════════
+           NAV + MOBILE MENU + FOOTER
+           Copied verbatim from index.html so this page matches the
+           rest of the site exactly. Uses DM Sans via --font-body.
+           ════════════════════════════════════════════════════════ */
+        nav, .mobile-menu, footer {
+            font-family: var(--font-body);
+        }
+
+        /* ─── NAVIGATION ─────────────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1050;
+            padding: 1.5rem 0;
+            transition: padding 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        nav.scrolled {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            background: var(--white);
+        }
+
+        .nav-container {
+            max-width: var(--nav-max-width);
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            justify-self: start;
+        }
+        .logo:hover { transform: rotate(-2deg) scale(1.05); }
+        .logo img { height: 46px; transition: height 0.3s ease; }
+        nav.scrolled .logo img { height: 38px; }
+
+        .nav-right {
+            display: flex;
+            gap: 1.75rem;
+            align-items: center;
+            justify-self: end;
+        }
+
+        .nav-right a {
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item)::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--orange);
+            transition: width 0.3s ease;
+        }
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item):hover::after { width: 100%; }
+        .nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item):hover { color: var(--orange); transform: none; }
+
+        .btn-donate {
+            background: var(--orange);
+            color: var(--white) !important;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.2s ease;
+            border: 2px solid var(--black);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+        .btn-donate::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: var(--black);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+        .btn-donate:hover::before { left: 0; }
+        .btn-donate:hover { transform: scale(1.05); }
+
+        .btn-get-involved {
+            background: transparent;
+            color: var(--black) !important;
+            padding: 0.4rem 0.85rem;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1.5px solid rgba(0, 0, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            letter-spacing: 0.01em;
+        }
+        .btn-get-involved::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: var(--black);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+        .btn-get-involved:hover::before { left: 0; }
+        .btn-get-involved:hover { color: var(--white) !important; border-color: var(--black); }
+
+        /* Dropdown */
+        .dropdown { position: relative; display: inline-block; height: 100%; }
+        .nav-right a.dropdown-trigger { display: flex; align-items: center; height: 100%; }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--white);
+            min-width: 240px;
+            box-shadow: 8px 8px 0 var(--black);
+            border: 3px solid var(--black);
+            z-index: 1001;
+            padding: 0.5rem 0;
+            margin-top: 0;
+        }
+
+        .dropdown::after { content: ''; position: absolute; bottom: -10px; left: 0; width: 100%; height: 10px; }
+        .dropdown-content::after { content: ''; position: absolute; top: -15px; left: 0; width: 100%; height: 15px; }
+
+        .dropdown-content::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 0 8px 8px 8px;
+            border-style: solid;
+            border-color: transparent transparent var(--black) transparent;
+            z-index: 1002;
+        }
+
+        .dropdown:hover .dropdown-content { display: block; animation: fadeIn 0.2s ease; }
+
+        .dropdown-item {
+            color: var(--black) !important;
+            padding: 0.85rem 1.5rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 0.95rem !important;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .dropdown-item:last-child { border-bottom: none; }
+        .nav-right .dropdown-item::after { display: none !important; }
+        .dropdown-item:hover { background-color: var(--light-gray); padding-left: 1.75rem; color: var(--orange) !important; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, 10px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+
+        /* Mega Dropdown */
+        .dropdown-mega .dropdown-content-mega { min-width: 620px; padding: 1rem 0; right: 0; left: auto; transform: none; }
+        .dropdown-content-mega::before { left: auto !important; right: 40px; transform: none !important; }
+        .dropdown-content-mega::after { left: auto; right: 0; }
+        .dropdown-mega-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+        .dropdown-mega-col:first-child { border-right: 1px solid rgba(0, 0, 0, 0.06); }
+        .dropdown-mega-col-label { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-medium); padding: 0.5rem 1.25rem 0.4rem; opacity: 0.6; }
+        .dropdown-content-mega .dropdown-item { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1.25rem; gap: 0.75rem; border-bottom: none; }
+        .dropdown-item-text { display: flex; flex-direction: column; gap: 0.1rem; }
+        .dropdown-item-name { font-size: 0.88rem; font-weight: 700; color: var(--black); transition: color 0.2s ease; }
+        .dropdown-item-desc { font-size: 0.68rem; font-weight: 500; color: var(--gray-medium); transition: color 0.2s ease; letter-spacing: 0.01em; }
+        .dropdown-external { font-size: 0.85rem; opacity: 0.4; transition: all 0.2s ease; flex-shrink: 0; }
+        .dropdown-content-mega .dropdown-item:hover { background-color: var(--light-gray); padding-left: 1.4rem; }
+        .dropdown-content-mega .dropdown-item:hover .dropdown-item-name { color: var(--orange); }
+        .dropdown-content-mega .dropdown-item:hover .dropdown-item-desc { color: var(--gray); }
+        .dropdown-content-mega .dropdown-item:hover .dropdown-external { opacity: 1; color: var(--orange); transform: translate(2px, -2px); }
+
+        @keyframes fadeInMega {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dropdown-mega:hover .dropdown-content-mega { animation: fadeInMega 0.2s ease; }
+
+        .mobile-controls { display: none; gap: 1rem; align-items: center; justify-self: end; }
+
+        /* ─── MOBILE MENU ────────────────────────────────────── */
+        .mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 0; }
+        .mobile-get-involved { display: none; }
+        .mobile-menu-btn span { display: block; width: 28px; height: 3px; background: var(--black); margin: 6px 0; transition: all 0.3s ease; }
+        .mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+        .mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+
+        .mobile-menu { display: none; position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; height: 100dvh; background: var(--white); z-index: 1040; padding: 5rem 1.5rem 1.5rem; transition: right 0.3s ease; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .mobile-menu.active { display: flex; flex-direction: column; right: 0; }
+        .mobile-menu::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--orange); z-index: 1; }
+        .mobile-menu-nav { flex: none; }
+        .mobile-menu-nav > a { display: block; padding: 0.85rem 0; font-size: 1.5rem; font-weight: 700; color: var(--black); text-decoration: none; border-bottom: 1px solid rgba(0, 0, 0, 0.08); transition: all 0.2s ease; opacity: 0; transform: translateX(20px); animation: mobileSlideIn 0.3s ease forwards; }
+        .mobile-menu.active .mobile-menu-nav > a:nth-child(1) { animation-delay: 0.05s; }
+        .mobile-menu.active .mobile-menu-nav > a:nth-child(2) { animation-delay: 0.08s; }
+        .mobile-menu.active .mobile-menu-nav > a:nth-child(3) { animation-delay: 0.11s; }
+        .mobile-menu.active .mobile-menu-nav > .mobile-dropdown { animation-delay: 0.14s; }
+        .mobile-menu.active .mobile-dropdown { opacity: 0; transform: translateX(20px); animation: mobileSlideIn 0.3s ease forwards; animation-delay: 0.14s; }
+
+        @keyframes mobileSlideIn { to { opacity: 1; transform: translateX(0); } }
+
+        .mobile-menu-nav > a:hover, .mobile-menu-nav > a:active { color: var(--orange); padding-left: 0.5rem; }
+        .mobile-menu-nav > a.active-page { color: var(--orange); border-bottom-color: var(--orange); }
+
+        .mobile-dropdown-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; border-bottom: 1px solid rgba(0, 0, 0, 0.08); padding: 0.85rem 0; font-size: 1.5rem; font-weight: 700; color: var(--black); cursor: pointer; text-align: left; font-family: inherit; transition: color 0.2s ease; }
+        .mobile-dropdown-toggle:active, .mobile-dropdown-toggle.active { color: var(--orange); }
+        .mobile-dropdown-toggle .arrow { transition: transform 0.3s ease; font-size: 1rem; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--light-gray); }
+        .mobile-dropdown-toggle.active .arrow { transform: rotate(180deg); color: var(--white); background: var(--orange); }
+
+        .mobile-dropdown-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; margin: 0 -1.5rem; padding: 0 1.5rem; }
+        .mobile-dropdown-content.open { max-height: 1200px; padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .mobile-cards-group { margin-bottom: 0.5rem; }
+        .mobile-cards-group:last-child { margin-bottom: 0; }
+        .mobile-cards-label { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); padding: 0.6rem 0 0.35rem; }
+        .mobile-card { display: flex !important; flex-direction: column; gap: 0.15rem; padding: 0.75rem 0.85rem !important; margin-bottom: 0.4rem; background: var(--white); border: 1.5px solid rgba(0, 0, 0, 0.06); border-radius: 8px; text-decoration: none !important; transition: all 0.15s ease; border-bottom: none !important; }
+        .mobile-card:last-child { margin-bottom: 0; }
+        .mobile-card:active { background: var(--orange-light); border-color: var(--orange); transform: scale(0.98); }
+        .mobile-card-name { font-size: 0.95rem !important; font-weight: 700; color: var(--black) !important; display: flex; align-items: center; gap: 0.35rem; }
+        .mobile-card:active .mobile-card-name { color: var(--orange) !important; }
+        .mobile-card-desc { font-size: 0.75rem; font-weight: 500; color: var(--gray-medium); line-height: 1.3; }
+        .mobile-card-external { font-size: 0.8rem; opacity: 0.4; font-weight: 400; }
+        .mobile-card:active .mobile-card-external { opacity: 1; color: var(--orange); }
+        .mobile-dropdown-content .mobile-card { font-size: unset !important; border-bottom: none !important; }
+        .mobile-menu-footer { padding-top: 0.75rem; margin-top: 0.75rem; border-top: 2px solid var(--black); display: flex; flex-direction: column; gap: 0.75rem; opacity: 0; transform: translateY(10px); animation: mobileSlideUp 0.3s ease forwards; animation-delay: 0.25s; }
+
+        @keyframes mobileSlideUp { to { opacity: 1; transform: translateY(0); } }
+
+        .mobile-menu-footer .btn-mobile-cta { display: block; text-align: center; padding: 0.9rem 1.5rem; font-size: 1rem; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 0.02em; transition: all 0.2s ease; background: var(--orange); color: var(--white); border: 2px solid var(--orange); }
+        .mobile-menu-footer .btn-mobile-cta:active { background: var(--orange-dark); }
+        .mobile-menu-footer-links { display: flex; justify-content: center; gap: 1.5rem; padding-top: 0.75rem; }
+        .mobile-menu-footer-links a { font-size: 0.85rem !important; color: var(--gray-medium) !important; border-bottom: none !important; padding: 0.25rem 0 !important; font-weight: 600 !important; }
+        .mobile-menu-footer-links a:hover { color: var(--orange) !important; }
+
+        /* ─── FOOTER ─────────────────────────────────────────── */
+        footer { padding: 0; border-top: 4px solid var(--orange); background: var(--black); color: var(--white); position: relative; }
+        .footer-newsletter { padding: 2.5rem 2rem; background: rgba(255, 107, 53, 0.08); border-bottom: 1px solid rgba(255, 255, 255, 0.08); text-align: center; }
+        .footer-newsletter-container { max-width: 850px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+        .footer-newsletter-text { text-align: left; }
+        .footer-newsletter h3 { font-size: 1.2rem; font-weight: 900; margin-bottom: 0.2rem; letter-spacing: -0.02em; }
+        .footer-newsletter p { font-size: 0.9rem; opacity: 0.7; margin: 0; line-height: 1.4; }
+        .footer-newsletter-btn { display: inline-block; padding: 0.75rem 1.75rem; font-size: 0.9rem; font-weight: 700; background: var(--orange); color: var(--white); text-decoration: none; border: 2px solid var(--orange); transition: all 0.2s ease; font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; }
+        .footer-newsletter-btn:hover { background: var(--white); color: var(--black); border-color: var(--white); transform: translateY(-2px); }
+        .footer-container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 0; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+        .footer-brand-col { display: flex; flex-direction: column; gap: 1rem; }
+        .footer-brand { margin-bottom: 0.25rem; }
+        .footer-brand img { height: 32px; filter: brightness(0) invert(1); }
+        .footer-tagline { opacity: 0.7; line-height: 1.6; font-size: 0.95rem; }
+        .footer-ein { opacity: 0.4; font-size: 0.8rem; }
+        .footer-social { display: flex; gap: 0.75rem; margin-top: 0.25rem; }
+        .footer-social a { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: var(--white); text-decoration: none; transition: all 0.2s ease; font-size: 0.85rem; }
+        .footer-social a:hover { background: var(--orange); transform: translateY(-2px); }
+        .footer-social a svg { width: 16px; height: 16px; fill: currentColor; }
+        .footer-section h4 { font-size: 0.75rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.25rem; color: var(--orange); opacity: 0.8; }
+        .footer-section a { display: block; color: var(--white); text-decoration: none; margin-bottom: 0.65rem; transition: all 0.2s ease; font-size: 0.95rem; opacity: 0.8; }
+        .footer-section a:hover { color: var(--orange); opacity: 1; transform: translateX(4px); }
+        .footer-squiggle { display: block; margin: 0 auto 0; width: 80px; height: 8px; opacity: 0.2; }
+        .footer-bottom { max-width: var(--max-width); margin: 0 auto; padding: 2rem 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; opacity: 0.5; font-size: 0.85rem; }
+        .footer-bottom a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s ease; margin: 0 0.75rem; }
+        .footer-bottom a:hover { color: var(--orange); }
+
+        /* ─── NAV/FOOTER RESPONSIVE (from index.html) ───────── */
+        @media (max-width: 1200px) {
+            .nav-right { gap: 1.5rem; }
+            .nav-right a { font-size: 0.95rem; }
+            .btn-donate { padding: 0.65rem 1.5rem; font-size: 0.9rem; }
+            .btn-get-involved { padding: 0.45rem 0.9rem; font-size: 0.82rem; }
+        }
+        @media (max-width: 1080px) {
+            nav { padding: 1.25rem 0; }
+            nav.scrolled { padding: 0.875rem 0; }
+            .logo img { height: 42px; }
+            nav.scrolled .logo img { height: 36px; }
+            .nav-right { gap: 1.25rem; }
+            .nav-right a { font-size: 0.9rem; }
+            .btn-donate { padding: 0.6rem 1.25rem; font-size: 0.85rem; text-transform: none; }
+            .btn-get-involved { padding: 0.4rem 0.8rem; font-size: 0.78rem; }
+        }
+        @media (max-width: 968px) {
+            .nav-container { grid-template-columns: 1fr auto; gap: 1rem; }
+            .nav-right { display: none; }
+            .mobile-controls { display: flex; }
+            .mobile-menu-btn { display: block; }
+            .mobile-get-involved { display: inline-block; padding: 0.35rem 0.85rem; font-size: 0.72rem; }
+            .mobile-menu { display: block; }
+            .footer-newsletter { padding: 2rem 1.5rem; }
+            .footer-newsletter-container { flex-direction: column; text-align: center; gap: 1rem; }
+            .footer-newsletter-text { text-align: center; }
+            .footer-newsletter h3 { font-size: 1.15rem; }
+            .footer-newsletter p { font-size: 0.85rem; }
+            .footer-newsletter-btn { padding: 0.7rem 1.5rem; font-size: 0.85rem; }
+            .footer-container { grid-template-columns: 1fr 1fr; gap: 2rem; }
+            .footer-brand-col { grid-column: 1 / -1; }
+            .footer-social { justify-content: flex-start; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+        @media (max-width: 480px) {
+            .mobile-menu-nav > a { font-size: 1.3rem; }
+            .mobile-dropdown-toggle { font-size: 1.3rem; }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <nav id="nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="finmango.png" alt="FinMango">
+            </a>
+
+            <div class="nav-right">
+                <a href="about.html">About</a>
+                <a href="research.html">Research</a>
+                <a href="education.html">Education</a>
+
+                <div class="dropdown dropdown-mega">
+                    <a href="#" class="dropdown-trigger" onclick="event.preventDefault()">Our Work ▾</a>
+                    <div class="dropdown-content dropdown-content-mega">
+                        <div class="dropdown-mega-grid">
+                            <div class="dropdown-mega-col">
+                                <div class="dropdown-mega-col-label">Build</div>
+                                <a href="education.html" class="dropdown-item">
+                                    <span class="dropdown-item-text">
+                                        <span class="dropdown-item-name">Millionaire Mindset</span>
+                                        <span class="dropdown-item-desc">In-school programming | 100k+ taught</span>
+                                    </span>
+                                </a>
+                                <a href="barrier-breakers.html" class="dropdown-item">
+                                    <span class="dropdown-item-text">
+                                        <span class="dropdown-item-name">Barrier Breakers</span>
+                                        <span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span>
+                                    </span>
+                                </a>
+                                <a href="ambassadors.html" class="dropdown-item">
+                                    <span class="dropdown-item-text">
+                                        <span class="dropdown-item-name">Ambassador Program</span>
+                                        <span class="dropdown-item-desc">Powered by young adults globally</span>
+                                    </span>
+                                </a>
+                                <a href="intelligence-platform.html" class="dropdown-item">
+                                    <span class="dropdown-item-text">
+                                        <span class="dropdown-item-name">Intelligence Platform</span>
+                                        <span class="dropdown-item-desc">Early warning across food, housing, health &amp; jobs</span>
+                                    </span>
+                                </a>
+                            </div>
+                            <div class="dropdown-mega-col">
+                                <div class="dropdown-mega-col-label">Measure</div>
+                                <a href="barometer.html" class="dropdown-item">
+                                    <span class="dropdown-item-text">
+                                        <span class="dropdown-item-name">Financial Health Barometer</span>
+                                        <span class="dropdown-item-desc">Real-time economic pulse · 50 states</span>
+                                    </span>
+                                </a>
+                                <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer">
+                                    <span class="dropdown-item-text">
+                                        <span class="dropdown-item-name">GitHub</span>
+                                        <span class="dropdown-item-desc">Research to Reality</span>
+                                    </span>
+                                </a>
+                                <a href="resources.html" class="dropdown-item">
+                                    <span class="dropdown-item-text">
+                                        <span class="dropdown-item-name">Resources</span>
+                                        <span class="dropdown-item-desc">Guides, tools & worksheets</span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+                <a href="donate.html" class="btn-donate">Donate</a>
+            </div>
+
+            <div class="mobile-controls">
+                <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-nav">
+            <a href="about.html">About</a>
+            <a href="research.html">Research</a>
+            <a href="education.html">Education</a>
+            <div class="mobile-dropdown">
+                <button class="mobile-dropdown-toggle">Our Work <span class="arrow">▾</span></button>
+                <div class="mobile-dropdown-content">
+                    <div class="mobile-cards-group">
+                        <div class="mobile-cards-label">Build</div>
+                        <a href="education.html" class="mobile-card"><span class="mobile-card-name">Millionaire Mindset</span><span class="mobile-card-desc">In-school programming | 100k+ taught</span></a>
+                        <a href="barrier-breakers.html" class="mobile-card"><span class="mobile-card-name">Barrier Breakers</span><span class="mobile-card-desc">Powered by Valmark · $20k+ in prizes</span></a>
+                        <a href="ambassadors.html" class="mobile-card"><span class="mobile-card-name">Ambassador Program</span><span class="mobile-card-desc">Powered by young adults globally</span></a>
+                        <a href="intelligence-platform.html" class="mobile-card"><span class="mobile-card-name">Intelligence Platform</span><span class="mobile-card-desc">Early warning across food, housing, health &amp; jobs</span></a>
+                    </div>
+                    <div class="mobile-cards-group">
+                        <div class="mobile-cards-label">Measure</div>
+                        <a href="barometer.html" class="mobile-card"><span class="mobile-card-name">Financial Health Barometer</span><span class="mobile-card-desc">Real-time economic pulse · 50 states</span></a>
+                        <a href="https://github.com/finmango/research" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">GitHub <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Research to Reality</span></a>
+                        <a href="resources.html" class="mobile-card"><span class="mobile-card-name">Resources</span><span class="mobile-card-desc">Guides, tools & worksheets</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mobile-menu-footer">
+            <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-mobile#/donate" target="_blank" rel="noopener noreferrer" class="btn-mobile-cta">Donate</a>
+            <div class="mobile-menu-footer-links">
+                <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
+                <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                <a href="/cdn-cgi/l/email-protection#0a626f6666654a6c6364676b646d652465786d">Contact</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN -->
+    <main class="lab-main">
+
+        <!-- HERO -->
+        <div class="section-band">
+            <div class="lab-hero">
+                <div class="lab-hero-text">
+                    <div class="lab-eyebrow">⚙️ Policy What-If Simulator</div>
+                    <h1 class="lab-title">Housing Policy Lab</h1>
+                    <p class="lab-subtitle">
+                        Pick a state. Move the levers. See a 24-month projection of housing stress under your policy mix,
+                        compared against the status quo trajectory — all grounded in elasticities from peer-reviewed housing
+                        research.
+                    </p>
+                </div>
+                <div class="lab-hero-badges">
+                    <div class="partner-badge">
+                        🎓 <span>Built with <strong>UVA Student Researchers</strong></span>
+                    </div>
+                    <div class="partner-badge">
+                        📊 <span>Sibling to <strong><a href="barometer.html" style="color: var(--text); text-decoration: none;">Financial Health Barometer</a></strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="state-controls">
+                <label for="state-select">State:</label>
+                <select id="state-select" class="state-select"></select>
+                <label for="horizon-toggle" style="margin-left: 1rem;">Horizon:</label>
+                <div class="horizon-toggle" id="horizon-toggle">
+                    <button class="horizon-btn" data-months="12">12 mo</button>
+                    <button class="horizon-btn active" data-months="24">24 mo</button>
+                    <button class="horizon-btn" data-months="36">36 mo</button>
+                </div>
+            </div>
+
+            <!-- Quick stats -->
+            <div class="stat-row" id="stat-row">
+                <div class="stat-card" id="stat-stress">
+                    <div class="stat-label">Current Housing Stress</div>
+                    <div class="stat-value orange" id="stat-stress-val">—</div>
+                    <div class="stat-sub" id="stat-stress-sub">—</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Rent Burden</div>
+                    <div class="stat-value" id="stat-burden-val">—</div>
+                    <div class="stat-sub">% of renters paying 30%+ of income</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Median 2BR Rent</div>
+                    <div class="stat-value" id="stat-fmr-val">—</div>
+                    <div class="stat-sub">HUD Fair Market Rent</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Wage Needed</div>
+                    <div class="stat-value" id="stat-wage-val">—</div>
+                    <div class="stat-sub">Hourly wage to afford median 2BR</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIMULATOR -->
+        <div class="section-band section-band--alt">
+            <div class="section-header">
+                <h2 class="section-title">Simulator</h2>
+            </div>
+
+            <div class="simulator-grid">
+
+                <!-- LEVERS -->
+                <div class="levers-panel">
+                    <div class="levers-header">
+                        <div class="levers-title">Policy Levers</div>
+                        <button class="reset-btn" id="reset-btn">Reset</button>
+                    </div>
+
+                    <div class="preset-row">
+                        <button class="preset-btn active" data-preset="status_quo">Status Quo</button>
+                        <button class="preset-btn" data-preset="moderate">Moderate</button>
+                        <button class="preset-btn" data-preset="aggressive">Aggressive</button>
+                    </div>
+
+                    <!-- Rent cap -->
+                    <div class="lever">
+                        <div class="lever-head">
+                            <span class="lever-label">Annual Rent Growth Cap</span>
+                            <span class="lever-value" id="val-rent-cap">No cap</span>
+                        </div>
+                        <div class="lever-desc">Maximum allowed year-over-year rent increase for existing units.</div>
+                        <input type="range" id="rent-cap" min="0" max="10" step="0.5" value="0">
+                        <div class="lever-scale"><span>No cap</span><span>10%</span></div>
+                        <div class="lever-citation">Diamond, McQuade & Qian (2019) · NBER</div>
+                    </div>
+
+                    <!-- Zoning / supply -->
+                    <div class="lever">
+                        <div class="lever-head">
+                            <span class="lever-label">Supply Expansion (Zoning Reform)</span>
+                            <span class="lever-value" id="val-zoning">0%</span>
+                        </div>
+                        <div class="lever-desc">Decadal increase in allowed housing units via upzoning, ADU allowance, and density reform.</div>
+                        <input type="range" id="zoning" min="0" max="50" step="1" value="0">
+                        <div class="lever-scale"><span>0%</span><span>50%</span></div>
+                        <div class="lever-citation">Pennington (2021); Mast (2019); Montana SB 323 (2023)</div>
+                    </div>
+
+                    <!-- LIHTC -->
+                    <div class="lever">
+                        <div class="lever-head">
+                            <span class="lever-label">LIHTC Expansion</span>
+                            <span class="lever-value" id="val-lihtc">$0B</span>
+                        </div>
+                        <div class="lever-desc">Additional annual federal Low-Income Housing Tax Credit authority.</div>
+                        <input type="range" id="lihtc" min="0" max="20" step="0.5" value="0">
+                        <div class="lever-scale"><span>$0B</span><span>$20B</span></div>
+                        <div class="lever-citation">NCSHA (2023); HUD (2024)</div>
+                    </div>
+
+                    <!-- Minimum wage -->
+                    <div class="lever">
+                        <div class="lever-head">
+                            <span class="lever-label">State Minimum Wage</span>
+                            <span class="lever-value" id="val-wage">$7.25</span>
+                        </div>
+                        <div class="lever-desc">Affects the denominator in rent-to-income ratios for low-wage renters.</div>
+                        <input type="range" id="min-wage" min="7.25" max="25" step="0.25" value="7.25">
+                        <div class="lever-scale"><span>$7.25</span><span>$25</span></div>
+                        <div class="lever-citation">Dube (2019); CBO (2021)</div>
+                    </div>
+
+                    <!-- Legal aid -->
+                    <div class="lever">
+                        <div class="lever-head">
+                            <span class="lever-label">Tenant Legal Aid</span>
+                            <span class="lever-value" id="val-legal">None</span>
+                        </div>
+                        <div class="lever-desc">Funding for eviction defense and right-to-counsel programs.</div>
+                        <div class="tier-buttons" id="legal-tiers">
+                            <button class="tier-btn active" data-tier="0">None</button>
+                            <button class="tier-btn" data-tier="1">Partial</button>
+                            <button class="tier-btn" data-tier="2">RTC</button>
+                            <button class="tier-btn" data-tier="3">RTC+</button>
+                        </div>
+                        <div class="lever-citation" style="margin-top: 0.6rem;">NYC Right to Counsel (2022); Eviction Lab (Princeton)</div>
+                    </div>
+                </div>
+
+                <!-- CHART -->
+                <div class="chart-panel">
+                    <div class="chart-panel-head">
+                        <div>
+                            <div class="chart-title">Housing Stress Projection</div>
+                            <div class="chart-sub" id="chart-sub">12 months historical · 24 months forecast</div>
+                        </div>
+                        <div class="chart-legend">
+                            <span><span class="legend-line" style="background: #999;"></span>Historical</span>
+                            <span><span class="legend-line" style="background: #999; border-top: 2px dashed #999; height: 0;"></span>Status Quo</span>
+                            <span><span class="legend-line" style="background: var(--orange);"></span>Your Policy</span>
+                            <span><span class="legend-dot" style="background: rgba(255,107,53,0.15);"></span>Confidence Band</span>
+                        </div>
+                    </div>
+                    <div class="chart-holder">
+                        <canvas id="projection-chart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- NARRATIVE + OUTCOMES -->
+        <div class="section-band">
+            <div class="section-header">
+                <h2 class="section-title">Projected Outcomes</h2>
+            </div>
+
+            <div class="narrative-card">
+                <div class="narrative-label">Scenario Summary</div>
+                <div class="narrative-text" id="narrative">Loading scenario…</div>
+            </div>
+
+            <div class="outcomes-grid">
+                <div class="outcome-card">
+                    <div class="outcome-card-label">Housing Stress Index (End of Horizon)</div>
+                    <div class="outcome-card-compare">
+                        <span class="outcome-baseline" id="out-stress-base">—</span>
+                        <span class="outcome-arrow">→</span>
+                        <span class="outcome-final" id="out-stress-final">—</span>
+                    </div>
+                    <div class="outcome-delta" id="out-stress-delta">—</div>
+                </div>
+                <div class="outcome-card">
+                    <div class="outcome-card-label">Effective Rent Burden</div>
+                    <div class="outcome-card-compare">
+                        <span class="outcome-baseline" id="out-burden-base">—</span>
+                        <span class="outcome-arrow">→</span>
+                        <span class="outcome-final" id="out-burden-final">—</span>
+                    </div>
+                    <div class="outcome-delta" id="out-burden-delta">—</div>
+                </div>
+                <div class="outcome-card">
+                    <div class="outcome-card-label">Cost-Burdened Households</div>
+                    <div class="outcome-card-compare">
+                        <span class="outcome-baseline" id="out-hh-base">—</span>
+                        <span class="outcome-arrow">→</span>
+                        <span class="outcome-final" id="out-hh-final">—</span>
+                    </div>
+                    <div class="outcome-delta" id="out-hh-delta">—</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BREAKDOWN -->
+        <div class="section-band section-band--alt">
+            <div class="section-header">
+                <h2 class="section-title">Policy Effect Breakdown</h2>
+            </div>
+            <div class="breakdown-panel">
+                <div class="breakdown-title">Contribution of each lever to the total stress reduction</div>
+                <div class="breakdown-list" id="breakdown-list"></div>
+                <div class="breakdown-total">
+                    <span>Total Stress Reduction</span>
+                    <span class="breakdown-total-value" id="breakdown-total">−0.0 pts</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SHARE TOOLS -->
+        <div class="section-band">
+            <div class="section-header">
+                <h2 class="section-title">Share This Scenario</h2>
+            </div>
+            <div class="tools-toolbar">
+                <button class="tool-btn" id="copy-link"><span class="tool-icon">🔗</span><span class="tool-label">Copy Scenario Link</span></button>
+                <button class="tool-btn" id="copy-citation"><span class="tool-icon">📋</span><span class="tool-label">Copy Citation</span></button>
+                <a class="tool-btn" href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer"><span class="tool-icon">💻</span><span class="tool-label">GitHub</span></a>
+                <a class="tool-btn" href="#methodology"><span class="tool-icon">📖</span><span class="tool-label">Methodology</span></a>
+                <a class="tool-btn" href="housing-calculator.html"><span class="tool-icon">🧮</span><span class="tool-label">Housing Calculator</span></a>
+                <a class="tool-btn" href="housing-affordability-stories.html"><span class="tool-icon">📖</span><span class="tool-label">Affordability Stories</span></a>
+            </div>
+        </div>
+
+        <!-- METHODOLOGY -->
+        <div class="section-band section-band--alt">
+            <section class="methodology-section" id="methodology">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>Methodology & Research Foundation</h3>
+                    <a href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer" class="tool-btn"
+                        style="background: var(--orange); color: white; border: none; padding: 0.5rem 1rem;">
+                        <span class="tool-icon" style="font-size: 1rem;">↗</span>
+                        <span class="tool-label" style="color: white;">GitHub Repo</span>
+                    </a>
+                </div>
+
+                <!-- Overview -->
+                <div class="methodology-accordion-item">
+                    <button class="methodology-accordion-btn open"
+                        onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                        <h4>Overview</h4>
+                        <span class="accordion-arrow">▼</span>
+                    </button>
+                    <div class="methodology-accordion-body open">
+                        <div class="methodology-accordion-content">
+                            <p>The Housing Policy Lab simulates the directional impact of five housing policy interventions
+                                on a state's <strong>Housing Stress Index</strong> — the same composite score surfaced by
+                                the FinMango Financial Health Barometer. For each state, the simulator starts with the
+                                current baseline and projects forward under two trajectories: <em>status quo</em> (no
+                                intervention) and <em>your policy mix</em> (the lever settings you choose).</p>
+                            <p>Every lever is tied to a published elasticity from the housing-economics literature.
+                                The simulator is a <strong>heuristic research tool</strong> — it is designed to support
+                                policy conversation, classroom use, and back-of-the-envelope scenario analysis, not to
+                                replace formal econometric modeling or a local impact study.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Elasticities -->
+                <div class="methodology-accordion-item">
+                    <button class="methodology-accordion-btn"
+                        onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                        <h4>Elasticity Table</h4>
+                        <span class="accordion-arrow">▼</span>
+                    </button>
+                    <div class="methodology-accordion-body">
+                        <div class="methodology-accordion-content">
+                            <p>Each lever applies a calibrated reduction (in points on the 0–200 Housing Stress scale)
+                                to the forecast trajectory, ramping in over 18 months to reflect implementation lag.</p>
+                            <table class="elasticity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Lever</th>
+                                        <th>Effect Size</th>
+                                        <th>Source</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Rent Growth Cap</strong></td>
+                                        <td>Up to −4 pts at 3% cap; supply-side offset at lower caps</td>
+                                        <td>Diamond, McQuade & Qian (2019), <em>AER</em></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Supply Expansion</strong></td>
+                                        <td>−0.15 pts per 1% supply increase (decadal)</td>
+                                        <td>Pennington (2021); Mast (2019), <em>J. Housing Econ.</em></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>LIHTC Expansion</strong></td>
+                                        <td>−0.15 pts per $1B additional annual authority</td>
+                                        <td>NCSHA (2023); HUD (2024)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Minimum Wage</strong></td>
+                                        <td>−0.6 pts per $1 above federal floor</td>
+                                        <td>Dube (2019); CBO (2021)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tenant Legal Aid</strong></td>
+                                        <td>0 / −1.5 / −3.5 / −6 pts by tier</td>
+                                        <td>NYC OCJ Right to Counsel Report (2022); Eviction Lab</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Forecast model -->
+                <div class="methodology-accordion-item">
+                    <button class="methodology-accordion-btn"
+                        onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                        <h4>Forecast Model</h4>
+                        <span class="accordion-arrow">▼</span>
+                    </button>
+                    <div class="methodology-accordion-body">
+                        <div class="methodology-accordion-content">
+                            <p>Baseline trajectories use state-specific trend growth rates drawn from the 5-year HPI
+                                change, wage growth, and rent-burden trend lines in ACS / HUD data. The status quo
+                                forecast is:</p>
+                            <p style="font-family: 'Courier New', monospace; background: #f8fafc; padding: 0.75rem; border-radius: 4px; color: var(--text);">
+                                stress(t) = baseline × (1 + trend)^(t/12)
+                            </p>
+                            <p>The <strong>confidence band</strong> shown on the chart is a ±5% envelope around the
+                                status-quo line, widening slightly with horizon length to reflect accumulated uncertainty.
+                                This is illustrative, not a formal prediction interval.</p>
+                            <p>Policy effects ramp from 0 to full strength over 18 months via a linear ramp factor —
+                                consistent with typical legislative and implementation timelines for housing policy.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Limitations -->
+                <div class="methodology-accordion-item">
+                    <button class="methodology-accordion-btn"
+                        onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                        <h4>Limitations</h4>
+                        <span class="accordion-arrow">▼</span>
+                    </button>
+                    <div class="methodology-accordion-body">
+                        <div class="methodology-accordion-content">
+                            <ul>
+                                <li><strong>Linear additive model.</strong> The simulator treats lever effects as
+                                    approximately independent and linearly additive. In reality, rent caps and supply
+                                    expansion interact; aggressive rent control without supply reform can <em>worsen</em>
+                                    long-run affordability (Diamond et al., 2019).</li>
+                                <li><strong>Elasticities are national averages.</strong> State-level effects vary with
+                                    market tightness, labor composition, and existing housing stock. Tight coastal
+                                    markets respond differently from Rust Belt metros.</li>
+                                <li><strong>No endogenous migration.</strong> The model does not capture inter-state
+                                    migration responses to policy changes.</li>
+                                <li><strong>Confidence bands are illustrative.</strong> They represent heuristic
+                                    uncertainty, not a formal statistical prediction interval.</li>
+                                <li><strong>Not a substitute for local impact analysis.</strong> For policy design
+                                    decisions, commission a state-specific study from an academic institution or
+                                    state housing agency.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student partnership -->
+                <div class="methodology-accordion-item">
+                    <button class="methodology-accordion-btn"
+                        onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                        <h4>UVA Student Research Partnership</h4>
+                        <span class="accordion-arrow">▼</span>
+                    </button>
+                    <div class="methodology-accordion-body">
+                        <div class="methodology-accordion-content">
+                            <p>This Lab was developed in partnership with undergraduate researchers at the University
+                                of Virginia as part of FinMango's ongoing collaboration on the affordability crisis.
+                                Student contributions included literature review on housing elasticities, calibration
+                                of the base model, stakeholder outreach, and user-testing with finance and policy
+                                practitioners.</p>
+                            <p>The students' spring 2026 presentations on housing affordability — featuring professional
+                                discussants from the investment and consulting communities — anchored the lab's design
+                                priorities.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cite -->
+                <div style="border-top: 1px solid var(--border); margin-top: 0.5rem; padding-top: 1.25rem;">
+                    <h4 style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--orange); margin-bottom: 0.5rem;">
+                        Cite This Tool</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                        To cite the Housing Policy Lab in publications:</p>
+                    <div class="citation-block">
+                        FinMango Research Team &amp; UVA Student Researchers. (2026). <em>Housing Policy Lab: Policy
+                            What-If Simulator</em> [Interactive tool]. FinMango. https://finmango.org/housing-policy-lab
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">Copied</div>
+
+    <!-- Footer (matches index.html) -->
+    <footer>
+        <div class="footer-newsletter">
+            <div class="footer-newsletter-container">
+                <div class="footer-newsletter-text">
+                    <h3>Stay Updated</h3>
+                    <p>Research, education, and advocacy updates. No spam.</p>
+                </div>
+                <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a>
+            </div>
+        </div>
+        <div class="footer-container">
+            <div class="footer-brand-col">
+                <div class="footer-brand"><img src="finmango.png" alt="FinMango" loading="lazy"></div>
+                <p class="footer-tagline">A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.</p>
+                <p class="footer-ein">EIN: 81-2543425</p>
+                <div class="footer-social">
+                    <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+                    <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+                    <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+                    <a href="/cdn-cgi/l/email-protection#6109040d0d0e2107080f0c000f060e4f0e1306" aria-label="Email"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg></a>
+                </div>
+            </div>
+            <div class="footer-section"><h4>Our Work</h4><a href="research.html">Research</a><a href="education.html">Education</a><a href="barometer.html">Barometer</a><a href="affordability-lab.html">Affordability Lab</a><a href="resources.html">Resources</a></div>
+            <div class="footer-section"><h4>Initiatives</h4><a href="barrier-breakers.html">Barrier Breakers</a><a href="ambassadors.html">Ambassador Program</a><a href="intelligence-platform.html">Intelligence Platform</a><a href="talent.html">Talent</a><a href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer">GitHub</a></div>
+            <div class="footer-section"><h4>Get Involved</h4><a href="donate.html">Donate</a><a href="ambassadors.html">Become an Ambassador</a><a href="/cdn-cgi/l/email-protection#d9b1bcb5b5b699bfb0b7b4b8b7beb6f7b6abbe">Partner With Us</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a><a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a></div>
+        </div>
+        <svg class="footer-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+        <div class="footer-bottom"><div>&copy; 2026 FinMango. All rights reserved.</div><div><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+    </footer>
+
+    <!-- Cloudflare email decoder (for obfuscated mailto links in mobile menu + footer) -->
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+
+    <!-- Nav behavior (inlined from index.html — replaces external js/navbar.js) -->
+    <script>
+        // Nav scroll effect
+        (function () {
+            const nav = document.getElementById('nav');
+            if (!nav) return;
+            window.addEventListener('scroll', () => {
+                nav.classList.toggle('scrolled', window.scrollY > 50);
+            });
+        })();
+
+        // Mobile menu toggle
+        (function () {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (!mobileMenuBtn || !mobileMenu) return;
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+                mobileMenuBtn.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+            document.querySelectorAll('.mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                    mobileMenuBtn.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        })();
+
+        // Mobile dropdown accordion
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.mobile-dropdown-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function () {
+                    this.classList.toggle('active');
+                    this.nextElementSibling.classList.toggle('open');
+                });
+            });
+        });
+    </script>
+
+    <!-- =========================================================
+         SIMULATOR LOGIC
+         ========================================================= -->
+    <script>
+        // ─────────────────────────────────────────────────────────
+        // STATE BASELINE DATA
+        // Housing Stress scored 0–200 (Heuristic Stress Model, see Barometer methodology).
+        // Plausible starting values for a research/demo context. These should be
+        // synchronized with Barometer data/dashboard-data.js on deployment.
+        // ─────────────────────────────────────────────────────────
+        const STATE_DATA = {
+            AL: { name: "Alabama",        stress: 108, burden: 29.1, fmr: 1020, wage: 19.6, trend: 0.018 },
+            AK: { name: "Alaska",         stress: 134, burden: 31.7, fmr: 1560, wage: 30.0, trend: 0.022 },
+            AZ: { name: "Arizona",        stress: 156, burden: 34.8, fmr: 1680, wage: 32.3, trend: 0.038 },
+            AR: { name: "Arkansas",       stress:  98, burden: 28.4, fmr:  960, wage: 18.5, trend: 0.016 },
+            CA: { name: "California",     stress: 181, burden: 38.2, fmr: 2610, wage: 50.2, trend: 0.028 },
+            CO: { name: "Colorado",       stress: 162, burden: 35.1, fmr: 1970, wage: 37.9, trend: 0.036 },
+            CT: { name: "Connecticut",    stress: 148, burden: 33.0, fmr: 1790, wage: 34.4, trend: 0.024 },
+            DE: { name: "Delaware",       stress: 128, burden: 31.5, fmr: 1450, wage: 27.9, trend: 0.025 },
+            DC: { name: "District of Columbia", stress: 171, burden: 36.8, fmr: 2340, wage: 45.0, trend: 0.026 },
+            FL: { name: "Florida",        stress: 168, burden: 37.5, fmr: 1820, wage: 35.0, trend: 0.042 },
+            GA: { name: "Georgia",        stress: 134, burden: 32.2, fmr: 1520, wage: 29.2, trend: 0.034 },
+            HI: { name: "Hawaii",         stress: 183, burden: 39.1, fmr: 2450, wage: 47.1, trend: 0.024 },
+            ID: { name: "Idaho",          stress: 141, burden: 30.9, fmr: 1360, wage: 26.2, trend: 0.048 },
+            IL: { name: "Illinois",       stress: 124, burden: 30.8, fmr: 1440, wage: 27.7, trend: 0.018 },
+            IN: { name: "Indiana",        stress: 106, burden: 28.7, fmr: 1100, wage: 21.2, trend: 0.020 },
+            IA: { name: "Iowa",           stress:  96, burden: 27.8, fmr: 1040, wage: 20.0, trend: 0.018 },
+            KS: { name: "Kansas",         stress: 101, burden: 28.9, fmr: 1080, wage: 20.8, trend: 0.019 },
+            KY: { name: "Kentucky",       stress: 102, burden: 29.4, fmr: 1030, wage: 19.8, trend: 0.020 },
+            LA: { name: "Louisiana",      stress: 116, burden: 31.0, fmr: 1180, wage: 22.7, trend: 0.022 },
+            ME: { name: "Maine",          stress: 139, burden: 31.6, fmr: 1510, wage: 29.0, trend: 0.032 },
+            MD: { name: "Maryland",       stress: 154, burden: 33.7, fmr: 1920, wage: 36.9, trend: 0.024 },
+            MA: { name: "Massachusetts",  stress: 172, burden: 36.5, fmr: 2380, wage: 45.8, trend: 0.026 },
+            MI: { name: "Michigan",       stress: 110, burden: 29.6, fmr: 1170, wage: 22.5, trend: 0.022 },
+            MN: { name: "Minnesota",      stress: 117, burden: 29.8, fmr: 1360, wage: 26.2, trend: 0.023 },
+            MS: { name: "Mississippi",    stress:  99, burden: 28.6, fmr:  980, wage: 18.8, trend: 0.016 },
+            MO: { name: "Missouri",       stress: 104, burden: 28.8, fmr: 1080, wage: 20.8, trend: 0.020 },
+            MT: { name: "Montana",        stress: 146, burden: 32.1, fmr: 1410, wage: 27.1, trend: 0.046 },
+            NE: { name: "Nebraska",       stress:  98, burden: 27.6, fmr: 1060, wage: 20.4, trend: 0.019 },
+            NV: { name: "Nevada",         stress: 164, burden: 35.6, fmr: 1690, wage: 32.5, trend: 0.040 },
+            NH: { name: "New Hampshire",  stress: 145, burden: 32.3, fmr: 1720, wage: 33.1, trend: 0.030 },
+            NJ: { name: "New Jersey",     stress: 166, burden: 35.8, fmr: 2140, wage: 41.2, trend: 0.024 },
+            NM: { name: "New Mexico",     stress: 122, burden: 30.2, fmr: 1240, wage: 23.9, trend: 0.028 },
+            NY: { name: "New York",       stress: 175, burden: 37.9, fmr: 2280, wage: 43.9, trend: 0.022 },
+            NC: { name: "North Carolina", stress: 132, burden: 31.8, fmr: 1470, wage: 28.3, trend: 0.034 },
+            ND: { name: "North Dakota",   stress:  94, burden: 27.2, fmr: 1080, wage: 20.8, trend: 0.015 },
+            OH: { name: "Ohio",           stress: 107, burden: 29.0, fmr: 1120, wage: 21.5, trend: 0.020 },
+            OK: { name: "Oklahoma",       stress: 100, burden: 28.6, fmr: 1010, wage: 19.4, trend: 0.018 },
+            OR: { name: "Oregon",         stress: 158, burden: 34.4, fmr: 1790, wage: 34.4, trend: 0.030 },
+            PA: { name: "Pennsylvania",   stress: 121, burden: 30.4, fmr: 1320, wage: 25.4, trend: 0.021 },
+            RI: { name: "Rhode Island",   stress: 147, burden: 33.2, fmr: 1680, wage: 32.3, trend: 0.024 },
+            SC: { name: "South Carolina", stress: 129, burden: 31.2, fmr: 1350, wage: 26.0, trend: 0.031 },
+            SD: { name: "South Dakota",   stress:  96, burden: 27.4, fmr: 1030, wage: 19.8, trend: 0.017 },
+            TN: { name: "Tennessee",      stress: 131, burden: 31.6, fmr: 1450, wage: 27.9, trend: 0.036 },
+            TX: { name: "Texas",          stress: 138, burden: 32.8, fmr: 1530, wage: 29.4, trend: 0.028 },
+            UT: { name: "Utah",           stress: 144, burden: 31.7, fmr: 1560, wage: 30.0, trend: 0.042 },
+            VT: { name: "Vermont",        stress: 143, burden: 32.0, fmr: 1520, wage: 29.2, trend: 0.026 },
+            VA: { name: "Virginia",       stress: 142, burden: 32.5, fmr: 1690, wage: 32.5, trend: 0.028 },
+            WA: { name: "Washington",     stress: 167, burden: 35.4, fmr: 2060, wage: 39.6, trend: 0.032 },
+            WV: { name: "West Virginia",  stress:  92, burden: 27.0, fmr:  940, wage: 18.1, trend: 0.012 },
+            WI: { name: "Wisconsin",      stress: 112, burden: 29.4, fmr: 1200, wage: 23.1, trend: 0.020 },
+            WY: { name: "Wyoming",        stress: 107, burden: 28.8, fmr: 1130, wage: 21.7, trend: 0.018 }
+        };
+
+        // ─────────────────────────────────────────────────────────
+        // SIMULATOR STATE
+        // ─────────────────────────────────────────────────────────
+        const SIM = {
+            state: 'VA',
+            horizon: 24,
+            policies: {
+                rentCap: null,   // % cap or null (no cap)
+                zoning: 0,       // % supply expansion
+                lihtc: 0,        // $B
+                minWage: 7.25,   // $
+                legalAid: 0      // tier 0-3
+            }
+        };
+
+        // Presets
+        const PRESETS = {
+            status_quo: { rentCap: null, zoning: 0,  lihtc: 0,  minWage: 7.25, legalAid: 0 },
+            moderate:   { rentCap: 6,    zoning: 15, lihtc: 5,  minWage: 15,   legalAid: 1 },
+            aggressive: { rentCap: 3,    zoning: 35, lihtc: 15, minWage: 22,   legalAid: 3 }
+        };
+
+        // ─────────────────────────────────────────────────────────
+        // ELASTICITY / POLICY EFFECT MODEL
+        // Returns effect in STRESS POINTS (negative = reduction)
+        // ─────────────────────────────────────────────────────────
+        function computePolicyEffect(policies) {
+            const assumedMarketRentGrowth = 6; // %/yr baseline
+
+            // Rent cap: relief when cap < market growth, with supply-side offset at very low caps.
+            // Below 2% cap, net effect diminishes (Diamond et al. 2019 supply contraction).
+            let rentCap = 0;
+            if (policies.rentCap !== null) {
+                const gap = Math.max(0, assumedMarketRentGrowth - policies.rentCap);
+                const rawRelief = gap * 0.7; // up to ~4.2 pts at 0% cap
+                const supplyPenalty = policies.rentCap < 3 ? (3 - policies.rentCap) * 0.4 : 0;
+                rentCap = Math.max(0, rawRelief - supplyPenalty);
+            }
+
+            const zoning   = policies.zoning * 0.15;                          // up to 7.5 pts @ 50%
+            const lihtc    = policies.lihtc  * 0.15;                          // up to 3 pts @ $20B
+            const minWage  = Math.max(0, (policies.minWage - 7.25) * 0.6);    // up to ~10.7 pts @ $25
+            const legalAid = [0, 1.5, 3.5, 6][policies.legalAid] || 0;
+
+            return {
+                rentCap, zoning, lihtc, minWage, legalAid,
+                total: rentCap + zoning + lihtc + minWage + legalAid
+            };
+        }
+
+        // ─────────────────────────────────────────────────────────
+        // FORECAST
+        // ─────────────────────────────────────────────────────────
+        function buildTrajectory(stateKey, horizonMonths, policyReduction) {
+            const s = STATE_DATA[stateKey];
+            const historicalMonths = 12;
+            const out = {
+                labels: [],
+                historical: [],
+                statusQuo: [],
+                withPolicy: [],
+                bandUpper: [],
+                bandLower: []
+            };
+
+            const now = new Date();
+
+            // 12 months of "historical" trending up toward current value
+            for (let i = -historicalMonths; i < 0; i++) {
+                const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+                out.labels.push(d.toLocaleString('en-US', { month: 'short', year: '2-digit' }));
+                // Backfill trending up smoothly with light noise
+                const t = i / 12; // negative
+                const val = s.stress * Math.pow(1 + s.trend, t);
+                // Small deterministic "noise" so it looks real but stays stable across renders
+                const noise = Math.sin(i * 1.7) * 1.2;
+                out.historical.push(+(val + noise).toFixed(1));
+                out.statusQuo.push(null);
+                out.withPolicy.push(null);
+                out.bandUpper.push(null);
+                out.bandLower.push(null);
+            }
+
+            // Connect historical to forecast: pin the join point
+            const joinVal = s.stress;
+            out.historical.push(joinVal);
+            out.statusQuo.push(joinVal);
+            out.withPolicy.push(joinVal);
+            out.bandUpper.push(joinVal);
+            out.bandLower.push(joinVal);
+            out.labels.push("Now");
+
+            // Forecast
+            for (let i = 1; i <= horizonMonths; i++) {
+                const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+                out.labels.push(d.toLocaleString('en-US', { month: 'short', year: '2-digit' }));
+                const t = i / 12;
+                const baseStress = s.stress * Math.pow(1 + s.trend, t);
+
+                // 18-month linear ramp for policy
+                const ramp = Math.min(1, i / 18);
+                const adjusted = baseStress - (policyReduction * ramp);
+
+                // Widening confidence band
+                const bandWidth = baseStress * (0.03 + (i / horizonMonths) * 0.04);
+
+                out.historical.push(null);
+                out.statusQuo.push(+baseStress.toFixed(1));
+                out.withPolicy.push(+adjusted.toFixed(1));
+                out.bandUpper.push(+(baseStress + bandWidth).toFixed(1));
+                out.bandLower.push(+(baseStress - bandWidth).toFixed(1));
+            }
+
+            return out;
+        }
+
+        // ─────────────────────────────────────────────────────────
+        // CHART
+        // ─────────────────────────────────────────────────────────
+        let chart;
+        function renderChart(traj) {
+            const ctx = document.getElementById('projection-chart').getContext('2d');
+
+            const data = {
+                labels: traj.labels,
+                datasets: [
+                    {
+                        label: 'Confidence Band (Upper)',
+                        data: traj.bandUpper,
+                        borderColor: 'transparent',
+                        backgroundColor: 'rgba(255, 107, 53, 0.12)',
+                        pointRadius: 0,
+                        fill: '+1',
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Confidence Band (Lower)',
+                        data: traj.bandLower,
+                        borderColor: 'transparent',
+                        backgroundColor: 'rgba(255, 107, 53, 0.12)',
+                        pointRadius: 0,
+                        fill: false,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Historical',
+                        data: traj.historical,
+                        borderColor: '#666666',
+                        backgroundColor: '#666666',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.3,
+                        spanGaps: false
+                    },
+                    {
+                        label: 'Status Quo',
+                        data: traj.statusQuo,
+                        borderColor: '#999999',
+                        backgroundColor: '#999999',
+                        borderWidth: 2,
+                        borderDash: [6, 6],
+                        pointRadius: 0,
+                        tension: 0.3,
+                        spanGaps: false
+                    },
+                    {
+                        label: 'Your Policy',
+                        data: traj.withPolicy,
+                        borderColor: '#FF6B35',
+                        backgroundColor: '#FF6B35',
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        tension: 0.3,
+                        spanGaps: false
+                    }
+                ]
+            };
+
+            const opts = {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function (ctx) {
+                                if (ctx.dataset.label.includes('Band')) return null;
+                                if (ctx.parsed.y === null) return null;
+                                return `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        ticks: { font: { family: 'Inter', size: 11 }, color: '#666' },
+                        title: {
+                            display: true,
+                            text: 'Housing Stress Index',
+                            font: { family: 'Inter', size: 11, weight: '600' },
+                            color: '#1a1a1a'
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            font: { family: 'Inter', size: 10 },
+                            color: '#666',
+                            maxRotation: 0,
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }
+                }
+            };
+
+            if (chart) {
+                chart.data = data;
+                chart.options = opts;
+                chart.update('none');
+            } else {
+                chart = new Chart(ctx, { type: 'line', data, options: opts });
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────
+        // STAT CARDS
+        // ─────────────────────────────────────────────────────────
+        function stressSeverity(val) {
+            if (val < 90)  return { cls: 'stress-low',  label: 'Low' };
+            if (val < 120) return { cls: 'stress-mod',  label: 'Moderate' };
+            if (val < 150) return { cls: 'stress-elev', label: 'Elevated' };
+            return { cls: 'stress-high', label: 'High' };
+        }
+
+        function updateStatCards() {
+            const s = STATE_DATA[SIM.state];
+            const sev = stressSeverity(s.stress);
+
+            const stressCard = document.getElementById('stat-stress');
+            stressCard.className = `stat-card ${sev.cls}`;
+            document.getElementById('stat-stress-val').textContent = s.stress.toFixed(0);
+            document.getElementById('stat-stress-sub').textContent = `${sev.label} · from FinMango Barometer`;
+
+            document.getElementById('stat-burden-val').textContent = s.burden.toFixed(1) + '%';
+            document.getElementById('stat-fmr-val').textContent = '$' + s.fmr.toLocaleString();
+
+            // Wage needed = rent / (40 * 4.33 * 0.30)
+            const wageNeeded = s.fmr / (40 * 4.33 * 0.30);
+            document.getElementById('stat-wage-val').textContent = '$' + wageNeeded.toFixed(2);
+        }
+
+        // ─────────────────────────────────────────────────────────
+        // OUTCOMES + NARRATIVE
+        // ─────────────────────────────────────────────────────────
+        function formatDelta(delta, unit = 'pts') {
+            if (Math.abs(delta) < 0.05) return 'No change';
+            const arrow = delta < 0 ? '↓' : '↑';
+            return `${arrow} ${Math.abs(delta).toFixed(1)} ${unit}`;
+        }
+
+        function updateOutcomes(traj, effect) {
+            const s = STATE_DATA[SIM.state];
+
+            // End-of-horizon values
+            const lastSQ = traj.statusQuo[traj.statusQuo.length - 1];
+            const lastWP = traj.withPolicy[traj.withPolicy.length - 1];
+
+            document.getElementById('out-stress-base').textContent = lastSQ.toFixed(0);
+            document.getElementById('out-stress-final').textContent = lastWP.toFixed(0);
+            const stressDelta = lastWP - lastSQ;
+            const d1 = document.getElementById('out-stress-delta');
+            d1.textContent = formatDelta(stressDelta);
+            d1.className = 'outcome-delta' + (stressDelta > 0 ? ' bad' : '');
+
+            // Effective rent burden: baseline drifts with trend; min wage raises denominator.
+            const endYears = SIM.horizon / 12;
+            const burdenDriftPct = s.trend * 0.6 * endYears; // rent burden grows ~60% as fast as stress trend
+            const burdenStatusQuo = s.burden * (1 + burdenDriftPct);
+
+            // Policy: min wage raises low-income wages proportionally; total policy effect softens burden
+            const wageFactor = 1 + ((SIM.policies.minWage - 7.25) * 0.032);
+            const policyBurdenRelief = (effect.total / 200) * s.burden * 0.4; // heuristic
+            const burdenWithPolicy = Math.max(15, (burdenStatusQuo / wageFactor) - policyBurdenRelief);
+
+            document.getElementById('out-burden-base').textContent = burdenStatusQuo.toFixed(1) + '%';
+            document.getElementById('out-burden-final').textContent = burdenWithPolicy.toFixed(1) + '%';
+            const burdenDelta = burdenWithPolicy - burdenStatusQuo;
+            const d2 = document.getElementById('out-burden-delta');
+            d2.textContent = formatDelta(burdenDelta, 'pp');
+            d2.className = 'outcome-delta' + (burdenDelta > 0 ? ' bad' : '');
+
+            // Cost-burdened households (rough: rent burden % = share of renters paying 30%+)
+            const stateRenterHH = { // approximate state-level renter household counts (millions)
+                CA: 5.9, TX: 3.9, NY: 3.4, FL: 2.8, IL: 1.6, PA: 1.4, OH: 1.5, MI: 1.2, GA: 1.5, NC: 1.3
+            };
+            const renterHHMillions = stateRenterHH[SIM.state] || 0.8; // fallback
+            const hhBase = renterHHMillions * (burdenStatusQuo / 100);
+            const hhPolicy = renterHHMillions * (burdenWithPolicy / 100);
+            document.getElementById('out-hh-base').textContent = (hhBase * 1000).toFixed(0) + 'K';
+            document.getElementById('out-hh-final').textContent = (hhPolicy * 1000).toFixed(0) + 'K';
+            const hhDelta = (hhPolicy - hhBase) * 1000;
+            const d3 = document.getElementById('out-hh-delta');
+            d3.textContent = formatDelta(hhDelta, 'K households');
+            d3.className = 'outcome-delta' + (hhDelta > 0 ? ' bad' : '');
+
+            // Narrative
+            const stateName = s.name;
+            const horizonLabel = SIM.horizon + ' months';
+            const endDate = new Date();
+            endDate.setMonth(endDate.getMonth() + SIM.horizon);
+            const endMonth = endDate.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+
+            let narrative;
+            if (effect.total < 0.5) {
+                narrative = `Under the <span class="highlight-orange">status quo</span>, ${stateName}'s housing stress is projected to reach <span class="highlight-red">${lastSQ.toFixed(0)}</span> by ${endMonth}. Move the levers to see how policy changes shift the trajectory.`;
+            } else {
+                const sqSev = stressSeverity(lastSQ).label.toLowerCase();
+                const wpSev = stressSeverity(lastWP).label.toLowerCase();
+                const reductionPct = ((lastSQ - lastWP) / lastSQ * 100).toFixed(1);
+                narrative = `Over the next ${horizonLabel}, ${stateName}'s housing stress is on track to reach <span class="highlight-red">${lastSQ.toFixed(0)}</span> under the status quo (<em>${sqSev}</em>). Your policy mix redirects that trajectory to <span class="highlight-green">${lastWP.toFixed(0)}</span> by ${endMonth} — a <strong>${reductionPct}% reduction</strong>, bringing the state into the <em>${wpSev}</em> range.`;
+            }
+            document.getElementById('narrative').innerHTML = narrative;
+        }
+
+        // ─────────────────────────────────────────────────────────
+        // BREAKDOWN
+        // ─────────────────────────────────────────────────────────
+        function updateBreakdown(effect) {
+            const rows = [
+                { key: 'rentCap',  name: 'Rent Growth Cap' },
+                { key: 'zoning',   name: 'Supply Expansion' },
+                { key: 'lihtc',    name: 'LIHTC Expansion' },
+                { key: 'minWage',  name: 'Minimum Wage' },
+                { key: 'legalAid', name: 'Tenant Legal Aid' }
+            ];
+
+            const maxVal = Math.max(...rows.map(r => effect[r.key]), 0.01);
+            const listEl = document.getElementById('breakdown-list');
+            listEl.innerHTML = rows.map(r => {
+                const val = effect[r.key];
+                const pct = (val / maxVal) * 100;
+                return `
+                    <div class="breakdown-item">
+                        <div class="breakdown-name">${r.name}</div>
+                        <div class="breakdown-bar-track">
+                            <div class="breakdown-bar-fill" style="width: ${pct}%"></div>
+                        </div>
+                        <div class="breakdown-value">−${val.toFixed(1)} pts</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('breakdown-total').textContent = `−${effect.total.toFixed(1)} pts`;
+        }
+
+        // ─────────────────────────────────────────────────────────
+        // LEVER LABEL UPDATES
+        // ─────────────────────────────────────────────────────────
+        function updateLeverLabels() {
+            document.getElementById('val-rent-cap').textContent =
+                SIM.policies.rentCap === null ? 'No cap' : SIM.policies.rentCap + '%';
+            document.getElementById('val-zoning').textContent = SIM.policies.zoning + '%';
+            document.getElementById('val-lihtc').textContent = '$' + SIM.policies.lihtc.toFixed(1) + 'B';
+            document.getElementById('val-wage').textContent = '$' + SIM.policies.minWage.toFixed(2);
+
+            const legalLabels = ['None', 'Partial', 'RTC', 'RTC+'];
+            document.getElementById('val-legal').textContent = legalLabels[SIM.policies.legalAid];
+
+            // Rent cap slider special-case: 0 = "no cap"
+            const rcVal = document.getElementById('rent-cap').value;
+            if (+rcVal === 0) {
+                SIM.policies.rentCap = null;
+                document.getElementById('val-rent-cap').textContent = 'No cap';
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────
+        // MAIN UPDATE
+        // ─────────────────────────────────────────────────────────
+        function updateSliderFill(el) {
+            const min = +el.min || 0;
+            const max = +el.max || 100;
+            const pct = ((+el.value - min) / (max - min)) * 100;
+            el.style.setProperty('--fill-pct', pct + '%');
+        }
+
+        function updateAllSliderFills() {
+            document.querySelectorAll('input[type="range"]').forEach(updateSliderFill);
+        }
+
+        function recompute() {
+            const effect = computePolicyEffect(SIM.policies);
+            const traj = buildTrajectory(SIM.state, SIM.horizon, effect.total);
+            renderChart(traj);
+            updateStatCards();
+            updateOutcomes(traj, effect);
+            updateBreakdown(effect);
+            updateLeverLabels();
+            updateAllSliderFills();
+            document.getElementById('chart-sub').textContent =
+                `12 months historical · ${SIM.horizon} months forecast`;
+        }
+
+        // ─────────────────────────────────────────────────────────
+        // UI WIRING
+        // ─────────────────────────────────────────────────────────
+        function populateStateSelect() {
+            const sel = document.getElementById('state-select');
+            const keys = Object.keys(STATE_DATA).sort((a, b) =>
+                STATE_DATA[a].name.localeCompare(STATE_DATA[b].name));
+            sel.innerHTML = keys.map(k =>
+                `<option value="${k}" ${k === SIM.state ? 'selected' : ''}>${STATE_DATA[k].name}</option>`
+            ).join('');
+            sel.addEventListener('change', (e) => {
+                SIM.state = e.target.value;
+                recompute();
+            });
+        }
+
+        function applyPreset(preset) {
+            const p = PRESETS[preset];
+            Object.assign(SIM.policies, p);
+
+            // Sync sliders/buttons
+            document.getElementById('rent-cap').value = p.rentCap === null ? 0 : p.rentCap;
+            document.getElementById('zoning').value = p.zoning;
+            document.getElementById('lihtc').value = p.lihtc;
+            document.getElementById('min-wage').value = p.minWage;
+
+            document.querySelectorAll('.tier-btn').forEach(b => {
+                b.classList.toggle('active', +b.dataset.tier === p.legalAid);
+            });
+            document.querySelectorAll('.preset-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.preset === preset);
+            });
+
+            recompute();
+        }
+
+        function wirePresets() {
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
+            });
+            document.getElementById('reset-btn').addEventListener('click', () => applyPreset('status_quo'));
+        }
+
+        function clearPresetSelection() {
+            document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        }
+
+        function wireLevers() {
+            document.getElementById('rent-cap').addEventListener('input', (e) => {
+                const v = +e.target.value;
+                SIM.policies.rentCap = v === 0 ? null : v;
+                clearPresetSelection();
+                recompute();
+            });
+            document.getElementById('zoning').addEventListener('input', (e) => {
+                SIM.policies.zoning = +e.target.value;
+                clearPresetSelection();
+                recompute();
+            });
+            document.getElementById('lihtc').addEventListener('input', (e) => {
+                SIM.policies.lihtc = +e.target.value;
+                clearPresetSelection();
+                recompute();
+            });
+            document.getElementById('min-wage').addEventListener('input', (e) => {
+                SIM.policies.minWage = +e.target.value;
+                clearPresetSelection();
+                recompute();
+            });
+            document.querySelectorAll('.tier-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    SIM.policies.legalAid = +btn.dataset.tier;
+                    clearPresetSelection();
+                    recompute();
+                });
+            });
+        }
+
+        function wireHorizon() {
+            document.querySelectorAll('.horizon-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.horizon-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    SIM.horizon = +btn.dataset.months;
+                    recompute();
+                });
+            });
+        }
+
+        // ─────────────────────────────────────────────────────────
+        // SHARE
+        // ─────────────────────────────────────────────────────────
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('visible');
+            setTimeout(() => t.classList.remove('visible'), 2200);
+        }
+
+        function buildShareURL() {
+            const params = new URLSearchParams({
+                state: SIM.state,
+                h: SIM.horizon,
+                rc: SIM.policies.rentCap === null ? 'none' : SIM.policies.rentCap,
+                z: SIM.policies.zoning,
+                l: SIM.policies.lihtc,
+                w: SIM.policies.minWage,
+                la: SIM.policies.legalAid
+            });
+            return `${location.origin}${location.pathname}?${params.toString()}`;
+        }
+
+        function loadFromURL() {
+            const p = new URLSearchParams(location.search);
+            if (p.has('state') && STATE_DATA[p.get('state')]) SIM.state = p.get('state');
+            if (p.has('h')) SIM.horizon = +p.get('h');
+            if (p.has('rc')) SIM.policies.rentCap = p.get('rc') === 'none' ? null : +p.get('rc');
+            if (p.has('z')) SIM.policies.zoning = +p.get('z');
+            if (p.has('l')) SIM.policies.lihtc = +p.get('l');
+            if (p.has('w')) SIM.policies.minWage = +p.get('w');
+            if (p.has('la')) SIM.policies.legalAid = +p.get('la');
+
+            // Sync UI
+            document.getElementById('rent-cap').value =
+                SIM.policies.rentCap === null ? 0 : SIM.policies.rentCap;
+            document.getElementById('zoning').value = SIM.policies.zoning;
+            document.getElementById('lihtc').value = SIM.policies.lihtc;
+            document.getElementById('min-wage').value = SIM.policies.minWage;
+            document.querySelectorAll('.tier-btn').forEach(b => {
+                b.classList.toggle('active', +b.dataset.tier === SIM.policies.legalAid);
+            });
+            document.querySelectorAll('.horizon-btn').forEach(b => {
+                b.classList.toggle('active', +b.dataset.months === SIM.horizon);
+            });
+        }
+
+        function wireShare() {
+            document.getElementById('copy-link').addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(buildShareURL());
+                    showToast('Scenario link copied');
+                } catch (err) {
+                    showToast('Copy failed');
+                }
+            });
+
+            document.getElementById('copy-citation').addEventListener('click', async () => {
+                const citation = `FinMango Research Team & UVA Student Researchers. (2026). Housing Policy Lab: Policy What-If Simulator [Interactive tool]. FinMango. https://finmango.org/housing-policy-lab`;
+                try {
+                    await navigator.clipboard.writeText(citation);
+                    showToast('Citation copied');
+                } catch (err) {
+                    showToast('Copy failed');
+                }
+            });
+        }
+
+        // ─────────────────────────────────────────────────────────
+        // INIT
+        // ─────────────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromURL();
+            populateStateSelect();
+            wirePresets();
+            wireLevers();
+            wireHorizon();
+            wireShare();
+            recompute();
+        });
+    </script>
+
+</body>
+
+</html>
