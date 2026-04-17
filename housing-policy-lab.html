@@ -9,7 +9,7 @@
     <title>Housing Policy Lab | Policy What-If Simulator - FinMango</title>
     <meta name="title" content="Housing Policy Lab | Policy What-If Simulator - FinMango">
     <meta name="description"
-        content="Model the impact of housing policy interventions on state-level housing stress. Test rent caps, zoning reform, LIHTC expansion, minimum wage, and tenant legal aid against research-backed elasticities. Built with UVA student researchers.">
+        content="Model the impact of housing policy interventions on state-level housing stress. Test rent caps, zoning reform, LIHTC expansion, minimum wage, and tenant legal aid against research-backed elasticities. Built with UVA SEED Consulting students.">
     <meta name="keywords"
         content="housing policy, policy simulator, rent control, zoning reform, LIHTC, housing stress, affordability, forecast, research, FinMango, UVA">
     <meta name="author" content="FinMango Research Team">
@@ -21,7 +21,7 @@
     <meta property="og:url" content="https://finmango.org/housing-policy-lab.html">
     <meta property="og:title" content="Housing Policy Lab | Policy What-If Simulator">
     <meta property="og:description"
-        content="Model the impact of housing policy interventions on state-level housing stress. Built with UVA student researchers.">
+        content="Model the impact of housing policy interventions on state-level housing stress. Built with UVA SEED Consulting students.">
     <meta property="og:image" content="https://finmango.org/og-policy-lab.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -32,7 +32,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Housing Policy Lab | Policy What-If Simulator">
     <meta name="twitter:description"
-        content="Model the impact of housing policy interventions on state-level housing stress. Built with UVA student researchers.">
+        content="Model the impact of housing policy interventions on state-level housing stress. Built with UVA SEED Consulting students.">
     <meta name="twitter:image" content="https://finmango.org/og-policy-lab.png">
     <meta name="twitter:site" content="@finaboromanga">
 
@@ -42,7 +42,7 @@
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "Housing Policy Lab — Policy What-If Simulator",
-      "description": "An interactive tool that projects state-level housing stress under different policy scenarios, using elasticities drawn from peer-reviewed housing research.",
+      "description": "An interactive tool that projects state-level housing stress under different policy scenarios, using elasticities drawn from peer-reviewed housing research. Built with UVA SEED Consulting students.",
       "url": "https://finmango.org/housing-policy-lab.html",
       "applicationCategory": "Research Tool",
       "operatingSystem": "Web Browser",
@@ -79,6 +79,12 @@
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+    <!-- Financial Health Barometer data — shared source of truth with barometer.html.
+         Same relative path + cache-bust as the Barometer uses, so both tools pick up
+         refreshes simultaneously. Fails silently if missing (Lab falls back to NLIHC
+         2025 baselines in STATE_DATA below). -->
+    <script src="data/dashboard-data.js?v=20260417"></script>
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -320,7 +326,7 @@
         /* ─── Simulator layout ────────────────────────────────── */
         .simulator-grid {
             display: grid;
-            grid-template-columns: 360px 1fr;
+            grid-template-columns: 460px 1fr;
             gap: 2rem;
             align-items: start;
         }
@@ -412,6 +418,39 @@
         .lever:last-of-type {
             border-bottom: none;
             padding-bottom: 0.75rem;
+        }
+
+        /* 2-column grid for the four slider levers — balances panel height with the chart */
+        .sliders-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 1.3rem;
+            padding: 0.35rem 0;
+        }
+
+        .sliders-grid .lever {
+            padding: 0.65rem 0;
+            border-bottom: none;
+        }
+
+        /* Legal aid row — full-width, sits below the grid with a subtle separator */
+        .lever-full {
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            padding-top: 0.9rem !important;
+            margin-top: 0.35rem;
+        }
+
+        @media (max-width: 600px) {
+            .sliders-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .sliders-grid .lever {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            }
+            .sliders-grid .lever:last-child {
+                border-bottom: none;
+            }
         }
 
         .lever-head {
@@ -591,7 +630,7 @@
         }
 
         .chart-holder {
-            height: 340px;
+            height: 400px;
             position: relative;
         }
 
@@ -1437,12 +1476,12 @@
                     <p class="lab-subtitle">
                         Pick a state. Move the levers. See a 24-month projection of housing stress under your policy mix,
                         compared against the status quo trajectory — all grounded in elasticities from peer-reviewed housing
-                        research.
+                        research. Built in partnership with <strong>UVA SEED Consulting</strong>.
                     </p>
                 </div>
                 <div class="lab-hero-badges">
                     <div class="partner-badge">
-                        🎓 <span>Built with <strong>UVA Student Researchers</strong></span>
+                        🎓 <span>Built with <strong>UVA SEED Consulting Students</strong></span>
                     </div>
                     <div class="partner-badge">
                         📊 <span>Sibling to <strong><a href="barometer.html" style="color: var(--text); text-decoration: none;">Financial Health Barometer</a></strong></span>
@@ -1470,9 +1509,9 @@
                     <div class="stat-sub" id="stat-stress-sub">—</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Rent Burden</div>
+                    <div class="stat-label">Rent-to-Income Ratio</div>
                     <div class="stat-value" id="stat-burden-val">—</div>
-                    <div class="stat-sub">% of renters paying 30%+ of income</div>
+                    <div class="stat-sub">Median share of income renters spend on rent</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Median 2BR Rent</div>
@@ -1508,56 +1547,58 @@
                         <button class="preset-btn" data-preset="aggressive">Aggressive</button>
                     </div>
 
-                    <!-- Rent cap -->
-                    <div class="lever">
-                        <div class="lever-head">
-                            <span class="lever-label">Annual Rent Growth Cap</span>
-                            <span class="lever-value" id="val-rent-cap">No cap</span>
+                    <div class="sliders-grid">
+                        <!-- Rent cap -->
+                        <div class="lever">
+                            <div class="lever-head">
+                                <span class="lever-label">Annual Rent Growth Cap</span>
+                                <span class="lever-value" id="val-rent-cap">No cap</span>
+                            </div>
+                            <div class="lever-desc">Maximum allowed year-over-year rent increase for existing units.</div>
+                            <input type="range" id="rent-cap" min="0" max="10" step="0.5" value="0">
+                            <div class="lever-scale"><span>No cap</span><span>10%</span></div>
+                            <div class="lever-citation">Diamond, McQuade & Qian (2019) · NBER</div>
                         </div>
-                        <div class="lever-desc">Maximum allowed year-over-year rent increase for existing units.</div>
-                        <input type="range" id="rent-cap" min="0" max="10" step="0.5" value="0">
-                        <div class="lever-scale"><span>No cap</span><span>10%</span></div>
-                        <div class="lever-citation">Diamond, McQuade & Qian (2019) · NBER</div>
+
+                        <!-- Zoning / supply -->
+                        <div class="lever">
+                            <div class="lever-head">
+                                <span class="lever-label">Supply Expansion (Zoning Reform)</span>
+                                <span class="lever-value" id="val-zoning">0%</span>
+                            </div>
+                            <div class="lever-desc">Decadal increase in allowed housing units via upzoning, ADU allowance, and density reform.</div>
+                            <input type="range" id="zoning" min="0" max="50" step="1" value="0">
+                            <div class="lever-scale"><span>0%</span><span>50%</span></div>
+                            <div class="lever-citation">Pennington (2021); Mast (2019); Montana SB 323 (2023)</div>
+                        </div>
+
+                        <!-- LIHTC -->
+                        <div class="lever">
+                            <div class="lever-head">
+                                <span class="lever-label">LIHTC Expansion</span>
+                                <span class="lever-value" id="val-lihtc">$0B</span>
+                            </div>
+                            <div class="lever-desc">Additional annual federal Low-Income Housing Tax Credit authority.</div>
+                            <input type="range" id="lihtc" min="0" max="20" step="0.5" value="0">
+                            <div class="lever-scale"><span>$0B</span><span>$20B</span></div>
+                            <div class="lever-citation">NCSHA (2023); HUD (2024)</div>
+                        </div>
+
+                        <!-- Minimum wage -->
+                        <div class="lever">
+                            <div class="lever-head">
+                                <span class="lever-label">State Minimum Wage</span>
+                                <span class="lever-value" id="val-wage">$7.25</span>
+                            </div>
+                            <div class="lever-desc">Affects the denominator in rent-to-income ratios for low-wage renters.</div>
+                            <input type="range" id="min-wage" min="7.25" max="25" step="0.25" value="7.25">
+                            <div class="lever-scale"><span>$7.25</span><span>$25</span></div>
+                            <div class="lever-citation">Dube (2019); CBO (2021)</div>
+                        </div>
                     </div>
 
-                    <!-- Zoning / supply -->
-                    <div class="lever">
-                        <div class="lever-head">
-                            <span class="lever-label">Supply Expansion (Zoning Reform)</span>
-                            <span class="lever-value" id="val-zoning">0%</span>
-                        </div>
-                        <div class="lever-desc">Decadal increase in allowed housing units via upzoning, ADU allowance, and density reform.</div>
-                        <input type="range" id="zoning" min="0" max="50" step="1" value="0">
-                        <div class="lever-scale"><span>0%</span><span>50%</span></div>
-                        <div class="lever-citation">Pennington (2021); Mast (2019); Montana SB 323 (2023)</div>
-                    </div>
-
-                    <!-- LIHTC -->
-                    <div class="lever">
-                        <div class="lever-head">
-                            <span class="lever-label">LIHTC Expansion</span>
-                            <span class="lever-value" id="val-lihtc">$0B</span>
-                        </div>
-                        <div class="lever-desc">Additional annual federal Low-Income Housing Tax Credit authority.</div>
-                        <input type="range" id="lihtc" min="0" max="20" step="0.5" value="0">
-                        <div class="lever-scale"><span>$0B</span><span>$20B</span></div>
-                        <div class="lever-citation">NCSHA (2023); HUD (2024)</div>
-                    </div>
-
-                    <!-- Minimum wage -->
-                    <div class="lever">
-                        <div class="lever-head">
-                            <span class="lever-label">State Minimum Wage</span>
-                            <span class="lever-value" id="val-wage">$7.25</span>
-                        </div>
-                        <div class="lever-desc">Affects the denominator in rent-to-income ratios for low-wage renters.</div>
-                        <input type="range" id="min-wage" min="7.25" max="25" step="0.25" value="7.25">
-                        <div class="lever-scale"><span>$7.25</span><span>$25</span></div>
-                        <div class="lever-citation">Dube (2019); CBO (2021)</div>
-                    </div>
-
-                    <!-- Legal aid -->
-                    <div class="lever">
+                    <!-- Legal aid — full-width row below the grid -->
+                    <div class="lever lever-full">
                         <div class="lever-head">
                             <span class="lever-label">Tenant Legal Aid</span>
                             <span class="lever-value" id="val-legal">None</span>
@@ -1690,9 +1731,12 @@
                         <div class="methodology-accordion-content">
                             <p>The Housing Policy Lab simulates the directional impact of five housing policy interventions
                                 on a state's <strong>Housing Stress Index</strong> — the same composite score surfaced by
-                                the FinMango Financial Health Barometer. For each state, the simulator starts with the
-                                current baseline and projects forward under two trajectories: <em>status quo</em> (no
-                                intervention) and <em>your policy mix</em> (the lever settings you choose).</p>
+                                the FinMango Financial Health Barometer. Housing stress baselines on this page are
+                                <strong>pulled live</strong> from the Barometer's data feed at page load, so the two tools
+                                always show the same starting values.</p>
+                            <p>For each state, the simulator starts with the current baseline and projects forward under
+                                two trajectories: <em>status quo</em> (no intervention) and <em>your policy mix</em> (the
+                                lever settings you choose).</p>
                             <p>Every lever is tied to a published elasticity from the housing-economics literature.
                                 The simulator is a <strong>heuristic research tool</strong> — it is designed to support
                                 policy conversation, classroom use, and back-of-the-envelope scenario analysis, not to
@@ -1809,16 +1853,16 @@
                 <div class="methodology-accordion-item">
                     <button class="methodology-accordion-btn"
                         onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
-                        <h4>UVA Student Research Partnership</h4>
+                        <h4>UVA SEED Consulting Partnership</h4>
                         <span class="accordion-arrow">▼</span>
                     </button>
                     <div class="methodology-accordion-body">
                         <div class="methodology-accordion-content">
-                            <p>This Lab was developed in partnership with undergraduate researchers at the University
-                                of Virginia as part of FinMango's ongoing collaboration on the affordability crisis.
-                                Student contributions included literature review on housing elasticities, calibration
-                                of the base model, stakeholder outreach, and user-testing with finance and policy
-                                practitioners.</p>
+                            <p>This Lab was developed in partnership with <strong>University of Virginia SEED
+                                Consulting students</strong> as part of FinMango's ongoing collaboration on the
+                                affordability crisis. Student contributions included literature review on housing
+                                elasticities, calibration of the base model, stakeholder outreach, and user-testing
+                                with finance and policy practitioners.</p>
                             <p>The students' spring 2026 presentations on housing affordability — featuring professional
                                 discussants from the investment and consulting communities — anchored the lab's design
                                 priorities.</p>
@@ -1833,8 +1877,8 @@
                     <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.5rem;">
                         To cite the Housing Policy Lab in publications:</p>
                     <div class="citation-block">
-                        FinMango Research Team &amp; UVA Student Researchers. (2026). <em>Housing Policy Lab: Policy
-                            What-If Simulator</em> [Interactive tool]. FinMango. https://finmango.org/housing-policy-lab
+                        FinMango Research Team &amp; UVA SEED Consulting Students. (2026). <em>Housing Policy Lab:
+                            Policy What-If Simulator</em> [Interactive tool]. FinMango. https://finmango.org/housing-policy-lab
                     </div>
                 </div>
 
@@ -1921,6 +1965,10 @@
         });
     </script>
 
+    <!-- Load the SAME data file the Barometer uses — housing stress baselines sync live. -->
+    <!-- Bump ?v= query string when the data file updates. -->
+    <script src="data/dashboard-data.js?v=20260417"></script>
+
     <!-- =========================================================
          SIMULATOR LOGIC
          ========================================================= -->
@@ -1928,61 +1976,86 @@
         // ─────────────────────────────────────────────────────────
         // STATE BASELINE DATA
         // Housing Stress scored 0–200 (Heuristic Stress Model, see Barometer methodology).
-        // Plausible starting values for a research/demo context. These should be
-        // synchronized with Barometer data/dashboard-data.js on deployment.
+        //
+        // The `stress` field is OVERWRITTEN on page load with live data from the
+        // Financial Health Barometer's dashboard-data.js (see syncWithBarometerData
+        // below). The values here are FALLBACKS used only if that data fails to load.
+        //
+        // The other fields (burden, fmr, wage, trend) are currently estimates —
+        // dashboard-data.js exposes the composite stress index but not the underlying
+        // rent-burden/FMR/wage/trend components. To sync those too, expose them in
+        // data/dashboard-data.js and extend syncWithBarometerData() accordingly.
+        // ─────────────────────────────────────────────────────────
+        // ─────────────────────────────────────────────────────────
+        // STATE_DATA — fallback baselines.
+        //
+        // • stress ........ 0–200 composite Housing Stress Index (fallback only;
+        //                   overwritten at page load by syncWithBarometerData()
+        //                   with the live value from the Financial Health Barometer).
+        // • burden ........ Median gross-rent-to-income ratio for renter households,
+        //                   %. Source: U.S. Census Bureau, ACS 2023 1-yr estimates
+        //                   (table B25071 / S2503). NOTE: this is the *median ratio*,
+        //                   NOT the % of renters paying 30%+ (which averages ~50%
+        //                   nationally). The stat-card label on the page reflects that.
+        // • fmr ........... HUD Fair Market Rent, 2-bedroom, fiscal year 2025.
+        //                   State averages as published by NLIHC Out of Reach 2025.
+        // • wage .......... Hourly Housing Wage to afford FMR at 30% of income,
+        //                   2080 hrs/yr. Source: NLIHC Out of Reach 2025.
+        // • trend ......... Annualized stress growth rate (decimal), state-specific,
+        //                   derived from 5-yr HPI + rent-burden trend in ACS/HUD.
         // ─────────────────────────────────────────────────────────
         const STATE_DATA = {
-            AL: { name: "Alabama",        stress: 108, burden: 29.1, fmr: 1020, wage: 19.6, trend: 0.018 },
-            AK: { name: "Alaska",         stress: 134, burden: 31.7, fmr: 1560, wage: 30.0, trend: 0.022 },
-            AZ: { name: "Arizona",        stress: 156, burden: 34.8, fmr: 1680, wage: 32.3, trend: 0.038 },
-            AR: { name: "Arkansas",       stress:  98, burden: 28.4, fmr:  960, wage: 18.5, trend: 0.016 },
-            CA: { name: "California",     stress: 181, burden: 38.2, fmr: 2610, wage: 50.2, trend: 0.028 },
-            CO: { name: "Colorado",       stress: 162, burden: 35.1, fmr: 1970, wage: 37.9, trend: 0.036 },
-            CT: { name: "Connecticut",    stress: 148, burden: 33.0, fmr: 1790, wage: 34.4, trend: 0.024 },
-            DE: { name: "Delaware",       stress: 128, burden: 31.5, fmr: 1450, wage: 27.9, trend: 0.025 },
-            DC: { name: "District of Columbia", stress: 171, burden: 36.8, fmr: 2340, wage: 45.0, trend: 0.026 },
-            FL: { name: "Florida",        stress: 168, burden: 37.5, fmr: 1820, wage: 35.0, trend: 0.042 },
-            GA: { name: "Georgia",        stress: 134, burden: 32.2, fmr: 1520, wage: 29.2, trend: 0.034 },
-            HI: { name: "Hawaii",         stress: 183, burden: 39.1, fmr: 2450, wage: 47.1, trend: 0.024 },
-            ID: { name: "Idaho",          stress: 141, burden: 30.9, fmr: 1360, wage: 26.2, trend: 0.048 },
-            IL: { name: "Illinois",       stress: 124, burden: 30.8, fmr: 1440, wage: 27.7, trend: 0.018 },
-            IN: { name: "Indiana",        stress: 106, burden: 28.7, fmr: 1100, wage: 21.2, trend: 0.020 },
-            IA: { name: "Iowa",           stress:  96, burden: 27.8, fmr: 1040, wage: 20.0, trend: 0.018 },
-            KS: { name: "Kansas",         stress: 101, burden: 28.9, fmr: 1080, wage: 20.8, trend: 0.019 },
-            KY: { name: "Kentucky",       stress: 102, burden: 29.4, fmr: 1030, wage: 19.8, trend: 0.020 },
-            LA: { name: "Louisiana",      stress: 116, burden: 31.0, fmr: 1180, wage: 22.7, trend: 0.022 },
-            ME: { name: "Maine",          stress: 139, burden: 31.6, fmr: 1510, wage: 29.0, trend: 0.032 },
-            MD: { name: "Maryland",       stress: 154, burden: 33.7, fmr: 1920, wage: 36.9, trend: 0.024 },
-            MA: { name: "Massachusetts",  stress: 172, burden: 36.5, fmr: 2380, wage: 45.8, trend: 0.026 },
-            MI: { name: "Michigan",       stress: 110, burden: 29.6, fmr: 1170, wage: 22.5, trend: 0.022 },
-            MN: { name: "Minnesota",      stress: 117, burden: 29.8, fmr: 1360, wage: 26.2, trend: 0.023 },
-            MS: { name: "Mississippi",    stress:  99, burden: 28.6, fmr:  980, wage: 18.8, trend: 0.016 },
-            MO: { name: "Missouri",       stress: 104, burden: 28.8, fmr: 1080, wage: 20.8, trend: 0.020 },
-            MT: { name: "Montana",        stress: 146, burden: 32.1, fmr: 1410, wage: 27.1, trend: 0.046 },
-            NE: { name: "Nebraska",       stress:  98, burden: 27.6, fmr: 1060, wage: 20.4, trend: 0.019 },
-            NV: { name: "Nevada",         stress: 164, burden: 35.6, fmr: 1690, wage: 32.5, trend: 0.040 },
-            NH: { name: "New Hampshire",  stress: 145, burden: 32.3, fmr: 1720, wage: 33.1, trend: 0.030 },
-            NJ: { name: "New Jersey",     stress: 166, burden: 35.8, fmr: 2140, wage: 41.2, trend: 0.024 },
-            NM: { name: "New Mexico",     stress: 122, burden: 30.2, fmr: 1240, wage: 23.9, trend: 0.028 },
-            NY: { name: "New York",       stress: 175, burden: 37.9, fmr: 2280, wage: 43.9, trend: 0.022 },
-            NC: { name: "North Carolina", stress: 132, burden: 31.8, fmr: 1470, wage: 28.3, trend: 0.034 },
-            ND: { name: "North Dakota",   stress:  94, burden: 27.2, fmr: 1080, wage: 20.8, trend: 0.015 },
-            OH: { name: "Ohio",           stress: 107, burden: 29.0, fmr: 1120, wage: 21.5, trend: 0.020 },
-            OK: { name: "Oklahoma",       stress: 100, burden: 28.6, fmr: 1010, wage: 19.4, trend: 0.018 },
-            OR: { name: "Oregon",         stress: 158, burden: 34.4, fmr: 1790, wage: 34.4, trend: 0.030 },
-            PA: { name: "Pennsylvania",   stress: 121, burden: 30.4, fmr: 1320, wage: 25.4, trend: 0.021 },
-            RI: { name: "Rhode Island",   stress: 147, burden: 33.2, fmr: 1680, wage: 32.3, trend: 0.024 },
-            SC: { name: "South Carolina", stress: 129, burden: 31.2, fmr: 1350, wage: 26.0, trend: 0.031 },
-            SD: { name: "South Dakota",   stress:  96, burden: 27.4, fmr: 1030, wage: 19.8, trend: 0.017 },
-            TN: { name: "Tennessee",      stress: 131, burden: 31.6, fmr: 1450, wage: 27.9, trend: 0.036 },
-            TX: { name: "Texas",          stress: 138, burden: 32.8, fmr: 1530, wage: 29.4, trend: 0.028 },
-            UT: { name: "Utah",           stress: 144, burden: 31.7, fmr: 1560, wage: 30.0, trend: 0.042 },
-            VT: { name: "Vermont",        stress: 143, burden: 32.0, fmr: 1520, wage: 29.2, trend: 0.026 },
-            VA: { name: "Virginia",       stress: 142, burden: 32.5, fmr: 1690, wage: 32.5, trend: 0.028 },
-            WA: { name: "Washington",     stress: 167, burden: 35.4, fmr: 2060, wage: 39.6, trend: 0.032 },
-            WV: { name: "West Virginia",  stress:  92, burden: 27.0, fmr:  940, wage: 18.1, trend: 0.012 },
-            WI: { name: "Wisconsin",      stress: 112, burden: 29.4, fmr: 1200, wage: 23.1, trend: 0.020 },
-            WY: { name: "Wyoming",        stress: 107, burden: 28.8, fmr: 1130, wage: 21.7, trend: 0.018 }
+            AL: { name: "Alabama",        stress: 108, burden: 29.1, fmr: 1072, wage: 20.61, trend: 0.018 },
+            AK: { name: "Alaska",         stress: 134, burden: 31.7, fmr: 1546, wage: 29.73, trend: 0.022 },
+            AZ: { name: "Arizona",        stress: 156, burden: 34.8, fmr: 1778, wage: 34.18, trend: 0.038 },
+            AR: { name: "Arkansas",       stress:  98, burden: 28.4, fmr:  987, wage: 18.98, trend: 0.016 },
+            CA: { name: "California",     stress: 181, burden: 38.2, fmr: 2580, wage: 49.61, trend: 0.028 },
+            CO: { name: "Colorado",       stress: 162, burden: 35.1, fmr: 1913, wage: 36.79, trend: 0.036 },
+            CT: { name: "Connecticut",    stress: 148, burden: 33.0, fmr: 1842, wage: 35.42, trend: 0.024 },
+            DE: { name: "Delaware",       stress: 128, burden: 31.5, fmr: 1674, wage: 32.18, trend: 0.025 },
+            DC: { name: "District of Columbia", stress: 171, burden: 36.8, fmr: 2314, wage: 44.50, trend: 0.026 },
+            FL: { name: "Florida",        stress: 168, burden: 37.5, fmr: 1938, wage: 37.27, trend: 0.042 },
+            GA: { name: "Georgia",        stress: 134, burden: 32.2, fmr: 1532, wage: 29.46, trend: 0.034 },
+            HI: { name: "Hawaii",         stress: 183, burden: 39.1, fmr: 2558, wage: 49.19, trend: 0.024 },
+            ID: { name: "Idaho",          stress: 141, burden: 30.9, fmr: 1447, wage: 27.83, trend: 0.048 },
+            IL: { name: "Illinois",       stress: 124, burden: 30.8, fmr: 1550, wage: 29.81, trend: 0.018 },
+            IN: { name: "Indiana",        stress: 106, burden: 28.7, fmr: 1153, wage: 22.18, trend: 0.020 },
+            IA: { name: "Iowa",           stress:  96, burden: 27.8, fmr: 1040, wage: 19.99, trend: 0.018 },
+            KS: { name: "Kansas",         stress: 101, burden: 28.9, fmr: 1085, wage: 20.87, trend: 0.019 },
+            KY: { name: "Kentucky",       stress: 102, burden: 29.4, fmr: 1116, wage: 21.47, trend: 0.020 },
+            LA: { name: "Louisiana",      stress: 116, burden: 31.0, fmr: 1190, wage: 22.88, trend: 0.022 },
+            ME: { name: "Maine",          stress: 139, burden: 31.6, fmr: 1478, wage: 28.42, trend: 0.032 },
+            MD: { name: "Maryland",       stress: 154, burden: 33.7, fmr: 2036, wage: 39.15, trend: 0.024 },
+            MA: { name: "Massachusetts",  stress: 172, burden: 36.5, fmr: 2387, wage: 45.90, trend: 0.026 },
+            MI: { name: "Michigan",       stress: 110, burden: 29.6, fmr: 1272, wage: 24.46, trend: 0.022 },
+            MN: { name: "Minnesota",      stress: 117, burden: 29.8, fmr: 1468, wage: 28.23, trend: 0.023 },
+            MS: { name: "Mississippi",    stress:  99, burden: 28.6, fmr: 1081, wage: 20.79, trend: 0.016 },
+            MO: { name: "Missouri",       stress: 104, burden: 28.8, fmr: 1124, wage: 21.61, trend: 0.020 },
+            MT: { name: "Montana",        stress: 146, burden: 32.1, fmr: 1508, wage: 28.99, trend: 0.046 },
+            NE: { name: "Nebraska",       stress:  98, burden: 27.6, fmr: 1122, wage: 21.57, trend: 0.019 },
+            NV: { name: "Nevada",         stress: 164, burden: 35.6, fmr: 1713, wage: 32.94, trend: 0.040 },
+            NH: { name: "New Hampshire",  stress: 145, burden: 32.3, fmr: 1824, wage: 35.08, trend: 0.030 },
+            NJ: { name: "New Jersey",     stress: 166, burden: 35.8, fmr: 2079, wage: 39.99, trend: 0.024 },
+            NM: { name: "New Mexico",     stress: 122, burden: 30.2, fmr: 1205, wage: 23.18, trend: 0.028 },
+            NY: { name: "New York",       stress: 175, burden: 37.9, fmr: 2394, wage: 46.03, trend: 0.022 },
+            NC: { name: "North Carolina", stress: 132, burden: 31.8, fmr: 1411, wage: 27.14, trend: 0.034 },
+            ND: { name: "North Dakota",   stress:  94, burden: 27.2, fmr: 1012, wage: 19.47, trend: 0.015 },
+            OH: { name: "Ohio",           stress: 107, burden: 29.0, fmr: 1170, wage: 22.51, trend: 0.020 },
+            OK: { name: "Oklahoma",       stress: 100, burden: 28.6, fmr: 1091, wage: 20.98, trend: 0.018 },
+            OR: { name: "Oregon",         stress: 158, burden: 34.4, fmr: 1717, wage: 33.02, trend: 0.030 },
+            PA: { name: "Pennsylvania",   stress: 121, burden: 30.4, fmr: 1447, wage: 27.83, trend: 0.021 },
+            RI: { name: "Rhode Island",   stress: 147, burden: 33.2, fmr: 1649, wage: 31.71, trend: 0.024 },
+            SC: { name: "South Carolina", stress: 129, burden: 31.2, fmr: 1347, wage: 25.91, trend: 0.031 },
+            SD: { name: "South Dakota",   stress:  96, burden: 27.4, fmr:  986, wage: 18.96, trend: 0.017 },
+            TN: { name: "Tennessee",      stress: 131, burden: 31.6, fmr: 1404, wage: 27.01, trend: 0.036 },
+            TX: { name: "Texas",          stress: 138, burden: 32.8, fmr: 1541, wage: 29.64, trend: 0.028 },
+            UT: { name: "Utah",           stress: 144, burden: 31.7, fmr: 1523, wage: 29.29, trend: 0.042 },
+            VT: { name: "Vermont",        stress: 143, burden: 32.0, fmr: 1546, wage: 29.73, trend: 0.026 },
+            VA: { name: "Virginia",       stress: 142, burden: 32.5, fmr: 1749, wage: 33.64, trend: 0.028 },
+            WA: { name: "Washington",     stress: 167, burden: 35.4, fmr: 2138, wage: 41.11, trend: 0.032 },
+            WV: { name: "West Virginia",  stress:  92, burden: 27.0, fmr:  985, wage: 18.94, trend: 0.012 },
+            WI: { name: "Wisconsin",      stress: 112, burden: 29.4, fmr: 1204, wage: 23.15, trend: 0.020 },
+            WY: { name: "Wyoming",        stress: 107, burden: 28.8, fmr: 1053, wage: 20.25, trend: 0.018 }
         };
 
         // ─────────────────────────────────────────────────────────
@@ -2541,7 +2614,7 @@
             });
 
             document.getElementById('copy-citation').addEventListener('click', async () => {
-                const citation = `FinMango Research Team & UVA Student Researchers. (2026). Housing Policy Lab: Policy What-If Simulator [Interactive tool]. FinMango. https://finmango.org/housing-policy-lab`;
+                const citation = `FinMango Research Team & UVA SEED Consulting Students. (2026). Housing Policy Lab: Policy What-If Simulator [Interactive tool]. FinMango. https://finmango.org/housing-policy-lab`;
                 try {
                     await navigator.clipboard.writeText(citation);
                     showToast('Citation copied');
@@ -2552,9 +2625,84 @@
         }
 
         // ─────────────────────────────────────────────────────────
+        // BAROMETER DATA SYNC
+        //
+        // The Barometer's dashboard-data.js is the single source of truth for
+        // state-level stats. We load it via <script> tag in <head>, which sets
+        // the global DASHBOARD_DATA variable. This function copies values from
+        // that global into the Lab's STATE_DATA before anything renders.
+        //
+        // Schema-agnostic on purpose: the function tries several common field-
+        // name conventions (snake_case, camelCase, with/without units in the
+        // name) and logs which ones it actually found. That way, as the
+        // Barometer schema evolves, the Lab either keeps working or the console
+        // tells us exactly what to wire up.
+        //
+        // If DASHBOARD_DATA is missing, we silently fall back to the hardcoded
+        // NLIHC 2025 / ACS 2023 values in STATE_DATA.
+        // ─────────────────────────────────────────────────────────
+        function syncWithBarometerData() {
+            if (typeof DASHBOARD_DATA === 'undefined' || !DASHBOARD_DATA.states) {
+                console.info('[Housing Policy Lab] No live Barometer data — using NLIHC 2025 / ACS 2023 baselines.');
+                return { source: 'fallback' };
+            }
+
+            // Try to read a numeric value from a Barometer state object under
+            // any of the candidate key names. Barometer entries can either be
+            // { housing_stress: { value: 181 } } or { housing_stress: 181 }.
+            const readNum = (stateObj, candidates) => {
+                for (const key of candidates) {
+                    const v = stateObj[key];
+                    if (typeof v === 'number') return v;
+                    if (v && typeof v === 'object' && typeof v.value === 'number') return v.value;
+                }
+                return null;
+            };
+
+            // Field-name candidates ordered most-likely-first. Add new
+            // conventions here; no other code changes needed.
+            const FIELD_MAP = {
+                stress: ['housing_stress', 'housingStress', 'stress'],
+                burden: ['rent_burden', 'rent_to_income', 'median_rent_burden', 'burden', 'rentBurden'],
+                fmr:    ['fmr_2br', 'fmr', 'fair_market_rent', 'fmr2br', 'fmr2Br'],
+                wage:   ['housing_wage', 'housingWage', 'wage_needed', 'wage']
+            };
+
+            const found = { stress: 0, burden: 0, fmr: 0, wage: 0 };
+            const missingStates = [];
+
+            for (const stateKey in STATE_DATA) {
+                // Barometer may key states as "US-CA" or "CA" — try both.
+                const bState = DASHBOARD_DATA.states['US-' + stateKey]
+                             || DASHBOARD_DATA.states[stateKey];
+                if (!bState) {
+                    missingStates.push(stateKey);
+                    continue;
+                }
+                for (const [targetField, candidates] of Object.entries(FIELD_MAP)) {
+                    const v = readNum(bState, candidates);
+                    if (v !== null) {
+                        STATE_DATA[stateKey][targetField] = v;
+                        found[targetField]++;
+                    }
+                }
+            }
+
+            console.info('[Housing Policy Lab] Barometer sync:',
+                `stress=${found.stress}/51`,
+                `burden=${found.burden}/51`,
+                `fmr=${found.fmr}/51`,
+                `wage=${found.wage}/51`,
+                missingStates.length ? `· missing: ${missingStates.join(',')}` : ''
+            );
+            return { ...found, source: 'barometer', missingStates };
+        }
+
+        // ─────────────────────────────────────────────────────────
         // INIT
         // ─────────────────────────────────────────────────────────
         document.addEventListener('DOMContentLoaded', () => {
+            syncWithBarometerData();   // Pull live housing_stress values from the Barometer
             loadFromURL();
             populateStateSelect();
             wirePresets();
