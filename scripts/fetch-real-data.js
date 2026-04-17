@@ -99,6 +99,32 @@ function loadJCHSReferenceData() {
 }
 
 /**
+ * Load NLIHC Out of Reach 2025 fallback data.
+ * Used when live Census ACS (B25071) or HUD FMR APIs are unavailable so that
+ * every state entry in DASHBOARD_DATA still exposes rent_burden / fmr_2br /
+ * housing_wage for the Policy Lab's top-line stat cards.
+ */
+function loadNLIHCFallbackData() {
+    console.log('📚 Loading NLIHC Out of Reach 2025 fallback data...');
+    try {
+        const p = path.join(__dirname, '..', 'data', 'nlihc-oor-2025-fallback.json');
+        const data = JSON.parse(fs.readFileSync(p, 'utf8'));
+        console.log(`  ✓ Loaded NLIHC fallback for ${Object.keys(data.states).length} states`);
+        return data;
+    } catch (error) {
+        console.warn(`  ⚠️ Could not load NLIHC fallback: ${error.message}`);
+        return null;
+    }
+}
+
+// NLIHC Housing Wage definition: hourly wage needed to afford FMR at 30% of
+// income, assuming 2,080 work hours per year. Matches NLIHC OOR methodology.
+function deriveHousingWage(fmr2br) {
+    if (!fmr2br || fmr2br <= 0) return null;
+    return Math.round((fmr2br * 12) / (2080 * 0.30) * 100) / 100;
+}
+
+/**
  * Fetch data from the Google Health Trends API (exclusive, approved access only).
  * Unlike the public Google Trends website (relative 0-100 scale), this API returns
  * absolute probability values: P(term | time, geography) × 10,000,000.
@@ -497,8 +523,9 @@ async function fetchCensusRentBurden() {
  * @param {Object} fmr - HUD Fair Market Rents data
  * @param {Object} jchs - Harvard JCHS 2025 reference data (calibration)
  * @param {Object} trends - Google Trends data (optional boost)
+ * @param {Object} nlihc - NLIHC OOR 2025 fallback data (used when live sources miss)
  */
-function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr = null, jchs = null, trends = null) {
+function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr = null, jchs = null, trends = null, nlihc = null) {
     const states = {};
     const stateAbbrs = Object.keys(STATE_FIPS);
 
@@ -721,6 +748,46 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             change: 0,
             rank: null
         };
+
+        // Top-level raw housing fields consumed by the Housing Policy Lab's
+        // syncWithBarometerData(). Live sources win; NLIHC OOR 2025 is the
+        // fallback when the Census/HUD APIs are unreachable.
+        const nlihcState = nlihc?.states?.[abbr];
+
+        // rent_burden: median gross rent-to-income %, ACS B25071
+        let rbValue = rentBurden?.[abbr]?.medianRentBurden ?? null;
+        let rbSource = rentBurden?.[abbr] ? `ACS B25071 ${rentBurden[abbr].year}` : null;
+        if (rbValue === null && nlihcState) {
+            rbValue = nlihcState.rent_burden;
+            rbSource = 'NLIHC OOR 2025 (fallback)';
+        }
+        states[stateCode].rent_burden = rbValue !== null
+            ? { value: rbValue, source: rbSource }
+            : null;
+
+        // fmr_2br: HUD FY2025 state-level 2-bedroom FMR (median of counties)
+        let fmrValue = fmr?.[abbr]?.fmr_2br ?? null;
+        let fmrOut = fmr?.[abbr] ? 'HUD FY2025' : null;
+        if (fmrValue === null && nlihcState) {
+            fmrValue = nlihcState.fmr_2br;
+            fmrOut = 'NLIHC OOR 2025 (fallback)';
+        }
+        states[stateCode].fmr_2br = fmrValue !== null
+            ? { value: fmrValue, source: fmrOut }
+            : null;
+
+        // housing_wage: NLIHC Housing Wage, derived from FMR when possible so
+        // the two numbers stay internally consistent.
+        let wageValue = deriveHousingWage(fmrValue);
+        let wageSource = fmrValue !== null && fmr?.[abbr]
+            ? 'Derived from HUD FMR (NLIHC formula)'
+            : (nlihcState ? 'NLIHC OOR 2025 (fallback)' : null);
+        if (wageValue === null && nlihcState) {
+            wageValue = nlihcState.housing_wage;
+        }
+        states[stateCode].housing_wage = wageValue !== null
+            ? { value: wageValue, source: wageSource }
+            : null;
     }
 
     // Fill in missing values with estimates based on regional patterns
@@ -814,6 +881,9 @@ async function main() {
     // Load JCHS reference data (static, authoritative calibration source)
     const jchs = loadJCHSReferenceData();
 
+    // Load NLIHC OOR 2025 fallback (used only when live Census / HUD miss)
+    const nlihc = loadNLIHCFallbackData();
+
     // Fetch data from all sources in parallel
     const [unemployment, housing, poverty, rentBurden, fmr] = await Promise.all([
         fetchBLSUnemployment(),
@@ -830,7 +900,7 @@ async function main() {
 
     // Calculate indices with all data sources including JCHS calibration
     console.log('🔢 Calculating composite indices...');
-    const states = calculateIndices(unemployment, housing, poverty, rentBurden, fmr, jchs, trends);
+    const states = calculateIndices(unemployment, housing, poverty, rentBurden, fmr, jchs, trends, nlihc);
     const national = calculateNational(states);
 
     // Build output
@@ -844,8 +914,9 @@ async function main() {
                 unemployment: unemployment ? 'BLS LAUS' : 'estimated',
                 housing_prices: housing ? 'FRED HPI' : 'estimated',
                 poverty: poverty ? 'Census SAIPE' : 'estimated',
-                rent_burden: rentBurden ? 'Census ACS B25071' : (jchs ? 'Harvard JCHS 2025' : 'estimated'),
-                fair_market_rent: fmr ? 'HUD FMR API' : (jchs ? 'Harvard JCHS 2025' : 'estimated'),
+                rent_burden: rentBurden ? 'Census ACS B25071' : (nlihc ? 'NLIHC OOR 2025 (fallback)' : (jchs ? 'Harvard JCHS 2025' : 'estimated')),
+                fair_market_rent: fmr ? 'HUD FMR API' : (nlihc ? 'NLIHC OOR 2025 (fallback)' : (jchs ? 'Harvard JCHS 2025' : 'estimated')),
+                housing_wage: fmr ? 'Derived from HUD FMR (NLIHC formula)' : (nlihc ? 'NLIHC OOR 2025 (fallback)' : 'estimated'),
                 jchs_calibration: jchs ? 'Harvard JCHS State of the Nation\'s Housing 2025' : 'not loaded',
                 trends: trends ? 'Google Trends' : 'not used'
             }

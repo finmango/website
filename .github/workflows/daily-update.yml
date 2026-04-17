@@ -52,6 +52,14 @@ jobs:
             exit 1
           fi
 
+          # Ensure top-level rent_burden / fmr_2br / housing_wage fields are
+          # present on every state so the Housing Policy Lab's Barometer sync
+          # lights up 51/51 across all four target fields. Falls back to
+          # NLIHC OOR 2025 for states the live APIs missed.
+          echo "::group::Augment housing fields"
+          node scripts/augment-housing-fields.js
+          echo "::endgroup::"
+
           # Update Student Health Map Data (Young Adult Specific)
           echo "Updating Student Map Data..."
           node scripts/update-student-map.js || true
