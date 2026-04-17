@@ -1772,8 +1772,8 @@
                                     </tr>
                                     <tr>
                                         <td><strong>Supply Expansion</strong></td>
-                                        <td>−0.15 pts per 1% supply increase (decadal)</td>
-                                        <td>Pennington (2021); Mast (2019), <em>J. Housing Econ.</em></td>
+                                        <td>−0.20 pts per 1% supply increase + ~20% rent-trend dampening at Minneapolis-2040 scale</td>
+                                        <td>Pennington (2021); Mast (2023); Freemark (2024)</td>
                                     </tr>
                                     <tr>
                                         <td><strong>LIHTC Expansion</strong></td>
@@ -1782,13 +1782,13 @@
                                     </tr>
                                     <tr>
                                         <td><strong>Minimum Wage</strong></td>
-                                        <td>−0.6 pts per $1 above federal floor</td>
+                                        <td>−0.9 pts per $1 above federal floor</td>
                                         <td>Dube (2019); CBO (2021)</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Tenant Legal Aid</strong></td>
-                                        <td>0 / −1.5 / −3.5 / −6 pts by tier</td>
-                                        <td>NYC OCJ Right to Counsel Report (2022); Eviction Lab</td>
+                                        <td>0 / −2.5 / −5.5 / −10 pts by tier</td>
+                                        <td>NYC OCJ Right to Counsel Report (2023); Eviction Lab</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -1816,6 +1816,12 @@
                                 This is illustrative, not a formal prediction interval.</p>
                             <p>Policy effects ramp from 0 to full strength over 18 months via a linear ramp factor —
                                 consistent with typical legislative and implementation timelines for housing policy.</p>
+                            <p><strong>Trend dampening.</strong> Structural policies (rent caps, zoning reform) don't
+                                only subtract stress points; they also bend the counterfactual rent-growth curve
+                                downward. The with-policy forecast uses <code>effectiveTrend = trend × (1 − dampen)</code>,
+                                where the dampen factor rises with the gap between a rent cap and market rent growth
+                                and with the scale of supply expansion (capped at 0.70 to leave room for exogenous
+                                drivers like wages, migration, and construction costs).</p>
                         </div>
                     </div>
                 </div>
@@ -1830,10 +1836,13 @@
                     <div class="methodology-accordion-body">
                         <div class="methodology-accordion-content">
                             <ul>
-                                <li><strong>Linear additive model.</strong> The simulator treats lever effects as
-                                    approximately independent and linearly additive. In reality, rent caps and supply
-                                    expansion interact; aggressive rent control without supply reform can <em>worsen</em>
-                                    long-run affordability (Diamond et al., 2019).</li>
+                                <li><strong>Mostly additive model.</strong> Levers are summed as independent point
+                                    contributions, with one non-linear adjustment: rent caps and zoning reform dampen
+                                    the counterfactual rent-growth trend, so their benefit compounds over a multi-year
+                                    horizon. Cross-lever synergies beyond that (e.g. zoning × LIHTC) are not modeled.
+                                    Aggressive rent control without supply reform can <em>worsen</em> long-run
+                                    affordability (Diamond et al., 2019) — the supply penalty in the rent-cap formula
+                                    reflects this.</li>
                                 <li><strong>Elasticities are national averages.</strong> State-level effects vary with
                                     market tightness, labor composition, and existing housing stock. Tight coastal
                                     markets respond differently from Rust Belt metros.</li>
@@ -2082,7 +2091,15 @@
 
         // ─────────────────────────────────────────────────────────
         // ELASTICITY / POLICY EFFECT MODEL
-        // Returns effect in STRESS POINTS (negative = reduction)
+        // Returns effect in STRESS POINTS (negative = reduction) plus a
+        // `trendDampen` factor for structural policies that bend the rent-
+        // growth curve (applied to the forecast's counterfactual trend).
+        //
+        // Coefficients calibrated against:
+        //   · Dube (2019), CBO (2021) — minimum wage → household income elasticity
+        //   · NYC Office of Civil Justice (2023) — right-to-counsel eviction reduction
+        //   · Minneapolis 2040 evaluations (Mast 2023, Freemark 2024) — zoning → rent moderation
+        //   · Diamond/McQuade/Qian (2019) — rent control supply contraction
         // ─────────────────────────────────────────────────────────
         function computePolicyEffect(policies) {
             const assumedMarketRentGrowth = 6; // %/yr baseline
@@ -2090,28 +2107,41 @@
             // Rent cap: relief when cap < market growth, with supply-side offset at very low caps.
             // Below 2% cap, net effect diminishes (Diamond et al. 2019 supply contraction).
             let rentCap = 0;
+            let rentCapTrendDampen = 0;
             if (policies.rentCap !== null) {
                 const gap = Math.max(0, assumedMarketRentGrowth - policies.rentCap);
                 const rawRelief = gap * 0.7; // up to ~4.2 pts at 0% cap
                 const supplyPenalty = policies.rentCap < 3 ? (3 - policies.rentCap) * 0.4 : 0;
                 rentCap = Math.max(0, rawRelief - supplyPenalty);
+                // Rent caps directly slow rent growth. Dampening scales with the
+                // fraction of market growth the cap absorbs.
+                rentCapTrendDampen = gap / assumedMarketRentGrowth;
             }
 
-            const zoning   = policies.zoning * 0.15;                          // up to 7.5 pts @ 50%
+            const zoning   = policies.zoning * 0.20;                          // up to 10 pts @ 50%
             const lihtc    = policies.lihtc  * 0.15;                          // up to 3 pts @ $20B
-            const minWage  = Math.max(0, (policies.minWage - 7.25) * 0.6);    // up to ~10.7 pts @ $25
-            const legalAid = [0, 1.5, 3.5, 6][policies.legalAid] || 0;
+            const minWage  = Math.max(0, (policies.minWage - 7.25) * 0.9);    // up to ~16 pts @ $25
+            const legalAid = [0, 2.5, 5.5, 10][policies.legalAid] || 0;
+
+            // Zoning reform moderates rent growth over the medium term. 35%
+            // expansion (~Minneapolis 2040 scale) → ~20% trend dampening.
+            const zoningTrendDampen = policies.zoning * 0.006;
+
+            // Combined trend dampening caps at 0.7 — exogenous factors (wages,
+            // migration, construction costs) keep some drift in place.
+            const trendDampen = Math.min(0.7, rentCapTrendDampen + zoningTrendDampen);
 
             return {
                 rentCap, zoning, lihtc, minWage, legalAid,
-                total: rentCap + zoning + lihtc + minWage + legalAid
+                total: rentCap + zoning + lihtc + minWage + legalAid,
+                trendDampen
             };
         }
 
         // ─────────────────────────────────────────────────────────
         // FORECAST
         // ─────────────────────────────────────────────────────────
-        function buildTrajectory(stateKey, horizonMonths, policyReduction) {
+        function buildTrajectory(stateKey, horizonMonths, effect) {
             const s = STATE_DATA[stateKey];
             const historicalMonths = 12;
             const out = {
@@ -2122,6 +2152,12 @@
                 bandUpper: [],
                 bandLower: []
             };
+
+            // Structural policies (rent caps, zoning) bend the counterfactual
+            // rent-growth curve downward over time, so the policy line benefits
+            // from compounding — not just a flat subtraction.
+            const policyReduction = effect.total;
+            const effectiveTrend = s.trend * (1 - (effect.trendDampen || 0));
 
             const now = new Date();
 
@@ -2156,10 +2192,11 @@
                 out.labels.push(d.toLocaleString('en-US', { month: 'short', year: '2-digit' }));
                 const t = i / 12;
                 const baseStress = s.stress * Math.pow(1 + s.trend, t);
+                const policyBaseStress = s.stress * Math.pow(1 + effectiveTrend, t);
 
                 // 18-month linear ramp for policy
                 const ramp = Math.min(1, i / 18);
-                const adjusted = baseStress - (policyReduction * ramp);
+                const adjusted = policyBaseStress - (policyReduction * ramp);
 
                 // Widening confidence band
                 const bandWidth = baseStress * (0.03 + (i / horizonMonths) * 0.04);
@@ -2341,10 +2378,13 @@
             const burdenDriftPct = s.trend * 0.6 * endYears; // rent burden grows ~60% as fast as stress trend
             const burdenStatusQuo = s.burden * (1 + burdenDriftPct);
 
-            // Policy: min wage raises low-income wages proportionally; total policy effect softens burden
+            // Policy: rent caps / zoning dampen the burden drift; min wage raises
+            // income denominator; total policy effect softens burden on top.
+            const burdenDriftPolicyPct = s.trend * 0.6 * endYears * (1 - (effect.trendDampen || 0));
+            const burdenBasePolicy = s.burden * (1 + burdenDriftPolicyPct);
             const wageFactor = 1 + ((SIM.policies.minWage - 7.25) * 0.032);
             const policyBurdenRelief = (effect.total / 200) * s.burden * 0.4; // heuristic
-            const burdenWithPolicy = Math.max(15, (burdenStatusQuo / wageFactor) - policyBurdenRelief);
+            const burdenWithPolicy = Math.max(15, (burdenBasePolicy / wageFactor) - policyBurdenRelief);
 
             document.getElementById('out-burden-base').textContent = burdenStatusQuo.toFixed(1) + '%';
             document.getElementById('out-burden-final').textContent = burdenWithPolicy.toFixed(1) + '%';
@@ -2454,7 +2494,7 @@
 
         function recompute() {
             const effect = computePolicyEffect(SIM.policies);
-            const traj = buildTrajectory(SIM.state, SIM.horizon, effect.total);
+            const traj = buildTrajectory(SIM.state, SIM.horizon, effect);
             renderChart(traj);
             updateStatCards();
             updateOutcomes(traj, effect);
