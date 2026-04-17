@@ -1,5 +1,5 @@
 // Financial Health Barometer Data
-// Auto-generated: 2026-04-17T05:48:28.739Z
+// Auto-generated: 2026-04-17T17:32:25.441Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
@@ -15,8 +15,10 @@ const DASHBOARD_DATA = {
       "rent_burden": "Census ACS B25071",
       "fair_market_rent": "Harvard JCHS 2025",
       "jchs_calibration": "Harvard JCHS State of the Nation's Housing 2025",
-      "trends": "Google Trends"
-    }
+      "trends": "Google Trends",
+      "housing_wage": "Derived from HUD FMR (NLIHC formula)"
+    },
+    "augmented_at": "2026-04-17T17:32:25.440Z"
   },
   "national": {
     "financial_anxiety": {
@@ -76,6 +78,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 47.7,
         "jchs_renters_severely_burdened": 25,
         "jchs_median_rent": 980
+      },
+      "rent_burden": {
+        "value": 29.3,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1072,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 20.62,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-AK": {
@@ -113,6 +127,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 41.9,
         "jchs_renters_severely_burdened": 18.4,
         "jchs_median_rent": 1350
+      },
+      "rent_burden": {
+        "value": 26.5,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1546,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 29.73,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-AZ": {
@@ -150,6 +176,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 50.9,
         "jchs_renters_severely_burdened": 24.2,
         "jchs_median_rent": 1390
+      },
+      "rent_burden": {
+        "value": 31.2,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1778,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 34.19,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-AR": {
@@ -187,6 +225,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 46.4,
         "jchs_renters_severely_burdened": 24,
         "jchs_median_rent": 850
+      },
+      "rent_burden": {
+        "value": 28.1,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 987,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 18.98,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-CA": {
@@ -224,6 +274,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 55.8,
         "jchs_renters_severely_burdened": 28.7,
         "jchs_median_rent": 1850
+      },
+      "rent_burden": {
+        "value": 33.1,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 2580,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 49.62,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-CO": {
@@ -261,6 +323,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 51.5,
         "jchs_renters_severely_burdened": 24,
         "jchs_median_rent": 1650
+      },
+      "rent_burden": {
+        "value": 31.2,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1913,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 36.79,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-CT": {
@@ -298,6 +372,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 50.5,
         "jchs_renters_severely_burdened": 27.3,
         "jchs_median_rent": 1400
+      },
+      "rent_burden": {
+        "value": 32.1,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1842,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 35.42,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-DE": {
@@ -335,6 +421,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 49.7,
         "jchs_renters_severely_burdened": 24.8,
         "jchs_median_rent": 1275
+      },
+      "rent_burden": {
+        "value": 30.1,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1674,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 32.19,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-DC": {
@@ -372,6 +470,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 46.2,
         "jchs_renters_severely_burdened": 21.5,
         "jchs_median_rent": 1750
+      },
+      "rent_burden": {
+        "value": 29,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 2314,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 44.5,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-FL": {
@@ -409,6 +519,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 57.2,
         "jchs_renters_severely_burdened": 29.6,
         "jchs_median_rent": 1550
+      },
+      "rent_burden": {
+        "value": 36.1,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1938,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 37.27,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-GA": {
@@ -446,6 +568,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 51.6,
         "jchs_renters_severely_burdened": 25.8,
         "jchs_median_rent": 1275
+      },
+      "rent_burden": {
+        "value": 31.6,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1532,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 29.46,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-HI": {
@@ -483,6 +617,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 56.5,
         "jchs_renters_severely_burdened": 29.5,
         "jchs_median_rent": 1950
+      },
+      "rent_burden": {
+        "value": 32.6,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 2558,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 49.19,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-ID": {
@@ -520,6 +666,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 47.8,
         "jchs_renters_severely_burdened": 21.5,
         "jchs_median_rent": 1200
+      },
+      "rent_burden": {
+        "value": 29.3,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1447,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 27.83,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-IL": {
@@ -557,6 +715,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 50.2,
         "jchs_renters_severely_burdened": 25,
         "jchs_median_rent": 1175
+      },
+      "rent_burden": {
+        "value": 29.4,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1550,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 29.81,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-IN": {
@@ -594,6 +764,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 47.3,
         "jchs_renters_severely_burdened": 23.2,
         "jchs_median_rent": 975
+      },
+      "rent_burden": {
+        "value": 29.3,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1153,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 22.17,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-IA": {
@@ -631,6 +813,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 42.8,
         "jchs_renters_severely_burdened": 20.5,
         "jchs_median_rent": 875
+      },
+      "rent_burden": {
+        "value": 27.2,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1040,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 20,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-KS": {
@@ -668,6 +862,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 44.5,
         "jchs_renters_severely_burdened": 21,
         "jchs_median_rent": 950
+      },
+      "rent_burden": {
+        "value": 27.1,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1085,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 20.87,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-KY": {
@@ -705,6 +911,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 46.8,
         "jchs_renters_severely_burdened": 24.5,
         "jchs_median_rent": 900
+      },
+      "rent_burden": {
+        "value": 27.9,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1116,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 21.46,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-LA": {
@@ -742,6 +960,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 52.5,
         "jchs_renters_severely_burdened": 28.2,
         "jchs_median_rent": 975
+      },
+      "rent_burden": {
+        "value": 32.5,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1190,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 22.88,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-ME": {
@@ -779,6 +1009,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 48.2,
         "jchs_renters_severely_burdened": 24.5,
         "jchs_median_rent": 1175
+      },
+      "rent_burden": {
+        "value": 30.1,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1478,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 28.42,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-MD": {
@@ -816,6 +1058,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 49.5,
         "jchs_renters_severely_burdened": 24.2,
         "jchs_median_rent": 1600
+      },
+      "rent_burden": {
+        "value": 30.8,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 2036,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 39.15,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-MA": {
@@ -853,6 +1107,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 50.8,
         "jchs_renters_severely_burdened": 26.5,
         "jchs_median_rent": 1750
+      },
+      "rent_burden": {
+        "value": 31.1,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 2387,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 45.9,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-MI": {
@@ -890,6 +1156,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 49.2,
         "jchs_renters_severely_burdened": 25,
         "jchs_median_rent": 1075
+      },
+      "rent_burden": {
+        "value": 30.7,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1272,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 24.46,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-MN": {
@@ -927,6 +1205,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 46.5,
         "jchs_renters_severely_burdened": 22.8,
         "jchs_median_rent": 1150
+      },
+      "rent_burden": {
+        "value": 29.1,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1468,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 28.23,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-MS": {
@@ -964,6 +1254,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 52,
         "jchs_renters_severely_burdened": 29,
         "jchs_median_rent": 925
+      },
+      "rent_burden": {
+        "value": 30.2,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1081,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 20.79,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-MO": {
@@ -1001,6 +1303,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 46.5,
         "jchs_renters_severely_burdened": 23.5,
         "jchs_median_rent": 975
+      },
+      "rent_burden": {
+        "value": 27.9,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1124,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 21.62,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-MT": {
@@ -1038,6 +1352,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 47.5,
         "jchs_renters_severely_burdened": 22,
         "jchs_median_rent": 1100
+      },
+      "rent_burden": {
+        "value": 27,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1508,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 29,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-NE": {
@@ -1075,6 +1401,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 43.5,
         "jchs_renters_severely_burdened": 20.5,
         "jchs_median_rent": 975
+      },
+      "rent_burden": {
+        "value": 28.5,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1122,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 21.58,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-NV": {
@@ -1112,6 +1450,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 53.8,
         "jchs_renters_severely_burdened": 26.5,
         "jchs_median_rent": 1450
+      },
+      "rent_burden": {
+        "value": 34,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1713,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 32.94,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-NH": {
@@ -1149,6 +1499,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 48,
         "jchs_renters_severely_burdened": 23,
         "jchs_median_rent": 1400
+      },
+      "rent_burden": {
+        "value": 29.8,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1824,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 35.08,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-NJ": {
@@ -1186,6 +1548,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 55.2,
         "jchs_renters_severely_burdened": 28.5,
         "jchs_median_rent": 1550
+      },
+      "rent_burden": {
+        "value": 31.2,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 2079,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 39.98,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-NM": {
@@ -1223,6 +1597,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 47,
         "jchs_renters_severely_burdened": 23.8,
         "jchs_median_rent": 1025
+      },
+      "rent_burden": {
+        "value": 29.3,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1205,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 23.17,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-NY": {
@@ -1260,6 +1646,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 54.5,
         "jchs_renters_severely_burdened": 29.2,
         "jchs_median_rent": 1500
+      },
+      "rent_burden": {
+        "value": 30.9,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 2394,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 46.04,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-NC": {
@@ -1297,6 +1695,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 50.5,
         "jchs_renters_severely_burdened": 25.5,
         "jchs_median_rent": 1175
+      },
+      "rent_burden": {
+        "value": 30.8,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1411,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 27.13,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-ND": {
@@ -1334,6 +1744,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 38.5,
         "jchs_renters_severely_burdened": 16,
         "jchs_median_rent": 925
+      },
+      "rent_burden": {
+        "value": 24.2,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1012,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 19.46,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-OH": {
@@ -1371,6 +1793,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 48.5,
         "jchs_renters_severely_burdened": 24.5,
         "jchs_median_rent": 950
+      },
+      "rent_burden": {
+        "value": 29,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1170,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 22.5,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-OK": {
@@ -1408,6 +1842,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 46,
         "jchs_renters_severely_burdened": 23,
         "jchs_median_rent": 925
+      },
+      "rent_burden": {
+        "value": 28.4,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1091,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 20.98,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-OR": {
@@ -1445,6 +1891,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 52.8,
         "jchs_renters_severely_burdened": 26,
         "jchs_median_rent": 1450
+      },
+      "rent_burden": {
+        "value": 31.2,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1717,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 33.02,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-PA": {
@@ -1482,6 +1940,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 48.5,
         "jchs_renters_severely_burdened": 25,
         "jchs_median_rent": 1125
+      },
+      "rent_burden": {
+        "value": 29.7,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1447,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 27.83,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-RI": {
@@ -1519,6 +1989,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 51,
         "jchs_renters_severely_burdened": 27,
         "jchs_median_rent": 1275
+      },
+      "rent_burden": {
+        "value": 30.5,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1649,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 31.71,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-SC": {
@@ -1556,6 +2038,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 50.2,
         "jchs_renters_severely_burdened": 25.8,
         "jchs_median_rent": 1125
+      },
+      "rent_burden": {
+        "value": 31.4,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1347,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 25.9,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-SD": {
@@ -1593,6 +2087,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 40.5,
         "jchs_renters_severely_burdened": 18.5,
         "jchs_median_rent": 875
+      },
+      "rent_burden": {
+        "value": 26.9,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 986,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 18.96,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-TN": {
@@ -1630,6 +2136,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 49.5,
         "jchs_renters_severely_burdened": 24.8,
         "jchs_median_rent": 1125
+      },
+      "rent_burden": {
+        "value": 30.1,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1404,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 27,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-TX": {
@@ -1667,6 +2185,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 50.5,
         "jchs_renters_severely_burdened": 24.5,
         "jchs_median_rent": 1275
+      },
+      "rent_burden": {
+        "value": 31.4,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1541,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 29.63,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-UT": {
@@ -1704,6 +2234,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 48.5,
         "jchs_renters_severely_burdened": 21.5,
         "jchs_median_rent": 1350
+      },
+      "rent_burden": {
+        "value": 29.4,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1523,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 29.29,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-VT": {
@@ -1741,6 +2283,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 48.5,
         "jchs_renters_severely_burdened": 24,
         "jchs_median_rent": 1275
+      },
+      "rent_burden": {
+        "value": 29.5,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1546,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 29.73,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-VA": {
@@ -1778,6 +2332,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 47.5,
         "jchs_renters_severely_burdened": 23,
         "jchs_median_rent": 1450
+      },
+      "rent_burden": {
+        "value": 29.7,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1749,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 33.63,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-WA": {
@@ -1815,6 +2381,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 51.5,
         "jchs_renters_severely_burdened": 25.5,
         "jchs_median_rent": 1650
+      },
+      "rent_burden": {
+        "value": 30.4,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 2138,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 41.12,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-WV": {
@@ -1852,6 +2430,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 46.5,
         "jchs_renters_severely_burdened": 24.5,
         "jchs_median_rent": 800
+      },
+      "rent_burden": {
+        "value": 28.4,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 985,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 18.94,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-WI": {
@@ -1889,6 +2479,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 46,
         "jchs_renters_severely_burdened": 22.5,
         "jchs_median_rent": 1000
+      },
+      "rent_burden": {
+        "value": 27.9,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1204,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 23.15,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     },
     "US-WY": {
@@ -1926,6 +2528,18 @@ const DASHBOARD_DATA = {
         "jchs_renters_cost_burdened": 39.5,
         "jchs_renters_severely_burdened": 17,
         "jchs_median_rent": 975
+      },
+      "rent_burden": {
+        "value": 26.5,
+        "source": "ACS B25071"
+      },
+      "fmr_2br": {
+        "value": 1053,
+        "source": "NLIHC OOR 2025 (fallback)"
+      },
+      "housing_wage": {
+        "value": 20.25,
+        "source": "NLIHC OOR 2025 (fallback)"
       }
     }
   },
