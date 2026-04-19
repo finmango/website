@@ -50,6 +50,7 @@ AMBASSADORS = [
 
 ROLE_LABEL = "2026 FinMango Ambassador"
 MISSION = "Advancing financial health."
+URL = "finmango.org/ambassadors"
 
 
 # ---------- font + geometry helpers ----------
@@ -274,12 +275,19 @@ def make_square(ambassador: dict, photo: Image.Image, logo: Image.Image) -> Imag
     city_f = font("medium", 26)
     draw.text((W // 2, squiggle_cy + 24), ambassador["city"], font=city_f, fill=GRAY, anchor="ma")
 
-    # ------ footer: mission bottom-left, logo bottom-right
+    # ------ footer: mission bottom-left, logo + URL bottom-right
     mission_f = font("regular", 22)
     draw.text((72, H - 66), MISSION, font=mission_f, fill=INK, anchor="la")
 
-    lg = fit_logo(logo, 44)
-    base.alpha_composite(lg.convert("RGBA"), (W - lg.width - 72, H - 56 - lg.height // 2))
+    lg = fit_logo(logo, 40)
+    logo_y = H - 82
+    logo_x = W - lg.width - 72
+    base.alpha_composite(lg.convert("RGBA"), (logo_x, logo_y))
+
+    url_f = font("medium", 18)
+    url_w = url_f.getbbox(URL)[2] - url_f.getbbox(URL)[0]
+    ImageDraw.Draw(base).text((W - 72 - url_w, logo_y + lg.height + 6),
+                              URL, font=url_f, fill=GRAY, anchor="la")
 
     return base.convert("RGB")
 
@@ -346,12 +354,19 @@ def make_vertical(ambassador: dict, photo: Image.Image, logo: Image.Image) -> Im
     city_f = font("medium", 32)
     draw.text((W // 2, squiggle_cy + 36), ambassador["city"], font=city_f, fill=GRAY, anchor="ma")
 
-    # ------ footer
+    # ------ footer: mission bottom-left, logo + URL bottom-right
     mission_f = font("regular", 26)
     draw.text((96, H - 96), MISSION, font=mission_f, fill=INK, anchor="la")
 
-    lg = fit_logo(logo, 54)
-    base.alpha_composite(lg.convert("RGBA"), (W - lg.width - 96, H - 86 - lg.height // 2))
+    lg = fit_logo(logo, 50)
+    logo_y = H - 124
+    logo_x = W - lg.width - 96
+    base.alpha_composite(lg.convert("RGBA"), (logo_x, logo_y))
+
+    url_f = font("medium", 22)
+    url_w = url_f.getbbox(URL)[2] - url_f.getbbox(URL)[0]
+    ImageDraw.Draw(base).text((W - 96 - url_w, logo_y + lg.height + 8),
+                              URL, font=url_f, fill=GRAY, anchor="la")
 
     return base.convert("RGB")
 
