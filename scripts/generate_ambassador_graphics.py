@@ -284,10 +284,10 @@ def make_square(ambassador: dict, photo: Image.Image, logo: Image.Image) -> Imag
     logo_x = W - lg.width - 72
     base.alpha_composite(lg.convert("RGBA"), (logo_x, logo_y))
 
-    url_f = font("bold", 22)
+    url_f = font("medium", 20)
     url_w = url_f.getbbox(URL)[2] - url_f.getbbox(URL)[0]
     ImageDraw.Draw(base).text((W - 72 - url_w, logo_y + lg.height + 8),
-                              URL, font=url_f, fill=BLACK, anchor="la")
+                              URL, font=url_f, fill=INK, anchor="la")
 
     return base.convert("RGB")
 
@@ -363,10 +363,10 @@ def make_vertical(ambassador: dict, photo: Image.Image, logo: Image.Image) -> Im
     logo_x = W - lg.width - 96
     base.alpha_composite(lg.convert("RGBA"), (logo_x, logo_y))
 
-    url_f = font("bold", 26)
+    url_f = font("medium", 24)
     url_w = url_f.getbbox(URL)[2] - url_f.getbbox(URL)[0]
     ImageDraw.Draw(base).text((W - 96 - url_w, logo_y + lg.height + 10),
-                              URL, font=url_f, fill=BLACK, anchor="la")
+                              URL, font=url_f, fill=INK, anchor="la")
 
     return base.convert("RGB")
 
