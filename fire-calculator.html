@@ -3,12 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FIRE Calculator - Financial Independence Retire Early - FinMango</title>
-<meta name="description" content="Calculate when you can achieve Financial Independence and Retire Early. See your path to freedom with the FIRE movement calculator.">
+<title>FIRE Calculator — Financial Independence, Retire Early — FinMango</title>
+<meta name="description" content="How fast can you escape the 9-to-5? Calculate your path to FIRE based on your savings rate, income, and spending — with the math behind Coast, Lean, and Fat FIRE.">
+<link rel="canonical" href="https://finmango.org/fire-calculator">
 <link rel="icon" type="image/png" href="favicon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://finmango.org/fire-calculator">
+<meta property="og:title" content="FIRE Calculator — Financial Independence, Retire Early">
+<meta property="og:description" content="Your savings rate decides your retirement date. Run the math.">
+<meta property="og:image" content="https://finmango.org/finmango-og.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap"></noscript>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
 <script>
@@ -17,2325 +26,1248 @@
   gtag('js', new Date());
   gtag('config', 'G-DW5HBYS9JW');
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-/* Font loaded asynchronously via preload link in <head> */
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+* { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-  /* Colors */
-  --black: #000000;
-  --white: #ffffff;
-  --orange: #FF6B35;
-  --orange-dark: #E55A2B;
-  --orange-soft: #FF8C61;
+  --black: #0a0a0a; --ink: #1a1a1a; --white: #ffffff;
+  --orange: #FF6B35; --orange-dark: #E55A2B; --orange-soft: #FF8C61;
   --orange-light: rgba(255, 107, 53, 0.1);
-  --gray: #6B6560;
-  --gray-medium: #666666;
-  --light-gray: #f5f5f5;
-
-  /* Semantic Colors */
-  --success: #10B981;
-  --error: #EF4444;
-  --warning: #F59E0B;
-  --info: #3B82F6;
-
-  /* Layout */
+  --gray: #57534e; --gray-medium: #78716c; --gray-soft: #a8a29e;
+  --light-gray: #f5f5f4; --warm-white: #fafaf7; --cream: #fff7ed;
   --max-width: 1200px;
-  --hero-max-width: 1400px;
-  --nav-max-width: 1280px;
+  --green: #2a7d5b; --red: #b04a5a; --amber: #c4882e; --blue: #3a6fa0;
 
-  --fire-red: #EF4444;
-  --fire-yellow: #F59E0B;
+  /* FIRE tier colors — warm progression */
+  --tier-coast: #c4882e;      /* amber */
+  --tier-barista: #d96e3a;    /* warm orange */
+  --tier-lean: #b04a5a;       /* brand red */
+  --tier-fire: #FF6B35;       /* brand orange */
+  --tier-fat: #7c3aed;        /* deep purple */
 
-  /* Spacing Scale (8px base) */
-  --space-1: 0.25rem;   /* 4px */
-  --space-2: 0.5rem;    /* 8px */
-  --space-3: 0.75rem;   /* 12px */
-  --space-4: 1rem;      /* 16px */
-  --space-6: 1.5rem;    /* 24px */
-  --space-8: 2rem;      /* 32px */
-  --space-10: 2.5rem;   /* 40px */
-  --space-12: 3rem;     /* 48px */
-  --space-16: 4rem;     /* 64px */
-  --space-20: 5rem;     /* 80px */
-  --space-24: 6rem;     /* 96px */
-  --space-32: 8rem;     /* 128px */
-  --space-40: 10rem;    /* 160px */
-
-  /* Typography Scale */
-  --text-xs: 0.75rem;   /* 12px */
-  --text-sm: 0.875rem;  /* 14px */
-  --text-base: 1rem;    /* 16px */
-  --text-lg: 1.125rem;  /* 18px */
-  --text-xl: 1.25rem;   /* 20px */
-  --text-2xl: 1.5rem;   /* 24px */
-  --text-3xl: 2rem;     /* 32px */
-  --text-4xl: 3rem;     /* 48px */
-  --text-5xl: 4rem;     /* 64px */
-
-  /* Font Weights */
-  --font-normal: 400;
-  --font-medium: 500;
-  --font-semibold: 600;
-  --font-bold: 700;
-  --font-black: 900;
-
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-
-  /* Shadows */
-  --shadow-sm: 4px 4px 0 var(--black);
-  --shadow-md: 8px 8px 0 var(--black);
-  --shadow-lg: 12px 12px 0 var(--black);
-  --shadow-xl: 16px 16px 0 var(--black);
-
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-base: 0.3s ease;
-  --transition-slow: 0.5s ease;
-
-  /* Borders */
-  --border-width-thin: 1px;
-  --border-width-base: 2px;
-  --border-width-thick: 3px;
-  --border-width-heavy: 4px;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
 }
-/* Accessibility: Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: var(--white);
-  color: var(--black);
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-/* Navigation */
-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: var(--white);
-  z-index: 1050;
-  padding: 1.5rem 0;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-nav.scrolled {
-  padding: 1rem 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-  backdrop-filter: blur(10px);
-  background: var(--white);
-}
-
-.nav-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  transition: transform 0.3s ease;
-  justify-self: start;
-}
-
-.logo:hover {
-  transform: rotate(-2deg) scale(1.05);
-}
-
-.logo img {
-  height: 46px;
-  transition: height 0.3s ease;
-}
-
-nav.scrolled .logo img {
-  height: 38px;
-}
-
-.nav-right {
-  display: flex;
-  gap: 1.75rem;
-  align-items: center;
-  justify-self: end;
-}
-
-.nav-right a {
-  color: var(--black);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-  position: relative;
-  white-space: nowrap;
-  letter-spacing: -0.01em;
-}
-
-.nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--orange);
-  transition: width 0.3s ease;
-}
-
-.nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
-  width: 100%;
-}
-
-.nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
-  color: var(--orange);
-}
-
-.btn-donate {
-  background: var(--orange);
-  color: var(--white) !important;
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  font-weight: 700;
-  transition: all 0.2s ease;
-  border: 2px solid var(--black);
-  position: relative;
-  overflow: hidden;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
-}
-
-.btn-donate::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--black);
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.btn-donate:hover::before {
-  left: 0;
-}
-
-.btn-donate:hover {
-  transform: scale(1.05);
-}
-
-.btn-get-involved {
-  background: transparent;
-  color: var(--black) !important;
-  padding: 0.4rem 0.85rem;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  border: 1.5px solid rgba(0, 0, 0, 0.25);
-  position: relative;
-  overflow: hidden;
-  font-size: 0.8rem;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
-}
-
-.btn-get-involved::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--black);
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.btn-get-involved:hover::before {
-  left: 0;
-}
-
-.btn-get-involved:hover {
-  color: var(--white) !important;
-  border-color: var(--black);
-}
-
-/* Mobile Menu */
-.mobile-controls {
-  display: none;
-  gap: 1rem;
-  align-items: center;
-  justify-self: end;
-}
-
-.mobile-menu-btn {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-.mobile-menu-btn span {
-  display: block;
-  width: 28px;
-  height: 3px;
-  background: var(--black);
-  margin: 6px 0;
-  transition: all 0.3s ease;
-}
-
-.mobile-menu-btn.active span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-
-.mobile-menu-btn.active span:nth-child(2) {
-  opacity: 0;
-}
-
-.mobile-menu-btn.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -6px);
-}
-
-.mobile-get-involved {
-  display: none;
-}
-
-.mobile-menu {
-  display: none;
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 100%;
-  height: 100vh;
-  background: var(--white);
-  z-index: 1040;
-  padding: 6rem 2rem;
-  transition: right 0.3s ease;
-  overflow-y: auto;
-}
-
-.mobile-menu.active {
-  display: block;
-  right: 0;
-}
-
-.mobile-menu a {
-  display: block;
-  padding: 1.5rem 0;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--black);
-  text-decoration: none;
-  border-bottom: 2px solid var(--black);
-  transition: all 0.2s ease;
-}
-
-.mobile-menu a:hover {
-  color: var(--orange);
-  padding-left: 1rem;
-}
-
-/* Hero */
-.hero {
-  min-height: 40vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 9rem 2rem 2rem;
-  text-align: center;
-  background: linear-gradient(135deg, var(--fire-red) 0%, var(--fire-yellow) 100%);
-  color: var(--white);
-  position: relative;
-}
-
-.hero-container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.hero-title {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 900;
-  margin-bottom: 1rem;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.hero-subtitle {
-  font-size: clamp(1.1rem, 3vw, 1.5rem);
-  font-weight: 600;
-  max-width: 700px;
-  margin: 0 auto;
-  opacity: 0.95;
-}
-
-/* Main Content */
-.main-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 3rem 2rem;
-}
-
-.content-section {
-  margin-bottom: 3rem;
-}
-
-.section-title {
-  font-size: 2rem;
-  font-weight: 900;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.02em;
-}
-
-.section-text {
-  font-size: 1.1rem;
-  color: var(--gray);
-  margin-bottom: 1rem;
-  line-height: 1.7;
-}
-
-/* Calculator Sections */
-.calc-section {
-  border: 3px solid var(--black);
-  margin-bottom: 1.5rem;
-  background: var(--white);
-  overflow: hidden;
-}
-
-.calc-section-header {
-  background: var(--orange);
-  color: var(--white);
-  padding: 1.25rem 1.5rem;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.3s ease;
-  border-bottom: 3px solid var(--black);
-}
-
-.calc-section-header:hover {
-  background: var(--black);
-}
-
-.calc-section-title {
-  font-size: 1.3rem;
-  font-weight: 900;
-  margin: 0;
-}
-
-.calc-section-arrow {
-  font-size: 1.5rem;
-  font-weight: 900;
-  transition: transform 0.3s ease;
-}
-
-.calc-section.active .calc-section-arrow {
-  transform: rotate(180deg);
-}
-
-.calc-section-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
-  padding: 0 1.5rem;
-}
-
-.calc-section.active .calc-section-content {
-  max-height: 2000px;
-  padding: 1.5rem;
-}
-
-/* Calculator Box */
-.calculator-box {
-  background: var(--light-gray);
-  border: 3px solid var(--black);
-  padding: 2rem;
-  margin: 2rem 0;
-}
-
-.input-grid {
-  display: grid;
-  gap: 2rem;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-label {
-  font-weight: 700;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  color: var(--black);
-}
-
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.input-prefix {
-  position: absolute;
-  left: 1rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--gray);
-}
-
-.input-suffix {
-  position: absolute;
-  right: 1rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--gray);
-}
-
-input[type="number"] {
-  width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2rem;
-  font-size: 1rem;
-  border: 2px solid var(--black);
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-input[type="number"]:focus {
-  outline: none;
-  border-color: var(--orange);
-  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-}
-
-input[type="range"] {
-  width: 100%;
-  height: 8px;
-  border-radius: 5px;
-  background: #ddd;
-  outline: none;
-  -webkit-appearance: none;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--fire-red);
-  cursor: pointer;
-  border: 3px solid var(--black);
-}
-
-input[type="range"]::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--fire-red);
-  cursor: pointer;
-  border: 3px solid var(--black);
-}
-
-.slider-info {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--gray);
-}
-
-/* Fire Number Display */
-.fire-display {
-  background: linear-gradient(135deg, var(--fire-red) 0%, var(--fire-yellow) 100%);
-  border: 3px solid var(--black);
-  padding: 3rem 2rem;
-  margin: 2rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.fire-display::before {
-  content: '🔥';
-  position: absolute;
-  font-size: 15rem;
-  opacity: 0.1;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.fire-label {
-  color: var(--white);
-  font-size: 1.2rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
-  position: relative;
-  z-index: 1;
-}
-
-.fire-number {
-  color: var(--white);
-  font-size: 4rem;
-  font-weight: 900;
-  margin-bottom: 0.5rem;
-  position: relative;
-  z-index: 1;
-}
-
-.fire-sublabel {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
-  position: relative;
-  z-index: 1;
-}
-
-/* Results Grid */
-.results-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin: 2rem 0;
-}
-
-.result-card {
-  background: var(--white);
-  border: 3px solid var(--black);
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.result-card-label {
-  font-size: 0.85rem;
-  color: var(--gray);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
-}
-
-.result-card-value {
-  font-size: 2rem;
-  font-weight: 900;
-  color: var(--black);
-}
-
-.result-card-subtext {
-  font-size: 0.9rem;
-  color: var(--gray);
-  margin-top: 0.5rem;
-}
-
-/* Chart Box */
-.chart-box {
-  background: var(--white);
-  border: 3px solid var(--black);
-  padding: 2rem;
-  margin: 2rem 0;
-}
-
-/* Milestone Cards */
-.milestone-grid {
-  display: grid;
-  gap: 1rem;
-  margin: 2rem 0;
-}
-
-.milestone-card {
-  background: var(--light-gray);
-  border: 3px solid var(--black);
-  padding: 1.5rem;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 1.5rem;
-  align-items: center;
-}
-
-.milestone-icon {
-  font-size: 2.5rem;
-}
-
-.milestone-content {
-  flex: 1;
-}
-
-.milestone-title {
-  font-size: 1.2rem;
-  font-weight: 900;
-  margin-bottom: 0.25rem;
-}
-
-.milestone-desc {
-  font-size: 0.9rem;
-  color: var(--gray);
-}
-
-.milestone-value {
-  font-size: 1.5rem;
-  font-weight: 900;
-  text-align: right;
-}
-
-/* Footer */
-footer {
-  padding: 0;
-  border-top: 4px solid var(--orange);
-  background: var(--black);
-  color: var(--white);
-}
-
-.footer-newsletter {
-  padding: 3rem 2rem;
-  background: rgba(255, 107, 53, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: center;
-}
-
-.footer-newsletter-container {
-  max-width: 850px;
-  margin: 0 auto;
-}
-
-.footer-newsletter h3 {
-  font-size: 1.5rem;
-  font-weight: 900;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.02em;
-}
-
-.footer-newsletter p {
-  font-size: 1rem;
-  opacity: 0.8;
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-}
-
-.footer-newsletter-btn {
-  display: inline-block;
-  padding: 0.85rem 2rem;
-  font-size: 1rem;
-  font-weight: 700;
-  background: var(--orange);
-  color: var(--white);
-  text-decoration: none;
-  border: 2px solid var(--orange);
-  transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.footer-newsletter-btn:hover {
-  background: var(--white);
-  color: var(--black);
-  border-color: var(--white);
-  transform: translateY(-2px);
-}
-
-.footer-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 4rem 2rem 0;
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 3rem;
-  margin-bottom: 2rem;
-}
-
-.footer-brand img {
-  height: 50px;
-  margin-bottom: 1rem;
-  filter: brightness(0) invert(1);
-}
-
-.footer-tagline {
-  color: #999;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.footer-section h4 {
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.footer-section a {
-  display: block;
-  color: #999;
-  text-decoration: none;
-  margin-bottom: 0.75rem;
-  transition: all 0.2s ease;
-  font-size: 0.95rem;
-}
-
-.footer-section a:hover {
-  color: var(--orange);
-  padding-left: 0.5rem;
-}
-
-.footer-bottom {
-  border-top: 1px solid #333;
-  padding-top: 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .footer-container {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .nav-right {
-    display: none;
-  }
-  
-  .mobile-controls {
-    display: flex;
-  }
-  
-  .mobile-menu-btn {
-    display: block;
-  }
-  
-  .mobile-get-involved {
-    display: inline-block;
-  }
-  
-  .hero {
-    padding: 7rem 1.5rem 2rem;
-  }
-  
-  .fire-number {
-    font-size: 2.5rem;
-  }
-  
-  .milestone-card {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-  
-  .milestone-value {
-    text-align: center;
-  }
-  
-    .footer-newsletter {
-    padding: 2.5rem 1.5rem;
-  }
-
-  .footer-newsletter h3 {
-    font-size: 1.25rem;
-  }
-
-  .footer-newsletter p {
-    font-size: 0.95rem;
-  }
-
-  .footer-newsletter-btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
-  }
-
-.footer-container {
-    grid-template-columns: 1fr;
-  }
-  
-  .footer-bottom {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-
-  .main-content {
-    padding: 2rem 1rem;
-  }
-
-  .calculator-box {
-    padding: 1.25rem;
-  }
-
-  .calc-section-content {
-    padding: 1.25rem;
-  }
-
-  .calc-section-header {
-    padding: 1.25rem;
-  }
-
-  .input-grid {
-    gap: 1.25rem;
-  }
-
-  .result-box {
-    padding: 1.25rem;
-  }
-
-  .chart-box {
-    padding: 1.25rem;
-  }
-}
-
-/* ============================================
-   BASE COMPONENT CLASSES
-   ============================================ */
-
-/* Base Input Styles with Validation States */
-input[type="text"],
-input[type="email"],
-input[type="number"],
-textarea,
-select {
-  font-family: 'Inter', sans-serif;
-  transition: var(--transition-base);
-}
-
-/* Input Validation States */
-input.error,
-textarea.error,
-select.error {
-  border-color: var(--error) !important;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-}
-
-input.success,
-textarea.success,
-select.success {
-  border-color: var(--success) !important;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-}
-
-input.warning,
-textarea.warning,
-select.warning {
-  border-color: var(--warning) !important;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
-}
-
-/* Base Card Component */
-.card {
-  padding: var(--space-12);
-  background: var(--white);
-  transition: var(--transition-base);
-}
-
-.card--bordered {
-  border: var(--border-width-thick) solid var(--black);
-}
-
-.card--shadow {
-  box-shadow: var(--shadow-md);
-}
-
-.card--hover-lift:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Utility Classes for Spacing */
-.mb-1 { margin-bottom: var(--space-1); }
-.mb-2 { margin-bottom: var(--space-2); }
-.mb-3 { margin-bottom: var(--space-3); }
-.mb-4 { margin-bottom: var(--space-4); }
-.mb-6 { margin-bottom: var(--space-6); }
-.mb-8 { margin-bottom: var(--space-8); }
-
-.mt-1 { margin-top: var(--space-1); }
-.mt-2 { margin-top: var(--space-2); }
-.mt-3 { margin-top: var(--space-3); }
-.mt-4 { margin-top: var(--space-4); }
-.mt-6 { margin-top: var(--space-6); }
-.mt-8 { margin-top: var(--space-8); }
-
-/* Typography Utility Classes */
-.text-xs { font-size: var(--text-xs); }
-.text-sm { font-size: var(--text-sm); }
-.text-base { font-size: var(--text-base); }
-.text-lg { font-size: var(--text-lg); }
-.text-xl { font-size: var(--text-xl); }
-.text-2xl { font-size: var(--text-2xl); }
-
-.font-medium { font-weight: var(--font-medium); }
-.font-semibold { font-weight: var(--font-semibold); }
-.font-bold { font-weight: var(--font-bold); }
-.font-black { font-weight: var(--font-black); }
-
-/* Alert/Message Components */
-.alert {
-  padding: var(--space-4) var(--space-6);
-  border: var(--border-width-base) solid;
-  margin-bottom: var(--space-4);
-  border-radius: var(--radius-sm);
-}
-
-.alert--success {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: var(--success);
-  color: #065f46;
-}
-
-.alert--error {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: var(--error);
-  color: #991b1b;
-}
-
-.alert--warning {
-  background: rgba(245, 158, 11, 0.1);
-  border-color: var(--warning);
-  color: #92400e;
-}
-
-.alert--info {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: var(--info);
-  color: #1e40af;
-}
-
-
-    /* ============================================
-       MEGA DROPDOWN (Initiatives)
-       ============================================ */
-    .dropdown-mega .dropdown-content-mega {
-      min-width: 620px;
-      padding: 1rem 0;
-      right: 0;
-      left: auto;
-      transform: none;
-    }
-
-    .dropdown-content-mega::before {
-      left: auto !important;
-      right: 40px;
-      transform: none !important;
-    }
-
-    .dropdown-content-mega::after {
-      left: auto;
-      right: 0;
-    }
-
-    .dropdown-mega-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-    }
-
-    .dropdown-mega-col {
-      padding: 0;
-    }
-
-    .dropdown-mega-col:first-child {
-      border-right: 1px solid rgba(0, 0, 0, 0.06);
-    }
-
-    .dropdown-mega-col-label {
-      font-size: 0.6rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--gray-medium);
-      padding: 0.5rem 1.25rem 0.4rem;
-      opacity: 0.6;
-    }
-
-    .dropdown-content-mega .dropdown-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem 1.25rem;
-      gap: 0.75rem;
-      border-bottom: none;
-    }
-
-    .dropdown-item-text {
-      display: flex;
-      flex-direction: column;
-      gap: 0.1rem;
-    }
-
-    .dropdown-item-name {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--black);
-      transition: color 0.2s ease;
-    }
-
-    .dropdown-item-desc {
-      font-size: 0.68rem;
-      font-weight: 500;
-      color: var(--gray-medium);
-      transition: color 0.2s ease;
-      letter-spacing: 0.01em;
-    }
-
-    .dropdown-external {
-      font-size: 0.85rem;
-      opacity: 0.4;
-      transition: all 0.2s ease;
-      flex-shrink: 0;
-    }
-
-    .dropdown-content-mega .dropdown-item:hover {
-      background-color: var(--light-gray);
-      padding-left: 1.4rem;
-    }
-
-    .dropdown-content-mega .dropdown-item:hover .dropdown-item-name {
-      color: var(--orange);
-    }
-
-    .dropdown-content-mega .dropdown-item:hover .dropdown-item-desc {
-      color: var(--gray);
-    }
-
-    .dropdown-content-mega .dropdown-item:hover .dropdown-external {
-      opacity: 1;
-      color: var(--orange);
-      transform: translate(2px, -2px);
-    }
-
-    @keyframes fadeInMega {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .dropdown-mega:hover .dropdown-content-mega {
-      animation: fadeInMega 0.2s ease;
-    }
-
-    /* Mobile controls container */
-    .mobile-controls {
-      display: none;
-      gap: 1rem;
-      align-items: center;
-      justify-self: end;
-    }
-
-    /* ============================================
-       FOOTER
-       ============================================ */
-    footer {
-      padding: 0;
-      border-top: 4px solid var(--orange);
-      background: var(--black);
-      color: var(--white);
-      position: relative;
-    }
-
-    .footer-newsletter {
-      padding: 2.5rem 2rem;
-      background: rgba(255, 107, 53, 0.08);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      text-align: center;
-    }
-
-    .footer-newsletter-container {
-      max-width: 850px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .footer-newsletter-text {
-      text-align: left;
-    }
-
-    .footer-newsletter h3 {
-      font-size: 1.2rem;
-      font-weight: 900;
-      margin-bottom: 0.2rem;
-      letter-spacing: -0.02em;
-    }
-
-    .footer-newsletter p {
-      font-size: 0.9rem;
-      opacity: 0.7;
-      margin: 0;
-      line-height: 1.4;
-    }
-
-    .footer-newsletter-btn {
-      display: inline-block;
-      padding: 0.75rem 1.75rem;
-      font-size: 0.9rem;
-      font-weight: 700;
-      background: var(--orange);
-      color: var(--white);
-      text-decoration: none;
-      border: 2px solid var(--orange);
-      transition: all 0.2s ease;
-      font-family: var(--font-body);
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
-    }
-
-    .footer-newsletter-btn:hover {
-      background: var(--white);
-      color: var(--black);
-      border-color: var(--white);
-      transform: translateY(-2px);
-    }
-
-    .footer-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 4rem 2rem 0;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-
-    .footer-brand-col {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .footer-brand {
-      margin-bottom: 0.25rem;
-    }
-
-    .footer-brand img {
-      height: 32px;
-      filter: brightness(0) invert(1);
-    }
-
-    .footer-tagline {
-      opacity: 0.7;
-      line-height: 1.6;
-      font-size: 0.95rem;
-    }
-
-    .footer-ein {
-      opacity: 0.4;
-      font-size: 0.8rem;
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 0.75rem;
-      margin-top: 0.25rem;
-    }
-
-    .footer-social a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--white);
-      text-decoration: none;
-      transition: all 0.2s ease;
-      font-size: 0.85rem;
-    }
-
-    .footer-social a:hover {
-      background: var(--orange);
-      transform: translateY(-2px);
-    }
-
-    .footer-social a svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
-
-    .footer-section h4 {
-      font-size: 0.75rem;
-      font-weight: 900;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 1.25rem;
-      color: var(--orange);
-      opacity: 0.8;
-    }
-
-    .footer-section a {
-      display: block;
-      color: var(--white);
-      text-decoration: none;
-      margin-bottom: 0.65rem;
-      transition: all 0.2s ease;
-      font-size: 0.95rem;
-      opacity: 0.8;
-    }
-
-    .footer-section a:hover {
-      color: var(--orange);
-      opacity: 1;
-      transform: translateX(4px);
-    }
-
-    /* Footer squiggle accent */
-    .footer-squiggle {
-      display: block;
-      margin: 0 auto 0;
-      width: 80px;
-      height: 8px;
-      opacity: 0.2;
-    }
-
-    .footer-bottom {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 2rem 2rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      opacity: 0.5;
-      font-size: 0.85rem;
-    }
-
-    .footer-bottom a {
-      color: rgba(255, 255, 255, 0.7);
-      text-decoration: none;
-      transition: color 0.2s ease;
-      margin: 0 0.75rem;
-    }
-
-    .footer-bottom a:hover {
-      color: var(--orange);
-    }
-
-
-    /* ============================================
-       MOBILE MENU
-       ============================================ */
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    .mobile-get-involved {
-      display: none;
-    }
-
-    .mobile-menu-btn span {
-      display: block;
-      width: 28px;
-      height: 3px;
-      background: var(--black);
-      margin: 6px 0;
-      transition: all 0.3s ease;
-    }
-
-    .mobile-menu-btn.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .mobile-menu-btn.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .mobile-menu-btn.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -6px);
-    }
-
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      background: var(--white);
-      z-index: 1040;
-      padding: 5rem 1.5rem 1.5rem;
-      transition: right 0.3s ease;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .mobile-menu.active {
-      display: flex;
-      flex-direction: column;
-      right: 0;
-    }
-
-    /* Orange accent strip at top */
-    .mobile-menu::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: var(--orange);
-      z-index: 1;
-    }
-
-    .mobile-menu-nav {
-      flex: none;
-    }
-
-    .mobile-menu-nav > a {
-      display: block;
-      padding: 0.85rem 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--black);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-      transition: all 0.2s ease;
-      opacity: 0;
-      transform: translateX(20px);
-      animation: mobileSlideIn 0.3s ease forwards;
-    }
-
-    .mobile-menu.active .mobile-menu-nav > a:nth-child(1) { animation-delay: 0.05s; }
-    .mobile-menu.active .mobile-menu-nav > a:nth-child(2) { animation-delay: 0.08s; }
-    .mobile-menu.active .mobile-menu-nav > a:nth-child(3) { animation-delay: 0.11s; }
-    .mobile-menu.active .mobile-menu-nav > .mobile-dropdown { animation-delay: 0.14s; }
-
-    .mobile-menu.active .mobile-dropdown {
-      opacity: 0;
-      transform: translateX(20px);
-      animation: mobileSlideIn 0.3s ease forwards;
-      animation-delay: 0.14s;
-    }
-
-    @keyframes mobileSlideIn {
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .mobile-menu-nav > a:hover,
-    .mobile-menu-nav > a:active {
-      color: var(--orange);
-      padding-left: 0.5rem;
-    }
-
-    /* Active page indicator */
-    .mobile-menu-nav > a.active-page {
-      color: var(--orange);
-      border-bottom-color: var(--orange);
-    }
-
-    .mobile-dropdown-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      background: none;
-      border: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-      padding: 0.85rem 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--black);
-      cursor: pointer;
-      text-align: left;
-      font-family: inherit;
-      transition: color 0.2s ease;
-    }
-
-    .mobile-dropdown-toggle:active,
-    .mobile-dropdown-toggle.active {
-      color: var(--orange);
-    }
-
-    .mobile-dropdown-toggle .arrow {
-      transition: transform 0.3s ease;
-      font-size: 1rem;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: var(--light-gray);
-    }
-
-    .mobile-dropdown-toggle.active .arrow {
-      transform: rotate(180deg);
-      color: var(--white);
-      background: var(--orange);
-    }
-
-    .mobile-dropdown-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease-out;
-      margin: 0 -1.5rem;
-      padding: 0 1.5rem;
-    }
-
-    .mobile-dropdown-content.open {
-      max-height: 1200px;
-      padding-top: 0.75rem;
-      padding-bottom: 0.75rem;
-    }
-
-    .mobile-cards-group {
-      margin-bottom: 0.5rem;
-    }
-
-    .mobile-cards-group:last-child {
-      margin-bottom: 0;
-    }
-
-    .mobile-cards-label {
-      font-size: 0.65rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--orange);
-      padding: 0.6rem 0 0.35rem;
-    }
-
-    .mobile-card {
-      display: flex !important;
-      flex-direction: column;
-      gap: 0.15rem;
-      padding: 0.75rem 0.85rem !important;
-      margin-bottom: 0.4rem;
-      background: var(--white);
-      border: 1.5px solid rgba(0, 0, 0, 0.06);
-      border-radius: 8px;
-      text-decoration: none !important;
-      transition: all 0.15s ease;
-      border-bottom: none !important;
-    }
-
-    .mobile-card:last-child {
-      margin-bottom: 0;
-    }
-
-    .mobile-card:active {
-      background: var(--orange-light);
-      border-color: var(--orange);
-      transform: scale(0.98);
-    }
-
-    .mobile-card-name {
-      font-size: 0.95rem !important;
-      font-weight: 700;
-      color: var(--black) !important;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .mobile-card:active .mobile-card-name {
-      color: var(--orange) !important;
-    }
-
-    .mobile-card-desc {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--gray-medium);
-      line-height: 1.3;
-    }
-
-    .mobile-card-external {
-      font-size: 0.8rem;
-      opacity: 0.4;
-      font-weight: 400;
-    }
-
-    .mobile-card:active .mobile-card-external {
-      opacity: 1;
-      color: var(--orange);
-    }
-
-    /* Override base mobile-menu a styles for cards */
-    .mobile-dropdown-content .mobile-card {
-      font-size: unset !important;
-      border-bottom: none !important;
-    }
-
-    /* Bottom CTA area */
-    .mobile-menu-footer {
-      padding-top: 0.75rem;
-      margin-top: 0.75rem;
-      border-top: 2px solid var(--black);
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      opacity: 0;
-      transform: translateY(10px);
-      animation: mobileSlideUp 0.3s ease forwards;
-      animation-delay: 0.25s;
-    }
-
-    @keyframes mobileSlideUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .mobile-menu-footer .btn-mobile-cta {
-      display: block;
-      text-align: center;
-      padding: 0.9rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      transition: all 0.2s ease;
-      background: var(--orange);
-      color: var(--white);
-      border: 2px solid var(--orange);
-    }
-
-    .mobile-menu-footer .btn-mobile-cta:active {
-      background: var(--orange-dark);
-    }
-
-    .mobile-menu-footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      padding-top: 0.75rem;
-    }
-
-    .mobile-menu-footer-links a {
-      font-size: 0.85rem !important;
-      color: var(--gray-medium) !important;
-      border-bottom: none !important;
-      padding: 0.25rem 0 !important;
-      font-weight: 600 !important;
-    }
-
-    .mobile-menu-footer-links a:hover {
-      color: var(--orange) !important;
-    }
-
-
-    /* ============================================
-       RESPONSIVE — SHARED COMPONENTS ONLY
-       ============================================ */
-    @media (max-width: 1200px) {
-      .nav-right { gap: 1.5rem; }
-      .nav-right a { font-size: 0.95rem; }
-      .btn-donate, .btn-get-involved { padding: 0.65rem 1.5rem; font-size: 0.9rem; }
-    }
-
-    @media (max-width: 1080px) {
-      nav { padding: 1.25rem 0; }
-      nav.scrolled { padding: 0.875rem 0; }
-      .logo img { height: 42px; }
-      nav.scrolled .logo img { height: 36px; }
-      .nav-right { gap: 1.25rem; }
-      .nav-right a { font-size: 0.9rem; }
-      .btn-donate, .btn-get-involved { padding: 0.6rem 1.25rem; font-size: 0.8rem; text-transform: none; }
-    }
-
-    @media (max-width: 968px) {
-      .nav-container { grid-template-columns: 1fr auto; gap: 1rem; }
-      .nav-right { display: none; }
-      .mobile-controls { display: flex; }
-      .mobile-menu-btn { display: block; }
-      .mobile-get-involved { display: inline-block; padding: 0.35rem 0.85rem; font-size: 0.72rem; }
-      .mobile-menu { display: block; }
-      .footer-newsletter { padding: 2rem 1.5rem; }
-      .footer-newsletter-container { flex-direction: column; text-align: center; gap: 1rem; }
-      .footer-newsletter-text { text-align: center; }
-      .footer-newsletter h3 { font-size: 1.15rem; }
-      .footer-newsletter p { font-size: 0.85rem; }
-      .footer-newsletter-btn { padding: 0.7rem 1.5rem; font-size: 0.85rem; }
-      .footer-container { grid-template-columns: 1fr 1fr; gap: 2rem; }
-      .footer-brand-col { grid-column: 1 / -1; }
-      .footer-social { justify-content: flex-start; }
-      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-    }
-
-    @media (max-width: 480px) {
-      .mobile-menu-nav > a { font-size: 1.3rem; }
-      .mobile-dropdown-toggle { font-size: 1.3rem; }
-    }
-  </style>
-
-  <!-- Shared Navbar Styles -->
-  <link rel="stylesheet" href="css/navbar.css">
-
-
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--warm-white); color: var(--ink); line-height: 1.5; overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 2rem; }
+
+/* NAV */
+nav { position: fixed; top: 0; width: 100%; background: var(--white); z-index: 1050; padding: 1.5rem 0; transition: all 0.3s ease; border-bottom: 1px solid rgba(0,0,0,0.06); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+nav.scrolled { padding: 1rem 0; border-bottom: 1px solid rgba(0,0,0,0.1); box-shadow: 0 2px 10px rgba(0,0,0,0.08); backdrop-filter: blur(10px); background: var(--white); }
+.nav-container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.logo { display: flex; align-items: center; text-decoration: none; transition: transform 0.3s ease; justify-self: start; }
+.logo:hover { transform: rotate(-2deg) scale(1.05); }
+.logo img { height: 46px; transition: height 0.3s ease; }
+nav.scrolled .logo img { height: 38px; }
+.nav-right { display: flex; gap: 1.75rem; align-items: center; justify-self: end; }
+.nav-right a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 1rem; transition: all 0.2s ease; position: relative; white-space: nowrap; letter-spacing: -0.01em; }
+.nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item)::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--orange); transition: width 0.3s ease; }
+.nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item):hover::after { width: 100%; }
+.nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item):hover { color: var(--orange); }
+.btn-donate { background: var(--orange); color: var(--white) !important; padding: 0.65rem 1.5rem; text-decoration: none; font-weight: 700; transition: all 0.2s ease; border: 2px solid var(--ink); position: relative; overflow: hidden; font-size: 0.85rem; white-space: nowrap; letter-spacing: 0.01em; }
+.btn-donate::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--ink); transition: left 0.3s ease; z-index: -1; }
+.btn-donate:hover::before { left: 0; }
+.btn-donate:hover { transform: scale(1.05); }
+.btn-get-involved { background: transparent; color: var(--ink) !important; padding: 0.6rem 1.25rem; text-decoration: none; font-weight: 600; transition: all 0.2s ease; border: 2px solid var(--ink); position: relative; overflow: hidden; font-size: 0.85rem; white-space: nowrap; letter-spacing: 0.01em; }
+.btn-get-involved::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--ink); transition: left 0.3s ease; z-index: -1; }
+.btn-get-involved:hover::before { left: 0; }
+.btn-get-involved:hover { color: var(--white) !important; }
+.dropdown { position: relative; display: inline-block; }
+.dropdown-trigger { cursor: pointer; }
+.dropdown-content { display: none; position: absolute; top: calc(100% + 16px); left: 50%; transform: translateX(-50%); background: var(--white); min-width: 240px; box-shadow: 8px 8px 0 var(--ink); border: 3px solid var(--ink); z-index: 1001; }
+.dropdown-content::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); border-style: solid; border-width: 0 10px 10px 10px; border-color: transparent transparent var(--ink) transparent; z-index: 1002; }
+.dropdown:hover .dropdown-content { display: block; }
+.dropdown-item { display: block; color: var(--ink) !important; padding: 0.85rem 1.5rem; text-decoration: none; font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid rgba(0,0,0,0.08); transition: all 0.2s ease; }
+.dropdown-item:hover { background-color: var(--light-gray); padding-left: 1.75rem; color: var(--orange) !important; }
+.dropdown-item:last-child { border-bottom: none; }
+.dropdown-mega .dropdown-content-mega { min-width: 620px; padding: 1rem 0; right: 0; left: auto; transform: none; }
+.dropdown-content-mega::before { left: auto !important; right: 40px; transform: none !important; }
+.dropdown-mega-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.dropdown-mega-col:first-child { border-right: 1px solid rgba(0,0,0,0.06); }
+.dropdown-mega-col-label { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-medium); padding: 0.5rem 1.25rem 0.4rem; opacity: 0.6; }
+.dropdown-content-mega .dropdown-item { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1.25rem; gap: 0.75rem; border-bottom: none; }
+.dropdown-item-text { display: flex; flex-direction: column; gap: 0.1rem; }
+.dropdown-item-name { font-size: 0.88rem; font-weight: 700; color: var(--ink); transition: color 0.2s ease; }
+.dropdown-item-desc { font-size: 0.68rem; font-weight: 500; color: var(--gray-medium); letter-spacing: 0.01em; }
+.dropdown-content-mega .dropdown-item:hover { background-color: var(--light-gray); padding-left: 1.4rem; }
+.dropdown-content-mega .dropdown-item:hover .dropdown-item-name { color: var(--orange); }
+
+.mobile-controls { display: none; gap: 1rem; align-items: center; justify-self: end; }
+.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 0; }
+.mobile-menu-btn span { display: block; width: 28px; height: 3px; background: var(--ink); margin: 6px 0; transition: all 0.3s ease; }
+.mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+.mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+.mobile-get-involved { display: none; }
+.mobile-menu { display: none; position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; height: 100dvh; background: var(--white); z-index: 1040; padding: 5rem 1.5rem 1.5rem; transition: right 0.3s ease; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.mobile-menu.active { display: flex; flex-direction: column; right: 0; }
+.mobile-menu::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--orange); z-index: 1; }
+.mobile-menu-nav { flex: none; }
+.mobile-menu-nav > a { display: block; padding: 0.85rem 0; font-size: 1.5rem; font-weight: 700; color: var(--ink); text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.08); transition: all 0.2s ease; opacity: 0; transform: translateX(20px); animation: mobileSlideIn 0.3s ease forwards; }
+.mobile-menu.active .mobile-menu-nav > a:nth-child(1) { animation-delay: 0.05s; }
+.mobile-menu.active .mobile-menu-nav > a:nth-child(2) { animation-delay: 0.08s; }
+.mobile-menu.active .mobile-menu-nav > a:nth-child(3) { animation-delay: 0.11s; }
+.mobile-menu.active .mobile-menu-nav > .mobile-dropdown { animation-delay: 0.14s; }
+.mobile-menu.active .mobile-dropdown { opacity: 0; transform: translateX(20px); animation: mobileSlideIn 0.3s ease forwards; animation-delay: 0.14s; }
+@keyframes mobileSlideIn { to { opacity: 1; transform: translateX(0); } }
+.mobile-menu-nav > a:hover, .mobile-menu-nav > a:active { color: var(--orange); padding-left: 0.5rem; }
+.mobile-dropdown-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; border-bottom: 1px solid rgba(0,0,0,0.08); padding: 0.85rem 0; font-size: 1.5rem; font-weight: 700; color: var(--ink); cursor: pointer; text-align: left; font-family: inherit; transition: color 0.2s ease; }
+.mobile-dropdown-toggle:active, .mobile-dropdown-toggle.active { color: var(--orange); }
+.mobile-dropdown-toggle .arrow { transition: transform 0.3s ease; font-size: 1rem; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--light-gray); }
+.mobile-dropdown-toggle.active .arrow { transform: rotate(180deg); color: var(--white); background: var(--orange); }
+.mobile-dropdown-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; margin: 0 -1.5rem; padding: 0 1.5rem; }
+.mobile-dropdown-content.open { max-height: 1200px; padding-top: 0.75rem; padding-bottom: 0.75rem; }
+.mobile-cards-group { margin-bottom: 0.5rem; }
+.mobile-cards-label { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); padding: 0.6rem 0 0.35rem; }
+.mobile-card { display: flex !important; flex-direction: column; gap: 0.15rem; padding: 0.75rem 0.85rem !important; margin-bottom: 0.4rem; background: var(--white); border: 1.5px solid rgba(0,0,0,0.06); border-radius: 8px; text-decoration: none !important; transition: all 0.15s ease; border-bottom: none !important; }
+.mobile-card:active { background: var(--orange-light); border-color: var(--orange); transform: scale(0.98); }
+.mobile-card-name { font-size: 0.95rem !important; font-weight: 700; color: var(--ink) !important; display: flex; align-items: center; gap: 0.35rem; }
+.mobile-card-desc { font-size: 0.75rem; font-weight: 500; color: var(--gray-medium); line-height: 1.3; }
+.mobile-menu-footer { padding-top: 0.75rem; margin-top: 0.75rem; border-top: 2px solid var(--ink); display: flex; flex-direction: column; gap: 0.75rem; opacity: 0; transform: translateY(10px); animation: mobileSlideUp 0.3s ease forwards; animation-delay: 0.25s; }
+@keyframes mobileSlideUp { to { opacity: 1; transform: translateY(0); } }
+.mobile-menu-footer .btn-mobile-cta { display: block; text-align: center; padding: 0.9rem 1.5rem; font-size: 1rem; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 0.02em; background: var(--orange); color: var(--white); border: 2px solid var(--orange); transition: all 0.2s ease; }
+.mobile-menu-footer .btn-mobile-cta:active { background: var(--orange-dark); }
+.mobile-menu-footer-links { display: flex; justify-content: center; gap: 1.5rem; padding-top: 0.75rem; }
+.mobile-menu-footer-links a { font-size: 0.85rem !important; color: var(--gray-medium) !important; border-bottom: none !important; padding: 0.25rem 0 !important; font-weight: 600 !important; }
+.mobile-menu-footer-links a:hover { color: var(--orange) !important; }
+
+/* HERO */
+.hero { position: relative; padding: 9rem 0 2.5rem; background: var(--warm-white); overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -200px; right: -300px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(255,107,53,0.12) 0%, transparent 65%); filter: blur(60px); pointer-events: none; z-index: -1; }
+.hero::after { content: ''; position: absolute; bottom: -100px; left: -200px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(196,136,46,0.09) 0%, transparent 65%); filter: blur(60px); pointer-events: none; z-index: -1; }
+.hero-content { text-align: center; max-width: 820px; margin: 0 auto; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 0.6rem; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--orange); padding: 0.4rem 0.85rem 0.4rem 0.65rem; background: rgba(255,107,53,0.08); border: 1px solid rgba(255,107,53,0.2); border-radius: 100px; margin-bottom: 1.5rem; }
+.hero-eyebrow-dot { width: 7px; height: 7px; background: var(--orange); border-radius: 50%; box-shadow: 0 0 0 4px rgba(255,107,53,0.2); animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%, 100% { box-shadow: 0 0 0 4px rgba(255,107,53,0.2); } 50% { box-shadow: 0 0 0 7px rgba(255,107,53,0.05); } }
+.hero h1 { font-size: clamp(2.25rem, 4.8vw, 3.75rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.035em; margin-bottom: 1.25rem; }
+.hero h1 .highlight { color: var(--orange); position: relative; display: inline-block; }
+.hero h1 .highlight svg { position: absolute; bottom: -0.05em; left: -2%; width: 104%; height: 0.22em; pointer-events: none; }
+.hero-sub { font-size: 1.15rem; color: var(--gray); line-height: 1.6; max-width: 640px; margin: 0 auto; }
+.hero-stats { display: inline-flex; gap: 0; margin-top: 1.75rem; padding: 0.5rem 0.75rem; background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 100px; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+.hero-stat { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.25rem 0.9rem; letter-spacing: 0.04em; color: var(--ink); }
+.hero-stat + .hero-stat { border-left: 1px solid rgba(0,0,0,0.08); }
+.hero-stat-label { color: var(--gray-medium); font-weight: 600; }
+.hero-stat-value { color: var(--orange); font-weight: 800; }
+
+/* CALCULATOR */
+.calc-section { padding: 3rem 0 5rem; }
+.calc-grid { display: grid; grid-template-columns: 380px 1fr; gap: 1.5rem; align-items: start; }
+
+/* CONTROLS */
+.controls-panel { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 1.75rem; position: sticky; top: 100px; min-width: 0; }
+.controls-section { margin-bottom: 1.75rem; }
+.controls-section:last-child { margin-bottom: 0; }
+.controls-section-title { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--orange); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; padding-bottom: 0.65rem; border-bottom: 1px solid rgba(0,0,0,0.06); }
+.controls-section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(255,107,53,0.2), transparent); }
+.input-row { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+.input-row:last-child { margin-bottom: 0; }
+.input-label { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.input-label-text { font-size: 0.78rem; font-weight: 600; color: var(--gray); display: flex; align-items: center; gap: 0.4rem; }
+.input-info { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 50%; background: var(--light-gray); color: var(--gray-medium); font-size: 0.6rem; font-weight: 700; cursor: help; position: relative; font-family: var(--font-mono); }
+.input-info:hover { background: var(--orange-light); color: var(--orange); }
+.input-info .tooltip-text { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: 220px; padding: 0.65rem 0.8rem; background: var(--ink); color: var(--white); font-size: 0.72rem; font-weight: 500; line-height: 1.4; border-radius: 6px; opacity: 0; visibility: hidden; transition: all 0.2s ease; pointer-events: none; text-align: left; font-family: var(--font-body); letter-spacing: 0; text-transform: none; z-index: 100; }
+.input-info .tooltip-text::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--ink) transparent transparent transparent; }
+.input-info:hover .tooltip-text { opacity: 1; visibility: visible; }
+.input-value { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.input-field { width: 100%; padding: 0.7rem 0.85rem; font-family: var(--font-mono); font-size: 0.92rem; font-weight: 600; background: var(--warm-white); border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; color: var(--ink); font-variant-numeric: tabular-nums; transition: all 0.15s ease; }
+.input-field:focus { outline: none; border-color: var(--orange); background: var(--white); box-shadow: 0 0 0 3px rgba(255,107,53,0.08); }
+.input-field-prefix { position: relative; }
+.input-field-prefix::before { content: '$'; position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 0.92rem; font-weight: 600; color: var(--gray-soft); pointer-events: none; }
+.input-field-prefix .input-field { padding-left: 1.85rem; }
+
+input[type="range"] { -webkit-appearance: none; width: 100%; height: 4px; background: var(--light-gray); border-radius: 100px; outline: none; padding: 0; margin: 0.5rem 0 0.25rem; cursor: pointer; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--orange); cursor: pointer; box-shadow: 0 0 0 3px var(--white), 0 0 0 4px rgba(255,107,53,0.25); transition: transform 0.15s ease; }
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--orange); cursor: pointer; border: none; box-shadow: 0 0 0 3px var(--white), 0 0 0 4px rgba(255,107,53,0.25); }
+.range-meta { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.65rem; color: var(--gray-soft); letter-spacing: 0.04em; margin-top: 0.4rem; }
+
+/* Savings rate mini-card inside controls */
+.savings-rate-card { margin-top: 0.75rem; padding: 0.85rem 1rem; background: var(--warm-white); border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; }
+.savings-rate-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; }
+.savings-rate-label { font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-medium); }
+.savings-rate-value { font-family: var(--font-mono); font-size: 1.4rem; font-weight: 900; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1; color: var(--sr-color, var(--orange)); transition: color 0.3s ease; }
+.savings-rate-bar { position: relative; height: 6px; background: var(--light-gray); border-radius: 100px; overflow: hidden; margin-bottom: 0.5rem; }
+.savings-rate-fill { position: absolute; inset: 0 auto 0 0; background: var(--sr-color, var(--orange)); border-radius: 100px; width: var(--sr-pct, 0%); transition: width 0.35s cubic-bezier(.16,1,.3,1), background 0.3s ease; }
+.savings-rate-tag { font-size: 0.72rem; color: var(--gray); font-weight: 600; }
+.savings-rate-tag strong { color: var(--sr-color, var(--orange)); font-weight: 800; }
+
+/* RESULTS */
+.results-col { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
+
+/* Verdict card */
+.verdict-card { position: relative; background: var(--ink); color: var(--white); border-radius: 16px; padding: 2rem; overflow: hidden; }
+.verdict-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 0%, var(--accent-glow, rgba(255,107,53,0.35)) 0%, transparent 55%); pointer-events: none; transition: background 0.5s ease; }
+.verdict-card.fast { --accent-glow: rgba(42,125,91,0.35); }
+.verdict-card.steady { --accent-glow: rgba(255,107,53,0.35); }
+.verdict-card.slow { --accent-glow: rgba(196,136,46,0.3); }
+.verdict-card.never { --accent-glow: rgba(176,74,90,0.35); }
+.verdict-card-top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap; }
+.verdict-meta { display: flex; flex-direction: column; gap: 0.25rem; }
+.verdict-eyebrow { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.5); }
+.verdict-horizon { font-size: 0.95rem; color: rgba(255,255,255,0.85); font-weight: 600; }
+.verdict-horizon strong { font-weight: 800; color: var(--white); }
+
+/* Countdown: giant years number */
+.countdown-block { position: relative; z-index: 1; margin-top: 1.5rem; display: flex; align-items: baseline; gap: 1.25rem; flex-wrap: wrap; }
+.countdown-number { font-size: clamp(3.5rem, 9vw, 5.75rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.04em; color: var(--white); font-variant-numeric: tabular-nums; }
+.countdown-number.fast { color: #4ade80; }
+.countdown-number.steady { color: var(--orange-soft); }
+.countdown-number.slow { color: #fbbf24; }
+.countdown-number.never { color: #f87171; }
+.countdown-unit-block { display: flex; flex-direction: column; gap: 0.25rem; }
+.countdown-unit { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.6); }
+.countdown-caption { font-size: 1.05rem; color: var(--white); font-weight: 600; }
+.countdown-caption strong { font-weight: 800; }
+
+.verdict-stats { position: relative; z-index: 1; margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.verdict-stat { display: flex; flex-direction: column; gap: 0.3rem; }
+.verdict-stat-label { font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.45); }
+.verdict-stat-value { font-size: 1.15rem; font-weight: 800; color: var(--white); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.verdict-stat-value.muted { color: rgba(255,255,255,0.65); font-size: 0.95rem; }
+
+.insight-callout { position: relative; z-index: 1; margin-top: 1.5rem; padding: 0.85rem 1rem; background: rgba(255,255,255,0.05); border-left: 3px solid var(--orange); border-radius: 0 8px 8px 0; font-size: 0.85rem; line-height: 1.5; color: rgba(255,255,255,0.9); }
+.insight-callout strong { color: var(--white); font-weight: 800; }
+.insight-callout-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: var(--orange); color: var(--white); font-size: 0.7rem; font-weight: 800; margin-right: 0.4rem; vertical-align: -3px; }
+
+/* TIER PROGRESSION STRIP */
+.tier-progression { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 1.75rem; min-width: 0; }
+.tier-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+.tier-header-title { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gray-medium); }
+.tier-header-meta { font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; color: var(--orange); letter-spacing: 0.04em; }
+.tier-track { position: relative; height: 10px; background: var(--light-gray); border-radius: 100px; margin: 1.25rem 0 1.75rem; }
+.tier-track-fill { position: absolute; inset: 0 auto 0 0; height: 100%; background: linear-gradient(to right, var(--tier-coast) 0%, var(--tier-lean) 40%, var(--tier-fire) 70%, var(--tier-fat) 100%); border-radius: 100px; width: var(--progress, 0%); transition: width 0.5s cubic-bezier(.16,1,.3,1); }
+.tier-track-marker { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; border-radius: 50%; background: var(--white); border: 3px solid var(--ink); box-shadow: 0 2px 8px rgba(0,0,0,0.15); left: var(--marker, 0%); transition: left 0.5s cubic-bezier(.16,1,.3,1); z-index: 2; }
+.tier-track-marker::after { content: 'YOU'; position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: 0.55rem; font-weight: 800; letter-spacing: 0.12em; color: var(--ink); white-space: nowrap; }
+
+.tier-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.65rem; }
+.tier-item { position: relative; padding: 0.85rem 0.75rem; background: var(--warm-white); border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; transition: all 0.25s ease; }
+.tier-item::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--tier-color); border-radius: 10px 10px 0 0; transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease; }
+.tier-item.reached { border-color: transparent; background: var(--white); box-shadow: 0 6px 20px -6px rgba(0,0,0,0.1); }
+.tier-item.reached::before { transform: scaleX(1); }
+.tier-item.coast { --tier-color: var(--tier-coast); }
+.tier-item.barista { --tier-color: var(--tier-barista); }
+.tier-item.lean { --tier-color: var(--tier-lean); }
+.tier-item.fire { --tier-color: var(--tier-fire); }
+.tier-item.fat { --tier-color: var(--tier-fat); }
+.tier-name { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--tier-color); display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.35rem; }
+.tier-name-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--tier-color); }
+.tier-value { font-family: var(--font-mono); font-size: 1rem; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.tier-sub { font-size: 0.68rem; color: var(--gray-medium); margin-top: 0.2rem; line-height: 1.3; }
+
+/* CHART */
+.chart-card { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 1.75rem; min-width: 0; overflow: hidden; }
+.chart-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+.chart-card-title { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gray-medium); }
+.chart-legend { display: flex; gap: 1rem; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; flex-wrap: wrap; }
+.chart-legend-item { display: inline-flex; align-items: center; gap: 0.4rem; letter-spacing: 0.04em; }
+.chart-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+.chart-legend-dot.portfolio { background: var(--orange); }
+.chart-legend-dot.contrib { background: var(--ink); }
+.chart-legend-dot.target { background: var(--amber); }
+.chart-container { position: relative; width: 100%; height: 280px; }
+.chart-container canvas { max-width: 100% !important; height: 100% !important; }
+
+/* Strategy strip */
+.strategy-strip { background: var(--cream); border: 1px solid rgba(196,136,46,0.15); border-radius: 16px; padding: 1.25rem 1.5rem; display: flex; align-items: flex-start; gap: 1rem; }
+.strategy-icon { flex-shrink: 0; width: 36px; height: 36px; border-radius: 8px; background: var(--white); display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; border: 1px solid rgba(196,136,46,0.2); }
+.strategy-content { flex: 1; }
+.strategy-label { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--amber); margin-bottom: 0.3rem; }
+.strategy-text { font-size: 0.9rem; color: var(--ink); line-height: 1.55; font-weight: 500; }
+.strategy-text strong { font-weight: 800; }
+
+.methodology { background: transparent; border: 1px dashed rgba(0,0,0,0.1); border-radius: 12px; padding: 1.25rem 1.5rem; }
+.methodology-title { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gray-medium); margin-bottom: 0.6rem; }
+.methodology p { font-size: 0.78rem; color: var(--gray-medium); line-height: 1.55; }
+
+/* EDUCATION */
+.edu-section { background: var(--cream); padding: 5rem 0 4.5rem; position: relative; }
+.edu-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(0,0,0,0.08), transparent); }
+.edu-header { text-align: center; max-width: 720px; margin: 0 auto 3rem; }
+.edu-eyebrow { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--orange); margin-bottom: 0.75rem; }
+.edu-header h2 { font-size: clamp(1.85rem, 3.5vw, 2.5rem); font-weight: 900; letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 1rem; }
+.edu-header p { font-size: 1.05rem; color: var(--gray); line-height: 1.6; }
+
+/* Savings rate table — the MMM chart */
+.sr-table { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 2rem; margin-bottom: 2.5rem; overflow: hidden; }
+.sr-table-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
+.sr-table-eyebrow { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--orange); }
+.sr-table-title { font-size: 1.35rem; font-weight: 900; letter-spacing: -0.02em; margin-top: 0.3rem; }
+.sr-table-credit { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 600; color: var(--gray-soft); letter-spacing: 0.04em; }
+.sr-rows { display: flex; flex-direction: column; gap: 0.4rem; }
+.sr-row { display: grid; grid-template-columns: 90px 1fr 85px; align-items: center; gap: 1rem; padding: 0.55rem 0; }
+.sr-row-pct { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
+.sr-row-bar-container { position: relative; height: 22px; background: var(--light-gray); border-radius: 4px; overflow: hidden; }
+.sr-row-bar { position: absolute; inset: 0 auto 0 0; height: 100%; border-radius: 4px; background: var(--bar-color, var(--orange)); width: var(--bar-pct, 0%); }
+.sr-row-years { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--gray); font-variant-numeric: tabular-nums; text-align: right; }
+.sr-row.highlight .sr-row-pct, .sr-row.highlight .sr-row-years { color: var(--orange); }
+.sr-row.highlight .sr-row-bar { background: var(--orange); box-shadow: 0 0 0 2px rgba(255,107,53,0.25); }
+
+/* Tier explainers */
+.tiers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.tier-card { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 1.75rem; position: relative; overflow: hidden; }
+.tier-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--tier-c); }
+.tier-card.coast-card { --tier-c: var(--tier-coast); }
+.tier-card.barista-card { --tier-c: var(--tier-barista); }
+.tier-card.lean-card { --tier-c: var(--tier-lean); }
+.tier-card.regular-card { --tier-c: var(--tier-fire); }
+.tier-card.fat-card { --tier-c: var(--tier-fat); }
+.tier-card-icon { width: 36px; height: 36px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: 0.85rem; background: var(--tier-c); color: var(--white); }
+.tier-card-eyebrow { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--tier-c); margin-bottom: 0.4rem; }
+.tier-card h4 { font-size: 1.15rem; font-weight: 900; letter-spacing: -0.015em; margin-bottom: 0.6rem; color: var(--ink); line-height: 1.2; }
+.tier-card p { font-size: 0.88rem; color: var(--gray); line-height: 1.55; margin-bottom: 1rem; }
+.tier-card-math { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; color: var(--ink); padding: 0.5rem 0.75rem; background: var(--warm-white); border-radius: 6px; letter-spacing: 0.02em; border: 1px solid rgba(0,0,0,0.04); }
+
+/* 4% rule callout */
+.rule-callout { margin-top: 2rem; background: var(--ink); color: var(--white); border-radius: 16px; padding: 2rem; display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: center; position: relative; overflow: hidden; }
+.rule-callout::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 100% 0%, rgba(255,107,53,0.18) 0%, transparent 55%); pointer-events: none; }
+.rule-big { position: relative; z-index: 1; }
+.rule-big-number { font-size: 4.5rem; font-weight: 900; letter-spacing: -0.04em; line-height: 0.9; color: var(--orange); font-variant-numeric: tabular-nums; }
+.rule-big-label { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.6); margin-top: 0.35rem; }
+.rule-explanation { position: relative; z-index: 1; }
+.rule-explanation h3 { font-size: 1.35rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 0.75rem; }
+.rule-explanation p { font-size: 0.92rem; color: rgba(255,255,255,0.85); line-height: 1.6; margin-bottom: 0.75rem; }
+.rule-explanation p:last-child { margin-bottom: 0; font-size: 0.82rem; color: rgba(255,255,255,0.6); }
+
+/* FOOTER */
+footer { padding: 0; border-top: 4px solid var(--orange); background: var(--ink); color: var(--white); }
+.footer-newsletter { padding: 2.5rem 2rem; background: rgba(255,107,53,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); text-align: center; }
+.footer-newsletter-container { max-width: 850px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+.footer-newsletter-text { text-align: left; }
+.footer-newsletter h3 { font-size: 1.2rem; font-weight: 900; margin-bottom: 0.2rem; letter-spacing: -0.02em; }
+.footer-newsletter p { font-size: 0.9rem; opacity: 0.7; margin: 0; line-height: 1.4; }
+.footer-newsletter-btn { display: inline-block; padding: 0.75rem 1.75rem; font-size: 0.9rem; font-weight: 700; background: var(--orange); color: var(--white); text-decoration: none; border: 2px solid var(--orange); transition: all 0.2s ease; font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; }
+.footer-newsletter-btn:hover { background: var(--white); color: var(--ink); border-color: var(--white); transform: translateY(-2px); }
+.footer-container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 0; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+.footer-brand-col { display: flex; flex-direction: column; gap: 1rem; }
+.footer-brand img { height: 32px; filter: brightness(0) invert(1); }
+.footer-tagline { opacity: 0.7; line-height: 1.6; font-size: 0.95rem; }
+.footer-ein { opacity: 0.4; font-size: 0.8rem; }
+.footer-social { display: flex; gap: 0.75rem; margin-top: 0.25rem; }
+.footer-social a { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.08); color: var(--white); text-decoration: none; transition: all 0.2s ease; }
+.footer-social a:hover { background: var(--orange); transform: translateY(-2px); }
+.footer-social a svg { width: 16px; height: 16px; fill: currentColor; }
+.footer-section h4 { font-size: 0.75rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.25rem; color: var(--orange); opacity: 0.8; }
+.footer-section a { display: block; color: var(--white); text-decoration: none; margin-bottom: 0.65rem; transition: all 0.2s ease; font-size: 0.95rem; opacity: 0.8; }
+.footer-section a:hover { color: var(--orange); opacity: 1; transform: translateX(4px); }
+.footer-squiggle { display: block; margin: 0 auto 0; width: 80px; height: 8px; opacity: 0.2; }
+.footer-bottom { max-width: var(--max-width); margin: 0 auto; padding: 2rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; opacity: 0.5; font-size: 0.85rem; }
+.footer-bottom a { color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.2s ease; margin: 0 0.75rem; }
+.footer-bottom a:hover { color: var(--orange); }
+
+/* RESPONSIVE */
+@media (max-width: 1200px) { .nav-right { gap: 1.5rem; } .nav-right a { font-size: 0.95rem; } .btn-donate, .btn-get-involved { padding: 0.65rem 1.5rem; font-size: 0.9rem; } }
+@media (max-width: 1080px) {
+  nav { padding: 1.25rem 0; }
+  nav.scrolled { padding: 0.875rem 0; }
+  .logo img { height: 42px; }
+  nav.scrolled .logo img { height: 36px; }
+  .nav-right { gap: 1.25rem; }
+  .nav-right a { font-size: 0.9rem; }
+  .btn-donate, .btn-get-involved { padding: 0.6rem 1.25rem; font-size: 0.85rem; text-transform: none; }
+  .calc-grid { grid-template-columns: 340px 1fr; gap: 1.25rem; }
+  .tier-list { grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+}
+@media (max-width: 968px) {
+  :root { font-size: 15.5px; }
+  .nav-container { grid-template-columns: 1fr auto; gap: 1rem; }
+  .nav-right { display: none; }
+  .mobile-controls { display: flex; }
+  .mobile-menu-btn { display: block; }
+  .mobile-get-involved { display: inline-block; padding: 0.35rem 0.85rem; font-size: 0.72rem; }
+  .mobile-menu { display: block; }
+  .hero { padding: 7rem 0 2rem; }
+  .calc-section { padding: 2rem 0 4rem; }
+  .calc-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+  .controls-panel { position: static; }
+  .results-col { gap: 1.25rem; }
+  .tiers-grid { grid-template-columns: 1fr 1fr; }
+  .rule-callout { grid-template-columns: 1fr; gap: 1.25rem; text-align: left; padding: 1.75rem; }
+  .edu-section { padding: 4.5rem 0 4rem; }
+  .footer-container { grid-template-columns: 1fr 1fr; gap: 2rem; padding: 3rem 2rem 1.5rem; }
+  .footer-brand-col { grid-column: 1 / -1; }
+  .footer-social { justify-content: flex-start; }
+  .footer-newsletter-container { flex-direction: column; text-align: center; }
+  .footer-newsletter-text { text-align: center; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+}
+@media (max-width: 720px) {
+  .tier-list { grid-template-columns: repeat(5, 1fr); gap: 0.35rem; }
+  .tier-item { padding: 0.6rem 0.45rem; }
+  .tier-name { font-size: 0.55rem; letter-spacing: 0.08em; }
+  .tier-value { font-size: 0.85rem; }
+  .tier-sub { display: none; }
+  .hero-stats { flex-wrap: wrap; gap: 0; }
+}
+@media (max-width: 640px) {
+  .wrap { padding: 0 1rem; }
+  .hero { padding: 6rem 0 1.5rem; }
+  .hero h1 { font-size: 2rem; line-height: 1.1; }
+  .hero-sub { font-size: 1rem; }
+  .hero-eyebrow { font-size: 0.65rem; padding: 0.35rem 0.7rem 0.35rem 0.55rem; }
+  .hero-stats { font-size: 0.65rem; padding: 0.4rem 0.5rem; }
+  .hero-stat { padding: 0.2rem 0.6rem; }
+  .calc-section { padding: 1.5rem 0 3rem; }
+  .calc-grid { gap: 1rem; }
+  .controls-panel { padding: 1.25rem; border-radius: 12px; }
+  .verdict-card { padding: 1.5rem 1.25rem; border-radius: 12px; }
+  .countdown-block { gap: 1rem; margin-top: 1.25rem; }
+  .countdown-number { font-size: 4rem; }
+  .countdown-caption { font-size: 0.95rem; }
+  .verdict-stats { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1.5rem; padding-top: 1.25rem; }
+  .verdict-stat-label { font-size: 0.55rem; letter-spacing: 0.1em; }
+  .verdict-stat-value { font-size: 0.95rem; }
+  .verdict-stat-value.muted { font-size: 0.85rem; }
+  .insight-callout { font-size: 0.8rem; padding: 0.75rem 0.85rem; margin-top: 1.25rem; }
+
+  .tier-progression { padding: 1.25rem; border-radius: 12px; }
+  .tier-list { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .tier-sub { display: block; font-size: 0.64rem; }
+  .tier-track { margin: 1rem 0 2rem; }
+
+  .chart-card { padding: 1.25rem 0.85rem; border-radius: 12px; }
+  .chart-card-header { padding: 0 0.4rem; }
+  .chart-container { height: 220px; }
+
+  .strategy-strip { padding: 1.1rem 1.25rem; border-radius: 12px; gap: 0.85rem; }
+  .strategy-icon { width: 32px; height: 32px; font-size: 1rem; }
+  .strategy-text { font-size: 0.85rem; }
+  .methodology { padding: 1.1rem 1.25rem; }
+  .methodology p { font-size: 0.75rem; }
+
+  .edu-section { padding: 3.5rem 0 3rem; }
+  .sr-table { padding: 1.5rem 1.25rem; }
+  .sr-table-title { font-size: 1.15rem; }
+  .sr-row { grid-template-columns: 60px 1fr 70px; gap: 0.75rem; }
+  .sr-row-pct, .sr-row-years { font-size: 0.75rem; }
+  .sr-row-bar-container { height: 18px; }
+  .tiers-grid { grid-template-columns: 1fr; gap: 0.85rem; }
+  .tier-card { padding: 1.5rem; }
+  .rule-callout { padding: 1.5rem; }
+  .rule-big-number { font-size: 3.5rem; }
+  .rule-explanation h3 { font-size: 1.15rem; }
+
+  .footer-container { grid-template-columns: 1fr; padding: 2.5rem 1.25rem 1rem; gap: 2rem; }
+  .input-info .tooltip-text { width: 200px; left: auto; right: -10px; transform: none; }
+  .input-info .tooltip-text::after { left: auto; right: 15px; margin-left: 0; }
+}
+@media (max-width: 420px) {
+  .verdict-stats { grid-template-columns: 1fr; gap: 0.6rem; }
+  .verdict-stat { flex-direction: row; justify-content: space-between; align-items: baseline; }
+  .verdict-stat-label { font-size: 0.65rem; }
+  .verdict-stat-value { font-size: 0.95rem; }
+}
+@media (max-width: 480px) { .mobile-menu-nav > a { font-size: 1.3rem; } .mobile-dropdown-toggle { font-size: 1.3rem; } }
+</style>
+
+<link rel="stylesheet" href="css/navbar.css">
 </head>
 <body>
 
-  <nav id="nav">
-    <div class="nav-container">
-      <a href="index.html" class="logo">
-        <img src="finmango.png" alt="FinMango">
-      </a>
-
-      <div class="nav-right">
-        <a href="about.html">About</a>
-        <a href="research.html">Research</a>
-        <a href="education.html">Education</a>
-
-        <div class="dropdown dropdown-mega">
-          <a href="#" class="dropdown-trigger" onclick="event.preventDefault()">Our Work ▾</a>
-          <div class="dropdown-content dropdown-content-mega">
-            <div class="dropdown-mega-grid">
-              <div class="dropdown-mega-col">
-                <div class="dropdown-mega-col-label">Build</div>
-                <a href="education.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Millionaire Mindset</span>
-                    <span class="dropdown-item-desc">In-school programming | 100k+ taught</span>
-                  </span>
-                </a>
-                <a href="barrier-breakers.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Barrier Breakers</span>
-                    <span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span>
-                  </span>
-                </a>
-                <a href="ambassadors.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Ambassador Program</span>
-                    <span class="dropdown-item-desc">Powered by young adults globally</span>
-                  </span>
-                </a>
-                <a href="intelligence-platform.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Intelligence Platform</span>
-                    <span class="dropdown-item-desc">Early warning across food, housing, health &amp; jobs</span>
-                  </span>
-                </a>
-              </div>
-              <div class="dropdown-mega-col">
-                <div class="dropdown-mega-col-label">Measure</div>
-                <a href="barometer.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Financial Health Barometer</span>
-                    <span class="dropdown-item-desc">Real-time economic pulse · 50 states</span>
-                  </span>
-                </a>
-                <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">GitHub</span>
-                    <span class="dropdown-item-desc">Research to Reality</span>
-                  </span>
-                </a>
-                <a href="resources.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Resources</span>
-                    <span class="dropdown-item-desc">Guides, tools & worksheets</span>
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
-        <a href="donate.html" class="btn-donate">Donate</a>
-      </div>
-
-      <div class="mobile-controls">
-        <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <div class="mobile-menu" id="mobileMenu">
-    <div class="mobile-menu-nav">
+<nav id="nav">
+  <div class="nav-container">
+    <a href="index.html" class="logo"><img src="finmango.png" alt="FinMango"></a>
+    <div class="nav-right">
       <a href="about.html">About</a>
       <a href="research.html">Research</a>
       <a href="education.html">Education</a>
-      <div class="mobile-dropdown">
-        <button class="mobile-dropdown-toggle">Our Work <span class="arrow">▾</span></button>
-        <div class="mobile-dropdown-content">
-          <div class="mobile-cards-group">
-            <div class="mobile-cards-label">Build</div>
-            <a href="education.html" class="mobile-card"><span class="mobile-card-name">Millionaire Mindset</span><span class="mobile-card-desc">In-school programming | 100k+ taught</span></a>
-            <a href="barrier-breakers.html" class="mobile-card"><span class="mobile-card-name">Barrier Breakers</span><span class="mobile-card-desc">Powered by Valmark · $20k+ in prizes</span></a>
-            <a href="ambassadors.html" class="mobile-card"><span class="mobile-card-name">Ambassador Program</span><span class="mobile-card-desc">Powered by young adults globally</span></a>
-            <a href="intelligence-platform.html" class="mobile-card"><span class="mobile-card-name">Intelligence Platform</span><span class="mobile-card-desc">Early warning across food, housing, health &amp; jobs</span></a>
-          </div>
-          <div class="mobile-cards-group">
-            <div class="mobile-cards-label">Measure</div>
-            <a href="barometer.html" class="mobile-card"><span class="mobile-card-name">Financial Health Barometer</span><span class="mobile-card-desc">Real-time economic pulse · 50 states</span></a>
-            <a href="https://github.com/finmango/research" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">GitHub <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Research to Reality</span></a>
-            <a href="resources.html" class="mobile-card"><span class="mobile-card-name">Resources</span><span class="mobile-card-desc">Guides, tools & worksheets</span></a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="mobile-menu-footer">
-      <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-mobile#/donate" target="_blank" rel="noopener noreferrer" class="btn-mobile-cta">Donate</a>
-      <div class="mobile-menu-footer-links">
-        <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
-        <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="/cdn-cgi/l/email-protection#0a626f6666654a6c6364676b646d652465786d">Contact</a>
-      </div>
-    </div>
-  </div>
-
-<section class="hero">
-  <div class="hero-container">
-    <h1 class="hero-title">FIRE Calculator 🔥</h1>
-    <p class="hero-subtitle">
-      Calculate when you can achieve Financial Independence and Retire Early
-    </p>
-  </div>
-</section>
-
-<div class="main-content">
-  <div class="content-section">
-    <p class="section-text">
-      FIRE stands for Financial Independence, Retire Early. It is a movement in the space of personal finance that encourages people to live well within their means, and aggressively save money towards early retirement.
-    </p>
-    <p class="section-text">
-      Traditional concepts of personal finance have changed significantly in recent times, but the financial advice that most people have access to has not. In the last 20 years: There has been an unprecedented level of inflation · Student loans and medical debt are orders of magnitude higher per capita · Owning a personal computing device and having a fast internet connection is not just a luxury, but often a necessity · All while wages have not changed significantly for the majority of the population ·
-    </p>
-    <p class="section-text">
-      There are more personal finance tools than ever before at our disposal, but it's easy to get lost in the details. FIRE focuses on a very simple concept: live well within your means, and invest as much as possible early on to let exponential growth take care of the hard work.
-    </p>
-    <p class="section-text">
-      We'll now ask you a few questions about your personal finances to show you that, even with a modest income, you can achieve financial freedom much earlier than most people realize it's possible.
-    </p>
-  </div>
-
-  <!-- Section 1: Your Current Financial Situation -->
-  <div class="calc-section active">
-    <div class="calc-section-header">
-      <h2 class="calc-section-title">1. Your Current Financial Situation</h2>
-      <span class="calc-section-arrow">▼</span>
-    </div>
-    <div class="calc-section-content">
-      <p class="section-text">
-        Start with where you are today. How much have you already saved, and what's your income?
-      </p>
-      
-      <div class="calculator-box">
-        <div class="input-grid">
-          <div class="input-group">
-            <label class="input-label">Your Current Age</label>
-            <input type="number" id="age" value="25" min="18" max="80">
-          </div>
-          
-          <div class="input-group">
-            <label class="input-label">Current Savings & Investments</label>
-            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-              Total value of all your retirement accounts, brokerage, savings, etc.
-            </p>
-            <div class="input-wrapper">
-              <span class="input-prefix">$</span>
-              <input type="number" id="currentSavings" value="50000" min="0" step="5000">
+      <div class="dropdown dropdown-mega">
+        <a href="#" class="dropdown-trigger" onclick="event.preventDefault()">Our Work ▾</a>
+        <div class="dropdown-content dropdown-content-mega">
+          <div class="dropdown-mega-grid">
+            <div class="dropdown-mega-col">
+              <div class="dropdown-mega-col-label">Build</div>
+              <a href="education.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Millionaire Mindset</span><span class="dropdown-item-desc">In-school programming | 100k+ taught</span></span></a>
+              <a href="barrier-breakers.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Barrier Breakers</span><span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span></span></a>
+              <a href="ambassadors.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Ambassador Program</span><span class="dropdown-item-desc">Powered by young adults globally</span></span></a>
+              <a href="intelligence-platform.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Intelligence Platform</span><span class="dropdown-item-desc">Early warning across food, housing, health &amp; jobs</span></span></a>
             </div>
-          </div>
-          
-          <div class="input-group">
-            <label class="input-label">Annual Income (After Tax)</label>
-            <div class="input-wrapper">
-              <span class="input-prefix">$</span>
-              <input type="number" id="income" value="60000" min="0" step="5000">
+            <div class="dropdown-mega-col">
+              <div class="dropdown-mega-col-label">Measure</div>
+              <a href="barometer.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Financial Health Barometer</span><span class="dropdown-item-desc">Real-time economic pulse · 50 states</span></span></a>
+              <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer"><span class="dropdown-item-text"><span class="dropdown-item-name">GitHub</span><span class="dropdown-item-desc">Research to Reality</span></span></a>
+              <a href="resources.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Resources</span><span class="dropdown-item-desc">Guides, tools & worksheets</span></span></a>
             </div>
           </div>
         </div>
       </div>
+      <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+      <a href="donate.html" class="btn-donate">Donate</a>
+    </div>
+    <div class="mobile-controls">
+      <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
+</nav>
 
-  <!-- Section 2: Your Spending & Savings -->
-  <div class="calc-section">
-    <div class="calc-section-header">
-      <h2 class="calc-section-title">2. Your Spending & Savings Rate</h2>
-      <span class="calc-section-arrow">▼</span>
-    </div>
-    <div class="calc-section-content">
-      <p class="section-text">
-        Your savings rate is THE most important factor in reaching FIRE. The more you save, the faster you get there. Most FIRE enthusiasts aim for 50%+ savings rates.
-      </p>
-      
-      <div class="calculator-box">
-        <div class="input-grid">
-          <div class="input-group">
-            <label class="input-label">Annual Spending</label>
-            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-              How much do you spend per year? This determines your FIRE number.
-            </p>
-            <div class="input-wrapper">
-              <span class="input-prefix">$</span>
-              <input type="number" id="spending" value="40000" min="0" step="1000">
-            </div>
-          </div>
-          
-          <div class="input-group">
-            <label class="input-label">Your Savings Rate</label>
-            <p id="savingsRateDisplay" style="font-size: 1.2rem; font-weight: 900; color: var(--fire-red); margin: 0.5rem 0;">33%</p>
-            <p style="font-size: 0.9rem; color: var(--gray);">
-              You're saving <span id="savingsAmount">$20,000</span> per year
-            </p>
-          </div>
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-nav">
+    <a href="about.html">About</a>
+    <a href="research.html">Research</a>
+    <a href="education.html">Education</a>
+    <div class="mobile-dropdown">
+      <button class="mobile-dropdown-toggle">Our Work <span class="arrow">▾</span></button>
+      <div class="mobile-dropdown-content">
+        <div class="mobile-cards-group">
+          <div class="mobile-cards-label">Build</div>
+          <a href="education.html" class="mobile-card"><span class="mobile-card-name">Millionaire Mindset</span><span class="mobile-card-desc">In-school programming | 100k+ taught</span></a>
+          <a href="barrier-breakers.html" class="mobile-card"><span class="mobile-card-name">Barrier Breakers</span><span class="mobile-card-desc">Powered by Valmark · $20k+ in prizes</span></a>
+          <a href="ambassadors.html" class="mobile-card"><span class="mobile-card-name">Ambassador Program</span><span class="mobile-card-desc">Powered by young adults globally</span></a>
+          <a href="intelligence-platform.html" class="mobile-card"><span class="mobile-card-name">Intelligence Platform</span><span class="mobile-card-desc">Early warning across food, housing, health &amp; jobs</span></a>
+        </div>
+        <div class="mobile-cards-group">
+          <div class="mobile-cards-label">Measure</div>
+          <a href="barometer.html" class="mobile-card"><span class="mobile-card-name">Financial Health Barometer</span><span class="mobile-card-desc">Real-time economic pulse · 50 states</span></a>
+          <a href="https://github.com/finmango/research" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">GitHub ↗</span><span class="mobile-card-desc">Research to Reality</span></a>
+          <a href="resources.html" class="mobile-card"><span class="mobile-card-name">Resources</span><span class="mobile-card-desc">Guides, tools & worksheets</span></a>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Section 3: Investment Strategy -->
-  <div class="calc-section">
-    <div class="calc-section-header">
-      <h2 class="calc-section-title">3. Your Investment Strategy</h2>
-      <span class="calc-section-arrow">▼</span>
-    </div>
-    <div class="calc-section-content">
-      <p class="section-text">
-        Your investment returns determine how fast your money grows. Most FIRE calculations use the historical stock market average of around 7% (after inflation).
-      </p>
-      
-      <div class="calculator-box">
-        <div class="input-group">
-          <label class="input-label">Expected Annual Return (After Inflation)</label>
-          <input type="range" id="returnRate" min="3" max="12" step="0.5" value="7">
-          <div class="slider-info">
-            <span>Conservative (3-4%)</span>
-            <span id="returnValue" style="font-weight: 900; color: var(--fire-red);">7%</span>
-            <span>Aggressive (10-12%)</span>
-          </div>
-        </div>
-        
-        <div class="input-group" style="margin-top: 2rem;">
-          <label class="input-label">Safe Withdrawal Rate</label>
-          <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-            The classic "4% rule" - how much you can safely withdraw each year in retirement
-          </p>
-          <input type="range" id="withdrawalRate" min="3" max="5" step="0.5" value="4">
-          <div class="slider-info">
-            <span>Conservative (3%)</span>
-            <span id="withdrawalValue" style="font-weight: 900; color: var(--fire-red);">4%</span>
-            <span>Aggressive (5%)</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section 4: Your FIRE Results -->
-  <div class="calc-section active">
-    <div class="calc-section-header">
-      <h2 class="calc-section-title">4. Your Path to FIRE 🔥</h2>
-      <span class="calc-section-arrow">▼</span>
-    </div>
-    <div class="calc-section-content">
-      <p class="section-text">
-        Here's when you can achieve financial independence based on your current plan:
-      </p>
-      
-      <div class="fire-display">
-        <div class="fire-label">Your FIRE Number</div>
-        <div class="fire-number" id="fireNumber">$0</div>
-        <div class="fire-sublabel" id="fireNumberDesc">25x your annual spending</div>
-      </div>
-      
-      <div class="results-grid">
-        <div class="result-card">
-          <div class="result-card-label">Years to FIRE</div>
-          <div class="result-card-value" id="yearsToFire">--</div>
-          <div class="result-card-subtext" id="fireAge">Age --</div>
-        </div>
-        
-        <div class="result-card">
-          <div class="result-card-label">Monthly Passive Income</div>
-          <div class="result-card-value" id="monthlyIncome">$0</div>
-          <div class="result-card-subtext">From your FIRE portfolio</div>
-        </div>
-        
-        <div class="result-card">
-          <div class="result-card-label">Total to Save</div>
-          <div class="result-card-value" id="totalToSave">$0</div>
-          <div class="result-card-subtext" id="savingsProgress">--% complete</div>
-        </div>
-      </div>
-      
-      <div class="chart-box">
-        <canvas id="fireChart"></canvas>
-      </div>
-      
-      <div class="milestone-grid">
-        <div class="milestone-card">
-          <div class="milestone-icon">🎯</div>
-          <div class="milestone-content">
-            <div class="milestone-title">Coast FIRE</div>
-            <div class="milestone-desc">Stop saving, let current investments grow to FIRE</div>
-          </div>
-          <div class="milestone-value" id="coastFire">$0</div>
-        </div>
-        
-        <div class="milestone-card">
-          <div class="milestone-icon">🏖️</div>
-          <div class="milestone-content">
-            <div class="milestone-title">Lean FIRE</div>
-            <div class="milestone-desc">Retire early with minimal expenses</div>
-          </div>
-          <div class="milestone-value" id="leanFire">$0</div>
-        </div>
-        
-        <div class="milestone-card">
-          <div class="milestone-icon">💎</div>
-          <div class="milestone-content">
-            <div class="milestone-title">Fat FIRE</div>
-            <div class="milestone-desc">Retire early with comfortable lifestyle</div>
-          </div>
-          <div class="milestone-value" id="fatFire">$0</div>
-        </div>
-      </div>
+  <div class="mobile-menu-footer">
+    <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-mobile#/donate" target="_blank" rel="noopener noreferrer" class="btn-mobile-cta">Donate</a>
+    <div class="mobile-menu-footer-links">
+      <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
+      <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="/cdn-cgi/l/email-protection#0a626f6666654a6c6364676b646d652465786d">Contact</a>
     </div>
   </div>
 </div>
 
-  <footer>
-    <div class="footer-newsletter">
-      <div class="footer-newsletter-container">
-        <div class="footer-newsletter-text">
-          <h3>Stay Updated</h3>
-          <p>Research, education, and advocacy updates. No spam.</p>
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        FIRE Calculator · The 4% Rule
+      </div>
+      <h1>
+        How fast can you
+        <span class="highlight">escape<svg viewBox="0 0 200 14" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M3 9 C 30 3, 60 11, 90 7 S 150 3, 197 8" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none"/></svg></span>
+        the 9-to-5?
+      </h1>
+      <p class="hero-sub">
+        Financial Independence, Retire Early. The math is surprisingly simple: your savings rate decides everything. Run your numbers and see when you can walk away from required work.
+      </p>
+      <div class="hero-stats">
+        <span class="hero-stat"><span class="hero-stat-label">Rule</span> <span class="hero-stat-value">25×</span></span>
+        <span class="hero-stat"><span class="hero-stat-label">Withdrawal</span> <span class="hero-stat-value">4%</span></span>
+        <span class="hero-stat"><span class="hero-stat-label">What matters</span> <span class="hero-stat-value">Savings Rate</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="calc-section">
+  <div class="wrap">
+    <div class="calc-grid">
+
+      <aside class="controls-panel">
+
+        <div class="controls-section">
+          <div class="controls-section-title">You</div>
+          <div class="input-row">
+            <div class="input-label">
+              <span class="input-label-text">Current age</span>
+              <span class="input-value" id="ageDisplay">28</span>
+            </div>
+            <input type="range" id="age" min="18" max="65" step="1" value="28">
+            <div class="range-meta"><span>18</span><span>65</span></div>
+          </div>
+          <div class="input-row">
+            <div class="input-label">
+              <span class="input-label-text">
+                Current savings &amp; investments
+                <span class="input-info">i<span class="tooltip-text">Everything invested for retirement: 401(k), IRAs, brokerage, savings earmarked for future you.</span></span>
+              </span>
+            </div>
+            <div class="input-field-prefix">
+              <input type="number" class="input-field" id="currentSavings" value="25000" min="0" step="1000">
+            </div>
+          </div>
         </div>
-        <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank"
-          rel="noopener noreferrer">Subscribe</a>
+
+        <div class="controls-section">
+          <div class="controls-section-title">Cash flow</div>
+          <div class="input-row">
+            <div class="input-label">
+              <span class="input-label-text">
+                Annual take-home income
+                <span class="input-info">i<span class="tooltip-text">After-tax income, not gross. This is what actually hits your bank account.</span></span>
+              </span>
+            </div>
+            <div class="input-field-prefix">
+              <input type="number" class="input-field" id="income" value="65000" min="0" step="1000">
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="input-label">
+              <span class="input-label-text">Annual spending</span>
+            </div>
+            <div class="input-field-prefix">
+              <input type="number" class="input-field" id="spending" value="40000" min="0" step="1000">
+            </div>
+          </div>
+
+          <div class="savings-rate-card" id="savingsRateCard">
+            <div class="savings-rate-top">
+              <span class="savings-rate-label">Savings rate</span>
+              <span class="savings-rate-value" id="savingsRateValue">38%</span>
+            </div>
+            <div class="savings-rate-bar">
+              <div class="savings-rate-fill"></div>
+            </div>
+            <div class="savings-rate-tag">
+              Saving <strong id="savingsAmount">$25,000</strong> per year
+            </div>
+          </div>
+        </div>
+
+        <div class="controls-section">
+          <div class="controls-section-title">Investment assumptions</div>
+          <div class="input-row">
+            <div class="input-label">
+              <span class="input-label-text">
+                Real return
+                <span class="input-info">i<span class="tooltip-text">Expected annual investment return after subtracting inflation. S&amp;P 500 historical average ≈ 7%.</span></span>
+              </span>
+              <span class="input-value" id="returnDisplay">7%</span>
+            </div>
+            <input type="range" id="returnRate" min="3" max="12" step="0.5" value="7">
+            <div class="range-meta"><span>3% safe</span><span>12% aggressive</span></div>
+          </div>
+          <div class="input-row">
+            <div class="input-label">
+              <span class="input-label-text">
+                Safe withdrawal rate
+                <span class="input-info">i<span class="tooltip-text">The percentage of your portfolio you withdraw annually in retirement. Bengen's classic 4% rule is the FIRE standard.</span></span>
+              </span>
+              <span class="input-value" id="withdrawalDisplay">4%</span>
+            </div>
+            <input type="range" id="withdrawalRate" min="3" max="5" step="0.25" value="4">
+            <div class="range-meta"><span>3% cautious</span><span>5% aggressive</span></div>
+          </div>
+        </div>
+
+      </aside>
+
+      <div class="results-col">
+
+        <div class="verdict-card" id="verdictCard">
+          <div class="verdict-card-top">
+            <div class="verdict-meta">
+              <span class="verdict-eyebrow">Your Escape Plan</span>
+              <span class="verdict-horizon" id="verdictHorizon">At a <strong>38% savings rate</strong></span>
+            </div>
+          </div>
+          <div class="countdown-block">
+            <div class="countdown-number" id="countdownNumber">23</div>
+            <div class="countdown-unit-block">
+              <span class="countdown-unit">Years to FIRE</span>
+              <span class="countdown-caption" id="countdownCaption">You'd retire at <strong id="retireAge">51</strong></span>
+            </div>
+          </div>
+          <div class="verdict-stats">
+            <div class="verdict-stat">
+              <span class="verdict-stat-label">FIRE Number</span>
+              <span class="verdict-stat-value" id="fireNumber">$1.0M</span>
+            </div>
+            <div class="verdict-stat">
+              <span class="verdict-stat-label">Monthly Passive</span>
+              <span class="verdict-stat-value" id="monthlyIncome">$3,333</span>
+            </div>
+            <div class="verdict-stat">
+              <span class="verdict-stat-label">Progress to goal</span>
+              <span class="verdict-stat-value muted" id="progress">2.5%</span>
+            </div>
+          </div>
+          <div class="insight-callout">
+            <span class="insight-callout-icon">!</span>
+            <span id="insightText">Adjust your savings rate to see how much time you can buy back.</span>
+          </div>
+        </div>
+
+        <div class="tier-progression">
+          <div class="tier-header">
+            <div>
+              <div class="tier-header-title">FIRE Tiers · Where you stand</div>
+            </div>
+            <div class="tier-header-meta" id="tierProgressLabel">Currently: pre-Coast</div>
+          </div>
+          <div class="tier-track">
+            <div class="tier-track-fill"></div>
+            <div class="tier-track-marker"></div>
+          </div>
+          <div class="tier-list">
+            <div class="tier-item coast" id="tierCoast">
+              <div class="tier-name"><span class="tier-name-dot"></span>Coast</div>
+              <div class="tier-value" id="tierCoastValue">$0</div>
+              <div class="tier-sub">Stop saving, still retire at 65</div>
+            </div>
+            <div class="tier-item barista" id="tierBarista">
+              <div class="tier-name"><span class="tier-name-dot"></span>Barista</div>
+              <div class="tier-value" id="tierBaristaValue">$0</div>
+              <div class="tier-sub">Part-time work bridges the gap</div>
+            </div>
+            <div class="tier-item lean" id="tierLean">
+              <div class="tier-name"><span class="tier-name-dot"></span>Lean</div>
+              <div class="tier-value" id="tierLeanValue">$0</div>
+              <div class="tier-sub">Frugal, minimalist retirement</div>
+            </div>
+            <div class="tier-item fire" id="tierFire">
+              <div class="tier-name"><span class="tier-name-dot"></span>FIRE</div>
+              <div class="tier-value" id="tierFireValue">$0</div>
+              <div class="tier-sub">Current lifestyle, permanently</div>
+            </div>
+            <div class="tier-item fat" id="tierFat">
+              <div class="tier-name"><span class="tier-name-dot"></span>Fat</div>
+              <div class="tier-value" id="tierFatValue">$0</div>
+              <div class="tier-sub">Comfortable, no compromises</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">Portfolio growth · Real dollars</div>
+            <div class="chart-legend">
+              <span class="chart-legend-item"><span class="chart-legend-dot portfolio"></span>Portfolio</span>
+              <span class="chart-legend-item"><span class="chart-legend-dot contrib"></span>Contributions</span>
+              <span class="chart-legend-item"><span class="chart-legend-dot target"></span>FIRE target</span>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="fireChart"></canvas>
+          </div>
+        </div>
+
+        <div class="strategy-strip">
+          <div class="strategy-icon">🔥</div>
+          <div class="strategy-content">
+            <div class="strategy-label">Your leverage</div>
+            <div class="strategy-text" id="strategyText">
+              Your return on investment barely matters compared to your <strong>savings rate</strong>. Bumping from 20% to 40% saved shaves off about <strong>14 years</strong> of working — no market timing required.
+            </div>
+          </div>
+        </div>
+
+        <div class="methodology">
+          <div class="methodology-title">How this is calculated</div>
+          <p>
+            All numbers are in today's dollars — your return rate should be real (inflation-adjusted), and spending is assumed constant. Growth follows the end-of-year formula <em>balance × (1 + return) + annual savings</em>. FIRE number uses your withdrawal rate (4% → 25× spending). Tiers assume steady returns and don't model sequence-of-returns risk or healthcare costs pre-65. For a full Monte Carlo simulation, see FIRECalc or cFIREsim.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="edu-section">
+  <div class="wrap">
+
+    <div class="edu-header">
+      <div class="edu-eyebrow">The Math Behind FIRE</div>
+      <h2>Your savings rate <em>is</em> your retirement date.</h2>
+      <p>
+        Not your salary. Not your investment picks. Not luck. The one number that decides when you can stop working is the share of your take-home pay you keep. Here's what that looks like, starting from zero.
+      </p>
+    </div>
+
+    <div class="sr-table">
+      <div class="sr-table-header">
+        <div>
+          <div class="sr-table-eyebrow">The shockingly simple chart</div>
+          <div class="sr-table-title">Years of work needed by savings rate</div>
+        </div>
+        <div class="sr-table-credit">5% real return · 4% withdrawal</div>
+      </div>
+      <div class="sr-rows" id="srRows"></div>
+    </div>
+
+    <div class="tiers-grid">
+      <div class="tier-card coast-card">
+        <div class="tier-card-icon">🌱</div>
+        <div class="tier-card-eyebrow">Coast FIRE</div>
+        <h4>Save hard early, coast forever</h4>
+        <p>Pile up enough in your 20s and 30s that compound interest alone gets you to a traditional retirement at 65 — no further contributions needed. You can drop to a lower-stress job or support a family on one income.</p>
+        <div class="tier-card-math">FIRE ÷ (1 + return)^(65 − age)</div>
+      </div>
+
+      <div class="tier-card barista-card">
+        <div class="tier-card-icon">☕</div>
+        <div class="tier-card-eyebrow">Barista FIRE</div>
+        <h4>Part-time work bridges the gap</h4>
+        <p>Your portfolio covers most expenses. A part-time job — often for health insurance — picks up the rest. Less stress, more freedom, and a defense against sequence-of-returns risk in bad market years.</p>
+        <div class="tier-card-math">~50–75% of full FIRE number</div>
+      </div>
+
+      <div class="tier-card lean-card">
+        <div class="tier-card-icon">🏕️</div>
+        <div class="tier-card-eyebrow">Lean FIRE</div>
+        <h4>Minimalist, intentional living</h4>
+        <p>Retire with a smaller number by committing to a lean lifestyle — often $30k–$50k/year. Works best for people who genuinely enjoy simplicity: van life, low cost-of-living towns, homesteading.</p>
+        <div class="tier-card-math">25× lean annual spending</div>
+      </div>
+
+      <div class="tier-card regular-card">
+        <div class="tier-card-icon">🔥</div>
+        <div class="tier-card-eyebrow">Regular FIRE</div>
+        <h4>Keep your current lifestyle, forever</h4>
+        <p>The classic goal: 25× your current annual spending. Withdraw 4% per year and your portfolio is statistically expected to last 30+ years, even through recessions. The Bengen rule in action.</p>
+        <div class="tier-card-math">25× current annual spending</div>
+      </div>
+
+      <div class="tier-card fat-card">
+        <div class="tier-card-icon">💎</div>
+        <div class="tier-card-eyebrow">Fat FIRE</div>
+        <h4>Retire well, no compromises</h4>
+        <p>Retire with room for travel, gifts, a nicer home, and the occasional splurge. Usually means a target of $2.5M–$5M+ and often requires high income plus high savings rate for 15–20 years.</p>
+        <div class="tier-card-math">~1.5× full FIRE (or $100k+/yr spend)</div>
+      </div>
+
+      <div class="tier-card" style="--tier-c: var(--ink);">
+        <div class="tier-card-icon" style="background: var(--ink);">∞</div>
+        <div class="tier-card-eyebrow" style="color: var(--gray);">The one rule</div>
+        <h4>All of them are optional.</h4>
+        <p>FIRE isn't about quitting at 35. It's about having the <em>option</em>. Once your portfolio covers your bills, work becomes a choice — whether you keep going for purpose, downshift to something meaningful, or walk away entirely.</p>
+        <div class="tier-card-math">Your life, your rules</div>
       </div>
     </div>
 
-    <div class="footer-container">
-      <div class="footer-brand-col">
-        <div class="footer-brand">
-          <img src="finmango.png" alt="FinMango" loading="lazy">
-        </div>
-        <p class="footer-tagline">
-          A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
+    <div class="rule-callout">
+      <div class="rule-big">
+        <div class="rule-big-number">4%</div>
+        <div class="rule-big-label">The rule that started FIRE</div>
+      </div>
+      <div class="rule-explanation">
+        <h3>The 4% rule, explained in one paragraph.</h3>
+        <p>
+          In 1994, financial planner William Bengen analyzed every 30-year retirement window in US market history and found that retirees who withdrew <strong>4% of their starting portfolio each year</strong> — adjusted for inflation — never ran out of money. Not even those who retired in 1929 or 1966. Flip that math around and you get the FIRE equation: whatever you spend annually, you need <strong>25× that amount</strong> invested to be done for life.
         </p>
-        <p class="footer-ein">EIN: 81-2543425</p>
-        <div class="footer-social">
-          <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          </a>
-          <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </a>
-          <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          </a>
-          <a href="/cdn-cgi/l/email-protection#6109040d0d0e2107080f0c000f060e4f0e1306" aria-label="Email">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <div class="footer-section">
-        <h4>Our Work</h4>
-        <a href="research.html">Research</a>
-        <a href="education.html">Education</a>
-        <a href="barometer.html">Barometer</a>
-        <a href="affordability-lab.html">Affordability Lab</a>
-        <a href="resources.html">Resources</a>
-      </div>
-
-      <div class="footer-section">
-        <h4>Initiatives</h4>
-        <a href="barrier-breakers.html">Barrier Breakers</a>
-        <a href="ambassadors.html">Ambassador Program</a>
-        <a href="intelligence-platform.html">Intelligence Platform</a>
-        <a href="talent.html">Talent</a>
-        <a href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer">GitHub</a>
-      </div>
-
-      <div class="footer-section">
-        <h4>Get Involved</h4>
-        <a href="donate.html">Donate</a>
-        <a href="ambassadors.html">Become an Ambassador</a>
-        <a href="/cdn-cgi/l/email-protection#d9b1bcb5b5b699bfb0b7b4b8b7beb6f7b6abbe">Partner With Us</a>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform"
-          target="_blank" rel="noopener noreferrer">Volunteer</a>
-        <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
+        <p>
+          Modern research suggests 3.5–4% is still a solid starting range for early retirees (who face longer horizons than traditional retirees). Variable withdrawal strategies can push this higher in good years.
+        </p>
       </div>
     </div>
 
-    <!-- Footer squiggle accent -->
-    <svg class="footer-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/>
-    </svg>
+  </div>
+</section>
 
-    <div class="footer-bottom">
-      <div>&copy; 2026 FinMango. All rights reserved.</div>
-      <div>
-        <a href="privacy.html">Privacy</a>
-        <a href="terms.html">Terms</a>
+<footer>
+  <div class="footer-newsletter">
+    <div class="footer-newsletter-container">
+      <div class="footer-newsletter-text">
+        <h3>Stay Updated</h3>
+        <p>Research, education, and advocacy updates. No spam.</p>
+      </div>
+      <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a>
+    </div>
+  </div>
+
+  <div class="footer-container">
+    <div class="footer-brand-col">
+      <div class="footer-brand"><img src="finmango.png" alt="FinMango" loading="lazy"></div>
+      <p class="footer-tagline">A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.</p>
+      <p class="footer-ein">EIN: 81-2543425</p>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+        <a href="/cdn-cgi/l/email-protection#6109040d0d0e2107080f0c000f060e4f0e1306" aria-label="Email"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg></a>
       </div>
     </div>
-  </footer>
+    <div class="footer-section">
+      <h4>Our Work</h4>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <a href="barometer.html">Barometer</a>
+      <a href="affordability-lab.html">Affordability Lab</a>
+      <a href="resources.html">Resources</a>
+    </div>
+    <div class="footer-section">
+      <h4>Initiatives</h4>
+      <a href="barrier-breakers.html">Barrier Breakers</a>
+      <a href="ambassadors.html">Ambassador Program</a>
+      <a href="intelligence-platform.html">Intelligence Platform</a>
+      <a href="talent.html">Talent</a>
+      <a href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+    <div class="footer-section">
+      <h4>Get Involved</h4>
+      <a href="donate.html">Donate</a>
+      <a href="ambassadors.html">Become an Ambassador</a>
+      <a href="/cdn-cgi/l/email-protection#d9b1bcb5b5b699bfb0b7b4b8b7beb6f7b6abbe">Partner With Us</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a>
+      <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
+    </div>
+  </div>
+  <svg class="footer-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/>
+  </svg>
+  <div class="footer-bottom">
+    <div>&copy; 2026 FinMango. All rights reserved.</div>
+    <div><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+  </div>
+</footer>
 
 <script>
 let chart = null;
+const $ = (id) => document.getElementById(id);
 
-function formatCurrency(value) {
-  if (value >= 1000000) {
-    return '$' + (value / 1000000).toFixed(2) + 'M';
-  } else if (value >= 1000) {
-    return '$' + (value / 1000).toFixed(0) + 'K';
-  }
+function fmt(value) {
+  if (!isFinite(value) || isNaN(value)) return '—';
+  if (Math.abs(value) >= 1000000) return '$' + (value / 1000000).toFixed(Math.abs(value) >= 10000000 ? 1 : 2) + 'M';
+  if (Math.abs(value) >= 1000) return '$' + Math.round(value / 1000) + 'K';
   return '$' + Math.round(value).toLocaleString();
 }
 
+// MMM's famous savings rate → years table (at 5% real return, 4% withdrawal)
+const srTable = [
+  { pct: 5,  years: 66 },
+  { pct: 10, years: 51 },
+  { pct: 15, years: 43 },
+  { pct: 20, years: 37 },
+  { pct: 25, years: 32 },
+  { pct: 30, years: 28 },
+  { pct: 35, years: 25 },
+  { pct: 40, years: 22 },
+  { pct: 50, years: 17 },
+  { pct: 60, years: 12.5 },
+  { pct: 70, years: 8.5 },
+  { pct: 80, years: 5.5 }
+];
+
+function renderSrTable(userPct) {
+  const host = $('srRows');
+  const maxYears = 66;
+  host.innerHTML = srTable.map(row => {
+    const barPct = (row.years / maxYears) * 100;
+    const yearLabel = row.years % 1 === 0 ? row.years + ' years' : row.years.toFixed(1) + ' years';
+    const isHighlight = userPct !== null && row.pct === Math.round(userPct / 5) * 5 && userPct >= 5;
+    return `<div class="sr-row${isHighlight ? ' highlight' : ''}">
+      <div class="sr-row-pct">${row.pct}%</div>
+      <div class="sr-row-bar-container"><div class="sr-row-bar" style="--bar-pct: ${barPct}%"></div></div>
+      <div class="sr-row-years">${yearLabel}</div>
+    </div>`;
+  }).join('');
+}
+
+function colorForSavingsRate(rate) {
+  if (rate < 10) return '#b04a5a';     // red
+  if (rate < 20) return '#d96e3a';     // warm orange
+  if (rate < 35) return '#c4882e';     // amber
+  if (rate < 50) return '#FF6B35';     // brand orange
+  if (rate < 65) return '#2a7d5b';     // green
+  return '#7c3aed';                    // purple
+}
+
+function srLabel(rate) {
+  if (rate < 10) return 'Rookie';
+  if (rate < 20) return 'Building';
+  if (rate < 35) return 'Solid';
+  if (rate < 50) return 'Mustachian';
+  if (rate < 65) return 'Hardcore';
+  return 'Elite';
+}
+
 function calculate() {
-  const age = parseInt(document.getElementById('age').value) || 25;
-  const currentSavings = parseFloat(document.getElementById('currentSavings').value) || 0;
-  const income = parseFloat(document.getElementById('income').value) || 60000;
-  const spending = parseFloat(document.getElementById('spending').value) || 40000;
-  const returnRate = parseFloat(document.getElementById('returnRate').value) / 100;
-  const withdrawalRate = parseFloat(document.getElementById('withdrawalRate').value) / 100;
-  
-  // Calculate savings
+  const age = parseInt($('age').value) || 28;
+  const currentSavings = Math.max(0, parseFloat($('currentSavings').value) || 0);
+  const income = Math.max(0, parseFloat($('income').value) || 0);
+  const spending = Math.max(0, parseFloat($('spending').value) || 0);
+  const returnRate = parseFloat($('returnRate').value) / 100;
+  const withdrawalRate = parseFloat($('withdrawalRate').value) / 100;
+
   const annualSavings = Math.max(0, income - spending);
   const savingsRate = income > 0 ? (annualSavings / income) * 100 : 0;
-  
-  // Update savings rate display
-  document.getElementById('savingsRateDisplay').textContent = savingsRate.toFixed(0) + '%';
-  document.getElementById('savingsAmount').textContent = formatCurrency(annualSavings);
-  
-  // Calculate FIRE number (25x annual spending is standard 4% rule)
-  const fireNumber = spending / withdrawalRate;
-  
-  // Calculate years to FIRE
+  const srColor = colorForSavingsRate(savingsRate);
+
+  // Display basic inputs
+  $('ageDisplay').textContent = age;
+  const rPct = returnRate * 100;
+  const wPct = withdrawalRate * 100;
+  $('returnDisplay').textContent = (rPct % 1 === 0 ? rPct.toFixed(0) : rPct.toFixed(1)) + '%';
+  $('withdrawalDisplay').textContent = (wPct % 1 === 0 ? wPct.toFixed(0) : wPct.toFixed(2)) + '%';
+
+  // Savings rate card
+  $('savingsRateValue').textContent = savingsRate.toFixed(0) + '%';
+  $('savingsAmount').textContent = fmt(annualSavings);
+  const srCard = $('savingsRateCard');
+  srCard.style.setProperty('--sr-pct', Math.min(100, savingsRate) + '%');
+  srCard.style.setProperty('--sr-color', srColor);
+
+  // FIRE number
+  const fireNumber = withdrawalRate > 0 ? spending / withdrawalRate : 0;
+
+  // Tiers
+  const coastFire = fireNumber / Math.pow(1 + returnRate, Math.max(1, 65 - age));
+  const baristaFire = fireNumber * 0.625;     // ~62.5% (part-time covers rest)
+  const leanFire = fireNumber * 0.6;          // conventional lean multiplier
+  const fatFire = fireNumber * 1.5;
+
+  // Compound growth loop — find years to FIRE
   let balance = currentSavings;
   let years = 0;
   const maxYears = 100;
   const balanceData = [currentSavings];
-  const contributionData = [currentSavings];
+  const contribData = [currentSavings];
   let totalContributions = currentSavings;
-  
+
   while (balance < fireNumber && years < maxYears) {
     years++;
     balance = balance * (1 + returnRate) + annualSavings;
     totalContributions += annualSavings;
     balanceData.push(balance);
-    contributionData.push(totalContributions);
+    contribData.push(totalContributions);
   }
-  
-  const fireAge = age + years;
+
+  // Build projection for chart — always project at least 30 years so user sees trajectory
+  const chartYears = Math.max(30, Math.min(maxYears, years + 5));
+  while (balanceData.length <= chartYears) {
+    const prev = balanceData[balanceData.length - 1];
+    const newBal = prev * (1 + returnRate) + annualSavings;
+    balanceData.push(newBal);
+    totalContributions += annualSavings;
+    contribData.push(totalContributions);
+  }
+
+  const reachable = balance >= fireNumber && years < maxYears && annualSavings > 0;
+  const retireAge = age + years;
   const monthlyIncome = (fireNumber * withdrawalRate) / 12;
-  const amountToSave = fireNumber - currentSavings;
-  const savingsProgress = currentSavings > 0 ? (currentSavings / fireNumber) * 100 : 0;
-  
-  // Coast FIRE: amount needed now to grow to FIRE number by traditional retirement age (65)
-  const yearsToTraditionalRetirement = Math.max(1, 65 - age);
-  const coastFire = fireNumber / Math.pow(1 + returnRate, yearsToTraditionalRetirement);
-  
-  // Lean FIRE: 60% of regular FIRE number
-  const leanFire = fireNumber * 0.6;
-  
-  // Fat FIRE: 150% of regular FIRE number
-  const fatFire = fireNumber * 1.5;
-  
-  // Update displays
-  document.getElementById('fireNumber').textContent = formatCurrency(fireNumber);
-  document.getElementById('fireNumberDesc').textContent = 
-    `${(1/withdrawalRate).toFixed(0)}x your annual spending of ${formatCurrency(spending)}`;
-  
-  if (years >= maxYears || annualSavings <= 0) {
-    document.getElementById('yearsToFire').textContent = '∞';
-    document.getElementById('fireAge').textContent = 'Never with current plan';
+  const progressPct = fireNumber > 0 ? Math.min(100, (currentSavings / fireNumber) * 100) : 0;
+
+  // ==== Verdict card ====
+  const verdictCard = $('verdictCard');
+  const countdownNumber = $('countdownNumber');
+  verdictCard.classList.remove('fast', 'steady', 'slow', 'never');
+  countdownNumber.classList.remove('fast', 'steady', 'slow', 'never');
+
+  let tier = 'steady';
+  if (!reachable || annualSavings <= 0) tier = 'never';
+  else if (years <= 12) tier = 'fast';
+  else if (years <= 22) tier = 'steady';
+  else tier = 'slow';
+
+  verdictCard.classList.add(tier);
+  countdownNumber.classList.add(tier);
+
+  if (!reachable || annualSavings <= 0) {
+    countdownNumber.textContent = '∞';
+    $('countdownCaption').innerHTML = spending >= income
+      ? `Spending exceeds income — <strong>no path to FIRE yet</strong>`
+      : `Not reachable — <strong>increase savings rate</strong>`;
   } else {
-    document.getElementById('yearsToFire').textContent = years;
-    document.getElementById('fireAge').textContent = `Age ${fireAge}`;
+    countdownNumber.textContent = years;
+    $('countdownCaption').innerHTML = `You'd retire at <strong>${retireAge}</strong>`;
   }
-  
-  document.getElementById('monthlyIncome').textContent = formatCurrency(monthlyIncome);
-  document.getElementById('totalToSave').textContent = formatCurrency(amountToSave);
-  document.getElementById('savingsProgress').textContent = savingsProgress.toFixed(0) + '% complete';
-  
-  document.getElementById('coastFire').textContent = formatCurrency(coastFire);
-  document.getElementById('leanFire').textContent = formatCurrency(leanFire);
-  document.getElementById('fatFire').textContent = formatCurrency(fatFire);
-  
-  // Update chart
-  updateChart(years, balanceData, contributionData, fireNumber);
+
+  $('verdictHorizon').innerHTML = `At a <strong>${savingsRate.toFixed(0)}% savings rate</strong> · ${srLabel(savingsRate)}`;
+  $('fireNumber').textContent = fmt(fireNumber);
+  $('monthlyIncome').textContent = fmt(monthlyIncome);
+  $('progress').textContent = progressPct.toFixed(progressPct < 10 ? 1 : 0) + '%';
+
+  // Insight
+  let insight = '';
+  if (savingsRate <= 0) {
+    insight = `You're <strong>spending more than you earn</strong>. FIRE isn't mathematically possible without changing this. Start by cutting one recurring expense this month.`;
+  } else if (savingsRate < 10) {
+    insight = `At <strong>${savingsRate.toFixed(0)}%</strong>, FIRE takes 50+ years. Every 5 percentage points you can add to your savings rate saves you roughly <strong>5 years</strong> of work. The jump from 10% → 20% alone cuts your timeline by about 14 years.`;
+  } else if (savingsRate < 25) {
+    insight = `At <strong>${savingsRate.toFixed(0)}%</strong>, you're on a traditional retirement track. Bumping your rate to 40% would cut roughly <strong>${Math.max(5, years - 22)} years</strong> off this number.`;
+  } else if (savingsRate < 50) {
+    insight = `You're saving <strong>${savingsRate.toFixed(0)}%</strong> — on pace for a ${years}-year timeline. Pushing to 50% would put you at about <strong>17 years</strong> to full FIRE, regardless of your salary.`;
+  } else if (savingsRate < 70) {
+    insight = `A <strong>${savingsRate.toFixed(0)}% savings rate</strong> is Mustachian territory. Your timeline is dictated almost entirely by your savings discipline — not market returns, not a raise, not luck.`;
+  } else {
+    insight = `At <strong>${savingsRate.toFixed(0)}%</strong>, you're in elite FIRE territory. Even a mediocre market won't significantly delay you — compounding is working overtime.`;
+  }
+  $('insightText').innerHTML = insight;
+
+  // Strategy callout — dynamic
+  let strategy = '';
+  if (!reachable || annualSavings <= 0) {
+    strategy = `The only path forward: <strong>spend less than you earn</strong>. Every dollar saved is a dollar that works for you forever — investments don't, can't, and won't fix a negative savings rate.`;
+  } else if (years > 30) {
+    strategy = `A <strong>${years}-year</strong> timeline means your savings rate is doing most of the work. Doubling your investment return from 5% to 10% only shaves a few years — but doubling your savings rate can cut your timeline in half.`;
+  } else if (years > 15) {
+    strategy = `You're on a reasonable track. The biggest lever now isn't <em>more</em> savings rate — it's <strong>protecting the one you have</strong>. Avoid lifestyle inflation when you get raises, and you'll accelerate without feeling the squeeze.`;
+  } else {
+    strategy = `Fast track. At <strong>${years} years</strong> your main risk isn't the math — it's burnout or sequence-of-returns risk. Consider a <strong>Barista FIRE glide path</strong>: a few years of part-time work smooths out bad market years.`;
+  }
+  $('strategyText').innerHTML = strategy;
+
+  // ==== Tier progression ====
+  const tierFill = document.querySelector('.tier-progression .tier-track-fill');
+  const tierMarker = document.querySelector('.tier-progression .tier-track-marker');
+  const tierRoot = $('verdictCard').parentElement.querySelector('.tier-progression');
+
+  const setTierValue = (id, v) => { $(id).textContent = fmt(v); };
+  setTierValue('tierCoastValue', coastFire);
+  setTierValue('tierBaristaValue', baristaFire);
+  setTierValue('tierLeanValue', leanFire);
+  setTierValue('tierFireValue', fireNumber);
+  setTierValue('tierFatValue', fatFire);
+
+  // Clear reached
+  ['tierCoast', 'tierBarista', 'tierLean', 'tierFire', 'tierFat'].forEach(id => $(id).classList.remove('reached'));
+
+  // Tier thresholds (sorted ascending)
+  const thresholds = [
+    { key: 'coast', val: coastFire, id: 'tierCoast', pos: 0 },
+    { key: 'barista', val: baristaFire, id: 'tierBarista', pos: 25 },
+    { key: 'lean', val: leanFire, id: 'tierLean', pos: 50 },
+    { key: 'fire', val: fireNumber, id: 'tierFire', pos: 75 },
+    { key: 'fat', val: fatFire, id: 'tierFat', pos: 100 }
+  ].sort((a, b) => a.val - b.val);
+
+  // Mark reached tiers
+  let currentTier = null;
+  thresholds.forEach((t, i) => {
+    if (currentSavings >= t.val) {
+      $(t.id).classList.add('reached');
+      currentTier = t;
+    }
+  });
+
+  // Marker position: find progress along tiers
+  let markerPct = 0;
+  let tierLabel = 'pre-Coast';
+  if (currentSavings >= fatFire) {
+    markerPct = 100; tierLabel = 'Fat FIRE reached 🎉';
+  } else if (currentSavings >= fireNumber) {
+    markerPct = 75 + 25 * ((currentSavings - fireNumber) / Math.max(1, fatFire - fireNumber));
+    tierLabel = 'Between FIRE and Fat';
+  } else if (currentSavings >= leanFire) {
+    markerPct = 50 + 25 * ((currentSavings - leanFire) / Math.max(1, fireNumber - leanFire));
+    tierLabel = 'Between Lean and FIRE';
+  } else if (currentSavings >= baristaFire) {
+    markerPct = 25 + 25 * ((currentSavings - baristaFire) / Math.max(1, leanFire - baristaFire));
+    tierLabel = 'Between Barista and Lean';
+  } else if (currentSavings >= coastFire) {
+    markerPct = 0 + 25 * ((currentSavings - coastFire) / Math.max(1, baristaFire - coastFire));
+    tierLabel = 'Between Coast and Barista';
+  } else {
+    markerPct = Math.max(0, (currentSavings / Math.max(1, coastFire)) * 0);
+    // Tiny progress within pre-Coast
+    markerPct = 0;
+    tierLabel = 'Pre-Coast';
+  }
+  tierFill.style.width = Math.max(0, Math.min(100, markerPct)) + '%';
+  tierMarker.style.left = Math.max(0, Math.min(100, markerPct)) + '%';
+  $('tierProgressLabel').textContent = 'Currently: ' + tierLabel;
+
+  // Update savings rate table highlighting
+  renderSrTable(savingsRate);
+
+  // ==== Chart ====
+  updateChart(balanceData, contribData, fireNumber, years, reachable);
 }
 
-function updateChart(years, balanceData, contributionData, fireNumber) {
+function updateChart(balanceData, contribData, fireNumber, years, reachable) {
   const labels = [];
-  for (let i = 0; i <= Math.min(years, 50); i++) {
-    labels.push('Year ' + i);
-  }
-  
-  // Trim data to 50 years for readability
-  const chartBalanceData = balanceData.slice(0, 51);
-  const chartContributionData = contributionData.slice(0, 51);
-  
-  const ctx = document.getElementById('fireChart').getContext('2d');
-  
-  if (chart) {
-    chart.destroy();
-  }
-  
+  const n = balanceData.length;
+  for (let i = 0; i < n; i++) labels.push(i === 0 ? 'Now' : 'Y' + i);
+  const targetLine = Array(n).fill(fireNumber);
+
+  const ctx = $('fireChart').getContext('2d');
+  if (chart) chart.destroy();
+
+  const portfolioGradient = ctx.createLinearGradient(0, 0, 0, 280);
+  portfolioGradient.addColorStop(0, 'rgba(255,107,53,0.22)');
+  portfolioGradient.addColorStop(1, 'rgba(255,107,53,0)');
+
   chart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: labels,
       datasets: [
         {
-          label: 'Portfolio Value',
-          data: chartBalanceData,
-          borderColor: '#EF4444',
-          backgroundColor: 'rgba(239, 68, 68, 0.1)',
-          borderWidth: 3,
-          tension: 0.4,
-          fill: true
+          label: 'Portfolio',
+          data: balanceData,
+          borderColor: '#FF6B35',
+          backgroundColor: portfolioGradient,
+          borderWidth: 2.5, tension: 0.35, fill: true,
+          pointRadius: 0, pointHoverRadius: 5,
+          pointBackgroundColor: '#FF6B35', pointBorderColor: '#ffffff', pointBorderWidth: 2
         },
         {
-          label: 'Total Contributions',
-          data: chartContributionData,
-          borderColor: '#000000',
+          label: 'Contributions',
+          data: contribData,
+          borderColor: '#1a1a1a',
           backgroundColor: 'transparent',
-          borderWidth: 2,
-          borderDash: [5, 5],
-          tension: 0
+          borderWidth: 1.5, borderDash: [4, 4], tension: 0,
+          pointRadius: 0
         },
         {
-          label: 'FIRE Number',
-          data: Array(labels.length).fill(fireNumber),
-          borderColor: '#F59E0B',
+          label: 'FIRE target',
+          data: targetLine,
+          borderColor: '#c4882e',
           backgroundColor: 'transparent',
-          borderWidth: 3,
-          borderDash: [10, 5],
-          tension: 0,
+          borderWidth: 2, borderDash: [8, 4], tension: 0,
           pointRadius: 0
         }
       ]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: {
-          display: true,
-          position: 'top',
-          labels: {
-            font: {
-              size: 14,
-              weight: 'bold'
-            }
-          }
-        },
+        legend: { display: false },
         tooltip: {
-          callbacks: {
-            label: function(context) {
-              return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
-            }
-          }
+          backgroundColor: '#1a1a1a', titleColor: '#ffffff', bodyColor: '#ffffff',
+          padding: 12, cornerRadius: 8, displayColors: true,
+          titleFont: { family: 'JetBrains Mono', size: 11, weight: '700' },
+          bodyFont: { family: 'DM Sans', size: 13, weight: '600' },
+          callbacks: { label: (ctx) => ' ' + ctx.dataset.label + ': ' + fmt(ctx.parsed.y) }
         }
       },
       scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: function(value) {
-              return formatCurrency(value);
-            }
-          }
-        }
+        x: { grid: { display: false }, border: { display: false }, ticks: { color: '#a8a29e', font: { family: 'JetBrains Mono', size: 10 }, maxTicksLimit: 8, autoSkipPadding: 12 } },
+        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false }, border: { display: false }, ticks: { color: '#a8a29e', font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => fmt(v), maxTicksLimit: 6 } }
       }
     }
   });
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
-  const nav = document.getElementById('nav');
+document.addEventListener('DOMContentLoaded', () => {
+  const nav = $('nav');
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-    }
+    if (window.scrollY > 50) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
   });
-  
-  
-  // Collapsible section handlers
-  document.querySelectorAll('.calc-section-header').forEach(header => {
-    header.addEventListener('click', function() {
-      const section = this.parentElement;
-      section.classList.toggle('active');
+
+  const mobileMenuBtn = $('mobileMenuBtn');
+  const mobileMenu = $('mobileMenu');
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    });
+  }
+  document.querySelectorAll('.mobile-dropdown-toggle').forEach(toggle => {
+    toggle.addEventListener('click', function() {
+      this.classList.toggle('active');
+      this.nextElementSibling.classList.toggle('open');
     });
   });
-  
-  // Input listeners
-  document.getElementById('age').addEventListener('input', calculate);
-  document.getElementById('currentSavings').addEventListener('input', calculate);
-  document.getElementById('income').addEventListener('input', calculate);
-  document.getElementById('spending').addEventListener('input', calculate);
-  
-  document.getElementById('returnRate').addEventListener('input', function() {
-    document.getElementById('returnValue').textContent = this.value + '%';
-    calculate();
+
+  ['age', 'currentSavings', 'income', 'spending', 'returnRate', 'withdrawalRate'].forEach(id => {
+    $(id).addEventListener('input', calculate);
   });
-  
-  document.getElementById('withdrawalRate').addEventListener('input', function() {
-    document.getElementById('withdrawalValue').textContent = this.value + '%';
-    calculate();
-  });
-  
+
+  renderSrTable(null);
   calculate();
 });
 </script>
 
-
-  <!-- Shared Navbar JavaScript -->
-  <script src="js/navbar.js"></script>
+<script src="js/navbar.js"></script>
 </body>
 </html>
