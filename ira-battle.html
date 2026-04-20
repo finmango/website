@@ -3,12 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Battle of the IRAs - Traditional vs Roth - FinMango</title>
-<meta name="description" content="Compare Traditional IRA vs Roth IRA to see which retirement account strategy works best for your financial future.">
+<title>Battle of the IRAs — Traditional vs. Roth vs. Brokerage — FinMango</title>
+<meta name="description" content="Traditional IRA, Roth IRA, or taxable brokerage? Run the math on your income, tax bracket, and timeline to see which one actually wins.">
+<link rel="canonical" href="https://finmango.org/ira-battle">
 <link rel="icon" type="image/png" href="favicon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://finmango.org/ira-battle">
+<meta property="og:title" content="Battle of the IRAs — Traditional vs. Roth vs. Brokerage">
+<meta property="og:description" content="Pay taxes now, pay them later, or pay them on every gain? Run the numbers.">
+<meta property="og:image" content="https://finmango.org/finmango-og.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap"></noscript>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
 <script>
@@ -17,2677 +26,1373 @@
   gtag('js', new Date());
   gtag('config', 'G-DW5HBYS9JW');
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-/* Font loaded asynchronously via preload link in <head> */
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+* { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
-  /* Colors */
-  --black: #000000;
-  --white: #ffffff;
-  --orange: #FF6B35;
-  --orange-dark: #E55A2B;
-  --orange-soft: #FF8C61;
+  --black: #0a0a0a; --ink: #1a1a1a; --white: #ffffff;
+  --orange: #FF6B35; --orange-dark: #E55A2B; --orange-soft: #FF8C61;
   --orange-light: rgba(255, 107, 53, 0.1);
-  --gray: #6B6560;
-  --gray-medium: #666666;
-  --light-gray: #f5f5f5;
-
-  /* Semantic Colors */
-  --success: #10B981;
-  --error: #EF4444;
-  --warning: #F59E0B;
-  --info: #3B82F6;
-
-  /* Layout */
+  --gray: #57534e; --gray-medium: #78716c; --gray-soft: #a8a29e;
+  --light-gray: #f5f5f4; --warm-white: #fafaf7; --cream: #fff7ed;
   --max-width: 1200px;
-  --hero-max-width: 1400px;
-  --nav-max-width: 1280px;
-
-  --blue: #3B82F6;
-  --green: #10B981;
-  --purple: #8B5CF6;
-
-  /* Spacing Scale (8px base) */
-  --space-1: 0.25rem;   /* 4px */
-  --space-2: 0.5rem;    /* 8px */
-  --space-3: 0.75rem;   /* 12px */
-  --space-4: 1rem;      /* 16px */
-  --space-6: 1.5rem;    /* 24px */
-  --space-8: 2rem;      /* 32px */
-  --space-10: 2.5rem;   /* 40px */
-  --space-12: 3rem;     /* 48px */
-  --space-16: 4rem;     /* 64px */
-  --space-20: 5rem;     /* 80px */
-  --space-24: 6rem;     /* 96px */
-  --space-32: 8rem;     /* 128px */
-  --space-40: 10rem;    /* 160px */
-
-  /* Typography Scale */
-  --text-xs: 0.75rem;   /* 12px */
-  --text-sm: 0.875rem;  /* 14px */
-  --text-base: 1rem;    /* 16px */
-  --text-lg: 1.125rem;  /* 18px */
-  --text-xl: 1.25rem;   /* 20px */
-  --text-2xl: 1.5rem;   /* 24px */
-  --text-3xl: 2rem;     /* 32px */
-  --text-4xl: 3rem;     /* 48px */
-  --text-5xl: 4rem;     /* 64px */
-
-  /* Font Weights */
-  --font-normal: 400;
-  --font-medium: 500;
-  --font-semibold: 600;
-  --font-bold: 700;
-  --font-black: 900;
-
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-
-  /* Shadows */
-  --shadow-sm: 4px 4px 0 var(--black);
-  --shadow-md: 8px 8px 0 var(--black);
-  --shadow-lg: 12px 12px 0 var(--black);
-  --shadow-xl: 16px 16px 0 var(--black);
-
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-base: 0.3s ease;
-  --transition-slow: 0.5s ease;
-
-  /* Borders */
-  --border-width-thin: 1px;
-  --border-width-base: 2px;
-  --border-width-thick: 3px;
-  --border-width-heavy: 4px;
+  --green: #2a7d5b; --red: #b04a5a; --amber: #c4882e;
+  --traditional: #3a6fa0; --roth: #2a7d5b; --taxable: #c4882e;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
 }
-/* Accessibility: Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: var(--white);
-  color: var(--black);
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-/* Navigation */
-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: var(--white);
-  z-index: 1050;
-  padding: 1.5rem 0;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-nav.scrolled {
-  padding: 1rem 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-  backdrop-filter: blur(10px);
-  background: var(--white);
-}
-
-.nav-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  transition: transform 0.3s ease;
-  justify-self: start;
-}
-
-.logo:hover {
-  transform: rotate(-2deg) scale(1.05);
-}
-
-.logo img {
-  height: 46px;
-  transition: height 0.3s ease;
-}
-
-nav.scrolled .logo img {
-  height: 38px;
-}
-
-.nav-right {
-  display: flex;
-  gap: 1.75rem;
-  align-items: center;
-  justify-self: end;
-}
-
-.nav-right a {
-  color: var(--black);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-  position: relative;
-  white-space: nowrap;
-  letter-spacing: -0.01em;
-}
-
-.nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--orange);
-  transition: width 0.3s ease;
-}
-
-.nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
-  width: 100%;
-}
-
-.nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
-  color: var(--orange);
-}
-
-.btn-donate {
-  background: var(--orange);
-  color: var(--white) !important;
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  font-weight: 700;
-  transition: all 0.2s ease;
-  border: 2px solid var(--black);
-  position: relative;
-  overflow: hidden;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
-}
-
-.btn-donate::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--black);
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.btn-donate:hover::before {
-  left: 0;
-}
-
-.btn-donate:hover {
-  transform: scale(1.05);
-}
-
-.btn-get-involved {
-  background: transparent;
-  color: var(--black) !important;
-  padding: 0.4rem 0.85rem;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  border: 1.5px solid rgba(0, 0, 0, 0.25);
-  position: relative;
-  overflow: hidden;
-  font-size: 0.8rem;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
-}
-
-.btn-get-involved::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--black);
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.btn-get-involved:hover::before {
-  left: 0;
-}
-
-.btn-get-involved:hover {
-  color: var(--white) !important;
-  border-color: var(--black);
-}
-
-/* Mobile Menu */
-.mobile-controls {
-  display: none;
-  gap: 1rem;
-  align-items: center;
-  justify-self: end;
-}
-
-.mobile-menu-btn {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-.mobile-menu-btn span {
-  display: block;
-  width: 28px;
-  height: 3px;
-  background: var(--black);
-  margin: 6px 0;
-  transition: all 0.3s ease;
-}
-
-.mobile-menu-btn.active span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-
-.mobile-menu-btn.active span:nth-child(2) {
-  opacity: 0;
-}
-
-.mobile-menu-btn.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -6px);
-}
-
-.mobile-get-involved {
-  display: none;
-}
-
-.mobile-menu {
-  display: none;
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 100%;
-  height: 100vh;
-  background: var(--white);
-  z-index: 1040;
-  padding: 6rem 2rem;
-  transition: right 0.3s ease;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-.mobile-menu.active {
-  display: block;
-  right: 0;
-}
-
-.mobile-menu a {
-  display: block;
-  padding: 1.5rem 0;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--black);
-  text-decoration: none;
-  border-bottom: 2px solid var(--black);
-  transition: all 0.2s ease;
-}
-
-.mobile-menu a:hover {
-  color: var(--orange);
-  padding-left: 1rem;
-}
-
-/* Hero */
-.hero {
-  min-height: 40vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 9rem 2rem 2rem;
-  text-align: center;
-  background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
-  color: var(--white);
-  position: relative;
-}
-
-.hero-container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.hero-title {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 900;
-  margin-bottom: 1rem;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.hero-subtitle {
-  font-size: clamp(1.1rem, 3vw, 1.5rem);
-  font-weight: 600;
-  max-width: 700px;
-  margin: 0 auto;
-  opacity: 0.95;
-}
-
-/* Main Content */
-.main-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 3rem 2rem;
-}
-
-.content-section {
-  margin-bottom: 3rem;
-}
-
-.section-title {
-  font-size: 2rem;
-  font-weight: 900;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.02em;
-}
-
-.section-text {
-  font-size: 1.1rem;
-  color: var(--gray);
-  margin-bottom: 1rem;
-  line-height: 1.7;
-}
-
-/* Calculator Sections - Card Based */
-.calc-section {
-  display: none;
-  border: 3px solid var(--black);
-  background: var(--white);
-  box-shadow: 4px 4px 0 var(--black);
-  transition: all 0.3s ease;
-  position: relative;
-  margin-bottom: 2rem;
-  animation: slideIn 0.4s ease;
-}
-
-.calc-section.active {
-  display: block;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.calc-section-header {
-  background: var(--orange);
-  color: var(--white);
-  padding: 1.5rem 2rem;
-  border-bottom: 3px solid var(--black);
-}
-
-.calc-section-title {
-  font-size: 1.5rem;
-  font-weight: 900;
-  margin: 0;
-}
-
-.calc-section-content {
-  padding: 2rem;
-}
-
-/* Step Navigator */
-.step-navigator {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.step-card {
-  background: var(--white);
-  border: 3px solid var(--black);
-  padding: 1.25rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 3px 3px 0 var(--black);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.step-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--purple);
-  transition: left 0.3s ease;
-  z-index: 0;
-}
-
-.step-card:hover::before {
-  left: 0;
-}
-
-.step-card:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 5px 5px 0 var(--black);
-}
-
-.step-card:active {
-  transform: translateY(-1px) scale(0.98);
-  box-shadow: 2px 2px 0 var(--black);
-}
-
-.step-card.active {
-  background: var(--purple);
-  color: var(--white);
-  transform: scale(1.05);
-  box-shadow: 4px 4px 0 var(--black);
-}
-
-.step-card.active::before {
-  display: none;
-}
-
-.step-card.completed {
-  background: var(--green);
-  color: var(--white);
-}
-
-.step-card.completed::before {
-  display: none;
-}
-
-.step-number {
-  font-size: 1.5rem;
-  font-weight: 900;
-  display: block;
-  margin-bottom: 0.5rem;
-  position: relative;
-  z-index: 1;
-}
-
-.step-label {
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  position: relative;
-  z-index: 1;
-}
-
-.step-card:hover .step-number,
-.step-card:hover .step-label {
-  color: var(--white);
-}
-
-/* Navigation Buttons */
-.nav-buttons {
-  display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-  justify-content: space-between;
-}
-
-.nav-btn {
-  background: var(--white);
-  color: var(--black);
-  padding: 0.85rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 700;
-  border: 3px solid var(--black);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 3px 3px 0 var(--black);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.nav-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--black);
-  transition: left 0.3s ease;
-  z-index: 0;
-}
-
-.nav-btn:hover::before {
-  left: 0;
-}
-
-.nav-btn:hover {
-  color: var(--white);
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 5px 5px 0 var(--black);
-}
-
-.nav-btn:active {
-  transform: translateY(-1px) scale(0.98);
-  box-shadow: 2px 2px 0 var(--black);
-}
-
-.nav-btn span {
-  position: relative;
-  z-index: 1;
-}
-
-.nav-btn.primary {
-  background: var(--purple);
-  color: var(--white);
-  box-shadow: 4px 4px 0 var(--black);
-}
-
-.nav-btn.primary::before {
-  background: var(--black);
-}
-
-.nav-btn.primary:hover {
-  box-shadow: 6px 6px 0 var(--black);
-}
-
-.nav-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.nav-btn:disabled:hover {
-  transform: none;
-  box-shadow: 3px 3px 0 var(--black);
-}
-
-.nav-btn:disabled::before {
-  display: none;
-}
-
-/* Calculator Box */
-.calculator-box {
-  background: var(--light-gray);
-  border: 3px solid var(--black);
-  padding: 2rem;
-  margin: 2rem 0;
-}
-
-.input-grid {
-  display: grid;
-  gap: 2rem;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-label {
-  font-weight: 700;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  color: var(--black);
-}
-
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.input-prefix {
-  position: absolute;
-  left: 1rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--gray);
-}
-
-input[type="number"] {
-  width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2rem;
-  font-size: 1rem;
-  border: 2px solid var(--black);
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-input[type="number"]:focus {
-  outline: none;
-  border-color: var(--orange);
-  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-}
-
-input[type="range"] {
-  width: 100%;
-  height: 8px;
-  border-radius: 5px;
-  background: #ddd;
-  outline: none;
-  -webkit-appearance: none;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--orange);
-  cursor: pointer;
-  border: 3px solid var(--black);
-}
-
-input[type="range"]::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: var(--orange);
-  cursor: pointer;
-  border: 3px solid var(--black);
-}
-
-.slider-info {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--gray);
-}
-
-/* Comparison Cards */
-.comparison-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin: 2rem 0;
-}
-
-.comparison-card {
-  border: 3px solid var(--black);
-  padding: 2rem;
-  background: var(--white);
-  position: relative;
-  overflow: hidden;
-}
-
-.comparison-card.traditional {
-  border-color: var(--blue);
-}
-
-.comparison-card.roth {
-  border-color: var(--green);
-}
-
-.comparison-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: var(--blue);
-}
-
-.comparison-card.roth::before {
-  background: var(--green);
-}
-
-.card-title {
-  font-size: 1.8rem;
-  font-weight: 900;
-  margin-bottom: 1rem;
-  color: var(--blue);
-}
-
-.comparison-card.roth .card-title {
-  color: var(--green);
-}
-
-.card-value {
-  font-size: 2.5rem;
-  font-weight: 900;
-  margin-bottom: 0.5rem;
-  color: var(--black);
-}
-
-.card-label {
-  font-size: 0.9rem;
-  color: var(--gray);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 1.5rem;
-}
-
-.card-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding-top: 1rem;
-  border-top: 2px solid var(--light-gray);
-}
-
-.detail-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.95rem;
-}
-
-.detail-label {
-  color: var(--gray);
-}
-
-.detail-value {
-  font-weight: 700;
-  color: var(--black);
-}
-
-/* Winner Badge */
-.winner-badge {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: var(--orange);
-  color: var(--white);
-  padding: 0.5rem 1rem;
-  font-weight: 900;
-  font-size: 0.85rem;
-  border: 2px solid var(--black);
-  transform: rotate(5deg);
-  letter-spacing: 0.05em;
-}
-
-/* Chart Box */
-.chart-box {
-  background: var(--white);
-  border: 3px solid var(--black);
-  padding: 2rem;
-  margin: 2rem 0;
-}
-
-/* Tax Bracket Selector */
-.tax-bracket-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 1rem;
-  margin: 1.5rem 0;
-}
-
-.tax-bracket-btn {
-  background: var(--white);
-  border: 3px solid var(--black);
-  padding: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-}
-
-.tax-bracket-btn:hover {
-  background: var(--light-gray);
-  transform: translateY(-2px);
-}
-
-.tax-bracket-btn.active {
-  background: var(--orange);
-  color: var(--white);
-  border-color: var(--orange);
-}
-
-.bracket-rate {
-  font-size: 1.5rem;
-  font-weight: 900;
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-.bracket-label {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Footer */
-footer {
-  padding: 0;
-  border-top: 4px solid var(--orange);
-  background: var(--black);
-  color: var(--white);
-}
-
-.footer-newsletter {
-  padding: 3rem 2rem;
-  background: rgba(255, 107, 53, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: center;
-}
-
-.footer-newsletter-container {
-  max-width: 850px;
-  margin: 0 auto;
-}
-
-.footer-newsletter h3 {
-  font-size: 1.5rem;
-  font-weight: 900;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.02em;
-}
-
-.footer-newsletter p {
-  font-size: 1rem;
-  opacity: 0.8;
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-}
-
-.footer-newsletter-btn {
-  display: inline-block;
-  padding: 0.85rem 2rem;
-  font-size: 1rem;
-  font-weight: 700;
-  background: var(--orange);
-  color: var(--white);
-  text-decoration: none;
-  border: 2px solid var(--orange);
-  transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.footer-newsletter-btn:hover {
-  background: var(--white);
-  color: var(--black);
-  border-color: var(--white);
-  transform: translateY(-2px);
-}
-
-.footer-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 4rem 2rem 0;
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 3rem;
-  margin-bottom: 2rem;
-}
-
-.footer-brand img {
-  height: 50px;
-  margin-bottom: 1rem;
-  filter: brightness(0) invert(1);
-}
-
-.footer-tagline {
-  color: #999;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.footer-section h4 {
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.footer-section a {
-  display: block;
-  color: #999;
-  text-decoration: none;
-  margin-bottom: 0.75rem;
-  transition: all 0.2s ease;
-  font-size: 0.95rem;
-}
-
-.footer-section a:hover {
-  color: var(--orange);
-  padding-left: 0.5rem;
-}
-
-.footer-bottom {
-  border-top: 1px solid #333;
-  padding-top: 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .footer-container {
-    grid-template-columns: 1fr 1fr;
-  }
-  
-  .comparison-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .nav-right {
-    display: none;
-  }
-  
-  .mobile-controls {
-    display: flex;
-  }
-  
-  .mobile-menu-btn {
-    display: block;
-  }
-  
-  .mobile-get-involved {
-    display: inline-block;
-  }
-  
-  .hero {
-    padding: 7rem 1.5rem 2rem;
-  }
-  
-  .tax-bracket-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .step-navigator {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-  }
-
-  .step-number {
-    font-size: 1.2rem;
-  }
-
-  .step-label {
-    font-size: 0.75rem;
-  }
-
-  .nav-buttons {
-    flex-direction: column;
-  }
-
-  .nav-btn {
-    width: 100%;
-  }
-
-    .footer-newsletter {
-    padding: 2.5rem 1.5rem;
-  }
-
-  .footer-newsletter h3 {
-    font-size: 1.25rem;
-  }
-
-  .footer-newsletter p {
-    font-size: 0.95rem;
-  }
-
-  .footer-newsletter-btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
-  }
-
-.footer-container {
-    grid-template-columns: 1fr;
-  }
-  
-  .footer-bottom {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-
-  .main-content {
-    padding: 2rem 1rem;
-  }
-
-  .calculator-box {
-    padding: 1.25rem;
-  }
-
-  .calc-section-content {
-    padding: 1.25rem;
-  }
-
-  .calc-section-header {
-    padding: 1.25rem;
-  }
-
-  .input-grid {
-    gap: 1.25rem;
-  }
-
-  .result-box {
-    padding: 1.25rem;
-  }
-
-  .chart-box {
-    padding: 1.25rem;
-  }
-}
-
-/* ============================================
-   BASE COMPONENT CLASSES
-   ============================================ */
-
-/* Base Input Styles with Validation States */
-input[type="text"],
-input[type="email"],
-input[type="number"],
-textarea,
-select {
-  font-family: 'Inter', sans-serif;
-  transition: var(--transition-base);
-}
-
-/* Input Validation States */
-input.error,
-textarea.error,
-select.error {
-  border-color: var(--error) !important;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-}
-
-input.success,
-textarea.success,
-select.success {
-  border-color: var(--success) !important;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-}
-
-input.warning,
-textarea.warning,
-select.warning {
-  border-color: var(--warning) !important;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
-}
-
-/* Base Card Component */
-.card {
-  padding: var(--space-12);
-  background: var(--white);
-  transition: var(--transition-base);
-}
-
-.card--bordered {
-  border: var(--border-width-thick) solid var(--black);
-}
-
-.card--shadow {
-  box-shadow: var(--shadow-md);
-}
-
-.card--hover-lift:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Utility Classes for Spacing */
-.mb-1 { margin-bottom: var(--space-1); }
-.mb-2 { margin-bottom: var(--space-2); }
-.mb-3 { margin-bottom: var(--space-3); }
-.mb-4 { margin-bottom: var(--space-4); }
-.mb-6 { margin-bottom: var(--space-6); }
-.mb-8 { margin-bottom: var(--space-8); }
-
-.mt-1 { margin-top: var(--space-1); }
-.mt-2 { margin-top: var(--space-2); }
-.mt-3 { margin-top: var(--space-3); }
-.mt-4 { margin-top: var(--space-4); }
-.mt-6 { margin-top: var(--space-6); }
-.mt-8 { margin-top: var(--space-8); }
-
-/* Typography Utility Classes */
-.text-xs { font-size: var(--text-xs); }
-.text-sm { font-size: var(--text-sm); }
-.text-base { font-size: var(--text-base); }
-.text-lg { font-size: var(--text-lg); }
-.text-xl { font-size: var(--text-xl); }
-.text-2xl { font-size: var(--text-2xl); }
-
-.font-medium { font-weight: var(--font-medium); }
-.font-semibold { font-weight: var(--font-semibold); }
-.font-bold { font-weight: var(--font-bold); }
-.font-black { font-weight: var(--font-black); }
-
-/* Alert/Message Components */
-.alert {
-  padding: var(--space-4) var(--space-6);
-  border: var(--border-width-base) solid;
-  margin-bottom: var(--space-4);
-  border-radius: var(--radius-sm);
-}
-
-.alert--success {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: var(--success);
-  color: #065f46;
-}
-
-.alert--error {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: var(--error);
-  color: #991b1b;
-}
-
-.alert--warning {
-  background: rgba(245, 158, 11, 0.1);
-  border-color: var(--warning);
-  color: #92400e;
-}
-
-.alert--info {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: var(--info);
-  color: #1e40af;
-}
-
-
-    /* ============================================
-       MEGA DROPDOWN (Initiatives)
-       ============================================ */
-    .dropdown-mega .dropdown-content-mega {
-      min-width: 620px;
-      padding: 1rem 0;
-      right: 0;
-      left: auto;
-      transform: none;
-    }
-
-    .dropdown-content-mega::before {
-      left: auto !important;
-      right: 40px;
-      transform: none !important;
-    }
-
-    .dropdown-content-mega::after {
-      left: auto;
-      right: 0;
-    }
-
-    .dropdown-mega-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-    }
-
-    .dropdown-mega-col {
-      padding: 0;
-    }
-
-    .dropdown-mega-col:first-child {
-      border-right: 1px solid rgba(0, 0, 0, 0.06);
-    }
-
-    .dropdown-mega-col-label {
-      font-size: 0.6rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--gray-medium);
-      padding: 0.5rem 1.25rem 0.4rem;
-      opacity: 0.6;
-    }
-
-    .dropdown-content-mega .dropdown-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem 1.25rem;
-      gap: 0.75rem;
-      border-bottom: none;
-    }
-
-    .dropdown-item-text {
-      display: flex;
-      flex-direction: column;
-      gap: 0.1rem;
-    }
-
-    .dropdown-item-name {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--black);
-      transition: color 0.2s ease;
-    }
-
-    .dropdown-item-desc {
-      font-size: 0.68rem;
-      font-weight: 500;
-      color: var(--gray-medium);
-      transition: color 0.2s ease;
-      letter-spacing: 0.01em;
-    }
-
-    .dropdown-external {
-      font-size: 0.85rem;
-      opacity: 0.4;
-      transition: all 0.2s ease;
-      flex-shrink: 0;
-    }
-
-    .dropdown-content-mega .dropdown-item:hover {
-      background-color: var(--light-gray);
-      padding-left: 1.4rem;
-    }
-
-    .dropdown-content-mega .dropdown-item:hover .dropdown-item-name {
-      color: var(--orange);
-    }
-
-    .dropdown-content-mega .dropdown-item:hover .dropdown-item-desc {
-      color: var(--gray);
-    }
-
-    .dropdown-content-mega .dropdown-item:hover .dropdown-external {
-      opacity: 1;
-      color: var(--orange);
-      transform: translate(2px, -2px);
-    }
-
-    @keyframes fadeInMega {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .dropdown-mega:hover .dropdown-content-mega {
-      animation: fadeInMega 0.2s ease;
-    }
-
-    /* Mobile controls container */
-    .mobile-controls {
-      display: none;
-      gap: 1rem;
-      align-items: center;
-      justify-self: end;
-    }
-
-    /* ============================================
-       FOOTER
-       ============================================ */
-    footer {
-      padding: 0;
-      border-top: 4px solid var(--orange);
-      background: var(--black);
-      color: var(--white);
-      position: relative;
-    }
-
-    .footer-newsletter {
-      padding: 2.5rem 2rem;
-      background: rgba(255, 107, 53, 0.08);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      text-align: center;
-    }
-
-    .footer-newsletter-container {
-      max-width: 850px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .footer-newsletter-text {
-      text-align: left;
-    }
-
-    .footer-newsletter h3 {
-      font-size: 1.2rem;
-      font-weight: 900;
-      margin-bottom: 0.2rem;
-      letter-spacing: -0.02em;
-    }
-
-    .footer-newsletter p {
-      font-size: 0.9rem;
-      opacity: 0.7;
-      margin: 0;
-      line-height: 1.4;
-    }
-
-    .footer-newsletter-btn {
-      display: inline-block;
-      padding: 0.75rem 1.75rem;
-      font-size: 0.9rem;
-      font-weight: 700;
-      background: var(--orange);
-      color: var(--white);
-      text-decoration: none;
-      border: 2px solid var(--orange);
-      transition: all 0.2s ease;
-      font-family: var(--font-body);
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
-    }
-
-    .footer-newsletter-btn:hover {
-      background: var(--white);
-      color: var(--black);
-      border-color: var(--white);
-      transform: translateY(-2px);
-    }
-
-    .footer-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 4rem 2rem 0;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-
-    .footer-brand-col {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .footer-brand {
-      margin-bottom: 0.25rem;
-    }
-
-    .footer-brand img {
-      height: 32px;
-      filter: brightness(0) invert(1);
-    }
-
-    .footer-tagline {
-      opacity: 0.7;
-      line-height: 1.6;
-      font-size: 0.95rem;
-    }
-
-    .footer-ein {
-      opacity: 0.4;
-      font-size: 0.8rem;
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 0.75rem;
-      margin-top: 0.25rem;
-    }
-
-    .footer-social a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--white);
-      text-decoration: none;
-      transition: all 0.2s ease;
-      font-size: 0.85rem;
-    }
-
-    .footer-social a:hover {
-      background: var(--orange);
-      transform: translateY(-2px);
-    }
-
-    .footer-social a svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
-
-    .footer-section h4 {
-      font-size: 0.75rem;
-      font-weight: 900;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 1.25rem;
-      color: var(--orange);
-      opacity: 0.8;
-    }
-
-    .footer-section a {
-      display: block;
-      color: var(--white);
-      text-decoration: none;
-      margin-bottom: 0.65rem;
-      transition: all 0.2s ease;
-      font-size: 0.95rem;
-      opacity: 0.8;
-    }
-
-    .footer-section a:hover {
-      color: var(--orange);
-      opacity: 1;
-      transform: translateX(4px);
-    }
-
-    /* Footer squiggle accent */
-    .footer-squiggle {
-      display: block;
-      margin: 0 auto 0;
-      width: 80px;
-      height: 8px;
-      opacity: 0.2;
-    }
-
-    .footer-bottom {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 2rem 2rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      opacity: 0.5;
-      font-size: 0.85rem;
-    }
-
-    .footer-bottom a {
-      color: rgba(255, 255, 255, 0.7);
-      text-decoration: none;
-      transition: color 0.2s ease;
-      margin: 0 0.75rem;
-    }
-
-    .footer-bottom a:hover {
-      color: var(--orange);
-    }
-
-
-    /* ============================================
-       MOBILE MENU
-       ============================================ */
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    .mobile-get-involved {
-      display: none;
-    }
-
-    .mobile-menu-btn span {
-      display: block;
-      width: 28px;
-      height: 3px;
-      background: var(--black);
-      margin: 6px 0;
-      transition: all 0.3s ease;
-    }
-
-    .mobile-menu-btn.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .mobile-menu-btn.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .mobile-menu-btn.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -6px);
-    }
-
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      background: var(--white);
-      z-index: 1040;
-      padding: 5rem 1.5rem 1.5rem;
-      transition: right 0.3s ease;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .mobile-menu.active {
-      display: flex;
-      flex-direction: column;
-      right: 0;
-    }
-
-    /* Orange accent strip at top */
-    .mobile-menu::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: var(--orange);
-      z-index: 1;
-    }
-
-    .mobile-menu-nav {
-      flex: none;
-    }
-
-    .mobile-menu-nav > a {
-      display: block;
-      padding: 0.85rem 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--black);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-      transition: all 0.2s ease;
-      opacity: 0;
-      transform: translateX(20px);
-      animation: mobileSlideIn 0.3s ease forwards;
-    }
-
-    .mobile-menu.active .mobile-menu-nav > a:nth-child(1) { animation-delay: 0.05s; }
-    .mobile-menu.active .mobile-menu-nav > a:nth-child(2) { animation-delay: 0.08s; }
-    .mobile-menu.active .mobile-menu-nav > a:nth-child(3) { animation-delay: 0.11s; }
-    .mobile-menu.active .mobile-menu-nav > .mobile-dropdown { animation-delay: 0.14s; }
-
-    .mobile-menu.active .mobile-dropdown {
-      opacity: 0;
-      transform: translateX(20px);
-      animation: mobileSlideIn 0.3s ease forwards;
-      animation-delay: 0.14s;
-    }
-
-    @keyframes mobileSlideIn {
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .mobile-menu-nav > a:hover,
-    .mobile-menu-nav > a:active {
-      color: var(--orange);
-      padding-left: 0.5rem;
-    }
-
-    /* Active page indicator */
-    .mobile-menu-nav > a.active-page {
-      color: var(--orange);
-      border-bottom-color: var(--orange);
-    }
-
-    .mobile-dropdown-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      background: none;
-      border: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-      padding: 0.85rem 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--black);
-      cursor: pointer;
-      text-align: left;
-      font-family: inherit;
-      transition: color 0.2s ease;
-    }
-
-    .mobile-dropdown-toggle:active,
-    .mobile-dropdown-toggle.active {
-      color: var(--orange);
-    }
-
-    .mobile-dropdown-toggle .arrow {
-      transition: transform 0.3s ease;
-      font-size: 1rem;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: var(--light-gray);
-    }
-
-    .mobile-dropdown-toggle.active .arrow {
-      transform: rotate(180deg);
-      color: var(--white);
-      background: var(--orange);
-    }
-
-    .mobile-dropdown-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease-out;
-      margin: 0 -1.5rem;
-      padding: 0 1.5rem;
-    }
-
-    .mobile-dropdown-content.open {
-      max-height: 1200px;
-      padding-top: 0.75rem;
-      padding-bottom: 0.75rem;
-    }
-
-    .mobile-cards-group {
-      margin-bottom: 0.5rem;
-    }
-
-    .mobile-cards-group:last-child {
-      margin-bottom: 0;
-    }
-
-    .mobile-cards-label {
-      font-size: 0.65rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--orange);
-      padding: 0.6rem 0 0.35rem;
-    }
-
-    .mobile-card {
-      display: flex !important;
-      flex-direction: column;
-      gap: 0.15rem;
-      padding: 0.75rem 0.85rem !important;
-      margin-bottom: 0.4rem;
-      background: var(--white);
-      border: 1.5px solid rgba(0, 0, 0, 0.06);
-      border-radius: 8px;
-      text-decoration: none !important;
-      transition: all 0.15s ease;
-      border-bottom: none !important;
-    }
-
-    .mobile-card:last-child {
-      margin-bottom: 0;
-    }
-
-    .mobile-card:active {
-      background: var(--orange-light);
-      border-color: var(--orange);
-      transform: scale(0.98);
-    }
-
-    .mobile-card-name {
-      font-size: 0.95rem !important;
-      font-weight: 700;
-      color: var(--black) !important;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .mobile-card:active .mobile-card-name {
-      color: var(--orange) !important;
-    }
-
-    .mobile-card-desc {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--gray-medium);
-      line-height: 1.3;
-    }
-
-    .mobile-card-external {
-      font-size: 0.8rem;
-      opacity: 0.4;
-      font-weight: 400;
-    }
-
-    .mobile-card:active .mobile-card-external {
-      opacity: 1;
-      color: var(--orange);
-    }
-
-    /* Override base mobile-menu a styles for cards */
-    .mobile-dropdown-content .mobile-card {
-      font-size: unset !important;
-      border-bottom: none !important;
-    }
-
-    /* Bottom CTA area */
-    .mobile-menu-footer {
-      padding-top: 0.75rem;
-      margin-top: 0.75rem;
-      border-top: 2px solid var(--black);
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      opacity: 0;
-      transform: translateY(10px);
-      animation: mobileSlideUp 0.3s ease forwards;
-      animation-delay: 0.25s;
-    }
-
-    @keyframes mobileSlideUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .mobile-menu-footer .btn-mobile-cta {
-      display: block;
-      text-align: center;
-      padding: 0.9rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      transition: all 0.2s ease;
-      background: var(--orange);
-      color: var(--white);
-      border: 2px solid var(--orange);
-    }
-
-    .mobile-menu-footer .btn-mobile-cta:active {
-      background: var(--orange-dark);
-    }
-
-    .mobile-menu-footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      padding-top: 0.75rem;
-    }
-
-    .mobile-menu-footer-links a {
-      font-size: 0.85rem !important;
-      color: var(--gray-medium) !important;
-      border-bottom: none !important;
-      padding: 0.25rem 0 !important;
-      font-weight: 600 !important;
-    }
-
-    .mobile-menu-footer-links a:hover {
-      color: var(--orange) !important;
-    }
-
-
-    /* ============================================
-       RESPONSIVE — SHARED COMPONENTS ONLY
-       ============================================ */
-    @media (max-width: 1200px) {
-      .nav-right { gap: 1.5rem; }
-      .nav-right a { font-size: 0.95rem; }
-      .btn-donate, .btn-get-involved { padding: 0.65rem 1.5rem; font-size: 0.9rem; }
-    }
-
-    @media (max-width: 1080px) {
-      nav { padding: 1.25rem 0; }
-      nav.scrolled { padding: 0.875rem 0; }
-      .logo img { height: 42px; }
-      nav.scrolled .logo img { height: 36px; }
-      .nav-right { gap: 1.25rem; }
-      .nav-right a { font-size: 0.9rem; }
-      .btn-donate, .btn-get-involved { padding: 0.6rem 1.25rem; font-size: 0.8rem; text-transform: none; }
-    }
-
-    @media (max-width: 968px) {
-      .nav-container { grid-template-columns: 1fr auto; gap: 1rem; }
-      .nav-right { display: none; }
-      .mobile-controls { display: flex; }
-      .mobile-menu-btn { display: block; }
-      .mobile-get-involved { display: inline-block; padding: 0.35rem 0.85rem; font-size: 0.72rem; }
-      .mobile-menu { display: block; }
-      .footer-newsletter { padding: 2rem 1.5rem; }
-      .footer-newsletter-container { flex-direction: column; text-align: center; gap: 1rem; }
-      .footer-newsletter-text { text-align: center; }
-      .footer-newsletter h3 { font-size: 1.15rem; }
-      .footer-newsletter p { font-size: 0.85rem; }
-      .footer-newsletter-btn { padding: 0.7rem 1.5rem; font-size: 0.85rem; }
-      .footer-container { grid-template-columns: 1fr 1fr; gap: 2rem; }
-      .footer-brand-col { grid-column: 1 / -1; }
-      .footer-social { justify-content: flex-start; }
-      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-    }
-
-    @media (max-width: 480px) {
-      .mobile-menu-nav > a { font-size: 1.3rem; }
-      .mobile-dropdown-toggle { font-size: 1.3rem; }
-    }
-  </style>
-
-  <!-- Shared Navbar Styles -->
-  <link rel="stylesheet" href="css/navbar.css">
-
-
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background: var(--warm-white); color: var(--ink); line-height: 1.5; overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 2rem; }
+
+/* NAV */
+nav { position: fixed; top: 0; width: 100%; background: var(--white); z-index: 1050; padding: 1.5rem 0; transition: all 0.3s ease; border-bottom: 1px solid rgba(0,0,0,0.06); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+nav.scrolled { padding: 1rem 0; border-bottom: 1px solid rgba(0,0,0,0.1); box-shadow: 0 2px 10px rgba(0,0,0,0.08); backdrop-filter: blur(10px); background: var(--white); }
+.nav-container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+.logo { display: flex; align-items: center; text-decoration: none; transition: transform 0.3s ease; justify-self: start; }
+.logo:hover { transform: rotate(-2deg) scale(1.05); }
+.logo img { height: 46px; transition: height 0.3s ease; }
+nav.scrolled .logo img { height: 38px; }
+.nav-right { display: flex; gap: 1.75rem; align-items: center; justify-self: end; }
+.nav-right a { color: var(--ink); text-decoration: none; font-weight: 600; font-size: 1rem; transition: all 0.2s ease; position: relative; white-space: nowrap; letter-spacing: -0.01em; }
+.nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item)::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--orange); transition: width 0.3s ease; }
+.nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item):hover::after { width: 100%; }
+.nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item):hover { color: var(--orange); }
+.btn-donate { background: var(--orange); color: var(--white) !important; padding: 0.65rem 1.5rem; text-decoration: none; font-weight: 700; transition: all 0.2s ease; border: 2px solid var(--ink); position: relative; overflow: hidden; font-size: 0.85rem; white-space: nowrap; letter-spacing: 0.01em; }
+.btn-donate::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--ink); transition: left 0.3s ease; z-index: -1; }
+.btn-donate:hover::before { left: 0; }
+.btn-donate:hover { transform: scale(1.05); }
+.btn-get-involved { background: transparent; color: var(--ink) !important; padding: 0.6rem 1.25rem; text-decoration: none; font-weight: 600; transition: all 0.2s ease; border: 2px solid var(--ink); position: relative; overflow: hidden; font-size: 0.85rem; white-space: nowrap; letter-spacing: 0.01em; }
+.btn-get-involved::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--ink); transition: left 0.3s ease; z-index: -1; }
+.btn-get-involved:hover::before { left: 0; }
+.btn-get-involved:hover { color: var(--white) !important; }
+
+.dropdown { position: relative; display: inline-block; }
+.dropdown-trigger { cursor: pointer; }
+.dropdown-content { display: none; position: absolute; top: calc(100% + 16px); left: 50%; transform: translateX(-50%); background: var(--white); min-width: 240px; box-shadow: 8px 8px 0 var(--ink); border: 3px solid var(--ink); z-index: 1001; }
+.dropdown-content::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); border-style: solid; border-width: 0 10px 10px 10px; border-color: transparent transparent var(--ink) transparent; z-index: 1002; }
+.dropdown:hover .dropdown-content { display: block; }
+.dropdown-item { display: block; color: var(--ink) !important; padding: 0.85rem 1.5rem; text-decoration: none; font-weight: 600; font-size: 0.9rem; border-bottom: 1px solid rgba(0,0,0,0.08); transition: all 0.2s ease; }
+.dropdown-item:hover { background-color: var(--light-gray); padding-left: 1.75rem; color: var(--orange) !important; }
+.dropdown-item:last-child { border-bottom: none; }
+.dropdown-mega .dropdown-content-mega { min-width: 620px; padding: 1rem 0; right: 0; left: auto; transform: none; }
+.dropdown-content-mega::before { left: auto !important; right: 40px; transform: none !important; }
+.dropdown-mega-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.dropdown-mega-col:first-child { border-right: 1px solid rgba(0,0,0,0.06); }
+.dropdown-mega-col-label { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-medium); padding: 0.5rem 1.25rem 0.4rem; opacity: 0.6; }
+.dropdown-content-mega .dropdown-item { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1.25rem; gap: 0.75rem; border-bottom: none; }
+.dropdown-item-text { display: flex; flex-direction: column; gap: 0.1rem; }
+.dropdown-item-name { font-size: 0.88rem; font-weight: 700; color: var(--ink); transition: color 0.2s ease; }
+.dropdown-item-desc { font-size: 0.68rem; font-weight: 500; color: var(--gray-medium); letter-spacing: 0.01em; }
+.dropdown-content-mega .dropdown-item:hover { background-color: var(--light-gray); padding-left: 1.4rem; }
+.dropdown-content-mega .dropdown-item:hover .dropdown-item-name { color: var(--orange); }
+
+.mobile-controls { display: none; gap: 1rem; align-items: center; justify-self: end; }
+.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: 0; }
+.mobile-menu-btn span { display: block; width: 28px; height: 3px; background: var(--ink); margin: 6px 0; transition: all 0.3s ease; }
+.mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+.mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+.mobile-get-involved { display: none; }
+.mobile-menu { display: none; position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; height: 100dvh; background: var(--white); z-index: 1040; padding: 5rem 1.5rem 1.5rem; transition: right 0.3s ease; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+.mobile-menu.active { display: flex; flex-direction: column; right: 0; }
+.mobile-menu::before { content: ''; position: fixed; top: 0; left: 0; right: 0; height: 4px; background: var(--orange); z-index: 1; }
+.mobile-menu-nav { flex: none; }
+.mobile-menu-nav > a { display: block; padding: 0.85rem 0; font-size: 1.5rem; font-weight: 700; color: var(--ink); text-decoration: none; border-bottom: 1px solid rgba(0,0,0,0.08); transition: all 0.2s ease; opacity: 0; transform: translateX(20px); animation: mobileSlideIn 0.3s ease forwards; }
+.mobile-menu.active .mobile-menu-nav > a:nth-child(1) { animation-delay: 0.05s; }
+.mobile-menu.active .mobile-menu-nav > a:nth-child(2) { animation-delay: 0.08s; }
+.mobile-menu.active .mobile-menu-nav > a:nth-child(3) { animation-delay: 0.11s; }
+.mobile-menu.active .mobile-menu-nav > .mobile-dropdown { animation-delay: 0.14s; }
+.mobile-menu.active .mobile-dropdown { opacity: 0; transform: translateX(20px); animation: mobileSlideIn 0.3s ease forwards; animation-delay: 0.14s; }
+@keyframes mobileSlideIn { to { opacity: 1; transform: translateX(0); } }
+.mobile-menu-nav > a:hover, .mobile-menu-nav > a:active { color: var(--orange); padding-left: 0.5rem; }
+.mobile-dropdown-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; background: none; border: none; border-bottom: 1px solid rgba(0,0,0,0.08); padding: 0.85rem 0; font-size: 1.5rem; font-weight: 700; color: var(--ink); cursor: pointer; text-align: left; font-family: inherit; transition: color 0.2s ease; }
+.mobile-dropdown-toggle:active, .mobile-dropdown-toggle.active { color: var(--orange); }
+.mobile-dropdown-toggle .arrow { transition: transform 0.3s ease; font-size: 1rem; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--light-gray); }
+.mobile-dropdown-toggle.active .arrow { transform: rotate(180deg); color: var(--white); background: var(--orange); }
+.mobile-dropdown-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; margin: 0 -1.5rem; padding: 0 1.5rem; }
+.mobile-dropdown-content.open { max-height: 1200px; padding-top: 0.75rem; padding-bottom: 0.75rem; }
+.mobile-cards-group { margin-bottom: 0.5rem; }
+.mobile-cards-label { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); padding: 0.6rem 0 0.35rem; }
+.mobile-card { display: flex !important; flex-direction: column; gap: 0.15rem; padding: 0.75rem 0.85rem !important; margin-bottom: 0.4rem; background: var(--white); border: 1.5px solid rgba(0,0,0,0.06); border-radius: 8px; text-decoration: none !important; transition: all 0.15s ease; border-bottom: none !important; }
+.mobile-card:active { background: var(--orange-light); border-color: var(--orange); transform: scale(0.98); }
+.mobile-card-name { font-size: 0.95rem !important; font-weight: 700; color: var(--ink) !important; display: flex; align-items: center; gap: 0.35rem; }
+.mobile-card-desc { font-size: 0.75rem; font-weight: 500; color: var(--gray-medium); line-height: 1.3; }
+.mobile-menu-footer { padding-top: 0.75rem; margin-top: 0.75rem; border-top: 2px solid var(--ink); display: flex; flex-direction: column; gap: 0.75rem; opacity: 0; transform: translateY(10px); animation: mobileSlideUp 0.3s ease forwards; animation-delay: 0.25s; }
+@keyframes mobileSlideUp { to { opacity: 1; transform: translateY(0); } }
+.mobile-menu-footer .btn-mobile-cta { display: block; text-align: center; padding: 0.9rem 1.5rem; font-size: 1rem; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 0.02em; background: var(--orange); color: var(--white); border: 2px solid var(--orange); transition: all 0.2s ease; }
+.mobile-menu-footer .btn-mobile-cta:active { background: var(--orange-dark); }
+.mobile-menu-footer-links { display: flex; justify-content: center; gap: 1.5rem; padding-top: 0.75rem; }
+.mobile-menu-footer-links a { font-size: 0.85rem !important; color: var(--gray-medium) !important; border-bottom: none !important; padding: 0.25rem 0 !important; font-weight: 600 !important; }
+.mobile-menu-footer-links a:hover { color: var(--orange) !important; }
+
+/* HERO */
+.hero { position: relative; padding: 9rem 0 2.5rem; background: var(--warm-white); overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -200px; right: -300px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(255,107,53,0.1) 0%, transparent 65%); filter: blur(60px); pointer-events: none; z-index: -1; }
+.hero::after { content: ''; position: absolute; bottom: -100px; left: -200px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(58,111,160,0.08) 0%, transparent 65%); filter: blur(60px); pointer-events: none; z-index: -1; }
+.hero-content { text-align: center; max-width: 820px; margin: 0 auto; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 0.6rem; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--orange); padding: 0.4rem 0.85rem 0.4rem 0.65rem; background: rgba(255,107,53,0.08); border: 1px solid rgba(255,107,53,0.2); border-radius: 100px; margin-bottom: 1.5rem; }
+.hero-eyebrow-dot { width: 7px; height: 7px; background: var(--orange); border-radius: 50%; box-shadow: 0 0 0 4px rgba(255,107,53,0.2); animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%, 100% { box-shadow: 0 0 0 4px rgba(255,107,53,0.2); } 50% { box-shadow: 0 0 0 7px rgba(255,107,53,0.05); } }
+.hero h1 { font-size: clamp(2.25rem, 4.8vw, 3.75rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.035em; margin-bottom: 1.25rem; }
+.hero h1 .highlight { color: var(--orange); position: relative; display: inline-block; }
+.hero h1 .highlight svg { position: absolute; bottom: -0.05em; left: -2%; width: 104%; height: 0.22em; pointer-events: none; }
+.hero-sub { font-size: 1.15rem; color: var(--gray); line-height: 1.6; max-width: 680px; margin: 0 auto; }
+.versus-pill { display: inline-flex; align-items: center; gap: 0.75rem; margin-top: 1.75rem; padding: 0.5rem 1rem; background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 100px; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 700; box-shadow: 0 4px 12px rgba(0,0,0,0.04); flex-wrap: wrap; justify-content: center; }
+.versus-pill .vs-side { display: inline-flex; align-items: center; gap: 0.4rem; letter-spacing: 0.04em; }
+.versus-pill .vs-dot { width: 8px; height: 8px; border-radius: 50%; }
+.versus-pill .vs-dot.trad { background: var(--traditional); }
+.versus-pill .vs-dot.roth { background: var(--roth); }
+.versus-pill .vs-dot.taxable { background: var(--taxable); }
+.versus-pill .vs-divider { font-size: 0.65rem; color: var(--gray-soft); font-weight: 800; letter-spacing: 0.1em; }
+
+/* CALCULATOR */
+.calc-section { padding: 3rem 0 5rem; }
+.calc-grid { display: grid; grid-template-columns: 380px 1fr; gap: 1.5rem; align-items: start; }
+
+/* CONTROLS */
+.controls-panel { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 1.75rem; position: sticky; top: 100px; min-width: 0; }
+.controls-section { margin-bottom: 1.75rem; }
+.controls-section:last-child { margin-bottom: 0; }
+.controls-section-title { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--orange); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; padding-bottom: 0.65rem; border-bottom: 1px solid rgba(0,0,0,0.06); }
+.controls-section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(255,107,53,0.2), transparent); }
+.input-row { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+.input-row:last-child { margin-bottom: 0; }
+.input-label { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.input-label-text { font-size: 0.78rem; font-weight: 600; color: var(--gray); display: flex; align-items: center; gap: 0.4rem; }
+.input-info { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 50%; background: var(--light-gray); color: var(--gray-medium); font-size: 0.6rem; font-weight: 700; cursor: help; position: relative; font-family: var(--font-mono); }
+.input-info:hover { background: var(--orange-light); color: var(--orange); }
+.input-info .tooltip-text { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: 220px; padding: 0.65rem 0.8rem; background: var(--ink); color: var(--white); font-size: 0.72rem; font-weight: 500; line-height: 1.4; border-radius: 6px; opacity: 0; visibility: hidden; transition: all 0.2s ease; pointer-events: none; text-align: left; font-family: var(--font-body); letter-spacing: 0; text-transform: none; z-index: 100; }
+.input-info .tooltip-text::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--ink) transparent transparent transparent; }
+.input-info:hover .tooltip-text { opacity: 1; visibility: visible; }
+.input-value { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.input-field { width: 100%; padding: 0.7rem 0.85rem; font-family: var(--font-mono); font-size: 0.92rem; font-weight: 600; background: var(--warm-white); border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; color: var(--ink); font-variant-numeric: tabular-nums; transition: all 0.15s ease; }
+.input-field:focus { outline: none; border-color: var(--orange); background: var(--white); box-shadow: 0 0 0 3px rgba(255,107,53,0.08); }
+.input-field-prefix { position: relative; }
+.input-field-prefix::before { content: '$'; position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 0.92rem; font-weight: 600; color: var(--gray-soft); pointer-events: none; }
+.input-field-prefix .input-field { padding-left: 1.85rem; }
+
+input[type="range"] { -webkit-appearance: none; width: 100%; height: 4px; background: var(--light-gray); border-radius: 100px; outline: none; padding: 0; margin: 0.5rem 0 0.25rem; cursor: pointer; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--orange); cursor: pointer; box-shadow: 0 0 0 3px var(--white), 0 0 0 4px rgba(255,107,53,0.25); transition: transform 0.15s ease; }
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--orange); cursor: pointer; border: none; box-shadow: 0 0 0 3px var(--white), 0 0 0 4px rgba(255,107,53,0.25); }
+.range-meta { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.65rem; color: var(--gray-soft); letter-spacing: 0.04em; margin-top: 0.4rem; }
+
+/* FILING STATUS SELECTOR */
+.filing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem; margin-top: 0.25rem; }
+.filing-btn { background: var(--warm-white); border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; padding: 0.6rem 0.5rem; cursor: pointer; transition: all 0.15s ease; text-align: center; font-family: var(--font-body); display: flex; flex-direction: column; gap: 0.15rem; align-items: center; }
+.filing-btn:hover { border-color: var(--orange); background: var(--white); }
+.filing-btn.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.filing-abbr { font-family: var(--font-mono); font-size: 0.82rem; font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: 0.02em; }
+.filing-btn.active .filing-abbr { color: var(--white); }
+.filing-label { font-size: 0.55rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.06em; color: var(--gray-medium); line-height: 1.2; }
+.filing-btn.active .filing-label { color: rgba(255,255,255,0.7); }
+
+/* DETECTED BRACKET DISPLAY */
+.bracket-display { background: linear-gradient(135deg, rgba(255,107,53,0.04), rgba(58,111,160,0.04)); border: 1px dashed rgba(0,0,0,0.12); border-radius: 10px; padding: 0.85rem 1rem; margin-top: 0.85rem; }
+.bracket-display-title { font-family: var(--font-mono); font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gray-medium); margin-bottom: 0.55rem; display: flex; align-items: center; gap: 0.4rem; }
+.bracket-display-title::before { content: '✨'; font-size: 0.7rem; }
+.bracket-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.78rem; padding: 0.2rem 0; }
+.bracket-row-label { color: var(--gray-medium); font-weight: 500; }
+.bracket-row-value { font-family: var(--font-mono); font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.bracket-row-value.trad-color { color: var(--traditional); }
+.bracket-row-value.roth-ok { color: var(--green); }
+.bracket-row-value.roth-partial { color: var(--amber); }
+.bracket-row-value.roth-out { color: var(--red); }
+
+/* RESULTS */
+.results-col { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
+
+.verdict-card { position: relative; background: var(--ink); color: var(--white); border-radius: 16px; padding: 2rem; overflow: hidden; }
+.verdict-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 0%, var(--accent-glow, rgba(42,125,91,0.3)) 0%, transparent 55%); pointer-events: none; transition: background 0.5s ease; }
+.verdict-card.roth-wins { --accent-glow: rgba(42,125,91,0.35); }
+.verdict-card.trad-wins { --accent-glow: rgba(58,111,160,0.35); }
+.verdict-card.taxable-wins { --accent-glow: rgba(196,136,46,0.35); }
+.verdict-card.tie { --accent-glow: rgba(196,136,46,0.3); }
+.verdict-card-top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap; }
+.verdict-meta { display: flex; flex-direction: column; gap: 0.25rem; }
+.verdict-eyebrow { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.5); }
+.verdict-horizon { font-size: 0.95rem; color: rgba(255,255,255,0.85); font-weight: 600; }
+.verdict-horizon strong { font-weight: 800; color: var(--white); }
+.verdict-headline { position: relative; z-index: 1; margin-top: 1.25rem; }
+.verdict-winner { font-size: clamp(2rem, 4vw, 2.75rem); font-weight: 900; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+.verdict-winner.roth-wins { color: #4ade80; }
+.verdict-winner.trad-wins { color: #7eb1e3; }
+.verdict-winner.taxable-wins { color: #e9b050; }
+.verdict-winner.tie { color: var(--orange-soft); }
+.verdict-diff { font-family: var(--font-mono); font-size: 1rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+.verdict-stats { position: relative; z-index: 1; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.verdict-stat { display: flex; flex-direction: column; gap: 0.3rem; }
+.verdict-stat-label { font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.45); display: flex; align-items: center; gap: 0.35rem; }
+.verdict-stat-label::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--stat-color, #fff); flex-shrink: 0; }
+.verdict-stat.stat-roth { --stat-color: #4ade80; }
+.verdict-stat.stat-trad { --stat-color: #7eb1e3; }
+.verdict-stat.stat-taxable { --stat-color: #e9b050; }
+.verdict-stat-value { font-size: 1.15rem; font-weight: 800; color: var(--white); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.insight-callout { position: relative; z-index: 1; margin-top: 1.5rem; padding: 0.85rem 1rem; background: rgba(255,255,255,0.05); border-left: 3px solid var(--orange); border-radius: 0 8px 8px 0; font-size: 0.85rem; line-height: 1.5; color: rgba(255,255,255,0.9); }
+.insight-callout strong { color: var(--white); font-weight: 800; }
+.insight-callout-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: var(--orange); color: var(--white); font-size: 0.7rem; font-weight: 800; margin-right: 0.4rem; vertical-align: -3px; }
+
+/* 3-FIGHTER SHOWDOWN */
+.showdown { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.85rem; min-width: 0; }
+.fighter-card { position: relative; background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 1.25rem; transition: all 0.25s ease; min-width: 0; }
+.fighter-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 16px 16px 0 0; background: var(--fighter-color, var(--orange)); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+.fighter-card.is-winner::before { transform: scaleX(1); }
+.fighter-card.traditional { --fighter-color: var(--traditional); }
+.fighter-card.roth { --fighter-color: var(--roth); }
+.fighter-card.taxable { --fighter-color: var(--taxable); }
+.fighter-card.is-winner { box-shadow: 0 12px 40px -12px rgba(0,0,0,0.12); border-color: transparent; }
+.fighter-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.65rem; gap: 0.4rem; }
+.fighter-name { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--fighter-color); display: flex; align-items: center; gap: 0.35rem; white-space: nowrap; }
+.fighter-name-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--fighter-color); flex-shrink: 0; }
+.winner-tag { font-family: var(--font-mono); font-size: 0.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--white); background: var(--fighter-color); padding: 0.2rem 0.45rem; border-radius: 100px; opacity: 0; transform: scale(0.85); transition: all 0.3s ease; white-space: nowrap; }
+.fighter-card.is-winner .winner-tag { opacity: 1; transform: scale(1); }
+.fighter-strategy { font-size: 0.72rem; color: var(--gray-medium); font-weight: 500; margin-bottom: 0.85rem; line-height: 1.35; min-height: 2.8em; }
+.fighter-value { font-size: 1.55rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums; color: var(--ink); margin-bottom: 0.2rem; }
+.fighter-value-label { font-family: var(--font-mono); font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray-soft); margin-bottom: 1rem; }
+.fighter-details { display: flex; flex-direction: column; gap: 0.4rem; padding-top: 0.85rem; border-top: 1px solid rgba(0,0,0,0.06); }
+.fighter-row { display: flex; justify-content: space-between; align-items: baseline; gap: 0.4rem; font-size: 0.74rem; }
+.fighter-row-label { color: var(--gray-medium); font-weight: 500; }
+.fighter-row-value { font-family: var(--font-mono); font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.fighter-row-value.positive { color: var(--green); }
+.fighter-row-value.negative { color: var(--red); }
+.fighter-row-value.neutral { color: var(--gray-soft); }
+
+.chart-card { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 1.75rem; min-width: 0; overflow: hidden; }
+.chart-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+.chart-card-title { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gray-medium); }
+.chart-legend { display: flex; gap: 0.85rem; font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; flex-wrap: wrap; }
+.chart-legend-item { display: inline-flex; align-items: center; gap: 0.35rem; letter-spacing: 0.04em; }
+.chart-legend-dot { width: 9px; height: 9px; border-radius: 50%; }
+.chart-legend-dot.trad { background: var(--traditional); }
+.chart-legend-dot.roth { background: var(--roth); }
+.chart-legend-dot.taxable { background: var(--taxable); }
+.chart-container { position: relative; width: 100%; height: 300px; }
+.chart-container canvas { max-width: 100% !important; height: 100% !important; }
+
+.strategy-strip { background: var(--cream); border: 1px solid rgba(196,136,46,0.15); border-radius: 16px; padding: 1.25rem 1.5rem; display: flex; align-items: flex-start; gap: 1rem; }
+.strategy-icon { flex-shrink: 0; width: 36px; height: 36px; border-radius: 8px; background: var(--white); display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; border: 1px solid rgba(196,136,46,0.2); }
+.strategy-content { flex: 1; }
+.strategy-label { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--amber); margin-bottom: 0.3rem; }
+.strategy-text { font-size: 0.9rem; color: var(--ink); line-height: 1.55; font-weight: 500; }
+.strategy-text strong { font-weight: 800; }
+
+.methodology { background: transparent; border: 1px dashed rgba(0,0,0,0.1); border-radius: 12px; padding: 1.25rem 1.5rem; }
+.methodology-title { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gray-medium); margin-bottom: 0.6rem; }
+.methodology p { font-size: 0.78rem; color: var(--gray-medium); line-height: 1.6; }
+.methodology p + p { margin-top: 0.6rem; }
+.methodology code { font-family: var(--font-mono); font-size: 0.72rem; background: rgba(0,0,0,0.04); padding: 0.1rem 0.35rem; border-radius: 4px; color: var(--ink); }
+
+/* EDUCATION */
+.edu-section { background: var(--cream); padding: 5rem 0 4.5rem; position: relative; }
+.edu-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(0,0,0,0.08), transparent); }
+.edu-header { text-align: center; max-width: 720px; margin: 0 auto 3rem; }
+.edu-eyebrow { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--orange); margin-bottom: 0.75rem; }
+.edu-header h2 { font-size: clamp(1.85rem, 3.5vw, 2.5rem); font-weight: 900; letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 1rem; }
+.edu-header p { font-size: 1.05rem; color: var(--gray); line-height: 1.6; }
+
+.edu-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem; }
+.edu-fighter { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 2rem; position: relative; overflow: hidden; }
+.edu-fighter::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--fighter-color); }
+.edu-fighter.traditional { --fighter-color: var(--traditional); }
+.edu-fighter.roth { --fighter-color: var(--roth); }
+.edu-fighter-eyebrow { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--fighter-color); margin-bottom: 0.5rem; }
+.edu-fighter h3 { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.85rem; color: var(--ink); }
+.edu-fighter > p { font-size: 0.95rem; color: var(--gray); line-height: 1.6; margin-bottom: 1.5rem; }
+.edu-tagline { display: inline-block; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; padding: 0.35rem 0.7rem; border-radius: 100px; margin-bottom: 1.5rem; }
+.edu-fighter.traditional .edu-tagline { background: rgba(58,111,160,0.1); color: var(--traditional); }
+.edu-fighter.roth .edu-tagline { background: rgba(42,125,91,0.1); color: var(--roth); }
+.edu-points { display: flex; flex-direction: column; gap: 0.65rem; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 1.25rem; }
+.edu-point { display: flex; gap: 0.65rem; font-size: 0.85rem; color: var(--ink); line-height: 1.5; }
+.edu-point-marker { flex-shrink: 0; width: 18px; height: 18px; border-radius: 4px; background: var(--fighter-color); color: var(--white); display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 800; margin-top: 1px; }
+.edu-point strong { font-weight: 700; }
+
+/* THIRD CONTESTANT: Brokerage */
+.edu-third { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 1.5rem 1.75rem; margin-bottom: 2rem; position: relative; overflow: hidden; display: flex; gap: 1.25rem; align-items: flex-start; flex-wrap: wrap; }
+.edu-third::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--taxable); }
+.edu-third-body { flex: 1; min-width: 260px; }
+.edu-third-eyebrow { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--taxable); margin-bottom: 0.4rem; }
+.edu-third h3 { font-size: 1.25rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.5rem; color: var(--ink); }
+.edu-third p { font-size: 0.9rem; color: var(--gray); line-height: 1.55; }
+.edu-third-tagline { display: inline-block; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; padding: 0.3rem 0.65rem; border-radius: 100px; background: rgba(196,136,46,0.12); color: var(--taxable); white-space: nowrap; align-self: flex-start; }
+
+.choose-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.choose-card { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; padding: 1.5rem; position: relative; }
+.choose-card-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--orange-light); display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: 0.85rem; }
+.choose-card.trad .choose-card-icon { background: rgba(58,111,160,0.1); }
+.choose-card.roth .choose-card-icon { background: rgba(42,125,91,0.1); }
+.choose-card-pick { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 0.4rem; color: var(--gray-medium); }
+.choose-card.trad .choose-card-pick { color: var(--traditional); }
+.choose-card.roth .choose-card-pick { color: var(--roth); }
+.choose-card h4 { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 0.5rem; color: var(--ink); line-height: 1.25; }
+.choose-card p { font-size: 0.85rem; color: var(--gray); line-height: 1.5; }
+
+.limits-strip { margin-top: 2rem; background: var(--ink); color: var(--white); border-radius: 16px; padding: 1.75rem 2rem; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1.5rem; position: relative; overflow: hidden; }
+.limits-strip::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 100% 0%, rgba(255,107,53,0.15) 0%, transparent 50%); pointer-events: none; }
+.limits-item { position: relative; z-index: 1; }
+.limits-label { font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.5); margin-bottom: 0.4rem; }
+.limits-value { font-size: 1.4rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums; margin-bottom: 0.25rem; }
+.limits-meta { font-size: 0.72rem; color: rgba(255,255,255,0.65); font-weight: 500; }
+
+/* FOOTER */
+footer { padding: 0; border-top: 4px solid var(--orange); background: var(--ink); color: var(--white); }
+.footer-newsletter { padding: 2.5rem 2rem; background: rgba(255,107,53,0.08); border-bottom: 1px solid rgba(255,255,255,0.08); text-align: center; }
+.footer-newsletter-container { max-width: 850px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+.footer-newsletter-text { text-align: left; }
+.footer-newsletter h3 { font-size: 1.2rem; font-weight: 900; margin-bottom: 0.2rem; letter-spacing: -0.02em; }
+.footer-newsletter p { font-size: 0.9rem; opacity: 0.7; margin: 0; line-height: 1.4; }
+.footer-newsletter-btn { display: inline-block; padding: 0.75rem 1.75rem; font-size: 0.9rem; font-weight: 700; background: var(--orange); color: var(--white); text-decoration: none; border: 2px solid var(--orange); transition: all 0.2s ease; font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; }
+.footer-newsletter-btn:hover { background: var(--white); color: var(--ink); border-color: var(--white); transform: translateY(-2px); }
+.footer-container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 0; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+.footer-brand-col { display: flex; flex-direction: column; gap: 1rem; }
+.footer-brand img { height: 32px; filter: brightness(0) invert(1); }
+.footer-tagline { opacity: 0.7; line-height: 1.6; font-size: 0.95rem; }
+.footer-ein { opacity: 0.4; font-size: 0.8rem; }
+.footer-social { display: flex; gap: 0.75rem; margin-top: 0.25rem; }
+.footer-social a { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.08); color: var(--white); text-decoration: none; transition: all 0.2s ease; }
+.footer-social a:hover { background: var(--orange); transform: translateY(-2px); }
+.footer-social a svg { width: 16px; height: 16px; fill: currentColor; }
+.footer-section h4 { font-size: 0.75rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.25rem; color: var(--orange); opacity: 0.8; }
+.footer-section a { display: block; color: var(--white); text-decoration: none; margin-bottom: 0.65rem; transition: all 0.2s ease; font-size: 0.95rem; opacity: 0.8; }
+.footer-section a:hover { color: var(--orange); opacity: 1; transform: translateX(4px); }
+.footer-squiggle { display: block; margin: 0 auto 0; width: 80px; height: 8px; opacity: 0.2; }
+.footer-bottom { max-width: var(--max-width); margin: 0 auto; padding: 2rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; opacity: 0.5; font-size: 0.85rem; }
+.footer-bottom a { color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.2s ease; margin: 0 0.75rem; }
+.footer-bottom a:hover { color: var(--orange); }
+
+/* RESPONSIVE */
+@media (max-width: 1200px) { .nav-right { gap: 1.5rem; } .nav-right a { font-size: 0.95rem; } .btn-donate, .btn-get-involved { padding: 0.65rem 1.5rem; font-size: 0.9rem; } }
+@media (max-width: 1080px) {
+  nav { padding: 1.25rem 0; }
+  nav.scrolled { padding: 0.875rem 0; }
+  .logo img { height: 42px; }
+  nav.scrolled .logo img { height: 36px; }
+  .nav-right { gap: 1.25rem; }
+  .nav-right a { font-size: 0.9rem; }
+  .btn-donate, .btn-get-involved { padding: 0.6rem 1.25rem; font-size: 0.85rem; text-transform: none; }
+  .calc-grid { grid-template-columns: 340px 1fr; gap: 1.25rem; }
+  .limits-strip { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 2rem; }
+  .fighter-value { font-size: 1.35rem; }
+  .showdown { gap: 0.65rem; }
+  .fighter-card { padding: 1rem; }
+}
+@media (max-width: 968px) {
+  :root { font-size: 15.5px; }
+  .nav-container { grid-template-columns: 1fr auto; gap: 1rem; }
+  .nav-right { display: none; }
+  .mobile-controls { display: flex; }
+  .mobile-menu-btn { display: block; }
+  .mobile-get-involved { display: inline-block; padding: 0.35rem 0.85rem; font-size: 0.72rem; }
+  .mobile-menu { display: block; }
+  .hero { padding: 7rem 0 2rem; }
+  .calc-section { padding: 2rem 0 4rem; }
+  .calc-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+  .controls-panel { position: static; }
+  .results-col { gap: 1.25rem; }
+  .showdown { grid-template-columns: 1fr; gap: 1rem; }
+  .fighter-card { padding: 1.5rem; }
+  .fighter-value { font-size: 1.85rem; }
+  .fighter-strategy { min-height: 0; }
+  .choose-grid { grid-template-columns: 1fr 1fr; }
+  .edu-section { padding: 4.5rem 0 4rem; }
+  .footer-container { grid-template-columns: 1fr 1fr; gap: 2rem; padding: 3rem 2rem 1.5rem; }
+  .footer-brand-col { grid-column: 1 / -1; }
+  .footer-social { justify-content: flex-start; }
+  .footer-newsletter-container { flex-direction: column; text-align: center; }
+  .footer-newsletter-text { text-align: center; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+}
+@media (max-width: 720px) { .edu-pair { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  .wrap { padding: 0 1rem; }
+  .hero { padding: 6rem 0 1.5rem; }
+  .hero h1 { font-size: 2rem; line-height: 1.1; }
+  .hero-sub { font-size: 1rem; }
+  .hero-eyebrow { font-size: 0.65rem; padding: 0.35rem 0.7rem 0.35rem 0.55rem; }
+  .versus-pill { font-size: 0.7rem; gap: 0.5rem; padding: 0.45rem 0.8rem; }
+  .calc-section { padding: 1.5rem 0 3rem; }
+  .calc-grid { gap: 1rem; }
+  .controls-panel { padding: 1.25rem; border-radius: 12px; }
+  .verdict-card { padding: 1.5rem 1.25rem; border-radius: 12px; }
+  .verdict-headline { margin-top: 1rem; }
+  .verdict-winner { font-size: 1.65rem; }
+  .verdict-diff { font-size: 0.8rem; }
+  .verdict-stats { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1.25rem; padding-top: 1.25rem; }
+  .verdict-stat-label { font-size: 0.55rem; letter-spacing: 0.08em; }
+  .verdict-stat-value { font-size: 0.95rem; }
+  .insight-callout { font-size: 0.8rem; padding: 0.75rem 0.85rem; margin-top: 1.25rem; }
+  .fighter-card { padding: 1.25rem; border-radius: 12px; }
+  .fighter-value { font-size: 1.65rem; }
+  .chart-card { padding: 1.25rem 0.85rem; border-radius: 12px; }
+  .chart-card-header { padding: 0 0.4rem; }
+  .chart-container { height: 240px; }
+  .strategy-strip { padding: 1.1rem 1.25rem; border-radius: 12px; gap: 0.85rem; }
+  .strategy-icon { width: 32px; height: 32px; font-size: 1rem; }
+  .strategy-text { font-size: 0.85rem; }
+  .methodology { padding: 1.1rem 1.25rem; }
+  .methodology p { font-size: 0.75rem; }
+  .edu-section { padding: 3.5rem 0 3rem; }
+  .edu-fighter { padding: 1.5rem; }
+  .edu-fighter h3 { font-size: 1.25rem; }
+  .edu-fighter > p { font-size: 0.9rem; }
+  .edu-third { padding: 1.25rem; }
+  .choose-grid { grid-template-columns: 1fr; gap: 0.85rem; }
+  .choose-card { padding: 1.25rem; }
+  .limits-strip { grid-template-columns: 1fr 1fr; padding: 1.5rem; gap: 1.25rem; }
+  .limits-value { font-size: 1.2rem; }
+  .footer-container { grid-template-columns: 1fr; padding: 2.5rem 1.25rem 1rem; gap: 2rem; }
+  .input-info .tooltip-text { width: 200px; left: auto; right: -10px; transform: none; }
+  .input-info .tooltip-text::after { left: auto; right: 15px; margin-left: 0; }
+}
+@media (max-width: 420px) {
+  .verdict-stats { grid-template-columns: 1fr; gap: 0.6rem; }
+  .verdict-stat { flex-direction: row; justify-content: space-between; align-items: baseline; }
+  .verdict-stat-label { font-size: 0.65rem; }
+  .verdict-stat-value { font-size: 0.95rem; }
+  .filing-abbr { font-size: 0.75rem; }
+  .filing-label { font-size: 0.5rem; }
+}
+@media (max-width: 480px) { .mobile-menu-nav > a { font-size: 1.3rem; } .mobile-dropdown-toggle { font-size: 1.3rem; } }
+</style>
+
+<link rel="stylesheet" href="css/navbar.css">
 </head>
 <body>
 
-  <nav id="nav">
-    <div class="nav-container">
-      <a href="index.html" class="logo">
-        <img src="finmango.png" alt="FinMango">
-      </a>
-
-      <div class="nav-right">
-        <a href="about.html">About</a>
-        <a href="research.html">Research</a>
-        <a href="education.html">Education</a>
-
-        <div class="dropdown dropdown-mega">
-          <a href="#" class="dropdown-trigger" onclick="event.preventDefault()">Our Work ▾</a>
-          <div class="dropdown-content dropdown-content-mega">
-            <div class="dropdown-mega-grid">
-              <div class="dropdown-mega-col">
-                <div class="dropdown-mega-col-label">Build</div>
-                <a href="education.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Millionaire Mindset</span>
-                    <span class="dropdown-item-desc">In-school programming | 100k+ taught</span>
-                  </span>
-                </a>
-                <a href="barrier-breakers.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Barrier Breakers</span>
-                    <span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span>
-                  </span>
-                </a>
-                <a href="ambassadors.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Ambassador Program</span>
-                    <span class="dropdown-item-desc">Powered by young adults globally</span>
-                  </span>
-                </a>
-                <a href="intelligence-platform.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Intelligence Platform</span>
-                    <span class="dropdown-item-desc">Early warning across food, housing, health &amp; jobs</span>
-                  </span>
-                </a>
-              </div>
-              <div class="dropdown-mega-col">
-                <div class="dropdown-mega-col-label">Measure</div>
-                <a href="barometer.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Financial Health Barometer</span>
-                    <span class="dropdown-item-desc">Real-time economic pulse · 50 states</span>
-                  </span>
-                </a>
-                <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">GitHub</span>
-                    <span class="dropdown-item-desc">Research to Reality</span>
-                  </span>
-                </a>
-                <a href="resources.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Resources</span>
-                    <span class="dropdown-item-desc">Guides, tools & worksheets</span>
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
-        <a href="donate.html" class="btn-donate">Donate</a>
-      </div>
-
-      <div class="mobile-controls">
-        <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <div class="mobile-menu" id="mobileMenu">
-    <div class="mobile-menu-nav">
+<nav id="nav">
+  <div class="nav-container">
+    <a href="index.html" class="logo"><img src="finmango.png" alt="FinMango"></a>
+    <div class="nav-right">
       <a href="about.html">About</a>
       <a href="research.html">Research</a>
       <a href="education.html">Education</a>
-      <div class="mobile-dropdown">
-        <button class="mobile-dropdown-toggle">Our Work <span class="arrow">▾</span></button>
-        <div class="mobile-dropdown-content">
-          <div class="mobile-cards-group">
-            <div class="mobile-cards-label">Build</div>
-            <a href="education.html" class="mobile-card"><span class="mobile-card-name">Millionaire Mindset</span><span class="mobile-card-desc">In-school programming | 100k+ taught</span></a>
-            <a href="barrier-breakers.html" class="mobile-card"><span class="mobile-card-name">Barrier Breakers</span><span class="mobile-card-desc">Powered by Valmark · $20k+ in prizes</span></a>
-            <a href="ambassadors.html" class="mobile-card"><span class="mobile-card-name">Ambassador Program</span><span class="mobile-card-desc">Powered by young adults globally</span></a>
-            <a href="intelligence-platform.html" class="mobile-card"><span class="mobile-card-name">Intelligence Platform</span><span class="mobile-card-desc">Early warning across food, housing, health &amp; jobs</span></a>
-          </div>
-          <div class="mobile-cards-group">
-            <div class="mobile-cards-label">Measure</div>
-            <a href="barometer.html" class="mobile-card"><span class="mobile-card-name">Financial Health Barometer</span><span class="mobile-card-desc">Real-time economic pulse · 50 states</span></a>
-            <a href="https://github.com/finmango/research" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">GitHub <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Research to Reality</span></a>
-            <a href="resources.html" class="mobile-card"><span class="mobile-card-name">Resources</span><span class="mobile-card-desc">Guides, tools & worksheets</span></a>
+      <div class="dropdown dropdown-mega">
+        <a href="#" class="dropdown-trigger" onclick="event.preventDefault()">Our Work ▾</a>
+        <div class="dropdown-content dropdown-content-mega">
+          <div class="dropdown-mega-grid">
+            <div class="dropdown-mega-col">
+              <div class="dropdown-mega-col-label">Build</div>
+              <a href="education.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Millionaire Mindset</span><span class="dropdown-item-desc">In-school programming | 100k+ taught</span></span></a>
+              <a href="barrier-breakers.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Barrier Breakers</span><span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span></span></a>
+              <a href="ambassadors.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Ambassador Program</span><span class="dropdown-item-desc">Powered by young adults globally</span></span></a>
+              <a href="intelligence-platform.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Intelligence Platform</span><span class="dropdown-item-desc">Early warning across food, housing, health &amp; jobs</span></span></a>
+            </div>
+            <div class="dropdown-mega-col">
+              <div class="dropdown-mega-col-label">Measure</div>
+              <a href="barometer.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Financial Health Barometer</span><span class="dropdown-item-desc">Real-time economic pulse · 50 states</span></span></a>
+              <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer"><span class="dropdown-item-text"><span class="dropdown-item-name">GitHub</span><span class="dropdown-item-desc">Research to Reality</span></span></a>
+              <a href="resources.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Resources</span><span class="dropdown-item-desc">Guides, tools & worksheets</span></span></a>
+            </div>
           </div>
         </div>
       </div>
+      <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+      <a href="donate.html" class="btn-donate">Donate</a>
     </div>
-    <div class="mobile-menu-footer">
-      <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-mobile#/donate" target="_blank" rel="noopener noreferrer" class="btn-mobile-cta">Donate</a>
-      <div class="mobile-menu-footer-links">
-        <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
-        <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a href="/cdn-cgi/l/email-protection#0a626f6666654a6c6364676b646d652465786d">Contact</a>
+    <div class="mobile-controls">
+      <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu-nav">
+    <a href="about.html">About</a>
+    <a href="research.html">Research</a>
+    <a href="education.html">Education</a>
+    <div class="mobile-dropdown">
+      <button class="mobile-dropdown-toggle">Our Work <span class="arrow">▾</span></button>
+      <div class="mobile-dropdown-content">
+        <div class="mobile-cards-group">
+          <div class="mobile-cards-label">Build</div>
+          <a href="education.html" class="mobile-card"><span class="mobile-card-name">Millionaire Mindset</span><span class="mobile-card-desc">In-school programming | 100k+ taught</span></a>
+          <a href="barrier-breakers.html" class="mobile-card"><span class="mobile-card-name">Barrier Breakers</span><span class="mobile-card-desc">Powered by Valmark · $20k+ in prizes</span></a>
+          <a href="ambassadors.html" class="mobile-card"><span class="mobile-card-name">Ambassador Program</span><span class="mobile-card-desc">Powered by young adults globally</span></a>
+          <a href="intelligence-platform.html" class="mobile-card"><span class="mobile-card-name">Intelligence Platform</span><span class="mobile-card-desc">Early warning across food, housing, health &amp; jobs</span></a>
+        </div>
+        <div class="mobile-cards-group">
+          <div class="mobile-cards-label">Measure</div>
+          <a href="barometer.html" class="mobile-card"><span class="mobile-card-name">Financial Health Barometer</span><span class="mobile-card-desc">Real-time economic pulse · 50 states</span></a>
+          <a href="https://github.com/finmango/research" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">GitHub ↗</span><span class="mobile-card-desc">Research to Reality</span></a>
+          <a href="resources.html" class="mobile-card"><span class="mobile-card-name">Resources</span><span class="mobile-card-desc">Guides, tools & worksheets</span></a>
+        </div>
       </div>
     </div>
   </div>
-
-<section class="hero">
-  <div class="hero-container">
-    <h1 class="hero-title">Battle of the IRAs</h1>
-    <p class="hero-subtitle">
-      Traditional IRA vs Roth IRA: Which retirement account wins for YOUR financial future? ⚔️
-    </p>
-  </div>
-</section>
-
-<div class="main-content">
-  <div class="content-section">
-    <p class="section-text">
-      Want to become a millionaire someday 💲📈? Two major ways to invest your money to build wealth are two Individual Retirement Accounts: <strong>TRADITIONAL IRA</strong> and <strong>ROTH IRA</strong>. You can open just one or both!
-    </p>
-    <p class="section-text">
-      In life, we all have to pay TAXES eventually. Both accounts provide TAX ADVANTAGES while growing your money, but the biggest differences are 1. which you qualify for based on your income and 2. how and when you get a tax break.
-    </p>
-    <p class="section-text">
-      Now, let's see how much your savings can grow and which IRA wins in the end!
-    </p>
-  </div>
-
-  <!-- Step Navigator -->
-  <div class="step-navigator">
-    <div class="step-card active" data-step="1">
-      <span class="step-number">1</span>
-      <span class="step-label">Your Situation</span>
-    </div>
-    <div class="step-card" data-step="2">
-      <span class="step-number">2</span>
-      <span class="step-label">Tax Brackets</span>
-    </div>
-    <div class="step-card" data-step="3">
-      <span class="step-number">3</span>
-      <span class="step-label">Growth & Risk</span>
-    </div>
-    <div class="step-card" data-step="4">
-      <span class="step-number">4</span>
-      <span class="step-label">Battle Results</span>
-    </div>
-  </div>
-
-  <!-- Section 1: Your Basics -->
-  <div class="calc-section active" data-section="1">
-    <div class="calc-section-header">
-      <h2 class="calc-section-title">1. Your Current Situation</h2>
-    </div>
-    <div class="calc-section-content">
-      <p class="section-text">
-        You can open a traditional IRA and Roth IRA at any age as long as you make money from a job or self-employment. If you are below 18, you may need your parent or guardian's help.
-      </p>
-      <p class="section-text">
-        To qualify for a Roth IRA, you must make less than $140,000 per year before taxes. On the other hand, there is no income limit for a Traditional IRA! However, these differences influence tax breaks.
-      </p>
-      
-      <div class="calculator-box">
-        <div class="input-grid">
-          <div class="input-group">
-            <label class="input-label">Your Current Age</label>
-            <input type="number" id="age" value="25" min="18" max="65">
-          </div>
-          
-          <div class="input-group">
-            <label class="input-label">Annual Income (Before Taxes)</label>
-            <div class="input-wrapper">
-              <span class="input-prefix">$</span>
-              <input type="number" id="income" value="60000" min="0" step="5000">
-            </div>
-          </div>
-          
-          <div class="input-group">
-            <label class="input-label">Annual IRA Contribution</label>
-            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-              Max contribution is $7,000/year if under 50 ($8,000 if 50+)
-            </p>
-            <div class="input-wrapper">
-              <span class="input-prefix">$</span>
-              <input type="number" id="contribution" value="5000" min="0" max="7000" step="500">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="nav-buttons">
-        <button class="nav-btn" disabled><span>← Previous</span></button>
-        <button class="nav-btn primary" onclick="goToStep(2)"><span>Next →</span></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section 2: Tax Brackets -->
-  <div class="calc-section" data-section="2">
-    <div class="calc-section-header">
-      <h2 class="calc-section-title">2. Rules for Contributing & Withdrawing</h2>
-    </div>
-    <div class="calc-section-content">
-      <p class="section-text">
-        <strong>RULES FOR CONTRIBUTING MONEY</strong><br>
-        For both traditional and Roth IRAs, you can contribute up to $6,000 per year if you are under the age of 50, and you can add money anytime. If you decide to open up both accounts, you can, but the limit is $6,000 combined!
-      </p>
-      <p class="section-text">
-        <strong>RULES FOR WITHDRAWING MONEY</strong><br>
-        The rules for withdrawing money differ for Traditional IRAs and Roth IRAs.
-      </p>
-      <p class="section-text">
-        Let's start with early withdrawals. For traditional IRAs, early withdrawals before the age of 59½ are taxed as income and usually have a 10% penalty. Similarly, withdrawals from a Roth IRA may have some taxes and penalties on earnings depending on what you use the money for.
-      </p>
-      <p class="section-text">
-        Now, let's move onto regular withdrawls after the age 59½. For a traditional IRA, these withdrawals are taxed at your retirement tax rate. On the other hand for Roth IRAs, if you have been contributing money for 5+ years, withdrawals are 100% tax-free, penalty-free, and can be taken out anytime!
-      </p>
-      <p class="section-text">
-        BOTTOM LINE: Set this money aside to grow more wealth in the long-run 🔥💲📈.
-      </p>
-      
-      <div class="calculator-box">
-        <div class="input-group">
-          <label class="input-label">Your Current Tax Bracket</label>
-          <div class="tax-bracket-grid">
-            <button class="tax-bracket-btn" data-bracket="10">
-              <span class="bracket-rate">10%</span>
-              <span class="bracket-label">Low Income</span>
-            </button>
-            <button class="tax-bracket-btn" data-bracket="12">
-              <span class="bracket-rate">12%</span>
-              <span class="bracket-label">Entry Level</span>
-            </button>
-            <button class="tax-bracket-btn active" data-bracket="22">
-              <span class="bracket-rate">22%</span>
-              <span class="bracket-label">Mid Career</span>
-            </button>
-            <button class="tax-bracket-btn" data-bracket="24">
-              <span class="bracket-rate">24%</span>
-              <span class="bracket-label">Upper Mid</span>
-            </button>
-            <button class="tax-bracket-btn" data-bracket="32">
-              <span class="bracket-rate">32%</span>
-              <span class="bracket-label">High Earner</span>
-            </button>
-            <button class="tax-bracket-btn" data-bracket="35">
-              <span class="bracket-rate">35%</span>
-              <span class="bracket-label">Very High</span>
-            </button>
-          </div>
-        </div>
-        
-        <div class="input-group" style="margin-top: 2rem;">
-          <label class="input-label">Expected Tax Bracket in Retirement</label>
-          <div class="tax-bracket-grid">
-            <button class="tax-bracket-ret-btn" data-bracket="10">
-              <span class="bracket-rate">10%</span>
-              <span class="bracket-label">Lower</span>
-            </button>
-            <button class="tax-bracket-ret-btn" data-bracket="12">
-              <span class="bracket-rate">12%</span>
-              <span class="bracket-label">Low-Mid</span>
-            </button>
-            <button class="tax-bracket-ret-btn active" data-bracket="22">
-              <span class="bracket-rate">22%</span>
-              <span class="bracket-label">Same</span>
-            </button>
-            <button class="tax-bracket-ret-btn" data-bracket="24">
-              <span class="bracket-rate">24%</span>
-              <span class="bracket-label">Mid-High</span>
-            </button>
-            <button class="tax-bracket-ret-btn" data-bracket="32">
-              <span class="bracket-rate">32%</span>
-              <span class="bracket-label">Higher</span>
-            </button>
-            <button class="tax-bracket-ret-btn" data-bracket="35">
-              <span class="bracket-rate">35%</span>
-              <span class="bracket-label">Much Higher</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="nav-buttons">
-        <button class="nav-btn" onclick="goToStep(1)"><span>← Previous</span></button>
-        <button class="nav-btn primary" onclick="goToStep(3)"><span>Next →</span></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section 3: Growth & Risk -->
-  <div class="calc-section" data-section="3">
-    <div class="calc-section-header">
-      <h2 class="calc-section-title">3. Battle of the IRAs: Tax Advantages</h2>
-    </div>
-    <div class="calc-section-content">
-      <p class="section-text">
-        Traditional IRAs and Roth IRAs provide different tax advantages to help you grow your wealth.
-      </p>
-      <p class="section-text">
-        <strong>Roth IRAs grow Tax-Free:</strong> When you contribute to a Roth IRA, you still have to pay taxes on that money. However, you pay no taxes on money you withdraw during retirement! This makes sense if you expect to pay more taxes in retirement than you do now.
-      </p>
-      <p class="section-text">
-        <strong>Traditional IRAs are Tax-Deferred:</strong> When you contribute to a traditional IRA, you get an upfront tax break, meaning that you pay less taxes for that year. However, you'll pay income taxes on withdrawls during retirement. This makes sense if you have pretty high income (and may not qualify for a Roth) and expect to pay less taxes in retirement.
-      </p>
-      <p class="section-text">
-        Would you rather pay taxes sooner or later? Take a second to think about the pros and cons of each tax advantage.
-      </p>
-      
-      <div class="calculator-box">
-        <div class="input-group">
-          <label class="input-label">What is your risk tolerance?</label>
-          <p class="section-text" style="margin-bottom: 1rem;">
-            How you invest your money (examples: stocks, bonds, mutual funds, ETFs) impacts how much your money grows.
-          </p>
-          <p class="section-text" style="margin-bottom: 1rem;">
-            The <strong>RISK/RETURN TRADE-OFF</strong> is that the more aggressive risk you take on, the greater your Rate of Return (RoR) and reward if the investment makes money. On the other hand, if you only take a small risk, you will get a smaller reward. Your <strong>RISK TOLERANCE</strong> is a personal choice!
-          </p>
-          <p class="section-text" style="margin-bottom: 1rem;">
-            For example, if you invest in Coinbase Stock 💰, you may see the value of your account take dips at times. This is okay for IRAs since if you do not need the money here in the near future and want it grow more in the long haul.
-          </p>
-          <label class="input-label">Expected Annual Return (%)</label>
-          <input type="range" id="returnRate" min="3" max="12" step="0.5" value="7">
-          <div class="slider-info">
-            <span>Conservative (3-4%)</span>
-            <span id="returnValue" style="font-weight: 900; color: var(--blue);">7%</span>
-            <span>Aggressive (10-12%)</span>
-          </div>
-        </div>
-        
-        <div class="input-group" style="margin-top: 2rem;">
-          <label class="input-label">Years Until Retirement</label>
-          <input type="number" id="yearsToRetirement" value="40" min="1" max="50">
-        </div>
-      </div>
-
-      <div class="nav-buttons">
-        <button class="nav-btn" onclick="goToStep(2)"><span>← Previous</span></button>
-        <button class="nav-btn primary" onclick="goToStep(4)"><span>See Battle Results →</span></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section 4: Battle Results -->
-  <div class="calc-section" data-section="4">
-    <div class="calc-section-header">
-      <h2 class="calc-section-title">4. Compounding Interest... 💲💲💲</h2>
-    </div>
-    <div class="calc-section-content">
-      <p class="section-text">
-        Traditional IRAs and Roth IRAs utilize COMPOUNDING 📈, which enables your money grows quickly especially when you start early.
-      </p>
-      <p class="section-text">
-        Now, let's see how their balance grows over time and see who won the Battle of the IRAs based on your inputs!
-      </p>
-      
-      <div class="comparison-grid">
-        <div class="comparison-card traditional" id="traditionalCard">
-          <div class="card-title">Traditional IRA</div>
-          <div class="card-value" id="traditionalValue">$0</div>
-          <div class="card-label">After-Tax Value at Retirement</div>
-          <div class="card-details">
-            <div class="detail-row">
-              <span class="detail-label">Total Contributions:</span>
-              <span class="detail-value" id="traditionalContributions">$0</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Account Growth:</span>
-              <span class="detail-value" id="traditionalGrowth">$0</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Taxes You'll Pay:</span>
-              <span class="detail-value" id="traditionalTaxes">$0</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Tax Savings Now:</span>
-              <span class="detail-value" id="traditionalSavings">$0</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="comparison-card roth" id="rothCard">
-          <div class="card-title">Roth IRA</div>
-          <div class="card-value" id="rothValue">$0</div>
-          <div class="card-label">Tax-Free Value at Retirement</div>
-          <div class="card-details">
-            <div class="detail-row">
-              <span class="detail-label">Total Contributions:</span>
-              <span class="detail-value" id="rothContributions">$0</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Account Growth:</span>
-              <span class="detail-value" id="rothGrowth">$0</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Taxes You'll Pay:</span>
-              <span class="detail-value">$0</span>
-            </div>
-            <div class="detail-row">
-              <span class="detail-label">Taxes Paid Now:</span>
-              <span class="detail-value" id="rothTaxesNow">$0</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="chart-box">
-        <canvas id="comparisonChart"></canvas>
-      </div>
-      
-      <div id="verdict" style="margin-top: 2rem; padding: 2rem; background: var(--light-gray); border: 3px solid var(--black);">
-        <h3 style="font-size: 1.5rem; font-weight: 900; margin-bottom: 1rem;">The Verdict</h3>
-        <p id="verdictText" style="font-size: 1.1rem; line-height: 1.7; color: var(--gray);"></p>
-      </div>
-
-      <div class="nav-buttons">
-        <button class="nav-btn" onclick="goToStep(3)"><span>← Previous</span></button>
-        <button class="nav-btn primary" onclick="goToStep(1)"><span>🔄 Start Over</span></button>
-      </div>
+  <div class="mobile-menu-footer">
+    <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-mobile#/donate" target="_blank" rel="noopener noreferrer" class="btn-mobile-cta">Donate</a>
+    <div class="mobile-menu-footer-links">
+      <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
+      <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="/cdn-cgi/l/email-protection#0a626f6666654a6c6364676b646d652465786d">Contact</a>
     </div>
   </div>
 </div>
 
-  <footer>
-    <div class="footer-newsletter">
-      <div class="footer-newsletter-container">
-        <div class="footer-newsletter-text">
-          <h3>Stay Updated</h3>
-          <p>Research, education, and advocacy updates. No spam.</p>
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        Retirement Calculator · 2026 Limits
+      </div>
+      <h1>
+        Pay taxes now, pay them
+        <span class="highlight">later<svg viewBox="0 0 200 14" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M3 9 C 30 3, 60 11, 90 7 S 150 3, 197 8" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none"/></svg></span>,
+        or pay them on every gain?
+      </h1>
+      <p class="hero-sub">
+        Traditional and Roth IRAs shield your growth from taxes. A regular brokerage account doesn't — every gain gets taxed along the way. Run your numbers and see which of the three actually puts the most after-tax dollars in your pocket at retirement.
+      </p>
+      <div class="versus-pill">
+        <span class="vs-side"><span class="vs-dot trad"></span>Traditional</span>
+        <span class="vs-divider">VS</span>
+        <span class="vs-side"><span class="vs-dot roth"></span>Roth</span>
+        <span class="vs-divider">VS</span>
+        <span class="vs-side"><span class="vs-dot taxable"></span>Brokerage</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="calc-section">
+  <div class="wrap">
+    <div class="calc-grid">
+
+      <aside class="controls-panel">
+        <div class="controls-section">
+          <div class="controls-section-title">You</div>
+          <div class="input-row">
+            <div class="input-label">
+              <span class="input-label-text">Current age</span>
+              <span class="input-value" id="ageDisplay">25</span>
+            </div>
+            <input type="range" id="age" min="18" max="65" step="1" value="25">
+            <div class="range-meta"><span>18</span><span>65</span></div>
+          </div>
+          <div class="input-row">
+            <div class="input-label">
+              <span class="input-label-text">Years until retirement</span>
+              <span class="input-value" id="yearsDisplay">40</span>
+            </div>
+            <input type="range" id="years" min="5" max="50" step="1" value="40">
+            <div class="range-meta"><span>5</span><span>50</span></div>
+          </div>
         </div>
-        <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank"
-          rel="noopener noreferrer">Subscribe</a>
+
+        <div class="controls-section">
+          <div class="controls-section-title">Income &amp; Filing</div>
+          <div class="input-row">
+            <div class="input-label">
+              <span class="input-label-text">
+                Annual earned income
+                <span class="input-info">i<span class="tooltip-text">Your pre-tax W-2 / self-employment income. Used to auto-detect your federal marginal tax bracket and check Roth IRA eligibility.</span></span>
+              </span>
+            </div>
+            <div class="input-field-prefix">
+              <input type="number" class="input-field" id="income" value="65000" min="0" step="1000">
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="input-label">
+              <span class="input-label-text">Filing status</span>
+            </div>
+            <div class="filing-grid" id="filingGrid">
+              <button class="filing-btn active" data-status="single"><span class="filing-abbr">Single</span><span class="filing-label">Unmarried</span></button>
+              <button class="filing-btn" data-status="mfj"><span class="filing-abbr">MFJ</span><span class="filing-label">Married · Joint</span></button>
+              <button class="filing-btn" data-status="hoh"><span class="filing-abbr">HoH</span><span class="filing-label">Head of Household</span></button>
+              <button class="filing-btn" data-status="mfs"><span class="filing-abbr">MFS</span><span class="filing-label">Married · Separate</span></button>
+            </div>
+          </div>
+          <div class="bracket-display">
+            <div class="bracket-display-title">Auto-detected from 2026 brackets</div>
+            <div class="bracket-row">
+              <span class="bracket-row-label">Your marginal rate today</span>
+              <span class="bracket-row-value trad-color" id="marginalDisplay">22%</span>
+            </div>
+            <div class="bracket-row">
+              <span class="bracket-row-label">Est. retirement rate
+                <span class="input-info">i<span class="tooltip-text">Rule of thumb: most people land 2 percentage points below their peak working bracket in retirement. Very rough — real retirement tax rates depend on your exact income sources.</span></span>
+              </span>
+              <span class="bracket-row-value" id="retirementDisplay">20%</span>
+            </div>
+            <div class="bracket-row">
+              <span class="bracket-row-label">Roth eligibility</span>
+              <span class="bracket-row-value roth-ok" id="rothEligibility">Full</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls-section">
+          <div class="controls-section-title">Contribution</div>
+          <div class="input-row">
+            <div class="input-label">
+              <span class="input-label-text">
+                Annual contribution
+                <span class="input-info">i<span class="tooltip-text">2026 IRA limit is $7,500 for under 50, $8,600 for 50+. Combined across all your IRAs. Same dollar amount is simulated for the taxable brokerage comparison.</span></span>
+              </span>
+            </div>
+            <div class="input-field-prefix">
+              <input type="number" class="input-field" id="contribution" value="6000" min="0" max="8600" step="500">
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="input-label">
+              <span class="input-label-text">Expected annual return</span>
+              <span class="input-value" id="returnDisplay">7%</span>
+            </div>
+            <input type="range" id="returnRate" min="3" max="12" step="0.5" value="7">
+            <div class="range-meta"><span>3% safe</span><span>12% aggressive</span></div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="results-col">
+
+        <div class="verdict-card" id="verdictCard">
+          <div class="verdict-card-top">
+            <div class="verdict-meta">
+              <span class="verdict-eyebrow">The Verdict</span>
+              <span class="verdict-horizon" id="verdictHorizon">After <strong>40 years</strong> at <strong>7%</strong></span>
+            </div>
+          </div>
+          <div class="verdict-headline">
+            <div class="verdict-winner" id="verdictWinner">Roth IRA wins</div>
+            <div class="verdict-diff" id="verdictDiff">$0 more after taxes</div>
+          </div>
+          <div class="verdict-stats">
+            <div class="verdict-stat stat-roth"><span class="verdict-stat-label">Roth</span><span class="verdict-stat-value" id="statRoth">$0</span></div>
+            <div class="verdict-stat stat-trad"><span class="verdict-stat-label">Traditional</span><span class="verdict-stat-value" id="statTrad">$0</span></div>
+            <div class="verdict-stat stat-taxable"><span class="verdict-stat-label">Brokerage</span><span class="verdict-stat-value" id="statTaxable">$0</span></div>
+          </div>
+          <div class="insight-callout">
+            <span class="insight-callout-icon">!</span>
+            <span id="insightText">Adjust the controls to see how your tax bracket and timeline change the winner.</span>
+          </div>
+        </div>
+
+        <div class="showdown">
+          <div class="fighter-card traditional" id="cardTrad">
+            <div class="fighter-header">
+              <div class="fighter-name"><span class="fighter-name-dot"></span>Traditional</div>
+              <span class="winner-tag">Winner</span>
+            </div>
+            <div class="fighter-strategy">Tax break now, taxes due at withdrawal.</div>
+            <div class="fighter-value" id="tradValue">$0</div>
+            <div class="fighter-value-label">After-tax balance</div>
+            <div class="fighter-details">
+              <div class="fighter-row"><span class="fighter-row-label">Contributed</span><span class="fighter-row-value" id="tradContrib">$0</span></div>
+              <div class="fighter-row"><span class="fighter-row-label">Grows to (pre-tax)</span><span class="fighter-row-value" id="tradGross">$0</span></div>
+              <div class="fighter-row"><span class="fighter-row-label">Tax savings pocketed</span><span class="fighter-row-value positive" id="tradSavings">$0</span></div>
+              <div class="fighter-row"><span class="fighter-row-label">Taxes at withdrawal</span><span class="fighter-row-value negative" id="tradTaxes">−$0</span></div>
+            </div>
+          </div>
+
+          <div class="fighter-card roth" id="cardRoth">
+            <div class="fighter-header">
+              <div class="fighter-name"><span class="fighter-name-dot"></span>Roth</div>
+              <span class="winner-tag">Winner</span>
+            </div>
+            <div class="fighter-strategy">Pay tax now, withdraw 100% tax-free.</div>
+            <div class="fighter-value" id="rothValue">$0</div>
+            <div class="fighter-value-label">After-tax balance</div>
+            <div class="fighter-details">
+              <div class="fighter-row"><span class="fighter-row-label">Contributed</span><span class="fighter-row-value" id="rothContrib">$0</span></div>
+              <div class="fighter-row"><span class="fighter-row-label">Grows to</span><span class="fighter-row-value" id="rothGross">$0</span></div>
+              <div class="fighter-row"><span class="fighter-row-label">Taxes at withdrawal</span><span class="fighter-row-value neutral">$0</span></div>
+              <div class="fighter-row"><span class="fighter-row-label">Phase-out status</span><span class="fighter-row-value" id="rothPhaseStatus">Full</span></div>
+            </div>
+          </div>
+
+          <div class="fighter-card taxable" id="cardTaxable">
+            <div class="fighter-header">
+              <div class="fighter-name"><span class="fighter-name-dot"></span>Brokerage</div>
+              <span class="winner-tag">Winner</span>
+            </div>
+            <div class="fighter-strategy">No tax shelter — gains taxed as you go.</div>
+            <div class="fighter-value" id="taxableValue">$0</div>
+            <div class="fighter-value-label">After-tax balance</div>
+            <div class="fighter-details">
+              <div class="fighter-row"><span class="fighter-row-label">Contributed</span><span class="fighter-row-value" id="taxableContrib">$0</span></div>
+              <div class="fighter-row"><span class="fighter-row-label">Gross return</span><span class="fighter-row-value" id="taxableReturn">7%</span></div>
+              <div class="fighter-row"><span class="fighter-row-label">Effective yield</span><span class="fighter-row-value" id="taxableYield">5.5%</span></div>
+              <div class="fighter-row"><span class="fighter-row-label">Lost to tax drag</span><span class="fighter-row-value negative" id="taxableDrag">−$0</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-card-header">
+            <div class="chart-card-title">Growth over time · After-tax</div>
+            <div class="chart-legend">
+              <span class="chart-legend-item"><span class="chart-legend-dot roth"></span>Roth</span>
+              <span class="chart-legend-item"><span class="chart-legend-dot trad"></span>Traditional</span>
+              <span class="chart-legend-item"><span class="chart-legend-dot taxable"></span>Brokerage</span>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="comparisonChart"></canvas>
+          </div>
+        </div>
+
+        <div class="strategy-strip">
+          <div class="strategy-icon">💡</div>
+          <div class="strategy-content">
+            <div class="strategy-label">Quick rule of thumb</div>
+            <div class="strategy-text" id="strategyText">
+              Both IRAs almost always beat a taxable brokerage because tax drag compounds against you for decades. Between the two IRAs: if your retirement tax bracket will be <strong>higher</strong> than today, Roth wins. <strong>Lower</strong>, Traditional wins.
+            </div>
+          </div>
+        </div>
+
+        <div class="methodology">
+          <div class="methodology-title">How this is calculated</div>
+          <p>
+            <strong>All three accounts get the same annual dollar contribution.</strong> Traditional and Roth compound at your expected return. The taxable brokerage compounds at an <em>effective after-tax yield</em> of <code>return × (1 − marginal rate)</code> — a simplification of ongoing taxes on dividends and realized gains.
+          </p>
+          <p>
+            At retirement, Traditional is taxed at your estimated retirement rate, then the cumulative tax savings you pocketed from each year's deduction are added back uncompounded (matching the original FinMango model). Roth withdraws tax-free. Brokerage keeps what it has.
+          </p>
+          <p>
+            Your marginal rate is auto-detected from 2026 IRS brackets. Your retirement rate is estimated as your current marginal rate minus 2 percentage points — a common rule of thumb, but not a prediction. Income grows 3% per year; once it crosses the 2026 Roth MAGI phase-out ($153K–$168K single / HoH, $242K–$252K joint), Roth contributions phase down proportionally while Traditional and Brokerage keep going. The model assumes constant contribution limits and doesn't model state tax, ACA subsidies, or required minimum distributions on Traditional at age 73.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="edu-section">
+  <div class="wrap">
+    <div class="edu-header">
+      <div class="edu-eyebrow">The Battle Explained</div>
+      <h2>Same goal, different timing.</h2>
+      <p>Both IRAs let your money grow without paying tax on the gains every year. A regular brokerage doesn't — and that drag compounds against you for decades.</p>
+    </div>
+
+    <div class="edu-pair">
+      <div class="edu-fighter traditional">
+        <div class="edu-fighter-eyebrow">Traditional IRA</div>
+        <h3>Tax break today</h3>
+        <p>Contribute pre-tax dollars and lower this year's tax bill. The money grows untouched by the IRS for decades — but every dollar you withdraw in retirement is taxed as income.</p>
+        <div class="edu-tagline">Pay later</div>
+        <div class="edu-points">
+          <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>Lower taxable income now.</strong> A $7,500 contribution at the 22% bracket saves you $1,650 this April.</span></div>
+          <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>No income limit.</strong> Anyone with earned income can contribute, regardless of how much they make.</span></div>
+          <div class="edu-point"><span class="edu-point-marker">−</span><span><strong>Required withdrawals at 73.</strong> The IRS forces you to start drawing down (and paying taxes) whether you need the money or not.</span></div>
+        </div>
+      </div>
+
+      <div class="edu-fighter roth">
+        <div class="edu-fighter-eyebrow">Roth IRA</div>
+        <h3>Tax-free forever</h3>
+        <p>Contribute money you've already paid taxes on. It grows tax-free, and every dollar you withdraw in retirement — including decades of investment gains — is yours, untouched by the IRS.</p>
+        <div class="edu-tagline">Pay now</div>
+        <div class="edu-points">
+          <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>Zero taxes in retirement.</strong> What you see in the account is what you spend. No surprises, no bracket math.</span></div>
+          <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>Pull contributions anytime.</strong> Your contributions (not gains) come out penalty-free — a built-in safety net.</span></div>
+          <div class="edu-point"><span class="edu-point-marker">−</span><span><strong>Income limits apply.</strong> In 2026, single filers earning over $168,000 are phased out (MAGI). Joint filers cap at $252,000.</span></div>
+        </div>
       </div>
     </div>
 
-    <div class="footer-container">
-      <div class="footer-brand-col">
-        <div class="footer-brand">
-          <img src="finmango.png" alt="FinMango" loading="lazy">
-        </div>
-        <p class="footer-tagline">
-          A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
-        </p>
-        <p class="footer-ein">EIN: 81-2543425</p>
-        <div class="footer-social">
-          <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          </a>
-          <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </a>
-          <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          </a>
-          <a href="/cdn-cgi/l/email-protection#6109040d0d0e2107080f0c000f060e4f0e1306" aria-label="Email">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg>
-          </a>
-        </div>
+    <div class="edu-third">
+      <div class="edu-third-body">
+        <div class="edu-third-eyebrow">And the third option · Taxable brokerage</div>
+        <h3>No shelter, but total flexibility.</h3>
+        <p>A regular brokerage account (Fidelity, Vanguard, Schwab, Robinhood) has no income limits, no contribution limits, and no withdrawal restrictions — but the IRS taxes your dividends every year and your capital gains every time you sell. Over 30+ years, that drag typically costs you tens of thousands compared to an IRA.</p>
       </div>
+      <span class="edu-third-tagline">Pay every year</span>
+    </div>
 
-      <div class="footer-section">
-        <h4>Our Work</h4>
-        <a href="research.html">Research</a>
-        <a href="education.html">Education</a>
-        <a href="barometer.html">Barometer</a>
-        <a href="affordability-lab.html">Affordability Lab</a>
-        <a href="resources.html">Resources</a>
+    <div class="choose-grid">
+      <div class="choose-card roth">
+        <div class="choose-card-icon">🌱</div>
+        <div class="choose-card-pick">Choose Roth if</div>
+        <h4>You're early in your career</h4>
+        <p>You're in a low bracket today and your income (and tax rate) will probably climb. Locking in today's lower rate is a steal.</p>
       </div>
-
-      <div class="footer-section">
-        <h4>Initiatives</h4>
-        <a href="barrier-breakers.html">Barrier Breakers</a>
-        <a href="ambassadors.html">Ambassador Program</a>
-        <a href="intelligence-platform.html">Intelligence Platform</a>
-        <a href="talent.html">Talent</a>
-        <a href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <div class="choose-card trad">
+        <div class="choose-card-icon">📊</div>
+        <div class="choose-card-pick">Choose Traditional if</div>
+        <h4>You're at peak earning years</h4>
+        <p>You're in a high bracket now and expect to spend less in retirement. The deduction today is worth more than the future tax bill.</p>
       </div>
-
-      <div class="footer-section">
-        <h4>Get Involved</h4>
-        <a href="donate.html">Donate</a>
-        <a href="ambassadors.html">Become an Ambassador</a>
-        <a href="/cdn-cgi/l/email-protection#d9b1bcb5b5b699bfb0b7b4b8b7beb6f7b6abbe">Partner With Us</a>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform"
-          target="_blank" rel="noopener noreferrer">Volunteer</a>
-        <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
+      <div class="choose-card roth">
+        <div class="choose-card-icon">🔮</div>
+        <div class="choose-card-pick">Choose Roth if</div>
+        <h4>You think tax rates will rise</h4>
+        <p>National debt, demographics — there's a reasonable case future rates climb. Roth locks in today's rate and never owes more.</p>
       </div>
     </div>
 
-    <!-- Footer squiggle accent -->
-    <svg class="footer-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/>
-    </svg>
-
-    <div class="footer-bottom">
-      <div>&copy; 2026 FinMango. All rights reserved.</div>
-      <div>
-        <a href="privacy.html">Privacy</a>
-        <a href="terms.html">Terms</a>
+    <div class="limits-strip">
+      <div class="limits-item">
+        <div class="limits-label">2026 Limit</div>
+        <div class="limits-value">$7,500</div>
+        <div class="limits-meta">Under age 50</div>
+      </div>
+      <div class="limits-item">
+        <div class="limits-label">2026 Limit · 50+</div>
+        <div class="limits-value">$8,600</div>
+        <div class="limits-meta">Includes $1,100 catch-up</div>
+      </div>
+      <div class="limits-item">
+        <div class="limits-label">Roth Cap · Single</div>
+        <div class="limits-value">$168K</div>
+        <div class="limits-meta">Phase-out begins at $153K</div>
+      </div>
+      <div class="limits-item">
+        <div class="limits-label">Roth Cap · Joint</div>
+        <div class="limits-value">$252K</div>
+        <div class="limits-meta">Phase-out begins at $242K</div>
       </div>
     </div>
-  </footer>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-newsletter">
+    <div class="footer-newsletter-container">
+      <div class="footer-newsletter-text">
+        <h3>Stay Updated</h3>
+        <p>Research, education, and advocacy updates. No spam.</p>
+      </div>
+      <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a>
+    </div>
+  </div>
+
+  <div class="footer-container">
+    <div class="footer-brand-col">
+      <div class="footer-brand"><img src="finmango.png" alt="FinMango" loading="lazy"></div>
+      <p class="footer-tagline">A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.</p>
+      <p class="footer-ein">EIN: 81-2543425</p>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+        <a href="/cdn-cgi/l/email-protection#6109040d0d0e2107080f0c000f060e4f0e1306" aria-label="Email"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-section">
+      <h4>Our Work</h4>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <a href="barometer.html">Barometer</a>
+      <a href="affordability-lab.html">Affordability Lab</a>
+      <a href="resources.html">Resources</a>
+    </div>
+    <div class="footer-section">
+      <h4>Initiatives</h4>
+      <a href="barrier-breakers.html">Barrier Breakers</a>
+      <a href="ambassadors.html">Ambassador Program</a>
+      <a href="intelligence-platform.html">Intelligence Platform</a>
+      <a href="talent.html">Talent</a>
+      <a href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+    <div class="footer-section">
+      <h4>Get Involved</h4>
+      <a href="donate.html">Donate</a>
+      <a href="ambassadors.html">Become an Ambassador</a>
+      <a href="/cdn-cgi/l/email-protection#d9b1bcb5b5b699bfb0b7b4b8b7beb6f7b6abbe">Partner With Us</a>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a>
+      <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
+    </div>
+  </div>
+
+  <svg class="footer-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/>
+  </svg>
+
+  <div class="footer-bottom">
+    <div>&copy; 2026 FinMango. All rights reserved.</div>
+    <div><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+  </div>
+</footer>
 
 <script>
+// ============================================================
+// 2026 IRS Federal Income Tax Brackets (ordinary income)
+// Source: IRS Rev. Proc. 2025-32 / Tax Foundation
+// Each bracket is [upper income cap, marginal rate]
+// ============================================================
+const TAX_BRACKETS_2026 = {
+  single: [[12400,0.10],[50400,0.12],[105700,0.22],[201775,0.24],[256225,0.32],[640600,0.35],[Infinity,0.37]],
+  mfj:    [[24800,0.10],[100800,0.12],[211400,0.22],[403550,0.24],[512450,0.32],[768700,0.35],[Infinity,0.37]],
+  mfs:    [[12400,0.10],[50400,0.12],[105700,0.22],[201775,0.24],[256225,0.32],[384350,0.35],[Infinity,0.37]],
+  hoh:    [[17700,0.10],[67450,0.12],[105700,0.22],[201775,0.24],[256200,0.32],[640600,0.35],[Infinity,0.37]]
+};
+
+// 2026 Roth IRA MAGI phase-out ranges
+const ROTH_PHASEOUT = {
+  single: [153000, 168000],
+  mfj:    [242000, 252000],
+  mfs:    [0, 10000],
+  hoh:    [153000, 168000]
+};
+
+const STATUS_LABEL = {
+  single: 'Single',
+  mfj: 'Married Filing Jointly',
+  mfs: 'Married Filing Separately',
+  hoh: 'Head of Household'
+};
+
 let chart = null;
-let currentTaxBracket = 22;
-let retirementTaxBracket = 22;
-let currentStep = 1;
+let currentStatus = 'single';
+const $ = (id) => document.getElementById(id);
 
-function goToStep(stepNumber) {
-  // Hide all sections
-  document.querySelectorAll('.calc-section').forEach(section => {
-    section.classList.remove('active');
-  });
-
-  // Show the selected section
-  const targetSection = document.querySelector(`[data-section="${stepNumber}"]`);
-  if (targetSection) {
-    targetSection.classList.add('active');
-    currentStep = stepNumber;
-  }
-
-  // Update step cards
-  document.querySelectorAll('.step-card').forEach(card => {
-    const cardStep = parseInt(card.dataset.step);
-    card.classList.remove('active', 'completed');
-
-    if (cardStep === stepNumber) {
-      card.classList.add('active');
-    } else if (cardStep < stepNumber) {
-      card.classList.add('completed');
-    }
-  });
-
-  // Recalculate if on results page
-  if (stepNumber === 4) {
-    calculate();
-  }
+function fmt(value) {
+  if (Math.abs(value) >= 1000000) return '$' + (value / 1000000).toFixed(2) + 'M';
+  if (Math.abs(value) >= 1000) return '$' + Math.round(value / 1000) + 'K';
+  return '$' + Math.round(value).toLocaleString();
+}
+function fmtNeg(value) {
+  if (value === 0) return '$0';
+  return '−' + fmt(Math.abs(value));
 }
 
-function formatCurrency(value) {
-  if (value >= 1000000) {
-    return '$' + (value / 1000000).toFixed(2) + 'M';
-  } else if (value >= 1000) {
-    return '$' + (value / 1000).toFixed(0) + 'K';
+function getMarginalRate(income, status) {
+  const brackets = TAX_BRACKETS_2026[status] || TAX_BRACKETS_2026.single;
+  for (const [cap, rate] of brackets) {
+    if (income <= cap) return rate;
   }
-  return '$' + Math.round(value).toLocaleString();
+  return 0.37;
+}
+
+function rothContribMultiplier(income, status) {
+  const [start, end] = ROTH_PHASEOUT[status] || ROTH_PHASEOUT.single;
+  if (income <= start) return 1;
+  if (income >= end) return 0;
+  return 1 - (income - start) / (end - start);
 }
 
 function calculate() {
-  const age = parseInt(document.getElementById('age').value) || 25;
-  const income = parseFloat(document.getElementById('income').value) || 60000;
-  const contribution = parseFloat(document.getElementById('contribution').value) || 5000;
-  const returnRate = parseFloat(document.getElementById('returnRate').value) / 100;
-  const years = parseInt(document.getElementById('yearsToRetirement').value) || 40;
-  
-  // Calculate future value (same for both initially)
-  let balance = 0;
-  const balanceData = [0];
-  let totalContributions = 0;
-  
-  for (let i = 1; i <= years; i++) {
-    balance = balance * (1 + returnRate) + contribution;
-    totalContributions += contribution;
-    balanceData.push(balance);
-  }
-  
-  // Traditional IRA calculations
-  const traditionalTaxSavingsNow = contribution * (currentTaxBracket / 100);
-  const traditionalFutureValue = balance;
-  const traditionalTaxesOwed = traditionalFutureValue * (retirementTaxBracket / 100);
-  const traditionalAfterTax = traditionalFutureValue - traditionalTaxesOwed;
-  
-  // Roth IRA calculations
-  const rothTaxesPaidNow = contribution * (currentTaxBracket / 100);
-  const rothFutureValue = balance; // Same growth
-  const rothAfterTax = rothFutureValue; // No taxes on withdrawal
-  
-  // Update Traditional card
-  document.getElementById('traditionalValue').textContent = formatCurrency(traditionalAfterTax);
-  document.getElementById('traditionalContributions').textContent = formatCurrency(totalContributions);
-  document.getElementById('traditionalGrowth').textContent = formatCurrency(traditionalFutureValue - totalContributions);
-  document.getElementById('traditionalTaxes').textContent = formatCurrency(traditionalTaxesOwed);
-  document.getElementById('traditionalSavings').textContent = formatCurrency(traditionalTaxSavingsNow * years);
-  
-  // Update Roth card
-  document.getElementById('rothValue').textContent = formatCurrency(rothAfterTax);
-  document.getElementById('rothContributions').textContent = formatCurrency(totalContributions);
-  document.getElementById('rothGrowth').textContent = formatCurrency(rothFutureValue - totalContributions);
-  document.getElementById('rothTaxesNow').textContent = formatCurrency(rothTaxesPaidNow * years);
-  
-  // Determine winner
-  const traditionalCard = document.getElementById('traditionalCard');
-  const rothCard = document.getElementById('rothCard');
-  
-  // Remove existing badges
-  document.querySelectorAll('.winner-badge').forEach(badge => badge.remove());
-  
-  if (traditionalAfterTax > rothAfterTax) {
-    const badge = document.createElement('div');
-    badge.className = 'winner-badge';
-    badge.textContent = 'WINNER';
-    traditionalCard.appendChild(badge);
-    
-    const difference = traditionalAfterTax - rothAfterTax;
-    document.getElementById('verdictText').innerHTML = `
-      <strong>Traditional IRA wins by ${formatCurrency(difference)}!</strong><br><br>
-      Since your retirement tax bracket (${retirementTaxBracket}%) is lower than your current bracket (${currentTaxBracket}%), 
-      you save more by deferring taxes to retirement. The tax deduction now gives you ${formatCurrency(traditionalTaxSavingsNow)} 
-      in savings each year that can be invested elsewhere.
-    `;
-  } else if (rothAfterTax > traditionalAfterTax) {
-    const badge = document.createElement('div');
-    badge.className = 'winner-badge';
-    badge.textContent = 'WINNER';
-    rothCard.appendChild(badge);
-    
-    const difference = rothAfterTax - traditionalAfterTax;
-    document.getElementById('verdictText').innerHTML = `
-      <strong>Roth IRA wins by ${formatCurrency(difference)}!</strong><br><br>
-      Since your retirement tax bracket (${retirementTaxBracket}%) is higher than or equal to your current bracket (${currentTaxBracket}%), 
-      you save more by paying taxes now. Your ${formatCurrency(rothFutureValue)} in retirement will be completely tax-free—no surprises, 
-      no tax bills, just pure financial freedom.
-    `;
-  } else {
-    document.getElementById('verdictText').innerHTML = `
-      <strong>It's a tie!</strong><br><br>
-      With the same tax bracket now (${currentTaxBracket}%) and in retirement (${retirementTaxBracket}%), 
-      both accounts deliver the same after-tax value. The choice comes down to personal preference: 
-      tax break now (Traditional) or tax-free withdrawals later (Roth).
-    `;
-  }
-  
-  // Update chart
-  updateChart(years, balanceData, traditionalAfterTax, rothAfterTax);
-}
+  const age = parseInt($('age').value) || 25;
+  const years = parseInt($('years').value) || 40;
+  const contribution = Math.max(0, parseFloat($('contribution').value) || 0);
+  const returnRate = parseFloat($('returnRate').value) / 100;
+  const income = Math.max(0, parseFloat($('income').value) || 0);
+  const status = currentStatus;
+  const incomeGrowth = 0.03;
 
-function updateChart(years, balanceData, traditionalFinal, rothFinal) {
-  const labels = [];
-  for (let i = 0; i <= years; i++) {
-    labels.push('Year ' + i);
+  $('ageDisplay').textContent = age;
+  $('yearsDisplay').textContent = years;
+  const retPct = returnRate * 100;
+  const retPctLabel = (retPct % 1 === 0 ? retPct.toFixed(0) : retPct.toFixed(1)) + '%';
+  $('returnDisplay').textContent = retPctLabel;
+
+  // Tax math
+  const marginalRate = getMarginalRate(income, status);
+  const retirementRate = Math.max(0, marginalRate - 0.02);
+  const afterTaxYield = returnRate * (1 - marginalRate);
+
+  // Update bracket display
+  $('marginalDisplay').textContent = (marginalRate * 100).toFixed(0) + '%';
+  $('retirementDisplay').textContent = (retirementRate * 100).toFixed(0) + '%';
+
+  // Roth eligibility status text
+  const initialRothMult = rothContribMultiplier(income, status);
+  const rothElig = $('rothEligibility');
+  rothElig.classList.remove('roth-ok', 'roth-partial', 'roth-out');
+  if (initialRothMult >= 1) {
+    rothElig.textContent = 'Full';
+    rothElig.classList.add('roth-ok');
+  } else if (initialRothMult > 0) {
+    rothElig.textContent = Math.round(initialRothMult * 100) + '% allowed';
+    rothElig.classList.add('roth-partial');
+  } else {
+    rothElig.textContent = 'Phased out';
+    rothElig.classList.add('roth-out');
   }
-  
-  // Create after-tax projection data
-  const traditionalAfterTaxData = balanceData.map((val, idx) => {
-    const taxRate = retirementTaxBracket / 100;
-    return val * (1 - taxRate);
-  });
-  
-  const rothAfterTaxData = [...balanceData]; // Roth is always after-tax
-  
-  const ctx = document.getElementById('comparisonChart').getContext('2d');
-  
-  if (chart) {
-    chart.destroy();
+
+  // ============================================================
+  // Simulation: each year grow balances, then contribute
+  // Methodology ported from finmango/mango-x-ira-battle:
+  //  - Same $ contribution to all three accounts
+  //  - Traditional & Roth compound at returnRate
+  //  - Taxable brokerage compounds at effective after-tax yield
+  //    (= returnRate × (1 − marginalRate))
+  //  - Roth contributions phase out when income hits 2026 MAGI limits
+  //  - Traditional tax savings (contribution × marginalRate) accumulate
+  //    uncompounded and are added back at retirement (representing
+  //    the tax cash you actually pocketed each year)
+  // ============================================================
+  let tradBalance = 0;
+  let rothBalance = 0;
+  let taxableBalance = 0;
+  let cumulativeTradSavings = 0;
+  let currIncome = income;
+  let totalTradContrib = 0;
+  let totalRothContrib = 0;
+  let totalTaxableContrib = 0;
+  let lastRothMult = initialRothMult;
+
+  // Track after-tax balances for the chart (year 0 = today, all zero)
+  const labels = ['Now'];
+  const rothSeries = [0];
+  const tradAfterTaxSeries = [0];
+  const taxableSeries = [0];
+
+  for (let y = 1; y <= years; y++) {
+    // 1) Grow existing balances
+    tradBalance = tradBalance * (1 + returnRate);
+    rothBalance = rothBalance * (1 + returnRate);
+    taxableBalance = taxableBalance * (1 + afterTaxYield);
+
+    // 2) Determine this year's marginal rate and Roth contribution
+    const yrMarginal = getMarginalRate(currIncome, status);
+    const yrRothMult = rothContribMultiplier(currIncome, status);
+    lastRothMult = yrRothMult;
+    const rothContribThisYear = contribution * yrRothMult;
+
+    // 3) Add this year's contributions
+    tradBalance += contribution;
+    rothBalance += rothContribThisYear;
+    taxableBalance += contribution;
+    cumulativeTradSavings += contribution * yrMarginal;
+
+    totalTradContrib += contribution;
+    totalRothContrib += rothContribThisYear;
+    totalTaxableContrib += contribution;
+
+    // 4) Snapshot after-tax values for chart
+    //    Trad after-tax = balance * (1 - retRate) + accumulated savings
+    //    Roth after-tax = balance (no tax)
+    //    Taxable after-tax = balance (drag is already baked into yield)
+    const tradAfterTaxYr = tradBalance * (1 - retirementRate) + cumulativeTradSavings;
+    labels.push('Y' + y);
+    rothSeries.push(rothBalance);
+    tradAfterTaxSeries.push(tradAfterTaxYr);
+    taxableSeries.push(taxableBalance);
+
+    // 5) Income grows for next year
+    currIncome *= (1 + incomeGrowth);
   }
-  
+
+  // Final after-tax outcomes
+  const tradGross = tradBalance;
+  const tradTaxesAtWithdrawal = tradBalance * retirementRate;
+  const tradAfterTax = tradBalance * (1 - retirementRate) + cumulativeTradSavings;
+  const rothAfterTax = rothBalance;
+  const taxableAfterTax = taxableBalance;
+
+  // Hypothetical "no tax drag" balance — used to compute lost-to-drag
+  // (what the brokerage WOULD have been if it grew at full returnRate)
+  let noDragBalance = 0;
+  for (let y = 1; y <= years; y++) {
+    noDragBalance = noDragBalance * (1 + returnRate) + contribution;
+  }
+  const taxableDrag = noDragBalance - taxableBalance;
+
+  // ============================================================
+  // Update DOM
+  // ============================================================
+  $('verdictHorizon').innerHTML = 'After <strong>' + years + ' years</strong> at <strong>' + retPctLabel + '</strong>';
+
+  // Traditional card
+  $('tradValue').textContent = fmt(tradAfterTax);
+  $('tradContrib').textContent = fmt(totalTradContrib);
+  $('tradGross').textContent = fmt(tradGross);
+  $('tradSavings').textContent = '+' + fmt(cumulativeTradSavings);
+  $('tradTaxes').textContent = fmtNeg(tradTaxesAtWithdrawal);
+
+  // Roth card
+  $('rothValue').textContent = fmt(rothAfterTax);
+  $('rothContrib').textContent = fmt(totalRothContrib);
+  $('rothGross').textContent = fmt(rothBalance);
+  const phaseEl = $('rothPhaseStatus');
+  phaseEl.classList.remove('positive', 'negative', 'neutral');
+  if (lastRothMult >= 1) {
+    phaseEl.textContent = 'Full all years';
+    phaseEl.classList.add('positive');
+  } else if (lastRothMult > 0) {
+    phaseEl.textContent = 'Partially phased';
+    phaseEl.classList.add('neutral');
+  } else {
+    phaseEl.textContent = 'Phased out late';
+    phaseEl.classList.add('negative');
+  }
+
+  // Taxable card
+  $('taxableValue').textContent = fmt(taxableAfterTax);
+  $('taxableContrib').textContent = fmt(totalTaxableContrib);
+  $('taxableReturn').textContent = retPctLabel;
+  const yieldPct = afterTaxYield * 100;
+  $('taxableYield').textContent = (yieldPct % 1 === 0 ? yieldPct.toFixed(0) : yieldPct.toFixed(1)) + '%';
+  $('taxableDrag').textContent = fmtNeg(taxableDrag);
+
+  // Verdict stats
+  $('statRoth').textContent = fmt(rothAfterTax);
+  $('statTrad').textContent = fmt(tradAfterTax);
+  $('statTaxable').textContent = fmt(taxableAfterTax);
+
+  // ============================================================
+  // Determine winner
+  // ============================================================
+  const results = [
+    { key: 'roth', label: 'Roth IRA', value: rothAfterTax, cardId: 'cardRoth', winClass: 'roth-wins' },
+    { key: 'trad', label: 'Traditional IRA', value: tradAfterTax, cardId: 'cardTrad', winClass: 'trad-wins' },
+    { key: 'taxable', label: 'Brokerage', value: taxableAfterTax, cardId: 'cardTaxable', winClass: 'taxable-wins' }
+  ];
+  results.sort((a, b) => b.value - a.value);
+  const winner = results[0];
+  const runnerUp = results[1];
+  const diff = winner.value - runnerUp.value;
+  const noContributions = winner.value === 0; // nothing to compare
+  const isVeryClose = !noContributions && diff / winner.value < 0.005; // <0.5% gap = effectively tied
+
+  // Reset all winner states
+  ['cardRoth', 'cardTrad', 'cardTaxable'].forEach(id => $(id).classList.remove('is-winner'));
+  const verdictCard = $('verdictCard');
+  verdictCard.classList.remove('roth-wins', 'trad-wins', 'taxable-wins', 'tie');
+  const verdictWinnerEl = $('verdictWinner');
+  verdictWinnerEl.classList.remove('roth-wins', 'trad-wins', 'taxable-wins', 'tie');
+
+  if (noContributions) {
+    verdictCard.classList.add('tie');
+    verdictWinnerEl.classList.add('tie');
+    verdictWinnerEl.textContent = 'Set a contribution';
+    $('verdictDiff').textContent = 'Pick an annual amount to compare the three accounts';
+  } else if (isVeryClose) {
+    verdictCard.classList.add('tie');
+    verdictWinnerEl.classList.add('tie');
+    verdictWinnerEl.textContent = 'It\'s essentially a tie';
+    $('verdictDiff').textContent = 'Less than ' + fmt(diff) + ' between the top two';
+  } else {
+    $(winner.cardId).classList.add('is-winner');
+    verdictCard.classList.add(winner.winClass);
+    verdictWinnerEl.classList.add(winner.winClass);
+    verdictWinnerEl.textContent = winner.label + ' wins';
+    $('verdictDiff').textContent = fmt(diff) + ' more than ' + runnerUp.label + ' after taxes';
+  }
+
+  // ============================================================
+  // Insight + strategy text
+  // ============================================================
+  let insight = '';
+  if (noContributions) {
+    insight = 'Enter an annual contribution amount to see how each account stacks up over your timeline.';
+  } else if (isVeryClose) {
+    insight = 'At your numbers, the top two are within a rounding error. Pick based on flexibility — Roth gives you penalty-free access to contributions; Traditional gives you a tax break this April.';
+  } else if (winner.key === 'roth' && runnerUp.key === 'trad') {
+    insight = '<strong>' + fmt(diff) + ' more</strong> in Roth thanks to decades of tax-free growth. The longer the runway, the more this gap compounds in Roth\'s favor.';
+  } else if (winner.key === 'trad' && runnerUp.key === 'roth') {
+    insight = '<strong>' + fmt(diff) + ' more</strong> in Traditional because your retirement bracket is lower than today\'s — and the tax savings you pocketed each year add up.';
+  } else if (winner.key === 'roth' && runnerUp.key === 'taxable') {
+    insight = '<strong>' + fmt(diff) + ' more</strong> in Roth than a brokerage. Tax drag eats compounding alive over ' + years + ' years.';
+  } else if (winner.key === 'trad' && runnerUp.key === 'taxable') {
+    insight = '<strong>' + fmt(diff) + ' more</strong> in Traditional than a brokerage — and that\'s after paying retirement taxes.';
+  } else if (winner.key === 'taxable') {
+    insight = 'Brokerage edges out at these numbers — usually means a very short timeline or the Roth is fully phased out and your retirement rate is high.';
+  }
+  $('insightText').innerHTML = insight;
+
+  // Strategy text (broader rule of thumb based on your situation)
+  let strategy = '';
+  const rateDelta = marginalRate - retirementRate;
+  if (initialRothMult <= 0) {
+    strategy = 'Your income is past the Roth limit, so a <strong>Traditional IRA</strong> (or backdoor Roth) is your tax-advantaged play. Either beats a brokerage by ' + fmt(Math.max(tradAfterTax, rothAfterTax) - taxableAfterTax) + ' here.';
+  } else if (initialRothMult < 1) {
+    strategy = 'You\'re in the Roth phase-out, contributing <strong>' + Math.round(initialRothMult * 100) + '% of the limit</strong>. As your income grows, this drops further. Traditional has no income limit and might be the simpler bet.';
+  } else if (rateDelta > 0.04) {
+    strategy = 'Big gap between today\'s bracket and retirement — <strong>Traditional</strong> wins. The deduction now is worth more than future taxes will cost.';
+  } else if (rateDelta < -0.02) {
+    strategy = 'Expect to be in a higher bracket later? <strong>Roth wins easily.</strong> Lock in today\'s lower rate.';
+  } else {
+    strategy = 'Your brackets today and at retirement are similar, so <strong>Roth\'s flexibility</strong> usually wins the tiebreaker — penalty-free access to contributions, no RMDs at 73.';
+  }
+  $('strategyText').innerHTML = strategy;
+
+  // ============================================================
+  // Chart
+  // ============================================================
+  if (chart) chart.destroy();
+  const ctx = $('comparisonChart').getContext('2d');
+
+  // Build gradients for each line
+  const makeGradient = (color, alphaTop, alphaBottom) => {
+    const g = ctx.createLinearGradient(0, 0, 0, 300);
+    g.addColorStop(0, color.replace('ALPHA', alphaTop));
+    g.addColorStop(1, color.replace('ALPHA', alphaBottom));
+    return g;
+  };
+  const rothGradient = makeGradient('rgba(42,125,91,ALPHA)', '0.18', '0.01');
+  const tradGradient = makeGradient('rgba(58,111,160,ALPHA)', '0.16', '0.01');
+  const taxableGradient = makeGradient('rgba(196,136,46,ALPHA)', '0.14', '0.01');
+
   chart = new Chart(ctx, {
     type: 'line',
     data: {
       labels: labels,
       datasets: [
         {
-          label: 'Roth IRA (Tax-Free)',
-          data: rothAfterTaxData,
-          borderColor: '#10B981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
-          borderWidth: 3,
-          tension: 0.4,
-          fill: true
+          label: 'Roth',
+          data: rothSeries,
+          borderColor: '#2a7d5b',
+          backgroundColor: rothGradient,
+          borderWidth: 2.5,
+          fill: true,
+          tension: 0.35,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: '#2a7d5b',
+          pointHoverBorderColor: '#fff',
+          pointHoverBorderWidth: 2
         },
         {
-          label: 'Traditional IRA (After Retirement Taxes)',
-          data: traditionalAfterTaxData,
-          borderColor: '#3B82F6',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
-          borderWidth: 3,
-          tension: 0.4,
-          fill: true
+          label: 'Traditional',
+          data: tradAfterTaxSeries,
+          borderColor: '#3a6fa0',
+          backgroundColor: tradGradient,
+          borderWidth: 2.5,
+          fill: true,
+          tension: 0.35,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: '#3a6fa0',
+          pointHoverBorderColor: '#fff',
+          pointHoverBorderWidth: 2
+        },
+        {
+          label: 'Brokerage',
+          data: taxableSeries,
+          borderColor: '#c4882e',
+          backgroundColor: taxableGradient,
+          borderWidth: 2.5,
+          fill: true,
+          tension: 0.35,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          pointHoverBackgroundColor: '#c4882e',
+          pointHoverBorderColor: '#fff',
+          pointHoverBorderWidth: 2
         }
       ]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: {
-          display: true,
-          position: 'top',
-          labels: {
-            font: {
-              size: 14,
-              weight: 'bold'
-            }
-          }
-        },
+        legend: { display: false },
         tooltip: {
+          backgroundColor: 'rgba(26,26,26,0.96)',
+          padding: 12,
+          titleFont: { family: "'JetBrains Mono', monospace", size: 11, weight: '700' },
+          titleColor: '#a8a29e',
+          titleMarginBottom: 8,
+          bodyFont: { family: "'DM Sans', sans-serif", size: 12, weight: '600' },
+          bodyColor: '#fff',
+          bodySpacing: 6,
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          cornerRadius: 8,
+          displayColors: true,
+          boxPadding: 4,
           callbacks: {
             label: function(context) {
-              return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
+              return '  ' + context.dataset.label + ': ' + fmt(context.parsed.y);
             }
           }
         }
       },
       scales: {
-        y: {
-          beginAtZero: true,
+        x: {
+          grid: { display: false },
           ticks: {
-            callback: function(value) {
-              return formatCurrency(value);
-            }
-          }
+            color: '#a8a29e',
+            font: { family: "'JetBrains Mono', monospace", size: 10 },
+            maxRotation: 0,
+            autoSkip: true,
+            maxTicksLimit: 8
+          },
+          border: { color: 'rgba(0,0,0,0.06)' }
+        },
+        y: {
+          grid: { color: 'rgba(0,0,0,0.04)', drawTicks: false },
+          ticks: {
+            color: '#a8a29e',
+            font: { family: "'JetBrains Mono', monospace", size: 10 },
+            padding: 8,
+            callback: function(value) { return fmt(value); }
+          },
+          border: { display: false }
         }
       }
     }
   });
 }
 
-// Initialize
+// ============================================================
+// Boot
+// ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-    }
-  });
-  
-  
-  // Step navigation
-  document.querySelectorAll('.step-card').forEach(card => {
-    card.addEventListener('click', function() {
-      const stepNumber = parseInt(this.dataset.step);
-      goToStep(stepNumber);
+  // Nav scroll behavior
+  const navEl = document.getElementById('nav');
+  const updateNav = () => {
+    if (window.scrollY > 50) navEl.classList.add('scrolled');
+    else navEl.classList.remove('scrolled');
+  };
+  updateNav();
+  window.addEventListener('scroll', updateNav, { passive: true });
+
+  // Mobile menu toggle
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener('click', () => {
+      const isActive = mobileMenu.classList.toggle('active');
+      mobileMenuBtn.classList.toggle('active');
+      document.body.style.overflow = isActive ? 'hidden' : '';
+    });
+    // Close on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+
+  // Mobile dropdown toggles
+  document.querySelectorAll('.mobile-dropdown-toggle').forEach(toggle => {
+    toggle.addEventListener('click', function() {
+      this.classList.toggle('active');
+      const content = this.nextElementSibling;
+      if (content) content.classList.toggle('open');
     });
   });
 
-  // Tax bracket buttons - Current
-  document.querySelectorAll('.tax-bracket-btn').forEach(btn => {
+  // Filing status buttons
+  document.querySelectorAll('#filingGrid .filing-btn').forEach(btn => {
     btn.addEventListener('click', function() {
-      document.querySelectorAll('.tax-bracket-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#filingGrid .filing-btn').forEach(b => b.classList.remove('active'));
       this.classList.add('active');
-      currentTaxBracket = parseInt(this.dataset.bracket);
+      currentStatus = this.dataset.status;
       calculate();
     });
   });
-  
-  // Tax bracket buttons - Retirement
-  document.querySelectorAll('.tax-bracket-ret-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.tax-bracket-ret-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      retirementTaxBracket = parseInt(this.dataset.bracket);
-      calculate();
-    });
+
+  // All input listeners
+  ['age', 'years', 'income', 'contribution', 'returnRate'].forEach(id => {
+    const el = $(id);
+    if (el) el.addEventListener('input', calculate);
   });
-  
-  // Input listeners
-  document.getElementById('age').addEventListener('input', calculate);
-  document.getElementById('income').addEventListener('input', calculate);
-  document.getElementById('contribution').addEventListener('input', calculate);
-  document.getElementById('yearsToRetirement').addEventListener('input', calculate);
-  
-  document.getElementById('returnRate').addEventListener('input', function() {
-    document.getElementById('returnValue').textContent = this.value + '%';
-    calculate();
-  });
-  
+
+  // Initial render
   calculate();
 });
 </script>
 
-
-  <!-- Shared Navbar JavaScript -->
-  <script src="js/navbar.js"></script>
+<script src="js/navbar.js"></script>
 </body>
 </html>
