@@ -973,66 +973,6 @@
       vertical-align: -1px;
     }
 
-    /* Sticky section sub-nav */
-    .section-subnav {
-      position: sticky;
-      top: 82px;
-      background: rgba(255, 255, 255, 0.94);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(0, 0, 0, 0.06);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-      z-index: 900;
-      padding: 0.85rem 2rem;
-    }
-    .section-subnav-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 2.25rem;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .section-subnav-container::-webkit-scrollbar { display: none; }
-    .section-subnav a {
-      display: inline-flex;
-      align-items: baseline;
-      gap: 0.4rem;
-      color: var(--gray);
-      text-decoration: none;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      padding: 0.25rem 0;
-      border-bottom: 2px solid transparent;
-      transition: color 0.2s ease, border-color 0.2s ease;
-    }
-    .section-subnav a .subnav-num {
-      font-family: var(--font-serif);
-      font-style: italic;
-      font-weight: 400;
-      font-size: 0.95rem;
-      letter-spacing: 0;
-      text-transform: none;
-      color: var(--orange);
-      opacity: 0.6;
-      transition: opacity 0.2s ease;
-    }
-    .section-subnav a:hover,
-    .section-subnav a.active {
-      color: var(--black);
-      border-bottom-color: var(--orange);
-    }
-    .section-subnav a:hover .subnav-num,
-    .section-subnav a.active .subnav-num {
-      opacity: 1;
-    }
-    @media (max-width: 968px) { .section-subnav { display: none; } }
-
     /* Paper metadata row */
     .paper-meta {
       display: flex;
@@ -1180,8 +1120,8 @@
       .pull-quote-container::before { top: -2.5rem; font-size: 5.5rem; }
     }
 
-    /* Anchor offset for sticky sub-nav */
-    #approach, #partnerships, #focus, #publications, #team, #methodology { scroll-margin-top: 140px; }
+    /* Anchor offset for fixed nav */
+    #approach, #partnerships, #focus, #publications, #team, #methodology { scroll-margin-top: 100px; }
 
     /* Minimal section divider (thin rule + dingbat) */
     .section-divider-minimal {
@@ -1344,18 +1284,6 @@
       <a href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer" class="btn-primary" style="margin-top: 2rem;">Explore Research on GitHub →</a>
     </div>
   </section>
-
-  <!-- Section Sub-Nav -->
-  <div class="section-subnav" id="sectionSubnav">
-    <nav class="section-subnav-container" aria-label="Research sections">
-      <a href="#approach"><span class="subnav-num">§ 01</span>Approach</a>
-      <a href="#partnerships"><span class="subnav-num">§ 02</span>Partnerships</a>
-      <a href="#focus"><span class="subnav-num">§ 03</span>Focus</a>
-      <a href="#publications"><span class="subnav-num">§ 04</span>Publications</a>
-      <a href="#team"><span class="subnav-num">§ 05</span>Team</a>
-      <a href="#methodology"><span class="subnav-num">§ 06</span>Methodology</a>
-    </nav>
-  </div>
 
   <!-- Research Stats Bar -->
   <section class="research-stats-bar">
@@ -1742,27 +1670,5 @@
   </footer>
 
   <script src="js/navbar.js"></script>
-  <script>
-    (function() {
-      var links = document.querySelectorAll('.section-subnav a');
-      if (!links.length || !('IntersectionObserver' in window)) return;
-      var linkById = {};
-      links.forEach(function(a) { linkById[a.getAttribute('href').slice(1)] = a; });
-      var io = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) {
-          if (e.isIntersecting) {
-            var link = linkById[e.target.id];
-            if (!link) return;
-            links.forEach(function(l) { l.classList.remove('active'); });
-            link.classList.add('active');
-          }
-        });
-      }, { rootMargin: '-25% 0px -65% 0px', threshold: 0 });
-      Object.keys(linkById).forEach(function(id) {
-        var el = document.getElementById(id);
-        if (el) io.observe(el);
-      });
-    })();
-  </script>
 </body>
 </html>
