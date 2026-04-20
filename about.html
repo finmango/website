@@ -230,13 +230,88 @@
     .dropdown-mega:hover .dropdown-content-mega { animation: fadeInMega 0.2s ease; }
 
     /* ============================================
-       HERO
+       HERO — tuned to match index.html / research.html language
        ============================================ */
-    .hero { min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 9rem 2rem 4rem; background: var(--white); position: relative; overflow: hidden; border-left: 5px solid var(--orange); }
+    .hero { min-height: 70vh; display: flex; align-items: center; justify-content: center; padding: 9rem 2rem 5rem; background: var(--white); position: relative; overflow: hidden; border-left: 5px solid var(--orange); }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(26, 26, 26, 0.08) 1px, transparent 0);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse at 50% 45%, black 0%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 45%, black 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
     .hero-content { max-width: var(--max-width); width: 100%; text-align: center; position: relative; z-index: 2; }
-    .hero-label { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); margin-bottom: 1.25rem; }
+    .hero-label { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); margin-bottom: 1.25rem; display: inline-flex; align-items: center; gap: 0.55rem; }
+    .hero-label::before { content: ''; width: 7px; height: 7px; background: var(--orange); border-radius: 50%; display: inline-block; animation: hero-pulse 2s ease-in-out infinite; }
+    @keyframes hero-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(0.85); } }
+    @media (prefers-reduced-motion: reduce) { .hero-label::before { animation: none; } }
     .hero h1 { font-size: clamp(2.75rem, 5.5vw, 4rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 2rem; max-width: 750px; margin-left: auto; margin-right: auto; }
     .hero-subtitle { font-size: 1.35rem; color: var(--gray); max-width: 750px; line-height: 1.6; margin: 0 auto 2rem; }
+
+    /* Hero CTA row — primary + sketchy-circle secondary (index-match) */
+    .hero-cta-row { display: inline-flex; gap: 1.25rem; flex-wrap: wrap; align-items: center; justify-content: center; margin-top: 1rem; }
+    .btn-secondary { background: transparent; color: var(--black); padding: 1rem 2.25rem; text-decoration: none; font-weight: 700; font-size: 1rem; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); border: 2.5px solid var(--black); display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; letter-spacing: 0.02em; text-transform: uppercase; position: relative; overflow: hidden; }
+    .btn-secondary::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--black); transition: left 0.3s ease; z-index: -1; }
+    .btn-secondary:hover::before { left: 0; }
+    .btn-secondary:hover { color: var(--white); transform: translateY(-2px); }
+    .sketchy-circle-wrap { position: relative; display: inline-flex; }
+    .sketchy-circle-wrap svg.sketchy-circle { position: absolute; top: -14px; left: -18px; width: calc(100% + 36px); height: calc(100% + 28px); pointer-events: none; z-index: 1; }
+
+    /* Hero identity strip — signals who FinMango is at a glance */
+    .hero-signals { display: inline-flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; justify-content: center; margin-top: 3rem; padding: 0.75rem 1.25rem; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; color: var(--gray); text-transform: uppercase; border-top: 1px solid rgba(0,0,0,0.08); border-bottom: 1px solid rgba(0,0,0,0.08); background: rgba(255,255,255,0.6); backdrop-filter: blur(4px); }
+    .hero-signals .signal { display: inline-flex; align-items: center; gap: 0.45rem; }
+    .hero-signals .signal-dot { width: 7px; height: 7px; border-radius: 50%; background: #2ecc71; box-shadow: 0 0 0 0 rgba(46,204,113,0.6); animation: signal-pulse 1.8s ease-out infinite; }
+    @keyframes signal-pulse { 0% { box-shadow: 0 0 0 0 rgba(46,204,113,0.55); } 70% { box-shadow: 0 0 0 10px rgba(46,204,113,0); } 100% { box-shadow: 0 0 0 0 rgba(46,204,113,0); } }
+    @media (prefers-reduced-motion: reduce) { .hero-signals .signal-dot { animation: none; } }
+    .hero-signals .sep { color: rgba(0,0,0,0.2); }
+    @media (max-width: 680px) { .hero-signals { font-size: 0.7rem; gap: 0.65rem; padding: 0.65rem 1rem; } .hero-signals .sep { display: none; } }
+
+    /* Reveal-on-scroll — applied to .reveal elements via IntersectionObserver */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+    /* Editorial pull-quote moment — bold declarative break between What We Do and Values */
+    .declaration { padding: 7rem 2rem; background: var(--white); position: relative; overflow: hidden; }
+    .declaration::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(26, 26, 26, 0.06) 1px, transparent 0);
+      background-size: 32px 32px;
+      mask-image: radial-gradient(ellipse at 50% 50%, black 0%, transparent 65%);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 50%, black 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .declaration-container { max-width: 920px; margin: 0 auto; text-align: center; position: relative; }
+    .declaration-mark { display: inline-block; font-size: 3rem; font-weight: 900; color: var(--orange); line-height: 1; margin-bottom: 1.25rem; letter-spacing: -0.05em; opacity: 0.8; }
+    .declaration-text { font-size: clamp(1.75rem, 3.4vw, 2.75rem); font-weight: 700; line-height: 1.25; letter-spacing: -0.025em; color: var(--black); margin: 0 0 1.75rem; }
+    .declaration-text .accent { color: var(--orange); }
+    .declaration-attribution { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gray-medium); display: inline-flex; align-items: center; gap: 0.65rem; }
+    .declaration-attribution::before { content: ''; width: 28px; height: 1px; background: currentColor; opacity: 0.5; }
+    @media (max-width: 680px) { .declaration { padding: 4.5rem 1.5rem; } .declaration-text { font-size: 1.5rem; } }
+
+    /* What-we-do card § numbering — restrained editorial ornament */
+    .what-card { position: relative; }
+    .what-num {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      z-index: 3;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      color: var(--orange);
+      background: rgba(255,255,255,0.92);
+      padding: 0.3rem 0.55rem;
+      border: 1px solid rgba(255,107,53,0.35);
+      border-radius: 999px;
+      backdrop-filter: blur(6px);
+    }
 
     /* ============================================
        MISSION SECTION
@@ -772,10 +847,10 @@
   <section class="hero">
     <div class="hero-content">
       <div class="hero-text">
-        <div class="hero-label">about us</div>
+        <div class="hero-label">About FinMango</div>
         <h1>
           Making Financial Health a <span class="hand-underline" style="color: var(--orange);">Right
-            <svg viewBox="0 0 200 12" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 200 12" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M2 8 C 30 3, 50 10, 80 6 S 130 2, 160 7 S 185 4, 198 6" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.7"/>
               <path d="M4 10 C 35 5, 55 11, 85 7 S 135 3, 165 8 S 188 5, 196 8" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.4"/>
             </svg>
@@ -784,6 +859,24 @@
         <p class="hero-subtitle">
           The affordability crisis is the defining financial challenge of our generation. We use data, technology, and education to fix what's actually broken.
         </p>
+        <div class="hero-cta-row">
+          <a href="#team" class="btn-primary">Meet the team</a>
+          <span class="sketchy-circle-wrap">
+            <svg class="sketchy-circle" viewBox="0 0 220 70" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M 30 8 C 60 2, 160 -2, 195 12 C 218 22, 216 48, 195 58 C 160 70, 60 72, 30 60 C 6 50, 4 22, 30 8 Z" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.45" stroke-dasharray="4 2"/>
+            </svg>
+            <a href="#what-we-do" class="btn-secondary">How we work</a>
+          </span>
+        </div>
+        <div class="hero-signals" role="status" aria-label="FinMango at a glance">
+          <span class="signal"><span class="signal-dot" aria-hidden="true"></span> Since 2017</span>
+          <span class="sep">·</span>
+          <span class="signal">501(c)(3) nonprofit</span>
+          <span class="sep">·</span>
+          <span class="signal">10M+ impacted</span>
+          <span class="sep">·</span>
+          <span class="signal">Global</span>
+        </div>
       </div>
     </div>
   </section>
@@ -791,7 +884,7 @@
   <!-- MISSION -->
   <section class="mission">
     <div class="mission-container">
-      <div class="mission-content">
+      <div class="mission-content reveal">
         <div class="mission-eyebrow">our mission</div>
         <h2>Financial health is a systems problem. We treat it that way.</h2>
         <p class="mission-text">
@@ -799,15 +892,15 @@
         </p>
         <div class="mission-stats">
           <div class="mission-stat">
-            <div class="stat-number">10M+</div>
+            <div class="stat-number"><span class="counter-val" data-count="10" data-suffix="M+">0</span></div>
             <div class="stat-label">Impacted</div>
           </div>
           <div class="mission-stat">
-            <div class="stat-number">5+</div>
+            <div class="stat-number"><span class="counter-val" data-count="5" data-suffix="+">0</span></div>
             <div class="stat-label">Continents</div>
           </div>
           <div class="mission-stat">
-            <div class="stat-number">100K+</div>
+            <div class="stat-number"><span class="counter-val" data-count="100" data-suffix="K+">0</span></div>
             <div class="stat-label">Educated</div>
           </div>
         </div>
@@ -817,7 +910,7 @@
           <a href="approach.html" class="mission-link">Our Approach &amp; Methodology <span class="arrow">→</span></a>
         </div>
       </div>
-      <div class="mission-image">
+      <div class="mission-image reveal">
         <img src="FinMango%20Header%20(NEW).png" alt="Data and research" loading="lazy">
       </div>
     </div>
@@ -831,13 +924,14 @@
   </div>
 
   <!-- WHAT WE DO -->
-  <section class="what-we-do">
+  <section class="what-we-do" id="what-we-do">
     <div class="what-container">
-      <span class="section-eyebrow-center">how we work</span>
-      <h2 class="section-title">What We Do</h2>
+      <span class="section-eyebrow-center reveal">how we work</span>
+      <h2 class="section-title reveal">What We Do</h2>
 
       <div class="what-grid">
-        <div class="what-card">
+        <div class="what-card reveal">
+          <span class="what-num">§ 01</span>
           <img src="research11.jpg" alt="Research & Data" class="what-card-image">
           <div class="what-card-content">
             <h3 class="what-title">Research</h3>
@@ -848,7 +942,8 @@
           </div>
         </div>
 
-        <div class="what-card">
+        <div class="what-card reveal">
+          <span class="what-num">§ 02</span>
           <img src="education.jpg" alt="Financial Education" class="what-card-image">
           <div class="what-card-content">
             <h3 class="what-title">Education</h3>
@@ -859,7 +954,8 @@
           </div>
         </div>
 
-        <div class="what-card">
+        <div class="what-card reveal">
+          <span class="what-num">§ 03</span>
           <img src="ambassadors.jpg" alt="Youth Empowerment" class="what-card-image">
           <div class="what-card-content">
             <h3 class="what-title">Advocacy</h3>
@@ -873,13 +969,24 @@
     </div>
   </section>
 
+  <!-- EDITORIAL DECLARATION — voice moment between what-we-do and values -->
+  <section class="declaration" aria-label="Our conviction">
+    <div class="declaration-container reveal">
+      <span class="declaration-mark">&ldquo;</span>
+      <p class="declaration-text">
+        Financial literacy alone won't fix a broken system. <span class="accent">We build the tools that will.</span>
+      </p>
+      <span class="declaration-attribution">The point of everything we do</span>
+    </div>
+  </section>
+
   <!-- VALUES -->
   <section class="values">
     <div class="values-container">
-      <span class="section-eyebrow-center">who we are</span>
-      <h2 class="section-title">Our Values</h2>
+      <span class="section-eyebrow-center reveal">who we are</span>
+      <h2 class="section-title reveal">Our Values</h2>
 
-      <div class="values-grid">
+      <div class="values-grid reveal">
         <!-- Globally Inclusive: globe with connecting lines -->
         <div class="value-card">
           <div class="value-icon">
@@ -994,15 +1101,15 @@
   </section>
 
   <!-- TEAM -->
-  <section class="team">
+  <section class="team" id="team">
     <div class="team-container">
-      <span class="section-eyebrow-center">the people</span>
-      <h2 class="section-title">Meet the Team</h2>
-      <p class="team-intro">
+      <span class="section-eyebrow-center reveal">the people</span>
+      <h2 class="section-title reveal">Meet the Team</h2>
+      <p class="team-intro reveal">
         No titles, no hierarchy — just a flat team of people doing the work together.
       </p>
 
-      <div class="team-grid">
+      <div class="team-grid reveal">
         <a href="soham-patel.html" class="team-member">
           <div class="team-photo-wrap"><img src="soham.jpg" alt="Soham Patel" class="team-photo" loading="lazy"></div>
           <div class="team-name">Soham Patel</div>
@@ -1062,12 +1169,12 @@
   <!-- CONTRIBUTORS -->
   <section class="contributors">
     <div class="contributors-container">
-      <div class="contributors-eyebrow">with gratitude</div>
-      <h2>Significant Contributors</h2>
-      <p class="contributors-subtitle">
+      <div class="contributors-eyebrow reveal">with gratitude</div>
+      <h2 class="reveal">Significant Contributors</h2>
+      <p class="contributors-subtitle reveal">
         FinMango is what it is because of every person who's put their time, ideas, and care into this work.
       </p>
-      <div class="contributors-content">
+      <div class="contributors-content reveal">
         <div>
           <img src="mission.png" alt="FinMango contributors" loading="lazy" class="contributors-image">
         </div>
@@ -1234,6 +1341,56 @@
   </footer>
 
   <script src="js/navbar.js"></script>
+
+  <script>
+    // Reveal-on-scroll + animated counters
+    (function () {
+      var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+        document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('revealed'); });
+        document.querySelectorAll('.counter-val').forEach(function (el) {
+          var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+          var suffix = el.getAttribute('data-suffix') || '';
+          el.textContent = target + suffix;
+        });
+        return;
+      }
+
+      var revealObserver = new IntersectionObserver(function (entries, observer) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach(function (el) { revealObserver.observe(el); });
+
+      function animateCounter(el) {
+        var target = parseInt(el.getAttribute('data-count'), 10) || 0;
+        var suffix = el.getAttribute('data-suffix') || '';
+        var duration = 1400;
+        var start = performance.now();
+        function tick(now) {
+          var progress = Math.min(1, (now - start) / duration);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+      var counterObserver = new IntersectionObserver(function (entries, observer) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.4 });
+      document.querySelectorAll('.counter-val').forEach(function (el) { counterObserver.observe(el); });
+    })();
+  </script>
 
 </body>
 </html>
