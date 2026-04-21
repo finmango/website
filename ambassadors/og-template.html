@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ambassador OG Template</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #000; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .card {
+    width: 1200px;
+    height: 630px;
+    display: grid;
+    grid-template-columns: 520px 1fr;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .photo-col {
+    position: relative;
+    overflow: hidden;
+    background: #1a1a1a;
+  }
+  .photo-col img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    display: block;
+  }
+  .photo-col::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%);
+  }
+
+  .info-col {
+    background: #FF6B35;
+    color: #fff;
+    padding: 56px 56px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* decorative ring */
+  .info-col::before {
+    content: '';
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.12);
+    right: -140px;
+    bottom: -140px;
+  }
+  .info-col::after {
+    content: '';
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.1);
+    right: 70px;
+    top: 140px;
+  }
+
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .logo {
+    height: 32px;
+    filter: brightness(0) invert(1);
+  }
+
+  .badge {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 2px solid rgba(255,255,255,0.55);
+    padding: 7px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .middle {
+    position: relative;
+    z-index: 2;
+    margin-top: 28px;
+  }
+
+  .kicker {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 14px;
+  }
+
+  .name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 72px;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    margin-bottom: 22px;
+  }
+  .name.long { font-size: 58px; }
+  .name.xlong { font-size: 48px; }
+
+  .tagline {
+    font-size: 21px;
+    line-height: 1.4;
+    font-weight: 500;
+    opacity: 0.97;
+    max-width: 560px;
+  }
+
+  .bottom {
+    border-top: 2px solid rgba(255,255,255,0.3);
+    padding-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    position: relative;
+    z-index: 2;
+  }
+
+  .country {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+  }
+  .flag { font-size: 24px; line-height: 1; }
+
+  .url { opacity: 0.9; text-transform: uppercase; }
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="photo-col">
+      <img id="photo" src="" alt="">
+    </div>
+    <div class="info-col">
+      <div class="top-row">
+        <img src="../finmango.png" alt="FinMango" class="logo">
+        <div class="badge">2026 Global Ambassador</div>
+      </div>
+
+      <div class="middle">
+        <div class="kicker">Meet</div>
+        <h1 class="name" id="name"></h1>
+        <p class="tagline" id="tagline"></p>
+      </div>
+
+      <div class="bottom">
+        <div class="country">
+          <span class="flag" id="flag"></span>
+          <span id="country"></span>
+        </div>
+        <div class="url">finmango.org/ambassadors</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function setAmbassador(data) {
+    document.getElementById('photo').src = data.photo;
+    const nameEl = document.getElementById('name');
+    nameEl.textContent = data.name;
+    nameEl.classList.remove('long', 'xlong');
+    if (data.name.length > 22) nameEl.classList.add('xlong');
+    else if (data.name.length > 15) nameEl.classList.add('long');
+    document.getElementById('tagline').textContent = data.tagline;
+    document.getElementById('flag').textContent = data.flag;
+    document.getElementById('country').textContent = data.country;
+  }
+  // Expose for puppeteer
+  window.setAmbassador = setAmbassador;
+
+  // Allow direct preview via query string ?slug=david-johnson (uses window.DATA if injected)
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('demo') === '1') {
+      setAmbassador({
+        name: 'David Johnson',
+        photo: '../33.jpg',
+        tagline: 'Connecting the fight for financial freedom to the fight for true equality.',
+        flag: '🇺🇸',
+        country: 'United States'
+      });
+    }
+  });
+</script>
+</body>
+</html>
