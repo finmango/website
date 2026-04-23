@@ -38,19 +38,19 @@
         /* Soft radial glow top-left */
         .glow {
             position: absolute;
-            width: 520px;
-            height: 520px;
-            left: -140px;
-            top: -260px;
+            width: 560px;
+            height: 560px;
+            left: -180px;
+            top: -280px;
             background: radial-gradient(closest-side, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0));
             pointer-events: none;
         }
 
-        /* Fine noise grain for depth */
+        /* Fine noise grain */
         .grain {
             position: absolute;
             inset: 0;
-            opacity: 0.07;
+            opacity: 0.06;
             mix-blend-mode: overlay;
             pointer-events: none;
             background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
@@ -61,34 +61,34 @@
             position: absolute;
             inset: 0;
             pointer-events: none;
-            background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 60%, rgba(60, 15, 0, 0.20) 100%);
+            background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 58%, rgba(60, 15, 0, 0.22) 100%);
         }
 
         /* Geometric accents */
         .shape {
             position: absolute;
-            opacity: 0.14;
+            opacity: 0.13;
             pointer-events: none;
         }
 
         .shape-diamond {
-            width: 160px;
-            height: 160px;
+            width: 180px;
+            height: 180px;
             border: 2px solid #fff;
             transform: rotate(45deg);
-            top: -80px;
-            left: 560px;
+            top: -90px;
+            left: 520px;
         }
 
         .shape-ring {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             border: 2px solid #fff;
             border-radius: 50%;
-            top: 50%;
-            left: 620px;
+            top: 52%;
+            left: 640px;
             transform: translateY(-50%);
-            opacity: 0.12;
+            opacity: 0.11;
         }
 
         /* Photo collage — right edge */
@@ -97,7 +97,7 @@
             right: 0;
             top: 0;
             bottom: 0;
-            width: 300px;
+            width: 290px;
             display: grid;
             grid-template-columns: 1.4fr 1fr;
             grid-template-rows: 1fr 1fr;
@@ -139,73 +139,91 @@
             z-index: 1;
         }
 
-        /* Fade from collage to orange */
         .collage::before {
             content: '';
             position: absolute;
             left: 0;
             top: 0;
             bottom: 0;
-            width: 140px;
-            background: linear-gradient(90deg, #FF6B35 0%, rgba(255, 107, 53, 0.85) 25%, rgba(255, 107, 53, 0.4) 60%, rgba(255, 107, 53, 0) 100%);
+            width: 150px;
+            background: linear-gradient(90deg, #FF6B35 0%, rgba(255, 107, 53, 0.85) 22%, rgba(255, 107, 53, 0.4) 58%, rgba(255, 107, 53, 0) 100%);
             z-index: 2;
             pointer-events: none;
         }
 
-        /* Layout — single-frame with left block + stats row */
+        /* --- Content layout: 3-row vertical rhythm, justify-content space-between --- */
         .content {
             position: relative;
             z-index: 3;
             height: 100%;
-            padding: 18px 24px;
+            padding: 14px 28px 14px 30px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            max-width: 840px;
+            max-width: 820px;
         }
 
+        /* Row 1: small logo chip + eyebrow */
         .top-row {
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 14px;
         }
 
         .logo-chip {
             position: relative;
             background: #fff;
-            padding: 8px 14px;
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(80, 20, 0, 0.18), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+            padding: 6px 12px;
+            border-radius: 10px;
+            box-shadow: 0 5px 14px rgba(80, 20, 0, 0.20), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
             display: inline-flex;
             align-items: center;
             flex-shrink: 0;
         }
 
         .logo-chip img {
-            height: 32px;
+            height: 22px;
             width: auto;
             display: block;
         }
 
         .leaf {
             position: absolute;
-            top: -9px;
-            right: 9px;
-            width: 22px;
-            height: 22px;
+            top: -8px;
+            right: 7px;
+            width: 18px;
+            height: 18px;
             transform: rotate(-24deg);
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.22));
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.22));
         }
 
+        .eyebrow {
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.26em;
+            opacity: 0.95;
+            border-left: 2px solid rgba(255, 255, 255, 0.7);
+            padding-left: 12px;
+            line-height: 1.35;
+        }
+
+        /* Row 2: hero headline — two-line editorial stack */
         .headline {
             color: #fff;
             font-family: 'Inter', sans-serif;
-            font-size: 36px;
+            font-size: 40px;
             font-weight: 900;
-            line-height: 1;
-            letter-spacing: -1.2px;
-            text-shadow: 0 3px 14px rgba(80, 20, 0, 0.18);
-            white-space: nowrap;
+            line-height: 0.98;
+            letter-spacing: -1.6px;
+            text-shadow: 0 3px 14px rgba(80, 20, 0, 0.20);
+            margin-left: -1px;
+        }
+
+        .headline .line-2 {
+            display: block;
+            margin-top: 3px;
         }
 
         .headline .serif {
@@ -218,7 +236,7 @@
         .headline .underline {
             position: relative;
             display: inline-block;
-            padding: 0 6px;
+            padding: 0 8px 0 6px;
             color: #fff;
             z-index: 1;
         }
@@ -227,29 +245,31 @@
             content: '';
             position: absolute;
             left: -4px;
-            right: -6px;
-            bottom: -2px;
+            right: -4px;
+            bottom: 0px;
             height: 22px;
             background:
-                radial-gradient(ellipse at 25% 50%, #FFD23F 0%, #FFD23F 60%, transparent 72%),
-                radial-gradient(ellipse at 78% 55%, #FFC72C 0%, #FFC72C 60%, transparent 74%),
+                radial-gradient(ellipse at 22% 50%, #FFD23F 0%, #FFD23F 60%, transparent 72%),
+                radial-gradient(ellipse at 80% 55%, #FFC72C 0%, #FFC72C 60%, transparent 74%),
                 linear-gradient(90deg, #FFD23F 0%, #FFC83A 60%, #FFBE2E 100%);
             border-radius: 50% 45% 48% 52% / 60% 50% 55% 45%;
-            transform: rotate(-2deg) skewX(-6deg);
+            transform: rotate(-2.2deg) skewX(-7deg);
             z-index: -1;
             box-shadow: 0 2px 0 rgba(180, 110, 0, 0.18);
         }
 
+        /* Row 3: stats + URL */
         .bottom-row {
             display: flex;
             align-items: center;
-            gap: 20px;
+            justify-content: space-between;
+            gap: 16px;
         }
 
         .stats {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
         }
 
         .stat {
@@ -260,11 +280,11 @@
 
         .stat-num {
             color: #fff;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 900;
-            letter-spacing: -0.6px;
+            letter-spacing: -0.5px;
             line-height: 1;
-            text-shadow: 0 2px 8px rgba(80, 20, 0, 0.18);
+            text-shadow: 0 2px 6px rgba(80, 20, 0, 0.18);
         }
 
         .stat-num .plus {
@@ -273,19 +293,18 @@
 
         .stat-label {
             color: #fff;
-            font-size: 9px;
+            font-size: 8.5px;
             font-weight: 800;
-            letter-spacing: 0.18em;
+            letter-spacing: 0.2em;
             text-transform: uppercase;
             opacity: 0.92;
             margin-top: 3px;
         }
 
         .stat-sep {
-            width: 2px;
-            height: 26px;
+            width: 1px;
+            height: 22px;
             background: rgba(255, 255, 255, 0.4);
-            border-radius: 2px;
         }
 
         .url {
@@ -293,11 +312,9 @@
             font-size: 13px;
             font-weight: 800;
             letter-spacing: 0.04em;
-            opacity: 0.98;
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-left: auto;
         }
 
         .url .chev {
@@ -312,19 +329,7 @@
             font-size: 12px;
             font-weight: 900;
             line-height: 1;
-            box-shadow: 0 3px 8px rgba(80, 20, 0, 0.2);
-        }
-
-        .eyebrow {
-            color: #fff;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.24em;
-            opacity: 0.92;
-            border-left: 2px solid rgba(255, 255, 255, 0.7);
-            padding-left: 10px;
-            line-height: 1.25;
+            box-shadow: 0 3px 8px rgba(80, 20, 0, 0.22);
         }
     </style>
 </head>
@@ -352,7 +357,7 @@
 
         <div class="vignette"></div>
 
-        <!-- Left content -->
+        <!-- Left content: 3-row vertical hierarchy -->
         <div class="content">
             <div class="top-row">
                 <div class="logo-chip">
@@ -362,13 +367,14 @@
                         <path d="M6 24 C 12 18, 20 12, 28 6" stroke="#5FA02E" stroke-width="1.2" fill="none" stroke-linecap="round"/>
                     </svg>
                 </div>
-                <h1 class="headline">
-                    Financial Health is a <span class="underline">Right</span><span class="serif">.</span>
-                </h1>
+                <div class="eyebrow">Since 2017 · 501(c)(3) Non-Profit</div>
             </div>
 
+            <h1 class="headline">
+                Financial Health<span class="line-2">is a <span class="underline">Right</span><span class="serif">.</span></span>
+            </h1>
+
             <div class="bottom-row">
-                <div class="eyebrow">501(c)(3)<br>Since 2017</div>
                 <div class="stats">
                     <div class="stat">
                         <div class="stat-num">10M<span class="plus">+</span></div>
