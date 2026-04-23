@@ -40,7 +40,7 @@ AMBASSADORS = [
     {"slug": "pranita-jadhav",      "name": "Pranita Jadhav",       "photo": "35.jpg", "city": "Pune, India",      "country": "India"},
     {"slug": "hans-patel",          "name": "Hans Patel",           "photo": "36.jpg", "city": "River Edge, NJ",   "country": "USA"},
     {"slug": "onyemeri-ihegazie",   "name": "Onyemeri Ihegazie",    "photo": "37.jpg", "city": "Abia, Nigeria",    "country": "Nigeria"},
-    {"slug": "harshil-shah",        "name": "Harshil Shah",         "photo": "38.jpg", "city": "Columbia, SC",     "country": "USA"},
+    {"slug": "harshil-shah",        "name": "Harshil Shah",         "photo": "38_Updated.jpg", "city": "Columbia, SC",     "country": "USA"},
     {"slug": "eduardo-charles-alba","name": "Eduardo Charles Alba", "photo": "39.jpg", "city": "Santo Domingo, DR","country": "Dominican Republic"},
     {"slug": "caleb-vales",         "name": "Caleb Vales",          "photo": "40.jpg", "city": "North Olmsted, OH","country": "USA"},
     {"slug": "aren-inan",           "name": "Aren Inan",            "photo": "41.jpg", "city": "Ridgefield, NJ",   "country": "USA"},
