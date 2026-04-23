@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ambassador Square</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #222; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
+
+  .card {
+    width: 1080px;
+    height: 1080px;
+    background: #F5EEE1;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 6px #EDE5D5;
+  }
+
+  .bg-year {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 900px;
+    color: #EBE2CE;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    user-select: none;
+    z-index: 0;
+    white-space: nowrap;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .top-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .orange-line {
+    width: 40px;
+    height: 3px;
+    background: #FF6B35;
+    display: block;
+  }
+  .ambassador-label {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #1a1a1a;
+  }
+  .top-right {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #9a9a9a;
+  }
+
+  .photo-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .photo {
+    width: 580px;
+    height: 580px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 22%;
+    border: 2px solid rgba(0,0,0,0.25);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+  }
+
+  .name-block {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    margin-top: -10px;
+  }
+  .name {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 88px;
+    line-height: 1;
+    color: #1a1a1a;
+    letter-spacing: -0.01em;
+  }
+  .wavy {
+    margin: 18px auto 16px;
+    display: block;
+  }
+  .city {
+    font-size: 22px;
+    font-weight: 500;
+    color: #8e8e8e;
+    letter-spacing: 0.02em;
+  }
+
+  .bottom-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 36px;
+  }
+  .tagline {
+    font-size: 18px;
+    color: #2a2a2a;
+    font-weight: 400;
+  }
+  .brand {
+    text-align: right;
+  }
+  .logo {
+    height: 48px;
+    display: block;
+    margin-left: auto;
+  }
+  .url {
+    font-size: 15px;
+    color: #8e8e8e;
+    font-weight: 500;
+    margin-top: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="bg-year">26</div>
+  <div class="content">
+    <div class="top-bar">
+      <div class="top-left">
+        <span class="orange-line"></span>
+        <span class="ambassador-label">2026 FINMANGO AMBASSADOR</span>
+      </div>
+      <div class="top-right" id="country-label">USA</div>
+    </div>
+
+    <div class="photo-wrap">
+      <img id="photo" class="photo" src="" alt="">
+    </div>
+
+    <div class="name-block">
+      <h1 class="name" id="name"></h1>
+      <svg class="wavy" width="170" height="18" viewBox="0 0 170 18" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 4 9 Q 25 0, 46 9 T 88 9 T 130 9 T 166 9" stroke="#FF6B35" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="city" id="city"></div>
+    </div>
+
+    <div class="bottom-bar">
+      <div class="tagline">Advancing financial health.</div>
+      <div class="brand">
+        <img src="../finmango.png" alt="FinMango" class="logo">
+        <div class="url">finmango.org/ambassadors</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setAmbassador(data) {
+    document.getElementById('photo').src = data.photo;
+    document.getElementById('name').textContent = data.name;
+    document.getElementById('city').textContent = data.city;
+    document.getElementById('country-label').textContent = data.countryLabel;
+  }
+  window.setAmbassador = setAmbassador;
+</script>
+</body>
+</html>
