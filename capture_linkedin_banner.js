@@ -7,7 +7,7 @@ const path = require('path');
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const page = await browser.newPage();
-    await page.setViewport({ width: 1584, height: 396, deviceScaleFactor: 2 });
+    await page.setViewport({ width: 1128, height: 191, deviceScaleFactor: 4 });
 
     const fileUrl = 'file://' + path.resolve('linkedin-company-banner.html');
     console.log(`Opening ${fileUrl}...`);

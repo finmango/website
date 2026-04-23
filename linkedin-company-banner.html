@@ -3,8 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1584">
-    <title>FinMango — LinkedIn Company Banner</title>
+    <meta name="viewport" content="width=1128">
+    <title>FinMango — LinkedIn Company Banner (1128x191)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -25,24 +25,35 @@
             background: #222;
         }
 
-        /* LinkedIn company page banner — 1584 x 396 (4:1) */
+        /* LinkedIn company page banner — 1128 x 191 (5.9:1) */
         .banner {
-            width: 1584px;
-            height: 396px;
+            width: 1128px;
+            height: 191px;
             position: relative;
             overflow: hidden;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(115deg, #E85A1F 0%, #FF6B35 40%, #FF8A4C 72%, #FFA66B 100%);
+            background: linear-gradient(115deg, #E85A1F 0%, #FF6B35 42%, #FF8A4C 75%, #FFA66B 100%);
         }
 
-        /* Fine noise texture for depth */
+        /* Soft radial glow top-left */
+        .glow {
+            position: absolute;
+            width: 520px;
+            height: 520px;
+            left: -140px;
+            top: -260px;
+            background: radial-gradient(closest-side, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0));
+            pointer-events: none;
+        }
+
+        /* Fine noise grain for depth */
         .grain {
             position: absolute;
             inset: 0;
-            opacity: 0.08;
+            opacity: 0.07;
             mix-blend-mode: overlay;
             pointer-events: none;
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
         }
 
         /* Edge vignette */
@@ -50,18 +61,7 @@
             position: absolute;
             inset: 0;
             pointer-events: none;
-            background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 55%, rgba(60, 15, 0, 0.18) 100%);
-        }
-
-        /* Subtle radial glow */
-        .glow {
-            position: absolute;
-            width: 900px;
-            height: 900px;
-            left: -200px;
-            top: -350px;
-            background: radial-gradient(closest-side, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0));
-            pointer-events: none;
+            background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 60%, rgba(60, 15, 0, 0.20) 100%);
         }
 
         /* Geometric accents */
@@ -72,71 +72,37 @@
         }
 
         .shape-diamond {
-            width: 240px;
-            height: 240px;
-            border: 3px solid #fff;
+            width: 160px;
+            height: 160px;
+            border: 2px solid #fff;
             transform: rotate(45deg);
-            top: -90px;
+            top: -80px;
             left: 560px;
-            opacity: 0.16;
-        }
-
-        .shape-square {
-            width: 140px;
-            height: 140px;
-            border: 3px solid #fff;
-            transform: rotate(18deg);
-            bottom: -50px;
-            left: 470px;
-            opacity: 0.14;
         }
 
         .shape-ring {
-            width: 180px;
-            height: 180px;
-            border: 3px solid #fff;
+            width: 120px;
+            height: 120px;
+            border: 2px solid #fff;
             border-radius: 50%;
             top: 50%;
-            left: 780px;
+            left: 620px;
             transform: translateY(-50%);
-            opacity: 0.14;
+            opacity: 0.12;
         }
 
-        /* Growth bars (subtle) */
-        .bars {
-            position: absolute;
-            bottom: 0;
-            left: 900px;
-            display: flex;
-            align-items: flex-end;
-            gap: 10px;
-            opacity: 0.22;
-            pointer-events: none;
-        }
-
-        .bars span {
-            width: 14px;
-            background: #fff;
-            border-radius: 3px 3px 0 0;
-        }
-
-        .bars span:nth-child(1) { height: 70px; opacity: 0.5; }
-        .bars span:nth-child(2) { height: 110px; opacity: 0.65; }
-        .bars span:nth-child(3) { height: 160px; opacity: 0.80; }
-        .bars span:nth-child(4) { height: 210px; opacity: 0.95; }
-
-        /* Photo collage on the right */
+        /* Photo collage — right edge */
         .collage {
             position: absolute;
             right: 0;
             top: 0;
             bottom: 0;
-            width: 560px;
+            width: 300px;
             display: grid;
             grid-template-columns: 1.4fr 1fr;
             grid-template-rows: 1fr 1fr;
-            gap: 4px;
-            padding: 4px;
+            gap: 3px;
+            padding: 3px;
         }
 
         .collage .tile {
@@ -156,7 +122,6 @@
             filter: grayscale(100%) contrast(1.12) brightness(1.02);
         }
 
-        /* Duotone: warm orange in shadows, soft amber in highlights */
         .collage .tile::after {
             content: '';
             position: absolute;
@@ -174,131 +139,117 @@
             z-index: 1;
         }
 
-        /* Fade from collage to orange on the left edge */
+        /* Fade from collage to orange */
         .collage::before {
             content: '';
             position: absolute;
             left: 0;
             top: 0;
             bottom: 0;
-            width: 240px;
+            width: 140px;
             background: linear-gradient(90deg, #FF6B35 0%, rgba(255, 107, 53, 0.85) 25%, rgba(255, 107, 53, 0.4) 60%, rgba(255, 107, 53, 0) 100%);
             z-index: 2;
             pointer-events: none;
         }
 
-        /* Left content */
+        /* Layout — single-frame with left block + stats row */
         .content {
             position: relative;
             z-index: 3;
             height: 100%;
-            padding: 54px 60px;
+            padding: 18px 24px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            max-width: 1050px;
+            max-width: 840px;
         }
 
         .top-row {
             display: flex;
             align-items: center;
-            gap: 22px;
+            gap: 18px;
         }
 
         .logo-chip {
             position: relative;
             background: #fff;
-            padding: 14px 24px;
-            border-radius: 18px;
-            box-shadow: 0 12px 36px rgba(80, 20, 0, 0.18), 0 2px 0 rgba(255, 255, 255, 0.6) inset;
+            padding: 8px 14px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(80, 20, 0, 0.18), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
             display: inline-flex;
             align-items: center;
+            flex-shrink: 0;
         }
 
         .logo-chip img {
-            height: 52px;
+            height: 32px;
             width: auto;
             display: block;
         }
 
-        /* Mango leaf accent above the chip, echoing the logo */
         .leaf {
             position: absolute;
-            top: -16px;
-            right: 24px;
-            width: 42px;
-            height: 42px;
+            top: -9px;
+            right: 9px;
+            width: 22px;
+            height: 22px;
             transform: rotate(-24deg);
-            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.22));
-        }
-
-        .eyebrow {
-            color: #fff;
-            font-size: 15px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.28em;
-            opacity: 0.92;
-            border-left: 3px solid rgba(255, 255, 255, 0.75);
-            padding-left: 16px;
-            line-height: 1.2;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.22));
         }
 
         .headline {
             color: #fff;
             font-family: 'Inter', sans-serif;
-            font-size: 78px;
+            font-size: 36px;
             font-weight: 900;
-            line-height: 0.98;
-            letter-spacing: -2.5px;
-            text-shadow: 0 4px 28px rgba(80, 20, 0, 0.18);
-            margin-top: -4px;
+            line-height: 1;
+            letter-spacing: -1.2px;
+            text-shadow: 0 3px 14px rgba(80, 20, 0, 0.18);
+            white-space: nowrap;
         }
 
         .headline .serif {
             font-family: 'DM Serif Display', serif;
             font-weight: 400;
             font-style: italic;
-            letter-spacing: -1px;
+            letter-spacing: -0.5px;
         }
 
         .headline .underline {
             position: relative;
             display: inline-block;
-            padding: 0 10px;
+            padding: 0 6px;
             color: #fff;
             z-index: 1;
         }
 
-        /* Hand-drawn highlight streak behind "Right" */
         .headline .underline::before {
             content: '';
             position: absolute;
-            left: -10px;
-            right: -12px;
-            bottom: -4px;
-            height: 44px;
+            left: -4px;
+            right: -6px;
+            bottom: -2px;
+            height: 22px;
             background:
-                radial-gradient(ellipse at 20% 50%, #FFD23F 0%, #FFD23F 60%, transparent 70%),
-                radial-gradient(ellipse at 80% 55%, #FFC72C 0%, #FFC72C 60%, transparent 72%),
+                radial-gradient(ellipse at 25% 50%, #FFD23F 0%, #FFD23F 60%, transparent 72%),
+                radial-gradient(ellipse at 78% 55%, #FFC72C 0%, #FFC72C 60%, transparent 74%),
                 linear-gradient(90deg, #FFD23F 0%, #FFC83A 60%, #FFBE2E 100%);
             border-radius: 50% 45% 48% 52% / 60% 50% 55% 45%;
             transform: rotate(-2deg) skewX(-6deg);
             z-index: -1;
-            box-shadow: 0 3px 0 rgba(180, 110, 0, 0.18);
+            box-shadow: 0 2px 0 rgba(180, 110, 0, 0.18);
         }
 
         .bottom-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 24px;
+            gap: 20px;
         }
 
         .stats {
             display: flex;
             align-items: center;
-            gap: 28px;
+            gap: 16px;
         }
 
         .stat {
@@ -309,11 +260,11 @@
 
         .stat-num {
             color: #fff;
-            font-size: 42px;
+            font-size: 22px;
             font-weight: 900;
-            letter-spacing: -1.5px;
+            letter-spacing: -0.6px;
             line-height: 1;
-            text-shadow: 0 3px 14px rgba(80, 20, 0, 0.2);
+            text-shadow: 0 2px 8px rgba(80, 20, 0, 0.18);
         }
 
         .stat-num .plus {
@@ -322,58 +273,58 @@
 
         .stat-label {
             color: #fff;
-            font-size: 13px;
+            font-size: 9px;
             font-weight: 800;
             letter-spacing: 0.18em;
             text-transform: uppercase;
             opacity: 0.92;
-            margin-top: 6px;
+            margin-top: 3px;
         }
 
         .stat-sep {
             width: 2px;
-            height: 38px;
+            height: 26px;
             background: rgba(255, 255, 255, 0.4);
             border-radius: 2px;
         }
 
         .url {
             color: #fff;
-            font-size: 18px;
+            font-size: 13px;
             font-weight: 800;
             letter-spacing: 0.04em;
             opacity: 0.98;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
+            margin-left: auto;
         }
 
         .url .chev {
-            width: 22px;
-            height: 22px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             background: #fff;
             color: #E85A1F;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 900;
             line-height: 1;
-            box-shadow: 0 4px 12px rgba(80, 20, 0, 0.2);
+            box-shadow: 0 3px 8px rgba(80, 20, 0, 0.2);
         }
 
-        /* Diagonal slice that divides content from collage */
-        .divider {
-            position: absolute;
-            top: -10px;
-            bottom: -10px;
-            left: 1010px;
-            width: 60px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
-            transform: skewX(-12deg);
-            z-index: 2;
-            pointer-events: none;
+        .eyebrow {
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.24em;
+            opacity: 0.92;
+            border-left: 2px solid rgba(255, 255, 255, 0.7);
+            padding-left: 10px;
+            line-height: 1.25;
         }
     </style>
 </head>
@@ -383,14 +334,8 @@
         <div class="glow"></div>
         <div class="grain"></div>
 
-        <!-- Geometric accents -->
         <div class="shape shape-diamond"></div>
-        <div class="shape shape-square"></div>
         <div class="shape shape-ring"></div>
-        <div class="bars">
-            <span></span><span></span><span></span><span></span>
-        </div>
-        <div class="divider"></div>
 
         <!-- Photo collage -->
         <div class="collage">
@@ -417,15 +362,13 @@
                         <path d="M6 24 C 12 18, 20 12, 28 6" stroke="#5FA02E" stroke-width="1.2" fill="none" stroke-linecap="round"/>
                     </svg>
                 </div>
-                <div class="eyebrow">501(c)(3) Non-Profit<br>Since 2017</div>
+                <h1 class="headline">
+                    Financial Health is a <span class="underline">Right</span><span class="serif">.</span>
+                </h1>
             </div>
 
-            <h1 class="headline">
-                Financial Health<br>
-                is a <span class="underline">Right</span><span class="serif">.</span>
-            </h1>
-
             <div class="bottom-row">
+                <div class="eyebrow">501(c)(3)<br>Since 2017</div>
                 <div class="stats">
                     <div class="stat">
                         <div class="stat-num">10M<span class="plus">+</span></div>
