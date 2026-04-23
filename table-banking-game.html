@@ -506,7 +506,7 @@ footer { padding: 0; border-top: 4px solid var(--orange); background: var(--ink)
         — not credit scores.
       </h1>
       <p class="hero-sub">
-        Join eight neighbors around a shared table. Over six monthly meetings, you'll contribute to a common pool, vote on who gets loans, weather emergencies, and build (or break) trust with the group. This kind of group is called a <em>chama</em> in Kenya, a <em>tanda</em> in Mexico, <em>susu</em> in Ghana, <em>hui</em> in China. Tens of millions of people bank this way — especially where banks won't go.
+        Join eight neighbors around a shared table. Over six monthly meetings, you'll contribute to a common pool, vote on who gets loans, weather emergencies, and build (or break) trust with the group. This kind of group is called a <em>chama</em> in Kenya, a <em>tanda</em> in Mexico, <em>susu</em> in Ghana, <em>hui</em> in China. Tens of millions of people bank this way — especially where&nbsp;banks&nbsp;won't&nbsp;go.
       </p>
       <div class="hero-facts">
         <span class="hero-fact"><span>Members</span> <span class="hero-fact-value">8</span></span>
@@ -702,6 +702,11 @@ const KSH_TO_USD = 130; // rough exchange
 
 function fmtKSh(n) { return Math.round(n).toLocaleString(); }
 function fmtUsd(n) { return '$' + Math.round(n).toLocaleString(); }
+function safeScroll(el, opts) {
+  if (el && typeof el.scrollIntoView === 'function') {
+    try { el.scrollIntoView(opts); } catch(e) { /* older browsers or jsdom */ }
+  }
+}
 
 /* === MEMBERS === reliability drives behavior === */
 const initialMembers = [
@@ -877,9 +882,8 @@ const scenarios = [
     title: "The Farmer's Request",
     speaker: 'omondi',
     speech: "The rains failed. My crop is finished. I need <strong>2,000</strong> to buy new seed before planting season ends. I swear I'll repay.",
-    body: "<p>The pool has <span id='s2-pool'></span>. The Farmer is young, his reliability isn't proven. If he defaults, it hurts the whole group. But the whole point of this table is moments like this.</p><p>The group looks at you. Your vote matters.</p>",
+    body: "<p>The pool has {{pool}}. The Farmer is young, his reliability isn't proven. If he defaults, it hurts the whole group. But the whole point of this table is moments like this.</p><p>The group looks at you. Your vote matters.</p>",
     beforeRender: (s) => { 
-      document.getElementById('s2-pool') && (document.getElementById('s2-pool').textContent = fmtKSh(s.pool)); 
       doContribution(s);
     },
     choices: [
@@ -1211,17 +1215,14 @@ function renderProgress() {
 
 function renderStats() {
   $('statCash').textContent = fmtKSh(state.cash);
-  $('statCashUsd').textContent = fmtUsd(state.cash);
   $('statSavings').textContent = fmtKSh(state.savings);
-  $('statSavingsUsd').textContent = fmtUsd(state.savings);
   $('statLoans').textContent = fmtKSh(state.loans);
-  $('statLoansUsd').textContent = fmtUsd(state.loans);
   const loansEl = $('statLoans');
   loansEl.classList.toggle('negative', state.loans > 0);
   $('statMeeting').textContent = state.meeting + ' / ' + state.maxMeetings;
 
   $('poolAmount').textContent = fmtKSh(state.pool);
-  $('poolUsd').textContent = fmtUsd(state.pool);
+  // pool caption stays static, no need to update
 
   const trust = Math.max(0, Math.min(100, state.trust));
   $('trustValue').textContent = trust;
@@ -1289,7 +1290,7 @@ function renderScenario(scn, afterChoice) {
         <div class="speaker-text"><strong>${speaker.name}${speaker.role ? ' · ' + speaker.role : ''}:</strong> "${scn.speech}"</div>
       </div>
     ` : ''}
-    <div class="scenario-body">${scn.body}</div>
+    <div class="scenario-body">${(scn.body || '').replace(/\{\{pool\}\}/g, fmtKSh(state.pool))}</div>
     <div class="choice-list">${choicesHtml}</div>
   `;
 }
@@ -1340,7 +1341,7 @@ function nextMeeting() {
   renderScenario(scn, null);
   // Scroll to top of game on mobile
   if (window.innerWidth <= 968) {
-    $('gameSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    safeScroll($("gameSection"), { behavior: "smooth", block: "start" });
   }
 }
 
@@ -1404,7 +1405,7 @@ function showEnd() {
     </div>
   `).join('');
 
-  end.scrollIntoView({ behavior: 'smooth' });
+  safeScroll(end, { behavior: 'smooth' });
 }
 
 /* === Init === */
@@ -1436,7 +1437,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('heroSection').classList.add('hidden');
     $('gameSection').classList.remove('hidden');
     renderScenario(scenarios[0], null);
-    $('gameSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    safeScroll($("gameSection"), { behavior: "smooth", block: "start" });
   });
 });
 </script>
