@@ -35,6 +35,24 @@
             background: linear-gradient(115deg, #E85A1F 0%, #FF6B35 40%, #FF8A4C 72%, #FFA66B 100%);
         }
 
+        /* Fine noise texture for depth */
+        .grain {
+            position: absolute;
+            inset: 0;
+            opacity: 0.08;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+        }
+
+        /* Edge vignette */
+        .vignette {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 55%, rgba(60, 15, 0, 0.18) 100%);
+        }
+
         /* Subtle radial glow */
         .glow {
             position: absolute;
@@ -135,16 +153,25 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: grayscale(100%) contrast(1.08) brightness(0.95);
+            filter: grayscale(100%) contrast(1.12) brightness(1.02);
         }
 
-        /* Warm orange wash over photos */
+        /* Duotone: warm orange in shadows, soft amber in highlights */
         .collage .tile::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(255, 107, 53, 0.22) 0%, rgba(232, 90, 31, 0.42) 100%);
+            background: linear-gradient(180deg, rgba(255, 138, 76, 0.55) 0%, rgba(232, 90, 31, 0.65) 100%);
             mix-blend-mode: multiply;
+        }
+
+        .collage .tile::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255, 220, 180, 0.18) 0%, rgba(255, 180, 120, 0.05) 100%);
+            mix-blend-mode: screen;
+            z-index: 1;
         }
 
         /* Fade from collage to orange on the left edge */
@@ -154,8 +181,8 @@
             left: 0;
             top: 0;
             bottom: 0;
-            width: 180px;
-            background: linear-gradient(90deg, #FF6B35 0%, rgba(255, 107, 53, 0.7) 40%, rgba(255, 107, 53, 0) 100%);
+            width: 240px;
+            background: linear-gradient(90deg, #FF6B35 0%, rgba(255, 107, 53, 0.85) 25%, rgba(255, 107, 53, 0.4) 60%, rgba(255, 107, 53, 0) 100%);
             z-index: 2;
             pointer-events: none;
         }
@@ -179,10 +206,11 @@
         }
 
         .logo-chip {
+            position: relative;
             background: #fff;
-            padding: 14px 22px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+            padding: 14px 24px;
+            border-radius: 18px;
+            box-shadow: 0 12px 36px rgba(80, 20, 0, 0.18), 0 2px 0 rgba(255, 255, 255, 0.6) inset;
             display: inline-flex;
             align-items: center;
         }
@@ -191,6 +219,17 @@
             height: 52px;
             width: auto;
             display: block;
+        }
+
+        /* Tiny mango leaf accent above the chip, echoing the logo */
+        .leaf {
+            position: absolute;
+            top: -10px;
+            right: 18px;
+            width: 22px;
+            height: 22px;
+            transform: rotate(-18deg);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
         }
 
         .eyebrow {
@@ -227,9 +266,23 @@
             position: relative;
             display: inline-block;
             padding: 0 10px;
-            background: linear-gradient(180deg, transparent 58%, #FFD23F 58%, #FFD23F 94%, transparent 94%);
-            border-radius: 3px;
             color: #fff;
+            z-index: 1;
+        }
+
+        /* Hand-drawn highlight streak behind "Right" */
+        .headline .underline::before {
+            content: '';
+            position: absolute;
+            left: -4px;
+            right: -6px;
+            bottom: 6px;
+            height: 28px;
+            background: linear-gradient(90deg, #FFD23F 0%, #FFC83A 60%, #FFBE2E 100%);
+            border-radius: 4px;
+            transform: rotate(-1.2deg) skewX(-4deg);
+            z-index: -1;
+            box-shadow: 0 2px 0 rgba(180, 110, 0, 0.15);
         }
 
         .bottom-row {
@@ -252,16 +305,18 @@
             letter-spacing: 0.06em;
             text-transform: uppercase;
             padding: 10px 18px;
-            border: 2px solid rgba(255, 255, 255, 0.55);
+            border: 2px solid rgba(255, 255, 255, 0.65);
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(2px);
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(3px);
+            box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset;
         }
 
         .pill.solid {
             background: #fff;
             color: #E85A1F;
             border-color: #fff;
+            box-shadow: 0 6px 18px rgba(80, 20, 0, 0.18);
         }
 
         .url {
@@ -269,17 +324,25 @@
             font-size: 18px;
             font-weight: 800;
             letter-spacing: 0.04em;
-            opacity: 0.95;
+            opacity: 0.98;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .url .dot {
-            width: 8px;
-            height: 8px;
-            background: #fff;
+        .url .chev {
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
+            background: #fff;
+            color: #E85A1F;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 900;
+            line-height: 1;
+            box-shadow: 0 4px 12px rgba(80, 20, 0, 0.2);
         }
 
         /* Diagonal slice that divides content from collage */
@@ -300,6 +363,7 @@
 <body>
     <div class="banner" id="capture">
         <div class="glow"></div>
+        <div class="grain"></div>
 
         <!-- Geometric accents -->
         <div class="shape shape-diamond"></div>
@@ -323,11 +387,17 @@
             </div>
         </div>
 
+        <div class="vignette"></div>
+
         <!-- Left content -->
         <div class="content">
             <div class="top-row">
                 <div class="logo-chip">
                     <img src="finmango.png" alt="FinMango">
+                    <svg class="leaf" viewBox="0 0 32 32" aria-hidden="true">
+                        <path d="M4 26 C 6 10, 18 4, 30 4 C 28 18, 18 28, 4 26 Z" fill="#7BC142"/>
+                        <path d="M6 24 C 12 18, 20 12, 28 6" stroke="#5FA02E" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+                    </svg>
                 </div>
                 <div class="eyebrow">501(c)(3) Non-Profit<br>Since 2017</div>
             </div>
@@ -344,8 +414,8 @@
                     <div class="pill">Advocacy</div>
                 </div>
                 <div class="url">
-                    <span class="dot"></span>
                     finmango.org
+                    <span class="chev">›</span>
                 </div>
             </div>
         </div>
