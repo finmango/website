@@ -25,14 +25,14 @@ const fs = require('fs');
 
   // Key moments in the 9s timeline
   const stops = [
-    { t: 0.5, name: '01_opener' },          // orange slab with "2026"
-    { t: 1.45, name: '02_cracks' },         // gridlines fully appearing
-    { t: 1.55, name: '02b_cracked' },       // slab gone, cracked orange
-    { t: 1.85, name: '03_flipping' },       // mid reveal
-    { t: 2.4, name: '04_revealed' },        // photos shown
-    { t: 3.2, name: '05_chips' },           // name chips popped
-    { t: 4.0, name: '06_callout' },         // final composition
-    { t: 7.0, name: '07_hold' },            // steady state
+    { t: 0.6, name: '01_scene1' },          // 2026 / THE COHORT
+    { t: 1.7, name: '02_scene2' },          // FROM 450 / 20 COUNTRIES
+    { t: 2.7, name: '03_scene3' },          // ONLY 11
+    { t: 3.0, name: '03b_cracks_through_11' },
+    { t: 3.3, name: '04_flipping' },        // mid reveal
+    { t: 4.0, name: '05_revealed' },        // photos shown
+    { t: 5.0, name: '06_callout' },         // settled with callout
+    { t: 8.0, name: '07_hold' },            // steady state
   ];
 
   for (const { t, name } of stops) {

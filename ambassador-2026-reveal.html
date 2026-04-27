@@ -14,7 +14,7 @@
       --orange-bright: #FF8552;
       --black: #0A0A0A;
       --white: #FFFFFF;
-      --duration: 9s;
+      --duration: 11s;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -62,8 +62,8 @@
 
     /* Grid settles upward when callout arrives, so no faces get covered */
     @keyframes gridSettle {
-      0%, 30% { bottom: 0; }
-      38% { bottom: 520px; }
+      0%, 42% { bottom: 0; }
+      50% { bottom: 520px; }
       100% { bottom: 520px; }
     }
 
@@ -178,47 +178,114 @@
       text-transform: uppercase;
     }
 
-    /* ========== OPENING ORANGE BLOCK ========== */
+    /* ========== OPENING ORANGE BLOCK (3 scenes: cohort -> applicant funnel -> "ONLY 11") ========== */
     .opener {
       position: absolute;
       inset: 0;
       background: var(--orange);
       z-index: 10;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       animation: openerSplit var(--duration) cubic-bezier(.7,0,.2,1) infinite;
       transform-origin: center;
     }
 
-    .opener .wordmark {
+    .opener .scene {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       color: var(--white);
+      text-align: center;
+      text-transform: uppercase;
+      opacity: 0;
+    }
+
+    /* Scene 1: 2026 / THE COHORT */
+    .opener .s1 { animation: scene1 var(--duration) cubic-bezier(.2,.9,.3,1) infinite; }
+    .opener .s1 .brandmark-logo {
+      width: 260px;
+      height: auto;
+      margin-bottom: 40px;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
+    }
+    .opener .s1 .yr {
       font-size: 340px;
       font-weight: 900;
       letter-spacing: -0.05em;
       line-height: 0.9;
-      text-align: center;
-      animation: wordmarkIntro var(--duration) cubic-bezier(.2,.9,.3,1) infinite;
-      text-transform: uppercase;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
-    .opener .wordmark .brandmark-logo {
-      width: 260px;
-      height: auto;
-      margin-bottom: 40px;
-      filter: brightness(0) invert(1); /* white silhouette for legibility on orange */
-      opacity: 0.95;
-    }
-    .opener .wordmark .sub {
-      display: block;
+    .opener .s1 .sub {
       font-size: 52px;
       font-weight: 800;
       letter-spacing: 0.35em;
       margin-top: 28px;
-      margin-left: 0.35em; /* visually recenter because of letter-spacing */
+      margin-left: 0.35em;
       opacity: 0.92;
+    }
+
+    /* Scene 2: applicant funnel — FROM 450 / 20 COUNTRIES */
+    .opener .s2 { animation: scene2 var(--duration) cubic-bezier(.2,.9,.3,1) infinite; }
+    .opener .s2 .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 30px 0;
+    }
+    .opener .s2 .preword {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: 0.4em;
+      margin-left: 0.4em;
+      opacity: 0.85;
+      margin-bottom: 8px;
+    }
+    .opener .s2 .num {
+      font-size: 360px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      line-height: 0.85;
+    }
+    .opener .s2 .lbl {
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: 0.35em;
+      margin-left: 0.35em;
+      margin-top: 16px;
+    }
+    .opener .s2 .divider {
+      width: 120px;
+      height: 6px;
+      background: var(--white);
+      margin: 36px 0;
+      opacity: 0.7;
+    }
+    /* Compact two-stat stack: bigger label, smaller number arrangement */
+    .opener .s2 .stat.compact .num { font-size: 240px; }
+    .opener .s2 .stat.compact .lbl { font-size: 36px; }
+
+    /* Scene 3: ONLY 11 (massive — gets sliced by the cracks) */
+    .opener .s3 { animation: scene3 var(--duration) cubic-bezier(.2,.9,.3,1) infinite; }
+    .opener .s3 .pre {
+      font-size: 78px;
+      font-weight: 900;
+      letter-spacing: 0.32em;
+      margin-left: 0.32em;
+      margin-bottom: 12px;
+    }
+    .opener .s3 .eleven {
+      font-size: 720px;
+      font-weight: 900;
+      letter-spacing: -0.07em;
+      line-height: 0.78;
+    }
+    .opener .s3 .post {
+      font-size: 60px;
+      font-weight: 900;
+      letter-spacing: 0.3em;
+      margin-left: 0.3em;
+      margin-top: 24px;
     }
 
     /* ========== GRID LINES (appear as orange shatters) ========== */
@@ -363,73 +430,93 @@
       font-weight: 700;
     }
 
-    /* ========== KEYFRAMES ========== */
+    /* ========== KEYFRAMES (timeline = 11s) ========== */
 
-    /* Opener: holds solid orange while wordmark plays, then fades after gridlines have cracked it visually */
+    /* Opener: solid orange through scene-3, fades only after cracks have sliced through "ONLY 11" */
     @keyframes openerSplit {
-      0%, 14% { opacity: 1; }
-      17% { opacity: 0; }
+      0%, 27% { opacity: 1; }
+      30% { opacity: 0; }
       100% { opacity: 0; }
     }
 
-    @keyframes wordmarkIntro {
-      0% { transform: scale(0.7); opacity: 0; letter-spacing: 0.3em; }
-      4% { transform: scale(1); opacity: 1; letter-spacing: -0.04em; }
-      12% { transform: scale(1); opacity: 1; }
-      14%, 100% { transform: scale(1.15); opacity: 0; }
+    /* Scene 1: 2026 / THE COHORT (0-1.1s) */
+    @keyframes scene1 {
+      0% { opacity: 0; transform: scale(0.88); }
+      3% { opacity: 1; transform: scale(1); }
+      8% { opacity: 1; transform: scale(1); }
+      10% { opacity: 0; transform: scale(1.08); }
+      100% { opacity: 0; transform: scale(1.08); }
     }
 
-    /* Grid lines slice across */
+    /* Scene 2: 450 / 20 COUNTRIES (1.1-2.2s) */
+    @keyframes scene2 {
+      0%, 9% { opacity: 0; transform: translateY(40px); }
+      13% { opacity: 1; transform: translateY(0); }
+      18% { opacity: 1; transform: translateY(0); }
+      20% { opacity: 0; transform: translateY(-30px); }
+      100% { opacity: 0; transform: translateY(-30px); }
+    }
+
+    /* Scene 3: ONLY 11 (2.2-3.2s) — gets sliced by cracks */
+    @keyframes scene3 {
+      0%, 19% { opacity: 0; transform: scale(0.7); }
+      22% { opacity: 1; transform: scale(1); }
+      27% { opacity: 1; transform: scale(1.03); }
+      30% { opacity: 0; transform: scale(1.06); }
+      100% { opacity: 0; transform: scale(1.06); }
+    }
+
+    /* Grid lines slice across — drawn THROUGH the giant "11" then through the orange slab */
     @keyframes drawH {
-      0%, 14% { transform: scaleX(0); opacity: 1; }
-      18% { transform: scaleX(1); opacity: 1; }
-      28% { transform: scaleX(1); opacity: 0.35; }
+      0%, 23% { transform: scaleX(0); opacity: 1; }
+      28% { transform: scaleX(1); opacity: 1; }
+      40% { transform: scaleX(1); opacity: 0.35; }
       100% { transform: scaleX(1); opacity: 0.35; }
     }
     @keyframes drawV {
-      0%, 15% { transform: scaleY(0); opacity: 1; }
-      19% { transform: scaleY(1); opacity: 1; }
-      28% { transform: scaleY(1); opacity: 0.35; }
+      0%, 24% { transform: scaleY(0); opacity: 1; }
+      29% { transform: scaleY(1); opacity: 1; }
+      40% { transform: scaleY(1); opacity: 0.35; }
       100% { transform: scaleY(1); opacity: 0.35; }
     }
 
     /* Orange mask reveals photo — CRT-style vertical flip */
     @keyframes maskReveal {
-      0%, 17% { transform: scaleY(1); opacity: 1; }
-      20% { transform: scaleY(0.02); opacity: 1; }
-      22%, 100% { transform: scaleY(0); opacity: 0; }
+      0%, 30% { transform: scaleY(1); opacity: 1; }
+      33% { transform: scaleY(0.02); opacity: 1; }
+      35%, 100% { transform: scaleY(0); opacity: 0; }
     }
 
     @keyframes photoReveal {
-      0%, 18% { opacity: 0; transform: scale(1.18); filter: blur(16px) saturate(0.6); }
-      22% { opacity: 1; transform: scale(1.06); filter: blur(0) saturate(1.05); }
-      32% { opacity: 1; transform: scale(1.0); filter: blur(0) saturate(1.05); }
+      0%, 31% { opacity: 0; transform: scale(1.18); filter: blur(16px) saturate(0.6); }
+      35% { opacity: 1; transform: scale(1.06); filter: blur(0) saturate(1.05); }
+      44% { opacity: 1; transform: scale(1.0); filter: blur(0) saturate(1.05); }
       100% { opacity: 1; transform: scale(1.0); filter: blur(0) saturate(1.05); }
     }
 
     @keyframes scanSweep {
-      0%, 17% { opacity: 0; transform: translateY(-100%); }
-      18% { opacity: 1; transform: translateY(-100%); }
-      22% { opacity: 1; transform: translateY(100%); }
-      23%, 100% { opacity: 0; transform: translateY(100%); }
+      0%, 30% { opacity: 0; transform: translateY(-100%); }
+      31% { opacity: 1; transform: translateY(-100%); }
+      35% { opacity: 1; transform: translateY(100%); }
+      36%, 100% { opacity: 0; transform: translateY(100%); }
     }
 
     @keyframes chipPop {
-      0%, 27% { opacity: 0; transform: translateY(12px) scale(0.96); }
-      32% { opacity: 1; transform: translateY(0) scale(1); }
+      0%, 39% { opacity: 0; transform: translateY(12px) scale(0.96); }
+      44% { opacity: 1; transform: translateY(0) scale(1); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     @keyframes flagFade {
-      0%, 25% { opacity: 0; transform: translateY(-6px); }
-      29% { opacity: 1; transform: translateY(0); }
+      0%, 37% { opacity: 0; transform: translateY(-6px); }
+      41% { opacity: 1; transform: translateY(0); }
       100% { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes brandReveal {
-      0%, 17% { opacity: 0; transform: scale(0.6) rotate(-8deg); }
-      22% { opacity: 1; transform: scale(1.08) rotate(0); }
-      26% { opacity: 1; transform: scale(1) rotate(0); }
+      0%, 30% { opacity: 0; transform: scale(0.6) rotate(-8deg); }
+      35% { opacity: 1; transform: scale(1.08) rotate(0); }
+      38% { opacity: 1; transform: scale(1) rotate(0); }
       100% { opacity: 1; transform: scale(1) rotate(0); }
     }
 
@@ -440,14 +527,14 @@
     }
 
     @keyframes calloutIn {
-      0%, 32% { opacity: 0; transform: translateY(80px); }
-      38% { opacity: 1; transform: translateY(0); }
+      0%, 44% { opacity: 0; transform: translateY(80px); }
+      50% { opacity: 1; transform: translateY(0); }
       100% { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes hudIn {
-      0%, 24% { opacity: 0; }
-      28% { opacity: 1; }
+      0%, 36% { opacity: 0; }
+      40% { opacity: 1; }
       100% { opacity: 1; }
     }
 
@@ -552,29 +639,51 @@
       <div class="tag">COHORT // 2026</div>
     </div>
 
-    <!-- Opening orange slab -->
+    <!-- Opening orange slab — 3 scenes: cohort → applicant funnel → ONLY 11 -->
     <div class="opener">
-      <div class="wordmark">
+      <!-- Scene 1: 2026 The Cohort -->
+      <div class="scene s1">
         <img class="brandmark-logo" src="finmango.png" alt="FinMango">
-        <span>2026</span>
-        <span class="sub">THE COHORT</span>
+        <div class="yr">2026</div>
+        <div class="sub">THE COHORT</div>
+      </div>
+
+      <!-- Scene 2: Applicant funnel -->
+      <div class="scene s2">
+        <div class="stat">
+          <div class="preword">FROM</div>
+          <div class="num">450</div>
+          <div class="lbl">APPLICATIONS</div>
+        </div>
+        <div class="divider"></div>
+        <div class="stat compact">
+          <div class="num">20</div>
+          <div class="lbl">COUNTRIES</div>
+        </div>
+      </div>
+
+      <!-- Scene 3: ONLY 11 — gets sliced by cracks then becomes 11 faces -->
+      <div class="scene s3">
+        <div class="pre">ONLY</div>
+        <div class="eleven">11</div>
+        <div class="post">SELECTED</div>
       </div>
     </div>
 
     <!-- Bottom callout backdrop + card -->
     <div class="callout-bg"></div>
     <div class="callout">
-      <div class="eyebrow"><span class="live"></span>NOW ANNOUNCING</div>
+      <div class="eyebrow"><span class="live"></span>11 SELECTED FROM 450</div>
       <div class="headline">
         Meet the
         <span class="accent">Ambassadors.</span>
       </div>
       <div class="stats">
-        <div><span class="num">11</span>CHANGEMAKERS</div>
+        <div><span class="num">450</span>APPLIED</div>
         <div class="divider">/</div>
-        <div><span class="num">4</span>COUNTRIES</div>
+        <div><span class="num">20</span>COUNTRIES</div>
         <div class="divider">/</div>
-        <div><span class="num">1</span>MISSION</div>
+        <div><span class="num">11</span>CHOSEN</div>
       </div>
     </div>
 
