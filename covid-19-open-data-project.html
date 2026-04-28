@@ -14,8 +14,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <!-- Load fonts asynchronously (non-blocking) -->
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel=\'stylesheet\'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap"></noscript>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap"></noscript>
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
@@ -108,15 +108,17 @@
 
 :root {
   /* Colors */
-  --black: #000000;
+  --black: #1a1a1a;
   --white: #ffffff;
   --orange: #FF6B35;
   --orange-dark: #E55A2B;
   --orange-soft: #FF8C61;
   --orange-light: rgba(255, 107, 53, 0.1);
-  --gray: #6B6560;
+  --gray: #5a574f;
   --gray-medium: #666666;
   --light-gray: #f5f5f5;
+  --warm-white: #f9f5f0;
+  --announcement-height: 44px;
 
   /* Semantic Colors */
   --success: #10B981;
@@ -184,6 +186,10 @@
   --border-width-base: 2px;
   --border-width-thick: 3px;
   --border-width-heavy: 4px;
+
+  /* Fonts */
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: 'Instrument Serif', 'Georgia', serif;
 }
 
 html {
@@ -203,12 +209,44 @@ html {
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
   background: var(--white);
   color: var(--black);
   line-height: 1.5;
   font-size: 18px;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hand-drawn SVG accents — match index/research aesthetic */
+.hand-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.hand-underline svg {
+  position: absolute;
+  bottom: -6px;
+  left: -4%;
+  width: 108%;
+  height: 14px;
+  pointer-events: none;
+}
+
+.squiggle-divider {
+  display: block;
+  margin: 0 auto;
+  width: 120px;
+  height: 12px;
+  opacity: 0.25;
+}
+
+.section-divider {
+  padding: 2.5rem 0;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
 }
 
 /* Navigation - SAME AS INDEX */
@@ -380,32 +418,32 @@ nav.scrolled .logo img {
   justify-self: end;
 }
 
-/* Hero Section - COVID Specific */
+/* Hero Section — light editorial, matches index/research */
 .hero {
-  min-height: 90vh;
+  min-height: 92vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 10rem 2rem 6rem;
-  background: var(--black);
-  color: var(--white);
+  background: var(--white);
+  color: var(--black);
   position: relative;
   overflow: hidden;
+  border-left: 5px solid var(--orange);
 }
 
+/* Subtle data-lattice backdrop — hints at the open-data nature without dominating */
 .hero::before {
-  content: '🦠';
+  content: '';
   position: absolute;
-  font-size: 40rem;
-  opacity: 0.03;
-  top: -10rem;
-  right: -10rem;
-  animation: float 8s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-30px) rotate(10deg); }
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(26, 26, 26, 0.07) 1px, transparent 0);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse at 50% 45%, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 45%, black 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .hero-content {
@@ -432,68 +470,106 @@ nav.scrolled .logo img {
 }
 
 .hero-label {
-  font-size: 0.75rem;
-  font-weight: 900;
-  letter-spacing: 0.15em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--orange);
   margin-bottom: 1.5rem;
-  animation: pulse 2s ease-in-out infinite;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+.hero-label::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  background: var(--orange);
+  border-radius: 50%;
+  display: inline-block;
+  animation: hero-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hero-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.85); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-label::before { animation: none; }
 }
 
 .hero h1 {
-  font-size: clamp(3rem, 7vw, 6rem);
+  font-size: clamp(2.75rem, 6vw, 5rem);
   font-weight: 900;
   line-height: 1.05;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
   margin-bottom: 2rem;
+  color: var(--black);
 }
 
 .hero h1 .highlight {
-  color: var(--orange);
+  color: var(--black);
   position: relative;
 }
 
+.hero h1 .hand-underline svg {
+  bottom: -10px;
+  height: 18px;
+}
+
 .hero-subtitle {
-  font-size: clamp(1.1rem, 2vw, 1.35rem);
+  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
   font-weight: 400;
   margin-bottom: 2rem;
-  line-height: 1.5;
-  opacity: 0.9;
+  line-height: 1.65;
+  color: var(--gray);
+  max-width: 560px;
 }
 
 .hero-meta {
-  display: flex;
-  gap: 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
   flex-wrap: wrap;
-  margin-bottom: 2.5rem;
-  font-size: 0.95rem;
-  opacity: 0.8;
+  margin-bottom: 2.25rem;
+  padding: 0.65rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--gray);
+  text-transform: uppercase;
+  border-top: 1px solid rgba(26, 26, 26, 0.12);
+  border-bottom: 1px solid rgba(26, 26, 26, 0.12);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .hero-meta-item {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
+}
+
+.hero-meta-item .sep {
+  color: rgba(26, 26, 26, 0.25);
 }
 
 .hero-meta-icon {
-  font-size: 1.25rem;
+  font-size: 0.95rem;
 }
 
 .video-embed {
   position: relative;
   width: 100%;
   padding-bottom: 56.25%;
-  border: 3px solid var(--white);
+  border: 3px solid var(--black);
   box-shadow: 12px 12px 0 var(--orange);
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--black);
 }
 
 .video-embed:hover {
@@ -519,12 +595,12 @@ nav.scrolled .logo img {
 .btn-primary {
   background: var(--orange);
   color: var(--white);
-  padding: 1rem 2.5rem;
+  padding: 1.1rem 2.5rem;
   text-decoration: none;
   font-weight: 700;
   font-size: 1rem;
-  transition: all 0.3s ease;
-  border: 3px solid var(--orange);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 2.5px solid var(--black);
   position: relative;
   overflow: hidden;
   display: inline-block;
@@ -540,7 +616,7 @@ nav.scrolled .logo img {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: var(--white);
+  background: var(--black);
   transition: left 0.3s ease;
   z-index: -1;
 }
@@ -550,20 +626,20 @@ nav.scrolled .logo img {
 }
 
 .btn-primary:hover {
-  color: var(--black);
-  border-color: var(--white);
+  color: var(--white);
+  border-color: var(--black);
   transform: translateY(-2px);
 }
 
 .btn-secondary {
   background: transparent;
-  color: var(--white);
-  padding: 1rem 2.5rem;
+  color: var(--black);
+  padding: 1.1rem 2.5rem;
   text-decoration: none;
   font-weight: 700;
   font-size: 1rem;
-  transition: all 0.3s ease;
-  border: 3px solid var(--white);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 2.5px solid var(--black);
   position: relative;
   overflow: hidden;
   display: inline-block;
@@ -579,7 +655,7 @@ nav.scrolled .logo img {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: var(--white);
+  background: var(--black);
   transition: left 0.3s ease;
   z-index: -1;
 }
@@ -589,19 +665,19 @@ nav.scrolled .logo img {
 }
 
 .btn-secondary:hover {
-  color: var(--black);
+  color: var(--white);
   transform: translateY(-2px);
 }
 
-/* Impact Stats */
+/* Impact Stats — black bar matches research-stats-bar treatment */
 .stats-bar {
-  padding: 3rem 2rem;
-  background: var(--orange);
+  padding: 5rem 2rem;
+  background: var(--black);
   color: var(--white);
 }
 
 .stats-container {
-  max-width: var(--max-width);
+  max-width: 1000px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -614,24 +690,26 @@ nav.scrolled .logo img {
 }
 
 .stat-number {
-  font-size: 2.5rem;
+  font-size: clamp(2.25rem, 4vw, 3rem);
   font-weight: 900;
   line-height: 1;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
+  color: var(--orange);
+  letter-spacing: -0.04em;
 }
 
 .stat-label {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  opacity: 0.95;
+  opacity: 0.85;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 /* About Section */
 .about {
   padding: 8rem 2rem;
-  background: var(--white);
+  background: var(--warm-white);
 }
 
 .about-container {
@@ -640,19 +718,30 @@ nav.scrolled .logo img {
 }
 
 .section-label {
-  font-size: 0.875rem;
-  font-weight: 900;
-  letter-spacing: 0.15em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--orange);
-  margin-bottom: 2rem;
+  margin-bottom: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.section-label::before {
+  content: '';
+  width: 24px;
+  height: 2px;
+  background: var(--orange);
+  display: inline-block;
 }
 
 .about h2 {
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 900;
   line-height: 1.1;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.035em;
   margin-bottom: 3rem;
 }
 
@@ -685,20 +774,23 @@ nav.scrolled .logo img {
 .about-image img {
   width: 100%;
   height: auto;
-  border: 4px solid var(--black);
-  box-shadow: 16px 16px 0 var(--orange);
-  transition: all 0.3s ease;
+  border: 3px solid var(--black);
+  border-radius: 4px;
+  box-shadow: 12px 12px 0 var(--orange);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--white);
+  padding: 2.5rem;
 }
 
 .about-image img:hover {
-  transform: scale(1.02);
-  box-shadow: 20px 20px 0 var(--orange);
+  transform: translate(-4px, -4px);
+  box-shadow: 16px 16px 0 var(--orange);
 }
 
 /* Publications Section */
 .publications {
   padding: 8rem 2rem;
-  background: var(--light-gray);
+  background: var(--white);
 }
 
 .publications-container {
@@ -706,25 +798,42 @@ nav.scrolled .logo img {
   margin: 0 auto;
 }
 
+.publications-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.publications-header .section-label {
+  margin-bottom: 1.25rem;
+}
+
 .publications h2 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 900;
   line-height: 1.1;
-  letter-spacing: -0.03em;
-  margin-bottom: 4rem;
-  text-align: center;
+  letter-spacing: -0.035em;
+  margin-bottom: 1rem;
+}
+
+.publications-intro {
+  font-size: 1.1rem;
+  color: var(--gray);
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.65;
 }
 
 .publications-grid {
   display: grid;
-  gap: 3rem;
+  gap: 2rem;
 }
 
 .publication-card {
   background: var(--white);
-  border: 3px solid var(--black);
+  border: 2px solid var(--black);
+  border-radius: 4px;
   padding: 3rem;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
 }
@@ -746,8 +855,8 @@ nav.scrolled .logo img {
 }
 
 .publication-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 12px 12px 0 var(--black);
+  transform: translate(-6px, -6px);
+  box-shadow: 6px 6px 0 var(--orange);
 }
 
 .publication-journal {
@@ -819,8 +928,8 @@ nav.scrolled .logo img {
 
 /* Features Section */
 .features {
-  padding: 6rem 2rem;
-  background: var(--white);
+  padding: 8rem 2rem;
+  background: var(--warm-white);
 }
 
 .features-container {
@@ -828,78 +937,62 @@ nav.scrolled .logo img {
   margin: 0 auto;
 }
 
+.features-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.features-header .section-label {
+  margin-bottom: 1.25rem;
+}
+
 .features h2 {
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
-  margin-bottom: 3rem;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  margin-bottom: 0;
   text-align: center;
 }
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
 }
 
 .feature-card {
-  padding: 1.5rem 1.25rem;
+  padding: 2rem 1.75rem;
   border: 2px solid var(--black);
-  transition: all 0.3s ease;
+  border-radius: 4px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   background: var(--white);
   position: relative;
 }
 
-.feature-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--black);
-  transform: scale(0);
-  transition: transform 0.3s ease;
-  z-index: -1;
-}
-
-.feature-card:hover::before {
-  transform: scale(1);
-}
-
 .feature-card:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: 6px 6px 0 var(--orange);
+  transform: translate(-5px, -5px);
+  box-shadow: 6px 6px 0 var(--black);
+  border-color: var(--orange);
 }
 
 .feature-icon {
   font-size: 1.75rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   display: inline-block;
 }
 
 .feature-title {
-  font-size: 0.95rem;
+  font-size: 1.1rem;
   font-weight: 900;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   letter-spacing: -0.02em;
-  transition: color 0.3s ease;
-}
-
-.feature-card:hover .feature-title {
-  color: var(--white);
 }
 
 .feature-text {
   color: var(--gray);
-  line-height: 1.5;
-  font-size: 0.85rem;
-  transition: color 0.3s ease;
-}
-
-.feature-card:hover .feature-text {
-  color: var(--white);
+  line-height: 1.6;
+  font-size: 0.95rem;
 }
 
 /* Recognition Section */
@@ -913,12 +1006,21 @@ nav.scrolled .logo img {
   margin: 0 auto;
 }
 
+.recognition-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.recognition-header .section-label {
+  margin-bottom: 1.25rem;
+}
+
 .recognition-container h2 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 900;
   line-height: 1.1;
-  letter-spacing: -0.03em;
-  margin-bottom: 4rem;
+  letter-spacing: -0.035em;
+  margin-bottom: 0;
   text-align: center;
 }
 
@@ -927,10 +1029,17 @@ nav.scrolled .logo img {
 }
 
 .letter-content {
-  background: var(--light-gray);
-  border: 3px solid var(--black);
-  padding: 4rem;
-  box-shadow: 16px 16px 0 var(--orange);
+  background: var(--warm-white);
+  border: 2px solid var(--black);
+  border-radius: 4px;
+  padding: 3.5rem;
+  box-shadow: 12px 12px 0 var(--orange);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.letter-content:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 15px 15px 0 var(--orange);
 }
 
 .letter-quote {
@@ -938,12 +1047,16 @@ nav.scrolled .logo img {
 }
 
 .quote-text {
-  font-size: 1.5rem;
-  line-height: 1.7;
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  line-height: 1.5;
   font-style: italic;
   color: var(--black);
   margin-bottom: 2rem;
-  font-weight: 500;
+  font-weight: 400;
+  position: relative;
+  padding-left: 1.5rem;
+  border-left: 3px solid var(--orange);
 }
 
 .quote-attribution {
@@ -1143,7 +1256,7 @@ nav.scrolled .logo img {
 /* Contributors Section */
 .contributors {
   padding: 8rem 2rem;
-  background: var(--light-gray);
+  background: var(--warm-white);
 }
 
 .contributors-container {
@@ -1151,22 +1264,31 @@ nav.scrolled .logo img {
   margin: 0 auto;
 }
 
+.contributors-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.contributors-header .section-label {
+  margin-bottom: 1.25rem;
+}
+
 .contributors-container h2 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 900;
   line-height: 1.1;
-  letter-spacing: -0.03em;
-  margin-bottom: 2rem;
+  letter-spacing: -0.035em;
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
 .contributors-intro {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   line-height: 1.7;
   color: var(--gray);
   text-align: center;
-  max-width: 800px;
-  margin: 0 auto 5rem;
+  max-width: 720px;
+  margin: 0 auto 4rem;
 }
 
 .contributors-section {
@@ -1194,28 +1316,32 @@ nav.scrolled .logo img {
 }
 
 .contributor-card {
-  padding: 1.5rem;
+  padding: 1.25rem;
   background: var(--white);
   border: 2px solid var(--black);
+  border-radius: 4px;
   font-weight: 600;
   text-align: center;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 0.95rem;
 }
 
 .contributor-card:hover {
   background: var(--orange);
   color: var(--white);
-  transform: translateY(-4px);
-  box-shadow: 6px 6px 0 var(--black);
+  transform: translate(-4px, -4px);
+  box-shadow: 4px 4px 0 var(--black);
+  border-color: var(--orange);
 }
 
 .contributors-list {
-  font-size: 1.05rem;
-  line-height: 1.8;
+  font-size: 1rem;
+  line-height: 1.85;
   color: var(--gray);
-  padding: 2rem;
+  padding: 2.5rem;
   background: var(--white);
   border: 2px solid var(--black);
+  border-radius: 4px;
 }
 
 /* CTA Section */
@@ -1224,23 +1350,65 @@ nav.scrolled .logo img {
   text-align: center;
   background: var(--orange);
   color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .cta h2 {
-  font-size: clamp(3rem, 7vw, 5rem);
+  font-size: clamp(2.5rem, 6vw, 4rem);
   font-weight: 900;
   line-height: 1.1;
-  letter-spacing: -0.04em;
-  margin-bottom: 2rem;
+  letter-spacing: -0.035em;
+  margin-bottom: 1.5rem;
 }
 
 .cta-subtitle {
-  font-size: 1.5rem;
-  margin-bottom: 3rem;
-  max-width: 700px;
+  font-size: 1.25rem;
+  margin-bottom: 2.5rem;
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
   opacity: 0.95;
+  line-height: 1.6;
+}
+
+.cta .hero-cta {
+  justify-content: center;
+}
+
+.cta .btn-primary {
+  background: var(--black);
+  border-color: var(--black);
+}
+
+.cta .btn-primary::before {
+  background: var(--white);
+}
+
+.cta .btn-primary:hover {
+  color: var(--black);
+  border-color: var(--white);
+}
+
+.cta .btn-secondary {
+  background: transparent;
+  color: var(--white);
+  border-color: var(--white);
+}
+
+.cta .btn-secondary::before {
+  background: var(--white);
+}
+
+.cta .btn-secondary:hover {
+  color: var(--orange);
 }
 
 /* Footer - SAME AS INDEX */
@@ -1287,7 +1455,7 @@ footer {
   text-decoration: none;
   border: 2px solid var(--orange);
   transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
@@ -1508,8 +1676,15 @@ footer {
   }
   
   .hero-meta {
-    gap: 1rem;
-    align-items: flex-start;
+    gap: 0.55rem;
+    flex-direction: row;
+    align-items: center;
+    font-size: 0.7rem;
+    padding: 0.55rem 0.85rem;
+  }
+
+  .hero-meta .sep {
+    display: none;
   }
   
   .stats-container {
@@ -1538,25 +1713,38 @@ footer {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
-  
+
   .feature-card {
-    padding: 1.25rem 1rem;
+    padding: 1.5rem 1.25rem;
   }
-  
+
   .feature-icon {
     font-size: 1.5rem;
   }
-  
+
   .feature-title {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   
   .feature-text {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
-  
+
   .publication-card {
     padding: 2rem;
+  }
+
+  .letter-content {
+    padding: 2rem;
+  }
+
+  .quote-text {
+    font-size: 1.2rem;
+    padding-left: 1rem;
+  }
+
+  .about-image img {
+    padding: 1.5rem;
   }
   
     .footer-newsletter {
@@ -1707,7 +1895,7 @@ input[type="email"],
 input[type="number"],
 textarea,
 select {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-body);
   transition: var(--transition-base);
 }
 
@@ -2608,32 +2796,38 @@ select.warning {
 <section class="hero">
   <div class="hero-content">
     <div class="hero-text">
-      <div class="hero-label">Google Health Partnership • 2020-2022</div>
+      <div class="hero-label">Google Health Partnership · 2020–2022</div>
       <h1>
         COVID-19<br>
-        <span class="highlight">Open Data</span>
+        <span class="highlight hand-underline">Open Data<svg viewBox="0 0 300 14" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M3 8 C 60 2, 120 12, 180 6 S 270 4, 297 7" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none"/></svg></span>
       </h1>
       <p class="hero-subtitle">
-        Our groundbreaking partnership with Google Health produced open-source COVID-19 datasets published in Nature, empowering decision-makers worldwide during the pandemic.
+        Our partnership with Google Health produced the world's largest open-source COVID-19 dataset—published in Nature, used by the WHO, World Bank, and IMF, and built to give decision-makers a fighting chance.
       </p>
-      
+
       <div class="hero-meta">
         <div class="hero-meta-item">
           <span class="hero-meta-icon">🌍</span>
           <span>190+ Countries</span>
         </div>
+        <span class="sep">·</span>
         <div class="hero-meta-item">
-          <span class="hero-meta-icon">💻</span>
-          <span>Open Source</span>
+          <span class="hero-meta-icon">📍</span>
+          <span>22,000+ Locations</span>
+        </div>
+        <span class="sep">·</span>
+        <div class="hero-meta-item">
+          <span class="hero-meta-icon">📰</span>
+          <span>Published in Nature</span>
         </div>
       </div>
-      
+
       <div class="hero-cta">
         <a href="#publications" class="btn-primary">Read the Research</a>
-        <a href="https://health.google.com/covid-19/open-data/" target="_blank" rel="noopener noreferrer" class="btn-secondary">Dive Into The Data</a>
+        <a href="https://health.google.com/covid-19/open-data/" target="_blank" rel="noopener noreferrer" class="btn-secondary">Dive Into the Data</a>
       </div>
     </div>
-    
+
     <div class="hero-video">
       <div class="video-embed">
         <iframe width="100%" height="100%" src="https://www.youtube.com/embed/ZfwDob4R7j8?si=XuJHZnm_MN7FjTYq" title="COVID-19 Open Data Project" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -2666,8 +2860,8 @@ select.warning {
 <section class="about">
   <div class="about-container">
     <div class="section-label">The Crisis</div>
-    <h2>Why This Work Mattered</h2>
-    
+    <h2>Why This Work <span class="hand-underline">Mattered<svg viewBox="0 0 300 14" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M3 8 C 60 2, 120 12, 180 6 S 270 4, 297 7" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none"/></svg></span></h2>
+
     <div class="about-content">
       <div class="about-text">
         <p>
@@ -2683,7 +2877,7 @@ select.warning {
           <strong>This wasn't just data. It was infrastructure for survival.</strong>
         </p>
       </div>
-      
+
       <div class="about-image">
         <img src="google.png" alt="Google Health Partnership" loading="lazy">
       </div>
@@ -2693,8 +2887,12 @@ select.warning {
 
 <section class="publications" id="publications">
   <div class="publications-container">
-    <h2>Published Research</h2>
-    
+    <div class="publications-header">
+      <div class="section-label">Published Research</div>
+      <h2>Peer-reviewed, in <span class="hand-underline">Nature<svg viewBox="0 0 300 14" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M3 8 C 60 2, 120 12, 180 6 S 270 4, 297 7" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none"/></svg></span></h2>
+      <p class="publications-intro">Two papers documenting the methodology, scale, and best practices behind the COVID-19 Open Data project.</p>
+    </div>
+
     <div class="publications-grid">
       <div class="publication-card">
         <div class="publication-journal">American Journal of Health Education</div>
@@ -2730,8 +2928,11 @@ select.warning {
 
 <section class="features">
   <div class="features-container">
-    <h2>What Makes This Dataset Revolutionary</h2>
-    
+    <div class="features-header">
+      <div class="section-label">The Dataset</div>
+      <h2>What made it <span class="hand-underline">revolutionary<svg viewBox="0 0 300 14" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M3 8 C 60 2, 120 12, 180 6 S 270 4, 297 7" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none"/></svg></span></h2>
+    </div>
+
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-icon">🌍</div>
@@ -2786,9 +2987,11 @@ select.warning {
 
 <section class="recognition">
   <div class="recognition-container">
-    <div class="section-label">Impact & Recognition</div>
-    <h2>How the Work Saved Lives</h2>
-    
+    <div class="recognition-header">
+      <div class="section-label">Impact &amp; Recognition</div>
+      <h2>How the work <span class="hand-underline">saved lives<svg viewBox="0 0 300 14" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M3 8 C 60 2, 120 12, 180 6 S 270 4, 297 7" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none"/></svg></span></h2>
+    </div>
+
     <div class="google-letter-section">
       <div class="letter-content">
         <div class="letter-quote">
@@ -2874,9 +3077,11 @@ select.warning {
 
 <section class="contributors">
   <div class="contributors-container">
-    <div class="section-label">The Team</div>
-    <h2>Built by Brilliant Minds</h2>
-    
+    <div class="contributors-header">
+      <div class="section-label">The Team</div>
+      <h2>Built by brilliant <span class="hand-underline">minds<svg viewBox="0 0 300 14" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M3 8 C 60 2, 120 12, 180 6 S 270 4, 297 7" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none"/></svg></span></h2>
+    </div>
+
     <p class="contributors-intro">
       This project was only possible through the dedication of researchers, data scientists, and volunteers who worked tirelessly throughout the pandemic to maintain the world's most comprehensive COVID-19 dataset.
     </p>
@@ -2915,16 +3120,18 @@ select.warning {
 </section>
 
 <section class="cta">
-  <h2>
-    Data infrastructure<br>
-    saved lives.
-  </h2>
-  <p class="cta-subtitle">
-    Support our continued mission to build the data systems that power health equity worldwide.
-  </p>
-  <div class="hero-cta">
-    <a href="donate.html" class="btn-primary">Support Our Mission</a>
-    <a href="research.html" class="btn-secondary">Explore More Research</a>
+  <div class="cta-container">
+    <h2>
+      Data infrastructure<br>
+      saved lives.
+    </h2>
+    <p class="cta-subtitle">
+      Support our continued mission to build the data systems that power health equity worldwide.
+    </p>
+    <div class="hero-cta">
+      <a href="donate.html" class="btn-primary">Support Our Mission</a>
+      <a href="research.html" class="btn-secondary">Explore More Research</a>
+    </div>
   </div>
 </section>
 
@@ -3019,7 +3226,6 @@ if (nav) {
       nav.classList.remove('scrolled');
     }
   });
-}
 }
 
 // Smooth scroll
