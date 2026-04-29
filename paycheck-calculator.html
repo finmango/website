@@ -3,1709 +3,122 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Paycheck Calculator - FinMango</title>
-<meta name="description" content="Calculate your take-home pay after taxes and deductions. Understand federal, state, and FICA taxes on your paycheck.">
-<meta name="keywords" content="paycheck calculator, salary calculator, take home pay, net pay calculator, tax withholding, FICA tax, federal tax calculator, state tax calculator">
-<meta name="author" content="FinMango">
-<link rel="canonical" href="https://finmango.org/paycheck-calculator">
+<title>Paycheck Calculator | FinMango</title>
+<meta name="description" content="Calculate your take-home pay after federal taxes, state taxes, FICA, and pre-tax deductions. See where every dollar of your paycheck goes.">
 <link rel="icon" type="image/png" href="favicon.png">
-
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://finmango.org/paycheck-calculator">
-<meta property="og:title" content="Paycheck Calculator - FinMango">
-<meta property="og:description" content="Calculate your take-home pay after taxes and deductions. Understand federal, state, and FICA taxes on your paycheck.">
-<meta property="og:image" content="https://www.finmango.org/og-image.png">
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://finmango.org/paycheck-calculator">
-<meta property="twitter:title" content="Paycheck Calculator - FinMango">
-<meta property="twitter:description" content="Calculate your take-home pay after taxes and deductions. Understand federal, state, and FICA taxes on your paycheck.">
-<meta property="twitter:image" content="https://www.finmango.org/og-image.png">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-DW5HBYS9JW');
-</script>
-
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/navbar.css">
 <style>
-/* Font loaded asynchronously via preload link in <head> */
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  /* Colors */
-  --black: #000000;
-  --white: #ffffff;
-  --orange: #FF6B35;
-  --orange-dark: #E55A2B;
-  --orange-soft: #FF8C61;
-  --orange-light: rgba(255, 107, 53, 0.1);
-  --gray: #6B6560;
-  --gray-medium: #666666;
-  --light-gray: #f5f5f5;
-
-  /* Semantic Colors */
-  --success: #10B981;
-  --error: #EF4444;
-  --warning: #F59E0B;
-  --info: #3B82F6;
-
-  /* Layout */
-  --max-width: 1200px;
-  --hero-max-width: 1400px;
-  --nav-max-width: 1280px;
-
-  --green: #10B981;
-  --red: #EF4444;
-
-  /* Spacing Scale (8px base) */
-  --space-1: 0.25rem;   /* 4px */
-  --space-2: 0.5rem;    /* 8px */
-  --space-3: 0.75rem;   /* 12px */
-  --space-4: 1rem;      /* 16px */
-  --space-6: 1.5rem;    /* 24px */
-  --space-8: 2rem;      /* 32px */
-  --space-10: 2.5rem;   /* 40px */
-  --space-12: 3rem;     /* 48px */
-  --space-16: 4rem;     /* 64px */
-  --space-20: 5rem;     /* 80px */
-  --space-24: 6rem;     /* 96px */
-  --space-32: 8rem;     /* 128px */
-  --space-40: 10rem;    /* 160px */
-
-  /* Typography Scale */
-  --text-xs: 0.75rem;   /* 12px */
-  --text-sm: 0.875rem;  /* 14px */
-  --text-base: 1rem;    /* 16px */
-  --text-lg: 1.125rem;  /* 18px */
-  --text-xl: 1.25rem;   /* 20px */
-  --text-2xl: 1.5rem;   /* 24px */
-  --text-3xl: 2rem;     /* 32px */
-  --text-4xl: 3rem;     /* 48px */
-  --text-5xl: 4rem;     /* 64px */
-
-  /* Font Weights */
-  --font-normal: 400;
-  --font-medium: 500;
-  --font-semibold: 600;
-  --font-bold: 700;
-  --font-black: 900;
-
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-
-  /* Shadows */
-  --shadow-sm: 4px 4px 0 var(--black);
-  --shadow-md: 8px 8px 0 var(--black);
-  --shadow-lg: 12px 12px 0 var(--black);
-  --shadow-xl: 16px 16px 0 var(--black);
-
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-base: 0.3s ease;
-  --transition-slow: 0.5s ease;
-
-  /* Borders */
-  --border-width-thin: 1px;
-  --border-width-base: 2px;
-  --border-width-thick: 3px;
-  --border-width-heavy: 4px;
-}
-/* Accessibility: Reduced Motion Support */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: var(--white);
-  color: var(--black);
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-/* Navigation */
-nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: var(--white);
-  z-index: 1050;
-  padding: 1.5rem 0;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-nav.scrolled {
-  padding: 1rem 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-  backdrop-filter: blur(10px);
-  background: var(--white);
-}
-
-.nav-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  transition: transform 0.3s ease;
-  justify-self: start;
-}
-
-.logo:hover {
-  transform: rotate(-2deg) scale(1.05);
-}
-
-.logo img {
-  height: 46px;
-  transition: height 0.3s ease;
-}
-
-nav.scrolled .logo img {
-  height: 38px;
-}
-
-.nav-right {
-  display: flex;
-  gap: 1.75rem;
-  align-items: center;
-  justify-self: end;
-}
-
-.nav-right a {
-  color: var(--black);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-  position: relative;
-  white-space: nowrap;
-  letter-spacing: -0.01em;
-}
-
-.nav-right a:not(.btn-donate):not(.btn-get-involved)::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--orange);
-  transition: width 0.3s ease;
-}
-
-.nav-right a:not(.btn-donate):not(.btn-get-involved):hover::after {
-  width: 100%;
-}
-
-.nav-right a:not(.btn-donate):not(.btn-get-involved):hover {
-  color: var(--orange);
-}
-
-.btn-donate {
-  background: var(--orange);
-  color: var(--white) !important;
-  padding: 0.5rem 1rem;
-  text-decoration: none;
-  font-weight: 700;
-  transition: all 0.2s ease;
-  border: 2px solid var(--black);
-  position: relative;
-  overflow: hidden;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
-}
-
-.btn-donate::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--black);
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.btn-donate:hover::before {
-  left: 0;
-}
-
-.btn-donate:hover {
-  transform: scale(1.05);
-}
-
-.btn-get-involved {
-  background: transparent;
-  color: var(--black) !important;
-  padding: 0.4rem 0.85rem;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  border: 1.5px solid rgba(0, 0, 0, 0.25);
-  position: relative;
-  overflow: hidden;
-  font-size: 0.8rem;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
-}
-
-.btn-get-involved::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--black);
-  transition: left 0.3s ease;
-  z-index: -1;
-}
-
-.btn-get-involved:hover::before {
-  left: 0;
-}
-
-.btn-get-involved:hover {
-  color: var(--white) !important;
-  border-color: var(--black);
-}
-
-/* Mobile Menu */
-.mobile-controls {
-  display: none;
-  gap: 1rem;
-  align-items: center;
-  justify-self: end;
-}
-
-.mobile-menu-btn {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-.mobile-menu-btn span {
-  display: block;
-  width: 28px;
-  height: 3px;
-  background: var(--black);
-  margin: 6px 0;
-  transition: all 0.3s ease;
-}
-
-.mobile-menu-btn.active span:nth-child(1) {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-
-.mobile-menu-btn.active span:nth-child(2) {
-  opacity: 0;
-}
-
-.mobile-menu-btn.active span:nth-child(3) {
-  transform: rotate(-45deg) translate(7px, -6px);
-}
-
-.mobile-get-involved {
-  display: none;
-}
-
-.mobile-menu {
-  display: none;
-  position: fixed;
-  top: 0;
-  right: -100%;
-  width: 100%;
-  height: 100vh;
-  background: var(--white);
-  z-index: 1040;
-  padding: 6rem 2rem;
-  transition: right 0.3s ease;
-  overflow-y: auto;
-}
-
-.mobile-menu.active {
-  display: block;
-  right: 0;
-}
-
-.mobile-menu a {
-  display: block;
-  padding: 1.5rem 0;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--black);
-  text-decoration: none;
-  border-bottom: 2px solid var(--black);
-  transition: all 0.2s ease;
-}
-
-.mobile-menu a:hover {
-  color: var(--orange);
-  padding-left: 1rem;
-}
-
-/* Hero */
-.hero {
-  min-height: 40vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 9rem 2rem 2rem;
-  text-align: center;
-  background: linear-gradient(135deg, var(--green) 0%, var(--orange) 100%);
-  color: var(--white);
-  position: relative;
-}
-
-.hero-container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.hero-title {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 900;
-  margin-bottom: 1rem;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.hero-subtitle {
-  font-size: clamp(1.1rem, 3vw, 1.5rem);
-  font-weight: 600;
-  max-width: 700px;
-  margin: 0 auto;
-  opacity: 0.95;
-}
-
-/* Main Content */
-.main-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 3rem 2rem;
-}
-
-.content-section {
-  margin-bottom: 3rem;
-}
-
-.section-text {
-  font-size: 1.1rem;
-  color: var(--gray);
-  margin-bottom: 1rem;
-  line-height: 1.7;
-}
-
-/* Calculator Sections */
-.calc-section {
-  border: 3px solid var(--black);
-  margin-bottom: 1.5rem;
-  background: var(--white);
-  overflow: hidden;
-}
-
-.calc-section-header {
-  background: var(--orange);
-  color: var(--white);
-  padding: 1.25rem 1.5rem;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.3s ease;
-  border-bottom: 3px solid var(--black);
-}
-
-.calc-section-header:hover {
-  background: var(--black);
-}
-
-.calc-section-title {
-  font-size: 1.3rem;
-  font-weight: 900;
-  margin: 0;
-}
-
-.calc-section-arrow {
-  font-size: 1.5rem;
-  font-weight: 900;
-  transition: transform 0.3s ease;
-}
-
-.calc-section.active .calc-section-arrow {
-  transform: rotate(180deg);
-}
-
-.calc-section-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
-  padding: 0 1.5rem;
-}
-
-.calc-section.active .calc-section-content {
-  max-height: 3000px;
-  padding: 1.5rem;
-}
-
-/* Calculator Box */
-.calculator-box {
-  background: var(--light-gray);
-  border: 3px solid var(--black);
-  padding: 2rem;
-  margin: 2rem 0;
-}
-
-.input-grid {
-  display: grid;
-  gap: 2rem;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.input-label {
-  font-weight: 700;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  color: var(--black);
-}
-
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.input-prefix {
-  position: absolute;
-  left: 1rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--gray);
-}
-
-input[type="number"],
-select {
-  width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2rem;
-  font-size: 1rem;
-  border: 2px solid var(--black);
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-select {
-  padding-left: 1rem;
-  background: var(--white);
-}
-
-input[type="number"]:focus,
-select:focus {
-  outline: none;
-  border-color: var(--orange);
-  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-}
-
-/* Paycheck Display */
-.paycheck-display {
-  background: linear-gradient(135deg, var(--green) 0%, var(--orange) 100%);
-  border: 3px solid var(--black);
-  padding: 3rem 2rem;
-  margin: 2rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.paycheck-display::before {
-  content: '💰';
-  position: absolute;
-  font-size: 15rem;
-  opacity: 0.1;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.paycheck-label {
-  color: var(--white);
-  font-size: 1.2rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.5rem;
-  position: relative;
-  z-index: 1;
-}
-
-.paycheck-number {
-  color: var(--white);
-  font-size: 4rem;
-  font-weight: 900;
-  margin-bottom: 0.5rem;
-  position: relative;
-  z-index: 1;
-}
-
-.paycheck-sublabel {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
-  position: relative;
-  z-index: 1;
-}
-
-/* Breakdown Cards */
-.breakdown-grid {
-  display: grid;
-  gap: 1rem;
-  margin: 2rem 0;
-}
-
-.breakdown-card {
-  background: var(--white);
-  border: 3px solid var(--black);
-  padding: 1.5rem;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1rem;
-  align-items: center;
-}
-
-.breakdown-card.deduction {
-  border-color: var(--red);
-}
-
-.breakdown-label {
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.breakdown-value {
-  font-size: 1.5rem;
-  font-weight: 900;
-  text-align: right;
-}
-
-.breakdown-card.deduction .breakdown-value {
-  color: var(--red);
-}
-
-/* Footer */
-footer {
-  padding: 0;
-  border-top: 4px solid var(--orange);
-  background: var(--black);
-  color: var(--white);
-}
-
-.footer-newsletter {
-  padding: 3rem 2rem;
-  background: rgba(255, 107, 53, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: center;
-}
-
-.footer-newsletter-container {
-  max-width: 850px;
-  margin: 0 auto;
-}
-
-.footer-newsletter h3 {
-  font-size: 1.5rem;
-  font-weight: 900;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.02em;
-}
-
-.footer-newsletter p {
-  font-size: 1rem;
-  opacity: 0.8;
-  margin-bottom: 1.5rem;
-  line-height: 1.5;
-}
-
-.footer-newsletter-btn {
-  display: inline-block;
-  padding: 0.85rem 2rem;
-  font-size: 1rem;
-  font-weight: 700;
-  background: var(--orange);
-  color: var(--white);
-  text-decoration: none;
-  border: 2px solid var(--orange);
-  transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.footer-newsletter-btn:hover {
-  background: var(--white);
-  color: var(--black);
-  border-color: var(--white);
-  transform: translateY(-2px);
-}
-
-.footer-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 4rem 2rem 0;
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 3rem;
-  margin-bottom: 2rem;
-}
-
-.footer-brand img {
-  height: 50px;
-  margin-bottom: 1rem;
-  filter: brightness(0) invert(1);
-}
-
-.footer-tagline {
-  color: #999;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.footer-section h4 {
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.footer-section a {
-  display: block;
-  color: #999;
-  text-decoration: none;
-  margin-bottom: 0.75rem;
-  transition: all 0.2s ease;
-  font-size: 0.95rem;
-}
-
-.footer-section a:hover {
-  color: var(--orange);
-  padding-left: 0.5rem;
-}
-
-.footer-bottom {
-  border-top: 1px solid #333;
-  padding-top: 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .footer-container {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .nav-right {
-    display: none;
-  }
-  
-  .mobile-controls {
-    display: flex;
-  }
-  
-  .mobile-menu-btn {
-    display: block;
-  }
-  
-  .mobile-get-involved {
-    display: inline-block;
-  }
-  
-  .hero {
-    padding: 7rem 1.5rem 2rem;
-  }
-  
-  .paycheck-number {
-    font-size: 2.5rem;
-  }
-  
-    .footer-newsletter {
-    padding: 2.5rem 1.5rem;
-  }
-
-  .footer-newsletter h3 {
-    font-size: 1.25rem;
-  }
-
-  .footer-newsletter p {
-    font-size: 0.95rem;
-  }
-
-  .footer-newsletter-btn {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
-  }
-
-.footer-container {
-    grid-template-columns: 1fr;
-  }
-  
-  .footer-bottom {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-
-  .main-content {
-    padding: 2rem 1rem;
-  }
-
-  .calculator-box {
-    padding: 1.25rem;
-  }
-
-  .calc-section-content {
-    padding: 1.25rem;
-  }
-
-  .calc-section-header {
-    padding: 1.25rem;
-  }
-
-  .input-grid {
-    gap: 1.25rem;
-  }
-
-  .result-box {
-    padding: 1.25rem;
-  }
-
-  .chart-box {
-    padding: 1.25rem;
-  }
-}
-
-/* ============================================
-   BASE COMPONENT CLASSES
-   ============================================ */
-
-/* Base Input Styles with Validation States */
-input[type="text"],
-input[type="email"],
-input[type="number"],
-textarea,
-select {
-  font-family: 'Inter', sans-serif;
-  transition: var(--transition-base);
-}
-
-/* Input Validation States */
-input.error,
-textarea.error,
-select.error {
-  border-color: var(--error) !important;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-}
-
-input.success,
-textarea.success,
-select.success {
-  border-color: var(--success) !important;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-}
-
-input.warning,
-textarea.warning,
-select.warning {
-  border-color: var(--warning) !important;
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
-}
-
-/* Base Card Component */
-.card {
-  padding: var(--space-12);
-  background: var(--white);
-  transition: var(--transition-base);
-}
-
-.card--bordered {
-  border: var(--border-width-thick) solid var(--black);
-}
-
-.card--shadow {
-  box-shadow: var(--shadow-md);
-}
-
-.card--hover-lift:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Utility Classes for Spacing */
-.mb-1 { margin-bottom: var(--space-1); }
-.mb-2 { margin-bottom: var(--space-2); }
-.mb-3 { margin-bottom: var(--space-3); }
-.mb-4 { margin-bottom: var(--space-4); }
-.mb-6 { margin-bottom: var(--space-6); }
-.mb-8 { margin-bottom: var(--space-8); }
-
-.mt-1 { margin-top: var(--space-1); }
-.mt-2 { margin-top: var(--space-2); }
-.mt-3 { margin-top: var(--space-3); }
-.mt-4 { margin-top: var(--space-4); }
-.mt-6 { margin-top: var(--space-6); }
-.mt-8 { margin-top: var(--space-8); }
-
-/* Typography Utility Classes */
-.text-xs { font-size: var(--text-xs); }
-.text-sm { font-size: var(--text-sm); }
-.text-base { font-size: var(--text-base); }
-.text-lg { font-size: var(--text-lg); }
-.text-xl { font-size: var(--text-xl); }
-.text-2xl { font-size: var(--text-2xl); }
-
-.font-medium { font-weight: var(--font-medium); }
-.font-semibold { font-weight: var(--font-semibold); }
-.font-bold { font-weight: var(--font-bold); }
-.font-black { font-weight: var(--font-black); }
-
-/* Alert/Message Components */
-.alert {
-  padding: var(--space-4) var(--space-6);
-  border: var(--border-width-base) solid;
-  margin-bottom: var(--space-4);
-  border-radius: var(--radius-sm);
-}
-
-.alert--success {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: var(--success);
-  color: #065f46;
-}
-
-.alert--error {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: var(--error);
-  color: #991b1b;
-}
-
-.alert--warning {
-  background: rgba(245, 158, 11, 0.1);
-  border-color: var(--warning);
-  color: #92400e;
-}
-
-.alert--info {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: var(--info);
-  color: #1e40af;
-}
-
-
-    /* ============================================
-       MEGA DROPDOWN (Initiatives)
-       ============================================ */
-    .dropdown-mega .dropdown-content-mega {
-      min-width: 620px;
-      padding: 1rem 0;
-      right: 0;
-      left: auto;
-      transform: none;
-    }
-
-    .dropdown-content-mega::before {
-      left: auto !important;
-      right: 40px;
-      transform: none !important;
-    }
-
-    .dropdown-content-mega::after {
-      left: auto;
-      right: 0;
-    }
-
-    .dropdown-mega-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-    }
-
-    .dropdown-mega-col {
-      padding: 0;
-    }
-
-    .dropdown-mega-col:first-child {
-      border-right: 1px solid rgba(0, 0, 0, 0.06);
-    }
-
-    .dropdown-mega-col-label {
-      font-size: 0.6rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--gray-medium);
-      padding: 0.5rem 1.25rem 0.4rem;
-      opacity: 0.6;
-    }
-
-    .dropdown-content-mega .dropdown-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.6rem 1.25rem;
-      gap: 0.75rem;
-      border-bottom: none;
-    }
-
-    .dropdown-item-text {
-      display: flex;
-      flex-direction: column;
-      gap: 0.1rem;
-    }
-
-    .dropdown-item-name {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--black);
-      transition: color 0.2s ease;
-    }
-
-    .dropdown-item-desc {
-      font-size: 0.68rem;
-      font-weight: 500;
-      color: var(--gray-medium);
-      transition: color 0.2s ease;
-      letter-spacing: 0.01em;
-    }
-
-    .dropdown-external {
-      font-size: 0.85rem;
-      opacity: 0.4;
-      transition: all 0.2s ease;
-      flex-shrink: 0;
-    }
-
-    .dropdown-content-mega .dropdown-item:hover {
-      background-color: var(--light-gray);
-      padding-left: 1.4rem;
-    }
-
-    .dropdown-content-mega .dropdown-item:hover .dropdown-item-name {
-      color: var(--orange);
-    }
-
-    .dropdown-content-mega .dropdown-item:hover .dropdown-item-desc {
-      color: var(--gray);
-    }
-
-    .dropdown-content-mega .dropdown-item:hover .dropdown-external {
-      opacity: 1;
-      color: var(--orange);
-      transform: translate(2px, -2px);
-    }
-
-    @keyframes fadeInMega {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .dropdown-mega:hover .dropdown-content-mega {
-      animation: fadeInMega 0.2s ease;
-    }
-
-    /* Mobile controls container */
-    .mobile-controls {
-      display: none;
-      gap: 1rem;
-      align-items: center;
-      justify-self: end;
-    }
-
-    /* ============================================
-       FOOTER
-       ============================================ */
-    footer {
-      padding: 0;
-      border-top: 4px solid var(--orange);
-      background: var(--black);
-      color: var(--white);
-      position: relative;
-    }
-
-    .footer-newsletter {
-      padding: 2.5rem 2rem;
-      background: rgba(255, 107, 53, 0.08);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      text-align: center;
-    }
-
-    .footer-newsletter-container {
-      max-width: 850px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .footer-newsletter-text {
-      text-align: left;
-    }
-
-    .footer-newsletter h3 {
-      font-size: 1.2rem;
-      font-weight: 900;
-      margin-bottom: 0.2rem;
-      letter-spacing: -0.02em;
-    }
-
-    .footer-newsletter p {
-      font-size: 0.9rem;
-      opacity: 0.7;
-      margin: 0;
-      line-height: 1.4;
-    }
-
-    .footer-newsletter-btn {
-      display: inline-block;
-      padding: 0.75rem 1.75rem;
-      font-size: 0.9rem;
-      font-weight: 700;
-      background: var(--orange);
-      color: var(--white);
-      text-decoration: none;
-      border: 2px solid var(--orange);
-      transition: all 0.2s ease;
-      font-family: var(--font-body);
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
-    }
-
-    .footer-newsletter-btn:hover {
-      background: var(--white);
-      color: var(--black);
-      border-color: var(--white);
-      transform: translateY(-2px);
-    }
-
-    .footer-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 4rem 2rem 0;
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-
-    .footer-brand-col {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .footer-brand {
-      margin-bottom: 0.25rem;
-    }
-
-    .footer-brand img {
-      height: 32px;
-      filter: brightness(0) invert(1);
-    }
-
-    .footer-tagline {
-      opacity: 0.7;
-      line-height: 1.6;
-      font-size: 0.95rem;
-    }
-
-    .footer-ein {
-      opacity: 0.4;
-      font-size: 0.8rem;
-    }
-
-    .footer-social {
-      display: flex;
-      gap: 0.75rem;
-      margin-top: 0.25rem;
-    }
-
-    .footer-social a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--white);
-      text-decoration: none;
-      transition: all 0.2s ease;
-      font-size: 0.85rem;
-    }
-
-    .footer-social a:hover {
-      background: var(--orange);
-      transform: translateY(-2px);
-    }
-
-    .footer-social a svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
-
-    .footer-section h4 {
-      font-size: 0.75rem;
-      font-weight: 900;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 1.25rem;
-      color: var(--orange);
-      opacity: 0.8;
-    }
-
-    .footer-section a {
-      display: block;
-      color: var(--white);
-      text-decoration: none;
-      margin-bottom: 0.65rem;
-      transition: all 0.2s ease;
-      font-size: 0.95rem;
-      opacity: 0.8;
-    }
-
-    .footer-section a:hover {
-      color: var(--orange);
-      opacity: 1;
-      transform: translateX(4px);
-    }
-
-    /* Footer squiggle accent */
-    .footer-squiggle {
-      display: block;
-      margin: 0 auto 0;
-      width: 80px;
-      height: 8px;
-      opacity: 0.2;
-    }
-
-    .footer-bottom {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 2rem 2rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      opacity: 0.5;
-      font-size: 0.85rem;
-    }
-
-    .footer-bottom a {
-      color: rgba(255, 255, 255, 0.7);
-      text-decoration: none;
-      transition: color 0.2s ease;
-      margin: 0 0.75rem;
-    }
-
-    .footer-bottom a:hover {
-      color: var(--orange);
-    }
-
-
-    /* ============================================
-       MOBILE MENU
-       ============================================ */
-    .mobile-menu-btn {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0;
-    }
-
-    .mobile-get-involved {
-      display: none;
-    }
-
-    .mobile-menu-btn span {
-      display: block;
-      width: 28px;
-      height: 3px;
-      background: var(--black);
-      margin: 6px 0;
-      transition: all 0.3s ease;
-    }
-
-    .mobile-menu-btn.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .mobile-menu-btn.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .mobile-menu-btn.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -6px);
-    }
-
-    .mobile-menu {
-      display: none;
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      background: var(--white);
-      z-index: 1040;
-      padding: 5rem 1.5rem 1.5rem;
-      transition: right 0.3s ease;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .mobile-menu.active {
-      display: flex;
-      flex-direction: column;
-      right: 0;
-    }
-
-    /* Orange accent strip at top */
-    .mobile-menu::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: var(--orange);
-      z-index: 1;
-    }
-
-    .mobile-menu-nav {
-      flex: none;
-    }
-
-    .mobile-menu-nav > a {
-      display: block;
-      padding: 0.85rem 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--black);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-      transition: all 0.2s ease;
-      opacity: 0;
-      transform: translateX(20px);
-      animation: mobileSlideIn 0.3s ease forwards;
-    }
-
-    .mobile-menu.active .mobile-menu-nav > a:nth-child(1) { animation-delay: 0.05s; }
-    .mobile-menu.active .mobile-menu-nav > a:nth-child(2) { animation-delay: 0.08s; }
-    .mobile-menu.active .mobile-menu-nav > a:nth-child(3) { animation-delay: 0.11s; }
-    .mobile-menu.active .mobile-menu-nav > .mobile-dropdown { animation-delay: 0.14s; }
-
-    .mobile-menu.active .mobile-dropdown {
-      opacity: 0;
-      transform: translateX(20px);
-      animation: mobileSlideIn 0.3s ease forwards;
-      animation-delay: 0.14s;
-    }
-
-    @keyframes mobileSlideIn {
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .mobile-menu-nav > a:hover,
-    .mobile-menu-nav > a:active {
-      color: var(--orange);
-      padding-left: 0.5rem;
-    }
-
-    /* Active page indicator */
-    .mobile-menu-nav > a.active-page {
-      color: var(--orange);
-      border-bottom-color: var(--orange);
-    }
-
-    .mobile-dropdown-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      background: none;
-      border: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-      padding: 0.85rem 0;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--black);
-      cursor: pointer;
-      text-align: left;
-      font-family: inherit;
-      transition: color 0.2s ease;
-    }
-
-    .mobile-dropdown-toggle:active,
-    .mobile-dropdown-toggle.active {
-      color: var(--orange);
-    }
-
-    .mobile-dropdown-toggle .arrow {
-      transition: transform 0.3s ease;
-      font-size: 1rem;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: var(--light-gray);
-    }
-
-    .mobile-dropdown-toggle.active .arrow {
-      transform: rotate(180deg);
-      color: var(--white);
-      background: var(--orange);
-    }
-
-    .mobile-dropdown-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease-out;
-      margin: 0 -1.5rem;
-      padding: 0 1.5rem;
-    }
-
-    .mobile-dropdown-content.open {
-      max-height: 1200px;
-      padding-top: 0.75rem;
-      padding-bottom: 0.75rem;
-    }
-
-    .mobile-cards-group {
-      margin-bottom: 0.5rem;
-    }
-
-    .mobile-cards-group:last-child {
-      margin-bottom: 0;
-    }
-
-    .mobile-cards-label {
-      font-size: 0.65rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--orange);
-      padding: 0.6rem 0 0.35rem;
-    }
-
-    .mobile-card {
-      display: flex !important;
-      flex-direction: column;
-      gap: 0.15rem;
-      padding: 0.75rem 0.85rem !important;
-      margin-bottom: 0.4rem;
-      background: var(--white);
-      border: 1.5px solid rgba(0, 0, 0, 0.06);
-      border-radius: 8px;
-      text-decoration: none !important;
-      transition: all 0.15s ease;
-      border-bottom: none !important;
-    }
-
-    .mobile-card:last-child {
-      margin-bottom: 0;
-    }
-
-    .mobile-card:active {
-      background: var(--orange-light);
-      border-color: var(--orange);
-      transform: scale(0.98);
-    }
-
-    .mobile-card-name {
-      font-size: 0.95rem !important;
-      font-weight: 700;
-      color: var(--black) !important;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .mobile-card:active .mobile-card-name {
-      color: var(--orange) !important;
-    }
-
-    .mobile-card-desc {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--gray-medium);
-      line-height: 1.3;
-    }
-
-    .mobile-card-external {
-      font-size: 0.8rem;
-      opacity: 0.4;
-      font-weight: 400;
-    }
-
-    .mobile-card:active .mobile-card-external {
-      opacity: 1;
-      color: var(--orange);
-    }
-
-    /* Override base mobile-menu a styles for cards */
-    .mobile-dropdown-content .mobile-card {
-      font-size: unset !important;
-      border-bottom: none !important;
-    }
-
-    /* Bottom CTA area */
-    .mobile-menu-footer {
-      padding-top: 0.75rem;
-      margin-top: 0.75rem;
-      border-top: 2px solid var(--black);
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      opacity: 0;
-      transform: translateY(10px);
-      animation: mobileSlideUp 0.3s ease forwards;
-      animation-delay: 0.25s;
-    }
-
-    @keyframes mobileSlideUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .mobile-menu-footer .btn-mobile-cta {
-      display: block;
-      text-align: center;
-      padding: 0.9rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 700;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      transition: all 0.2s ease;
-      background: var(--orange);
-      color: var(--white);
-      border: 2px solid var(--orange);
-    }
-
-    .mobile-menu-footer .btn-mobile-cta:active {
-      background: var(--orange-dark);
-    }
-
-    .mobile-menu-footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      padding-top: 0.75rem;
-    }
-
-    .mobile-menu-footer-links a {
-      font-size: 0.85rem !important;
-      color: var(--gray-medium) !important;
-      border-bottom: none !important;
-      padding: 0.25rem 0 !important;
-      font-weight: 600 !important;
-    }
-
-    .mobile-menu-footer-links a:hover {
-      color: var(--orange) !important;
-    }
-
-
-    /* ============================================
-       RESPONSIVE — SHARED COMPONENTS ONLY
-       ============================================ */
-    @media (max-width: 1200px) {
-      .nav-right { gap: 1.5rem; }
-      .nav-right a { font-size: 0.95rem; }
-      .btn-donate, .btn-get-involved { padding: 0.65rem 1.5rem; font-size: 0.9rem; }
-    }
-
-    @media (max-width: 1080px) {
-      nav { padding: 1.25rem 0; }
-      nav.scrolled { padding: 0.875rem 0; }
-      .logo img { height: 42px; }
-      nav.scrolled .logo img { height: 36px; }
-      .nav-right { gap: 1.25rem; }
-      .nav-right a { font-size: 0.9rem; }
-      .btn-donate, .btn-get-involved { padding: 0.6rem 1.25rem; font-size: 0.8rem; text-transform: none; }
-    }
-
-    @media (max-width: 968px) {
-      .nav-container { grid-template-columns: 1fr auto; gap: 1rem; }
-      .nav-right { display: none; }
-      .mobile-controls { display: flex; }
-      .mobile-menu-btn { display: block; }
-      .mobile-get-involved { display: inline-block; padding: 0.35rem 0.85rem; font-size: 0.72rem; }
-      .mobile-menu { display: block; }
-      .footer-newsletter { padding: 2rem 1.5rem; }
-      .footer-newsletter-container { flex-direction: column; text-align: center; gap: 1rem; }
-      .footer-newsletter-text { text-align: center; }
-      .footer-newsletter h3 { font-size: 1.15rem; }
-      .footer-newsletter p { font-size: 0.85rem; }
-      .footer-newsletter-btn { padding: 0.7rem 1.5rem; font-size: 0.85rem; }
-      .footer-container { grid-template-columns: 1fr 1fr; gap: 2rem; }
-      .footer-brand-col { grid-column: 1 / -1; }
-      .footer-social { justify-content: flex-start; }
-      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-    }
-
-    @media (max-width: 480px) {
-      .mobile-menu-nav > a { font-size: 1.3rem; }
-      .mobile-dropdown-toggle { font-size: 1.3rem; }
-    }
-  </style>
-
-  <!-- Shared Navbar Styles -->
-  <link rel="stylesheet" href="css/navbar.css">
-
-
+:root{--bg:#FAF8F5;--white:#fff;--black:#1a1a1a;--orange:#FF6B35;--ol:rgba(255,107,53,.08);--muted:#6b655b;--bdr:rgba(0,0,0,.07);--green:#16a34a;--yellow:#d97706;--red:#dc2626;--fb:'DM Sans',-apple-system,sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{font-family:var(--fb);background:var(--bg);color:var(--black);line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+a{color:inherit;text-decoration:none}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+.page-layout{max-width:1200px;margin:0 auto;padding:110px 32px 80px;display:grid;grid-template-columns:360px 1fr;gap:72px;align-items:start}
+.hero-col{align-self:center;padding-top:0}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.25rem}
+.hero-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--orange);flex-shrink:0}
+.hero-col h1{font-size:2.7rem;font-weight:900;line-height:1.05;letter-spacing:-.04em;margin-bottom:18px}
+.hero-col h1 em{font-style:normal;color:var(--orange);position:relative}
+.hero-col h1 em::after{content:'';position:absolute;bottom:2px;left:-3px;right:-3px;height:10px;background:rgba(255,107,53,.18);border-radius:4px;z-index:-1}
+.hero-desc{font-size:.98rem;color:var(--muted);line-height:1.65;margin-bottom:28px;max-width:330px}
+.hero-features{display:flex;flex-direction:column;gap:9px;margin-bottom:32px}
+.hero-feature{display:flex;align-items:center;gap:10px;font-size:.84rem;color:var(--muted);font-weight:500}
+.hero-feature::before{content:'';width:5px;height:5px;background:var(--orange);border-radius:50%;flex-shrink:0}
+.hero-trust{display:flex;gap:18px;padding-top:20px;border-top:1px solid var(--bdr)}
+.hero-trust span{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);opacity:.5}
+.calc-col{min-width:0}
+.ccard{background:var(--white);border:1px solid var(--bdr);border-radius:14px;padding:32px;box-shadow:0 2px 16px rgba(0,0,0,.03);margin-bottom:14px}
+.eyebrow{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:4px}
+.ccard h2{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;line-height:1.15;margin-bottom:8px}
+.cdesc{font-size:.85rem;color:var(--muted);padding-bottom:18px;border-bottom:1px solid var(--bdr);margin-bottom:22px;line-height:1.55}
+.fg{margin-bottom:18px}
+.fl{display:block;font-size:.67rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px}
+.fh{display:block;font-size:.71rem;color:#b0a99e;margin-top:4px}
+.iw{position:relative}
+.ip{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:600;font-size:.95rem;color:#c0b9af;pointer-events:none}
+.fi,.fs{width:100%;padding:13px 16px;border:1.5px solid rgba(0,0,0,.1);background:var(--bg);font-size:1rem;font-weight:600;color:var(--black);outline:none;transition:all .2s;font-family:inherit;border-radius:10px}
+.fi:focus,.fs:focus{border-color:var(--orange);box-shadow:0 0 0 3px var(--ol);background:var(--white)}
+.fi.px{padding-left:28px}
+.fs{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236b655b'><path d='M7 10l5 5 5-5z'/></svg>");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.section-divider{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin:18px 0 12px;padding-top:18px;border-top:1px dashed var(--bdr)}
+.hero-result{background:linear-gradient(135deg,#fff7ed 0%,#fff 100%);border:1px solid var(--bdr);border-left:4px solid var(--green);border-radius:12px;padding:24px;margin-bottom:14px;text-align:center}
+.hero-result-label{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.hero-result-num{font-size:3rem;font-weight:900;letter-spacing:-.04em;color:var(--green);line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.hero-result-sub{font-size:.85rem;color:var(--muted)}
+.bk-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:18px}
+.bk-card{background:var(--bg);border-radius:10px;padding:14px;text-align:left}
+.bk-card .bk-lbl{font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.bk-card .bk-val{font-size:1.05rem;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.dash-card{background:var(--white);border:1px solid var(--bdr);border-radius:14px;padding:24px;margin-bottom:14px;box-shadow:0 2px 16px rgba(0,0,0,.03)}
+.dash-card .stit{font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--bdr)}
+.bkr{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--bdr);font-size:.92rem}
+.bkr:last-child{border:none}
+.bkr.tot{border-top:2px solid var(--black);border-bottom:none;padding-top:14px;margin-top:6px;font-weight:800;font-size:1rem}
+.bkl small{display:block;font-size:.65rem;color:#c0b9af;font-weight:400;margin-top:2px}
+.bkv{font-weight:700;font-variant-numeric:tabular-nums}
+.bkv.neg{color:var(--red)}.bkv.pos{color:var(--green)}
+.disc{font-size:.66rem;color:#c0b9af;text-align:center;margin-top:18px;padding:10px;border:1px dashed var(--bdr);border-radius:8px;line-height:1.5}
+.related-tools{background:var(--black);padding:48px 32px;border-top:4px solid var(--orange)}
+.related-inner{max-width:960px;margin:0 auto}
+.related-header{text-align:center;margin-bottom:28px}
+.related-tag{display:inline-block;background:var(--orange);color:#fff;font-size:.58rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:4px 11px;border-radius:100px;margin-bottom:10px}
+.related-header h2{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;color:#fff;margin-bottom:5px}
+.related-header p{font-size:.88rem;color:rgba(255,255,255,.4)}
+.related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.related-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:18px;text-decoration:none;transition:all .25s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;gap:5px;border-radius:12px}
+.related-card:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
+.rc-icon{font-size:1.3rem}.rc-title{font-size:.85rem;font-weight:700;color:#fff}.rc-desc{font-size:.7rem;color:rgba(255,255,255,.38);line-height:1.4}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:4px}::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.2)}
+@media(max-width:968px){.nav-right{display:none}.mobile-controls{display:flex}.mobile-menu-btn{display:block}.mobile-get-involved{display:inline-block;padding:.35rem .85rem;font-size:.72rem}.mobile-menu{display:block}.page-layout{grid-template-columns:1fr;gap:28px;padding:100px 20px 60px}.hero-col{display:none}.footer-newsletter-container{flex-direction:column;text-align:center}.footer-newsletter-text{text-align:center}.footer-container{grid-template-columns:1fr 1fr;gap:2rem}.footer-brand-col{grid-column:1/-1}.footer-bottom{flex-direction:column;gap:1rem;text-align:center}}
+@media(max-width:600px){.page-layout{padding:90px 16px 48px}.ccard,.dash-card{padding:22px 18px;border-radius:12px}.frow{grid-template-columns:1fr}.hero-col h1{font-size:2.1rem}.related-grid{grid-template-columns:1fr 1fr}.footer-container{grid-template-columns:1fr}.hero-result-num{font-size:2.4rem}.bk-strip{grid-template-columns:1fr}}
+@media(max-width:480px){.related-grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-
-  <nav id="nav">
+<nav id="nav">
     <div class="nav-container">
       <a href="index.html" class="logo">
         <img src="finmango.png" alt="FinMango">
       </a>
-
       <div class="nav-right">
         <a href="about.html">About</a>
         <a href="research.html">Research</a>
         <a href="education.html">Education</a>
-
         <div class="dropdown dropdown-mega">
           <a href="#" class="dropdown-trigger" onclick="event.preventDefault()">Our Work ▾</a>
           <div class="dropdown-content dropdown-content-mega">
             <div class="dropdown-mega-grid">
               <div class="dropdown-mega-col">
                 <div class="dropdown-mega-col-label">Build</div>
-                <a href="education.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Millionaire Mindset</span>
-                    <span class="dropdown-item-desc">In-school programming | 100k+ taught</span>
-                  </span>
-                </a>
-                <a href="barrier-breakers.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Barrier Breakers</span>
-                    <span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span>
-                  </span>
-                </a>
-                <a href="ambassadors.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Ambassador Program</span>
-                    <span class="dropdown-item-desc">Powered by young adults globally</span>
-                  </span>
-                </a>
-                <a href="intelligence-platform.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Intelligence Platform</span>
-                    <span class="dropdown-item-desc">Early warning across food, housing, health &amp; jobs</span>
-                  </span>
-                </a>
+                <a href="education.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Millionaire Mindset</span><span class="dropdown-item-desc">In-school programming | 100k+ taught</span></span></a>
+                <a href="barrier-breakers.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Barrier Breakers</span><span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span></span></a>
+                <a href="ambassadors.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Ambassador Program</span><span class="dropdown-item-desc">Powered by young adults globally</span></span></a>
+                <a href="intelligence-platform.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Intelligence Platform</span><span class="dropdown-item-desc">Early warning across food, housing, health &amp; jobs</span></span></a>
               </div>
               <div class="dropdown-mega-col">
                 <div class="dropdown-mega-col-label">Measure</div>
-                <a href="barometer.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Financial Health Barometer</span>
-                    <span class="dropdown-item-desc">Real-time economic pulse · 50 states</span>
-                  </span>
-                </a>
-                <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">GitHub</span>
-                    <span class="dropdown-item-desc">Research to Reality</span>
-                  </span>
-                </a>
-                <a href="resources.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Resources</span>
-                    <span class="dropdown-item-desc">Guides, tools & worksheets</span>
-                  </span>
-                </a>
+                <a href="barometer.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Financial Health Barometer</span><span class="dropdown-item-desc">Real-time economic pulse · 50 states</span></span></a>
+                <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer"><span class="dropdown-item-text"><span class="dropdown-item-name">GitHub</span><span class="dropdown-item-desc">Research to Reality</span></span></a>
+                <a href="resources.html" class="dropdown-item"><span class="dropdown-item-text"><span class="dropdown-item-name">Resources</span><span class="dropdown-item-desc">Guides, tools & worksheets</span></span></a>
               </div>
             </div>
           </div>
         </div>
-
         <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
         <a href="donate.html" class="btn-donate">Donate</a>
       </div>
-
       <div class="mobile-controls">
         <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
-          <span></span><span></span><span></span>
-        </button>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
       </div>
     </div>
   </nav>
-
-  <div class="mobile-menu" id="mobileMenu">
+<div class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-nav">
       <a href="about.html">About</a>
       <a href="research.html">Research</a>
@@ -1738,426 +151,118 @@ select.warning {
       </div>
     </div>
   </div>
-
-<section class="hero">
-  <div class="hero-container">
-    <h1 class="hero-title">Paycheck Calculator 💵</h1>
-    <p class="hero-subtitle">
-      Calculate your take-home pay after taxes and deductions
-    </p>
-  </div>
-</section>
-
-<div class="main-content">
-  <div class="content-section">
-    <p class="section-text">
-      Understanding your paycheck is crucial for financial planning. Your gross pay (what you earn) and net pay (what you take home) can differ significantly due to federal taxes, state taxes, FICA (Social Security and Medicare), and other deductions.
-    </p>
-    <p class="section-text">
-      Use this calculator to estimate your take-home pay and understand where your money goes each pay period.
-    </p>
-  </div>
-
-  <!-- Section 1: Your Income -->
-  <div class="calc-section active">
-    <div class="calc-section-header">
-      <h2 class="calc-section-title">1. Your Income</h2>
-      <span class="calc-section-arrow">▼</span>
-    </div>
-    <div class="calc-section-content">
-      <div class="calculator-box">
-        <div class="input-grid">
-          <div class="input-group">
-            <label class="input-label">Pay Frequency</label>
-            <select id="payFrequency">
-              <option value="52">Weekly</option>
-              <option value="26" selected>Bi-Weekly (Every 2 weeks)</option>
-              <option value="24">Semi-Monthly (Twice a month)</option>
-              <option value="12">Monthly</option>
-            </select>
-          </div>
-          
-          <div class="input-group">
-            <label class="input-label">Gross Pay Per Paycheck</label>
-            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-              Your pay before any deductions
-            </p>
-            <div class="input-wrapper">
-              <span class="input-prefix">$</span>
-              <input type="number" id="grossPay" value="3000" min="0" step="100">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section 2: Tax Information -->
-  <div class="calc-section">
-    <div class="calc-section-header">
-      <h2 class="calc-section-title">2. Tax Information</h2>
-      <span class="calc-section-arrow">▼</span>
-    </div>
-    <div class="calc-section-content">
-      <p class="section-text">
-        Federal and state taxes are withheld from each paycheck based on your income, filing status, and W-4 withholding elections.
-      </p>
-      
-      <div class="calculator-box">
-        <div class="input-grid">
-          <div class="input-group">
-            <label class="input-label">Filing Status</label>
-            <select id="filingStatus">
-              <option value="single" selected>Single</option>
-              <option value="married">Married Filing Jointly</option>
-              <option value="hoh">Head of Household</option>
-            </select>
-          </div>
-          
-          <div class="input-group">
-            <label class="input-label">State</label>
-            <select id="state">
-              <option value="0">No State Tax</option>
-              <option value="3">Low Tax State (~3%)</option>
-              <option value="5" selected>Medium Tax State (~5%)</option>
-              <option value="7">High Tax State (~7%)</option>
-              <option value="10">Very High Tax State (~10%)</option>
-            </select>
-          </div>
-          
-          <div class="input-group">
-            <label class="input-label">Federal W-4 Allowances</label>
-            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-              More allowances = less withholding (0-3 is typical)
-            </p>
-            <input type="number" id="allowances" value="1" min="0" max="10" style="padding-left: 1rem;">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section 3: Deductions -->
-  <div class="calc-section">
-    <div class="calc-section-header">
-      <h2 class="calc-section-title">3. Pre-Tax Deductions</h2>
-      <span class="calc-section-arrow">▼</span>
-    </div>
-    <div class="calc-section-content">
-      <p class="section-text">
-        Pre-tax deductions reduce your taxable income, lowering your tax bill. Common pre-tax deductions include 401(k) contributions and health insurance premiums.
-      </p>
-      
-      <div class="calculator-box">
-        <div class="input-grid">
-          <div class="input-group">
-            <label class="input-label">401(k) Contribution</label>
-            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-              Per paycheck (reduces taxable income)
-            </p>
-            <div class="input-wrapper">
-              <span class="input-prefix">$</span>
-              <input type="number" id="contribution401k" value="200" min="0" step="50">
-            </div>
-          </div>
-          
-          <div class="input-group">
-            <label class="input-label">Health Insurance Premium</label>
-            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-              Per paycheck (your share, not employer's)
-            </p>
-            <div class="input-wrapper">
-              <span class="input-prefix">$</span>
-              <input type="number" id="healthInsurance" value="100" min="0" step="10">
-            </div>
-          </div>
-          
-          <div class="input-group">
-            <label class="input-label">Other Pre-Tax Deductions</label>
-            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-              HSA, FSA, transit, etc. (per paycheck)
-            </p>
-            <div class="input-wrapper">
-              <span class="input-prefix">$</span>
-              <input type="number" id="otherPreTax" value="0" min="0" step="10">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Section 4: Your Paycheck -->
-  <div class="calc-section active">
-    <div class="calc-section-header">
-      <h2 class="calc-section-title">4. Your Take-Home Pay</h2>
-      <span class="calc-section-arrow">▼</span>
-    </div>
-    <div class="calc-section-content">
-      <div class="paycheck-display">
-        <div class="paycheck-label">Net Pay (Take-Home)</div>
-        <div class="paycheck-number" id="netPay">$0</div>
-        <div class="paycheck-sublabel" id="payPeriod">Per Paycheck</div>
-      </div>
-      
-      <div class="breakdown-grid">
-        <div class="breakdown-card">
-          <div class="breakdown-label">Gross Pay</div>
-          <div class="breakdown-value" id="displayGross">$0</div>
-        </div>
-        
-        <div class="breakdown-card deduction">
-          <div class="breakdown-label">Federal Tax</div>
-          <div class="breakdown-value" id="federalTax">-$0</div>
-        </div>
-        
-        <div class="breakdown-card deduction">
-          <div class="breakdown-label">State Tax</div>
-          <div class="breakdown-value" id="stateTax">-$0</div>
-        </div>
-        
-        <div class="breakdown-card deduction">
-          <div class="breakdown-label">Social Security (6.2%)</div>
-          <div class="breakdown-value" id="socialSecurity">-$0</div>
-        </div>
-        
-        <div class="breakdown-card deduction">
-          <div class="breakdown-label">Medicare (1.45%)</div>
-          <div class="breakdown-value" id="medicare">-$0</div>
-        </div>
-        
-        <div class="breakdown-card deduction">
-          <div class="breakdown-label">401(k) Contribution</div>
-          <div class="breakdown-value" id="display401k">-$0</div>
-        </div>
-        
-        <div class="breakdown-card deduction">
-          <div class="breakdown-label">Health Insurance</div>
-          <div class="breakdown-value" id="displayHealth">-$0</div>
-        </div>
-        
-        <div class="breakdown-card deduction">
-          <div class="breakdown-label">Other Pre-Tax</div>
-          <div class="breakdown-value" id="displayOther">-$0</div>
-        </div>
-      </div>
-      
-      <div style="margin-top: 2rem; padding: 1.5rem; background: var(--light-gray); border: 3px solid var(--black);">
-        <h3 style="font-size: 1.2rem; font-weight: 900; margin-bottom: 1rem;">Annual Summary</h3>
-        <p style="margin-bottom: 0.5rem;"><strong>Annual Gross:</strong> <span id="annualGross">$0</span></p>
-        <p style="margin-bottom: 0.5rem;"><strong>Annual Take-Home:</strong> <span id="annualNet">$0</span></p>
-        <p><strong>Effective Tax Rate:</strong> <span id="effectiveRate">0%</span></p>
-      </div>
-    </div>
-  </div>
+<div class="page-layout" id="pageLayout">
+<div class="hero-col">
+<div class="hero-eyebrow"><span class="dot"></span> Free tool · No account needed</div>
+<h1>Where does your<br><em>paycheck go?</em></h1>
+<p class="hero-desc">See your real take-home pay after federal taxes, state taxes, FICA, and pre-tax deductions like 401(k) and health insurance.</p>
+<div class="hero-features"><div class="hero-feature">2024 federal tax brackets</div><div class="hero-feature">FICA (Social Security + Medicare)</div><div class="hero-feature">401(k) and pre-tax deductions</div><div class="hero-feature">Nothing stored or shared</div></div>
+<div class="hero-trust"><span>501(c)(3) nonprofit</span><span>No ads</span><span>No data collection</span></div>
+</div>
+<div class="calc-col">
+<div class="ccard">
+<div class="eyebrow">Your Paycheck</div><h2>Earnings &amp; Filing</h2><p class="cdesc">Tell us your gross pay and how often you're paid. We'll project federal, state, and FICA taxes plus pre-tax deductions.</p>
+<div class="frow">
+<div class="fg"><label class="fl" for="payFrequency">Pay Frequency</label><select id="payFrequency" class="fs"><option value="52">Weekly</option><option value="26" selected>Bi-Weekly</option><option value="24">Semi-Monthly</option><option value="12">Monthly</option></select><span class="fh">How often you receive a paycheck</span></div>
+<div class="fg"><label class="fl" for="grossPay">Gross Pay (per period)</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="grossPay" value="3000" min="0" step="100"></div><span class="fh">Before any taxes or deductions</span></div>
+</div>
+<div class="frow">
+<div class="fg"><label class="fl" for="filingStatus">Filing Status</label><select id="filingStatus" class="fs"><option value="single" selected>Single</option><option value="married">Married Filing Jointly</option><option value="hoh">Head of Household</option></select></div>
+<div class="fg"><label class="fl" for="state">State Tax Rate</label><select id="state" class="fs"><option value="0">No State Tax</option><option value="3">Low (~3%)</option><option value="5" selected>Medium (~5%)</option><option value="7">High (~7%)</option><option value="10">Very High (~10%)</option></select></div>
+</div>
+<div class="fg"><label class="fl" for="allowances">Federal Allowances</label><input class="fi" type="number" id="allowances" value="1" min="0" max="10"><span class="fh">Each allowance reduces tax by ~$85/paycheck</span></div>
+<div class="section-divider">Pre-Tax Deductions (Optional)</div>
+<div class="frow">
+<div class="fg"><label class="fl" for="contribution401k">401(k) Contribution</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="contribution401k" value="200" min="0" step="50"></div></div>
+<div class="fg"><label class="fl" for="healthInsurance">Health Insurance</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="healthInsurance" value="100" min="0" step="10"></div></div>
+</div>
+<div class="fg"><label class="fl" for="otherPreTax">Other Pre-Tax (HSA, FSA, etc.)</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="otherPreTax" value="0" min="0" step="10"></div></div>
+</div>
+<div class="hero-result">
+<div class="hero-result-label" id="payPeriod">Per Bi-Weekly Paycheck</div>
+<div class="hero-result-num" id="netPay">$0</div>
+<div class="hero-result-sub">Take-home pay after taxes &amp; deductions</div>
+<div class="bk-strip">
+<div class="bk-card"><div class="bk-lbl">Annual Gross</div><div class="bk-val" id="annualGross">$0</div></div>
+<div class="bk-card"><div class="bk-lbl">Annual Net</div><div class="bk-val" id="annualNet">$0</div></div>
+<div class="bk-card"><div class="bk-lbl">Effective Tax Rate</div><div class="bk-val" id="effectiveRate">0%</div></div>
+</div>
+</div>
+<div class="dash-card">
+<div class="stit">Where Your Paycheck Goes</div>
+<div class="bkr"><div class="bkl">Gross Pay</div><div class="bkv" id="displayGross">$0</div></div>
+<div class="bkr"><div class="bkl">Federal Tax<small>Estimated marginal rate</small></div><div class="bkv neg" id="federalTax">$0</div></div>
+<div class="bkr"><div class="bkl">State Tax</div><div class="bkv neg" id="stateTax">$0</div></div>
+<div class="bkr"><div class="bkl">Social Security<small>6.2% of wages, capped at $168,600 in 2024</small></div><div class="bkv neg" id="socialSecurity">$0</div></div>
+<div class="bkr"><div class="bkl">Medicare<small>1.45% of wages</small></div><div class="bkv neg" id="medicare">$0</div></div>
+<div class="bkr"><div class="bkl">401(k)</div><div class="bkv neg" id="display401k">$0</div></div>
+<div class="bkr"><div class="bkl">Health Insurance</div><div class="bkv neg" id="displayHealth">$0</div></div>
+<div class="bkr"><div class="bkl">Other Pre-Tax</div><div class="bkv neg" id="displayOther">$0</div></div>
+<div class="bkr tot"><div class="bkl">Take-Home Pay</div><div class="bkv pos" id="netPayBottom">$0</div></div>
+</div>
+<div class="disc">Estimates use simplified 2024 federal brackets and a flat state rate. Real-life withholding depends on W-4 details and varies by state. <strong>FinMango</strong> · 501(c)(3) · <a href="index.html" style="color:var(--orange)">finmango.org</a></div>
+</div>
 </div>
 
-  <footer>
-    <div class="footer-newsletter">
-      <div class="footer-newsletter-container">
-        <div class="footer-newsletter-text">
-          <h3>Stay Updated</h3>
-          <p>Research, education, and advocacy updates. No spam.</p>
-        </div>
-        <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank"
-          rel="noopener noreferrer">Subscribe</a>
-      </div>
-    </div>
+<section class="related-tools"><div class="related-inner"><div class="related-header"><div class="related-tag">More Free Tools</div><h2>Keep Building Your Financial Future</h2><p>Free calculators and lessons from FinMango.</p></div><div class="related-grid"><a href="company-benefits-guide.html" class="related-card"><div class="rc-icon">💼</div><div class="rc-title">Benefits Guide</div><div class="rc-desc">Maximize your package</div></a><a href="roth-ira.html" class="related-card"><div class="rc-icon">🌱</div><div class="rc-title">Roth IRA</div><div class="rc-desc">Tax-free retirement</div></a><a href="compound-interest.html" class="related-card"><div class="rc-icon">📈</div><div class="rc-title">Compound Interest</div><div class="rc-desc">See your savings grow</div></a><a href="housing-calculator.html" class="related-card"><div class="rc-icon">🏠</div><div class="rc-title">Housing Calculator</div><div class="rc-desc">What can you afford?</div></a></div></div></section>
 
-    <div class="footer-container">
-      <div class="footer-brand-col">
-        <div class="footer-brand">
-          <img src="finmango.png" alt="FinMango" loading="lazy">
-        </div>
-        <p class="footer-tagline">
-          A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.
-        </p>
-        <p class="footer-ein">EIN: 81-2543425</p>
-        <div class="footer-social">
-          <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-          </a>
-          <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </a>
-          <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-          </a>
-          <a href="/cdn-cgi/l/email-protection#6109040d0d0e2107080f0c000f060e4f0e1306" aria-label="Email">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg>
-          </a>
-        </div>
-      </div>
+<footer>
+<div class="footer-newsletter"><div class="footer-newsletter-container"><div class="footer-newsletter-text"><h3>Stay Updated</h3><p>Research, education, and advocacy. No spam.</p></div><a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a></div></div>
+<div class="footer-container"><div class="footer-brand-col"><div class="footer-brand"><img src="finmango.png" alt="FinMango" loading="lazy"></div><p class="footer-tagline">A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.</p><p class="footer-ein">EIN: 81-2543425</p><div class="footer-social"><a href="https://www.linkedin.com/company/finmango/" target="_blank" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a><a href="https://x.com/finmango" target="_blank" aria-label="X"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a><a href="mailto:info@finmango.org" aria-label="Email"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg></a></div></div><div class="footer-section"><h4>Our Work</h4><a href="research.html">Research</a><a href="education.html">Education</a><a href="barometer.html">Barometer</a><a href="affordability-lab.html">Affordability Lab</a><a href="resources.html">Resources</a></div><div class="footer-section"><h4>Initiatives</h4><a href="barrier-breakers.html">Barrier Breakers</a><a href="ambassadors.html">Ambassador Program</a><a href="intelligence-platform.html">Intelligence Platform</a><a href="talent.html">Talent</a></div><div class="footer-section"><h4>Get Involved</h4><a href="donate.html">Donate</a><a href="ambassadors.html">Become an Ambassador</a><a href="mailto:info@finmango.org">Partner With Us</a><a href="https://blogs.finmango.org/" target="_blank">Blog</a></div></div>
+<svg class="footer-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6C12 2,22 10,32 6S52 2,62 6S82 10,92 6S108 2,118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+<div class="footer-bottom"><div>&copy; 2026 FinMango. All rights reserved.</div><div><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+</footer>
 
-      <div class="footer-section">
-        <h4>Our Work</h4>
-        <a href="research.html">Research</a>
-        <a href="education.html">Education</a>
-        <a href="barometer.html">Barometer</a>
-        <a href="affordability-lab.html">Affordability Lab</a>
-        <a href="resources.html">Resources</a>
-      </div>
-
-      <div class="footer-section">
-        <h4>Initiatives</h4>
-        <a href="barrier-breakers.html">Barrier Breakers</a>
-        <a href="ambassadors.html">Ambassador Program</a>
-        <a href="intelligence-platform.html">Intelligence Platform</a>
-        <a href="talent.html">Talent</a>
-        <a href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer">GitHub</a>
-      </div>
-
-      <div class="footer-section">
-        <h4>Get Involved</h4>
-        <a href="donate.html">Donate</a>
-        <a href="ambassadors.html">Become an Ambassador</a>
-        <a href="/cdn-cgi/l/email-protection#d9b1bcb5b5b699bfb0b7b4b8b7beb6f7b6abbe">Partner With Us</a>
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform"
-          target="_blank" rel="noopener noreferrer">Volunteer</a>
-        <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
-      </div>
-    </div>
-
-    <!-- Footer squiggle accent -->
-    <svg class="footer-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/>
-    </svg>
-
-    <div class="footer-bottom">
-      <div>&copy; 2026 FinMango. All rights reserved.</div>
-      <div>
-        <a href="privacy.html">Privacy</a>
-        <a href="terms.html">Terms</a>
-      </div>
-    </div>
-  </footer>
-
+<script src="js/navbar.js"></script>
 <script>
-function formatCurrency(value) {
-  return '$' + Math.round(value).toLocaleString();
+function fmt(v){return'$'+Math.round(v).toLocaleString()}
+function calculate(){
+  const gross=parseFloat(document.getElementById('grossPay').value)||0;
+  const freq=parseInt(document.getElementById('payFrequency').value);
+  const fs=document.getElementById('filingStatus').value;
+  const sr=parseFloat(document.getElementById('state').value)/100;
+  const allow=parseInt(document.getElementById('allowances').value)||0;
+  const k401=parseFloat(document.getElementById('contribution401k').value)||0;
+  const hi=parseFloat(document.getElementById('healthInsurance').value)||0;
+  const opt=parseFloat(document.getElementById('otherPreTax').value)||0;
+  const annualGross=gross*freq;
+  const totalPre=k401+hi+opt;
+  const taxable=gross-totalPre;
+  const annualTax=taxable*freq;
+  const ssMax=168600;
+  const ss=Math.min(taxable,ssMax/freq)*0.062;
+  const med=taxable*0.0145;
+  let fr=0.12;
+  if(fs==='single'){if(annualTax<=11600)fr=0.10;else if(annualTax<=47150)fr=0.12;else if(annualTax<=100525)fr=0.22;else if(annualTax<=191950)fr=0.24;else if(annualTax<=243725)fr=0.32;else fr=0.35}
+  else if(fs==='married'){if(annualTax<=23200)fr=0.10;else if(annualTax<=94300)fr=0.12;else if(annualTax<=201050)fr=0.22;else if(annualTax<=383900)fr=0.24;else if(annualTax<=487450)fr=0.32;else fr=0.35}
+  else{if(annualTax<=16550)fr=0.10;else if(annualTax<=63100)fr=0.12;else if(annualTax<=100500)fr=0.22;else if(annualTax<=191950)fr=0.24;else if(annualTax<=243700)fr=0.32;else fr=0.35}
+  const fed=Math.max(0,(taxable*fr)-(allow*85));
+  const st=taxable*sr;
+  const net=gross-fed-st-ss-med-totalPre;
+  document.getElementById('netPay').textContent=fmt(net);
+  document.getElementById('netPayBottom').textContent=fmt(net);
+  document.getElementById('displayGross').textContent=fmt(gross);
+  document.getElementById('federalTax').textContent='-'+fmt(fed);
+  document.getElementById('stateTax').textContent='-'+fmt(st);
+  document.getElementById('socialSecurity').textContent='-'+fmt(ss);
+  document.getElementById('medicare').textContent='-'+fmt(med);
+  document.getElementById('display401k').textContent='-'+fmt(k401);
+  document.getElementById('displayHealth').textContent='-'+fmt(hi);
+  document.getElementById('displayOther').textContent='-'+fmt(opt);
+  const labels={52:'Weekly',26:'Bi-Weekly',24:'Semi-Monthly',12:'Monthly'};
+  document.getElementById('payPeriod').textContent='Per '+labels[freq]+' Paycheck';
+  const annualNet=net*freq;
+  const totalT=(fed+st+ss+med)*freq;
+  const er=annualGross>0?(totalT/annualGross)*100:0;
+  document.getElementById('annualGross').textContent=fmt(annualGross);
+  document.getElementById('annualNet').textContent=fmt(annualNet);
+  document.getElementById('effectiveRate').textContent=er.toFixed(1)+'%';
 }
-
-function calculate() {
-  const grossPay = parseFloat(document.getElementById('grossPay').value) || 0;
-  const payFrequency = parseInt(document.getElementById('payFrequency').value);
-  const filingStatus = document.getElementById('filingStatus').value;
-  const stateRate = parseFloat(document.getElementById('state').value) / 100;
-  const allowances = parseInt(document.getElementById('allowances').value) || 0;
-  const contribution401k = parseFloat(document.getElementById('contribution401k').value) || 0;
-  const healthInsurance = parseFloat(document.getElementById('healthInsurance').value) || 0;
-  const otherPreTax = parseFloat(document.getElementById('otherPreTax').value) || 0;
-  
-  // Annual calculations
-  const annualGrossPay = grossPay * payFrequency;
-  
-  // Pre-tax deductions
-  const totalPreTax = contribution401k + healthInsurance + otherPreTax;
-  const taxableIncome = grossPay - totalPreTax;
-  const annualTaxableIncome = taxableIncome * payFrequency;
-  
-  // FICA (Social Security + Medicare)
-  const socialSecurityMax = 168600; // 2024 limit
-  const socialSecurity = Math.min(taxableIncome, socialSecurityMax / payFrequency) * 0.062;
-  const medicare = taxableIncome * 0.0145;
-  
-  // Federal tax (simplified brackets for 2024)
-  let federalTaxRate = 0.12; // Default
-  if (filingStatus === 'single') {
-    if (annualTaxableIncome <= 11600) federalTaxRate = 0.10;
-    else if (annualTaxableIncome <= 47150) federalTaxRate = 0.12;
-    else if (annualTaxableIncome <= 100525) federalTaxRate = 0.22;
-    else if (annualTaxableIncome <= 191950) federalTaxRate = 0.24;
-    else if (annualTaxableIncome <= 243725) federalTaxRate = 0.32;
-    else federalTaxRate = 0.35;
-  } else if (filingStatus === 'married') {
-    if (annualTaxableIncome <= 23200) federalTaxRate = 0.10;
-    else if (annualTaxableIncome <= 94300) federalTaxRate = 0.12;
-    else if (annualTaxableIncome <= 201050) federalTaxRate = 0.22;
-    else if (annualTaxableIncome <= 383900) federalTaxRate = 0.24;
-    else if (annualTaxableIncome <= 487450) federalTaxRate = 0.32;
-    else federalTaxRate = 0.35;
-  } else { // Head of household
-    if (annualTaxableIncome <= 16550) federalTaxRate = 0.10;
-    else if (annualTaxableIncome <= 63100) federalTaxRate = 0.12;
-    else if (annualTaxableIncome <= 100500) federalTaxRate = 0.22;
-    else if (annualTaxableIncome <= 191950) federalTaxRate = 0.24;
-    else if (annualTaxableIncome <= 243700) federalTaxRate = 0.32;
-    else federalTaxRate = 0.35;
-  }
-  
-  // Adjust for allowances (simplified - each allowance reduces tax by ~$85/paycheck)
-  const federalTax = Math.max(0, (taxableIncome * federalTaxRate) - (allowances * 85));
-  const stateTax = taxableIncome * stateRate;
-  
-  // Net pay
-  const netPay = grossPay - federalTax - stateTax - socialSecurity - medicare - totalPreTax;
-  
-  // Update displays
-  document.getElementById('netPay').textContent = formatCurrency(netPay);
-  document.getElementById('displayGross').textContent = formatCurrency(grossPay);
-  document.getElementById('federalTax').textContent = '-' + formatCurrency(federalTax);
-  document.getElementById('stateTax').textContent = '-' + formatCurrency(stateTax);
-  document.getElementById('socialSecurity').textContent = '-' + formatCurrency(socialSecurity);
-  document.getElementById('medicare').textContent = '-' + formatCurrency(medicare);
-  document.getElementById('display401k').textContent = '-' + formatCurrency(contribution401k);
-  document.getElementById('displayHealth').textContent = '-' + formatCurrency(healthInsurance);
-  document.getElementById('displayOther').textContent = '-' + formatCurrency(otherPreTax);
-  
-  // Pay period label
-  const periodLabels = {
-    52: 'Weekly',
-    26: 'Bi-Weekly',
-    24: 'Semi-Monthly',
-    12: 'Monthly'
-  };
-  document.getElementById('payPeriod').textContent = 'Per ' + periodLabels[payFrequency] + ' Paycheck';
-  
-  // Annual summary
-  const annualNetPay = netPay * payFrequency;
-  const totalTaxes = (federalTax + stateTax + socialSecurity + medicare) * payFrequency;
-  const effectiveRate = (totalTaxes / annualGrossPay) * 100;
-  
-  document.getElementById('annualGross').textContent = formatCurrency(annualGrossPay);
-  document.getElementById('annualNet').textContent = formatCurrency(annualNetPay);
-  document.getElementById('effectiveRate').textContent = effectiveRate.toFixed(1) + '%';
-}
-
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-    }
-  });
-  
-  
-  // Collapsible section handlers
-  document.querySelectorAll('.calc-section-header').forEach(header => {
-    header.addEventListener('click', function() {
-      const section = this.parentElement;
-      section.classList.toggle('active');
-    });
-  });
-  
-  // Input listeners
-  document.getElementById('payFrequency').addEventListener('change', calculate);
-  document.getElementById('grossPay').addEventListener('input', calculate);
-  document.getElementById('filingStatus').addEventListener('change', calculate);
-  document.getElementById('state').addEventListener('change', calculate);
-  document.getElementById('allowances').addEventListener('input', calculate);
-  document.getElementById('contribution401k').addEventListener('input', calculate);
-  document.getElementById('healthInsurance').addEventListener('input', calculate);
-  document.getElementById('otherPreTax').addEventListener('input', calculate);
-  
+document.addEventListener('DOMContentLoaded',function(){
+  ['payFrequency','grossPay','filingStatus','state','allowances','contribution401k','healthInsurance','otherPreTax'].forEach(id=>{const el=document.getElementById(id);el.addEventListener('input',calculate);el.addEventListener('change',calculate)});
   calculate();
 });
 </script>
-
-
-  <!-- Shared Navbar JavaScript -->
-  <script src="js/navbar.js"></script>
+<script>document.addEventListener('DOMContentLoaded',function(){document.querySelectorAll('.mobile-dropdown-toggle').forEach(function(t){t.addEventListener('click',function(){this.classList.toggle('active');this.nextElementSibling.classList.toggle('open')})})});</script>
 </body>
 </html>
