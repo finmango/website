@@ -1942,7 +1942,7 @@
     }
   </script>
 
-  <script src="data/dashboard-data.js?v=20251219"></script>
+  <script src="data/dashboard-data.js"></script>
   <script src="scripts/us-map-content.js"></script>
   <script>
     // Barometer Preview
@@ -2000,6 +2000,16 @@
           } else {
             changeEl.textContent = 'Holding steady from last month.';
             changeEl.className = 'stat-change-pill flat';
+          }
+        }
+
+        // Update spotlight eyebrow with as_of date (falls back to "updated daily" if missing)
+        const eyebrowEl = document.querySelector('.barometer-spotlight-eyebrow');
+        if (eyebrowEl && DASHBOARD_DATA.as_of) {
+          const [y, m, d] = DASHBOARD_DATA.as_of.split('-').map(Number);
+          if (y && m && d) {
+            const formatted = new Date(y, m - 1, d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            eyebrowEl.innerHTML = `live data &middot; updated ${formatted}`;
           }
         }
       }

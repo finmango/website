@@ -904,9 +904,11 @@ async function main() {
     const national = calculateNational(states);
 
     // Build output
+    const generated = new Date().toISOString();
     const output = {
+        as_of: generated.slice(0, 10),
         meta: {
-            generated: new Date().toISOString(),
+            generated,
             version: '2.4',
             source: 'BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs',
             update_frequency: 'daily',
