@@ -148,6 +148,12 @@ function augment() {
     }
     data.meta.augmented_at = new Date().toISOString();
 
+    // Backfill top-level as_of if the upstream fetch step didn't set it
+    // (preserves an existing as_of so manual augment reruns don't lie).
+    if (!data.as_of && data.meta.generated) {
+        data.as_of = data.meta.generated.slice(0, 10);
+    }
+
     writeDashboardJSON(data);
 
     console.log('Augmented', totalStates, 'states:',
