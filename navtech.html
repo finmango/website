@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NavTech | FinMango</title>
+<meta name="description" content="The affordability crisis isn't a literacy problem. It's structural. FinMango builds Navigation Technology — tools that help families navigate it.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#FAFAF7;
+  --bg-soft:#F1F1ED;
+  --bg-dark:#0A0A0A;
+  --bg-dark-soft:#141414;
+  --fg:#0A0A0A;
+  --fg-dim:rgba(10,10,10,.6);
+  --fg-faint:rgba(10,10,10,.35);
+  --fg-line:rgba(10,10,10,.08);
+  --fg-on-dark:#FAFAFA;
+  --fg-on-dark-dim:rgba(250,250,250,.6);
+  --fg-on-dark-faint:rgba(250,250,250,.3);
+  --fg-on-dark-line:rgba(250,250,250,.08);
+  --orange:#FF6B35;
+  --orange-glow:rgba(255,107,53,.12);
+  --max:1400px;
+}
+
+html{
+  scroll-behavior:smooth;
+  background:var(--bg);
+}
+
+body{
+  font-family:'DM Sans',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--fg);
+  line-height:1.4;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  font-feature-settings:"ss01" on,"cv11" on;
+}
+
+::selection{
+  background:var(--orange);
+  color:var(--bg);
+}
+
+/* ============================================
+   MICRO LABELS (mono, all caps)
+   ============================================ */
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:var(--fg-faint);
+  display:inline-flex;
+  align-items:center;
+  gap:.75rem;
+}
+.eyebrow::before{
+  content:'';
+  width:24px;
+  height:1px;
+  background:var(--orange);
+}
+
+/* ============================================
+   SECTION SCAFFOLD
+   ============================================ */
+section{
+  min-height:100vh;
+  padding:8rem 2.5rem;
+  display:flex;
+  align-items:center;
+  position:relative;
+}
+.section-container{
+  max-width:var(--max);
+  width:100%;
+  margin:0 auto;
+}
+
+/* ============================================
+   HERO — billboard
+   ============================================ */
+.hero{
+  padding:6rem 2.5rem 5rem;
+  position:relative;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+  pointer-events:none;
+  z-index:0;
+}
+.hero-bg::before{
+  content:'';
+  position:absolute;
+  top:30%;
+  left:-10%;
+  width:60vw;
+  height:60vw;
+  background:radial-gradient(circle,rgba(255,107,53,.1) 0%,transparent 60%);
+  filter:blur(40px);
+}
+
+.hero-container{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:var(--max);
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:5rem;
+}
+
+.hero-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top:1rem;
+}
+.brand-mark{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.78rem;
+  font-weight:500;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--fg-dim);
+}
+.brand-mark span{color:var(--orange)}
+.hero-status{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;
+  font-weight:500;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--fg-faint);
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;
+}
+.hero-status .pulse{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--orange);
+  box-shadow:0 0 0 0 rgba(255,107,53,.5);
+  animation:pulse 2.4s ease-out infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(255,107,53,.5)}
+  70%{box-shadow:0 0 0 10px rgba(255,107,53,0)}
+  100%{box-shadow:0 0 0 0 rgba(255,107,53,0)}
+}
+
+.hero-main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:65vh;
+}
+.hero h1{
+  font-size:clamp(3.2rem,9.5vw,11rem);
+  font-weight:900;
+  line-height:.92;
+  letter-spacing:-.055em;
+  color:var(--fg);
+  max-width:14ch;
+}
+.hero h1 em{
+  font-style:normal;
+  color:var(--orange);
+  display:inline-block;
+}
+
+.hero-bottom{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:end;
+  gap:3rem;
+  padding-top:2rem;
+  border-top:1px solid var(--fg-line);
+}
+.hero-sub{
+  font-size:clamp(1.1rem,1.6vw,1.5rem);
+  font-weight:300;
+  line-height:1.4;
+  color:var(--fg-dim);
+  max-width:42ch;
+  letter-spacing:-.015em;
+}
+.hero-sub strong{
+  color:var(--fg);
+  font-weight:500;
+}
+
+.btn-primary{
+  display:inline-flex;
+  align-items:center;
+  gap:.85rem;
+  padding:1.1rem 1.75rem;
+  background:var(--orange);
+  color:#FFFFFF;
+  font-weight:600;
+  font-size:.95rem;
+  text-decoration:none;
+  letter-spacing:-.01em;
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+  white-space:nowrap;
+  border:none;
+  cursor:pointer;
+  font-family:inherit;
+}
+.btn-primary:hover{
+  background:var(--fg);
+  color:var(--bg);
+}
+.btn-primary svg{
+  width:14px;
+  height:14px;
+  transition:transform .3s cubic-bezier(.16,1,.3,1);
+}
+.btn-primary:hover svg{transform:translateX(4px)}
+
+/* ============================================
+   STAKES — full-viewport stats (DARK BAND)
+   ============================================ */
+.stakes{
+  background:var(--bg-dark);
+  color:var(--fg-on-dark);
+  border-top:none;
+}
+.stakes-container{
+  width:100%;
+  max-width:var(--max);
+  margin:0 auto;
+}
+.stakes .eyebrow{
+  color:var(--fg-on-dark-faint);
+}
+.stakes-header{
+  margin-bottom:6rem;
+  display:flex;
+  flex-direction:column;
+  gap:2rem;
+}
+.stakes-title{
+  font-size:clamp(2.4rem,6vw,5rem);
+  font-weight:900;
+  line-height:.95;
+  letter-spacing:-.045em;
+  color:var(--fg-on-dark);
+  max-width:18ch;
+}
+.stakes-title em{
+  font-style:normal;
+  color:var(--orange);
+}
+.stakes-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:0;
+  border-top:1px solid var(--fg-on-dark-line);
+}
+.stat{
+  padding:3rem 2rem 2rem 0;
+  border-right:1px solid var(--fg-on-dark-line);
+  position:relative;
+}
+.stat:last-child{border-right:none}
+.stat:not(:last-child){padding-right:3rem}
+.stat:not(:first-child){padding-left:3rem}
+.stat-num{
+  font-size:clamp(3.5rem,8vw,7rem);
+  font-weight:900;
+  letter-spacing:-.05em;
+  line-height:.9;
+  color:var(--fg-on-dark);
+  margin-bottom:1.5rem;
+}
+.stat-num em{
+  font-style:normal;
+  color:var(--orange);
+}
+.stat-desc{
+  font-size:1.05rem;
+  font-weight:300;
+  color:var(--fg-on-dark-dim);
+  line-height:1.4;
+  margin-bottom:1.5rem;
+  max-width:24ch;
+}
+.stat-source{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.65rem;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--fg-on-dark-faint);
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  transition:color .2s ease;
+}
+a.stat-source:hover{
+  color:var(--orange);
+}
+a.stat-source svg{
+  width:9px;
+  height:9px;
+  transition:transform .2s ease;
+}
+a.stat-source:hover svg{transform:translate(2px,-2px)}
+
+/* ============================================
+   WORK — what we've built
+   ============================================ */
+.work{
+  background:var(--bg);
+  border-top:1px solid var(--fg-line);
+}
+.work-header{
+  margin-bottom:5rem;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  align-items:end;
+}
+.work-title{
+  font-size:clamp(2.4rem,6vw,5rem);
+  font-weight:900;
+  line-height:.95;
+  letter-spacing:-.045em;
+  color:var(--fg);
+}
+.work-title em{
+  font-style:normal;
+  color:var(--orange);
+}
+.work-aside{
+  font-size:1.05rem;
+  font-weight:300;
+  color:var(--fg-dim);
+  max-width:36ch;
+  line-height:1.5;
+}
+
+.work-list{
+  display:flex;
+  flex-direction:column;
+  border-top:1px solid var(--fg-line);
+}
+.work-item{
+  display:grid;
+  grid-template-columns:80px 1fr auto auto;
+  align-items:center;
+  gap:3rem;
+  padding:2rem 0;
+  border-bottom:1px solid var(--fg-line);
+  text-decoration:none;
+  color:var(--fg);
+  transition:padding .3s cubic-bezier(.16,1,.3,1);
+  position:relative;
+}
+.work-item::before{
+  content:'';
+  position:absolute;
+  top:0;left:-2.5rem;right:-2.5rem;bottom:0;
+  background:linear-gradient(90deg,transparent,rgba(255,107,53,.04) 50%,transparent);
+  opacity:0;
+  transition:opacity .3s ease;
+  pointer-events:none;
+}
+.work-item:hover::before{opacity:1}
+.work-item:hover{padding-left:1rem}
+.work-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.85rem;
+  font-weight:500;
+  letter-spacing:.1em;
+  color:var(--fg-faint);
+  transition:color .3s ease;
+}
+.work-item:hover .work-num{color:var(--orange)}
+.work-name{
+  font-size:clamp(1.5rem,3vw,2.5rem);
+  font-weight:700;
+  letter-spacing:-.025em;
+  line-height:1.1;
+  color:var(--fg);
+}
+.work-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  color:var(--fg-faint);
+  white-space:nowrap;
+}
+.work-arrow{
+  width:44px;
+  height:44px;
+  border:1px solid var(--fg-line);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+  flex-shrink:0;
+}
+.work-arrow svg{
+  width:14px;
+  height:14px;
+  transition:transform .3s cubic-bezier(.16,1,.3,1);
+  color:var(--fg-dim);
+}
+.work-item:hover .work-arrow{
+  background:var(--orange);
+  border-color:var(--orange);
+}
+.work-item:hover .work-arrow svg{
+  color:var(--bg);
+  transform:translate(2px,-2px);
+}
+
+.work-foot{
+  margin-top:3rem;
+  text-align:right;
+}
+.work-foot a{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.78rem;
+  font-weight:500;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--fg-dim);
+  text-decoration:none;
+  border-bottom:1px solid var(--fg-line);
+  padding-bottom:.4rem;
+  transition:all .2s ease;
+}
+.work-foot a:hover{
+  color:var(--orange);
+  border-bottom-color:var(--orange);
+}
+
+/* ============================================
+   ROADMAP — phases as monolithic bars
+   ============================================ */
+.roadmap{
+  border-top:1px solid var(--fg-line);
+}
+.roadmap-header{
+  margin-bottom:5rem;
+}
+.roadmap-title{
+  font-size:clamp(2.4rem,6vw,5rem);
+  font-weight:900;
+  line-height:.95;
+  letter-spacing:-.045em;
+  color:var(--fg);
+  max-width:18ch;
+}
+.roadmap-title em{
+  font-style:normal;
+  color:var(--orange);
+}
+
+.phases{
+  display:flex;
+  flex-direction:column;
+  border-top:1px solid var(--fg-line);
+}
+.phase{
+  border-bottom:1px solid var(--fg-line);
+  overflow:hidden;
+}
+.phase summary{
+  list-style:none;
+  cursor:pointer;
+  padding:2.5rem 0;
+  display:grid;
+  grid-template-columns:80px 1fr auto;
+  align-items:center;
+  gap:3rem;
+  user-select:none;
+  position:relative;
+  transition:padding .3s cubic-bezier(.16,1,.3,1);
+}
+.phase summary::-webkit-details-marker{display:none}
+.phase summary::before{
+  content:'';
+  position:absolute;
+  top:0;left:-2.5rem;right:-2.5rem;bottom:0;
+  background:linear-gradient(90deg,transparent,rgba(255,107,53,.04) 50%,transparent);
+  opacity:0;
+  transition:opacity .3s ease;
+  pointer-events:none;
+}
+.phase:hover summary::before{opacity:1}
+.phase:hover summary{padding-left:1rem}
+.phase-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.85rem;
+  font-weight:500;
+  letter-spacing:.1em;
+  color:var(--fg-faint);
+  transition:color .3s ease;
+}
+.phase:hover .phase-num,
+.phase[open] .phase-num{color:var(--orange)}
+.phase-titles{
+  display:flex;
+  flex-direction:column;
+  gap:.4rem;
+}
+.phase-name{
+  font-size:clamp(1.5rem,3vw,2.5rem);
+  font-weight:700;
+  letter-spacing:-.025em;
+  line-height:1.1;
+  color:var(--fg);
+}
+.phase-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.75rem;
+  font-weight:500;
+  letter-spacing:.06em;
+  color:var(--fg-faint);
+}
+.phase-toggle{
+  width:44px;
+  height:44px;
+  border:1px solid var(--fg-line);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.2rem;
+  font-weight:200;
+  line-height:1;
+  flex-shrink:0;
+  color:var(--fg-dim);
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+}
+.phase[open] .phase-toggle{
+  background:var(--orange);
+  border-color:var(--orange);
+  color:var(--bg);
+  transform:rotate(45deg);
+}
+.phase-content{
+  padding:0 0 3rem 80px;
+  margin-right:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  animation:slideDown .4s cubic-bezier(.16,1,.3,1);
+}
+@keyframes slideDown{
+  from{opacity:0;transform:translateY(-10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.phase-thesis{
+  font-size:1.2rem;
+  font-weight:300;
+  color:var(--fg-dim);
+  line-height:1.5;
+  letter-spacing:-.015em;
+}
+.phase-thesis strong{color:var(--fg);font-weight:500}
+.phase-tools{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  border-top:1px solid var(--fg-line);
+}
+.phase-tools li{
+  list-style:none;
+  padding:1rem 0;
+  border-bottom:1px solid var(--fg-line);
+  font-size:.95rem;
+  color:var(--fg-dim);
+  line-height:1.5;
+}
+.phase-tools li strong{
+  display:block;
+  color:var(--fg);
+  font-weight:600;
+  font-size:1.05rem;
+  margin-bottom:.25rem;
+  letter-spacing:-.01em;
+}
+
+/* ============================================
+   WHY — credibility
+   ============================================ */
+.why{
+  border-top:1px solid var(--fg-line);
+}
+.why-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6rem;
+  align-items:start;
+}
+.why-title{
+  font-size:clamp(2.4rem,6vw,5rem);
+  font-weight:900;
+  line-height:.95;
+  letter-spacing:-.045em;
+  color:var(--fg);
+}
+.why-title em{
+  font-style:normal;
+  color:var(--orange);
+}
+.why-list{
+  display:flex;
+  flex-direction:column;
+  border-top:1px solid var(--fg-line);
+}
+.why-item{
+  padding:1.75rem 0;
+  border-bottom:1px solid var(--fg-line);
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:2rem;
+  align-items:baseline;
+}
+.why-marker{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.75rem;
+  font-weight:500;
+  letter-spacing:.1em;
+  color:var(--orange);
+}
+.why-item-content strong{
+  display:block;
+  font-size:1.4rem;
+  font-weight:700;
+  letter-spacing:-.02em;
+  color:var(--fg);
+  margin-bottom:.35rem;
+}
+.why-item-content span{
+  font-size:1rem;
+  color:var(--fg-dim);
+  font-weight:300;
+  line-height:1.5;
+}
+
+/* ============================================
+   CTA — final
+   ============================================ */
+.cta{
+  border-top:1px solid var(--fg-line);
+  position:relative;
+  overflow:hidden;
+  background:var(--bg);
+}
+.cta::before{
+  content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:80vw;
+  height:80vw;
+  max-width:1000px;
+  max-height:1000px;
+  background:radial-gradient(circle,rgba(255,107,53,.08) 0%,transparent 60%);
+  pointer-events:none;
+  filter:blur(60px);
+}
+.cta-container{
+  text-align:left;
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  gap:3rem;
+}
+.cta h2{
+  font-size:clamp(3.5rem,11vw,11rem);
+  font-weight:900;
+  line-height:.88;
+  letter-spacing:-.055em;
+  color:var(--fg);
+  max-width:12ch;
+}
+.cta h2 em{
+  font-style:normal;
+  color:var(--orange);
+}
+.cta-sub{
+  font-size:clamp(1.1rem,1.6vw,1.4rem);
+  font-weight:300;
+  color:var(--fg-dim);
+  max-width:42ch;
+  line-height:1.5;
+  letter-spacing:-.015em;
+}
+.cta-buttons{
+  margin-top:1.5rem;
+}
+
+/* ============================================
+   FOOTER STRIP
+   ============================================ */
+.foot{
+  padding:2.5rem;
+  border-top:1px solid var(--fg-line);
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;
+  font-weight:500;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--fg-faint);
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:1rem;
+  background:var(--bg);
+}
+.foot-meta{display:flex;gap:2rem;flex-wrap:wrap}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeIn{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+.hero-top,.hero h1,.hero-bottom{
+  opacity:0;
+  animation:fadeUp 1s cubic-bezier(.16,1,.3,1) forwards;
+}
+.hero-top{animation-delay:.1s}
+.hero h1{animation-delay:.3s;animation-duration:1.2s}
+.hero-bottom{animation-delay:.6s}
+
+.reveal{
+  opacity:0;
+  transform:translateY(30px);
+  transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);
+}
+.reveal.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media(max-width:968px){
+  section{padding:5rem 1.5rem;min-height:auto}
+  .hero{padding:3rem 1.5rem 4rem}
+  .hero-container{gap:3rem}
+  .hero-main{min-height:50vh}
+  .hero h1{font-size:clamp(2.8rem,12vw,5rem)}
+  .hero-bottom{grid-template-columns:1fr;gap:2rem}
+  .stakes-grid{grid-template-columns:1fr}
+  .stat{padding:2.5rem 0!important;border-right:none;border-bottom:1px solid var(--fg-line)}
+  .stat:last-child{border-bottom:none}
+  .work-header{grid-template-columns:1fr;gap:2rem}
+  .work-item{grid-template-columns:60px 1fr auto;gap:1.5rem}
+  .work-tag{display:none}
+  .phase summary{grid-template-columns:60px 1fr auto;gap:1.5rem;padding:2rem 0}
+  .phase-content{grid-template-columns:1fr;gap:2rem;padding-left:0;padding-bottom:2.5rem}
+  .why-grid{grid-template-columns:1fr;gap:3rem}
+  .foot{padding:2rem 1.5rem;flex-direction:column;gap:.75rem}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    transition-duration:.01ms!important;
+  }
+}
+
+/* ============================================
+   FINMANGO NAVBAR + FOOTER (integrated)
+   ============================================ */
+
+/* Local nav-scoped vars for FinMango chrome */
+:root{
+  --fm-black:#1a1a1a;
+  --fm-white:#ffffff;
+  --fm-orange:#FF6B35;
+  --fm-orange-dark:#E55A2B;
+  --fm-gray:#5a574f;
+  --fm-gray-medium:#666666;
+  --fm-light-gray:#f5f5f5;
+  --fm-orange-light:rgba(255,107,53,0.1);
+  --fm-nav-max-width:1280px;
+  --fm-max-width:1200px;
+  --fm-font-body:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+}
+
+/* Push hero down to clear fixed nav */
+.hero{
+  padding-top:7.5rem;
+}
+
+/* NAV */
+nav#fm-nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  background:var(--fm-white);
+  z-index:1050;
+  padding:1.5rem 0;
+  transition:padding 0.3s ease,box-shadow 0.3s ease,border-color 0.3s ease;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  font-family:var(--fm-font-body);
+}
+nav#fm-nav.scrolled{
+  padding:1rem 0;
+  border-bottom:1px solid rgba(0,0,0,0.1);
+  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+  background:var(--fm-white);
+}
+nav#fm-nav .nav-container{
+  max-width:var(--fm-nav-max-width);
+  margin:0 auto;
+  padding:0 2rem;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4rem;
+  align-items:center;
+}
+nav#fm-nav .logo{
+  display:flex;
+  align-items:center;
+  text-decoration:none;
+  transition:transform 0.3s ease;
+  justify-self:start;
+  color:var(--fm-black);
+}
+nav#fm-nav .logo:hover{transform:rotate(-2deg) scale(1.05)}
+nav#fm-nav .logo img{height:46px;transition:height 0.3s ease}
+nav#fm-nav.scrolled .logo img{height:38px}
+nav#fm-nav .nav-right{
+  display:flex;
+  gap:1.75rem;
+  align-items:center;
+  justify-self:end;
+}
+nav#fm-nav .nav-right a{
+  color:var(--fm-black);
+  text-decoration:none;
+  font-weight:600;
+  font-size:1rem;
+  transition:all 0.2s ease;
+  position:relative;
+  white-space:nowrap;
+  letter-spacing:-0.01em;
+}
+nav#fm-nav .nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item)::after{
+  content:'';
+  position:absolute;
+  bottom:-4px;
+  left:0;
+  width:0;
+  height:2px;
+  background:var(--fm-orange);
+  transition:width 0.3s ease;
+}
+nav#fm-nav .nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item):hover::after{width:100%}
+nav#fm-nav .nav-right a:not(.btn-donate):not(.btn-get-involved):not(.dropdown-item):hover{color:var(--fm-orange);transform:none}
+nav#fm-nav .btn-donate{
+  background:var(--fm-orange);
+  color:var(--fm-white)!important;
+  padding:0.5rem 1rem;
+  text-decoration:none;
+  font-weight:700;
+  transition:all 0.2s ease;
+  border:2px solid var(--fm-black);
+  position:relative;
+  overflow:hidden;
+  font-size:0.85rem;
+  white-space:nowrap;
+  letter-spacing:0.01em;
+}
+nav#fm-nav .btn-donate::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:var(--fm-black);
+  transition:left 0.3s ease;
+  z-index:-1;
+}
+nav#fm-nav .btn-donate:hover::before{left:0}
+nav#fm-nav .btn-donate:hover{transform:scale(1.05)}
+nav#fm-nav .btn-get-involved{
+  background:transparent;
+  color:var(--fm-black)!important;
+  padding:0.4rem 0.85rem;
+  text-decoration:none;
+  font-weight:600;
+  transition:all 0.2s ease;
+  border:1.5px solid rgba(0,0,0,0.25);
+  position:relative;
+  overflow:hidden;
+  font-size:0.8rem;
+  white-space:nowrap;
+  letter-spacing:0.01em;
+}
+nav#fm-nav .btn-get-involved::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:var(--fm-black);
+  transition:left 0.3s ease;
+  z-index:-1;
+}
+nav#fm-nav .btn-get-involved:hover::before{left:0}
+nav#fm-nav .btn-get-involved:hover{color:var(--fm-white)!important;border-color:var(--fm-black)}
+
+/* Dropdown */
+nav#fm-nav .dropdown{position:relative;display:inline-block;height:100%}
+nav#fm-nav .nav-right a.dropdown-trigger{display:flex;align-items:center;height:100%}
+nav#fm-nav .dropdown-content{
+  display:none;
+  position:absolute;
+  top:100%;
+  left:50%;
+  transform:translateX(-50%);
+  background-color:var(--fm-white);
+  min-width:240px;
+  box-shadow:8px 8px 0 var(--fm-black);
+  border:3px solid var(--fm-black);
+  z-index:1001;
+  padding:0.5rem 0;
+  margin-top:0;
+}
+nav#fm-nav .dropdown::after{content:'';position:absolute;bottom:-10px;left:0;width:100%;height:10px}
+nav#fm-nav .dropdown-content::after{content:'';position:absolute;top:-15px;left:0;width:100%;height:15px}
+nav#fm-nav .dropdown-content::before{
+  content:'';
+  position:absolute;
+  top:-8px;
+  left:50%;
+  transform:translateX(-50%);
+  border-width:0 8px 8px 8px;
+  border-style:solid;
+  border-color:transparent transparent var(--fm-black) transparent;
+  z-index:1002;
+}
+nav#fm-nav .dropdown:hover .dropdown-content{display:block;animation:fm-fadeIn 0.2s ease}
+nav#fm-nav .dropdown-item{
+  color:var(--fm-black)!important;
+  padding:0.85rem 1.5rem;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  transition:all 0.2s ease;
+  font-weight:600;
+  font-size:0.95rem!important;
+  text-align:left;
+  border-bottom:1px solid rgba(0,0,0,0.05);
+}
+nav#fm-nav .dropdown-item:last-child{border-bottom:none}
+nav#fm-nav .nav-right .dropdown-item::after{display:none!important}
+nav#fm-nav .dropdown-item:hover{background-color:var(--fm-light-gray);padding-left:1.75rem;color:var(--fm-orange)!important}
+@keyframes fm-fadeIn{from{opacity:0;transform:translate(-50%,10px)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* Mega Dropdown */
+nav#fm-nav .dropdown-mega .dropdown-content-mega{min-width:620px;padding:1rem 0;right:0;left:auto;transform:none}
+nav#fm-nav .dropdown-content-mega::before{left:auto!important;right:40px;transform:none!important}
+nav#fm-nav .dropdown-content-mega::after{left:auto;right:0}
+nav#fm-nav .dropdown-mega-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+nav#fm-nav .dropdown-mega-col:first-child{border-right:1px solid rgba(0,0,0,0.06)}
+nav#fm-nav .dropdown-mega-col-label{font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--fm-gray-medium);padding:0.5rem 1.25rem 0.4rem;opacity:0.6}
+nav#fm-nav .dropdown-content-mega .dropdown-item{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1.25rem;gap:0.75rem;border-bottom:none}
+nav#fm-nav .dropdown-item-text{display:flex;flex-direction:column;gap:0.1rem}
+nav#fm-nav .dropdown-item-name{font-size:0.88rem;font-weight:700;color:var(--fm-black);transition:color 0.2s ease}
+nav#fm-nav .dropdown-item-desc{font-size:0.68rem;font-weight:500;color:var(--fm-gray-medium);transition:color 0.2s ease;letter-spacing:0.01em}
+nav#fm-nav .dropdown-external{font-size:0.85rem;opacity:0.4;transition:all 0.2s ease;flex-shrink:0}
+nav#fm-nav .dropdown-content-mega .dropdown-item:hover{background-color:var(--fm-light-gray);padding-left:1.4rem}
+nav#fm-nav .dropdown-content-mega .dropdown-item:hover .dropdown-item-name{color:var(--fm-orange)}
+nav#fm-nav .dropdown-content-mega .dropdown-item:hover .dropdown-item-desc{color:var(--fm-gray)}
+nav#fm-nav .dropdown-content-mega .dropdown-item:hover .dropdown-external{opacity:1;color:var(--fm-orange);transform:translate(2px,-2px)}
+@keyframes fm-fadeInMega{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+nav#fm-nav .dropdown-mega:hover .dropdown-content-mega{animation:fm-fadeInMega 0.2s ease}
+
+nav#fm-nav .mobile-controls{display:none;gap:1rem;align-items:center;justify-self:end}
+nav#fm-nav .mobile-menu-btn{display:none;background:none;border:none;cursor:pointer;padding:0}
+nav#fm-nav .mobile-get-involved{display:none}
+nav#fm-nav .mobile-menu-btn span{display:block;width:28px;height:3px;background:var(--fm-black);margin:6px 0;transition:all 0.3s ease}
+nav#fm-nav .mobile-menu-btn.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+nav#fm-nav .mobile-menu-btn.active span:nth-child(2){opacity:0}
+nav#fm-nav .mobile-menu-btn.active span:nth-child(3){transform:rotate(-45deg) translate(7px,-6px)}
+
+/* MOBILE MENU */
+.fm-mobile-menu{
+  display:none;
+  position:fixed;
+  top:0;
+  right:-100%;
+  width:100%;
+  height:100vh;
+  height:100dvh;
+  background:var(--fm-white);
+  z-index:1040;
+  padding:5rem 1.5rem 1.5rem;
+  transition:right 0.3s ease;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  font-family:var(--fm-font-body);
+  color:var(--fm-black);
+}
+.fm-mobile-menu.active{display:flex;flex-direction:column;right:0}
+.fm-mobile-menu::before{content:'';position:fixed;top:0;left:0;right:0;height:4px;background:var(--fm-orange);z-index:1}
+.fm-mobile-menu .mobile-menu-nav{flex:none}
+.fm-mobile-menu .mobile-menu-nav > a{
+  display:block;
+  padding:0.85rem 0;
+  font-size:1.5rem;
+  font-weight:700;
+  color:var(--fm-black);
+  text-decoration:none;
+  border-bottom:1px solid rgba(0,0,0,0.08);
+  transition:all 0.2s ease;
+  opacity:0;
+  transform:translateX(20px);
+  animation:fm-mobileSlideIn 0.3s ease forwards;
+}
+.fm-mobile-menu.active .mobile-menu-nav > a:nth-child(1){animation-delay:0.05s}
+.fm-mobile-menu.active .mobile-menu-nav > a:nth-child(2){animation-delay:0.08s}
+.fm-mobile-menu.active .mobile-menu-nav > a:nth-child(3){animation-delay:0.11s}
+.fm-mobile-menu.active .mobile-menu-nav > .mobile-dropdown{animation-delay:0.14s}
+.fm-mobile-menu.active .mobile-dropdown{opacity:0;transform:translateX(20px);animation:fm-mobileSlideIn 0.3s ease forwards;animation-delay:0.14s}
+@keyframes fm-mobileSlideIn{to{opacity:1;transform:translateX(0)}}
+.fm-mobile-menu .mobile-menu-nav > a:hover,.fm-mobile-menu .mobile-menu-nav > a:active{color:var(--fm-orange);padding-left:0.5rem}
+.fm-mobile-menu .mobile-dropdown-toggle{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:100%;
+  background:none;
+  border:none;
+  border-bottom:1px solid rgba(0,0,0,0.08);
+  padding:0.85rem 0;
+  font-size:1.5rem;
+  font-weight:700;
+  color:var(--fm-black);
+  cursor:pointer;
+  text-align:left;
+  font-family:inherit;
+  transition:color 0.2s ease;
+}
+.fm-mobile-menu .mobile-dropdown-toggle:active,.fm-mobile-menu .mobile-dropdown-toggle.active{color:var(--fm-orange)}
+.fm-mobile-menu .mobile-dropdown-toggle .arrow{transition:transform 0.3s ease;font-size:1rem;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--fm-light-gray)}
+.fm-mobile-menu .mobile-dropdown-toggle.active .arrow{transform:rotate(180deg);color:var(--fm-white);background:var(--fm-orange)}
+.fm-mobile-menu .mobile-dropdown-content{max-height:0;overflow:hidden;transition:max-height 0.4s ease-out;margin:0 -1.5rem;padding:0 1.5rem}
+.fm-mobile-menu .mobile-dropdown-content.open{max-height:1200px;padding-top:0.75rem;padding-bottom:0.75rem}
+.fm-mobile-menu .mobile-cards-group{margin-bottom:0.5rem}
+.fm-mobile-menu .mobile-cards-group:last-child{margin-bottom:0}
+.fm-mobile-menu .mobile-cards-label{font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--fm-orange);padding:0.6rem 0 0.35rem}
+.fm-mobile-menu .mobile-card{display:flex!important;flex-direction:column;gap:0.15rem;padding:0.75rem 0.85rem!important;margin-bottom:0.4rem;background:var(--fm-white);border:1.5px solid rgba(0,0,0,0.06);border-radius:8px;text-decoration:none!important;transition:all 0.15s ease;border-bottom:none!important}
+.fm-mobile-menu .mobile-card:last-child{margin-bottom:0}
+.fm-mobile-menu .mobile-card:active{background:var(--fm-orange-light);border-color:var(--fm-orange);transform:scale(0.98)}
+.fm-mobile-menu .mobile-card-name{font-size:0.95rem!important;font-weight:700;color:var(--fm-black)!important;display:flex;align-items:center;gap:0.35rem}
+.fm-mobile-menu .mobile-card:active .mobile-card-name{color:var(--fm-orange)!important}
+.fm-mobile-menu .mobile-card-desc{font-size:0.75rem;font-weight:500;color:var(--fm-gray-medium);line-height:1.3}
+.fm-mobile-menu .mobile-card-external{font-size:0.8rem;opacity:0.4;font-weight:400}
+.fm-mobile-menu .mobile-card:active .mobile-card-external{opacity:1;color:var(--fm-orange)}
+.fm-mobile-menu .mobile-menu-footer{padding-top:0.75rem;margin-top:0.75rem;border-top:2px solid var(--fm-black);display:flex;flex-direction:column;gap:0.75rem;opacity:0;transform:translateY(10px);animation:fm-mobileSlideUp 0.3s ease forwards;animation-delay:0.25s}
+@keyframes fm-mobileSlideUp{to{opacity:1;transform:translateY(0)}}
+.fm-mobile-menu .btn-mobile-cta{display:block;text-align:center;padding:0.9rem 1.5rem;font-size:1rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:0.02em;transition:all 0.2s ease;background:var(--fm-orange);color:var(--fm-white);border:2px solid var(--fm-orange)}
+.fm-mobile-menu .btn-mobile-cta:active{background:var(--fm-orange-dark)}
+.fm-mobile-menu .mobile-menu-footer-links{display:flex;justify-content:center;gap:1.5rem;padding-top:0.75rem}
+.fm-mobile-menu .mobile-menu-footer-links a{font-size:0.85rem!important;color:var(--fm-gray-medium)!important;border-bottom:none!important;padding:0.25rem 0!important;font-weight:600!important;text-decoration:none}
+.fm-mobile-menu .mobile-menu-footer-links a:hover{color:var(--fm-orange)!important}
+
+@media(max-width:1080px){
+  nav#fm-nav{padding:1.25rem 0}
+  nav#fm-nav.scrolled{padding:0.875rem 0}
+  nav#fm-nav .logo img{height:42px}
+  nav#fm-nav.scrolled .logo img{height:36px}
+  nav#fm-nav .nav-right{gap:1.25rem}
+  nav#fm-nav .nav-right a{font-size:0.9rem}
+  nav#fm-nav .btn-donate{padding:0.6rem 1.25rem;font-size:0.85rem;text-transform:none}
+  nav#fm-nav .btn-get-involved{padding:0.4rem 0.8rem;font-size:0.78rem}
+}
+@media(max-width:968px){
+  nav#fm-nav .nav-container{grid-template-columns:1fr auto;gap:1rem}
+  nav#fm-nav .nav-right{display:none}
+  nav#fm-nav .mobile-controls{display:flex}
+  nav#fm-nav .mobile-menu-btn{display:block}
+  nav#fm-nav .mobile-get-involved{display:inline-block;padding:0.35rem 0.85rem;font-size:0.72rem}
+  .fm-mobile-menu{display:block}
+}
+
+/* FOOTER */
+footer.fm-footer{
+  padding:0;
+  border-top:4px solid var(--fm-orange);
+  background:var(--fm-black);
+  color:var(--fm-white);
+  position:relative;
+  font-family:var(--fm-font-body);
+}
+footer.fm-footer .footer-newsletter{padding:2.5rem 2rem;background:rgba(255,107,53,0.08);border-bottom:1px solid rgba(255,255,255,0.08);text-align:center}
+footer.fm-footer .footer-newsletter-container{max-width:850px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap}
+footer.fm-footer .footer-newsletter-text{text-align:left}
+footer.fm-footer .footer-newsletter h3{font-size:1.2rem;font-weight:900;margin-bottom:0.2rem;letter-spacing:-0.02em;color:var(--fm-white)}
+footer.fm-footer .footer-newsletter p{font-size:0.9rem;opacity:0.7;margin:0;line-height:1.4}
+footer.fm-footer .footer-newsletter-btn{display:inline-block;padding:0.75rem 1.75rem;font-size:0.9rem;font-weight:700;background:var(--fm-orange);color:var(--fm-white);text-decoration:none;border:2px solid var(--fm-orange);transition:all 0.2s ease;font-family:var(--fm-font-body);text-transform:uppercase;letter-spacing:0.02em;white-space:nowrap}
+footer.fm-footer .footer-newsletter-btn:hover{background:var(--fm-white);color:var(--fm-black);border-color:var(--fm-white);transform:translateY(-2px)}
+footer.fm-footer .footer-container{max-width:var(--fm-max-width);margin:0 auto;padding:4rem 2rem 0;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+footer.fm-footer .footer-brand-col{display:flex;flex-direction:column;gap:1rem}
+footer.fm-footer .footer-brand{margin-bottom:0.25rem}
+footer.fm-footer .footer-brand img{height:32px;filter:brightness(0) invert(1)}
+footer.fm-footer .footer-tagline{opacity:0.7;line-height:1.6;font-size:0.95rem}
+footer.fm-footer .footer-ein{opacity:0.4;font-size:0.8rem}
+footer.fm-footer .footer-social{display:flex;gap:0.75rem;margin-top:0.25rem}
+footer.fm-footer .footer-social a{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);color:var(--fm-white);text-decoration:none;transition:all 0.2s ease;font-size:0.85rem}
+footer.fm-footer .footer-social a:hover{background:var(--fm-orange);transform:translateY(-2px)}
+footer.fm-footer .footer-social a svg{width:16px;height:16px;fill:currentColor}
+footer.fm-footer .footer-section h4{font-size:0.75rem;font-weight:900;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.25rem;color:var(--fm-orange);opacity:0.8}
+footer.fm-footer .footer-section a{display:block;color:var(--fm-white);text-decoration:none;margin-bottom:0.65rem;transition:all 0.2s ease;font-size:0.95rem;opacity:0.8}
+footer.fm-footer .footer-section a:hover{color:var(--fm-orange);opacity:1;transform:translateX(4px)}
+footer.fm-footer .footer-squiggle{display:block;margin:0 auto 0;width:80px;height:8px;opacity:0.2}
+footer.fm-footer .footer-bottom{max-width:var(--fm-max-width);margin:0 auto;padding:2rem 2rem;border-top:1px solid rgba(255,255,255,0.1);display:flex;justify-content:space-between;align-items:center;opacity:0.5;font-size:0.85rem}
+footer.fm-footer .footer-bottom a{color:rgba(255,255,255,0.7);text-decoration:none;transition:color 0.2s ease;margin:0 0.75rem}
+footer.fm-footer .footer-bottom a:hover{color:var(--fm-orange)}
+
+@media(max-width:968px){
+  footer.fm-footer .footer-newsletter{padding:2rem 1.5rem}
+  footer.fm-footer .footer-newsletter-container{flex-direction:column;text-align:center;gap:1rem}
+  footer.fm-footer .footer-newsletter-text{text-align:center}
+  footer.fm-footer .footer-newsletter h3{font-size:1.15rem}
+  footer.fm-footer .footer-newsletter p{font-size:0.85rem}
+  footer.fm-footer .footer-newsletter-btn{padding:0.7rem 1.5rem;font-size:0.85rem}
+  footer.fm-footer .footer-container{grid-template-columns:1fr 1fr;gap:2rem}
+  footer.fm-footer .footer-brand-col{grid-column:1 / -1}
+  footer.fm-footer .footer-social{justify-content:flex-start}
+  footer.fm-footer .footer-bottom{flex-direction:column;gap:1rem;text-align:center}
+}
+@media(max-width:480px){
+  .fm-mobile-menu .mobile-menu-nav > a{font-size:1.3rem}
+  .fm-mobile-menu .mobile-dropdown-toggle{font-size:1.3rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================ FINMANGO NAV ============================================ -->
+<nav id="fm-nav">
+  <div class="nav-container">
+    <a href="index.html" class="logo">
+      <img src="finmango.png" alt="FinMango">
+    </a>
+
+    <div class="nav-right">
+      <a href="about.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+
+      <div class="dropdown dropdown-mega">
+        <a href="#" class="dropdown-trigger" onclick="event.preventDefault()">Our Work ▾</a>
+        <div class="dropdown-content dropdown-content-mega">
+          <div class="dropdown-mega-grid">
+            <div class="dropdown-mega-col">
+              <div class="dropdown-mega-col-label">Build</div>
+              <a href="education.html" class="dropdown-item">
+                <span class="dropdown-item-text">
+                  <span class="dropdown-item-name">Millionaire Mindset</span>
+                  <span class="dropdown-item-desc">In-school programming | 100k+ taught</span>
+                </span>
+              </a>
+              <a href="barrier-breakers.html" class="dropdown-item">
+                <span class="dropdown-item-text">
+                  <span class="dropdown-item-name">Barrier Breakers</span>
+                  <span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span>
+                </span>
+              </a>
+              <a href="ambassadors.html" class="dropdown-item">
+                <span class="dropdown-item-text">
+                  <span class="dropdown-item-name">Ambassador Program</span>
+                  <span class="dropdown-item-desc">Powered by young adults globally</span>
+                </span>
+              </a>
+              <a href="intelligence-platform.html" class="dropdown-item">
+                <span class="dropdown-item-text">
+                  <span class="dropdown-item-name">Intelligence Platform</span>
+                  <span class="dropdown-item-desc">Early warning across food, housing, health &amp; jobs</span>
+                </span>
+              </a>
+            </div>
+            <div class="dropdown-mega-col">
+              <div class="dropdown-mega-col-label">Measure</div>
+              <a href="barometer.html" class="dropdown-item">
+                <span class="dropdown-item-text">
+                  <span class="dropdown-item-name">Financial Health Barometer</span>
+                  <span class="dropdown-item-desc">Real-time economic pulse · 50 states</span>
+                </span>
+              </a>
+              <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer">
+                <span class="dropdown-item-text">
+                  <span class="dropdown-item-name">GitHub</span>
+                  <span class="dropdown-item-desc">Research to Reality</span>
+                </span>
+              </a>
+              <a href="resources.html" class="dropdown-item">
+                <span class="dropdown-item-text">
+                  <span class="dropdown-item-name">Resources</span>
+                  <span class="dropdown-item-desc">Guides, tools & worksheets</span>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+      <a href="donate.html" class="btn-donate">Donate</a>
+    </div>
+
+    <div class="mobile-controls">
+      <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+      <button class="mobile-menu-btn" id="fmMobileMenuBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="fm-mobile-menu" id="fmMobileMenu">
+  <div class="mobile-menu-nav">
+    <a href="about.html">About</a>
+    <a href="research.html">Research</a>
+    <a href="education.html">Education</a>
+    <div class="mobile-dropdown">
+      <button class="mobile-dropdown-toggle">Our Work <span class="arrow">▾</span></button>
+      <div class="mobile-dropdown-content">
+        <div class="mobile-cards-group">
+          <div class="mobile-cards-label">Build</div>
+          <a href="education.html" class="mobile-card"><span class="mobile-card-name">Millionaire Mindset</span><span class="mobile-card-desc">In-school programming | 100k+ taught</span></a>
+          <a href="barrier-breakers.html" class="mobile-card"><span class="mobile-card-name">Barrier Breakers</span><span class="mobile-card-desc">Powered by Valmark · $20k+ in prizes</span></a>
+          <a href="ambassadors.html" class="mobile-card"><span class="mobile-card-name">Ambassador Program</span><span class="mobile-card-desc">Powered by young adults globally</span></a>
+          <a href="intelligence-platform.html" class="mobile-card"><span class="mobile-card-name">Intelligence Platform</span><span class="mobile-card-desc">Early warning across food, housing, health &amp; jobs</span></a>
+        </div>
+        <div class="mobile-cards-group">
+          <div class="mobile-cards-label">Measure</div>
+          <a href="barometer.html" class="mobile-card"><span class="mobile-card-name">Financial Health Barometer</span><span class="mobile-card-desc">Real-time economic pulse · 50 states</span></a>
+          <a href="https://github.com/finmango/research" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">GitHub <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Research to Reality</span></a>
+          <a href="resources.html" class="mobile-card"><span class="mobile-card-name">Resources</span><span class="mobile-card-desc">Guides, tools & worksheets</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mobile-menu-footer">
+    <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-mobile#/donate" target="_blank" rel="noopener noreferrer" class="btn-mobile-cta">Donate</a>
+    <div class="mobile-menu-footer-links">
+      <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
+      <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="/cdn-cgi/l/email-protection#0a626f6666654a6c6364676b646d652465786d">Contact</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ HERO ============================================ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-container">
+
+    <div class="hero-top">
+      <div class="brand-mark">Navigation Technology</div>
+      <div class="hero-status"><span class="pulse"></span>Building Now</div>
+    </div>
+
+    <div class="hero-main">
+      <h1>The affordability crisis isn't a <em>literacy</em> problem.</h1>
+    </div>
+
+    <div class="hero-bottom">
+      <p class="hero-sub">
+        It's <strong>structural.</strong> We build the tools to navigate it.
+      </p>
+      <a href="#work" class="btn-primary">
+        See the work
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================ STAKES ============================================ -->
+<section class="stakes" id="stakes">
+  <div class="section-container">
+    <div class="stakes-container">
+
+      <div class="stakes-header reveal">
+        <span class="eyebrow">The Stakes</span>
+        <h2 class="stakes-title">90 million Americans, <em>one crisis away.</em></h2>
+      </div>
+
+      <div class="stakes-grid reveal">
+        <div class="stat">
+          <div class="stat-num">90M<em>+</em></div>
+          <div class="stat-desc">can't cover basic expenses</div>
+          <a class="stat-source" href="https://www.urban.org/data-tools/american-affordability-tracker" target="_blank" rel="noopener noreferrer">
+            Urban Institute
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+        </div>
+        <div class="stat">
+          <div class="stat-num">12.1<em>M</em></div>
+          <div class="stat-desc">renters spend 50%+ on housing</div>
+          <a class="stat-source" href="https://www.jchs.harvard.edu/americas-rental-housing-2024" target="_blank" rel="noopener noreferrer">
+            Harvard JCHS
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+        </div>
+        <div class="stat">
+          <div class="stat-num">770<em>K+</em></div>
+          <div class="stat-desc">experiencing homelessness</div>
+          <a class="stat-source" href="https://endhomelessness.org/homelessness-in-america/homelessness-statistics/state-of-homelessness/" target="_blank" rel="noopener noreferrer">
+            End Homelessness
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ WORK ============================================ -->
+<section class="work" id="work">
+  <div class="section-container">
+
+    <div class="work-header reveal">
+      <h2 class="work-title">Live <em>today.</em></h2>
+      <p class="work-aside">25+ free tools. Five do the diagnostic-and-routing work NavTech is built on.</p>
+    </div>
+
+    <div class="work-list reveal">
+      <a href="#" class="work-item">
+        <span class="work-num">01</span>
+        <span class="work-name">Disaster Desk</span>
+        <span class="work-tag">Diagnostic + Routing</span>
+        <span class="work-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <a href="#" class="work-item">
+        <span class="work-num">02</span>
+        <span class="work-name">Food Assistance Calculator</span>
+        <span class="work-tag">Benefits Access</span>
+        <span class="work-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <a href="#" class="work-item">
+        <span class="work-num">03</span>
+        <span class="work-name">Food Desert Analyzer</span>
+        <span class="work-tag">Structural Diagnostic</span>
+        <span class="work-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <a href="#" class="work-item">
+        <span class="work-num">04</span>
+        <span class="work-name">Financial Health Barometer</span>
+        <span class="work-tag">Infrastructure</span>
+        <span class="work-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <a href="#" class="work-item">
+        <span class="work-num">05</span>
+        <span class="work-name">Intelligence Platform</span>
+        <span class="work-tag">Early Warning</span>
+        <span class="work-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+    </div>
+
+    <div class="work-foot reveal">
+      <a href="#">See all 25+ tools →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================ ROADMAP ============================================ -->
+<section class="roadmap" id="roadmap">
+  <div class="section-container">
+
+    <div class="roadmap-header reveal">
+      <span class="eyebrow">What's Next</span>
+      <h2 class="roadmap-title" style="margin-top:1.5rem">Three phases. <em>Full coverage.</em></h2>
+    </div>
+
+    <div class="phases reveal">
+
+      <details class="phase">
+        <summary>
+          <span class="phase-num">01</span>
+          <div class="phase-titles">
+            <span class="phase-name">More critical moments.</span>
+            <span class="phase-tag">Unemployment · Medical Debt · Eviction · Benefits Cliffs</span>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">+</span>
+        </summary>
+        <div class="phase-content">
+          <p class="phase-thesis">We cover three critical moments today. <strong>Phase 01 extends the proven pattern to the rest.</strong></p>
+          <ul class="phase-tools">
+            <li><strong>Unemployment Navigator</strong>First 72 hours after job loss. UI, SNAP, Medicaid, ACA.</li>
+            <li><strong>Medical Debt Navigator</strong>Bill triage. Financial assistance. Negotiation. Credit protection.</li>
+            <li><strong>Eviction Prevention</strong>Legal aid. Rental assistance. Mediation.</li>
+            <li><strong>Benefits Cliff Modeler</strong>Avoid losing more than you gain.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="phase">
+        <summary>
+          <span class="phase-num">02</span>
+          <div class="phase-titles">
+            <span class="phase-name">Frontline-worker interface.</span>
+            <span class="phase-tag">One tool for 1.6M case managers</span>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">+</span>
+        </summary>
+        <div class="phase-content">
+          <p class="phase-thesis">30 minutes of paperwork. <strong>Becomes 3 minutes of routing.</strong></p>
+          <ul class="phase-tools">
+            <li><strong>Case Manager Dashboard</strong>Every client, every barrier, in one view.</li>
+            <li><strong>AI Diagnostic Engine</strong>5-minute intake → barrier map.</li>
+            <li><strong>Smart Routing Database</strong>Real local resources. Verified. Geo-matched.</li>
+            <li><strong>Caseload Analytics</strong>Patterns, gaps, follow-ups.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="phase">
+        <summary>
+          <span class="phase-num">03</span>
+          <div class="phase-titles">
+            <span class="phase-name">Feedback loop to policy.</span>
+            <span class="phase-tag">Every interaction becomes signal</span>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">+</span>
+        </summary>
+        <div class="phase-content">
+          <p class="phase-thesis">Aggregated and anonymized, <strong>every interaction becomes a real-time signal for the policy layer.</strong></p>
+          <ul class="phase-tools">
+            <li><strong>Policy Dashboard</strong>Real-time barriers and hotspots.</li>
+            <li><strong>Hotspot Alerts</strong>Eviction waves. SNAP bottlenecks. Debt spikes.</li>
+            <li><strong>Research API</strong>Open aggregate data.</li>
+            <li><strong>Community Briefings</strong>Auto-generated, hyperlocal.</li>
+          </ul>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ WHY ============================================ -->
+<section class="why" id="why">
+  <div class="section-container">
+
+    <div class="why-grid">
+
+      <div class="reveal">
+        <span class="eyebrow">Why FinMango</span>
+        <h2 class="why-title" style="margin-top:1.5rem">Built <em>for this.</em></h2>
+      </div>
+
+      <div class="why-list reveal">
+        <div class="why-item">
+          <span class="why-marker">01</span>
+          <div class="why-item-content">
+            <strong>AI-native</strong>
+            <span>Claude already powers our work.</span>
+          </div>
+        </div>
+        <div class="why-item">
+          <span class="why-marker">02</span>
+          <div class="why-item-content">
+            <strong>Trust by default</strong>
+            <span>Free. Open source. No data collection.</span>
+          </div>
+        </div>
+        <div class="why-item">
+          <span class="why-marker">03</span>
+          <div class="why-item-content">
+            <strong>Proven</strong>
+            <span>10M+ reached. Partners include Google Health, Harvard JCHS, UVA, Kent State.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ CTA ============================================ -->
+<section class="cta" id="contact">
+  <div class="section-container">
+    <div class="cta-container reveal">
+      <span class="eyebrow">Build With Us</span>
+      <h2>Let's <em>talk.</em></h2>
+      <p class="cta-sub">
+        Funders. Frontline orgs. Researchers. Journalists.
+      </p>
+      <div class="cta-buttons">
+        <a href="mailto:scott@finmango.org" class="btn-primary">
+          Email Scott
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ FINMANGO FOOTER ============================================ -->
+<footer class="fm-footer">
+  <div class="footer-newsletter">
+    <div class="footer-newsletter-container">
+      <div class="footer-newsletter-text">
+        <h3>Stay Updated</h3>
+        <p>Research, education, and advocacy updates. No spam.</p>
+      </div>
+      <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a>
+    </div>
+  </div>
+  <div class="footer-container">
+    <div class="footer-brand-col">
+      <div class="footer-brand"><img src="finmango.png" alt="FinMango" loading="lazy"></div>
+      <p class="footer-tagline">A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.</p>
+      <p class="footer-ein">EIN: 81-2543425</p>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+        <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+        <a href="/cdn-cgi/l/email-protection#6109040d0d0e2107080f0c000f060e4f0e1306" aria-label="Email"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-section"><h4>Our Work</h4><a href="research.html">Research</a><a href="education.html">Education</a><a href="barometer.html">Barometer</a><a href="affordability-lab.html">Affordability Lab</a><a href="resources.html">Resources</a></div>
+    <div class="footer-section"><h4>Initiatives</h4><a href="barrier-breakers.html">Barrier Breakers</a><a href="ambassadors.html">Ambassador Program</a><a href="intelligence-platform.html">Intelligence Platform</a><a href="talent.html">Talent</a><a href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer">GitHub</a></div>
+    <div class="footer-section"><h4>Get Involved</h4><a href="donate.html">Donate</a><a href="ambassadors.html">Become an Ambassador</a><a href="/cdn-cgi/l/email-protection#d9b1bcb5b5b699bfb0b7b4b8b7beb6f7b6abbe">Partner With Us</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a><a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a></div>
+  </div>
+  <svg class="footer-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+  <div class="footer-bottom"><div>&copy; 2026 FinMango. All rights reserved.</div><div><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+</footer>
+
+<script>
+// FinMango nav scroll effect
+const fmNav = document.getElementById('fm-nav');
+window.addEventListener('scroll', () => {
+  if (fmNav) fmNav.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// FinMango mobile menu
+const fmMobileMenuBtn = document.getElementById('fmMobileMenuBtn');
+const fmMobileMenu = document.getElementById('fmMobileMenu');
+if (fmMobileMenuBtn && fmMobileMenu) {
+  fmMobileMenuBtn.addEventListener('click', () => {
+    fmMobileMenu.classList.toggle('active');
+    fmMobileMenuBtn.classList.toggle('active');
+    document.body.style.overflow = fmMobileMenu.classList.contains('active') ? 'hidden' : '';
+  });
+  fmMobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      fmMobileMenu.classList.remove('active');
+      fmMobileMenuBtn.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
+}
+
+// FinMango mobile dropdown accordion
+document.querySelectorAll('.fm-mobile-menu .mobile-dropdown-toggle').forEach(toggle => {
+  toggle.addEventListener('click', function () {
+    this.classList.toggle('active');
+    this.nextElementSibling.classList.toggle('open');
+  });
+});
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
