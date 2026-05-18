@@ -508,12 +508,8 @@ a.stat-source:hover svg{transform:translate(2px,-2px)}
   overflow:hidden;
 }
 .phase-featured{
-  border-left:2px solid var(--orange);
-  background:rgba(255,107,53,.03);
-  padding-left:1.5rem;
-}
-.phase-featured summary::before{
-  left:-1.5rem;
+  border-left:3px solid var(--orange);
+  background:rgba(255,107,53,.07);
 }
 .phase-core-tag{
   font-family:'JetBrains Mono',monospace;
@@ -550,14 +546,30 @@ a.stat-source:hover svg{transform:translate(2px,-2px)}
 .phase:hover summary{padding-left:1rem}
 .phase-num{
   font-family:'JetBrains Mono',monospace;
-  font-size:.85rem;
+  font-size:.8rem;
   font-weight:500;
-  letter-spacing:.1em;
+  letter-spacing:.08em;
   color:var(--fg-faint);
-  transition:color .3s ease;
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid var(--fg-line);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  justify-self:center;
+  background:var(--bg);
+  position:relative;
+  z-index:1;
+  flex-shrink:0;
 }
 .phase:hover .phase-num,
-.phase[open] .phase-num{color:var(--orange)}
+.phase[open] .phase-num{
+  background:var(--orange);
+  border-color:var(--orange);
+  color:var(--bg)!important;
+}
 .phase-titles{
   display:flex;
   flex-direction:column;
@@ -667,15 +679,21 @@ a.stat-source:hover svg{transform:translate(2px,-2px)}
 .why-list{
   display:flex;
   flex-direction:column;
-  border-top:1px solid var(--fg-line);
+  gap:.6rem;
 }
 .why-item{
-  padding:1.75rem 0;
-  border-bottom:1px solid var(--fg-line);
+  padding:1.5rem;
+  border:1px solid var(--fg-line);
+  background:var(--bg-soft);
   display:grid;
   grid-template-columns:auto 1fr;
-  gap:2rem;
-  align-items:baseline;
+  gap:1.5rem;
+  align-items:start;
+  transition:border-color .25s ease,background .25s ease;
+}
+.why-item:hover{
+  border-color:var(--orange);
+  background:var(--orange-glow);
 }
 .why-marker{
   font-family:'JetBrains Mono',monospace;
@@ -833,7 +851,11 @@ a.stat-source:hover svg{transform:translate(2px,-2px)}
   .phase summary{grid-template-columns:60px 1fr auto;gap:1.5rem;padding:2rem 0}
   .phase:hover summary{padding-left:0}
   .phase-content{grid-template-columns:1fr;gap:2rem;padding-left:0;padding-bottom:2.5rem}
+  .phase-num{width:36px;height:36px;font-size:.72rem}
+  .phases::before{left:29px}
   .why-grid{grid-template-columns:1fr;gap:3rem}
+  .cta-buttons{flex-direction:column;align-items:flex-start}
+  #hero-canvas{opacity:.25}
   .foot{padding:2rem 1.5rem;flex-direction:column;gap:.75rem}
 }
 
@@ -842,6 +864,106 @@ a.stat-source:hover svg{transform:translate(2px,-2px)}
     animation-duration:.01ms!important;
     transition-duration:.01ms!important;
   }
+}
+
+/* ============================================
+   HERO CANVAS
+   ============================================ */
+#hero-canvas{
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  opacity:.45;
+}
+
+/* ============================================
+   ROADMAP PROGRESS TRACK
+   ============================================ */
+.phases{
+  position:relative;
+}
+.phases::before{
+  content:'';
+  position:absolute;
+  top:0;bottom:0;
+  left:39px;
+  width:1px;
+  background:var(--fg-line);
+  z-index:0;
+  pointer-events:none;
+}
+
+/* ============================================
+   WORK ITEM DESCRIPTIONS
+   ============================================ */
+.work-name-wrap{
+  display:flex;
+  flex-direction:column;
+  gap:.3rem;
+}
+.work-desc{
+  font-size:.88rem;
+  font-weight:300;
+  color:var(--fg-faint);
+  line-height:1.4;
+  letter-spacing:-.01em;
+}
+
+/* ============================================
+   NOW BUILDING BADGE
+   ============================================ */
+.now-building{
+  display:inline-flex;
+  align-items:center;
+  gap:.45rem;
+  background:var(--orange);
+  color:#fff;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.58rem;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  padding:.25rem .6rem;
+  margin-bottom:.35rem;
+  width:fit-content;
+}
+.now-building .nb-pulse{
+  width:5px;height:5px;border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 0 0 rgba(255,255,255,.5);
+  animation:pulse 2.4s ease-out infinite;
+}
+
+/* ============================================
+   SECONDARY BUTTON + CTA LAYOUT
+   ============================================ */
+.btn-secondary{
+  display:inline-flex;
+  align-items:center;
+  gap:.85rem;
+  padding:1.1rem 1.75rem;
+  background:transparent;
+  color:var(--fg);
+  font-weight:600;
+  font-size:.95rem;
+  text-decoration:none;
+  letter-spacing:-.01em;
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+  white-space:nowrap;
+  border:1px solid var(--fg-line);
+  cursor:pointer;
+  font-family:inherit;
+}
+.btn-secondary:hover{
+  border-color:var(--fg);
+  background:var(--fg);
+  color:var(--bg);
+}
+.cta-buttons{
+  display:flex;
+  gap:1rem;
+  flex-wrap:wrap;
 }
 
 /* ============================================
@@ -1340,7 +1462,9 @@ footer.fm-footer .footer-bottom a:hover{color:var(--fm-orange)}
 
 <!-- ============================================ HERO ============================================ -->
 <section class="hero">
-  <div class="hero-bg"></div>
+  <div class="hero-bg">
+    <canvas id="hero-canvas"></canvas>
+  </div>
   <div class="hero-container">
 
     <div class="hero-top">
@@ -1418,7 +1542,10 @@ footer.fm-footer .footer-bottom a:hover{color:var(--fm-orange)}
     <div class="work-list reveal">
       <a href="disaster-desk.html" class="work-item">
         <span class="work-num">01</span>
-        <span class="work-name">Disaster Desk</span>
+        <span class="work-name-wrap">
+          <span class="work-name">Disaster Desk</span>
+          <span class="work-desc">Triage any crisis. Get matched to local aid in minutes.</span>
+        </span>
         <span class="work-tag">Diagnostic + Routing</span>
         <span class="work-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1426,7 +1553,10 @@ footer.fm-footer .footer-bottom a:hover{color:var(--fm-orange)}
       </a>
       <a href="food-assistance-calculator.html" class="work-item">
         <span class="work-num">02</span>
-        <span class="work-name">Food Assistance Calculator</span>
+        <span class="work-name-wrap">
+          <span class="work-name">Food Assistance Calculator</span>
+          <span class="work-desc">Find SNAP, WIC, and food bank eligibility in minutes.</span>
+        </span>
         <span class="work-tag">Benefits Access</span>
         <span class="work-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1434,7 +1564,10 @@ footer.fm-footer .footer-bottom a:hover{color:var(--fm-orange)}
       </a>
       <a href="food-desert-analyzer.html" class="work-item">
         <span class="work-num">03</span>
-        <span class="work-name">Food Desert Analyzer</span>
+        <span class="work-name-wrap">
+          <span class="work-name">Food Desert Analyzer</span>
+          <span class="work-desc">Map the structural gap between families and food access.</span>
+        </span>
         <span class="work-tag">Structural Diagnostic</span>
         <span class="work-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1442,7 +1575,10 @@ footer.fm-footer .footer-bottom a:hover{color:var(--fm-orange)}
       </a>
       <a href="barometer.html" class="work-item">
         <span class="work-num">04</span>
-        <span class="work-name">Financial Health Barometer</span>
+        <span class="work-name-wrap">
+          <span class="work-name">Financial Health Barometer</span>
+          <span class="work-desc">Real-time economic stress signals across all 50 states.</span>
+        </span>
         <span class="work-tag">Infrastructure</span>
         <span class="work-arrow">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1492,7 +1628,7 @@ footer.fm-footer .footer-bottom a:hover{color:var(--fm-orange)}
         <summary>
           <span class="phase-num">02</span>
           <div class="phase-titles">
-            <span class="phase-core-tag">★ Core Build</span>
+            <span class="now-building"><span class="nb-pulse"></span>Now Building</span>
             <span class="phase-name">Frontline-worker interface.</span>
             <span class="phase-tag">One tool for 1.6M case managers</span>
           </div>
@@ -1587,6 +1723,10 @@ footer.fm-footer .footer-bottom a:hover{color:var(--fm-orange)}
           Email FinMango
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
+        <a href="resources.html" class="btn-secondary">
+          View all 25+ tools
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
     </div>
   </div>
@@ -1655,6 +1795,88 @@ document.querySelectorAll('.fm-mobile-menu .mobile-dropdown-toggle').forEach(tog
     this.nextElementSibling.classList.toggle('open');
   });
 });
+
+// Hero canvas: routing network animation
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const COLOR = '255,107,53';
+  const N = 20, LINK = 190;
+  let W, H, nodes = [];
+
+  function resize(){
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  function init(){
+    nodes = Array.from({length:N}, () => ({
+      x: Math.random()*W, y: Math.random()*H,
+      vx: (Math.random()-.5)*.35, vy: (Math.random()-.5)*.35,
+      r: Math.random()*1.5+1.5
+    }));
+  }
+  function tick(){
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<nodes.length;i++){
+      for(let j=i+1;j<nodes.length;j++){
+        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<LINK){
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x,nodes[i].y);
+          ctx.lineTo(nodes[j].x,nodes[j].y);
+          ctx.strokeStyle=`rgba(${COLOR},${(1-d/LINK)*.18})`;
+          ctx.lineWidth=1;
+          ctx.stroke();
+        }
+      }
+    }
+    nodes.forEach(n=>{
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${COLOR},0.4)`;
+      ctx.fill();
+      n.x+=n.vx; n.y+=n.vy;
+      if(n.x<0||n.x>W) n.vx*=-1;
+      if(n.y<0||n.y>H) n.vy*=-1;
+    });
+    requestAnimationFrame(tick);
+  }
+  window.addEventListener('resize',()=>{resize();init();});
+  resize(); init(); tick();
+})();
+
+// Count-up animation for stats
+(function(){
+  const els = document.querySelectorAll('.stat-num');
+  if(!els.length) return;
+  const countObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting) return;
+      countObserver.unobserve(entry.target);
+      const el = entry.target;
+      const textNode = el.childNodes[0];
+      const orig = textNode.textContent.trim();
+      const num = parseFloat(orig);
+      const suffix = orig.replace(/[\d.]+/,'');
+      const isDecimal = orig.includes('.');
+      const dur = 1600;
+      let start;
+      function animate(ts){
+        if(!start) start=ts;
+        const p = Math.min((ts-start)/dur,1);
+        const eased = 1-Math.pow(1-p,3);
+        const val = num*eased;
+        textNode.textContent = (isDecimal ? val.toFixed(1) : Math.round(val)) + suffix;
+        if(p<1) requestAnimationFrame(animate);
+        else textNode.textContent = orig;
+      }
+      requestAnimationFrame(animate);
+    });
+  },{threshold:0.6});
+  els.forEach(el=>countObserver.observe(el));
+})();
 
 // Reveal on scroll
 const observer = new IntersectionObserver((entries) => {
