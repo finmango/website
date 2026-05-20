@@ -7,307 +7,61 @@
     <title>FinMango — LinkedIn Company Banner</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&family=DM+Serif+Display&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { margin: 0; padding: 0; overflow: hidden; background: #222; }
 
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background: #222;
-        }
-
-        /* LinkedIn company page banner — 1584 x 396 (4:1) */
+        /* LinkedIn company page banner — 1584 x 396 */
         .banner {
             width: 1584px;
             height: 396px;
             position: relative;
             overflow: hidden;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(115deg, #E85A1F 0%, #FF6B35 40%, #FF8A4C 72%, #FFA66B 100%);
+            background: #FF6B35;
         }
 
-        /* Subtle radial glow */
+        /* Subtle radial light from the right */
         .glow {
             position: absolute;
-            width: 900px;
-            height: 900px;
-            left: -200px;
-            top: -350px;
-            background: radial-gradient(closest-side, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0));
-            pointer-events: none;
-        }
-
-        /* Geometric accents */
-        .shape {
-            position: absolute;
-            opacity: 0.14;
-            pointer-events: none;
-        }
-
-        .shape-diamond {
-            width: 240px;
-            height: 240px;
-            border: 3px solid #fff;
-            transform: rotate(45deg);
-            top: -90px;
-            left: 560px;
-            opacity: 0.16;
-        }
-
-        .shape-square {
-            width: 140px;
-            height: 140px;
-            border: 3px solid #fff;
-            transform: rotate(18deg);
-            bottom: -50px;
-            left: 470px;
-            opacity: 0.14;
-        }
-
-        .shape-ring {
-            width: 180px;
-            height: 180px;
-            border: 3px solid #fff;
-            border-radius: 50%;
-            top: 50%;
-            left: 780px;
-            transform: translateY(-50%);
-            opacity: 0.14;
-        }
-
-        /* Growth bars (subtle) */
-        .bars {
-            position: absolute;
-            bottom: 0;
-            left: 900px;
-            display: flex;
-            align-items: flex-end;
-            gap: 10px;
-            opacity: 0.22;
-            pointer-events: none;
-        }
-
-        .bars span {
-            width: 14px;
-            background: #fff;
-            border-radius: 3px 3px 0 0;
-        }
-
-        .bars span:nth-child(1) { height: 70px; opacity: 0.5; }
-        .bars span:nth-child(2) { height: 110px; opacity: 0.65; }
-        .bars span:nth-child(3) { height: 160px; opacity: 0.80; }
-        .bars span:nth-child(4) { height: 210px; opacity: 0.95; }
-
-        /* Photo collage on the right */
-        .collage {
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            width: 560px;
-            display: grid;
-            grid-template-columns: 1.4fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            gap: 4px;
-            padding: 4px;
-        }
-
-        .collage .tile {
-            position: relative;
-            overflow: hidden;
-            background: #111;
-        }
-
-        .collage .tile.big {
-            grid-row: 1 / span 2;
-        }
-
-        .collage .tile img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(100%) contrast(1.08) brightness(0.95);
-        }
-
-        /* Warm orange wash over photos */
-        .collage .tile::after {
-            content: '';
-            position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(255, 107, 53, 0.22) 0%, rgba(232, 90, 31, 0.42) 100%);
-            mix-blend-mode: multiply;
-        }
-
-        /* Fade from collage to orange on the left edge */
-        .collage::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 180px;
-            background: linear-gradient(90deg, #FF6B35 0%, rgba(255, 107, 53, 0.7) 40%, rgba(255, 107, 53, 0) 100%);
-            z-index: 2;
+            background: radial-gradient(circle at 75% 50%, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0) 60%);
             pointer-events: none;
         }
 
-        /* Left content */
+        /* Right-aligned content (safe from the company logo overlay in bottom-left) */
         .content {
-            position: relative;
-            z-index: 3;
-            height: 100%;
-            padding: 54px 60px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 1100px;
+            padding: 0 96px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            max-width: 1050px;
-        }
-
-        .top-row {
-            display: flex;
-            align-items: center;
-            gap: 22px;
-        }
-
-        .logo-chip {
-            background: #fff;
-            padding: 14px 22px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .logo-chip img {
-            height: 52px;
-            width: auto;
-            display: block;
-        }
-
-        .eyebrow {
-            color: #fff;
-            font-size: 15px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.28em;
-            opacity: 0.92;
-            border-left: 3px solid rgba(255, 255, 255, 0.75);
-            padding-left: 16px;
-            line-height: 1.2;
+            justify-content: center;
+            align-items: flex-end;
+            text-align: right;
         }
 
         .headline {
             color: #fff;
-            font-family: 'Inter', sans-serif;
-            font-size: 78px;
+            font-size: 82px;
             font-weight: 900;
-            line-height: 0.98;
+            line-height: 1;
             letter-spacing: -2.5px;
             text-shadow: 0 4px 28px rgba(80, 20, 0, 0.18);
-            margin-top: -4px;
-        }
-
-        .headline .serif {
-            font-family: 'DM Serif Display', serif;
-            font-weight: 400;
-            font-style: italic;
-            letter-spacing: -1px;
-        }
-
-        .headline .underline {
-            position: relative;
-            display: inline-block;
-            padding: 0 10px;
-            background: linear-gradient(180deg, transparent 58%, #FFD23F 58%, #FFD23F 94%, transparent 94%);
-            border-radius: 3px;
-            color: #fff;
-        }
-
-        .bottom-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 24px;
-        }
-
-        .pillars {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .pill {
-            color: #fff;
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            padding: 10px 18px;
-            border: 2px solid rgba(255, 255, 255, 0.55);
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(2px);
-        }
-
-        .pill.solid {
-            background: #fff;
-            color: #E85A1F;
-            border-color: #fff;
         }
 
         .url {
             color: #fff;
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: 0.04em;
-            opacity: 0.95;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .url .dot {
-            width: 8px;
-            height: 8px;
-            background: #fff;
-            border-radius: 50%;
-        }
-
-        .url-stack {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.15;
-        }
-
-        .url-sub {
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.14em;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
             text-transform: uppercase;
-            opacity: 0.75;
-            margin-top: 4px;
-        }
-
-        /* Diagonal slice that divides content from collage */
-        .divider {
-            position: absolute;
-            top: -10px;
-            bottom: -10px;
-            left: 1010px;
-            width: 60px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0));
-            transform: skewX(-12deg);
-            z-index: 2;
-            pointer-events: none;
+            opacity: 0.85;
+            margin-top: 28px;
         }
     </style>
 </head>
@@ -315,54 +69,9 @@
 <body>
     <div class="banner" id="capture">
         <div class="glow"></div>
-
-        <!-- Geometric accents -->
-        <div class="shape shape-diamond"></div>
-        <div class="shape shape-square"></div>
-        <div class="shape shape-ring"></div>
-        <div class="bars">
-            <span></span><span></span><span></span><span></span>
-        </div>
-        <div class="divider"></div>
-
-        <!-- Photo collage -->
-        <div class="collage">
-            <div class="tile big">
-                <img src="kent2025.jpg" alt="">
-            </div>
-            <div class="tile">
-                <img src="hero.jpg" alt="">
-            </div>
-            <div class="tile">
-                <img src="education.jpg" alt="">
-            </div>
-        </div>
-
-        <!-- Left content -->
         <div class="content">
-            <div class="top-row">
-                <div class="logo-chip">
-                    <img src="finmango.png" alt="FinMango">
-                </div>
-                <div class="eyebrow">Economic Mobility<br>Infrastructure</div>
-            </div>
-
-            <h1 class="headline">
-                Financial Health<br>
-                is a <span class="underline">Right</span><span class="serif">.</span>
-            </h1>
-
-            <div class="bottom-row">
-                <div class="pillars">
-                    <div class="pill solid">Research</div>
-                    <div class="pill">Education</div>
-                    <div class="pill">Advocacy</div>
-                </div>
-                <div class="url">
-                    <span class="dot"></span>
-                    <span class="url-stack">finmango.org<span class="url-sub">501(c)(3) · Since 2017</span></span>
-                </div>
-            </div>
+            <div class="headline">Economic Mobility is a Right.</div>
+            <div class="url">finmango.org</div>
         </div>
     </div>
 </body>
