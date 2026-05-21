@@ -30,14 +30,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Preload critical assets for LCP -->
-  <link rel="preload" as="image" href="header.png" fetchpriority="high">
 
   <!-- Load fonts asynchronously (non-blocking) -->
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&display=swap" as="style"
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
   </noscript>
 
   <!-- Open Graph / Facebook -->
@@ -1552,6 +1550,251 @@
     ::-webkit-scrollbar-track { background: var(--light-gray); }
     ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }
+
+    /* ============================================
+       HERO BILLBOARD (navtech-style editorial hero)
+       Scoped to .hero-billboard so it overrides only inside the hero
+       ============================================ */
+    .hero-billboard {
+      --hb-bg: #FAFAF7;
+      --hb-fg: #0A0A0A;
+      --hb-fg-dim: rgba(10, 10, 10, .6);
+      --hb-fg-faint: rgba(10, 10, 10, .35);
+      --hb-fg-line: rgba(10, 10, 10, .08);
+      --hb-orange: #FF6B35;
+      background: var(--hb-bg);
+      color: var(--hb-fg);
+      border-left: none;
+      padding: 7.5rem 2.5rem 3rem;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      font-feature-settings: "ss01" on, "cv11" on;
+    }
+    .hero-billboard .hero-bg {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-billboard .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 30%;
+      left: -10%;
+      width: 60vw;
+      height: 60vw;
+      background: radial-gradient(circle, rgba(255, 107, 53, .1) 0%, transparent 60%);
+      filter: blur(40px);
+    }
+    .hero-billboard .hero-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: var(--hero-max-width);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 3.5rem;
+    }
+    .hero-billboard .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .hero-billboard .hb-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--hb-fg-faint);
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .hero-billboard .hb-eyebrow::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--hb-orange);
+    }
+    .hero-billboard .hb-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--hb-fg-faint);
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .hero-billboard .hb-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--hb-orange);
+      box-shadow: 0 0 0 0 rgba(255, 107, 53, .5);
+      animation: hb-pulse 2.4s ease-out infinite;
+    }
+    @keyframes hb-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, .5); }
+      70% { box-shadow: 0 0 0 10px rgba(255, 107, 53, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
+    }
+    .hero-billboard .hb-main {
+      min-height: auto;
+      padding: 2.5rem 0;
+    }
+    .hero-billboard h1 {
+      font-size: clamp(3.2rem, 9.5vw, 11rem);
+      font-weight: 900;
+      line-height: .92;
+      letter-spacing: -.055em;
+      color: var(--hb-fg);
+      max-width: 18ch;
+      margin-bottom: 0;
+      font-family: 'DM Sans', -apple-system, sans-serif;
+    }
+    .hero-billboard h1 em {
+      font-style: normal;
+      color: var(--hb-orange);
+      display: inline-block;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 107, 53, 0.35);
+      text-decoration-thickness: 0.16em;
+      text-underline-offset: 0.22em;
+    }
+    .hero-billboard .hb-bottom {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: end;
+      gap: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--hb-fg-line);
+    }
+    .hero-billboard .hb-sub {
+      font-size: clamp(1.05rem, 1.5vw, 1.4rem);
+      font-weight: 300;
+      line-height: 1.45;
+      color: var(--hb-fg-dim);
+      max-width: 46ch;
+      letter-spacing: -.015em;
+      margin: 0;
+    }
+    .hero-billboard .hb-sub strong {
+      color: var(--hb-fg);
+      font-weight: 500;
+    }
+    .hero-billboard .hb-stats {
+      display: flex;
+      gap: 2.5rem;
+      align-items: flex-end;
+    }
+    .hero-billboard .hb-stat {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+    .hero-billboard .hb-stat-num {
+      font-size: clamp(2rem, 3.2vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: .95;
+      color: var(--hb-fg);
+    }
+    .hero-billboard .hb-stat-num em { font-style: normal; color: var(--hb-orange); }
+    .hero-billboard .hb-stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--hb-fg-faint);
+    }
+    .hero-billboard .hb-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    /* Override .btn-primary / .btn-secondary inside the billboard hero only */
+    .hero-billboard .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: .85rem;
+      padding: 1.1rem 1.75rem;
+      background: var(--hb-orange);
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: .95rem;
+      text-decoration: none;
+      letter-spacing: -.01em;
+      transition: all .3s cubic-bezier(.16, 1, .3, 1);
+      white-space: nowrap;
+      border: none;
+      font-family: inherit;
+      text-transform: none;
+    }
+    .hero-billboard .btn-primary::before { display: none; }
+    .hero-billboard .btn-primary:hover {
+      background: var(--hb-fg);
+      color: var(--hb-bg);
+      transform: none;
+      border-color: transparent;
+    }
+    .hero-billboard .btn-primary svg {
+      width: 14px;
+      height: 14px;
+      transition: transform .3s cubic-bezier(.16, 1, .3, 1);
+    }
+    .hero-billboard .btn-primary:hover svg { transform: translateX(4px); }
+    .hero-billboard .btn-secondary {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      padding: 1.05rem 1.5rem;
+      background: transparent;
+      color: var(--hb-fg);
+      font-weight: 600;
+      font-size: .95rem;
+      text-decoration: none;
+      letter-spacing: -.01em;
+      border: 1px solid var(--hb-fg-line);
+      transition: all .3s cubic-bezier(.16, 1, .3, 1);
+      font-family: inherit;
+      text-transform: none;
+    }
+    .hero-billboard .btn-secondary::before { display: none; }
+    .hero-billboard .btn-secondary:hover {
+      border-color: var(--hb-fg);
+      transform: none;
+      color: var(--hb-fg);
+      background: transparent;
+    }
+    @media (max-width: 780px) {
+      .hero-billboard {
+        padding: 6.5rem 1.5rem 2rem;
+        min-height: auto;
+      }
+      .hero-billboard .hero-container { gap: 1.75rem; }
+      .hero-billboard .hb-main { padding: 0; }
+      .hero-billboard .hb-bottom {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        align-items: start;
+        padding-top: 1.25rem;
+      }
+      .hero-billboard .hb-stats { gap: 2rem; flex-wrap: wrap; }
+      .hero-billboard .hb-cta-row { justify-content: flex-start; width: 100%; }
+      .hero-billboard .btn-primary,
+      .hero-billboard .btn-secondary { width: auto; }
+    }
   </style>
 </head>
 
@@ -1672,36 +1915,47 @@
     </div>
   </div>
 
-  <section class="hero">
-    <canvas id="particle-canvas"></canvas>
-    <div class="hero-content">
-      <div class="hero-text">
-        <div class="hero-label">economic mobility infrastructure</div>
-        <h1>
-          Financial Health<br>
-          Is a <span class="highlight">RIGHT</span>,<br>
-          Not A Privilege
-        </h1>
-        <p class="hero-subtitle">
-          The affordability crisis is a mobility crisis. We use data and technology to fix the systemic barriers crushing the financial health of young adults and vulnerable communities.
+  <section class="hero hero-billboard">
+    <div class="hero-bg"></div>
+    <div class="hero-container">
+
+      <div class="hero-top">
+        <div class="hb-eyebrow">Economic Mobility Infrastructure</div>
+        <div class="hb-status"><span class="hb-pulse"></span>Building since 2017</div>
+      </div>
+
+      <div class="hb-main">
+        <h1>Financial health is a <em>right</em>, not a privilege.</h1>
+      </div>
+
+      <div class="hb-bottom">
+        <p class="hb-sub">
+          The affordability crisis is a mobility crisis. We use data and technology to fix the <strong>systemic barriers</strong> crushing the financial health of young adults and vulnerable communities.
         </p>
-        <div class="hero-stats">
-          <div class="stat-item"><div class="stat-number">10M+</div><div class="stat-label">Lives Reached</div></div>
-          <div class="stat-item"><div class="stat-number">100K+</div><div class="stat-label">Educated</div></div>
+        <div class="hb-stats">
+          <div class="hb-stat">
+            <div class="hb-stat-num">10M<em>+</em></div>
+            <div class="hb-stat-label">Lives reached</div>
+          </div>
+          <div class="hb-stat">
+            <div class="hb-stat-num">100K<em>+</em></div>
+            <div class="hb-stat-label">Educated</div>
+          </div>
         </div>
-        <div class="hero-cta">
-          <a href="#solution" class="btn-primary">See Our Work</a>
+        <div class="hb-cta-row">
+          <a href="#solution" class="btn-primary">
+            See our work
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
           <span class="sketchy-circle-wrap">
             <svg class="sketchy-circle" viewBox="0 0 220 70" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
               <path d="M 30 8 C 60 2, 160 -2, 195 12 C 218 22, 216 48, 195 58 C 160 70, 60 72, 30 60 C 6 50, 4 22, 30 8 Z" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.45" stroke-dasharray="4 2"/>
             </svg>
-            <a href="get-involved.html" class="btn-secondary">Join The Movement</a>
+            <a href="get-involved.html" class="btn-secondary">Join the movement</a>
           </span>
         </div>
       </div>
-      <div class="hero-image">
-        <img src="header.png" alt="Financial Health Impact" fetchpriority="high">
-      </div>
+
     </div>
   </section>
 
