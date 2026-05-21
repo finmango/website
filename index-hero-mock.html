@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Index Hero Mock — FinMango (scratch)</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#FAFAF7;
+  --bg-soft:#F1F1ED;
+  --fg:#0A0A0A;
+  --fg-dim:rgba(10,10,10,.6);
+  --fg-faint:rgba(10,10,10,.35);
+  --fg-line:rgba(10,10,10,.08);
+  --orange:#FF6B35;
+  --max:1400px;
+}
+
+html{scroll-behavior:smooth;background:var(--bg);overflow-x:hidden}
+body{
+  font-family:'DM Sans',-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--fg);
+  line-height:1.4;
+  -webkit-font-smoothing:antialiased;
+  font-feature-settings:"ss01" on,"cv11" on;
+}
+::selection{background:var(--orange);color:var(--bg)}
+
+/* ============================================
+   SCRATCH-FILE LABELING (delete on adoption)
+   ============================================ */
+.mock-label{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:var(--fg);
+  color:var(--bg);
+  padding:.5rem 1.5rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.mock-label span:last-child{color:var(--orange)}
+.variant-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:.75rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--fg-faint);
+  padding:1.5rem 2.5rem 0;
+  max-width:var(--max);
+  margin:0 auto;
+  display:block;
+}
+.variant-tag::before{
+  content:'';
+  display:inline-block;
+  width:24px;
+  height:1px;
+  background:var(--orange);
+  vertical-align:middle;
+  margin-right:.75rem;
+}
+
+/* ============================================
+   PLACEHOLDER NAV (for visual context only)
+   ============================================ */
+.mock-nav{
+  border-bottom:1px solid var(--fg-line);
+  padding:1.25rem 2.5rem;
+}
+.mock-nav-inner{
+  max-width:var(--max);
+  margin:0 auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:2rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.72rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--fg-dim);
+}
+.mock-nav-inner .logo{
+  font-weight:600;
+  color:var(--fg);
+  letter-spacing:.05em;
+  font-size:1rem;
+  font-family:'DM Sans',sans-serif;
+  text-transform:none;
+}
+.mock-nav-inner .logo span{color:var(--orange)}
+.mock-nav-links{display:flex;gap:2rem}
+
+/* ============================================
+   EYEBROW (mono + orange tick)
+   ============================================ */
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  color:var(--fg-faint);
+  display:inline-flex;
+  align-items:center;
+  gap:.75rem;
+}
+.eyebrow::before{
+  content:'';
+  width:24px;
+  height:1px;
+  background:var(--orange);
+}
+
+/* ============================================
+   HERO — billboard
+   ============================================ */
+.hero{
+  padding:5rem 2.5rem 5rem;
+  position:relative;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+  pointer-events:none;
+  z-index:0;
+}
+.hero-bg::before{
+  content:'';
+  position:absolute;
+  top:25%;
+  left:-10%;
+  width:60vw;
+  height:60vw;
+  background:radial-gradient(circle,rgba(255,107,53,.1) 0%,transparent 60%);
+  filter:blur(40px);
+}
+
+.hero-container{
+  position:relative;
+  z-index:1;
+  width:100%;
+  max-width:var(--max);
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:4rem;
+}
+
+.hero-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.hero-status{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;
+  font-weight:500;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--fg-faint);
+  display:inline-flex;
+  align-items:center;
+  gap:.6rem;
+}
+.hero-status .pulse{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--orange);
+  box-shadow:0 0 0 0 rgba(255,107,53,.5);
+  animation:pulse 2.4s ease-out infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(255,107,53,.5)}
+  70%{box-shadow:0 0 0 10px rgba(255,107,53,0)}
+  100%{box-shadow:0 0 0 0 rgba(255,107,53,0)}
+}
+
+/* Variant A — pure billboard */
+.hero-main{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:55vh;
+}
+.hero h1{
+  font-size:clamp(3rem,9vw,10.5rem);
+  font-weight:900;
+  line-height:.92;
+  letter-spacing:-.055em;
+  color:var(--fg);
+  max-width:16ch;
+}
+.hero h1 em{
+  font-style:normal;
+  color:var(--orange);
+  display:inline-block;
+  text-decoration:underline;
+  text-decoration-color:rgba(255,107,53,0.35);
+  text-decoration-thickness:0.16em;
+  text-underline-offset:0.22em;
+}
+
+.hero-bottom{
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  align-items:end;
+  gap:3rem;
+  padding-top:2.5rem;
+  border-top:1px solid var(--fg-line);
+}
+.hero-sub{
+  font-size:clamp(1.05rem,1.5vw,1.4rem);
+  font-weight:300;
+  line-height:1.45;
+  color:var(--fg-dim);
+  max-width:46ch;
+  letter-spacing:-.015em;
+}
+.hero-sub strong{
+  color:var(--fg);
+  font-weight:500;
+}
+
+/* Hero stats inline (replaces hero-stats block) */
+.hero-stats-inline{
+  display:flex;
+  gap:2.5rem;
+  align-items:flex-end;
+}
+.hero-stat{
+  display:flex;
+  flex-direction:column;
+  gap:.35rem;
+}
+.hero-stat-num{
+  font-size:clamp(2rem,3.2vw,2.8rem);
+  font-weight:900;
+  letter-spacing:-.04em;
+  line-height:.95;
+  color:var(--fg);
+}
+.hero-stat-num em{font-style:normal;color:var(--orange)}
+.hero-stat-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.65rem;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:.14em;
+  color:var(--fg-faint);
+}
+
+/* CTAs */
+.cta-row{
+  display:flex;
+  align-items:center;
+  gap:1.25rem;
+}
+.btn-primary{
+  display:inline-flex;
+  align-items:center;
+  gap:.85rem;
+  padding:1.1rem 1.75rem;
+  background:var(--orange);
+  color:#FFFFFF;
+  font-weight:600;
+  font-size:.95rem;
+  text-decoration:none;
+  letter-spacing:-.01em;
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+  white-space:nowrap;
+  border:none;
+  cursor:pointer;
+  font-family:inherit;
+}
+.btn-primary:hover{
+  background:var(--fg);
+  color:var(--bg);
+}
+.btn-primary svg{
+  width:14px;
+  height:14px;
+  transition:transform .3s cubic-bezier(.16,1,.3,1);
+}
+.btn-primary:hover svg{transform:translateX(4px)}
+
+.sketchy-circle-wrap{
+  position:relative;
+  display:inline-block;
+}
+.sketchy-circle{
+  position:absolute;
+  inset:-12px -22px;
+  width:calc(100% + 44px);
+  height:calc(100% + 24px);
+  pointer-events:none;
+  z-index:0;
+}
+.btn-secondary{
+  position:relative;
+  z-index:1;
+  display:inline-flex;
+  align-items:center;
+  gap:.65rem;
+  padding:1.05rem 1.5rem;
+  background:transparent;
+  color:var(--fg);
+  font-weight:600;
+  font-size:.95rem;
+  text-decoration:none;
+  letter-spacing:-.01em;
+  border:1px solid var(--fg-line);
+  transition:all .3s cubic-bezier(.16,1,.3,1);
+  font-family:inherit;
+}
+.btn-secondary:hover{
+  border-color:var(--fg);
+}
+
+/* ============================================
+   VARIANT B — billboard + image
+   ============================================ */
+.hero-b .hero-main{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:4rem;
+  align-items:center;
+  min-height:55vh;
+}
+.hero-b h1{
+  max-width:12ch;
+}
+.hero-b .hero-image{
+  position:relative;
+  aspect-ratio:1/1;
+  overflow:hidden;
+  background:var(--bg-soft);
+  border:1px solid var(--fg-line);
+}
+.hero-b .hero-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:grayscale(.15) contrast(1.02);
+  transition:transform .8s cubic-bezier(.16,1,.3,1),filter .6s ease;
+}
+.hero-b .hero-image:hover img{
+  filter:none;
+  transform:scale(1.02);
+}
+.hero-b .hero-image::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,transparent 60%,rgba(255,107,53,.08));
+  pointer-events:none;
+}
+
+/* Divider between mock variants */
+.mock-divider{
+  height:1px;
+  background:var(--fg-line);
+  margin:6rem auto 0;
+  max-width:var(--max);
+  position:relative;
+}
+.mock-divider::after{
+  content:'A / B';
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:var(--bg);
+  padding:0 1.25rem;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;
+  letter-spacing:.18em;
+  color:var(--fg-faint);
+}
+
+/* Annotations */
+.notes{
+  max-width:var(--max);
+  margin:5rem auto 4rem;
+  padding:0 2.5rem;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2rem;
+}
+.note{
+  border-top:1px solid var(--fg-line);
+  padding-top:1.25rem;
+}
+.note-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--orange);
+  margin-bottom:.5rem;
+}
+.note-text{
+  font-size:.92rem;
+  color:var(--fg-dim);
+  line-height:1.55;
+}
+
+@media (max-width:900px){
+  .hero h1{font-size:clamp(2.6rem,11vw,4.5rem)}
+  .hero-bottom{grid-template-columns:1fr;gap:2rem;align-items:start}
+  .hero-stats-inline{order:2}
+  .cta-row{order:3;flex-wrap:wrap}
+  .hero-b .hero-main{grid-template-columns:1fr;gap:2.5rem}
+  .hero-b .hero-image{aspect-ratio:4/3;order:-1}
+  .notes{grid-template-columns:1fr}
+  .mock-nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="mock-label">
+  <span>SCRATCH MOCKUP · index-hero-mock.html</span>
+  <span>NOT LIVE · compare to index.html</span>
+</div>
+
+<!-- Placeholder nav for visual context -->
+<div class="mock-nav">
+  <div class="mock-nav-inner">
+    <div class="logo">finmango<span>.</span></div>
+    <div class="mock-nav-links">
+      <a href="#" style="color:inherit;text-decoration:none">About</a>
+      <a href="#" style="color:inherit;text-decoration:none">Research</a>
+      <a href="#" style="color:inherit;text-decoration:none">Education</a>
+      <a href="#" style="color:inherit;text-decoration:none">Our Work ▾</a>
+    </div>
+    <div style="font-family:'DM Sans',sans-serif;text-transform:none;letter-spacing:0">
+      <a href="#" style="color:var(--orange);text-decoration:none;font-weight:600;font-size:.92rem">Donate →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     VARIANT A — Pure Billboard
+     ============================================ -->
+<div class="variant-tag">Variant A · Pure billboard (no hero image)</div>
+
+<section class="hero hero-a">
+  <div class="hero-bg"></div>
+  <div class="hero-container">
+
+    <div class="hero-top">
+      <div class="eyebrow">Economic Mobility Infrastructure</div>
+      <div class="hero-status"><span class="pulse"></span>Building since 2017</div>
+    </div>
+
+    <div class="hero-main">
+      <h1>Financial health is a <em>right</em>, not a privilege.</h1>
+    </div>
+
+    <div class="hero-bottom">
+      <p class="hero-sub">
+        The affordability crisis is a mobility crisis. We use data and technology to fix the <strong>systemic barriers</strong> crushing the financial health of young adults and vulnerable communities.
+      </p>
+
+      <div class="hero-stats-inline">
+        <div class="hero-stat">
+          <div class="hero-stat-num">10M<em>+</em></div>
+          <div class="hero-stat-label">Lives reached</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">100K<em>+</em></div>
+          <div class="hero-stat-label">Educated</div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a href="#solution" class="btn-primary">
+          See our work
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <span class="sketchy-circle-wrap">
+          <svg class="sketchy-circle" viewBox="0 0 220 70" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M 30 8 C 60 2, 160 -2, 195 12 C 218 22, 216 48, 195 58 C 160 70, 60 72, 30 60 C 6 50, 4 22, 30 8 Z" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.45" stroke-dasharray="4 2"/>
+          </svg>
+          <a href="get-involved.html" class="btn-secondary">Join the movement</a>
+        </span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="mock-divider"></div>
+
+<!-- ============================================
+     VARIANT B — Billboard + image (compromise)
+     ============================================ -->
+<div class="variant-tag">Variant B · Billboard + editorial image (keeps header.png)</div>
+
+<section class="hero hero-b">
+  <div class="hero-bg"></div>
+  <div class="hero-container">
+
+    <div class="hero-top">
+      <div class="eyebrow">Economic Mobility Infrastructure</div>
+      <div class="hero-status"><span class="pulse"></span>10M+ lives reached</div>
+    </div>
+
+    <div class="hero-main">
+      <div>
+        <h1>Financial health is a <em>right</em>, not a privilege.</h1>
+      </div>
+      <div class="hero-image">
+        <img src="header.png" alt="Financial Health Impact">
+      </div>
+    </div>
+
+    <div class="hero-bottom">
+      <p class="hero-sub">
+        The affordability crisis is a mobility crisis. We use data and technology to fix the <strong>systemic barriers</strong> crushing the financial health of young adults and vulnerable communities.
+      </p>
+
+      <div class="hero-stats-inline">
+        <div class="hero-stat">
+          <div class="hero-stat-num">10M<em>+</em></div>
+          <div class="hero-stat-label">Lives reached</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">100K<em>+</em></div>
+          <div class="hero-stat-label">Educated</div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a href="#solution" class="btn-primary">
+          See our work
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <span class="sketchy-circle-wrap">
+          <svg class="sketchy-circle" viewBox="0 0 220 70" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M 30 8 C 60 2, 160 -2, 195 12 C 218 22, 216 48, 195 58 C 160 70, 60 72, 30 60 C 6 50, 4 22, 30 8 Z" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.45" stroke-dasharray="4 2"/>
+          </svg>
+          <a href="get-involved.html" class="btn-secondary">Join the movement</a>
+        </span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================
+     DESIGNER NOTES
+     ============================================ -->
+<div class="notes">
+  <div class="note">
+    <div class="note-label">What changed vs. live</div>
+    <div class="note-text">
+      H1 scaled up to billboard size (clamp 3rem → 10.5rem). Sentence-case for editorial feel. Particle canvas removed. Hero-stats moved into the bottom rail. Mono eyebrow + pulse status added. Sketchy circle kept on secondary CTA.
+    </div>
+  </div>
+  <div class="note">
+    <div class="note-label">A vs. B tradeoff</div>
+    <div class="note-text">
+      <strong>A</strong> is bolder, more publication-like — closer to navtech. <strong>B</strong> keeps the image equity (header.png) but treats it editorially: square frame, subtle desaturation on rest, gradient overlay. B is safer; A is the statement.
+    </div>
+  </div>
+  <div class="note">
+    <div class="note-label">Open questions</div>
+    <div class="note-text">
+      Sentence-case vs. title-case h1? Keep "RIGHT" all-caps or lowercase? Pulse copy ("Building since 2017" vs. "10M+ lives reached" vs. something live)? Should we also port the eyebrow style up into the nav?
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
