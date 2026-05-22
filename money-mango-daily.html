@@ -28,10 +28,14 @@
 
   <link rel="canonical" href="https://www.finmango.org/money-mango-daily">
 
-  <!-- Preconnect -->
+  <!-- Preconnect & fonts (match index.html) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300..800&family=Fraunces:opsz,wght@9..144,400..900&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
+  </noscript>
 
   <!-- Shared navbar styles -->
   <link rel="stylesheet" href="css/navbar.css">
@@ -46,524 +50,981 @@
   </script>
 
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     :root {
       --black: #1a1a1a;
       --white: #ffffff;
       --orange: #FF6B35;
       --orange-dark: #E55A2B;
       --orange-soft: #FF8C61;
-      --orange-glow: rgba(255, 107, 53, 0.10);
-      --cream: #fdfbf7;
+      --orange-light: rgba(255, 107, 53, 0.1);
+      --gray: #5a574f;
+      --gray-medium: #666666;
+      --light-gray: #f5f5f5;
       --warm-white: #f9f5f0;
-      --gray: #6B6560;
-      --gray-soft: #8a857f;
-      --light-gray: #f3f0eb;
-      --success: #16a34a;
-      --success-soft: #dcfce7;
-      --warning: #ca8a04;
-      --warning-soft: #fef9c3;
-      --danger: #dc2626;
+      --success: #10B981;
+      --success-soft: #d1fae5;
+      --warning: #F59E0B;
+      --warning-soft: #fef3c7;
+      --danger: #EF4444;
       --danger-soft: #fee2e2;
-      --font-display: 'Fraunces', Georgia, serif;
-      --font-body: 'DM Sans', system-ui, sans-serif;
-      --max-width: 720px;
+      --max-width: 1200px;
+      --hero-max-width: 1400px;
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
-
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     html { scroll-behavior: smooth; }
 
-    body {
-      font-family: var(--font-body);
-      background: var(--cream);
-      color: var(--black);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
 
-    /* Decorative background mango pattern */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 12% 18%, rgba(255, 107, 53, 0.06) 0%, transparent 40%),
-        radial-gradient(circle at 88% 78%, rgba(255, 107, 53, 0.05) 0%, transparent 45%);
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--black);
+      line-height: 1.5;
+      font-size: 18px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ============================================
+       HERO BILLBOARD (matches index.html)
+       ============================================ */
+    .hero-billboard {
+      --hb-bg: #FAFAF7;
+      --hb-fg: #0A0A0A;
+      --hb-fg-dim: rgba(10, 10, 10, .6);
+      --hb-fg-faint: rgba(10, 10, 10, .35);
+      --hb-fg-line: rgba(10, 10, 10, .08);
+      --hb-orange: #FF6B35;
+      background: var(--hb-bg);
+      color: var(--hb-fg);
+      padding: 8.5rem 2.5rem 3rem;
+      min-height: auto;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero-billboard .hero-bg {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
       pointer-events: none;
       z-index: 0;
     }
-
-    /* ── Page layout ───────────────── */
-    .page {
+    .hero-billboard .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 30%;
+      left: -10%;
+      width: 60vw;
+      height: 60vw;
+      background: radial-gradient(circle, rgba(255, 107, 53, .1) 0%, transparent 60%);
+      filter: blur(40px);
+    }
+    .hero-billboard .hero-bg::after {
+      content: '';
+      position: absolute;
+      bottom: -20%;
+      right: -10%;
+      width: 50vw;
+      height: 50vw;
+      background: radial-gradient(circle, rgba(255, 107, 53, .07) 0%, transparent 60%);
+      filter: blur(40px);
+    }
+    .hero-billboard .hero-container {
       position: relative;
       z-index: 1;
-      padding: 7rem 1.25rem 4rem;
-      max-width: var(--max-width);
+      width: 100%;
+      max-width: var(--hero-max-width);
       margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
     }
-
-    /* ── Hero ─────────────────────── */
-    .hero {
-      text-align: center;
-      margin-bottom: 2.5rem;
+    .hero-billboard .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
-
-    .eyebrow {
+    .hb-eyebrow {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: .7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--hb-fg-faint);
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      background: var(--orange-glow);
-      color: var(--orange-dark);
-      padding: 0.45rem 0.9rem;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 1.25rem;
+      gap: .75rem;
     }
-
-    .eyebrow .pulse {
-      width: 7px;
-      height: 7px;
+    .hb-eyebrow::before {
+      content: '';
+      width: 24px;
+      height: 1px;
       background: var(--orange);
-      border-radius: 50%;
-      box-shadow: 0 0 0 0 var(--orange);
-      animation: pulse 2s infinite;
     }
-
-    @keyframes pulse {
-      0%   { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.6); }
-      70%  { box-shadow: 0 0 0 12px rgba(255, 107, 53, 0); }
+    .hb-status {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--hb-fg-faint);
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .hb-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 0 rgba(255, 107, 53, .5);
+      animation: hb-pulse 2.4s ease-out infinite;
+    }
+    @keyframes hb-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, .5); }
+      70% { box-shadow: 0 0 0 10px rgba(255, 107, 53, 0); }
       100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
     }
-
-    .hero h1 {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: clamp(2.3rem, 5.5vw, 3.2rem);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.65rem;
+    .hb-main { padding: 1rem 0 1.5rem; }
+    .hb-main h1 {
+      font-size: clamp(3.2rem, 9.5vw, 9rem);
+      font-weight: 900;
+      line-height: .92;
+      letter-spacing: -.055em;
+      color: var(--hb-fg);
+      max-width: 16ch;
+      margin-bottom: 0;
+      font-family: var(--font-body);
     }
-
-    .hero h1 .mango-emoji {
-      display: inline-block;
-      animation: mangoTilt 4s ease-in-out infinite;
-      transform-origin: bottom center;
-    }
-
-    @keyframes mangoTilt {
-      0%, 100% { transform: rotate(-6deg); }
-      50% { transform: rotate(6deg); }
-    }
-
-    .hero h1 em {
-      font-style: italic;
+    .hb-main h1 em {
+      font-style: normal;
       color: var(--orange);
-    }
-
-    .hero p {
-      color: var(--gray);
-      font-size: 1.05rem;
-      max-width: 38ch;
-      margin: 0 auto;
-    }
-
-    /* ── Puzzle meta strip ───────── */
-    .puzzle-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem 1.25rem;
-      background: var(--white);
-      border: 1.5px solid rgba(26,26,26,0.08);
-      border-radius: 12px;
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 1px 3px rgba(26,26,26,0.04);
-    }
-
-    .puzzle-meta-left {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-weight: 700;
-    }
-
-    .puzzle-number {
-      background: var(--black);
-      color: var(--white);
-      padding: 0.15rem 0.55rem;
-      border-radius: 6px;
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.78rem;
-      letter-spacing: 0.02em;
-    }
-
-    .puzzle-date { color: var(--gray); font-weight: 500; }
-
-    .streak-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      font-weight: 700;
-      color: var(--orange-dark);
-    }
-
-    /* ── Card ─────────────────────── */
-    .card {
-      background: var(--white);
-      border: 2px solid var(--black);
-      border-radius: 16px;
-      padding: 2rem 1.5rem;
-      box-shadow: 6px 6px 0 var(--black);
-      margin-bottom: 1.5rem;
-    }
-
-    @media (min-width: 640px) {
-      .card { padding: 2.5rem 2.25rem; }
-    }
-
-    .category-tag {
       display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 800;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 107, 53, 0.35);
+      text-decoration-thickness: 0.16em;
+      text-underline-offset: 0.22em;
+    }
+    .hb-main h1 .mango-emoji {
+      display: inline-block;
+      transform-origin: bottom center;
+      animation: mangoTilt 4s ease-in-out infinite;
+      font-style: normal;
+      margin-right: 0.2em;
+    }
+    @keyframes mangoTilt {
+      0%, 100% { transform: rotate(-7deg); }
+      50% { transform: rotate(7deg); }
+    }
+    .hb-bottom {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--hb-fg-line);
+    }
+    .hb-sub {
+      font-size: clamp(1.05rem, 1.5vw, 1.4rem);
+      font-weight: 300;
+      line-height: 1.45;
+      color: var(--hb-fg-dim);
+      max-width: 50ch;
+      letter-spacing: -.015em;
+      margin: 0;
+    }
+    .hb-sub strong { color: var(--hb-fg); font-weight: 500; }
+    .hb-stats {
+      display: flex;
+      gap: 2.5rem;
+      align-items: flex-end;
+    }
+    .hb-stat {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+    .hb-stat-num {
+      font-size: clamp(2rem, 3.2vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: .95;
+      color: var(--hb-fg);
+    }
+    .hb-stat-num em { font-style: normal; color: var(--orange); }
+    .hb-stat-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: .65rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--hb-fg-faint);
+    }
+
+    /* ============================================
+       SHARED SECTION PRIMITIVES (mirror index.html)
+       ============================================ */
+    .section-eyebrow {
+      font-size: 0.85rem;
+      font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--orange);
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
+      display: block;
     }
+
+    .section-h2 {
+      font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 2rem;
+    }
+    .section-h2 em {
+      font-style: normal;
+      color: var(--orange);
+      display: inline-block;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 107, 53, 0.35);
+      text-decoration-thickness: 0.12em;
+      text-underline-offset: 0.2em;
+    }
+
+    /* ============================================
+       PUZZLE SECTION
+       ============================================ */
+    .puzzle-section {
+      padding: 5rem 2rem 6rem;
+      background: var(--white);
+    }
+    .puzzle-container {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .puzzle-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .puzzle-meta-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .puzzle-number-pill {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      background: var(--black);
+      color: var(--white);
+      padding: 0.4rem 0.7rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      border-radius: 4px;
+    }
+    .puzzle-date {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+    .puzzle-category {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+    .streak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.85rem;
+      border: 1.5px solid var(--black);
+      border-radius: 4px;
+      background: var(--white);
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--black);
+    }
+    .streak-badge .streak-flame { font-size: 1rem; }
 
     .scenario {
-      font-family: var(--font-display);
-      font-weight: 500;
-      font-size: clamp(1.35rem, 3.4vw, 1.65rem);
-      line-height: 1.32;
+      font-size: clamp(1.75rem, 4.3vw, 2.65rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
       color: var(--black);
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
-
-    .scenario strong { font-weight: 700; color: var(--orange-dark); }
+    .scenario strong {
+      color: var(--orange);
+      font-weight: 900;
+      background: rgba(255, 107, 53, 0.10);
+      padding: 0 0.18em;
+    }
 
     .question {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--gray);
-      margin-bottom: 1.5rem;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      color: var(--gray);
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .question::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--orange);
     }
 
-    /* ── Choices ──────────────────── */
-    .choices { display: flex; flex-direction: column; gap: 0.75rem; }
+    /* Choices — neo-brutalist cards */
+    .choices { display: grid; gap: 1rem; }
 
     .choice {
       display: flex;
       align-items: flex-start;
-      gap: 1rem;
-      padding: 1rem 1.1rem;
-      background: var(--cream);
-      border: 2px solid rgba(26,26,26,0.12);
-      border-radius: 12px;
+      gap: 1.25rem;
+      padding: 1.5rem 1.5rem;
+      background: var(--white);
+      border: 2px solid var(--black);
+      border-radius: 4px;
       cursor: pointer;
       text-align: left;
       font-family: inherit;
-      font-size: 1rem;
+      font-size: 1.05rem;
       color: var(--black);
-      transition: all 0.18s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       width: 100%;
+      position: relative;
     }
-
     .choice:hover:not(:disabled) {
-      border-color: var(--orange);
-      background: var(--orange-glow);
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      box-shadow: 6px 6px 0 var(--black);
     }
-
-    .choice:disabled { cursor: default; opacity: 0.55; }
+    .choice:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+    .choice:disabled { cursor: default; }
 
     .choice-letter {
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      width: 32px;
-      height: 32px;
+      width: 38px;
+      height: 38px;
       background: var(--black);
       color: var(--white);
-      border-radius: 50%;
-      font-weight: 700;
-      font-size: 0.9rem;
+      font-weight: 900;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+      border-radius: 4px;
+    }
+    .choice-text {
+      flex: 1;
+      font-weight: 500;
+      line-height: 1.45;
+      padding-top: 0.4rem;
     }
 
-    .choice-text { flex: 1; line-height: 1.4; padding-top: 4px; font-weight: 500; }
-
-    /* Verdict states after answering */
-    .choice.is-optimal { border-color: var(--success); background: var(--success-soft); opacity: 1; }
+    /* Verdict states after answer */
+    .choice.is-optimal { border-color: var(--success); background: var(--success-soft); }
     .choice.is-optimal .choice-letter { background: var(--success); }
-    .choice.is-decent { border-color: var(--warning); background: var(--warning-soft); opacity: 1; }
-    .choice.is-decent .choice-letter { background: var(--warning); }
-    .choice.is-risky { border-color: var(--danger); background: var(--danger-soft); opacity: 1; }
-    .choice.is-risky .choice-letter { background: var(--danger); }
-    .choice.is-selected { box-shadow: 0 0 0 3px rgba(26,26,26,0.18); }
+    .choice.is-decent  { border-color: var(--warning); background: var(--warning-soft); }
+    .choice.is-decent  .choice-letter { background: var(--warning); }
+    .choice.is-risky   { border-color: var(--danger); background: var(--danger-soft); }
+    .choice.is-risky   .choice-letter { background: var(--danger); }
+    .choice.is-selected { box-shadow: 6px 6px 0 var(--black) !important; transform: translateY(-2px); }
+    .choice:disabled.is-not-selected { opacity: 0.55; }
 
-    /* ── Reveal card ──────────────── */
-    .reveal {
+    /* ============================================
+       REVEAL SECTION
+       ============================================ */
+    .reveal-section {
       display: none;
-      animation: revealUp 0.45s cubic-bezier(.2,.9,.3,1.2);
+      padding: 6rem 2rem 6rem;
+      background: var(--warm-white);
+      border-top: 4px solid var(--orange);
     }
-
-    .reveal.visible { display: block; }
+    .reveal-section.visible { display: block; animation: revealUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
 
     @keyframes revealUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .verdict-header {
+    .reveal-container {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    .verdict-eyebrow-row {
       display: flex;
       align-items: center;
-      gap: 0.85rem;
-      padding: 1rem 1.25rem;
-      border-radius: 12px;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .verdict-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      border: 1.5px solid currentColor;
+    }
+    .verdict-tag.optimal { color: #047857; background: var(--success-soft); }
+    .verdict-tag.decent  { color: #92400e; background: var(--warning-soft); }
+    .verdict-tag.risky   { color: #991b1b; background: var(--danger-soft); }
+    .verdict-tag-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: currentColor;
+    }
+
+    .verdict-headline {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 2.5rem;
+      max-width: 22ch;
+    }
+    .verdict-headline em {
+      font-style: normal;
+      color: var(--orange);
+      display: inline-block;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 107, 53, 0.35);
+      text-decoration-thickness: 0.12em;
+      text-underline-offset: 0.2em;
+    }
+
+    .reveal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
       margin-bottom: 1.5rem;
-      font-weight: 700;
     }
+    @media (max-width: 720px) { .reveal-grid { grid-template-columns: 1fr; } }
 
-    .verdict-header.optimal { background: var(--success-soft); color: #14532d; }
-    .verdict-header.decent { background: var(--warning-soft); color: #713f12; }
-    .verdict-header.risky { background: var(--danger-soft); color: #7f1d1d; }
+    .reveal-card {
+      background: var(--white);
+      border: 2px solid var(--black);
+      border-radius: 4px;
+      padding: 2rem 1.75rem;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-card:hover { transform: translateY(-4px); box-shadow: 8px 8px 0 var(--black); }
 
-    .verdict-emoji { font-size: 1.65rem; flex-shrink: 0; line-height: 1; }
-    .verdict-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.15rem; }
-    .verdict-title { font-size: 1.1rem; line-height: 1.25; }
-
-    .reveal h3 {
-      font-family: var(--font-display);
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.5rem;
+    .reveal-card-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.75rem;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
-
-    .reveal h3::before {
+    .reveal-card-eyebrow::before {
       content: '';
-      width: 18px;
+      width: 22px;
       height: 2px;
       background: var(--orange);
     }
-
-    .reveal-section { margin-bottom: 1.5rem; }
-    .reveal-section p { color: var(--black); font-size: 0.98rem; line-height: 1.55; }
-    .reveal-section .math {
+    .reveal-card-title {
+      font-size: 1.4rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    .reveal-card .math {
       font-family: 'JetBrains Mono', ui-monospace, monospace;
-      background: var(--warm-white);
-      padding: 1rem 1.1rem;
-      border-radius: 10px;
-      border-left: 3px solid var(--orange);
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       line-height: 1.7;
       white-space: pre-wrap;
       overflow-x: auto;
+      color: var(--black);
+    }
+    .reveal-card p {
+      font-size: 1.05rem;
+      color: var(--gray);
+      line-height: 1.6;
     }
 
-    .truth {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-size: 1.15rem;
-      line-height: 1.45;
-      padding: 1.1rem 1.25rem;
-      background: var(--black);
-      color: var(--white);
-      border-radius: 12px;
-      position: relative;
-    }
-
-    .truth::before {
-      content: '“';
-      position: absolute;
-      top: -20px;
-      left: 14px;
-      font-size: 5rem;
-      color: var(--orange);
-      font-family: var(--font-display);
-      line-height: 1;
-    }
-
-    .learn-more {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--orange-dark);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      margin-top: 0.25rem;
-      border-bottom: 2px solid transparent;
-      transition: all 0.15s ease;
-    }
-    .learn-more:hover { border-bottom-color: var(--orange); transform: translateX(2px); }
-
-    /* ── Result / share card ──────── */
-    .result-card {
-      display: none;
+    .truth-card {
       background: var(--black);
       color: var(--white);
       border: 2px solid var(--black);
-      border-radius: 16px;
-      padding: 2rem 1.5rem;
-      box-shadow: 6px 6px 0 var(--orange);
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
       margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .truth-card .truth-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .truth-card .truth-label::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--orange);
+    }
+    .truth-text {
+      font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      max-width: 30ch;
+    }
+    .truth-text em {
+      font-style: normal;
+      color: var(--orange);
+    }
+
+    .learn-more-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .learn-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--orange);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      position: relative;
+      padding-bottom: 2px;
+      transition: transform 0.2s ease;
+    }
+    .learn-more::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--orange);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .learn-more:hover { transform: translateX(4px); }
+    .learn-more:hover::after { transform: scaleX(1); }
+
+    /* ============================================
+       RESULT / SHARE SECTION (black, like .impact)
+       ============================================ */
+    .result-section {
+      display: none;
+      padding: 6rem 2rem 6rem;
+      background: var(--black);
+      color: var(--white);
       text-align: center;
     }
-    .result-card.visible { display: block; }
+    .result-section.visible { display: block; }
 
-    .result-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; }
-    .stat { text-align: center; }
-    .stat-value {
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 6vw, 2.6rem);
+    .result-container { max-width: var(--max-width); margin: 0 auto; }
+
+    .result-eyebrow {
+      font-size: 0.85rem;
       font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.75rem;
+    }
+
+    .result-headline {
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 3.5rem;
+    }
+    .result-headline em {
+      font-style: normal;
+      color: var(--orange);
+      display: inline-block;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 107, 53, 0.4);
+      text-decoration-thickness: 0.12em;
+      text-underline-offset: 0.2em;
+    }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      max-width: 800px;
+      margin: 0 auto 3.5rem;
+    }
+    @media (max-width: 640px) {
+      .result-stats { grid-template-columns: 1fr; gap: 2.25rem; }
+    }
+    .result-stat-num {
+      font-size: clamp(3rem, 6vw, 4.5rem);
+      font-weight: 900;
       color: var(--orange);
       line-height: 1;
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.05em;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .stat-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.65; }
+    .result-stat-num:hover { transform: scale(1.06); }
+    .result-stat-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
 
-    .share-row { display: flex; flex-direction: column; gap: 0.75rem; align-items: center; }
+    .result-share-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
 
-    .btn {
+    /* Buttons matching index.html style */
+    .btn-primary, .btn-secondary {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.55rem;
-      padding: 0.9rem 1.5rem;
+      gap: 0.6rem;
+      padding: 1.1rem 2.25rem;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: var(--font-body);
+      text-decoration: none;
+      transition: all 0.25s ease;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-primary {
       background: var(--orange);
       color: var(--white);
-      border: none;
-      border-radius: 10px;
-      font-family: inherit;
+      border: 2.5px solid var(--orange);
+    }
+    .btn-primary:hover {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--white);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      border: 2.5px solid var(--white);
+    }
+    .btn-secondary:hover {
+      background: var(--white);
+      color: var(--black);
+      transform: translateY(-3px);
+    }
+
+    .countdown-row {
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+    .countdown-row strong {
+      color: var(--orange);
       font-weight: 700;
       font-size: 1rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.18s ease;
-      min-width: 220px;
+      margin-left: 0.5rem;
     }
-    .btn:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4); }
-    .btn.btn-ghost { background: transparent; border: 1.5px solid rgba(255,255,255,0.25); color: var(--white); }
-    .btn.btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: var(--white); transform: translateY(-2px); }
 
+    /* ============================================
+       "WHY DAILY" — solution-card style grid
+       ============================================ */
+    .why-section {
+      padding: 7rem 2rem;
+      background: var(--white);
+    }
+    .why-container { max-width: var(--max-width); margin: 0 auto; }
+
+    .why-header { margin-bottom: 4rem; max-width: 50ch; }
+    .why-header p {
+      font-size: 1.15rem;
+      color: var(--gray);
+      line-height: 1.6;
+      margin-top: 0.5rem;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .why-card {
+      position: relative;
+      padding: 2.5rem 2rem;
+      border: 2px solid var(--black);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      background: var(--white);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+    }
+    .why-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 6px 6px 0 var(--black);
+    }
+    .why-card-num {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.25rem;
+    }
+    .why-card-title {
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.85rem;
+      line-height: 1.15;
+    }
+    .why-card-title em {
+      font-style: normal;
+      color: var(--orange);
+    }
+    .why-card-text {
+      color: var(--gray);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    /* ============================================
+       FINAL CTA SECTION (warm-white like .cta)
+       ============================================ */
+    .final-cta-section {
+      padding: 8rem 2rem;
+      text-align: center;
+      background: var(--warm-white);
+    }
+    .final-cta-container { max-width: 900px; margin: 0 auto; }
+
+    .final-cta-eyebrow {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.75rem;
+    }
+    .final-cta-h2 {
+      font-size: clamp(2.5rem, 6.5vw, 5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 2rem;
+    }
+    .final-cta-h2 em {
+      font-style: normal;
+      color: var(--orange);
+      display: inline-block;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 107, 53, 0.35);
+      text-decoration-thickness: 0.12em;
+      text-underline-offset: 0.2em;
+    }
+    .final-cta-sub {
+      font-size: 1.2rem;
+      color: var(--gray);
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      line-height: 1.55;
+    }
+
+    .cta-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cta-btns .btn-solid-black {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 1.1rem 2.25rem;
+      background: var(--black);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      border: 2.5px solid var(--black);
+      transition: all 0.25s ease;
+      border-radius: 4px;
+    }
+    .cta-btns .btn-solid-black:hover {
+      background: var(--orange);
+      border-color: var(--orange);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(255, 107, 53, 0.25);
+    }
+    .cta-btns .btn-ghost-dark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 1.1rem 2.25rem;
+      background: transparent;
+      color: var(--black);
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      border: 2.5px solid var(--black);
+      transition: all 0.25s ease;
+      border-radius: 4px;
+    }
+    .cta-btns .btn-ghost-dark:hover {
+      background: var(--black);
+      color: var(--white);
+      transform: translateY(-3px);
+    }
+
+    /* ============================================
+       FOOTER (same as index.html)
+       ============================================ */
+    footer { padding: 0; border-top: 4px solid var(--orange); background: var(--black); color: var(--white); position: relative; }
+    .footer-newsletter { padding: 2.5rem 2rem; background: rgba(255, 107, 53, 0.08); border-bottom: 1px solid rgba(255, 255, 255, 0.08); text-align: center; }
+    .footer-newsletter-container { max-width: 850px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+    .footer-newsletter-text { text-align: left; }
+    .footer-newsletter h3 { font-size: 1.2rem; font-weight: 900; margin-bottom: 0.2rem; letter-spacing: -0.02em; }
+    .footer-newsletter p { font-size: 0.9rem; opacity: 0.7; margin: 0; line-height: 1.4; }
+    .footer-newsletter-btn { display: inline-block; padding: 0.75rem 1.75rem; font-size: 0.9rem; font-weight: 700; background: var(--orange); color: var(--white); text-decoration: none; border: 2px solid var(--orange); transition: all 0.2s ease; font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; }
+    .footer-newsletter-btn:hover { background: var(--white); color: var(--black); border-color: var(--white); transform: translateY(-2px); }
+    .footer-container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 0; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+    .footer-brand-col { display: flex; flex-direction: column; gap: 1rem; }
+    .footer-brand img { height: 32px; filter: brightness(0) invert(1); }
+    .footer-tagline { opacity: 0.7; line-height: 1.6; font-size: 0.95rem; }
+    .footer-ein { opacity: 0.4; font-size: 0.8rem; }
+    .footer-social { display: flex; gap: 0.75rem; margin-top: 0.25rem; }
+    .footer-social a { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: var(--white); text-decoration: none; transition: all 0.2s ease; font-size: 0.85rem; }
+    .footer-social a:hover { background: var(--orange); transform: translateY(-2px); }
+    .footer-social a svg { width: 16px; height: 16px; fill: currentColor; }
+    .footer-section h4 { font-size: 0.75rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.25rem; color: var(--orange); opacity: 0.8; }
+    .footer-section a { display: block; color: var(--white); text-decoration: none; margin-bottom: 0.65rem; transition: all 0.2s ease; font-size: 0.95rem; opacity: 0.8; }
+    .footer-section a:hover { color: var(--orange); opacity: 1; transform: translateX(4px); }
+    .footer-squiggle { display: block; margin: 0 auto 0; width: 80px; height: 8px; opacity: 0.2; }
+    .footer-bottom { max-width: var(--max-width); margin: 0 auto; padding: 2rem 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; opacity: 0.5; font-size: 0.85rem; }
+    .footer-bottom a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s ease; margin: 0 0.75rem; }
+    .footer-bottom a:hover { color: var(--orange); }
+
+    /* ============================================
+       UTILITY: copied toast
+       ============================================ */
     .copied-toast {
       position: fixed;
       bottom: 30px;
       left: 50%;
-      transform: translateX(-50%) translateY(100px);
+      transform: translateX(-50%) translateY(120px);
       background: var(--black);
       color: var(--white);
-      padding: 0.85rem 1.5rem;
-      border-radius: 999px;
+      padding: 0.95rem 1.6rem;
+      border: 2px solid var(--orange);
+      border-radius: 4px;
       font-weight: 700;
       font-size: 0.9rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
       opacity: 0;
-      transition: all 0.3s ease;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 2000;
       pointer-events: none;
     }
     .copied-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    .countdown {
-      margin-top: 1.25rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid rgba(255,255,255,0.12);
-      font-size: 0.85rem;
-      opacity: 0.75;
-    }
-    .countdown strong { color: var(--orange); font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; }
-
-    /* ── Already-played gate ──────── */
-    .already-played {
-      display: none;
-      text-align: center;
-      padding: 2rem 1.5rem;
-    }
-    .already-played.visible { display: block; }
-    .already-played-icon { font-size: 3rem; margin-bottom: 0.5rem; }
-    .already-played h2 {
-      font-family: var(--font-display);
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-    .already-played p { color: var(--gray); margin-bottom: 1rem; }
-
-    /* ── Below the fold ───────────── */
-    .below {
-      max-width: var(--max-width);
-      margin: 4rem auto 0;
-      padding: 0 1.25rem;
-    }
-    .below h2 {
-      font-family: var(--font-display);
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      font-weight: 700;
-      text-align: center;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
-    }
-    .below > p { text-align: center; color: var(--gray); margin-bottom: 2rem; max-width: 50ch; margin-left: auto; margin-right: auto; }
-
-    .feature-row { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
-    @media (min-width: 720px) { .feature-row { grid-template-columns: repeat(3, 1fr); } }
-
-    .feature {
-      background: var(--white);
-      border: 1.5px solid rgba(26,26,26,0.08);
-      border-radius: 14px;
-      padding: 1.35rem 1.25rem;
-      transition: all 0.2s ease;
-    }
-    .feature:hover { border-color: var(--orange); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(26,26,26,0.08); }
-    .feature-icon { font-size: 1.5rem; margin-bottom: 0.5rem; display: block; }
-    .feature h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.3rem; }
-    .feature p { font-size: 0.92rem; color: var(--gray); line-height: 1.5; }
-
-    .final-cta {
-      background: var(--black);
-      color: var(--white);
-      border-radius: 16px;
-      padding: 2rem 1.5rem;
-      text-align: center;
-      margin-top: 1.5rem;
-    }
-    .final-cta h3 {
-      font-family: var(--font-display);
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      line-height: 1.2;
-    }
-    .final-cta p { opacity: 0.75; font-size: 0.95rem; margin-bottom: 1.25rem; }
-    .final-cta a { color: var(--orange); font-weight: 700; text-decoration: none; border-bottom: 2px solid transparent; transition: border-color 0.2s; }
-    .final-cta a:hover { border-bottom-color: var(--orange); }
-
-    .cta-btns { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
-    .cta-btns .btn { min-width: 0; padding: 0.75rem 1.25rem; font-size: 0.9rem; }
-
-    /* ── Confetti ─────────────────── */
+    /* Confetti */
     .confetti-piece {
       position: fixed;
-      width: 10px;
-      height: 14px;
+      width: 10px; height: 14px;
       top: -20px;
       z-index: 999;
       pointer-events: none;
       will-change: transform, opacity;
+    }
+    @keyframes confettiFall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 968px) {
+      :root { font-size: 16px; }
+      .hero-billboard { padding: 7rem 1.5rem 2.5rem; }
+      .hb-bottom { grid-template-columns: 1fr; gap: 2rem; }
+      .hb-stats { gap: 1.75rem; flex-wrap: wrap; }
+      .puzzle-section { padding: 4rem 1.25rem 5rem; }
+      .reveal-section, .result-section { padding: 5rem 1.25rem; }
+      .why-section { padding: 5rem 1.25rem; }
+      .final-cta-section { padding: 6rem 1.25rem; }
+      .footer-container { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-brand-col { grid-column: 1 / -1; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    @media (max-width: 600px) {
+      .puzzle-meta-row { flex-direction: column; align-items: flex-start; gap: 0.85rem; }
+      .choice { padding: 1.25rem 1.1rem; font-size: 1rem; }
+      .choice-letter { width: 32px; height: 32px; font-size: 0.9rem; }
+      .truth-card { padding: 2rem 1.5rem; }
+      .reveal-card { padding: 1.75rem 1.5rem; }
+      .footer-container { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -684,119 +1145,203 @@
     </div>
   </div>
 
-  <main class="page">
-    <header class="hero">
-      <span class="eyebrow"><span class="pulse"></span> New puzzle every day</span>
-      <h1><span class="mango-emoji">🥭</span> Money Mango <em>Daily</em></h1>
-      <p>One real money decision. Three choices. 60 seconds. See the math. Learn the truth.</p>
-    </header>
-
-    <div class="puzzle-meta">
-      <div class="puzzle-meta-left">
-        <span class="puzzle-number" id="puzzleNumber">#001</span>
-        <span class="puzzle-date" id="puzzleDate">Today</span>
+  <!-- ============================================
+       HERO BILLBOARD (matches index.html aesthetic)
+       ============================================ -->
+  <section class="hero-billboard">
+    <div class="hero-bg"></div>
+    <div class="hero-container">
+      <div class="hero-top">
+        <span class="hb-eyebrow" id="heroEyebrow">PUZZLE #001 &middot; <span id="heroDateLabel">Today</span></span>
+        <span class="hb-status"><span class="hb-pulse"></span> New puzzle daily</span>
       </div>
-      <div class="streak-badge" id="streakBadge" title="Your current streak">🔥 <span id="streakValue">0</span></div>
-    </div>
 
-    <!-- Puzzle card -->
-    <section class="card" id="puzzleCard" aria-live="polite">
-      <span class="category-tag" id="categoryTag">Loading…</span>
-      <p class="scenario" id="scenario">Loading today's puzzle…</p>
-      <p class="question" id="question">What do you do?</p>
-      <div class="choices" id="choices"></div>
-    </section>
+      <div class="hb-main">
+        <h1>
+          <span class="mango-emoji" aria-hidden="true">🥭</span>Money Mango <em>Daily.</em>
+        </h1>
+      </div>
 
-    <!-- Reveal card -->
-    <section class="card reveal" id="revealCard" aria-live="polite">
-      <div class="verdict-header" id="verdictHeader">
-        <div class="verdict-emoji" id="verdictEmoji">🟢</div>
-        <div>
-          <div class="verdict-label" id="verdictLabel">Verdict</div>
-          <div class="verdict-title" id="verdictTitle">—</div>
+      <div class="hb-bottom">
+        <p class="hb-sub">
+          One real money decision. Three choices. <strong>60 seconds.</strong> Not literacy — <strong>the system itself</strong>, made visible. Come back tomorrow.
+        </p>
+        <div class="hb-stats">
+          <div class="hb-stat">
+            <div class="hb-stat-num" id="heroStreak">0</div>
+            <div class="hb-stat-label">Streak 🔥</div>
+          </div>
+          <div class="hb-stat">
+            <div class="hb-stat-num" id="heroBest">0</div>
+            <div class="hb-stat-label">Best</div>
+          </div>
+          <div class="hb-stat">
+            <div class="hb-stat-num" id="heroPlayed">0</div>
+            <div class="hb-stat-label">Played</div>
+          </div>
         </div>
-      </div>
-
-      <div class="reveal-section">
-        <h3>The math</h3>
-        <div class="math" id="mathBlock">—</div>
-      </div>
-
-      <div class="reveal-section">
-        <p class="truth" id="truthBlock">—</p>
-      </div>
-
-      <div class="reveal-section" style="margin-bottom:0;">
-        <a class="learn-more" id="learnMoreLink" href="#">Dive deeper →</a>
-      </div>
-    </section>
-
-    <!-- Result / share card -->
-    <section class="result-card" id="resultCard">
-      <h2 style="font-family:var(--font-display); font-size:1.5rem; font-weight:700; line-height:1.2;">
-        Locked in. <span id="resultCheer">Nice play.</span>
-      </h2>
-
-      <div class="result-stats">
-        <div class="stat">
-          <div class="stat-value" id="statStreak">0</div>
-          <div class="stat-label">Streak 🔥</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" id="statBest">0</div>
-          <div class="stat-label">Best</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" id="statPlayed">0</div>
-          <div class="stat-label">Played</div>
-        </div>
-      </div>
-
-      <div class="share-row">
-        <button class="btn" id="shareBtn">Share my result</button>
-        <a class="btn btn-ghost" href="education.html">Want more? Try a lesson →</a>
-      </div>
-
-      <div class="countdown">
-        Next Money Mango in <strong id="countdown">--:--:--</strong>
-      </div>
-    </section>
-  </main>
-
-  <!-- Below the fold -->
-  <section class="below">
-    <h2>Why a daily puzzle?</h2>
-    <p>Because real financial health isn't built in a workshop. It's built in 60-second decisions, made over and over, until the math becomes second nature.</p>
-
-    <div class="feature-row">
-      <div class="feature">
-        <span class="feature-icon">🧠</span>
-        <h3>One decision, daily</h3>
-        <p>A real money moment a real person actually faces. No fluff, no jargon.</p>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">📊</span>
-        <h3>See the math</h3>
-        <p>Every reveal shows you the underlying numbers — so the lesson sticks.</p>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">🔥</span>
-        <h3>Build a streak</h3>
-        <p>Come back tomorrow. And the day after. Compound your knowledge like interest.</p>
-      </div>
-    </div>
-
-    <div class="final-cta">
-      <h3>Money decisions shouldn't be a privilege.</h3>
-      <p>FinMango is a 501(c)(3) building economic mobility infrastructure for young adults.<br>This game is free and ad-free because of donors who believe financial health is a right.</p>
-      <div class="cta-btns">
-        <a class="btn" href="donate.html">Donate</a>
-        <a class="btn btn-ghost" href="ambassadors.html" style="border:1.5px solid rgba(255,255,255,0.35); color: var(--white);">Become an Ambassador</a>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ============================================
+       PUZZLE SECTION (white)
+       ============================================ -->
+  <section class="puzzle-section">
+    <div class="puzzle-container">
+      <div class="puzzle-meta-row">
+        <div class="puzzle-meta-left">
+          <span class="puzzle-number-pill" id="puzzleNumberPill">#001</span>
+          <span class="puzzle-date" id="puzzleDateLabel">— Today</span>
+          <span class="puzzle-category" id="puzzleCategoryLabel">Loading…</span>
+        </div>
+        <div class="streak-badge" title="Your current streak">
+          <span class="streak-flame">🔥</span> <span id="streakBadgeValue">0</span>-day streak
+        </div>
+      </div>
+
+      <p class="question">The scenario</p>
+      <h2 class="scenario" id="scenario">Loading today's puzzle…</h2>
+
+      <p class="question" id="questionLabel">What do you do?</p>
+      <div class="choices" id="choices"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       REVEAL SECTION (warm-white)
+       ============================================ -->
+  <section class="reveal-section" id="revealSection" aria-live="polite">
+    <div class="reveal-container">
+      <div class="verdict-eyebrow-row">
+        <span class="section-eyebrow" style="margin-bottom:0;">Verdict</span>
+        <span class="verdict-tag" id="verdictTag">
+          <span class="verdict-tag-dot"></span>
+          <span id="verdictTagLabel">Optimal</span>
+        </span>
+      </div>
+
+      <h2 class="verdict-headline" id="verdictHeadline">Optimal play. <em>The math agrees.</em></h2>
+
+      <div class="reveal-grid">
+        <div class="reveal-card">
+          <div class="reveal-card-eyebrow">What happens</div>
+          <p id="choiceResultText">—</p>
+        </div>
+        <div class="reveal-card">
+          <div class="reveal-card-eyebrow">The math</div>
+          <div class="math" id="mathBlock">—</div>
+        </div>
+      </div>
+
+      <div class="truth-card">
+        <div class="truth-label">The truth</div>
+        <p class="truth-text" id="truthBlock">—</p>
+      </div>
+
+      <div class="learn-more-row">
+        <a class="learn-more" id="learnMoreLink" href="#">Dive deeper →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       RESULT / SHARE SECTION (black, like .impact)
+       ============================================ -->
+  <section class="result-section" id="resultSection">
+    <div class="result-container">
+      <div class="result-eyebrow">Locked in</div>
+      <h2 class="result-headline">Come back <em>tomorrow</em>.<br>Compound the habit.</h2>
+
+      <div class="result-stats">
+        <div>
+          <div class="result-stat-num" id="resultStreak">0</div>
+          <div class="result-stat-label">Current streak</div>
+        </div>
+        <div>
+          <div class="result-stat-num" id="resultBest">0</div>
+          <div class="result-stat-label">Best streak</div>
+        </div>
+        <div>
+          <div class="result-stat-num" id="resultPlayed">0</div>
+          <div class="result-stat-label">Puzzles played</div>
+        </div>
+      </div>
+
+      <div class="result-share-row">
+        <button class="btn-primary" id="shareBtn">
+          Share my result
+          <span aria-hidden="true">→</span>
+        </button>
+        <a class="btn-secondary" href="education.html">
+          Try a lesson
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="countdown-row">
+        Next Money Mango in <strong id="countdown">--:--:--</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       WHY DAILY (white, solution-card style)
+       ============================================ -->
+  <section class="why-section">
+    <div class="why-container">
+      <div class="why-header">
+        <span class="section-eyebrow">Why a puzzle a day?</span>
+        <h2 class="section-h2">Financial health isn't a <em>literacy</em> problem.</h2>
+        <p>It's a system problem. Money Mango makes that system visible — one decision at a time — and points you to the people working to change it.</p>
+      </div>
+
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-card-num">01 / Daily</div>
+          <h3 class="why-card-title">See the <em>system.</em></h3>
+          <p class="why-card-text">Each puzzle is a real money moment the system didn't make easy — banking deserts, benefit cliffs, predatory lending, eviction records. The kind of thing 'just budget better' won't fix.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-num">02 / Honest</div>
+          <h3 class="why-card-title">Name the <em>cost.</em></h3>
+          <p class="why-card-text">Every reveal shows the structural math — the wage theft, the payday spread, the cliff that punishes a $200 raise. So you can see what's being taken, not just what to optimize.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-num">03 / Sticky</div>
+          <h3 class="why-card-title">Move the <em>system.</em></h3>
+          <p class="why-card-text">Every puzzle ends with a way to act — research to read, policy to support, work FinMango is doing on the ground. Mobility is built individually AND collectively. We do both.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       FINAL CTA (warm-white, mirrors index.html .cta)
+       ============================================ -->
+  <section class="final-cta-section">
+    <div class="final-cta-container">
+      <div class="final-cta-eyebrow">Mission</div>
+      <h2 class="final-cta-h2">Money decisions shouldn't be a <em>privilege.</em></h2>
+      <p class="final-cta-sub">
+        Money Mango Daily exists because financial health is a right, not a privilege — and the system that decides who gets it doesn't change on its own. FinMango is a 501(c)(3) building economic mobility infrastructure for young adults and vulnerable communities. Donors keep this work going.
+      </p>
+      <div class="cta-btns">
+        <a class="btn-solid-black" href="donate.html">
+          Donate
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="btn-ghost-dark" href="ambassadors.html">
+          Become an Ambassador
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       FOOTER (identical to index.html)
+       ============================================ -->
   <footer>
     <div class="footer-newsletter">
       <div class="footer-newsletter-container">
@@ -882,428 +1427,425 @@
     // ============================================================
     // MONEY MANGO DAILY
     // ============================================================
-    // A new puzzle every local-calendar day. Verdicts: optimal,
-    // decent, risky. Streak persists in localStorage.
-    // ============================================================
 
     const PUZZLES = [
       {
-        category: "Windfall",
-        scenario: "You owe <strong>$4,200</strong> on a credit card at <strong>24% APR</strong>. You just got a <strong>$1,500</strong> tax refund. You have no emergency savings.",
-        question: "What's the smartest move?",
+        category: "Banking Deserts",
+        scenario: "Your zip code has <strong>4 payday lenders</strong> and <strong>0 bank branches</strong>. You need <strong>$400</strong> by Friday to keep the lights on. What do you do?",
+        question: "What's the actual best option here?",
         choices: [
-          { text: "Throw the whole $1,500 at the credit card.", verdict: "decent",  result: "You save real money in interest — but with $0 cushion, the next surprise expense lands right back on the card." },
-          { text: "Park $1,000 in a high-yield savings account first; send $500 to the card.", verdict: "optimal", result: "You break the cycle. The buffer prevents the next emergency from becoming new credit card debt." },
-          { text: "Save the whole thing in case something breaks.", verdict: "risky", result: "Your card is silently costing you $84/month in interest. Every month you wait, the debt grows faster than your savings earn." }
+          { text: "Take the payday loan at 391% APR.", verdict: "risky", result: "A typical 2-week $400 payday loan costs ~$60 in fees. The rollover cycle averages 8 loans before payoff — that $400 emergency becomes a $480+ tax on being broke." },
+          { text: "Find a CDFI, Bank On certified account, or 2-1-1 emergency assistance.", verdict: "optimal", result: "Community Development Financial Institutions (CDFIs) and 2-1-1 utility assistance exist for exactly this. Most people in payday-lender zones never learn they qualify." },
+          { text: "Just skip the bill and pay the reconnect fee later.", verdict: "risky", result: "Utility shut-offs trigger reconnect fees ($40-$200), security deposit resets ($150-$300), and tank your tenant rating. Cheaper to borrow than to disconnect." }
         ],
-        math: "$1,500 sitting on a 24% card =\n  ~$30/month in interest avoided\n\n$1,000 emergency fund + $500 paydown =\n  Stops the cycle. Stat: 64% of Americans\n  can't cover a $1,000 emergency without\n  borrowing (Bankrate, 2024).",
-        truth: "An emergency fund isn't a savings goal. It's the wall that keeps your past mistakes from becoming your future debt.",
-        learnUrl: "debt-destroyer.html",
-        learnLabel: "Try the Debt Destroyer →"
+        math: "Banking desert math:\n  $400 payday loan → $60 fee → 391% APR\n  CDFI small-dollar loan → ~$15 fee → 36% APR\n  Bank-On certified account → $0/mo, no overdraft\n\n1 in 5 US households are unbanked or\nunderbanked (FDIC, 2023).\n\nNeighborhoods with no banks didn't lose\nthem by accident — branches closed\nfaster in low-income zip codes for 20+\nyears, leaving payday lenders behind.",
+        truth: "Banking deserts aren't accidents. They're decades of branch-closing decisions that turned neighborhoods into 391% APR markets.",
+        learnUrl: "navtech.html",
+        learnLabel: "See FinMango NavTech →"
       },
       {
-        category: "Employer Benefits",
-        scenario: "Your job offers a <strong>401(k) match: 100% of the first 4%</strong> of your salary. You make $50,000 and you're nervous about market volatility.",
-        question: "How much do you contribute?",
+        category: "Medical Debt",
+        scenario: "An ER visit left you with a <strong>$1,200 bill</strong>. It went to collections. Your credit score just dropped <strong>80 points</strong>. You didn't choose to get sick.",
+        question: "What's the smart first move?",
         choices: [
-          { text: "Nothing — I'll wait until the market 'feels safer.'", verdict: "risky", result: "You're walking away from $2,000 a year — that's a 100% instant return. No market timing strategy beats that." },
-          { text: "Contribute at least 4% to capture the full match.", verdict: "optimal", result: "You just turned $2,000 of your money into $4,000 — before any market gains. This is the highest-return move in personal finance." },
-          { text: "Contribute 2% just to be safe.", verdict: "decent", result: "You're leaving half the match on the table — $1,000/year your employer will keep instead of you." }
+          { text: "Pay it as fast as possible to restore your score.", verdict: "risky", result: "Paying a collection often doesn't remove it. Worse — under new credit bureau rules, you may not need to pay at all. Don't pay without first disputing and negotiating removal." },
+          { text: "Dispute it under the new medical debt rules; negotiate a 'pay for delete'.", verdict: "optimal", result: "As of 2023, medical collections under $500 should NOT appear on credit reports. Larger ones must wait 1 year. Many people pay debts that were never supposed to hit their score." },
+          { text: "Take out a personal loan to consolidate the collection.", verdict: "risky", result: "You've now converted a (possibly disputable) medical bill into an actual loan with interest — and the original debt may still report." }
         ],
-        math: "Salary: $50,000\n4% contribution: $2,000/yr\nEmployer match: +$2,000/yr (FREE)\n\nOver 30 years at 7% return:\n  Your $2k/yr alone → ~$203,000\n  WITH match → ~$406,000\n\nThe match literally doubles your retirement.",
-        truth: "Skipping the 401(k) match isn't being cautious. It's being paid less than the offer letter says.",
-        learnUrl: "compound-interest.html",
-        learnLabel: "Run the compound interest numbers →"
+        math: "Medical debt by the numbers:\n  100M+ Americans carry medical debt\n  41% of US adults (KFF, 2024)\n\nNew CFPB / bureau rules (2023):\n  Under $500 → should NOT report\n  Paid medical debt → must be removed\n  Unpaid → 1-year delay before reporting\n\nMedical debt is the only debt where\nyou often didn't see the price\nbefore agreeing to the service.",
+        truth: "In the US, getting sick can lower your credit score. The system is the disease.",
+        learnUrl: "research.html",
+        learnLabel: "Read the research →"
       },
       {
-        category: "Spending",
-        scenario: "You just got a <strong>$6,000/year raise</strong>. Your friends are already nudging you toward a nicer apartment, a new car lease, and weekly dinners out.",
-        question: "What do you do with it?",
+        category: "Wage Theft",
+        scenario: "Your boss says <strong>'we don't pay overtime here.'</strong> You worked 50 hours last week. You're an hourly employee covered by FLSA.",
+        question: "What do you actually do?",
         choices: [
-          { text: "Upgrade lifestyle to match the new income.", verdict: "risky", result: "Welcome to lifestyle creep — the silent killer of financial mobility. Within a year, the raise vanishes and the obligations stay." },
-          { text: "Bank at least 50% of the raise; enjoy the rest guilt-free.", verdict: "optimal", result: "You enjoy the win AND build wealth. Half the raise, invested, is six figures by retirement." },
-          { text: "Save 100% and don't change a thing.", verdict: "decent", result: "Disciplined, but unsustainable. Raises you don't enjoy at all tend to leak out as random splurges later." }
+          { text: "Let it go — you can't afford to lose this job.", verdict: "risky", result: "Wage theft compounds. Workers who never reclaim it lose ~$50B/year collectively. The Department of Labor offers retaliation protection for filers." },
+          { text: "Document hours; file with your state labor board or US DOL Wage and Hour Division.", verdict: "optimal", result: "Filing is free and confidential. The DOL recovered $1.4B in unpaid wages for workers in 2024 alone. You don't need a lawyer to start." },
+          { text: "Quit and move on.", verdict: "decent", result: "Valid — but quitting doesn't recover what you're owed. You can quit AND file. The clock starts the day you leave for many state claims." }
         ],
-        math: "$3,000/yr saved (50%) invested at 7%\n  10 years → $41,000\n  20 years → $123,000\n  30 years → $283,000\n\nSpend it all? You earn the same\nas your old self — just with nicer rent.",
-        truth: "The first raise you fully spend sets the ceiling on every raise after it.",
-        learnUrl: "budget-balancer.html",
-        learnLabel: "Try the Budget Balancer →"
+        math: "Wage theft by the numbers:\n  ~$50 BILLION stolen from US workers/yr\n  More than ALL other property crime combined\n  (Economic Policy Institute)\n\nMost common forms:\n  ✗ Unpaid overtime\n  ✗ 'Off the clock' work\n  ✗ Misclassified as exempt\n  ✗ Tip pocketing\n  ✗ Misclassified as 'contractor'\n\nDOL recovery rate when filed:\n  ~$1,400 average back-wages per worker.",
+        truth: "Wage theft steals more from US workers each year than every other property crime combined. The thieves wear collared shirts.",
+        learnUrl: "research.html",
+        learnLabel: "Why systems matter →"
       },
       {
-        category: "Debt",
-        scenario: "You have <strong>two debts</strong>:<br>• $8,000 student loan at 5% APR<br>• $3,000 credit card at 22% APR<br><br>You have $400/month extra to throw at debt.",
-        question: "Where does it go first?",
+        category: "Gig Economy",
+        scenario: "You drive for a rideshare app full-time. Gross: <strong>$52,000</strong>. <strong>No 401(k), no health insurance, no PTO.</strong> The app calls you a 'contractor.'",
+        question: "What's the structural move?",
         choices: [
-          { text: "Split it 50/50 across both.", verdict: "decent", result: "You make progress, but you're paying way more total interest by dragging out the 22% card." },
-          { text: "Minimums on the loan, $400 on the credit card.", verdict: "optimal", result: "Classic 'avalanche' — kill the highest interest rate first. You'll save thousands and finish faster." },
-          { text: "Minimums on the card, $400 on the student loan.", verdict: "risky", result: "You're prioritizing the cheap debt while the expensive one compounds against you. That's how people stay stuck for years." }
+          { text: "Just grind harder — flexibility is worth it.", verdict: "risky", result: "The 'flexibility' narrative was the marketing. The reality: 30 years of worker protections (overtime, unemployment, SS contributions, benefits) stripped off the books in 5 years of platform growth." },
+          { text: "Open a SEP-IRA, claim ACA subsidies, file Form SS-8 if you suspect misclassification.", verdict: "optimal", result: "SS-8 is the IRS form that asks 'am I actually an employee?' If the company controls your hours, rate, and uniform — you probably are. Reclassification recovers thousands in benefits and back taxes." },
+          { text: "Switch to W-2 work even if it pays less.", verdict: "decent", result: "Often the right call long-term. The 'gig premium' usually disappears once you price in self-employment tax (+7.65%), zero PTO, zero unemployment, and zero employer healthcare contribution." }
         ],
-        math: "Card at 22% APR with $400/mo  → paid off in ~8 months\nLoan at 5% APR with $400/mo  → paid off in ~22 months\n\nIf you reverse it, the card alone\ncosts you ~$1,400+ extra in interest.\n\nMath rule: kill the highest APR first.\n(Unless the small one is psychologically\ncrushing you — see 'snowball method'.)",
-        truth: "Interest rate isn't a number. It's a clock counting up your future paychecks.",
-        learnUrl: "minimum-payment-trap.html",
-        learnLabel: "See the minimum payment trap →"
+        math: "Real cost of 'contractor' status:\n  Self-employment tax: -7.65%\n  No employer 401k match: -3% of comp\n  Healthcare on open market: -$400/mo\n  No PTO / sick days: -10 days × daily rate\n  No unemployment if app deactivates you\n\n$52k gig income ≈ $40k W-2 equivalent\nonce you price in lost benefits.\n\n~16% of US workers are now 'gig' workers\nwith no employer-side benefits floor.",
+        truth: "Gig work was sold as flexibility. It was also how 30 years of worker protections came off the books in 5.",
+        learnUrl: "navtech.html",
+        learnLabel: "See FinMango NavTech →"
       },
       {
-        category: "Investing",
-        scenario: "You're 25. A friend is hyping a stock that's 'about to moon.' You also see your boring index fund returned ~10%/yr historically.",
-        question: "What do you do with your $1,000?",
+        category: "Benefit Cliffs",
+        scenario: "You're <strong>$50/month over</strong> the SNAP income limit. Taking a <strong>$200/month raise</strong> at work will cut your benefits by <strong>$400</strong>.",
+        question: "What's the right play?",
         choices: [
-          { text: "Put it all on the hot stock — you're young, you can recover.", verdict: "risky", result: "Most 'hot' stocks underperform the index. You're not buying upside — you're buying a story." },
-          { text: "Put $1,000 in a broad-market index fund and walk away.", verdict: "optimal", result: "You just out-performed 80% of professional fund managers — by doing nothing for 40 years." },
-          { text: "Split it: $500 in the index, $500 on the stock for fun.", verdict: "decent", result: "The 'fun money' rule works IF the gambling portion is small. But honestly? You're still paying tuition to learn what the index already knows." }
+          { text: "Refuse the raise — staying eligible is mathematically smarter.", verdict: "risky", result: "Sometimes literally true short-term. That's the trap. Benefit cliffs are designed to discourage 'dependency' but actually freeze people just below the line." },
+          { text: "Take the raise; check transitional benefits in your state (TANF, child care, Medicaid) which often phase out gradually.", verdict: "optimal", result: "Many states now offer 'cliff smoothing' programs. The cliff in SNAP doesn't mean the cliff in ALL programs. Ask a benefits navigator at 2-1-1 or your state agency." },
+          { text: "Quit and re-qualify for full benefits later.", verdict: "risky", result: "Quitting can disqualify you for unemployment AND can trigger waiting periods on most benefits. The system punishes voluntary loss harder than involuntary loss." }
         ],
-        math: "$1,000 today, 40 years at 7% real:\n  → ~$15,000 in today's dollars\n\nThe S&P 500 has beaten 80%+ of\nactively managed funds over 20 yrs.\n\nIndividual stock picking: the median\nDIY investor underperforms the\nmarket by ~3%/yr (DALBAR).",
-        truth: "The boring portfolio that wins is the one you didn't try to make exciting.",
-        learnUrl: "investing-lessons.html",
-        learnLabel: "Read the investing lessons →"
+        math: "Benefit cliff math:\n  +$200/mo earned income\n  -$400/mo SNAP\n  -$80/mo housing voucher adjustment\n  -$50/mo childcare subsidy bump\n  = -$330/mo net for working MORE\n\n~36% of US households face at least\none significant benefit cliff (Urban Institute).\n\nA cliff isn't an incentive to work less.\nIt's a tax on climbing out.",
+        truth: "Benefit cliffs were designed to discourage 'dependency.' They actually trap it.",
+        learnUrl: "food-assistance-calculator.html",
+        learnLabel: "Food assistance calculator →"
       },
       {
-        category: "Salary",
-        scenario: "You get a job offer with a starting salary of <strong>$62,000</strong>. The recruiter says 'this is our standard offer.' You think you could get more.",
-        question: "What do you say?",
+        category: "Eviction Records",
+        scenario: "Your landlord <strong>filed an eviction</strong> a year ago. You paid before court. Case was dismissed. Your name is <strong>still in the eviction database</strong> future landlords use.",
+        question: "What do you do?",
         choices: [
-          { text: "'Sounds great, I accept!'", verdict: "risky", result: "You just left an average of $5,000–$10,000 on the table. And every future raise is a % of this number." },
-          { text: "'Thank you. Based on the role and market, I was hoping for closer to $68,000 — is there room there?'", verdict: "optimal", result: "You named a specific number, made the case respectfully, and gave them room to come back. 70%+ of recruiters expect this." },
-          { text: "Ghost them until they raise the offer.", verdict: "risky", result: "You might lose the offer entirely. Negotiation is a conversation, not a power move." }
+          { text: "Just live with it — dismissal should be enough.", verdict: "risky", result: "It isn't. Tenant screening companies pull raw filings, not outcomes. A dismissed eviction can follow you for 7 years. Future landlords often reject before reading the dismissal." },
+          { text: "File to seal or expunge the record (allowed in ~12 states + DC).", verdict: "optimal", result: "Many states now allow sealing of dismissed evictions. Where it's not yet allowed, organizing for tenant-record reform is the system-level fix. Legal aid orgs help for free." },
+          { text: "Switch to month-to-month to avoid background checks.", verdict: "risky", result: "Background checks still happen on M2M and short-term leases. You're more vulnerable, not less." }
         ],
-        math: "$62k → $68k is a 9.7% bump.\n\nCompounded with 3% annual raises:\nOver 10 years, that $6k gap becomes\n  → $68,000+ in total extra income.\n\n55% of US workers never negotiated\ntheir first salary (Robert Half, 2023).",
-        truth: "The single most lucrative 15 minutes of your career happens before you accept the job.",
-        learnUrl: "education.html",
-        learnLabel: "Career & money lessons →"
+        math: "Eviction filing reality:\n  3.6 MILLION evictions filed/yr in US\n  ~1 in 4 are dismissed or settled\n  ALL of them can hit screening databases\n  Reporting period: up to 7 years\n\nDispute path:\n  ✓ State court motion to seal\n  ✓ FCRA dispute with screening company\n  ✓ Free legal aid via LawHelp.org\n\nWho gets sealing access varies by zip code.\nNot a feature — a design.",
+        truth: "An eviction filing — even a dismissed one — can follow you for 7 years. It's a credit score for the right to a roof.",
+        learnUrl: "housing-affordability-stories.html",
+        learnLabel: "Housing affordability stories →"
       },
       {
-        category: "Credit",
-        scenario: "Your credit card limit is <strong>$5,000</strong>. You currently owe <strong>$2,800</strong> on it (you can pay it all soon). You're about to apply for a mortgage.",
-        question: "What should you do first?",
+        category: "Tax Credits",
+        scenario: "You make <strong>$22,000</strong> as a single parent. You usually don't file taxes because you 'don't owe.' You may be leaving <strong>$5,000+ in refundable credits</strong> on the table.",
+        question: "What's the right move?",
         choices: [
-          { text: "Pay it down to under $500 before the next statement closes.", verdict: "optimal", result: "Your credit utilization drops from 56% to under 10% — that single move can lift your score 20-50+ points before the mortgage application." },
-          { text: "Just keep paying minimums; you'll be fine.", verdict: "risky", result: "56% utilization is killing your score. Mortgage lenders will give you a worse rate — costing you tens of thousands over 30 years." },
-          { text: "Close the card entirely so the balance goes to zero.", verdict: "risky", result: "Closing cards REDUCES your total available credit and can crater your score right when you need it. Pay it down — don't close it." }
+          { text: "Skip filing again — not worth the hassle.", verdict: "risky", result: "Roughly 20% of EITC-eligible households never claim it. That's billions of dollars in the largest anti-poverty program in the US, sitting unclaimed because filing is hard." },
+          { text: "Use IRS Free File or a free VITA site to claim EITC + Child Tax Credit.", verdict: "optimal", result: "VITA (Volunteer Income Tax Assistance) is free and IRS-certified. EITC + CTC can mean $4,000-$7,000+ back at your income level — money that was already yours." },
+          { text: "Use a 'refund anticipation loan' at a paid preparer.", verdict: "risky", result: "RAL fees plus tax prep fees can eat 10-15% of your refund. The biggest anti-poverty program in the US has a paid-tax-prep middleman built into it." }
         ],
-        math: "Utilization = balance ÷ limit\n  $2,800 / $5,000 = 56% (HIGH)\n  $500 / $5,000 = 10% (HEALTHY)\n  $0 / $5,000 = best (but $1-5 is fine)\n\n0.25% rate diff on a $300k mortgage:\n  → ~$15,000 over 30 years.",
-        truth: "Your credit utilization on the day of your application matters more than your balance the rest of the year.",
+        math: "EITC + CTC for single parent, $22k:\n  EITC ≈ $3,900\n  Child Tax Credit ≈ $2,000 (partial refundable)\n  TOTAL POTENTIAL: ~$5,900\n\nNon-claim rate:\n  ~20% of EITC-eligible households\n  ~$7 BILLION/yr in unclaimed credits\n\nFree options:\n  ✓ IRS Free File (online)\n  ✓ VITA sites (in-person, IRS-certified)\n  ✓ MyFreeTaxes.com (United Way)\n\nPaid prep eats ~10-15% of refund.",
+        truth: "The biggest anti-poverty program in the US is the EITC. ~20% of eligible people never claim it because filing taxes is harder than it needs to be.",
+        learnUrl: "research.html",
+        learnLabel: "Research & advocacy →"
+      },
+      {
+        category: "Housing Vouchers",
+        scenario: "You finally got a <strong>Section 8 voucher</strong> after a 4-year wait. Landlords <strong>keep 'ghosting' you</strong> the moment you mention it. You have 60 days to use it.",
+        question: "What's the real play?",
+        choices: [
+          { text: "Hide that you have a voucher.", verdict: "risky", result: "Required disclosure varies by state, and dishonesty can void the voucher. The problem isn't your disclosure — it's the discrimination. Don't carry the blame." },
+          { text: "File a Source-of-Income discrimination complaint (illegal in 20+ states & DC).", verdict: "optimal", result: "'Source-of-income' (SOI) discrimination is now illegal in 20 states, DC, and 100+ cities. The HUD complaint is free; local fair-housing orgs help you file. This is how the rule gets enforced." },
+          { text: "Give up and try for next year's lottery.", verdict: "risky", result: "Vouchers expire. Average Section 8 waitlist: 3-7 years. Restarting is not a neutral option." }
+        ],
+        math: "Section 8 voucher reality:\n  Avg waitlist: 3-7 years\n  Half of US public housing authorities have\n    waitlists CLOSED to new applicants\n  Voucher utilization rate: ~75%\n    (1 in 4 vouchers expires unused)\n\nSource-of-income protection map (2025):\n  ✓ 20 states + DC: illegal\n  ✓ 100+ cities: illegal\n  ✗ Rest of US: still legal to refuse vouchers\n\nThe rule existing isn't the same\nas the rule being enforced.",
+        truth: "Having a voucher and finding a landlord who'll take it are two different problems — by design.",
+        learnUrl: "housing-affordability-stories.html",
+        learnLabel: "Housing affordability stories →"
+      },
+      {
+        category: "Energy Burden",
+        scenario: "Your apartment's heating bill is <strong>$340/month</strong> because the building has zero insulation. The landlord won't fix it. You can't afford to move.",
+        question: "What can actually help?",
+        choices: [
+          { text: "Just pay the bill every winter.", verdict: "risky", result: "Low-income households spend up to 3x more of their income on energy. That's not 'consumption' — it's a tax on bad insulation you don't control." },
+          { text: "Apply for LIHEAP + WAP; report code violations if landlord refuses repairs.", verdict: "optimal", result: "LIHEAP pays the utility directly. WAP (Weatherization Assistance Program) can pay to insulate even rental units — your landlord benefits, but YOU get the lower bill. Most renters don't know they qualify." },
+          { text: "Move — it's the only fix.", verdict: "decent", result: "Sometimes the right call. But moving costs ($1,500-$3,000) often exceed the heating savings. WAP is often cheaper than moving." }
+        ],
+        math: "Energy burden by household:\n  Median US household: ~3% of income\n  Low-income household: ~8-15% of income\n  Black & Latino renters: 30% higher burden\n  (ACEEE, DOE)\n\nFree-money programs (under-claimed):\n  LIHEAP — Low-Income Home Energy Assistance\n  WAP — Weatherization Assistance Program\n  State / utility weatherization rebates\n\nWAP serves only ~35,000 homes/year\nout of ~38 MILLION eligible.",
+        truth: "Low-income households spend up to 3x more of their income on energy. That's not consumption — it's a tax on someone else's choice not to insulate.",
+        learnUrl: "navtech.html",
+        learnLabel: "NavTech: housing →"
+      },
+      {
+        category: "Credit Invisibility",
+        scenario: "You're 22. <strong>No credit cards, no loans, no score.</strong> You're applying to rent your first apartment. The landlord just said 'we need a 650 minimum.'",
+        question: "What's the structural move?",
+        choices: [
+          { text: "Ask a parent or friend to cosign.", verdict: "decent", result: "Works if your family has credit access — but that's the whole point. 'Credit invisibility' tracks closely with whose parents could open them an authorized-user card at 16." },
+          { text: "Open a secured credit card AND sign up for a rent-reporting service.", verdict: "optimal", result: "Secured cards build credit with $200-$500 deposit. Rent-reporting services (RentTrack, Esusu) make YOUR on-time rent payments count. Without one, rent builds nothing — even at $20k+/year in payments." },
+          { text: "Tell the landlord you're 'just responsible.'", verdict: "risky", result: "They can't underwrite vibes. Credit invisibility affects ~26 million US adults — disproportionately young, Black, Latino, immigrant. Not a personal failure. A system that doesn't see you." }
+        ],
+        math: "Credit invisibility in the US:\n  ~26 MILLION adults have NO credit file\n  ~19 MILLION more are 'unscoreable'\n  Disproportionately: young, Black, Latino, immigrant\n  (CFPB)\n\nRent payments → credit score:\n  Mortgage: AUTO-REPORTS to bureaus\n  Rent: REPORTS ONLY if you pay extra\n\nA $20,000/yr rent obligation builds\nZERO credit by default. By design.",
+        truth: "Having no credit history is treated worse than having bad credit. That isn't a personal failure — it's an algorithmic one.",
         learnUrl: "credit-score-simulator.html",
-        learnLabel: "Try the credit score simulator →"
+        learnLabel: "Credit score simulator →"
       },
       {
-        category: "Big Purchases",
-        scenario: "You need a car. You're choosing between:<br>• A <strong>new car</strong> with $0 down, $480/mo for 72 months<br>• A 3-year-old version of the same car for $18,000 cash<br><br>You have $20,000 saved.",
-        question: "What do you choose?",
+        category: "Child Care",
+        scenario: "Full-time job offer: <strong>$42,000</strong>. Child care for one kid in your county: <strong>$22,000/yr</strong>. After taxes, you'd net <strong>~$8,000</strong> from working.",
+        question: "What's the systemic answer?",
         choices: [
-          { text: "The new car — the warranty is worth it.", verdict: "risky", result: "You pay $34,560 over 6 years for a car that loses 50%+ of its value in the first 5. The warranty isn't worth the depreciation hit." },
-          { text: "The used car cash — keep $2,000 for repairs/emergencies.", verdict: "optimal", result: "You skip $16,000+ of depreciation AND interest. A modern used car at 3 years old is barely 'used' — most of the loss already happened." },
-          { text: "Lease a new one — lower monthly payment.", verdict: "risky", result: "Leasing = paying for someone else to own the car. After 6 years of leases, you have $0 of car equity." }
+          { text: "Stay home — the math is unbeatable.", verdict: "decent", result: "Math says yes; career trajectory says no. A 5-year career gap costs ~$300k+ in lifetime earnings (NWLC). The 'choice' to leave the workforce was made by zip-code child care prices, not by you." },
+          { text: "Check CCDBG subsidies, employer-sponsored care, and tax credits (CDCTC, Dependent Care FSA).", verdict: "optimal", result: "Child Care and Development Block Grant subsidies help millions — but reach only ~1 in 6 eligible kids. Stack with $5k Dependent Care FSA + employer child care benefits if they exist." },
+          { text: "Take the job; just pay it.", verdict: "risky", result: "Unless that 5-year career trajectory bumps your income meaningfully fast, you're paying $14k to keep a job that nets $8k. Push the employer for child care benefits — it's negotiable." }
         ],
-        math: "New car total: $480 × 72 = $34,560\n  + ~$3k in interest + insurance hike\n  - Trade-in value at year 6: ~$10k\n  Net cost: ~$24k+ over 6 years\n\nUsed car: $18,000 once\n  - Trade-in value at year 6: ~$6k\n  Net cost: ~$12k\n\nDifference: $12,000+ — invested at 7%\nover 30 years = $91,000.",
-        truth: "Cars are the most expensive 'asset' most people buy. New cars are also one of the worst.",
-        learnUrl: "new-vs-used-car-calculator.html",
-        learnLabel: "Run the new-vs-used calculator →"
-      },
-      {
-        category: "Housing",
-        scenario: "Rent vs. buy: a $1,800/mo apartment vs. a $310,000 starter home (about $2,200/mo all-in: mortgage, taxes, insurance, repairs). You have $25k saved.",
-        question: "Which makes more sense — if you only plan to stay 2 years?",
-        choices: [
-          { text: "Buy — building equity is always better than renting.", verdict: "risky", result: "Closing costs + selling costs typically run 8-10% of the home price. On a 2-year horizon, you'd almost certainly lose money buying." },
-          { text: "Rent for now; revisit in a few years.", verdict: "optimal", result: "The break-even on buying is typically 5+ years. For short timelines, renting wins almost every time after fees." },
-          { text: "House-hack — buy a duplex and rent half.", verdict: "decent", result: "If you can pull it off, it changes the math entirely. But for most short-timeline first-time buyers, it's an advanced move." }
-        ],
-        math: "Buy & sell within 2 years:\n  Closing in (~3%):  -$9,300\n  Closing out (~7%): -$21,700\n  Total fees:        -$31,000\n\nYou'd need 10%+ price growth\njust to break even — without\ncounting maintenance.\n\nRent isn't 'throwing money away.'\nFees & interest are.",
-        truth: "Buying a home is a 5+ year commitment dressed up as a 30-year mortgage.",
-        learnUrl: "rent-vs-buy.html",
-        learnLabel: "Try the Rent vs. Buy calculator →"
-      },
-      {
-        category: "Lifestyle",
-        scenario: "You spend <strong>$5/day</strong> on coffee. A friend says skipping it makes you a millionaire. You enjoy it. You're 25.",
-        question: "What's the actually accurate answer?",
-        choices: [
-          { text: "Skip the coffee — it costs me a million dollars.", verdict: "decent", result: "Technically yes, IF you invest every skipped dollar for 40 years at 7%. In reality, most people just spend it on something else." },
-          { text: "Keep the coffee. It's not what's breaking my budget.", verdict: "optimal", result: "Big wins come from the 3 biggest line items — housing, transportation, food. Optimizing those beats every coffee-skipping trick." },
-          { text: "Spend more on coffee, less on rent.", verdict: "risky", result: "Joke aside: most people don't have a coffee problem. They have a rent / car / restaurant problem. Attack the big numbers first." }
-        ],
-        math: "$5/day × 365 × 40 yrs @ 7%:\n  → ~$425,000 IF invested every time.\n\nBut: median rent overpayment\n(vs. a cheaper option) per month\nis often 5-10x larger than coffee.\n\nKill the 3 biggest line items first:\n  HOUSING, CAR, FOOD-OUT.",
-        truth: "Personal finance influencers love the coffee story because it's small enough to feel doable — and small enough not to matter.",
-        learnUrl: "budget-lessons.html",
-        learnLabel: "Read the budgeting lessons →"
-      },
-      {
-        category: "Retirement",
-        scenario: "Two friends start saving for retirement:<br>• <strong>Anna</strong> saves $200/mo from age 25-35, then stops.<br>• <strong>Ben</strong> saves $200/mo from age 35-65.<br><br>Both earn 7%/yr. Who has more at 65?",
-        question: "Who wins?",
-        choices: [
-          { text: "Ben. He saved 3x as much money.", verdict: "risky", result: "Ben put in $72,000 over 30 years. He ends with ~$240,000. Sounds good — until you see Anna's number." },
-          { text: "Anna. She started earlier.", verdict: "optimal", result: "Anna only put in $24,000 — but she ends with ~$260,000. Starting 10 years earlier beats saving 3x more for 30 years." },
-          { text: "They end up about the same — fair is fair.", verdict: "decent", result: "Intuitive but wrong. Time in the market beats money in the market. Compound interest doesn't care about your effort, only your timeline." }
-        ],
-        math: "Anna: $200/mo × 10 yrs = $24,000 in.\n  Then compounds untouched 30 more.\n  → ~$260,000 at 65.\n\nBen:  $200/mo × 30 yrs = $72,000 in.\n  → ~$240,000 at 65.\n\nAnna put in $48,000 LESS\nand ended up with MORE.",
-        truth: "The most expensive financial mistake is being 25 and not doing the boring thing.",
-        learnUrl: "compound-interest.html",
-        learnLabel: "Play with the compound interest curve →"
-      },
-      {
-        category: "Health",
-        scenario: "Your job offers a <strong>High-Deductible Health Plan (HDHP) + HSA</strong>, or a traditional PPO. You're 28, healthy, and have $2k saved for emergencies.",
-        question: "Which do you choose?",
-        choices: [
-          { text: "PPO — better coverage feels safer.", verdict: "decent", result: "Safer up front, but you're paying ~$100/mo more in premiums for coverage you may rarely use." },
-          { text: "HDHP + max out the HSA.", verdict: "optimal", result: "If you're healthy, the HSA is the only triple-tax-advantaged account in the US — better than a 401(k) for medical AND retirement." },
-          { text: "HDHP, but don't bother funding the HSA.", verdict: "risky", result: "You took the risk of the HDHP without the offsetting tax superpower of the HSA. Worst of both worlds." }
-        ],
-        math: "HSA = triple tax-free:\n  ✓ Tax-deductible going in\n  ✓ Grows tax-free\n  ✓ Tax-free out (for medical)\n\nMax HSA contribution 2025: $4,300\n  Tax savings @ 22%: ~$950/yr\n\nAt 65, unused HSA funds work like\na traditional IRA — withdraw for\nanything, just pay income tax.",
-        truth: "The HSA is the secret retirement account hiding inside your health insurance.",
-        learnUrl: "company-benefits-guide.html",
-        learnLabel: "See the company benefits guide →"
-      },
-      {
-        category: "Gambling",
-        scenario: "You see a sports betting ad: '<strong>Free $200 if you bet $5!</strong>' You've never bet before.",
-        question: "What do you do?",
-        choices: [
-          { text: "Take the free $200 — easy money.", verdict: "risky", result: "It's not free. The 'bonus' is locked behind wagering requirements designed to keep you betting. The house always wins on average." },
-          { text: "Walk away from sports betting entirely.", verdict: "optimal", result: "Sports books keep ~5-10% of every dollar bet. The math guarantees the house wins long-term. Your $200 'free' costs them nothing in expectation." },
-          { text: "Bet small for fun and call it entertainment.", verdict: "decent", result: "If you can truly cap it like a movie ticket — fine. But sports books are designed like slot machines: variable rewards engineered to keep you spinning." }
-        ],
-        math: "Avg sports book hold: 5-10%\n  → For every $100 bet, $5-$10 vanishes.\n\nA 'free $200' typically requires\n$1,000-$5,000 in wagers to unlock.\n\nThat 'free money' is a hook to\ntrigger a $50-$500 loss on average.\n\n28% of young men in legal-betting\nstates show signs of problem\ngambling (NCPG, 2024).",
-        truth: "Casinos don't get rich from people who lose. They get rich from people who win sometimes.",
-        learnUrl: "sports-betting.html",
-        learnLabel: "Read the FinMango sports betting breakdown →"
-      },
-      {
-        category: "Family",
-        scenario: "A close family member asks to borrow <strong>$2,000</strong>. You have it in savings. They've borrowed before — and paid you back late, twice.",
-        question: "What's the financially-and-emotionally smart move?",
-        choices: [
-          { text: "Lend it — family is family.", verdict: "risky", result: "Past behavior is the best predictor. The loan is likely to strain the relationship AND your finances at the same time." },
-          { text: "Gift them a smaller amount you can afford to never see again.", verdict: "optimal", result: "Reframing the loan as a gift removes the resentment of waiting for repayment. You help, AND you protect your savings AND the relationship." },
-          { text: "Say no and avoid the conversation.", verdict: "decent", result: "Sometimes the right answer — but the WAY you say no matters. A clean 'I can't this time' beats avoidance every time." }
-        ],
-        math: "Money loaned to family with past\ndefaults is repaid at much lower\nrates than commercial loans.\n\nIf you must help: gift what you\ncan AFFORD TO LOSE, not 'lend'\nwhat you NEED to recover.\n\nResentment over a missing $2k\ncosts more than the $2k did.",
-        truth: "A loan to family is a gift with a grudge attached. Skip the grudge.",
+        math: "US child care reality:\n  Child care costs MORE than rent\n  in 31 states (Child Care Aware, 2024)\n\nFederal CCDBG eligibility:\n  ~13 MILLION children eligible\n  ~1.4 MILLION served (~11%)\n\nDependent Care FSA cap: $5,000/yr\n  (Unchanged since 1986.)\n\nThe US is the only wealthy country\nwithout federal paid parental leave\nor universal child care.",
+        truth: "In the US, child care costs more than rent in 31 states. That's not parents 'choosing' to leave the workforce.",
         learnUrl: "family-planning.html",
-        learnLabel: "Family money planning →"
+        learnLabel: "Family planning →"
       },
       {
-        category: "Side Income",
-        scenario: "You start a side hustle that brings in <strong>$8,000/year</strong>. You're a W-2 employee with no other extra income.",
-        question: "What should you do for taxes?",
+        category: "Lending Discrimination",
+        scenario: "Same income. Same credit score. Same debt-to-income ratio. <strong>Two zip codes</strong> away: you get quoted <strong>6.1%</strong> on a mortgage. Your friend across town gets <strong>7.0%</strong>.",
+        question: "What's actually going on?",
         choices: [
-          { text: "Nothing — my W-2 withholding handles it.", verdict: "risky", result: "Your W-2 withholding doesn't cover side income. You'll get hit with a tax bill AND potentially an underpayment penalty next April." },
-          { text: "Set aside ~30% in a separate account; file quarterly estimated taxes.", verdict: "optimal", result: "30% covers federal + state + self-employment tax for most people. Quarterly payments avoid penalties." },
-          { text: "Wait until tax time to figure it out.", verdict: "decent", result: "You won't go to jail, but you'll likely owe penalties AND have one ugly April surprise. Set the money aside as you earn it." }
+          { text: "Normal market variation — different lenders, different days.", verdict: "risky", result: "The 'normal' explanation is the cover story. Studies consistently show Black and Latino borrowers, with identical financials, get higher quoted rates. The math has a zip code." },
+          { text: "Shop CDFI lenders + file an HMDA / CFPB / state AG complaint if denied or up-priced.", verdict: "optimal", result: "Home Mortgage Disclosure Act data exists FOR this. CDFIs (Community Development Financial Institutions) often outprice big banks for working-class borrowers. Complaints with documentation move regulators." },
+          { text: "Take what's offered — at least you got approved.", verdict: "risky", result: "A 0.9% rate gap on a $250k mortgage is ~$50,000 over 30 years. The wealth transfer happens quietly, payment by payment." }
         ],
-        math: "$8,000 side income owes roughly:\n  Self-employment tax:  ~$1,130 (15.3%)\n  Federal income tax:   ~$1,760 (22%)\n  State (varies):        ~$400 (5%)\n  Total: ~$3,300 (~41%)\n\nSet aside 30% minimum.\nFile estimated taxes quarterly\n(Apr 15, Jun 15, Sep 15, Jan 15).",
-        truth: "Side hustle tax surprises are the #1 way people get punished for the work they did to get ahead.",
-        learnUrl: "gig-tax-estimator.html",
-        learnLabel: "Use the gig tax estimator →"
+        math: "Modern lending disparity (HMDA data):\n  Black borrowers: 2x more likely to be denied\n    even with same income & score\n  Latino borrowers: ~1.5x more likely denied\n  Same-profile rate gaps: avg ~0.3-0.7%\n\nA 0.5% rate gap on $250k / 30 yrs:\n  → ~$26,000 extra paid\n\nA 1% rate gap:\n  → ~$53,000 extra paid\n\nThe Fair Housing Act is 56 years old.\nThe enforcement isn't.",
+        truth: "The math has a zip code. Same paperwork, different rates — and the difference is generational.",
+        learnUrl: "research.html",
+        learnLabel: "FinMango research →"
       },
       {
-        category: "Insurance",
-        scenario: "An insurance agent pitches you a <strong>whole life insurance policy</strong>: 'It's life insurance AND an investment!' Premiums: $250/month. You're 30 and healthy.",
-        question: "What do you do?",
+        category: "Healthcare Pricing",
+        scenario: "Same procedure, same hospital. With insurance: <strong>$1,400</strong>. Self-pay 'cash price': <strong>$12,400</strong>. You're underinsured.",
+        question: "What can you actually do?",
         choices: [
-          { text: "Buy it — life insurance plus savings sounds smart.", verdict: "risky", result: "Whole life policies typically have brutal fees and low returns. The agent's commission is often the entire first year of your premiums." },
-          { text: "Get a 20-year term policy + invest the difference.", verdict: "optimal", result: "Term life is dramatically cheaper. The difference, invested in an index fund, typically blows away the whole life policy's 'cash value.'" },
-          { text: "Skip life insurance entirely — I'm young.", verdict: "decent", result: "Risky if you have dependents. But if you're single with no debts, you may genuinely not need it yet." }
+          { text: "Pay the bill they send you.", verdict: "risky", result: "Hospital 'chargemaster' prices are mostly fiction — opening bids in a negotiation most patients don't know they're in. Paying the sticker is paying the highest tier of a multi-tier price system." },
+          { text: "Apply for hospital financial assistance, negotiate to the insurer rate, request itemized bill.", verdict: "optimal", result: "Nonprofit hospitals are LEGALLY REQUIRED to offer charity care policies. ~90% of patients eligible don't apply. Itemized bills routinely reduce by 30-60% on review alone." },
+          { text: "Set up a 24-month payment plan and pay full sticker price.", verdict: "decent", result: "Better than collections, but you're still paying the 'unbargained' rate. Negotiate FIRST, then set up the plan against the lower number." }
         ],
-        math: "Whole life: $250/mo = $3,000/yr\nTerm life (same coverage): ~$25/mo\n  = $300/yr\n\nDifference: $2,700/yr invested at 7%\n  20 years → ~$118,000\n  30 years → ~$273,000\n\nWhole life 'cash value' at 30 years\noften lands around $90-120k.\nTerm + invest wins by $150k+.",
-        truth: "Life insurance is a product. Investing is a product. Companies selling both in one box make money on the confusion.",
-        learnUrl: "education.html",
-        learnLabel: "More money lessons →"
+        math: "Hospital pricing reality:\n  Same procedure can vary 10x within ONE hospital\n    based on insurance status\n  ~90% of charity-care-eligible patients\n    never apply (Dollar For)\n\nLeverage available to YOU:\n  ✓ Itemized bill request (federal law)\n  ✓ Charity care application (nonprofit hospitals)\n  ✓ No Surprises Act (2022) — many out-of-network\n    ER bills now banned\n  ✓ State medical debt protections vary\n\nThe sticker price is for people without\nsomeone bargaining for them.",
+        truth: "Healthcare in the US has two prices: the one for people with someone bargaining for them, and the one for everyone else.",
+        learnUrl: "research.html",
+        learnLabel: "Why we research this →"
       },
       {
-        category: "Education",
-        scenario: "You're admitted to two schools:<br>• <strong>State school</strong>: $12k/yr after aid<br>• <strong>Private school</strong>: $38k/yr after aid<br><br>Both teach your major. The private has a 'name.'",
-        question: "What's the smart move?",
+        category: "Predatory Auto Lending",
+        scenario: "You need a car for your job. The dealer offers a used sedan: <strong>$14,000 at 24% APR</strong>. The lot says 'we approve anyone.'",
+        question: "What's the structural read?",
         choices: [
-          { text: "Private — the network is worth it.", verdict: "risky", result: "Outside the top 10-20 schools nationally, 'name' rarely justifies $100k+ extra debt. Your work history matters more after job #1." },
-          { text: "State school — graduate with way less debt.", verdict: "optimal", result: "You graduate with the same degree and tens of thousands less debt. That debt difference compounds for decades." },
-          { text: "Private, but only if I can pay cash.", verdict: "decent", result: "If you can pay cash and the network truly matches your career goals (law, finance, consulting at top firms), it's defensible." }
+          { text: "Sign — you can't get to work otherwise.", verdict: "risky", result: "'Buy here / pay here' lots target subprime borrowers; default rates exceed 30% by design. The business model is repossess-and-resell, not lending. Same car can be sold 3-4 times." },
+          { text: "Try a CDFI auto loan, credit union, or LIFT (Local Initiatives Support) program.", verdict: "optimal", result: "Mission-driven auto loans (e.g. Working Cars for Working Families, local CDFIs) cap APR at ~10-15% for subprime borrowers. Lower payment, lower repo risk. They exist in most metros." },
+          { text: "Buy a $3,000 beater outright on Facebook Marketplace.", verdict: "decent", result: "Sometimes the right call — but old cars break, and a $3k purchase that strands you costs more than a $14k one that runs. Mechanic inspection first; CDFI loan second; lot loan last." }
         ],
-        math: "State (4 yrs): $48,000\nPrivate (4 yrs): $152,000\nDifference: $104,000 of debt\n\nAt 6% APR over 10 yrs:\n  Monthly payment: ~$1,155\n  Total paid: ~$139,000\n\nThat $1,155/mo, instead invested,\nover 30 years → ~$1.4 MILLION.",
-        truth: "The school name on your wall fades. The loan payment doesn't.",
-        learnUrl: "college-lessons.html",
-        learnLabel: "Read the college lessons →"
+        math: "Subprime auto lending in the US:\n  Outstanding subprime auto debt: ~$300B\n  Subprime default rate: ~7-12%\n  'Buy here / pay here' default: ~30%+\n  Avg subprime APR: 19-29%\n\nFor a $14k loan over 60 months:\n  At 7%   → $277/mo,  $2,640 interest\n  At 24%  → $403/mo,  $10,200 interest\n\nDifference: $7,560 — roughly half a car.\n\nTransportation poverty IS job poverty.\nNo car = no work in most US metros.",
+        truth: "Transportation poverty is job poverty. The 'buy here / pay here' lot is the modern company store.",
+        learnUrl: "navtech.html",
+        learnLabel: "NavTech: mobility →"
       },
       {
-        category: "Saving",
-        scenario: "You're saving for a <strong>down payment</strong> you'll use in 2-3 years. Right now your $15k is sitting in a checking account earning 0.01%.",
-        question: "Where should it go?",
-        choices: [
-          { text: "Leave it — checking is safe.", verdict: "risky", result: "Inflation eats your savings at 2-3% a year. 'Safe' checking is losing buying power every month." },
-          { text: "High-yield savings or short-term Treasuries at 4-5%.", verdict: "optimal", result: "Same FDIC/Treasury protection, just earning ~400-500x more. Free money you're leaving on the table otherwise." },
-          { text: "Put it all in the stock market — 2 years is enough time.", verdict: "risky", result: "Markets routinely drop 20-30% in any given year. If you need the money in 2 years, a single bad year wrecks the plan." }
-        ],
-        math: "$15,000 in checking (0.01%):\n  After 2 yrs → +$3 earned\n  After inflation → -$900 buying power\n\n$15,000 in HYSA (4.5%):\n  After 2 yrs → +$1,380 earned\n\nDifference for 5 minutes of paperwork:\n  $1,377\n\nShort-term money goes in:\n  HYSA, money market, Treasury bills.\n  NOT stocks.",
-        truth: "Cash you'll need soon belongs in a savings account paying real interest — not a checking account paying nothing.",
-        learnUrl: "compound-interest.html",
-        learnLabel: "See compounding in action →"
-      },
-      {
-        category: "Subscriptions",
-        scenario: "You audit your subscriptions: <strong>$210/month</strong> across streaming, apps, gym, music, food delivery memberships, and 'I'll-cancel-later' free trials.",
+        category: "Student Debt Relief",
+        scenario: "You work in <strong>public service</strong> (teacher, nurse, nonprofit). You qualify for PSLF — but the program has been gutted, restored, gutted again. You have <strong>$60k in federal loans</strong>.",
         question: "What's the move?",
         choices: [
-          { text: "Cut everything — these are wasting my money.", verdict: "decent", result: "Aggressive, but you may snap back. Sustainable cuts beat zero-based budgets that last 2 weeks." },
-          { text: "Cancel anything you didn't use this month; rotate the rest.", verdict: "optimal", result: "Most people only actively use 30-40% of their subscriptions. Cancel the rest. Rotate streaming services seasonally — pay for one at a time." },
-          { text: "It's only $210 — not worth the hassle.", verdict: "risky", result: "$210/month = $2,520/year. Invested at 7% over 30 years, that's $254,000. The 'small' subscriptions hide the biggest leak." }
+          { text: "Refinance with a private lender for a lower rate.", verdict: "risky", result: "Refinancing federal → private is irreversible. You lose income-driven repayment, PSLF, deferment, forgiveness, and ALL federal protections. Lower monthly payment costs you everything else." },
+          { text: "Stay federal, get on an income-driven plan, certify employment annually for PSLF.", verdict: "optimal", result: "PSLF requires 120 qualifying payments. Annual certification is the trap door — people who miss it lose years. The Employer Certification Form is the single most important PSLF document." },
+          { text: "Just pay it down on the standard plan.", verdict: "decent", result: "You're paying off a debt that may be forgiven. If you're in qualifying employment, switch to IDR + PSLF immediately — you can't 'pay early' your way to forgiveness, only steadily." }
         ],
-        math: "$210/mo × 12 = $2,520/yr\n\nInvested at 7% real return:\n  10 yrs → $35,000\n  20 yrs → $103,000\n  30 yrs → $254,000\n\nMost households underestimate their\nsubscription spend by ~$130/mo\n(C+R Research).",
-        truth: "Subscriptions are the only bills designed to be forgotten.",
-        learnUrl: "budget-lessons.html",
-        learnLabel: "Try the budget lessons →"
+        math: "Federal student debt:\n  ~43 MILLION borrowers\n  ~$1.7 TRILLION outstanding\n  Median balance: ~$28k\n  Black borrowers owe ~50% MORE 4 years\n    after graduation than white peers\n\nPSLF facts:\n  120 qualifying payments (10 years)\n  ✓ Must be federal Direct Loans\n  ✓ Must work for govt or 501(c)(3)\n  ✓ Must certify employment yearly\n\nApproval rate is now ~30%+, up from\n<1% before the 2021 reforms. Reforms\nthat are still politically contested.",
+        truth: "The complexity of student loan relief is a feature, not a bug. People who give up are the cost savings.",
+        learnUrl: "college-lessons.html",
+        learnLabel: "College & money systems →"
       },
       {
-        category: "Career",
-        scenario: "You've been at your job for <strong>3 years</strong>. You get a 3% annual raise. A competitor recruiter is offering a similar role with a <strong>15% raise</strong>.",
-        question: "What do you do?",
+        category: "Tipped Wages",
+        scenario: "You're a server in a tipped-minimum state. Sub-minimum cash wage: <strong>$2.13/hr</strong>. Last Tuesday you made <strong>$5/hr</strong> with tips. The owner says 'tips are your wage.'",
+        question: "What's the systemic read?",
         choices: [
-          { text: "Stay — loyalty matters and you like your team.", verdict: "decent", result: "Loyalty is real, but external offers are how most workers' pay actually catches up to market." },
-          { text: "Take the offer to your manager and negotiate.", verdict: "optimal", result: "Even if you stay, your salary, title, or growth plan should bump. If they don't move, you have a real option." },
-          { text: "Jump immediately without a counter-offer conversation.", verdict: "decent", result: "Sometimes right — but always at least explore the counter. You might get more AND keep what you like." }
+          { text: "Hustle harder, work better shifts.", verdict: "risky", result: "Frames a policy choice as a personal effort problem. The $2.13 sub-minimum cash wage has been frozen since 1991 — your tips are absorbing 30+ years of inflation the law refused to fix." },
+          { text: "Report any shift where tips + wage < full minimum (the law REQUIRES employer to make up the difference).", verdict: "optimal", result: "Under FLSA, if your tipped wage + tips don't equal full minimum wage for the pay period, the EMPLOYER MUST PAY THE DIFFERENCE. Most workers don't know — and most owners don't volunteer it." },
+          { text: "Quit and apply to non-tipped jobs.", verdict: "decent", result: "Valid. But it doesn't change the system. 7 states have already abolished sub-minimum tipped wage — and the sky did not fall." }
         ],
-        math: "Avg internal raise: ~3%/yr\nAvg job-change raise: 10-15%\n\n$60k starting:\n  10 yrs of 3% raises → $80,600\n  10 yrs of 10% job-changes → $129,700\n\nDifference: ~$49,000/yr by year 10.\n\nThe people who never job-change\nare not 'rewarded' — they're\nquietly outpaced.",
-        truth: "Job loyalty pays psychologically. Job mobility pays in dollars.",
-        learnUrl: "education.html",
-        learnLabel: "Career & money lessons →"
+        math: "Tipped minimum wage timeline:\n  Federal tipped min: $2.13/hr\n  Last raised: 1991\n  Adjusted for inflation: would be ~$4.92\n\nOne Fair Wage states (no sub-min):\n  CA, AK, MN, MT, NV, OR, WA, DC (after 2027)\n\nIn those states:\n  ✗ Tipped jobs did NOT disappear\n  ✗ Restaurant employment grew\n  ✓ Sexual harassment dropped\n  ✓ Tip rates stayed roughly stable\n\nThe sub-minimum wage is a policy choice.\nIt isn't physics.",
+        truth: "The 'subminimum wage' is the only sub-poverty wage written into US law. It exists by design.",
+        learnUrl: "research.html",
+        learnLabel: "FinMango research →"
       },
       {
-        category: "Inflation",
-        scenario: "Your grandparents kept <strong>$50,000</strong> under the mattress (or in a 0% account) for the past 10 years 'to be safe.'",
-        question: "What actually happened?",
+        category: "ACA Subsidy Cliff",
+        scenario: "You're on an ACA marketplace plan with a $400/mo subsidy. A $5,000/yr raise will <strong>cut your subsidy by ~$3,500</strong>.",
+        question: "What's the right play?",
         choices: [
-          { text: "They preserved their money perfectly.", verdict: "risky", result: "The dollars are the same. The buying power is not. They quietly lost ~25-30% of their wealth." },
-          { text: "They lost real purchasing power to inflation.", verdict: "optimal", result: "$50k from 10 years ago has the buying power of about $38k today. Cash that doesn't earn is cash that bleeds." },
-          { text: "They beat the market by avoiding crashes.", verdict: "risky", result: "Even with crashes, broad-market index funds returned ~12%/yr in that decade. They missed ~$100k of gains." }
+          { text: "Decline the raise — keep the subsidy.", verdict: "risky", result: "The cliff is real, but refusing income is rarely the answer. Mid-year you can update your projected income on the marketplace to smooth the adjustment instead of taking the full hit." },
+          { text: "Take the raise; update marketplace income immediately; max HSA if HDHP.", verdict: "optimal", result: "ACA subsidies adjust mid-year if you report income changes via Form 1095-A logic. Pre-tax contributions (HSA, traditional 401k) lower your MAGI — directly raising your subsidy back." },
+          { text: "Drop coverage to save the premium.", verdict: "risky", result: "Uninsured = one ER visit from bankruptcy. The ACA's 'family glitch' was the biggest cliff in the system — partially fixed in 2022, but cliffs everywhere remain." }
         ],
-        math: "$50,000 in 2015, 10 yrs later:\n  Mattress: $50,000\n  But buying power: ~$38,000\n\nSame $50,000 in a HYSA averaging 2%:\n  → $60,950\n\nSame $50,000 in S&P 500 index:\n  → ~$155,000+\n\nThe 'safe' choice wasn't safe at all.",
-        truth: "Inflation is a tax on caution.",
-        learnUrl: "inflation-time-machine.html",
-        learnLabel: "Try the Inflation Time Machine →"
+        math: "ACA subsidy math (single, age 30):\n  $30k income → subsidy ~$200/mo\n  $35k income → subsidy ~$140/mo  (-$60/mo)\n  $50k income → subsidy ~$50/mo   (-$150/mo)\n  $55k income → subsidy phase out at most ages\n\nMAGI-lowering moves:\n  ✓ Traditional 401(k) contributions\n  ✓ HSA contributions (HDHP only)\n  ✓ Traditional IRA (if eligible)\n  ✓ Student loan interest deduction\n\nHealth coverage tied to:\n  income → job → zip code → marriage status.\nNone of those are health.",
+        truth: "Health insurance is tied to income, then to a job, then to your zip code. None of those things are health.",
+        learnUrl: "research.html",
+        learnLabel: "Research on policy →"
       },
       {
-        category: "BNPL",
-        scenario: "Checkout shows: '<strong>4 easy payments of $87</strong>' for a $348 jacket. No interest!",
-        question: "Use Buy-Now-Pay-Later?",
+        category: "Retirement Access Gap",
+        scenario: "You work two part-time jobs. Neither offers a <strong>401(k)</strong>. The retirement system was built assuming a full-time employer.",
+        question: "What's the structural workaround?",
         choices: [
-          { text: "Yes — it's free financing, why not?", verdict: "risky", result: "BNPL trains your brain to evaluate purchases in $87 chunks instead of $348 totals. Studies show people spend 20-30% more when using BNPL." },
-          { text: "Only if you'd buy it cash anyway, AND can autopay from a real account.", verdict: "optimal", result: "Used carefully, BNPL is interest-free. Used carelessly, late fees + overdrafts + lifestyle inflation pile up fast." },
-          { text: "Never — it's a debt trap.", verdict: "decent", result: "Mostly true, but it can be a useful tool for disciplined users. The danger is in the disguise, not the math itself." }
+          { text: "Skip retirement saving until you get a 'real' job.", verdict: "risky", result: "~50% of US workers have NO workplace retirement plan at any given moment. 'Waiting for the real job' is how the access gap becomes the wealth gap." },
+          { text: "Open a Roth IRA + check if your state has an automatic IRA program (CalSavers, OregonSaves, etc.).", verdict: "optimal", result: "20+ states have state-facilitated retirement programs for workers without an employer plan. Plus: anyone with earned income can open a Roth IRA — even with $20/month." },
+          { text: "Save in a checking account instead.", verdict: "risky", result: "A Roth IRA grows tax-free for decades. A checking account loses to inflation every year. Same money, dramatically different outcome." }
         ],
-        math: "BNPL users spend 20-30% more\nper transaction than cash users\n(LendingTree, 2024).\n\nFee landmines:\n  Late fees: $7-$40 per missed payment\n  Bank overdraft if linked to checking\n  Multiple BNPL plans = no central\n    'limit' to stop you.\n\nIf the answer to 'can I afford this'\nis 'in 4 payments' — you can't.",
-        truth: "Splitting a price into 4 doesn't make it cheaper. It makes it harder for your brain to feel the cost.",
-        learnUrl: "minimum-payment-trap.html",
-        learnLabel: "See the minimum payment trap →"
-      },
-      {
-        category: "Roth vs Traditional",
-        scenario: "You're 24, making <strong>$45,000</strong> (low tax bracket). Your 401(k) lets you pick Roth or Traditional contributions.",
-        question: "Which makes more sense?",
-        choices: [
-          { text: "Traditional — get the tax deduction now.", verdict: "decent", result: "OK if you expect to be in a much lower bracket in retirement — unlikely if you're early in your career." },
-          { text: "Roth — pay tax now, withdraw tax-free in retirement.", verdict: "optimal", result: "You're likely in the lowest tax bracket you'll ever be in. Pay tax now while it's cheap. Decades of growth come out tax-free." },
-          { text: "Whichever — they're basically the same.", verdict: "risky", result: "They're mathematically equivalent ONLY if your tax rate is the same now and later. For a 24-year-old, it almost never will be." }
-        ],
-        math: "At 24, low bracket → pay 12% now,\nwithdraw decades later possibly\nat 22-24% if successful.\n\nRoth at 12% beats Traditional\nif future rate > 12%.\n\n$6k/yr in Roth from 24-65 at 7%:\n  → ~$1.5M, ALL tax-free.\n\nThe earlier you are, the more\nyou should lean Roth.",
-        truth: "Tax-free growth in retirement is one of the few advantages a young, low-income worker has over a high-income future self.",
-        learnUrl: "roth-ira-calculator.html",
-        learnLabel: "Try the Roth IRA calculator →"
-      },
-      {
-        category: "Refinancing",
-        scenario: "You have a <strong>5-year-old car loan</strong> at 9.5% APR. Rates have dropped — your credit union offers a refinance at <strong>5.5%</strong>. You have 18 months left.",
-        question: "Refinance?",
-        choices: [
-          { text: "No — only 18 months left, not worth the hassle.", verdict: "risky", result: "Even a quick rate drop on the remaining principal can save real money. The 'paperwork' is usually a 30-minute online form." },
-          { text: "Yes, if there are no fees and the payment can stay the same.", verdict: "optimal", result: "Rate drop = more of each payment goes to principal. Same payment, faster payoff, less total interest." },
-          { text: "Yes, and stretch the loan back out to 5 years for lower payments.", verdict: "risky", result: "Lower monthly payment, MORE total interest paid. You'd undo the entire benefit of refinancing." }
-        ],
-        math: "Remaining balance: $9,000\nOld rate 9.5%, 18 months left\n  Interest remaining: ~$680\n\nNew rate 5.5%, 18 months\n  Interest remaining: ~$390\n\nSavings: ~$290 for 30 min of work.\n\nNEVER refinance to a longer term\nat the same rate — pure interest gift\nto the lender.",
-        truth: "Refinancing is one of the few times you get paid to do paperwork.",
-        learnUrl: "rule-of-72.html",
-        learnLabel: "See the Rule of 72 →"
-      },
-      {
-        category: "Emergency",
-        scenario: "Your car breaks down. Repair: <strong>$1,200</strong>. You have:<br>• $800 in emergency savings<br>• A 0% credit card promo for 12 months<br>• A 401(k) loan option",
-        question: "What do you do?",
-        choices: [
-          { text: "Borrow from your 401(k).", verdict: "risky", result: "If you leave the job, the loan often becomes due. Miss the deadline → it counts as a withdrawal, with penalties + tax. Last resort only." },
-          { text: "Use the 0% card; aggressively pay it off in <12 months.", verdict: "optimal", result: "0% promo = free financing IF you pay it off before the promo expires. Otherwise back-interest can be brutal." },
-          { text: "Drain emergency savings AND charge the rest.", verdict: "decent", result: "OK in a pinch — but leaves you completely exposed to the NEXT emergency. Spread the hit." }
-        ],
-        math: "0% promo for 12 months:\n  $1,200 / 12 = $100/mo\n  Pay off by month 12 → $0 interest.\n  Miss it → deferred interest can\n  ALL come due (often 20%+ APR).\n\n401(k) loan risk:\n  Leaving the job = often immediate\n  repayment OR a taxable distribution\n  + 10% penalty if under 59½.",
-        truth: "The interest rate isn't the danger of a 0% promo. The expiration date is.",
-        learnUrl: "debt-destroyer.html",
-        learnLabel: "Try the Debt Destroyer →"
-      },
-      {
-        category: "Identity",
-        scenario: "You get an alert: a <strong>new credit account</strong> was just opened in your name. You didn't open it.",
-        question: "What's step ONE — done in the next hour?",
-        choices: [
-          { text: "Call the bank to dispute the account.", verdict: "decent", result: "You'll get there — but this isn't step one. Without a freeze, more accounts can keep opening today." },
-          { text: "Freeze your credit at all three bureaus.", verdict: "optimal", result: "A freeze stops any new credit account from being opened in your name. It's free, fast, and reversible. Do this FIRST." },
-          { text: "Change your bank passwords and wait.", verdict: "risky", result: "Passwords don't matter for new credit applications. Without a freeze, fraudsters keep opening accounts." }
-        ],
-        math: "Credit freeze: FREE at all 3 bureaus.\n  Equifax, Experian, TransUnion.\n  Online, ~5 minutes each.\n\nFreeze means: NO new credit can\nbe opened in your name without\nyou temporarily lifting it.\n\nThen, in this order:\n  1. Freeze (today)\n  2. File FTC ID theft report\n  3. Dispute fraudulent accounts\n  4. Police report if needed",
-        truth: "A credit freeze is the cheapest, most powerful financial weapon most people don't know they have.",
-        learnUrl: "credit-lessons.html",
-        learnLabel: "Read the credit lessons →"
-      },
-      {
-        category: "Future You",
-        scenario: "You're 19. A parent says: '<strong>You don't need to think about retirement yet.</strong>' You have $50/month you could save.",
-        question: "What does your future self need you to do?",
-        choices: [
-          { text: "Wait until I make 'real money.'", verdict: "risky", result: "Every year you wait, the cost of catching up roughly doubles. The 19-year-old has the cheapest dollars to invest of your entire life." },
-          { text: "Open a Roth IRA and contribute $50/month — even just an index fund.", verdict: "optimal", result: "$50/mo from 19 → 65 at 7% = ~$215,000. Wait until 30 to start the same plan? You'd need ~$110/mo to match." },
-          { text: "Save $50/mo in a savings account — same thing.", verdict: "risky", result: "Savings accounts barely beat inflation. The whole power comes from investing inside a Roth, where it grows TAX-FREE." }
-        ],
-        math: "$50/mo at 7%:\n  Start at 19 → ~$215k by 65\n  Start at 25 → ~$140k by 65\n  Start at 30 → ~$95k by 65\n\nDelay cost from 19→30 = ~$120,000\nfor delaying the exact same $50/mo.\n\nA Roth IRA at 19 with earned\nincome is the single most\npowerful account you can open.",
-        truth: "The cheapest dollar to invest is always the next one.",
+        math: "Retirement access gap:\n  ~57 MILLION US workers (~50%) have NO\n    workplace retirement plan at any moment\n  Black & Latino workers: 60% no-access rate\n  Part-time workers: 80%+ no-access rate\n\nState auto-IRA programs (growing):\n  CA, OR, IL, CT, MD, CO, ME, VA, NY, NJ, VT, etc.\n  Default opt-in. Workers can opt out.\n  Result: significant new savers, especially\n    low-wage and minority workers.\n\nThe 401(k) wasn't designed to be the\nbackbone. It was a 1980s tax tweak\nfor executives that ate the pension system.",
+        truth: "Most low-wage and part-time jobs strip out the retirement infrastructure that makes wealth-building automatic for everyone else.",
         learnUrl: "roth-ira.html",
-        learnLabel: "Read about Roth IRAs →"
+        learnLabel: "Open a Roth IRA →"
       },
       {
-        category: "Big Picture",
-        scenario: "You want to retire 'early.' A blog says: 'Save <strong>50% of your income</strong>.' You save 5% and can't imagine 50%.",
-        question: "What's a realistic, life-changing target?",
+        category: "Banking Fees",
+        scenario: "You have a checking account. Last month you got hit with <strong>3 overdraft fees</strong> totaling <strong>$105</strong> from a $4 coffee that posted before your paycheck cleared.",
+        question: "What can you actually do about this?",
         choices: [
-          { text: "Stop reading FIRE blogs — it's not possible.", verdict: "risky", result: "The blogs are extreme. But the principle (savings rate matters most) is true. You don't have to hit 50% to dramatically change your timeline." },
-          { text: "Push toward 15-20% — that's the real game-changer.", verdict: "optimal", result: "A 15-20% savings rate, sustained, retires the average person comfortably. Every 5% above that pulls retirement years closer." },
-          { text: "Stay at 5% — every little bit helps.", verdict: "decent", result: "Better than nothing. But at 5%, you're more likely to retire at 75 than 65. The number itself matters." }
+          { text: "Pay it; manage your account better next time.", verdict: "risky", result: "Overdraft fees are heavily concentrated. 9% of bank customers pay 80% of all overdraft revenue (CFPB). It's a tax on living paycheck to paycheck — and on the order banks choose to process transactions." },
+          { text: "Switch to a Bank On certified or no-overdraft account (Capital One 360, Ally, Chime, Cash App, etc.).", verdict: "optimal", result: "Bank On certified accounts cannot charge overdraft fees by design. ~150+ banks and credit unions are certified. Switching is free." },
+          { text: "Just keep more cushion in checking.", verdict: "decent", result: "Helpful, but only if you can. If you could keep a $500 buffer reliably, you weren't overdrafting. The fee structure punishes the precise people who can't escape it." }
         ],
-        math: "Savings rate vs. years to retire\n(assuming you'll spend the same):\n  5%  → ~66 years\n  15% → ~43 years\n  25% → ~32 years\n  50% → ~17 years\n  75% → ~7 years\n\nSavings rate, not income,\ndetermines when you're free.\n(Mr. Money Mustache, 2012)",
-        truth: "Your salary determines what you spend. Your savings rate determines when you can stop.",
-        learnUrl: "fire-calculator.html",
-        learnLabel: "Try the FIRE calculator →"
+        math: "Overdraft economics:\n  US banks collect ~$8 BILLION/yr in overdraft fees\n  9% of customers pay 80% of those fees (CFPB)\n  Avg overdraft fee: $35\n  Avg transaction that triggered it: <$25\n\nBank On certified standard (no surprise fees):\n  ✗ No overdraft fees\n  ✗ No NSF fees\n  ✗ No monthly min if direct deposit\n  ✓ Real bank account, FDIC insured\n\n~150+ banks & credit unions certified.\nMost customers never hear about it.",
+        truth: "Overdraft fees are a tax on living paycheck to paycheck. The banks know exactly who pays them.",
+        learnUrl: "navtech.html",
+        learnLabel: "NavTech: banking →"
       },
       {
-        category: "Bias",
-        scenario: "The market <strong>just dropped 20%</strong>. The news is full of red arrows. Your 401(k) is down. You're 32.",
-        question: "What do you do?",
+        category: "Food Insecurity",
+        scenario: "You live in a <strong>food desert</strong>. The closest full grocery store is a 45-minute bus ride. The corner store has chips and soda. You spend <strong>40% more</strong> on groceries.",
+        question: "What helps right now?",
         choices: [
-          { text: "Sell to stop the bleeding.", verdict: "risky", result: "You just locked in the loss. Markets recover — but only if you're still in them. Selling at the bottom is THE classic wealth-destroying move." },
-          { text: "Keep contributing on autopilot — buy more at lower prices.", verdict: "optimal", result: "A 20% drop means everything is on sale. Every contribution at the bottom buys more shares — which compound for 30+ years." },
-          { text: "Stop contributing until things 'feel safer.'", verdict: "decent", result: "You miss buying at a discount AND you train yourself to time the market — a game even the pros lose at." }
+          { text: "Just shop at the corner store; it's easier.", verdict: "risky", result: "The corner-store grocery markup runs 30-50%. Food deserts are spatial, but they're also pricing systems — the same households pay more for less nutritious food, then get blamed for poor health outcomes." },
+          { text: "Check SNAP eligibility, Double Up Food Bucks (matches SNAP at farmers' markets), and local food cooperatives.", verdict: "optimal", result: "Double Up Food Bucks matches SNAP $1-for-$1 at farmers' markets in 30+ states. Mobile markets and grocery co-ops are filling the gap that supermarket chains created by closing." },
+          { text: "Move closer to a grocery store.", verdict: "decent", result: "Often financially impossible — and 'just move' is the entire structure of food insecurity. Better to organize for a market or a grocery cooperative in your neighborhood." }
         ],
-        math: "S&P 500 historical drawdowns:\n  Avg years to recover: 1-3 years\n  After every major crash since 1950,\n  the market hit new highs within 5 yrs.\n\nSelling at the bottom vs. holding:\n  2008 sellers locked in ~50% loss.\n  Holders saw full recovery + gains\n  by 2013.\n\nTime in market > timing market.",
-        truth: "A market crash isn't the moment to act on fear. It's the moment to act on a plan you wrote when you weren't afraid.",
-        learnUrl: "market-rollercoaster.html",
-        learnLabel: "Ride the market rollercoaster →"
+        math: "Food deserts in the US:\n  ~23 MILLION people live in food deserts\n  Disproportionately low-income & non-white\n    neighborhoods\n\nFood pricing in food deserts:\n  Corner stores avg 30-50% markup\n  Same products, smaller pack sizes\n  Less fresh produce, more shelf-stable\n\nDouble Up Food Bucks results:\n  $1 SNAP becomes $2 at participating markets\n  Operating in 30+ states\n  Avg participating family: +120% produce purchasing\n\nGrocery 'redlining' is real and measurable.",
+        truth: "Food deserts aren't a place. They're a pricing system that charges the poorest neighborhoods the most per calorie.",
+        learnUrl: "food-security.html",
+        learnLabel: "Food security work →"
       },
       {
-        category: "Generosity",
-        scenario: "You finally have enough breathing room to donate. A friend says <strong>'wait until you're rich.'</strong>",
-        question: "What's actually true?",
+        category: "Generational Wealth Gap",
+        scenario: "Two 25-year-olds. Same income, same credit, same job. One inherited a <strong>$30,000 down payment</strong> from family. The other rents. Fast-forward 30 years.",
+        question: "What's the honest read?",
         choices: [
-          { text: "They're right — give later when it matters more.", verdict: "risky", result: "Studies of high earners show the people who give a lot are mostly the people who started giving small early. 'Later' tends not to come." },
-          { text: "Set a small recurring amount now to a cause you care about.", verdict: "optimal", result: "Even $10/month builds the habit. Generosity, like saving, is mostly an identity decision — not a balance-sheet one." },
-          { text: "Donate everything you can — your future self will figure it out.", verdict: "risky", result: "Generosity at the cost of your own stability isn't sustainable. Help yourself enough to keep helping others." }
+          { text: "Both end up roughly the same — it's about work ethic.", verdict: "risky", result: "It really isn't. The same $30k starting line, compounded through 30 years of home equity + investment access, becomes a ~$400k+ wealth gap by retirement. The gap is generational, not behavioral." },
+          { text: "Recognize the structural starting line, support policies that close it (down payment assistance, baby bonds, IDA accounts).", verdict: "optimal", result: "States with first-generation homebuyer programs, baby bonds, and matched savings (IDA) programs are testing exactly this. Individual hustle and policy aren't opposites — both close the gap." },
+          { text: "The renter just needs to save harder.", verdict: "risky", result: "If $30k of saving was easy enough to 'just do,' the wealth gap wouldn't be 8:1 between white and Black households. The starting line moves the finish line." }
         ],
-        math: "Habitual donors in the US give\non avg 3-5% of income — not\nbecause they're rich, but because\nthey started early (Lilly School\nof Philanthropy).\n\nFinMango is a 501(c)(3).\nA $10/mo donation funds nearly\n5 free lessons for a young adult.\n\nGiving is also tax-deductible if\nyou itemize.",
-        truth: "Generosity isn't a result of wealth. It's part of how wealth becomes meaningful.",
+        math: "Generational wealth gap (US):\n  Median white household wealth: ~$285,000\n  Median Black household wealth:  ~$45,000\n  Median Latino household wealth: ~$62,000\n  (Federal Reserve, 2022)\n\n  ~30-40% of US down payments rely on\n  family help (NAR).\n\n  A $30k down payment in 1995:\n    → median US home price growth alone\n      built ~$300k+ of equity by 2025.\n\n  Same income, no down payment:\n    → rent paid out, $0 equity built.\n\nMost US wealth is inherited, not earned.",
+        truth: "Most US wealth is inherited. 'Pull yourself up' is what we tell the people we already pulled the ladder up on.",
+        learnUrl: "research.html",
+        learnLabel: "Read the research →"
+      },
+      {
+        category: "Insulin & Prescription Pricing",
+        scenario: "Your monthly insulin: <strong>$640 cash</strong> at the pharmacy counter. With insurance after deductible: <strong>$35</strong>. With a coupon: <strong>$98</strong>. The same vial.",
+        question: "What's actually going on?",
+        choices: [
+          { text: "Pay sticker; sometimes that's life.", verdict: "risky", result: "1 in 4 insulin-dependent diabetics has rationed insulin due to cost (CDC). Skipping doses kills people. The pricing isn't broken — it's hidden, and rationing is the silent symptom." },
+          { text: "Check Mark Cuban Cost Plus, GoodRx, manufacturer patient-assistance programs, and the $35 cap (Medicare; some states).", verdict: "optimal", result: "Cost Plus Drugs sells generic insulin at ~$30. Medicare's $35/mo insulin cap went into effect in 2023. Many states have followed. Most patients never hear about these options at the counter." },
+          { text: "Skip doses to make the supply last.", verdict: "risky", result: "Hospitalization from DKA costs ~$10,000+. Skipped doses kill 1,500+ Americans/yr. The pharmacy counter should never be where rationing decisions get made." }
+        ],
+        math: "US insulin pricing reality:\n  US list price per vial: ~$300\n  Canada list price per vial: ~$30\n  Same molecule, same manufacturer.\n\n  Generic insulin (Cost Plus, etc.):\n    Often $30-$50 cash, no insurance\n\nWho gets the spread?\n  Manufacturers, PBMs (pharmacy benefit\n  managers), insurers, pharmacies.\n  Each layer marks up. Patient is at the\n  bottom of the cascade.\n\n  ~25% of insulin-dependent patients\n  ration. Rationing kills people.",
+        truth: "In the US, the cash price of a generic medicine can be cheaper than the insured one. The pricing isn't broken — it's hidden.",
+        learnUrl: "research.html",
+        learnLabel: "Why we research this →"
+      },
+      {
+        category: "Workforce Misclassification",
+        scenario: "Your 'manager' sets your hours, your uniform, your rate, and which clients you can work with. You're paid as a <strong>1099 contractor</strong>. The IRS has a test for this.",
+        question: "What's the move?",
+        choices: [
+          { text: "Just file the 1099 — pay the self-employment tax.", verdict: "risky", result: "Workers misclassified as contractors lose ~$3,800/year in benefits and pay an extra 7.65% in self-employment tax. The company saves all of that, plus avoids unemployment & workers' comp." },
+          { text: "File IRS Form SS-8 (worker misclassification determination); file a complaint with your state labor board.", verdict: "optimal", result: "SS-8 forces the IRS to determine your actual status. If you're reclassified as W-2, the company owes back payroll taxes, you get retroactive benefits, and your Social Security record gets fixed." },
+          { text: "Quit and find a 'real' W-2 job.", verdict: "decent", result: "Sometimes right. But misclassification is widespread — switching jobs without filing means the next worker walks into the same trap." }
+        ],
+        math: "Worker misclassification scale:\n  Estimated 10-30% of employers misclassify\n    at least some workers as contractors\n  Annual lost payroll tax revenue: ~$3-4 BILLION\n  (US Treasury)\n\nWhat the worker loses:\n  ✗ Half of Social Security/Medicare tax\n    (employer's 7.65% — now your problem)\n  ✗ Unemployment insurance access\n  ✗ Workers' comp\n  ✗ Overtime protections\n  ✗ Minimum wage floor\n  ✗ Anti-discrimination protections in some cases\n\nThe paperwork classifies you. Reality\ndoesn't have to.",
+        truth: "Worker misclassification saves companies billions a year — money that used to go to your Social Security, Medicare, and unemployment insurance.",
+        learnUrl: "navtech.html",
+        learnLabel: "NavTech: workforce →"
+      },
+      {
+        category: "Predatory Lending",
+        scenario: "You see an ad: '<strong>Get $5,000 fast! No credit check!</strong>' The fine print: <strong>198% APR</strong>, balloon payment in 6 months. You really need the money.",
+        question: "Where should this actually come from?",
+        choices: [
+          { text: "Take the loan — sometimes you don't have a choice.", verdict: "risky", result: "198% APR isn't 'high cost' — it's debt-trap engineering. Designed default rates mean the lender PROFITS from your inability to repay, via fees and rollovers. This is the modern equivalent of company scrip." },
+          { text: "Try a CDFI personal loan, employer-based small-dollar loan, or PAL II credit union loan (28% APR cap).", verdict: "optimal", result: "Federal credit unions can offer Payday Alternative Loans (PALs) at 28% APR max. CDFIs do small-dollar lending for exactly this audience. Many employers now offer earned-wage-access programs too." },
+          { text: "Ask family.", verdict: "decent", result: "Often the right answer. But not everyone has family with the spare $5k — and that uneven access is one of the biggest hidden drivers of wealth divergence." }
+        ],
+        math: "Predatory small-dollar lending:\n  Payday loans: 391% avg APR\n  Title loans: 300% avg APR\n  'Tribal' / online installment: 200-700% APR\n\nFair alternatives:\n  PAL II (federal credit unions): 28% cap\n  CDFI emergency loans: 8-36%\n  Employer earned-wage access: 0-5% typical\n\nResult of the gap:\n  Same $5k emergency.\n  Predatory cost: $4,800+ in interest\n  Fair cost: $400-$1,000 in interest\n  Difference: ~$4,000 transferred up the\n    income ladder.",
+        truth: "Predatory lending isn't 'serving the underserved.' It's an extraction industry that the rest of the financial system declined to compete with.",
+        learnUrl: "research.html",
+        learnLabel: "FinMango research →"
+      },
+      {
+        category: "Sports Betting",
+        scenario: "Your state legalized sports betting <strong>last year</strong>. Your phone now pushes you 4 notifications a day. A 'free $200 bet' offer just hit your screen.",
+        question: "What's the systemic read?",
+        choices: [
+          { text: "Take the bonus — free money.", verdict: "risky", result: "It's not free. The 'bonus' is locked behind wagering requirements designed to keep you betting until the math wins. In legal-betting states, problem-gambling rates among young men have jumped to ~28% (NCPG)." },
+          { text: "Recognize it as a designed addiction product; support state revenue caps & treatment funding.", verdict: "optimal", result: "Sports betting isn't a 'personal choice industry' — it's a state-licensed monopoly funded by problem gamblers. 90%+ of revenue comes from a small fraction of bettors. Policy reform (deposit caps, ad limits, mandatory treatment funding) is the system answer." },
+          { text: "Bet small for fun, call it entertainment.", verdict: "decent", result: "If you can truly cap it. But the apps are designed by behavioral scientists to defeat exactly that intention — variable rewards, push notifications, parlays designed to feel close to winning." }
+        ],
+        math: "Legal sports betting in the US:\n  38 states + DC have legalized since 2018\n  ~$120 BILLION wagered in 2023\n  ~$10 BILLION in sportsbook revenue\n\nProblem gambling spike (legal states):\n  Helpline calls up 100-300% post-legalization\n  Young men (18-29): ~28% problem-gambling\n    indicators in legal-betting states (NCPG)\n  Bankruptcy filings rise in adopting states\n\nWho funds the industry?\n  ~90% of revenue from ~5% of bettors.\n  The product is the addiction.",
+        truth: "Sports betting was legalized in 38 states in 6 years. It wasn't legalized because the public demanded it. It was legalized because someone realized a state could tax addiction.",
+        learnUrl: "sports-betting.html",
+        learnLabel: "FinMango: sports betting →"
+      },
+      {
+        category: "Identity & Credit",
+        scenario: "You get an alert: a <strong>new credit account</strong> was just opened in your name. You didn't open it. Identity theft disproportionately hits low-income & older Americans.",
+        question: "What's step ONE — within the next hour?",
+        choices: [
+          { text: "Call the bank to dispute the account.", verdict: "decent", result: "You'll get there. But without a credit freeze first, more accounts can keep opening today. The bank will be there in 24 hours. The damage scales by the minute." },
+          { text: "Freeze credit at all 3 bureaus + file an FTC ID theft report at IdentityTheft.gov.", verdict: "optimal", result: "A freeze is free, fast, and stops new accounts. IdentityTheft.gov generates your official affidavit — the document banks legally have to accept. Order: FREEZE → REPORT → DISPUTE." },
+          { text: "Change all your passwords.", verdict: "risky", result: "Passwords don't matter for new credit applications. Without a freeze, fraudsters keep opening accounts whether you change every password tonight or not." }
+        ],
+        math: "ID theft in the US:\n  ~1.4 MILLION FTC reports/year\n  Median direct loss: $500\n  Hours per victim to resolve: ~200+\n  Disproportionately affects older,\n    low-income, and non-English-speaking adults.\n\nThe free credit freeze (since 2018):\n  Equifax, Experian, TransUnion\n  ~5 minutes each, online\n  Reversible within minutes when you need\n    to apply for credit yourself\n\nFreezes are the single most powerful tool\nmost ID-theft victims don't know they have.\nKnowledge of them tracks closely with\nincome and education access. That gap is\nan exploit.",
+        truth: "A credit freeze is the cheapest, most powerful financial weapon in the US. Most people don't know it exists — and that knowledge gap is, itself, the exploit.",
+        learnUrl: "credit-lessons.html",
+        learnLabel: "Credit & systems →"
+      },
+      {
+        category: "Public Transit & Job Access",
+        scenario: "A job offers <strong>$3/hr more</strong> across town. With no car, the commute is <strong>90 minutes each way</strong> by bus — <strong>15 hours/week lost</strong>. Transit deserts have an income.",
+        question: "What's the structural answer?",
+        choices: [
+          { text: "Take it; the higher wage is worth the commute.", verdict: "decent", result: "It might be — IF the math nets out. At $3/hr more for a 40-hr week = +$120/wk. But 15 hours of transit cost (childcare, lost rest, lost side income) often eats the whole raise." },
+          { text: "Negotiate WFH/hybrid; check transit voucher / commuter benefits / WorkLink-style programs.", verdict: "optimal", result: "Many cities offer subsidized transit passes for low-income workers. Some employers offer pre-tax commuter benefits. Hybrid/remote work, where possible, is the single biggest transit-poverty fix." },
+          { text: "Skip it; stay closer to home.", verdict: "decent", result: "Sometimes valid. Sometimes the system asks you to choose between mobility (career) and mobility (transportation). The fact that this is a real tradeoff is itself the problem." }
+        ],
+        math: "Transit access vs. employment:\n  ~30% of US workers live in 'transit deserts'\n    (Brookings)\n  Avg commute for car-free worker: 50+ min\n  Compared to car-owning peer: 25 min\n\nTime poverty math:\n  90-min one-way commute = 15 hr/wk\n  At median wage: ~$300/wk of unpaid time\n  Plus: childcare, rest debt, food choices\n\nThe US has been called a 'driver's country.'\nThat's not nature — it's 70+ years of\nzoning, highway, and parking subsidies\nthat decided cars would be required and\ntransit would be optional.",
+        truth: "In the US, your right to work depends on owning a car. That isn't an economy. It's a private toll on opportunity.",
+        learnUrl: "navtech.html",
+        learnLabel: "NavTech: mobility →"
+      },
+      {
+        category: "Tipping & Wage Floors",
+        scenario: "A self-serve frozen yogurt shop asks for a <strong>20% tip</strong>. You're at minimum wage yourself. The screen is staring at you.",
+        question: "What's the policy-level read?",
+        choices: [
+          { text: "Tip 20% out of guilt.", verdict: "decent", result: "Generous, but you're absorbing a cost that should be paid by the business. Tip-screen sprawl is a wage-cost transfer from owners to customers — and disproportionately from low-income customers to low-income workers." },
+          { text: "Tip what you can if served; push for federal & state wage floor reform.", verdict: "optimal", result: "Tipping was never meant to be the safety net for retail and food service. The system that needs reform is the wage floor, not your guilt response. Vote local, support One Fair Wage and similar reforms." },
+          { text: "Refuse to tip anywhere on principle.", verdict: "risky", result: "Refusing tips at a sub-minimum-wage server's job punishes the worker, not the system. The system answer isn't 'stop tipping' — it's 'stop NEEDING tipping to clear the floor.'" }
+        ],
+        math: "US tipping has grown:\n  Avg # of tip prompts/wk per consumer:\n    Up ~30% from 2019 (Square data)\n  'Tip creep' is real and measurable.\n\nWhy?\n  Inflation in wages owed > inflation in\n  prices owners can charge.\n  Tip prompts shift the labor cost gap\n  onto the customer.\n\nLow-income consumers tip more, by %.\n  Low-income workers earn more tips, by %.\n  Net effect: a redistribution from poor\n  to less-poor, with the employer skipping\n  the bill.\n\nThe fix is structural, not emotional.",
+        truth: "Tipping screens exist because labor cost is the line item business owners control — and tip prompts transfer the cost to you.",
+        learnUrl: "research.html",
+        learnLabel: "Research & advocacy →"
+      },
+      {
+        category: "Civic Action",
+        scenario: "You now know the system has a thumb on the scale. You also have <strong>$30, an hour a week, or a vote</strong>. What changes the math at scale?",
+        question: "Where does individual action actually move the system?",
+        choices: [
+          { text: "Quietly opt out — 'system can't be fixed.'", verdict: "risky", result: "It's the answer the system is hoping for. Disengagement IS the equilibrium it's optimized for. The status quo wins by default when people give up — that's not neutrality, it's a side." },
+          { text: "Donate, vote local elections, support orgs doing both research AND on-the-ground programs.", verdict: "optimal", result: "Local elections decide tenant protections, eviction record sealing, wage floors, predatory-lending caps, transit funding, and benefit-cliff smoothing — all the puzzles above. Turnout in local races is often <20%. Yours is decisive." },
+          { text: "Move somewhere with better policy.", verdict: "decent", result: "Valid for you; doesn't fix it for everyone else. And housing/wage cliffs make it harder for the people who need to move most." }
+        ],
+        math: "Local election turnout:\n  Federal general election: ~60% turnout\n  Local/municipal: often <20%\n  Primaries: often <10%\n\nWhat local races actually decide:\n  ✓ Minimum wage above federal floor\n  ✓ Sub-minimum tipped wage elimination\n  ✓ Eviction record sealing\n  ✓ Source-of-income discrimination bans\n  ✓ Predatory lending caps\n  ✓ Public transit funding\n  ✓ Affordable housing supply\n  ✓ Benefit-cliff smoothing\n\nThe system isn't a building. It's the\nsum of decisions made by people who\nshowed up.",
+        truth: "Financial health is built by people navigating the system AND by people changing it. You need both. We're building both.",
+        learnUrl: "donate.html",
+        learnLabel: "Support FinMango →"
+      },
+      {
+        category: "Generosity & Mobility",
+        scenario: "You finally have <strong>breathing room</strong>. A voice (probably the internet) says 'donate later, when you're rich.' FinMango exists because of the people who didn't.",
+        question: "What's actually true about generosity & mobility?",
+        choices: [
+          { text: "Wait until you have 'real' money.", verdict: "risky", result: "The data is clear: people who give a lot in their 50s are mostly the people who started giving a little in their 20s. 'Later' tends never to come. Identity precedes balance sheet." },
+          { text: "Set $10/month recurring to one cause that works on systems you care about.", verdict: "optimal", result: "Recurring small donations are the foundation of every advocacy org's budget. A $10/mo donor enables a researcher to file an HMDA report, an ambassador to teach 5 students, an audit of a benefit cliff in their state." },
+          { text: "Donate everything you can — the org needs you more than you need savings.", verdict: "risky", result: "Generosity at the cost of your own stability isn't sustainable. The most powerful donor is a stable donor. Help yourself enough to keep helping the system change." }
+        ],
+        math: "Habitual giving in the US:\n  Habitual donors give 3-5% of income\n    on average\n  Started giving: often in their 20s\n  (Lilly School of Philanthropy)\n\nWhat $10/mo to FinMango funds:\n  ~5 free financial lessons / mo for\n    a young adult\n  Or: research time on a state-level\n    cliff analysis\n  Or: 1 ambassador's program kit\n\nThe biggest lie in personal finance is\nthat individual upward mobility and\ncollective change are competitors.\nThey aren't. Both are required.",
+        truth: "Generosity isn't a result of wealth. It's part of how wealth becomes meaningful — and how the next person's wealth becomes possible.",
         learnUrl: "donate.html",
         learnLabel: "Support FinMango →"
       }
@@ -1313,14 +1855,13 @@
     // STATE
     // ============================================================
     const LS_KEY = 'finmango.moneyMangoDaily.v1';
-    const EPOCH = new Date(2026, 0, 1); // local time, Jan 1, 2026
+    const EPOCH = new Date(2026, 0, 1);
 
     function loadState() {
       try {
         const raw = localStorage.getItem(LS_KEY);
         if (!raw) return defaultState();
-        const s = JSON.parse(raw);
-        return { ...defaultState(), ...s };
+        return { ...defaultState(), ...JSON.parse(raw) };
       } catch { return defaultState(); }
     }
     function defaultState() {
@@ -1329,20 +1870,13 @@
     function saveState(s) {
       try { localStorage.setItem(LS_KEY, JSON.stringify(s)); } catch {}
     }
-
     function todayKey() {
       const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${y}-${m}-${day}`;
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     }
     function yesterdayKey() {
       const d = new Date(); d.setDate(d.getDate() - 1);
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${y}-${m}-${day}`;
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     }
     function dayIndex() {
       const today = new Date();
@@ -1360,27 +1894,33 @@
       return new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
     }
 
-    // ============================================================
-    // RENDER
-    // ============================================================
     const state = loadState();
     const idx = dayIndex();
     const puzzle = PUZZLES[idx];
     const pNum = puzzleNumber();
     const tKey = todayKey();
+    const pNumStr = '#' + String(pNum).padStart(3, '0');
 
-    document.getElementById('puzzleNumber').textContent = '#' + String(pNum).padStart(3, '0');
-    document.getElementById('puzzleDate').textContent = formatDate();
-    refreshStreakBadge();
+    // ============================================================
+    // RENDER STATIC METADATA
+    // ============================================================
+    document.getElementById('puzzleNumberPill').textContent = pNumStr;
+    document.getElementById('heroEyebrow').firstChild.textContent = `PUZZLE ${pNumStr} · `;
+    document.getElementById('heroDateLabel').textContent = formatDate();
+    document.getElementById('puzzleDateLabel').textContent = '— ' + formatDate();
+    refreshStreakBadges();
 
-    function refreshStreakBadge() {
-      document.getElementById('streakValue').textContent = state.streak;
+    function refreshStreakBadges() {
+      document.getElementById('streakBadgeValue').textContent = state.streak;
+      document.getElementById('heroStreak').textContent = state.streak;
+      document.getElementById('heroBest').textContent = state.bestStreak;
+      document.getElementById('heroPlayed').textContent = state.totalPlayed;
     }
 
     function renderPuzzle() {
-      document.getElementById('categoryTag').textContent = puzzle.category;
+      document.getElementById('puzzleCategoryLabel').textContent = puzzle.category;
       document.getElementById('scenario').innerHTML = puzzle.scenario;
-      document.getElementById('question').textContent = puzzle.question;
+      document.getElementById('questionLabel').textContent = puzzle.question;
 
       const wrap = document.getElementById('choices');
       wrap.innerHTML = '';
@@ -1395,24 +1935,20 @@
     }
 
     function answer(choiceIdx) {
-      // Disable choices, mark selected
       const buttons = document.querySelectorAll('.choice');
       buttons.forEach((b, i) => {
         b.disabled = true;
         const v = puzzle.choices[i].verdict;
         b.classList.add('is-' + v);
         if (i === choiceIdx) b.classList.add('is-selected');
+        else b.classList.add('is-not-selected');
       });
 
       const chosen = puzzle.choices[choiceIdx];
-      // Streak logic
       const wasPlayedToday = state.lastPlayed === tKey;
       if (!wasPlayedToday) {
-        if (state.lastPlayed === yesterdayKey()) {
-          state.streak = (state.streak || 0) + 1;
-        } else {
-          state.streak = 1;
-        }
+        if (state.lastPlayed === yesterdayKey()) state.streak = (state.streak || 0) + 1;
+        else state.streak = 1;
         state.lastPlayed = tKey;
         state.totalPlayed = (state.totalPlayed || 0) + 1;
         state.bestStreak = Math.max(state.bestStreak || 0, state.streak);
@@ -1420,96 +1956,62 @@
         saveState(state);
       }
 
-      // Reveal
-      const verdict = chosen.verdict;
-      const header = document.getElementById('verdictHeader');
-      header.classList.remove('optimal', 'decent', 'risky');
-      header.classList.add(verdict);
-      const verdictMap = {
-        optimal: { emoji: '🟢', label: 'Verdict', title: 'Optimal play. The math agrees.' },
-        decent:  { emoji: '🟡', label: 'Verdict', title: 'Not bad — but there’s a better move.' },
-        risky:   { emoji: '🔴', label: 'Verdict', title: 'This one bites you later.' }
-      };
-      document.getElementById('verdictEmoji').textContent = verdictMap[verdict].emoji;
-      document.getElementById('verdictLabel').textContent = verdictMap[verdict].label;
-      document.getElementById('verdictTitle').textContent = verdictMap[verdict].title;
+      paintReveal(chosen.verdict, chosen.result);
+      refreshStreakBadges();
 
-      document.getElementById('mathBlock').textContent = puzzle.math;
-      document.getElementById('truthBlock').textContent = puzzle.truth;
-      const link = document.getElementById('learnMoreLink');
-      link.href = puzzle.learnUrl;
-      link.textContent = puzzle.learnLabel || 'Learn more →';
+      if (chosen.verdict === 'optimal') confettiBurst();
 
-      document.getElementById('revealCard').classList.add('visible');
-
-      // Result card
-      document.getElementById('statStreak').textContent = state.streak;
-      document.getElementById('statBest').textContent = state.bestStreak;
-      document.getElementById('statPlayed').textContent = state.totalPlayed;
-
-      const cheers = {
-        optimal: 'Nailed it. 🎯',
-        decent:  'Solid play.',
-        risky:   'Now you know.'
-      };
-      document.getElementById('resultCheer').textContent = cheers[verdict];
-
-      document.getElementById('resultCard').classList.add('visible');
-      refreshStreakBadge();
-
-      if (verdict === 'optimal') confettiBurst();
-
-      // Smooth scroll to reveal
       setTimeout(() => {
-        document.getElementById('revealCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 200);
+        document.getElementById('revealSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 220);
 
-      // Analytics
       try {
         gtag('event', 'money_mango_answer', {
-          puzzle_number: pNum,
-          verdict: verdict,
-          choice_index: choiceIdx,
-          streak: state.streak
+          puzzle_number: pNum, verdict: chosen.verdict, choice_index: choiceIdx, streak: state.streak
         });
       } catch {}
     }
 
-    // Restore prior answer if already played today
+    function paintReveal(verdict, resultText) {
+      const tagEl = document.getElementById('verdictTag');
+      tagEl.classList.remove('optimal', 'decent', 'risky');
+      tagEl.classList.add(verdict);
+
+      const verdictMap = {
+        optimal: { label: 'Optimal', headline: 'Optimal play. <em>The math agrees.</em>' },
+        decent:  { label: 'Decent',  headline: 'Not bad — <em>but there\'s a sharper move.</em>' },
+        risky:   { label: 'Risky',   headline: 'This one <em>bites you later.</em>' }
+      };
+      document.getElementById('verdictTagLabel').textContent = verdictMap[verdict].label;
+      document.getElementById('verdictHeadline').innerHTML = verdictMap[verdict].headline;
+
+      document.getElementById('choiceResultText').textContent = resultText;
+      document.getElementById('mathBlock').textContent = puzzle.math;
+      document.getElementById('truthBlock').textContent = puzzle.truth;
+
+      const link = document.getElementById('learnMoreLink');
+      link.href = puzzle.learnUrl;
+      link.textContent = (puzzle.learnLabel || 'Learn more') + ' →';
+
+      document.getElementById('revealSection').classList.add('visible');
+      document.getElementById('resultStreak').textContent = state.streak;
+      document.getElementById('resultBest').textContent = state.bestStreak;
+      document.getElementById('resultPlayed').textContent = state.totalPlayed;
+      document.getElementById('resultSection').classList.add('visible');
+    }
+
     function maybeRestore() {
       const h = state.history && state.history[tKey];
       if (h && h.puzzleNumber === pNum) {
-        // Replay reveal silently
         const buttons = document.querySelectorAll('.choice');
         buttons.forEach((b, i) => {
           b.disabled = true;
           const v = puzzle.choices[i].verdict;
           b.classList.add('is-' + v);
           if (i === h.choice) b.classList.add('is-selected');
+          else b.classList.add('is-not-selected');
         });
-
-        const verdict = h.verdict;
-        const header = document.getElementById('verdictHeader');
-        header.classList.add(verdict);
-        const verdictMap = {
-          optimal: { emoji: '🟢', title: 'Optimal play. The math agrees.' },
-          decent:  { emoji: '🟡', title: 'Not bad — but there’s a better move.' },
-          risky:   { emoji: '🔴', title: 'This one bites you later.' }
-        };
-        document.getElementById('verdictEmoji').textContent = verdictMap[verdict].emoji;
-        document.getElementById('verdictTitle').textContent = verdictMap[verdict].title;
-        document.getElementById('mathBlock').textContent = puzzle.math;
-        document.getElementById('truthBlock').textContent = puzzle.truth;
-        const link = document.getElementById('learnMoreLink');
-        link.href = puzzle.learnUrl;
-        link.textContent = puzzle.learnLabel || 'Learn more →';
-
-        document.getElementById('revealCard').classList.add('visible');
-        document.getElementById('statStreak').textContent = state.streak;
-        document.getElementById('statBest').textContent = state.bestStreak;
-        document.getElementById('statPlayed').textContent = state.totalPlayed;
-        document.getElementById('resultCheer').textContent = 'You’ve already played today.';
-        document.getElementById('resultCard').classList.add('visible');
+        paintReveal(h.verdict, puzzle.choices[h.choice].result);
         return true;
       }
       return false;
@@ -1524,39 +2026,29 @@
       const emoji = verdict === 'optimal' ? '🟢' : verdict === 'decent' ? '🟡' : '🔴';
       const tier = verdict === 'optimal' ? 'Optimal play' : verdict === 'decent' ? 'Decent play' : 'Tough lesson';
       const streakLine = state.streak > 1 ? `🔥 Streak: ${state.streak} days` : '';
-      const lines = [
-        `🥭 Money Mango #${String(pNum).padStart(3, '0')}`,
+      return [
+        `🥭 Money Mango ${pNumStr}`,
         `${emoji} ${tier}`,
         streakLine,
         'finmango.org/money-mango-daily'
-      ].filter(Boolean);
-      return lines.join('\n');
+      ].filter(Boolean).join('\n');
     }
-
     function shareResult() {
       const text = buildShareText();
       if (navigator.share) {
         navigator.share({ title: 'Money Mango Daily', text }).catch(() => copyToClipboard(text));
-      } else {
-        copyToClipboard(text);
-      }
+      } else { copyToClipboard(text); }
       try { gtag('event', 'money_mango_share', { puzzle_number: pNum }); } catch {}
     }
-
     function copyToClipboard(text) {
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(showCopiedToast).catch(() => fallbackCopy(text));
-      } else {
-        fallbackCopy(text);
-      }
+      } else { fallbackCopy(text); }
     }
     function fallbackCopy(text) {
       const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
       try { document.execCommand('copy'); showCopiedToast(); } catch {}
       document.body.removeChild(ta);
     }
@@ -1565,7 +2057,6 @@
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 1800);
     }
-
     document.getElementById('shareBtn').addEventListener('click', shareResult);
 
     // ============================================================
@@ -1587,23 +2078,19 @@
     // CONFETTI
     // ============================================================
     function confettiBurst() {
-      const colors = ['#FF6B35', '#E55A2B', '#FFD166', '#16a34a', '#1a1a1a'];
+      const colors = ['#FF6B35', '#E55A2B', '#FFD166', '#10B981', '#1a1a1a'];
       for (let i = 0; i < 40; i++) {
         const piece = document.createElement('div');
         piece.className = 'confetti-piece';
         piece.style.left = Math.random() * 100 + 'vw';
         piece.style.background = colors[Math.floor(Math.random() * colors.length)];
         piece.style.transform = `rotate(${Math.random() * 360}deg)`;
-        piece.style.animation = `fall ${2 + Math.random() * 1.5}s cubic-bezier(.25,.46,.45,.94) forwards`;
+        piece.style.animation = `confettiFall ${2 + Math.random() * 1.5}s cubic-bezier(.25,.46,.45,.94) forwards`;
         piece.style.animationDelay = (Math.random() * 0.3) + 's';
         document.body.appendChild(piece);
         setTimeout(() => piece.remove(), 4000);
       }
     }
-    // Inject keyframes
-    const fallStyle = document.createElement('style');
-    fallStyle.textContent = `@keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }`;
-    document.head.appendChild(fallStyle);
 
     // ============================================================
     // INIT
