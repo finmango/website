@@ -28,10 +28,14 @@
 
   <link rel="canonical" href="https://www.finmango.org/money-mango-daily">
 
-  <!-- Preconnect -->
+  <!-- Preconnect & fonts (match index.html) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300..800&family=Fraunces:opsz,wght@9..144,400..900&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
+  </noscript>
 
   <!-- Shared navbar styles -->
   <link rel="stylesheet" href="css/navbar.css">
@@ -46,524 +50,981 @@
   </script>
 
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
     :root {
       --black: #1a1a1a;
       --white: #ffffff;
       --orange: #FF6B35;
       --orange-dark: #E55A2B;
       --orange-soft: #FF8C61;
-      --orange-glow: rgba(255, 107, 53, 0.10);
-      --cream: #fdfbf7;
+      --orange-light: rgba(255, 107, 53, 0.1);
+      --gray: #5a574f;
+      --gray-medium: #666666;
+      --light-gray: #f5f5f5;
       --warm-white: #f9f5f0;
-      --gray: #6B6560;
-      --gray-soft: #8a857f;
-      --light-gray: #f3f0eb;
-      --success: #16a34a;
-      --success-soft: #dcfce7;
-      --warning: #ca8a04;
-      --warning-soft: #fef9c3;
-      --danger: #dc2626;
+      --success: #10B981;
+      --success-soft: #d1fae5;
+      --warning: #F59E0B;
+      --warning-soft: #fef3c7;
+      --danger: #EF4444;
       --danger-soft: #fee2e2;
-      --font-display: 'Fraunces', Georgia, serif;
-      --font-body: 'DM Sans', system-ui, sans-serif;
-      --max-width: 720px;
+      --max-width: 1200px;
+      --hero-max-width: 1400px;
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
-
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     html { scroll-behavior: smooth; }
 
-    body {
-      font-family: var(--font-body);
-      background: var(--cream);
-      color: var(--black);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
     }
 
-    /* Decorative background mango pattern */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 12% 18%, rgba(255, 107, 53, 0.06) 0%, transparent 40%),
-        radial-gradient(circle at 88% 78%, rgba(255, 107, 53, 0.05) 0%, transparent 45%);
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--black);
+      line-height: 1.5;
+      font-size: 18px;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ============================================
+       HERO BILLBOARD (matches index.html)
+       ============================================ */
+    .hero-billboard {
+      --hb-bg: #FAFAF7;
+      --hb-fg: #0A0A0A;
+      --hb-fg-dim: rgba(10, 10, 10, .6);
+      --hb-fg-faint: rgba(10, 10, 10, .35);
+      --hb-fg-line: rgba(10, 10, 10, .08);
+      --hb-orange: #FF6B35;
+      background: var(--hb-bg);
+      color: var(--hb-fg);
+      padding: 8.5rem 2.5rem 3rem;
+      min-height: auto;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .hero-billboard .hero-bg {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
       pointer-events: none;
       z-index: 0;
     }
-
-    /* ── Page layout ───────────────── */
-    .page {
+    .hero-billboard .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 30%;
+      left: -10%;
+      width: 60vw;
+      height: 60vw;
+      background: radial-gradient(circle, rgba(255, 107, 53, .1) 0%, transparent 60%);
+      filter: blur(40px);
+    }
+    .hero-billboard .hero-bg::after {
+      content: '';
+      position: absolute;
+      bottom: -20%;
+      right: -10%;
+      width: 50vw;
+      height: 50vw;
+      background: radial-gradient(circle, rgba(255, 107, 53, .07) 0%, transparent 60%);
+      filter: blur(40px);
+    }
+    .hero-billboard .hero-container {
       position: relative;
       z-index: 1;
-      padding: 7rem 1.25rem 4rem;
-      max-width: var(--max-width);
+      width: 100%;
+      max-width: var(--hero-max-width);
       margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
     }
-
-    /* ── Hero ─────────────────────── */
-    .hero {
-      text-align: center;
-      margin-bottom: 2.5rem;
+    .hero-billboard .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
-
-    .eyebrow {
+    .hb-eyebrow {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: .7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--hb-fg-faint);
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      background: var(--orange-glow);
-      color: var(--orange-dark);
-      padding: 0.45rem 0.9rem;
-      border-radius: 999px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 1.25rem;
+      gap: .75rem;
     }
-
-    .eyebrow .pulse {
-      width: 7px;
-      height: 7px;
+    .hb-eyebrow::before {
+      content: '';
+      width: 24px;
+      height: 1px;
       background: var(--orange);
-      border-radius: 50%;
-      box-shadow: 0 0 0 0 var(--orange);
-      animation: pulse 2s infinite;
     }
-
-    @keyframes pulse {
-      0%   { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.6); }
-      70%  { box-shadow: 0 0 0 12px rgba(255, 107, 53, 0); }
+    .hb-status {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--hb-fg-faint);
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .hb-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 0 rgba(255, 107, 53, .5);
+      animation: hb-pulse 2.4s ease-out infinite;
+    }
+    @keyframes hb-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, .5); }
+      70% { box-shadow: 0 0 0 10px rgba(255, 107, 53, 0); }
       100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
     }
-
-    .hero h1 {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: clamp(2.3rem, 5.5vw, 3.2rem);
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.65rem;
+    .hb-main { padding: 1rem 0 1.5rem; }
+    .hb-main h1 {
+      font-size: clamp(3.2rem, 9.5vw, 9rem);
+      font-weight: 900;
+      line-height: .92;
+      letter-spacing: -.055em;
+      color: var(--hb-fg);
+      max-width: 16ch;
+      margin-bottom: 0;
+      font-family: var(--font-body);
     }
-
-    .hero h1 .mango-emoji {
-      display: inline-block;
-      animation: mangoTilt 4s ease-in-out infinite;
-      transform-origin: bottom center;
-    }
-
-    @keyframes mangoTilt {
-      0%, 100% { transform: rotate(-6deg); }
-      50% { transform: rotate(6deg); }
-    }
-
-    .hero h1 em {
-      font-style: italic;
+    .hb-main h1 em {
+      font-style: normal;
       color: var(--orange);
-    }
-
-    .hero p {
-      color: var(--gray);
-      font-size: 1.05rem;
-      max-width: 38ch;
-      margin: 0 auto;
-    }
-
-    /* ── Puzzle meta strip ───────── */
-    .puzzle-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem 1.25rem;
-      background: var(--white);
-      border: 1.5px solid rgba(26,26,26,0.08);
-      border-radius: 12px;
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 1px 3px rgba(26,26,26,0.04);
-    }
-
-    .puzzle-meta-left {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-weight: 700;
-    }
-
-    .puzzle-number {
-      background: var(--black);
-      color: var(--white);
-      padding: 0.15rem 0.55rem;
-      border-radius: 6px;
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.78rem;
-      letter-spacing: 0.02em;
-    }
-
-    .puzzle-date { color: var(--gray); font-weight: 500; }
-
-    .streak-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      font-weight: 700;
-      color: var(--orange-dark);
-    }
-
-    /* ── Card ─────────────────────── */
-    .card {
-      background: var(--white);
-      border: 2px solid var(--black);
-      border-radius: 16px;
-      padding: 2rem 1.5rem;
-      box-shadow: 6px 6px 0 var(--black);
-      margin-bottom: 1.5rem;
-    }
-
-    @media (min-width: 640px) {
-      .card { padding: 2.5rem 2.25rem; }
-    }
-
-    .category-tag {
       display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 800;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 107, 53, 0.35);
+      text-decoration-thickness: 0.16em;
+      text-underline-offset: 0.22em;
+    }
+    .hb-main h1 .mango-emoji {
+      display: inline-block;
+      transform-origin: bottom center;
+      animation: mangoTilt 4s ease-in-out infinite;
+      font-style: normal;
+      margin-right: 0.2em;
+    }
+    @keyframes mangoTilt {
+      0%, 100% { transform: rotate(-7deg); }
+      50% { transform: rotate(7deg); }
+    }
+    .hb-bottom {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--hb-fg-line);
+    }
+    .hb-sub {
+      font-size: clamp(1.05rem, 1.5vw, 1.4rem);
+      font-weight: 300;
+      line-height: 1.45;
+      color: var(--hb-fg-dim);
+      max-width: 50ch;
+      letter-spacing: -.015em;
+      margin: 0;
+    }
+    .hb-sub strong { color: var(--hb-fg); font-weight: 500; }
+    .hb-stats {
+      display: flex;
+      gap: 2.5rem;
+      align-items: flex-end;
+    }
+    .hb-stat {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+    }
+    .hb-stat-num {
+      font-size: clamp(2rem, 3.2vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: .95;
+      color: var(--hb-fg);
+    }
+    .hb-stat-num em { font-style: normal; color: var(--orange); }
+    .hb-stat-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: .65rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--hb-fg-faint);
+    }
+
+    /* ============================================
+       SHARED SECTION PRIMITIVES (mirror index.html)
+       ============================================ */
+    .section-eyebrow {
+      font-size: 0.85rem;
+      font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--orange);
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
+      display: block;
     }
+
+    .section-h2 {
+      font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 2rem;
+    }
+    .section-h2 em {
+      font-style: normal;
+      color: var(--orange);
+      display: inline-block;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 107, 53, 0.35);
+      text-decoration-thickness: 0.12em;
+      text-underline-offset: 0.2em;
+    }
+
+    /* ============================================
+       PUZZLE SECTION
+       ============================================ */
+    .puzzle-section {
+      padding: 5rem 2rem 6rem;
+      background: var(--white);
+    }
+    .puzzle-container {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    .puzzle-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .puzzle-meta-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .puzzle-number-pill {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      background: var(--black);
+      color: var(--white);
+      padding: 0.4rem 0.7rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      border-radius: 4px;
+    }
+    .puzzle-date {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+    .puzzle-category {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+    .streak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.85rem;
+      border: 1.5px solid var(--black);
+      border-radius: 4px;
+      background: var(--white);
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--black);
+    }
+    .streak-badge .streak-flame { font-size: 1rem; }
 
     .scenario {
-      font-family: var(--font-display);
-      font-weight: 500;
-      font-size: clamp(1.35rem, 3.4vw, 1.65rem);
-      line-height: 1.32;
+      font-size: clamp(1.75rem, 4.3vw, 2.65rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
       color: var(--black);
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
-
-    .scenario strong { font-weight: 700; color: var(--orange-dark); }
+    .scenario strong {
+      color: var(--orange);
+      font-weight: 900;
+      background: rgba(255, 107, 53, 0.10);
+      padding: 0 0.18em;
+    }
 
     .question {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--gray);
-      margin-bottom: 1.5rem;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      color: var(--gray);
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .question::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--orange);
     }
 
-    /* ── Choices ──────────────────── */
-    .choices { display: flex; flex-direction: column; gap: 0.75rem; }
+    /* Choices — neo-brutalist cards */
+    .choices { display: grid; gap: 1rem; }
 
     .choice {
       display: flex;
       align-items: flex-start;
-      gap: 1rem;
-      padding: 1rem 1.1rem;
-      background: var(--cream);
-      border: 2px solid rgba(26,26,26,0.12);
-      border-radius: 12px;
+      gap: 1.25rem;
+      padding: 1.5rem 1.5rem;
+      background: var(--white);
+      border: 2px solid var(--black);
+      border-radius: 4px;
       cursor: pointer;
       text-align: left;
       font-family: inherit;
-      font-size: 1rem;
+      font-size: 1.05rem;
       color: var(--black);
-      transition: all 0.18s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       width: 100%;
+      position: relative;
     }
-
     .choice:hover:not(:disabled) {
-      border-color: var(--orange);
-      background: var(--orange-glow);
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      box-shadow: 6px 6px 0 var(--black);
     }
-
-    .choice:disabled { cursor: default; opacity: 0.55; }
+    .choice:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+    .choice:disabled { cursor: default; }
 
     .choice-letter {
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      width: 32px;
-      height: 32px;
+      width: 38px;
+      height: 38px;
       background: var(--black);
       color: var(--white);
-      border-radius: 50%;
-      font-weight: 700;
-      font-size: 0.9rem;
+      font-weight: 900;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+      border-radius: 4px;
+    }
+    .choice-text {
+      flex: 1;
+      font-weight: 500;
+      line-height: 1.45;
+      padding-top: 0.4rem;
     }
 
-    .choice-text { flex: 1; line-height: 1.4; padding-top: 4px; font-weight: 500; }
-
-    /* Verdict states after answering */
-    .choice.is-optimal { border-color: var(--success); background: var(--success-soft); opacity: 1; }
+    /* Verdict states after answer */
+    .choice.is-optimal { border-color: var(--success); background: var(--success-soft); }
     .choice.is-optimal .choice-letter { background: var(--success); }
-    .choice.is-decent { border-color: var(--warning); background: var(--warning-soft); opacity: 1; }
-    .choice.is-decent .choice-letter { background: var(--warning); }
-    .choice.is-risky { border-color: var(--danger); background: var(--danger-soft); opacity: 1; }
-    .choice.is-risky .choice-letter { background: var(--danger); }
-    .choice.is-selected { box-shadow: 0 0 0 3px rgba(26,26,26,0.18); }
+    .choice.is-decent  { border-color: var(--warning); background: var(--warning-soft); }
+    .choice.is-decent  .choice-letter { background: var(--warning); }
+    .choice.is-risky   { border-color: var(--danger); background: var(--danger-soft); }
+    .choice.is-risky   .choice-letter { background: var(--danger); }
+    .choice.is-selected { box-shadow: 6px 6px 0 var(--black) !important; transform: translateY(-2px); }
+    .choice:disabled.is-not-selected { opacity: 0.55; }
 
-    /* ── Reveal card ──────────────── */
-    .reveal {
+    /* ============================================
+       REVEAL SECTION
+       ============================================ */
+    .reveal-section {
       display: none;
-      animation: revealUp 0.45s cubic-bezier(.2,.9,.3,1.2);
+      padding: 6rem 2rem 6rem;
+      background: var(--warm-white);
+      border-top: 4px solid var(--orange);
     }
-
-    .reveal.visible { display: block; }
+    .reveal-section.visible { display: block; animation: revealUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
 
     @keyframes revealUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .verdict-header {
+    .reveal-container {
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    .verdict-eyebrow-row {
       display: flex;
       align-items: center;
-      gap: 0.85rem;
-      padding: 1rem 1.25rem;
-      border-radius: 12px;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .verdict-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.75rem;
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      border: 1.5px solid currentColor;
+    }
+    .verdict-tag.optimal { color: #047857; background: var(--success-soft); }
+    .verdict-tag.decent  { color: #92400e; background: var(--warning-soft); }
+    .verdict-tag.risky   { color: #991b1b; background: var(--danger-soft); }
+    .verdict-tag-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: currentColor;
+    }
+
+    .verdict-headline {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 2.5rem;
+      max-width: 22ch;
+    }
+    .verdict-headline em {
+      font-style: normal;
+      color: var(--orange);
+      display: inline-block;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 107, 53, 0.35);
+      text-decoration-thickness: 0.12em;
+      text-underline-offset: 0.2em;
+    }
+
+    .reveal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
       margin-bottom: 1.5rem;
-      font-weight: 700;
     }
+    @media (max-width: 720px) { .reveal-grid { grid-template-columns: 1fr; } }
 
-    .verdict-header.optimal { background: var(--success-soft); color: #14532d; }
-    .verdict-header.decent { background: var(--warning-soft); color: #713f12; }
-    .verdict-header.risky { background: var(--danger-soft); color: #7f1d1d; }
+    .reveal-card {
+      background: var(--white);
+      border: 2px solid var(--black);
+      border-radius: 4px;
+      padding: 2rem 1.75rem;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-card:hover { transform: translateY(-4px); box-shadow: 8px 8px 0 var(--black); }
 
-    .verdict-emoji { font-size: 1.65rem; flex-shrink: 0; line-height: 1; }
-    .verdict-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; margin-bottom: 0.15rem; }
-    .verdict-title { font-size: 1.1rem; line-height: 1.25; }
-
-    .reveal h3 {
-      font-family: var(--font-display);
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.5rem;
+    .reveal-card-eyebrow {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.75rem;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
-
-    .reveal h3::before {
+    .reveal-card-eyebrow::before {
       content: '';
-      width: 18px;
+      width: 22px;
       height: 2px;
       background: var(--orange);
     }
-
-    .reveal-section { margin-bottom: 1.5rem; }
-    .reveal-section p { color: var(--black); font-size: 0.98rem; line-height: 1.55; }
-    .reveal-section .math {
+    .reveal-card-title {
+      font-size: 1.4rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    .reveal-card .math {
       font-family: 'JetBrains Mono', ui-monospace, monospace;
-      background: var(--warm-white);
-      padding: 1rem 1.1rem;
-      border-radius: 10px;
-      border-left: 3px solid var(--orange);
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       line-height: 1.7;
       white-space: pre-wrap;
       overflow-x: auto;
+      color: var(--black);
+    }
+    .reveal-card p {
+      font-size: 1.05rem;
+      color: var(--gray);
+      line-height: 1.6;
     }
 
-    .truth {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-size: 1.15rem;
-      line-height: 1.45;
-      padding: 1.1rem 1.25rem;
-      background: var(--black);
-      color: var(--white);
-      border-radius: 12px;
-      position: relative;
-    }
-
-    .truth::before {
-      content: '“';
-      position: absolute;
-      top: -20px;
-      left: 14px;
-      font-size: 5rem;
-      color: var(--orange);
-      font-family: var(--font-display);
-      line-height: 1;
-    }
-
-    .learn-more {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--orange-dark);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.95rem;
-      margin-top: 0.25rem;
-      border-bottom: 2px solid transparent;
-      transition: all 0.15s ease;
-    }
-    .learn-more:hover { border-bottom-color: var(--orange); transform: translateX(2px); }
-
-    /* ── Result / share card ──────── */
-    .result-card {
-      display: none;
+    .truth-card {
       background: var(--black);
       color: var(--white);
       border: 2px solid var(--black);
-      border-radius: 16px;
-      padding: 2rem 1.5rem;
-      box-shadow: 6px 6px 0 var(--orange);
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
       margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .truth-card .truth-label {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .truth-card .truth-label::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--orange);
+    }
+    .truth-text {
+      font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -0.02em;
+      max-width: 30ch;
+    }
+    .truth-text em {
+      font-style: normal;
+      color: var(--orange);
+    }
+
+    .learn-more-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .learn-more {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--orange);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      position: relative;
+      padding-bottom: 2px;
+      transition: transform 0.2s ease;
+    }
+    .learn-more::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--orange);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .learn-more:hover { transform: translateX(4px); }
+    .learn-more:hover::after { transform: scaleX(1); }
+
+    /* ============================================
+       RESULT / SHARE SECTION (black, like .impact)
+       ============================================ */
+    .result-section {
+      display: none;
+      padding: 6rem 2rem 6rem;
+      background: var(--black);
+      color: var(--white);
       text-align: center;
     }
-    .result-card.visible { display: block; }
+    .result-section.visible { display: block; }
 
-    .result-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; }
-    .stat { text-align: center; }
-    .stat-value {
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 6vw, 2.6rem);
+    .result-container { max-width: var(--max-width); margin: 0 auto; }
+
+    .result-eyebrow {
+      font-size: 0.85rem;
       font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.75rem;
+    }
+
+    .result-headline {
+      font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 3.5rem;
+    }
+    .result-headline em {
+      font-style: normal;
+      color: var(--orange);
+      display: inline-block;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 107, 53, 0.4);
+      text-decoration-thickness: 0.12em;
+      text-underline-offset: 0.2em;
+    }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3rem;
+      max-width: 800px;
+      margin: 0 auto 3.5rem;
+    }
+    @media (max-width: 640px) {
+      .result-stats { grid-template-columns: 1fr; gap: 2.25rem; }
+    }
+    .result-stat-num {
+      font-size: clamp(3rem, 6vw, 4.5rem);
+      font-weight: 900;
       color: var(--orange);
       line-height: 1;
-      margin-bottom: 0.35rem;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.05em;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .stat-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.65; }
+    .result-stat-num:hover { transform: scale(1.06); }
+    .result-stat-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
 
-    .share-row { display: flex; flex-direction: column; gap: 0.75rem; align-items: center; }
+    .result-share-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
 
-    .btn {
+    /* Buttons matching index.html style */
+    .btn-primary, .btn-secondary {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.55rem;
-      padding: 0.9rem 1.5rem;
+      gap: 0.6rem;
+      padding: 1.1rem 2.25rem;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: var(--font-body);
+      text-decoration: none;
+      transition: all 0.25s ease;
+      border-radius: 4px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-primary {
       background: var(--orange);
       color: var(--white);
-      border: none;
-      border-radius: 10px;
-      font-family: inherit;
+      border: 2.5px solid var(--orange);
+    }
+    .btn-primary:hover {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--white);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--white);
+      border: 2.5px solid var(--white);
+    }
+    .btn-secondary:hover {
+      background: var(--white);
+      color: var(--black);
+      transform: translateY(-3px);
+    }
+
+    .countdown-row {
+      padding-top: 2.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+    .countdown-row strong {
+      color: var(--orange);
       font-weight: 700;
       font-size: 1rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.18s ease;
-      min-width: 220px;
+      margin-left: 0.5rem;
     }
-    .btn:hover { background: var(--orange-dark); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(255, 107, 53, 0.4); }
-    .btn.btn-ghost { background: transparent; border: 1.5px solid rgba(255,255,255,0.25); color: var(--white); }
-    .btn.btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: var(--white); transform: translateY(-2px); }
 
+    /* ============================================
+       "WHY DAILY" — solution-card style grid
+       ============================================ */
+    .why-section {
+      padding: 7rem 2rem;
+      background: var(--white);
+    }
+    .why-container { max-width: var(--max-width); margin: 0 auto; }
+
+    .why-header { margin-bottom: 4rem; max-width: 50ch; }
+    .why-header p {
+      font-size: 1.15rem;
+      color: var(--gray);
+      line-height: 1.6;
+      margin-top: 0.5rem;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .why-card {
+      position: relative;
+      padding: 2.5rem 2rem;
+      border: 2px solid var(--black);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      background: var(--white);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+    }
+    .why-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 6px 6px 0 var(--black);
+    }
+    .why-card-num {
+      font-family: 'JetBrains Mono', ui-monospace, monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 1.25rem;
+    }
+    .why-card-title {
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.85rem;
+      line-height: 1.15;
+    }
+    .why-card-title em {
+      font-style: normal;
+      color: var(--orange);
+    }
+    .why-card-text {
+      color: var(--gray);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    /* ============================================
+       FINAL CTA SECTION (warm-white like .cta)
+       ============================================ */
+    .final-cta-section {
+      padding: 8rem 2rem;
+      text-align: center;
+      background: var(--warm-white);
+    }
+    .final-cta-container { max-width: 900px; margin: 0 auto; }
+
+    .final-cta-eyebrow {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.75rem;
+    }
+    .final-cta-h2 {
+      font-size: clamp(2.5rem, 6.5vw, 5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 2rem;
+    }
+    .final-cta-h2 em {
+      font-style: normal;
+      color: var(--orange);
+      display: inline-block;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 107, 53, 0.35);
+      text-decoration-thickness: 0.12em;
+      text-underline-offset: 0.2em;
+    }
+    .final-cta-sub {
+      font-size: 1.2rem;
+      color: var(--gray);
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      line-height: 1.55;
+    }
+
+    .cta-btns {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cta-btns .btn-solid-black {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 1.1rem 2.25rem;
+      background: var(--black);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      border: 2.5px solid var(--black);
+      transition: all 0.25s ease;
+      border-radius: 4px;
+    }
+    .cta-btns .btn-solid-black:hover {
+      background: var(--orange);
+      border-color: var(--orange);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(255, 107, 53, 0.25);
+    }
+    .cta-btns .btn-ghost-dark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 1.1rem 2.25rem;
+      background: transparent;
+      color: var(--black);
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      border: 2.5px solid var(--black);
+      transition: all 0.25s ease;
+      border-radius: 4px;
+    }
+    .cta-btns .btn-ghost-dark:hover {
+      background: var(--black);
+      color: var(--white);
+      transform: translateY(-3px);
+    }
+
+    /* ============================================
+       FOOTER (same as index.html)
+       ============================================ */
+    footer { padding: 0; border-top: 4px solid var(--orange); background: var(--black); color: var(--white); position: relative; }
+    .footer-newsletter { padding: 2.5rem 2rem; background: rgba(255, 107, 53, 0.08); border-bottom: 1px solid rgba(255, 255, 255, 0.08); text-align: center; }
+    .footer-newsletter-container { max-width: 850px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+    .footer-newsletter-text { text-align: left; }
+    .footer-newsletter h3 { font-size: 1.2rem; font-weight: 900; margin-bottom: 0.2rem; letter-spacing: -0.02em; }
+    .footer-newsletter p { font-size: 0.9rem; opacity: 0.7; margin: 0; line-height: 1.4; }
+    .footer-newsletter-btn { display: inline-block; padding: 0.75rem 1.75rem; font-size: 0.9rem; font-weight: 700; background: var(--orange); color: var(--white); text-decoration: none; border: 2px solid var(--orange); transition: all 0.2s ease; font-family: var(--font-body); text-transform: uppercase; letter-spacing: 0.02em; white-space: nowrap; }
+    .footer-newsletter-btn:hover { background: var(--white); color: var(--black); border-color: var(--white); transform: translateY(-2px); }
+    .footer-container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 0; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+    .footer-brand-col { display: flex; flex-direction: column; gap: 1rem; }
+    .footer-brand img { height: 32px; filter: brightness(0) invert(1); }
+    .footer-tagline { opacity: 0.7; line-height: 1.6; font-size: 0.95rem; }
+    .footer-ein { opacity: 0.4; font-size: 0.8rem; }
+    .footer-social { display: flex; gap: 0.75rem; margin-top: 0.25rem; }
+    .footer-social a { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); color: var(--white); text-decoration: none; transition: all 0.2s ease; font-size: 0.85rem; }
+    .footer-social a:hover { background: var(--orange); transform: translateY(-2px); }
+    .footer-social a svg { width: 16px; height: 16px; fill: currentColor; }
+    .footer-section h4 { font-size: 0.75rem; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.25rem; color: var(--orange); opacity: 0.8; }
+    .footer-section a { display: block; color: var(--white); text-decoration: none; margin-bottom: 0.65rem; transition: all 0.2s ease; font-size: 0.95rem; opacity: 0.8; }
+    .footer-section a:hover { color: var(--orange); opacity: 1; transform: translateX(4px); }
+    .footer-squiggle { display: block; margin: 0 auto 0; width: 80px; height: 8px; opacity: 0.2; }
+    .footer-bottom { max-width: var(--max-width); margin: 0 auto; padding: 2rem 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; justify-content: space-between; align-items: center; opacity: 0.5; font-size: 0.85rem; }
+    .footer-bottom a { color: rgba(255, 255, 255, 0.7); text-decoration: none; transition: color 0.2s ease; margin: 0 0.75rem; }
+    .footer-bottom a:hover { color: var(--orange); }
+
+    /* ============================================
+       UTILITY: copied toast
+       ============================================ */
     .copied-toast {
       position: fixed;
       bottom: 30px;
       left: 50%;
-      transform: translateX(-50%) translateY(100px);
+      transform: translateX(-50%) translateY(120px);
       background: var(--black);
       color: var(--white);
-      padding: 0.85rem 1.5rem;
-      border-radius: 999px;
+      padding: 0.95rem 1.6rem;
+      border: 2px solid var(--orange);
+      border-radius: 4px;
       font-weight: 700;
       font-size: 0.9rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
       opacity: 0;
-      transition: all 0.3s ease;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 2000;
       pointer-events: none;
     }
     .copied-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    .countdown {
-      margin-top: 1.25rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid rgba(255,255,255,0.12);
-      font-size: 0.85rem;
-      opacity: 0.75;
-    }
-    .countdown strong { color: var(--orange); font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; }
-
-    /* ── Already-played gate ──────── */
-    .already-played {
-      display: none;
-      text-align: center;
-      padding: 2rem 1.5rem;
-    }
-    .already-played.visible { display: block; }
-    .already-played-icon { font-size: 3rem; margin-bottom: 0.5rem; }
-    .already-played h2 {
-      font-family: var(--font-display);
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-    .already-played p { color: var(--gray); margin-bottom: 1rem; }
-
-    /* ── Below the fold ───────────── */
-    .below {
-      max-width: var(--max-width);
-      margin: 4rem auto 0;
-      padding: 0 1.25rem;
-    }
-    .below h2 {
-      font-family: var(--font-display);
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      font-weight: 700;
-      text-align: center;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
-    }
-    .below > p { text-align: center; color: var(--gray); margin-bottom: 2rem; max-width: 50ch; margin-left: auto; margin-right: auto; }
-
-    .feature-row { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
-    @media (min-width: 720px) { .feature-row { grid-template-columns: repeat(3, 1fr); } }
-
-    .feature {
-      background: var(--white);
-      border: 1.5px solid rgba(26,26,26,0.08);
-      border-radius: 14px;
-      padding: 1.35rem 1.25rem;
-      transition: all 0.2s ease;
-    }
-    .feature:hover { border-color: var(--orange); transform: translateY(-3px); box-shadow: 0 8px 20px rgba(26,26,26,0.08); }
-    .feature-icon { font-size: 1.5rem; margin-bottom: 0.5rem; display: block; }
-    .feature h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.3rem; }
-    .feature p { font-size: 0.92rem; color: var(--gray); line-height: 1.5; }
-
-    .final-cta {
-      background: var(--black);
-      color: var(--white);
-      border-radius: 16px;
-      padding: 2rem 1.5rem;
-      text-align: center;
-      margin-top: 1.5rem;
-    }
-    .final-cta h3 {
-      font-family: var(--font-display);
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-      line-height: 1.2;
-    }
-    .final-cta p { opacity: 0.75; font-size: 0.95rem; margin-bottom: 1.25rem; }
-    .final-cta a { color: var(--orange); font-weight: 700; text-decoration: none; border-bottom: 2px solid transparent; transition: border-color 0.2s; }
-    .final-cta a:hover { border-bottom-color: var(--orange); }
-
-    .cta-btns { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; }
-    .cta-btns .btn { min-width: 0; padding: 0.75rem 1.25rem; font-size: 0.9rem; }
-
-    /* ── Confetti ─────────────────── */
+    /* Confetti */
     .confetti-piece {
       position: fixed;
-      width: 10px;
-      height: 14px;
+      width: 10px; height: 14px;
       top: -20px;
       z-index: 999;
       pointer-events: none;
       will-change: transform, opacity;
+    }
+    @keyframes confettiFall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 968px) {
+      :root { font-size: 16px; }
+      .hero-billboard { padding: 7rem 1.5rem 2.5rem; }
+      .hb-bottom { grid-template-columns: 1fr; gap: 2rem; }
+      .hb-stats { gap: 1.75rem; flex-wrap: wrap; }
+      .puzzle-section { padding: 4rem 1.25rem 5rem; }
+      .reveal-section, .result-section { padding: 5rem 1.25rem; }
+      .why-section { padding: 5rem 1.25rem; }
+      .final-cta-section { padding: 6rem 1.25rem; }
+      .footer-container { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-brand-col { grid-column: 1 / -1; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+
+    @media (max-width: 600px) {
+      .puzzle-meta-row { flex-direction: column; align-items: flex-start; gap: 0.85rem; }
+      .choice { padding: 1.25rem 1.1rem; font-size: 1rem; }
+      .choice-letter { width: 32px; height: 32px; font-size: 0.9rem; }
+      .truth-card { padding: 2rem 1.5rem; }
+      .reveal-card { padding: 1.75rem 1.5rem; }
+      .footer-container { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -684,119 +1145,203 @@
     </div>
   </div>
 
-  <main class="page">
-    <header class="hero">
-      <span class="eyebrow"><span class="pulse"></span> New puzzle every day</span>
-      <h1><span class="mango-emoji">🥭</span> Money Mango <em>Daily</em></h1>
-      <p>One real money decision. Three choices. 60 seconds. See the math. Learn the truth.</p>
-    </header>
-
-    <div class="puzzle-meta">
-      <div class="puzzle-meta-left">
-        <span class="puzzle-number" id="puzzleNumber">#001</span>
-        <span class="puzzle-date" id="puzzleDate">Today</span>
+  <!-- ============================================
+       HERO BILLBOARD (matches index.html aesthetic)
+       ============================================ -->
+  <section class="hero-billboard">
+    <div class="hero-bg"></div>
+    <div class="hero-container">
+      <div class="hero-top">
+        <span class="hb-eyebrow" id="heroEyebrow">PUZZLE #001 &middot; <span id="heroDateLabel">Today</span></span>
+        <span class="hb-status"><span class="hb-pulse"></span> New puzzle daily</span>
       </div>
-      <div class="streak-badge" id="streakBadge" title="Your current streak">🔥 <span id="streakValue">0</span></div>
-    </div>
 
-    <!-- Puzzle card -->
-    <section class="card" id="puzzleCard" aria-live="polite">
-      <span class="category-tag" id="categoryTag">Loading…</span>
-      <p class="scenario" id="scenario">Loading today's puzzle…</p>
-      <p class="question" id="question">What do you do?</p>
-      <div class="choices" id="choices"></div>
-    </section>
+      <div class="hb-main">
+        <h1>
+          <span class="mango-emoji" aria-hidden="true">🥭</span>Money Mango <em>Daily.</em>
+        </h1>
+      </div>
 
-    <!-- Reveal card -->
-    <section class="card reveal" id="revealCard" aria-live="polite">
-      <div class="verdict-header" id="verdictHeader">
-        <div class="verdict-emoji" id="verdictEmoji">🟢</div>
-        <div>
-          <div class="verdict-label" id="verdictLabel">Verdict</div>
-          <div class="verdict-title" id="verdictTitle">—</div>
+      <div class="hb-bottom">
+        <p class="hb-sub">
+          One real money decision. Three choices. <strong>60 seconds.</strong> See the math. Learn the truth. Come back tomorrow.
+        </p>
+        <div class="hb-stats">
+          <div class="hb-stat">
+            <div class="hb-stat-num" id="heroStreak">0</div>
+            <div class="hb-stat-label">Streak 🔥</div>
+          </div>
+          <div class="hb-stat">
+            <div class="hb-stat-num" id="heroBest">0</div>
+            <div class="hb-stat-label">Best</div>
+          </div>
+          <div class="hb-stat">
+            <div class="hb-stat-num" id="heroPlayed">0</div>
+            <div class="hb-stat-label">Played</div>
+          </div>
         </div>
-      </div>
-
-      <div class="reveal-section">
-        <h3>The math</h3>
-        <div class="math" id="mathBlock">—</div>
-      </div>
-
-      <div class="reveal-section">
-        <p class="truth" id="truthBlock">—</p>
-      </div>
-
-      <div class="reveal-section" style="margin-bottom:0;">
-        <a class="learn-more" id="learnMoreLink" href="#">Dive deeper →</a>
-      </div>
-    </section>
-
-    <!-- Result / share card -->
-    <section class="result-card" id="resultCard">
-      <h2 style="font-family:var(--font-display); font-size:1.5rem; font-weight:700; line-height:1.2;">
-        Locked in. <span id="resultCheer">Nice play.</span>
-      </h2>
-
-      <div class="result-stats">
-        <div class="stat">
-          <div class="stat-value" id="statStreak">0</div>
-          <div class="stat-label">Streak 🔥</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" id="statBest">0</div>
-          <div class="stat-label">Best</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" id="statPlayed">0</div>
-          <div class="stat-label">Played</div>
-        </div>
-      </div>
-
-      <div class="share-row">
-        <button class="btn" id="shareBtn">Share my result</button>
-        <a class="btn btn-ghost" href="education.html">Want more? Try a lesson →</a>
-      </div>
-
-      <div class="countdown">
-        Next Money Mango in <strong id="countdown">--:--:--</strong>
-      </div>
-    </section>
-  </main>
-
-  <!-- Below the fold -->
-  <section class="below">
-    <h2>Why a daily puzzle?</h2>
-    <p>Because real financial health isn't built in a workshop. It's built in 60-second decisions, made over and over, until the math becomes second nature.</p>
-
-    <div class="feature-row">
-      <div class="feature">
-        <span class="feature-icon">🧠</span>
-        <h3>One decision, daily</h3>
-        <p>A real money moment a real person actually faces. No fluff, no jargon.</p>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">📊</span>
-        <h3>See the math</h3>
-        <p>Every reveal shows you the underlying numbers — so the lesson sticks.</p>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">🔥</span>
-        <h3>Build a streak</h3>
-        <p>Come back tomorrow. And the day after. Compound your knowledge like interest.</p>
-      </div>
-    </div>
-
-    <div class="final-cta">
-      <h3>Money decisions shouldn't be a privilege.</h3>
-      <p>FinMango is a 501(c)(3) building economic mobility infrastructure for young adults.<br>This game is free and ad-free because of donors who believe financial health is a right.</p>
-      <div class="cta-btns">
-        <a class="btn" href="donate.html">Donate</a>
-        <a class="btn btn-ghost" href="ambassadors.html" style="border:1.5px solid rgba(255,255,255,0.35); color: var(--white);">Become an Ambassador</a>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ============================================
+       PUZZLE SECTION (white)
+       ============================================ -->
+  <section class="puzzle-section">
+    <div class="puzzle-container">
+      <div class="puzzle-meta-row">
+        <div class="puzzle-meta-left">
+          <span class="puzzle-number-pill" id="puzzleNumberPill">#001</span>
+          <span class="puzzle-date" id="puzzleDateLabel">— Today</span>
+          <span class="puzzle-category" id="puzzleCategoryLabel">Loading…</span>
+        </div>
+        <div class="streak-badge" title="Your current streak">
+          <span class="streak-flame">🔥</span> <span id="streakBadgeValue">0</span>-day streak
+        </div>
+      </div>
+
+      <p class="question">The scenario</p>
+      <h2 class="scenario" id="scenario">Loading today's puzzle…</h2>
+
+      <p class="question" id="questionLabel">What do you do?</p>
+      <div class="choices" id="choices"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       REVEAL SECTION (warm-white)
+       ============================================ -->
+  <section class="reveal-section" id="revealSection" aria-live="polite">
+    <div class="reveal-container">
+      <div class="verdict-eyebrow-row">
+        <span class="section-eyebrow" style="margin-bottom:0;">Verdict</span>
+        <span class="verdict-tag" id="verdictTag">
+          <span class="verdict-tag-dot"></span>
+          <span id="verdictTagLabel">Optimal</span>
+        </span>
+      </div>
+
+      <h2 class="verdict-headline" id="verdictHeadline">Optimal play. <em>The math agrees.</em></h2>
+
+      <div class="reveal-grid">
+        <div class="reveal-card">
+          <div class="reveal-card-eyebrow">What happens</div>
+          <p id="choiceResultText">—</p>
+        </div>
+        <div class="reveal-card">
+          <div class="reveal-card-eyebrow">The math</div>
+          <div class="math" id="mathBlock">—</div>
+        </div>
+      </div>
+
+      <div class="truth-card">
+        <div class="truth-label">The truth</div>
+        <p class="truth-text" id="truthBlock">—</p>
+      </div>
+
+      <div class="learn-more-row">
+        <a class="learn-more" id="learnMoreLink" href="#">Dive deeper →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       RESULT / SHARE SECTION (black, like .impact)
+       ============================================ -->
+  <section class="result-section" id="resultSection">
+    <div class="result-container">
+      <div class="result-eyebrow">Locked in</div>
+      <h2 class="result-headline">Come back <em>tomorrow</em>.<br>Compound the habit.</h2>
+
+      <div class="result-stats">
+        <div>
+          <div class="result-stat-num" id="resultStreak">0</div>
+          <div class="result-stat-label">Current streak</div>
+        </div>
+        <div>
+          <div class="result-stat-num" id="resultBest">0</div>
+          <div class="result-stat-label">Best streak</div>
+        </div>
+        <div>
+          <div class="result-stat-num" id="resultPlayed">0</div>
+          <div class="result-stat-label">Puzzles played</div>
+        </div>
+      </div>
+
+      <div class="result-share-row">
+        <button class="btn-primary" id="shareBtn">
+          Share my result
+          <span aria-hidden="true">→</span>
+        </button>
+        <a class="btn-secondary" href="education.html">
+          Try a lesson
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+
+      <div class="countdown-row">
+        Next Money Mango in <strong id="countdown">--:--:--</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       WHY DAILY (white, solution-card style)
+       ============================================ -->
+  <section class="why-section">
+    <div class="why-container">
+      <div class="why-header">
+        <span class="section-eyebrow">Why a puzzle a day?</span>
+        <h2 class="section-h2">Real financial health is built in <em>60-second decisions</em>.</h2>
+        <p>Not in workshops. Not in three-hour budgeting sessions. In the small, repeated moments — until the math becomes second nature.</p>
+      </div>
+
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-card-num">01 / Daily</div>
+          <h3 class="why-card-title">One real decision <em>a day.</em></h3>
+          <p class="why-card-text">A real money moment a real person actually faces. No jargon, no fluff, no signup. Just one sharp question and three honest choices.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-num">02 / Honest</div>
+          <h3 class="why-card-title">See the <em>math.</em></h3>
+          <p class="why-card-text">Every reveal shows the actual numbers behind the right move. So the lesson sticks — even when the puzzle doesn't.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-num">03 / Sticky</div>
+          <h3 class="why-card-title">Build a <em>streak.</em></h3>
+          <p class="why-card-text">Show up tomorrow. And the day after. Compound your money knowledge the same way compound interest works — boring, daily, unstoppable.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       FINAL CTA (warm-white, mirrors index.html .cta)
+       ============================================ -->
+  <section class="final-cta-section">
+    <div class="final-cta-container">
+      <div class="final-cta-eyebrow">Mission</div>
+      <h2 class="final-cta-h2">Money decisions shouldn't be a <em>privilege.</em></h2>
+      <p class="final-cta-sub">
+        Money Mango Daily is free and ad-free because FinMango is a 501(c)(3) building economic mobility infrastructure for young adults. Donors keep it that way.
+      </p>
+      <div class="cta-btns">
+        <a class="btn-solid-black" href="donate.html">
+          Donate
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="btn-ghost-dark" href="ambassadors.html">
+          Become an Ambassador
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       FOOTER (identical to index.html)
+       ============================================ -->
   <footer>
     <div class="footer-newsletter">
       <div class="footer-newsletter-container">
@@ -882,9 +1427,6 @@
     // ============================================================
     // MONEY MANGO DAILY
     // ============================================================
-    // A new puzzle every local-calendar day. Verdicts: optimal,
-    // decent, risky. Streak persists in localStorage.
-    // ============================================================
 
     const PUZZLES = [
       {
@@ -931,7 +1473,7 @@
       },
       {
         category: "Debt",
-        scenario: "You have <strong>two debts</strong>:<br>• $8,000 student loan at 5% APR<br>• $3,000 credit card at 22% APR<br><br>You have $400/month extra to throw at debt.",
+        scenario: "You have <strong>two debts</strong>: an $8,000 student loan at 5% APR and a $3,000 credit card at 22% APR. You have $400/month extra to throw at debt.",
         question: "Where does it go first?",
         choices: [
           { text: "Split it 50/50 across both.", verdict: "decent", result: "You make progress, but you're paying way more total interest by dragging out the 22% card." },
@@ -987,7 +1529,7 @@
       },
       {
         category: "Big Purchases",
-        scenario: "You need a car. You're choosing between:<br>• A <strong>new car</strong> with $0 down, $480/mo for 72 months<br>• A 3-year-old version of the same car for $18,000 cash<br><br>You have $20,000 saved.",
+        scenario: "You need a car. You're choosing between a <strong>new car</strong> at $480/mo for 72 months and a 3-year-old version of the same car for $18,000 cash. You have $20,000 saved.",
         question: "What do you choose?",
         choices: [
           { text: "The new car — the warranty is worth it.", verdict: "risky", result: "You pay $34,560 over 6 years for a car that loses 50%+ of its value in the first 5. The warranty isn't worth the depreciation hit." },
@@ -1001,7 +1543,7 @@
       },
       {
         category: "Housing",
-        scenario: "Rent vs. buy: a $1,800/mo apartment vs. a $310,000 starter home (about $2,200/mo all-in: mortgage, taxes, insurance, repairs). You have $25k saved.",
+        scenario: "Rent vs. buy: an <strong>$1,800/mo</strong> apartment vs. a <strong>$310,000</strong> starter home (about $2,200/mo all-in). You have $25k saved.",
         question: "Which makes more sense — if you only plan to stay 2 years?",
         choices: [
           { text: "Buy — building equity is always better than renting.", verdict: "risky", result: "Closing costs + selling costs typically run 8-10% of the home price. On a 2-year horizon, you'd almost certainly lose money buying." },
@@ -1029,8 +1571,8 @@
       },
       {
         category: "Retirement",
-        scenario: "Two friends start saving for retirement:<br>• <strong>Anna</strong> saves $200/mo from age 25-35, then stops.<br>• <strong>Ben</strong> saves $200/mo from age 35-65.<br><br>Both earn 7%/yr. Who has more at 65?",
-        question: "Who wins?",
+        scenario: "Two friends save for retirement. <strong>Anna</strong> saves $200/mo from age 25-35, then stops. <strong>Ben</strong> saves $200/mo from age 35-65. Both earn 7%/yr.",
+        question: "Who has more at 65?",
         choices: [
           { text: "Ben. He saved 3x as much money.", verdict: "risky", result: "Ben put in $72,000 over 30 years. He ends with ~$240,000. Sounds good — until you see Anna's number." },
           { text: "Anna. She started earlier.", verdict: "optimal", result: "Anna only put in $24,000 — but she ends with ~$260,000. Starting 10 years earlier beats saving 3x more for 30 years." },
@@ -1113,7 +1655,7 @@
       },
       {
         category: "Education",
-        scenario: "You're admitted to two schools:<br>• <strong>State school</strong>: $12k/yr after aid<br>• <strong>Private school</strong>: $38k/yr after aid<br><br>Both teach your major. The private has a 'name.'",
+        scenario: "You're admitted to two schools: a <strong>state school</strong> at $12k/yr after aid, and a <strong>private school</strong> at $38k/yr after aid. Both teach your major.",
         question: "What's the smart move?",
         choices: [
           { text: "Private — the network is worth it.", verdict: "risky", result: "Outside the top 10-20 schools nationally, 'name' rarely justifies $100k+ extra debt. Your work history matters more after job #1." },
@@ -1225,7 +1767,7 @@
       },
       {
         category: "Emergency",
-        scenario: "Your car breaks down. Repair: <strong>$1,200</strong>. You have:<br>• $800 in emergency savings<br>• A 0% credit card promo for 12 months<br>• A 401(k) loan option",
+        scenario: "Your car breaks down. Repair: <strong>$1,200</strong>. You have $800 in emergency savings, a 0% credit card promo for 12 months, and a 401(k) loan option.",
         question: "What do you do?",
         choices: [
           { text: "Borrow from your 401(k).", verdict: "risky", result: "If you leave the job, the loan often becomes due. Miss the deadline → it counts as a withdrawal, with penalties + tax. Last resort only." },
@@ -1313,14 +1855,13 @@
     // STATE
     // ============================================================
     const LS_KEY = 'finmango.moneyMangoDaily.v1';
-    const EPOCH = new Date(2026, 0, 1); // local time, Jan 1, 2026
+    const EPOCH = new Date(2026, 0, 1);
 
     function loadState() {
       try {
         const raw = localStorage.getItem(LS_KEY);
         if (!raw) return defaultState();
-        const s = JSON.parse(raw);
-        return { ...defaultState(), ...s };
+        return { ...defaultState(), ...JSON.parse(raw) };
       } catch { return defaultState(); }
     }
     function defaultState() {
@@ -1329,20 +1870,13 @@
     function saveState(s) {
       try { localStorage.setItem(LS_KEY, JSON.stringify(s)); } catch {}
     }
-
     function todayKey() {
       const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${y}-${m}-${day}`;
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     }
     function yesterdayKey() {
       const d = new Date(); d.setDate(d.getDate() - 1);
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${y}-${m}-${day}`;
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     }
     function dayIndex() {
       const today = new Date();
@@ -1360,27 +1894,33 @@
       return new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
     }
 
-    // ============================================================
-    // RENDER
-    // ============================================================
     const state = loadState();
     const idx = dayIndex();
     const puzzle = PUZZLES[idx];
     const pNum = puzzleNumber();
     const tKey = todayKey();
+    const pNumStr = '#' + String(pNum).padStart(3, '0');
 
-    document.getElementById('puzzleNumber').textContent = '#' + String(pNum).padStart(3, '0');
-    document.getElementById('puzzleDate').textContent = formatDate();
-    refreshStreakBadge();
+    // ============================================================
+    // RENDER STATIC METADATA
+    // ============================================================
+    document.getElementById('puzzleNumberPill').textContent = pNumStr;
+    document.getElementById('heroEyebrow').firstChild.textContent = `PUZZLE ${pNumStr} · `;
+    document.getElementById('heroDateLabel').textContent = formatDate();
+    document.getElementById('puzzleDateLabel').textContent = '— ' + formatDate();
+    refreshStreakBadges();
 
-    function refreshStreakBadge() {
-      document.getElementById('streakValue').textContent = state.streak;
+    function refreshStreakBadges() {
+      document.getElementById('streakBadgeValue').textContent = state.streak;
+      document.getElementById('heroStreak').textContent = state.streak;
+      document.getElementById('heroBest').textContent = state.bestStreak;
+      document.getElementById('heroPlayed').textContent = state.totalPlayed;
     }
 
     function renderPuzzle() {
-      document.getElementById('categoryTag').textContent = puzzle.category;
+      document.getElementById('puzzleCategoryLabel').textContent = puzzle.category;
       document.getElementById('scenario').innerHTML = puzzle.scenario;
-      document.getElementById('question').textContent = puzzle.question;
+      document.getElementById('questionLabel').textContent = puzzle.question;
 
       const wrap = document.getElementById('choices');
       wrap.innerHTML = '';
@@ -1395,24 +1935,20 @@
     }
 
     function answer(choiceIdx) {
-      // Disable choices, mark selected
       const buttons = document.querySelectorAll('.choice');
       buttons.forEach((b, i) => {
         b.disabled = true;
         const v = puzzle.choices[i].verdict;
         b.classList.add('is-' + v);
         if (i === choiceIdx) b.classList.add('is-selected');
+        else b.classList.add('is-not-selected');
       });
 
       const chosen = puzzle.choices[choiceIdx];
-      // Streak logic
       const wasPlayedToday = state.lastPlayed === tKey;
       if (!wasPlayedToday) {
-        if (state.lastPlayed === yesterdayKey()) {
-          state.streak = (state.streak || 0) + 1;
-        } else {
-          state.streak = 1;
-        }
+        if (state.lastPlayed === yesterdayKey()) state.streak = (state.streak || 0) + 1;
+        else state.streak = 1;
         state.lastPlayed = tKey;
         state.totalPlayed = (state.totalPlayed || 0) + 1;
         state.bestStreak = Math.max(state.bestStreak || 0, state.streak);
@@ -1420,96 +1956,62 @@
         saveState(state);
       }
 
-      // Reveal
-      const verdict = chosen.verdict;
-      const header = document.getElementById('verdictHeader');
-      header.classList.remove('optimal', 'decent', 'risky');
-      header.classList.add(verdict);
-      const verdictMap = {
-        optimal: { emoji: '🟢', label: 'Verdict', title: 'Optimal play. The math agrees.' },
-        decent:  { emoji: '🟡', label: 'Verdict', title: 'Not bad — but there’s a better move.' },
-        risky:   { emoji: '🔴', label: 'Verdict', title: 'This one bites you later.' }
-      };
-      document.getElementById('verdictEmoji').textContent = verdictMap[verdict].emoji;
-      document.getElementById('verdictLabel').textContent = verdictMap[verdict].label;
-      document.getElementById('verdictTitle').textContent = verdictMap[verdict].title;
+      paintReveal(chosen.verdict, chosen.result);
+      refreshStreakBadges();
 
-      document.getElementById('mathBlock').textContent = puzzle.math;
-      document.getElementById('truthBlock').textContent = puzzle.truth;
-      const link = document.getElementById('learnMoreLink');
-      link.href = puzzle.learnUrl;
-      link.textContent = puzzle.learnLabel || 'Learn more →';
+      if (chosen.verdict === 'optimal') confettiBurst();
 
-      document.getElementById('revealCard').classList.add('visible');
-
-      // Result card
-      document.getElementById('statStreak').textContent = state.streak;
-      document.getElementById('statBest').textContent = state.bestStreak;
-      document.getElementById('statPlayed').textContent = state.totalPlayed;
-
-      const cheers = {
-        optimal: 'Nailed it. 🎯',
-        decent:  'Solid play.',
-        risky:   'Now you know.'
-      };
-      document.getElementById('resultCheer').textContent = cheers[verdict];
-
-      document.getElementById('resultCard').classList.add('visible');
-      refreshStreakBadge();
-
-      if (verdict === 'optimal') confettiBurst();
-
-      // Smooth scroll to reveal
       setTimeout(() => {
-        document.getElementById('revealCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 200);
+        document.getElementById('revealSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 220);
 
-      // Analytics
       try {
         gtag('event', 'money_mango_answer', {
-          puzzle_number: pNum,
-          verdict: verdict,
-          choice_index: choiceIdx,
-          streak: state.streak
+          puzzle_number: pNum, verdict: chosen.verdict, choice_index: choiceIdx, streak: state.streak
         });
       } catch {}
     }
 
-    // Restore prior answer if already played today
+    function paintReveal(verdict, resultText) {
+      const tagEl = document.getElementById('verdictTag');
+      tagEl.classList.remove('optimal', 'decent', 'risky');
+      tagEl.classList.add(verdict);
+
+      const verdictMap = {
+        optimal: { label: 'Optimal', headline: 'Optimal play. <em>The math agrees.</em>' },
+        decent:  { label: 'Decent',  headline: 'Not bad — <em>but there\'s a sharper move.</em>' },
+        risky:   { label: 'Risky',   headline: 'This one <em>bites you later.</em>' }
+      };
+      document.getElementById('verdictTagLabel').textContent = verdictMap[verdict].label;
+      document.getElementById('verdictHeadline').innerHTML = verdictMap[verdict].headline;
+
+      document.getElementById('choiceResultText').textContent = resultText;
+      document.getElementById('mathBlock').textContent = puzzle.math;
+      document.getElementById('truthBlock').textContent = puzzle.truth;
+
+      const link = document.getElementById('learnMoreLink');
+      link.href = puzzle.learnUrl;
+      link.textContent = (puzzle.learnLabel || 'Learn more') + ' →';
+
+      document.getElementById('revealSection').classList.add('visible');
+      document.getElementById('resultStreak').textContent = state.streak;
+      document.getElementById('resultBest').textContent = state.bestStreak;
+      document.getElementById('resultPlayed').textContent = state.totalPlayed;
+      document.getElementById('resultSection').classList.add('visible');
+    }
+
     function maybeRestore() {
       const h = state.history && state.history[tKey];
       if (h && h.puzzleNumber === pNum) {
-        // Replay reveal silently
         const buttons = document.querySelectorAll('.choice');
         buttons.forEach((b, i) => {
           b.disabled = true;
           const v = puzzle.choices[i].verdict;
           b.classList.add('is-' + v);
           if (i === h.choice) b.classList.add('is-selected');
+          else b.classList.add('is-not-selected');
         });
-
-        const verdict = h.verdict;
-        const header = document.getElementById('verdictHeader');
-        header.classList.add(verdict);
-        const verdictMap = {
-          optimal: { emoji: '🟢', title: 'Optimal play. The math agrees.' },
-          decent:  { emoji: '🟡', title: 'Not bad — but there’s a better move.' },
-          risky:   { emoji: '🔴', title: 'This one bites you later.' }
-        };
-        document.getElementById('verdictEmoji').textContent = verdictMap[verdict].emoji;
-        document.getElementById('verdictTitle').textContent = verdictMap[verdict].title;
-        document.getElementById('mathBlock').textContent = puzzle.math;
-        document.getElementById('truthBlock').textContent = puzzle.truth;
-        const link = document.getElementById('learnMoreLink');
-        link.href = puzzle.learnUrl;
-        link.textContent = puzzle.learnLabel || 'Learn more →';
-
-        document.getElementById('revealCard').classList.add('visible');
-        document.getElementById('statStreak').textContent = state.streak;
-        document.getElementById('statBest').textContent = state.bestStreak;
-        document.getElementById('statPlayed').textContent = state.totalPlayed;
-        document.getElementById('resultCheer').textContent = 'You’ve already played today.';
-        document.getElementById('resultCard').classList.add('visible');
+        paintReveal(h.verdict, puzzle.choices[h.choice].result);
         return true;
       }
       return false;
@@ -1524,39 +2026,29 @@
       const emoji = verdict === 'optimal' ? '🟢' : verdict === 'decent' ? '🟡' : '🔴';
       const tier = verdict === 'optimal' ? 'Optimal play' : verdict === 'decent' ? 'Decent play' : 'Tough lesson';
       const streakLine = state.streak > 1 ? `🔥 Streak: ${state.streak} days` : '';
-      const lines = [
-        `🥭 Money Mango #${String(pNum).padStart(3, '0')}`,
+      return [
+        `🥭 Money Mango ${pNumStr}`,
         `${emoji} ${tier}`,
         streakLine,
         'finmango.org/money-mango-daily'
-      ].filter(Boolean);
-      return lines.join('\n');
+      ].filter(Boolean).join('\n');
     }
-
     function shareResult() {
       const text = buildShareText();
       if (navigator.share) {
         navigator.share({ title: 'Money Mango Daily', text }).catch(() => copyToClipboard(text));
-      } else {
-        copyToClipboard(text);
-      }
+      } else { copyToClipboard(text); }
       try { gtag('event', 'money_mango_share', { puzzle_number: pNum }); } catch {}
     }
-
     function copyToClipboard(text) {
       if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(showCopiedToast).catch(() => fallbackCopy(text));
-      } else {
-        fallbackCopy(text);
-      }
+      } else { fallbackCopy(text); }
     }
     function fallbackCopy(text) {
       const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
-      ta.select();
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
       try { document.execCommand('copy'); showCopiedToast(); } catch {}
       document.body.removeChild(ta);
     }
@@ -1565,7 +2057,6 @@
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 1800);
     }
-
     document.getElementById('shareBtn').addEventListener('click', shareResult);
 
     // ============================================================
@@ -1587,23 +2078,19 @@
     // CONFETTI
     // ============================================================
     function confettiBurst() {
-      const colors = ['#FF6B35', '#E55A2B', '#FFD166', '#16a34a', '#1a1a1a'];
+      const colors = ['#FF6B35', '#E55A2B', '#FFD166', '#10B981', '#1a1a1a'];
       for (let i = 0; i < 40; i++) {
         const piece = document.createElement('div');
         piece.className = 'confetti-piece';
         piece.style.left = Math.random() * 100 + 'vw';
         piece.style.background = colors[Math.floor(Math.random() * colors.length)];
         piece.style.transform = `rotate(${Math.random() * 360}deg)`;
-        piece.style.animation = `fall ${2 + Math.random() * 1.5}s cubic-bezier(.25,.46,.45,.94) forwards`;
+        piece.style.animation = `confettiFall ${2 + Math.random() * 1.5}s cubic-bezier(.25,.46,.45,.94) forwards`;
         piece.style.animationDelay = (Math.random() * 0.3) + 's';
         document.body.appendChild(piece);
         setTimeout(() => piece.remove(), 4000);
       }
     }
-    // Inject keyframes
-    const fallStyle = document.createElement('style');
-    fallStyle.textContent = `@keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }`;
-    document.head.appendChild(fallStyle);
 
     // ============================================================
     // INIT
