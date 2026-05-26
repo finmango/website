@@ -1637,11 +1637,44 @@
       margin-left: 0.2rem;
     }
     .mango-daily-link:hover .mango-daily-link-arrow { transform: translateX(3px); }
+    /* Short-text variant of the link is hidden by default; shown on narrow phones */
+    .mango-daily-link-text-short { display: none; }
+
     @media (max-width: 640px) {
-      .mango-daily-strip { padding: 0.85rem 1rem; }
-      .mango-daily-inner { flex-direction: column; gap: 0.45rem; text-align: center; }
-      .mango-daily-title { font-size: 0.9rem; }
-      .mango-daily-eyebrow { font-size: 0.62rem; letter-spacing: 0.16em; }
+      .mango-daily-strip { padding: 0.6rem 0.85rem; }
+      .mango-daily-inner {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 0.65rem;
+        justify-content: flex-start;
+      }
+      /* Hide eyebrow text but keep the pulse dot as a small "live" indicator */
+      .mango-daily-eyebrow { gap: 0; flex-shrink: 0; }
+      .mango-daily-eyebrow-text { display: none; }
+      /* Hide the long tagline */
+      .mango-daily-tagline { display: none; }
+      .mango-daily-title {
+        font-size: 0.88rem;
+        line-height: 1.3;
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .mango-daily-title strong { font-size: 0.9rem; }
+      .mango-daily-link {
+        font-size: 0.82rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding-bottom: 1px;
+      }
+    }
+    @media (max-width: 380px) {
+      .mango-daily-strip { padding: 0.55rem 0.7rem; }
+      .mango-daily-link-text-long { display: none; }
+      .mango-daily-link-text-short { display: inline; }
+      .mango-daily-title { font-size: 0.84rem; }
+      .mango-daily-title strong { font-size: 0.86rem; }
     }
 
     .section-divider { padding: 0; display: flex; justify-content: center; overflow: hidden; }
@@ -2083,13 +2116,13 @@
   <!-- Money Mango Daily promo -->
   <section class="mango-daily-strip" aria-label="Money Mango Daily">
     <div class="mango-daily-inner">
-      <span class="mango-daily-eyebrow"><span class="mango-daily-pulse"></span> New every day</span>
+      <span class="mango-daily-eyebrow"><span class="mango-daily-pulse"></span> <span class="mango-daily-eyebrow-text">New every day</span></span>
       <span class="mango-daily-title">
         <span class="mango-emoji-spin" aria-hidden="true">🥭</span>
-        <strong>Money Mango Daily</strong> &mdash; one event, six aftershocks. Trace the cascade.
+        <strong>Money Mango Daily</strong><span class="mango-daily-tagline"> &mdash; one event, six aftershocks. Trace the cascade.</span>
       </span>
       <a href="money-mango-daily.html" class="mango-daily-link">
-        Play today's puzzle<span class="mango-daily-link-arrow">→</span>
+        <span class="mango-daily-link-text-long">Play today's puzzle</span><span class="mango-daily-link-text-short">Play</span><span class="mango-daily-link-arrow">→</span>
       </a>
     </div>
   </section>
