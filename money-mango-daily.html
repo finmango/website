@@ -47,34 +47,45 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --black: #1a1a1a;
+      /* Apple/Google-flavored neutral palette */
+      --black: #1d1d1f;             /* Apple's near-black for text */
+      --text-secondary: #6e6e73;    /* Apple's muted gray */
+      --text-tertiary: #86868b;
       --white: #ffffff;
+      --page-bg: #f5f5f7;           /* Apple page gray */
+      --card-bg: #ffffff;
+      --hairline: rgba(0, 0, 0, 0.08);
+      --hairline-strong: rgba(0, 0, 0, 0.12);
+      --trigger-bg: #fbf6ef;
       --orange: #FF6B35;
       --orange-dark: #E55A2B;
       --orange-soft: #FF8C61;
-      --orange-light: rgba(255, 107, 53, 0.1);
-      --gray: #5a574f;
-      --gray-medium: #666666;
-      --gray-soft: #efe9df;
-      --light-gray: #f5f5f5;
-      --warm-white: #f9f5f0;
+      --orange-light: rgba(255, 107, 53, 0.08);
+      --gray: #6e6e73;
+      --gray-medium: #86868b;
+      --light-gray: #f5f5f7;
+      --warm-white: #fbf6ef;
       --success: #16a34a;
-      --success-soft: #d1fae5;
+      --success-soft: #ecfdf5;
       --danger: #dc2626;
       --max-width: 1200px;
       --hero-max-width: 1400px;
-      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --card-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 24px rgba(0,0,0,0.04);
+      --card-radius: 18px;
+      --row-radius: 12px;
+      --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'DM Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
     html { scroll-behavior: smooth; }
     body {
       font-family: var(--font-body);
-      background: var(--white);
+      background: var(--page-bg);
       color: var(--black);
-      line-height: 1.5;
-      font-size: 18px;
+      line-height: 1.55;
+      font-size: 17px;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.011em;
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
@@ -84,82 +95,79 @@
       }
     }
 
-    /* Hero billboard */
+    /* Hero — minimal Apple-style header */
     .hero-billboard {
-      background: #FAFAF7; color: #0A0A0A;
-      padding: 8.5rem 2.5rem 3rem;
-      display: flex; align-items: center; overflow: hidden; position: relative;
+      background: var(--page-bg); color: var(--black);
+      padding: 6.5rem 1.5rem 2rem;
+      display: flex; align-items: center; position: relative;
     }
-    .hero-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-    .hero-bg::before {
-      content: ''; position: absolute; top: 30%; left: -10%; width: 60vw; height: 60vw;
-      background: radial-gradient(circle, rgba(255, 107, 53, .1) 0%, transparent 60%); filter: blur(40px);
-    }
-    .hero-bg::after {
-      content: ''; position: absolute; bottom: -20%; right: -10%; width: 50vw; height: 50vw;
-      background: radial-gradient(circle, rgba(255, 107, 53, .07) 0%, transparent 60%); filter: blur(40px);
-    }
+    .hero-bg { display: none; }
     .hero-container {
-      position: relative; z-index: 1; width: 100%; max-width: var(--hero-max-width);
-      margin: 0 auto; display: flex; flex-direction: column; gap: 2.5rem;
+      position: relative; z-index: 1; width: 100%; max-width: 640px;
+      margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;
     }
     .hero-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
     .hb-eyebrow {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: .7rem; font-weight: 500; text-transform: uppercase; letter-spacing: .18em;
-      color: rgba(10, 10, 10, .35); display: inline-flex; align-items: center; gap: .75rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--text-secondary);
+      display: inline-flex; align-items: center; gap: 0.5rem;
     }
-    .hb-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--orange); }
+    .hb-eyebrow::before { display: none; }
     .hb-status {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: .7rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
-      color: rgba(10, 10, 10, .35); display: inline-flex; align-items: center; gap: .6rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      color: var(--text-secondary);
+      display: inline-flex; align-items: center; gap: 0.45rem;
     }
     .hb-pulse {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--orange);
+      width: 7px; height: 7px; border-radius: 50%; background: var(--orange);
       animation: hb-pulse 2.4s ease-out infinite;
     }
     @keyframes hb-pulse {
-      0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, .5); }
-      70% { box-shadow: 0 0 0 10px rgba(255, 107, 53, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, .45); }
+      70% { box-shadow: 0 0 0 8px rgba(255, 107, 53, 0); }
       100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
     }
-    .hb-main { padding: 1rem 0 1.5rem; }
+    .hb-main { padding: 0; }
     .hb-main h1 {
-      font-size: clamp(3.2rem, 9.5vw, 8.5rem); font-weight: 900;
-      line-height: .92; letter-spacing: -.055em; max-width: 16ch; margin-bottom: 0;
+      font-size: clamp(2.1rem, 5.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      max-width: 100%;
+      margin-bottom: 0;
+      color: var(--black);
     }
     .hb-main h1 em {
       font-style: normal; color: var(--orange); display: inline-block;
-      text-decoration: underline;
-      text-decoration-color: rgba(255, 107, 53, 0.35);
-      text-decoration-thickness: 0.16em;
-      text-underline-offset: 0.22em;
+      text-decoration: none;
     }
     .mango-emoji {
       display: inline-block; transform-origin: bottom center;
-      animation: mangoTilt 4s ease-in-out infinite; font-style: normal; margin-right: 0.2em;
+      animation: mangoTilt 5s ease-in-out infinite; font-style: normal; margin-right: 0.25em;
     }
-    @keyframes mangoTilt { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
+    @keyframes mangoTilt { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
     .hb-bottom {
-      display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 3rem;
-      padding-top: 1.5rem; border-top: 1px solid rgba(10, 10, 10, .08);
+      display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+      padding-top: 0; border-top: none; flex-wrap: wrap;
     }
     .hb-sub {
-      font-size: clamp(1.05rem, 1.5vw, 1.4rem); font-weight: 300; line-height: 1.45;
-      color: rgba(10, 10, 10, .6); max-width: 50ch; letter-spacing: -.015em; margin: 0;
+      display: none; /* simplified hero — no long subtitle */
     }
-    .hb-sub strong { color: #0A0A0A; font-weight: 500; }
-    .hb-stats { display: flex; gap: 2.5rem; align-items: flex-end; }
-    .hb-stat { display: flex; flex-direction: column; gap: .35rem; }
+    .hb-stats { display: flex; gap: 1.75rem; align-items: center; }
+    .hb-stat { display: flex; flex-direction: row; align-items: baseline; gap: 0.4rem; }
     .hb-stat-num {
-      font-size: clamp(2rem, 3.2vw, 2.8rem); font-weight: 900;
-      letter-spacing: -.04em; line-height: .95; color: #0A0A0A;
+      font-size: 1.2rem; font-weight: 600;
+      letter-spacing: -0.02em; line-height: 1; color: var(--black);
     }
     .hb-stat-label {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: .65rem; font-weight: 500; text-transform: uppercase;
-      letter-spacing: .14em; color: rgba(10, 10, 10, .35);
+      font-size: 0.82rem; font-weight: 400;
+      color: var(--text-secondary);
+      letter-spacing: 0;
+      text-transform: none;
     }
 
     /* Section primitives */
@@ -178,193 +186,193 @@
     }
 
     /* ── Game section ─────────── */
-    .game-section { padding: 5rem 1.5rem 6rem; background: var(--white); }
-    .game-container { max-width: 720px; margin: 0 auto; }
+    .game-section { padding: 1rem 1.25rem 4rem; background: var(--page-bg); }
+    .game-container {
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+    }
 
+    /* Top meta row — small, inside the card */
     .game-meta-row {
       display: flex; align-items: center; justify-content: space-between;
-      gap: 1rem; margin-bottom: 1.75rem;
-      padding-bottom: 1.25rem; border-bottom: 1px solid rgba(0,0,0,0.08);
+      gap: 0.75rem;
+      padding: 0.85rem 1.5rem;
+      border-bottom: 1px solid var(--hairline);
+      background: var(--card-bg);
     }
     .game-meta-left { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
     .puzzle-pill {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      background: var(--black); color: var(--white);
-      padding: 0.4rem 0.7rem; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em; border-radius: 4px;
+      background: transparent;
+      color: var(--black);
+      padding: 0;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      border-radius: 0;
     }
     .puzzle-date {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray);
+      font-size: 0.85rem; font-weight: 400; color: var(--text-secondary);
+      letter-spacing: -0.01em; text-transform: none;
     }
-    .puzzle-theme {
-      font-size: 0.7rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--orange);
-    }
+    .puzzle-theme { display: none; /* theme moves into the trigger section */ }
     .streak-badge {
-      display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.85rem;
-      border: 1.5px solid var(--black); border-radius: 4px; background: var(--white);
-      font-weight: 700; font-size: 0.85rem;
+      display: inline-flex; align-items: center; gap: 0.35rem; padding: 0;
+      border: none; border-radius: 0; background: transparent;
+      font-weight: 500; font-size: 0.85rem; color: var(--text-secondary);
     }
+    .streak-badge span:last-child { color: var(--black); font-weight: 600; }
 
-    /* Starting event — quiet billboard, no shadow */
+    /* Trigger — first section inside the card */
     .starting-card {
-      background: var(--black);
-      color: var(--white);
-      border-radius: 6px;
-      padding: 1.85rem 1.85rem 2rem;
-      margin-bottom: 1rem;
+      background: var(--trigger-bg);
+      color: var(--black);
+      border-radius: 0;
+      padding: 1.5rem 1.5rem 1.65rem;
+      margin-bottom: 0;
       position: relative;
       overflow: hidden;
+      border-bottom: 1px solid var(--hairline);
     }
-    .starting-card::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 4px;
-      background: var(--orange);
-    }
+    .starting-card::before { display: none; }
     .starting-eyebrow {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--orange);
-      margin-bottom: 0.85rem;
+      margin-bottom: 0.65rem;
     }
     .starting-text {
-      font-size: clamp(1.3rem, 3vw, 1.7rem);
-      font-weight: 700;
-      line-height: 1.3;
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1.42;
       letter-spacing: -0.015em;
-      color: var(--white);
+      color: var(--black);
     }
     .starting-text strong {
       color: var(--orange);
-      font-weight: 700;
+      font-weight: 600;
     }
 
-    /* The "what happens next?" prompt — clean section eyebrow */
+    /* Section label between cascade and pool */
     .next-prompt {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--gray);
-      margin: 1.85rem 0 0.9rem;
-      display: flex; align-items: center; gap: 0.65rem;
+      color: var(--text-secondary);
+      padding: 1.1rem 1.5rem 0.4rem;
+      margin: 0;
+      display: block;
+      background: var(--card-bg);
     }
-    .next-prompt::before {
-      content: '';
-      width: 22px;
-      height: 1px;
-      background: var(--orange);
-    }
+    .next-prompt::before { display: none; }
     .next-prompt-arrow { display: none; }
     .next-prompt.done { display: none; }
 
-    /* Cascade column — clean, no shadows */
+    /* Cascade steps — Settings.app rows, hairlines between */
     .cascade-column {
       display: flex; flex-direction: column;
+      background: var(--card-bg);
     }
     .cascade-step {
       position: relative;
-      background: var(--white);
-      border: 1.5px solid rgba(0, 0, 0, 0.12);
-      border-left: 3px solid var(--orange);
-      border-radius: 6px;
-      padding: 1.15rem 1.4rem 1.2rem 1.4rem;
-      animation: stepIn 0.4s cubic-bezier(.2, .9, .3, 1.2);
-      margin-top: 0.55rem;
+      background: var(--card-bg);
+      border: none;
+      border-radius: 0;
+      padding: 1.1rem 1.5rem 1.2rem;
+      animation: stepIn 0.35s cubic-bezier(.2, .9, .3, 1.2);
+      margin: 0;
+      border-top: 1px solid var(--hairline);
     }
     @keyframes stepIn {
-      from { opacity: 0; transform: translateY(-6px); }
+      from { opacity: 0; transform: translateY(-4px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     .cascade-step-num {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.14em;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
       color: var(--orange);
       text-transform: uppercase;
-      margin-bottom: 0.45rem;
+      margin-bottom: 0.4rem;
       display: block;
     }
     .cascade-step-event {
-      font-weight: 700;
+      font-weight: 600;
       font-size: 1.02rem;
-      line-height: 1.4;
-      letter-spacing: -0.005em;
+      line-height: 1.42;
+      letter-spacing: -0.012em;
       color: var(--black);
     }
     .cascade-step-truth {
-      margin-top: 0.7rem;
-      padding-top: 0.7rem;
-      border-top: 1px solid rgba(0, 0, 0, 0.08);
-      font-size: 0.87rem;
-      line-height: 1.55;
-      color: var(--gray);
+      margin-top: 0.6rem;
+      padding-top: 0;
+      padding-left: 0.85rem;
+      border-top: none;
+      border-left: 2px solid var(--orange-light);
+      font-size: 0.92rem;
+      line-height: 1.5;
+      color: var(--text-secondary);
       font-style: normal;
     }
-    /* Connector — single thin line, no chevron */
-    .cascade-connector {
-      align-self: center;
-      width: 2px;
-      height: 18px;
-      background: var(--orange);
-      opacity: 0.4;
-      margin: 0.1rem 0;
-      border-radius: 1px;
-    }
+    /* No visual connector — hairlines do the work */
+    .cascade-connector { display: none; }
 
-    /* Pool of remaining events — clean, restrained */
+    /* Pool — tap rows, hairlines between */
     .pool {
-      display: grid; gap: 0.55rem;
-      margin-bottom: 1.5rem;
+      display: flex; flex-direction: column;
+      margin: 0;
+      background: var(--card-bg);
     }
     .pool-card {
-      background: var(--white);
-      border: 1.5px solid rgba(0, 0, 0, 0.14);
-      border-radius: 6px;
-      padding: 1rem 1.15rem;
+      background: var(--card-bg);
+      border: none;
+      border-radius: 0;
+      padding: 1.1rem 1.5rem;
       cursor: pointer;
       text-align: left;
       font-family: inherit;
-      font-weight: 600;
-      font-size: 0.98rem;
-      line-height: 1.4;
+      font-weight: 500;
+      font-size: 1rem;
+      line-height: 1.42;
+      letter-spacing: -0.011em;
       color: var(--black);
-      transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+      transition: background 0.15s ease;
       width: 100%;
       display: flex; align-items: center; gap: 0.85rem;
       user-select: none;
+      border-top: 1px solid var(--hairline);
     }
     .pool-card:hover:not(:disabled) {
-      border-color: var(--orange);
-      background: rgba(255, 107, 53, 0.04);
-      transform: translateX(2px);
+      background: rgba(0, 0, 0, 0.025);
     }
     .pool-card:active:not(:disabled) {
-      background: rgba(255, 107, 53, 0.08);
-      transform: translateX(0);
+      background: var(--orange-light);
     }
-    .pool-card:disabled { cursor: default; opacity: 0.45; }
+    .pool-card:disabled { cursor: default; opacity: 0.4; }
     .pool-card-arrow {
       flex-shrink: 0;
-      width: 22px; height: 22px;
+      width: 18px; height: 18px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
-      color: var(--orange);
-      font-weight: 700;
-      opacity: 0.5;
-      transition: opacity 0.15s ease, transform 0.15s ease;
+      font-size: 1.1rem;
+      color: var(--text-tertiary);
+      font-weight: 400;
+      margin-left: auto;
+      transition: color 0.15s ease, transform 0.15s ease;
     }
     .pool-card:hover:not(:disabled) .pool-card-arrow {
-      opacity: 1;
+      color: var(--orange);
       transform: translateX(2px);
     }
-    .pool-card.shake { animation: shake 0.45s ease-in-out; border-color: var(--danger); background: #fef2f2; }
+    .pool-card.shake {
+      animation: shake 0.45s ease-in-out;
+      background: #fef2f2;
+    }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20% { transform: translateX(-6px); }
@@ -374,15 +382,17 @@
     }
     .pool-card.cooling-down { pointer-events: none; opacity: 0.4; }
 
-    /* Mistakes row */
+    /* Mistakes — quiet footer of the card */
     .mistakes-row {
-      display: flex; align-items: center; gap: 0.5rem;
-      font-size: 0.85rem; font-weight: 600; color: var(--gray);
-      margin-bottom: 0.5rem;
+      display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+      font-size: 0.82rem; font-weight: 400;
+      color: var(--text-secondary);
+      padding: 0.95rem 1.5rem;
+      border-top: 1px solid var(--hairline);
+      background: var(--card-bg);
     }
     .mistakes-counter {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-weight: 700; color: var(--black);
+      font-weight: 600; color: var(--black);
     }
 
     /* Toast */
@@ -400,31 +410,42 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* Result section */
+    /* Result — soft white card on gray, Apple-flavored */
     .result-section {
       display: none;
-      padding: 5rem 1.5rem;
-      background: var(--black); color: var(--white); text-align: center;
+      padding: 1.5rem 1.25rem 5rem;
+      background: var(--page-bg);
+      text-align: center;
     }
     .result-section.visible { display: block; }
-    .result-container { max-width: var(--max-width); margin: 0 auto; }
+    .result-container {
+      max-width: 640px; margin: 0 auto;
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow);
+      padding: 2.5rem 1.75rem 2rem;
+      color: var(--black);
+    }
     .result-eyebrow {
-      font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--orange); margin-bottom: 0.75rem;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--orange); margin-bottom: 0.65rem;
     }
     .result-headline {
-      font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 900; line-height: 1.05;
-      letter-spacing: -0.03em; margin-bottom: 1.5rem;
+      font-size: clamp(1.6rem, 4vw, 2.1rem);
+      font-weight: 700;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
+      margin-bottom: 1.5rem;
+      color: var(--black);
     }
     .result-headline em {
       font-style: normal; color: var(--orange);
-      text-decoration: underline; text-decoration-color: rgba(255, 107, 53, 0.4);
-      text-decoration-thickness: 0.12em; text-underline-offset: 0.2em;
+      text-decoration: none;
     }
     .stars-row {
-      font-size: clamp(2.8rem, 6vw, 3.6rem);
-      letter-spacing: 0.4rem;
-      margin-bottom: 2rem;
+      font-size: 2.2rem;
+      letter-spacing: 0.3rem;
+      margin-bottom: 1.5rem;
       line-height: 1;
     }
     .star {
@@ -434,121 +455,149 @@
       transition: transform 0.5s cubic-bezier(.36,.07,.6,1.6), opacity 0.4s ease;
     }
     .star.appear { transform: scale(1); opacity: 1; }
-    .star.filled { color: var(--orange); text-shadow: 0 0 24px rgba(255, 107, 53, 0.45); }
-    .star.empty { color: rgba(255,255,255,0.12); }
+    .star.filled { color: var(--orange); }
+    .star.empty { color: rgba(0,0,0,0.08); }
     .result-summary {
-      font-size: 1.05rem; opacity: 0.85; max-width: 50ch;
-      margin: 0 auto 2rem; line-height: 1.5;
+      font-size: 1rem; max-width: 44ch;
+      margin: 0 auto 1.75rem; line-height: 1.55;
+      color: var(--text-secondary);
     }
-    .result-summary strong { color: var(--orange); }
+    .result-summary strong { color: var(--black); font-weight: 600; }
     .result-stats {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
-      max-width: 600px; margin: 0 auto 2.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      max-width: 480px; margin: 0 auto 1.75rem;
+      border-top: 1px solid var(--hairline);
+      border-bottom: 1px solid var(--hairline);
+      padding: 1rem 0;
     }
-    @media (max-width: 640px) { .result-stats { gap: 1.5rem; } }
+    .result-stats > div {
+      flex: 1; text-align: center;
+      padding: 0 0.5rem;
+    }
+    .result-stats > div + div { border-left: 1px solid var(--hairline); }
     .result-stat-num {
-      font-size: clamp(2.4rem, 5vw, 3.5rem); font-weight: 900; color: var(--orange);
-      line-height: 1; margin-bottom: 0.5rem; letter-spacing: -0.05em;
+      font-size: 1.5rem; font-weight: 600; color: var(--black);
+      line-height: 1; margin-bottom: 0.35rem; letter-spacing: -0.02em;
     }
     .result-stat-label {
-      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em;
-      text-transform: uppercase; opacity: 0.7;
+      font-size: 0.78rem; font-weight: 400; letter-spacing: 0;
+      text-transform: none; color: var(--text-secondary);
     }
     .result-share-row {
-      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;
+      display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 1.5rem;
     }
     .btn-primary, .btn-secondary {
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
-      padding: 1rem 2rem; font-size: 0.95rem; font-weight: 700; font-family: var(--font-body);
-      text-decoration: none; transition: all 0.25s ease; border-radius: 4px; cursor: pointer; border: 2.5px solid transparent;
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+      padding: 0.7rem 1.4rem; font-size: 0.95rem; font-weight: 500;
+      font-family: var(--font-body);
+      text-decoration: none; transition: all 0.18s ease;
+      border-radius: 980px;
+      cursor: pointer; border: none;
+      letter-spacing: -0.01em;
     }
-    .btn-primary { background: var(--orange); color: var(--white); border-color: var(--orange); }
-    .btn-primary:hover { background: var(--white); color: var(--black); border-color: var(--white); transform: translateY(-3px); }
-    .btn-secondary { background: transparent; color: var(--white); border-color: var(--white); }
-    .btn-secondary:hover { background: var(--white); color: var(--black); transform: translateY(-3px); }
+    .btn-primary { background: var(--orange); color: var(--white); }
+    .btn-primary:hover { background: var(--orange-dark); transform: none; }
+    .btn-secondary { background: rgba(0,0,0,0.05); color: var(--black); }
+    .btn-secondary:hover { background: rgba(0,0,0,0.08); transform: none; }
     .countdown-row {
-      padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.12);
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.8;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--hairline);
+      font-size: 0.82rem; letter-spacing: 0;
+      text-transform: none; color: var(--text-secondary);
+      font-weight: 400;
     }
-    .countdown-row strong { color: var(--orange); font-weight: 700; font-size: 1rem; margin-left: 0.5rem; }
+    .countdown-row strong { color: var(--black); font-weight: 600; font-size: 0.95rem; margin-left: 0.35rem; }
 
-    /* Squiggle divider (matches index.html footer accent style) */
-    .squiggle-divider {
-      display: block;
-      margin: 0 auto;
-      width: 140px;
-      height: 14px;
-      opacity: 0.35;
-    }
-    .squiggle-spacer {
-      padding: 2.5rem 1.5rem;
-      background: var(--white);
-      display: flex; justify-content: center;
-    }
+    /* Hide the old squiggle divider — not needed in calmer layout */
+    .squiggle-divider, .squiggle-spacer { display: none; }
 
-    /* Why section */
-    .why-section { padding: 6rem 1.5rem; background: var(--white); }
-    .why-container { max-width: var(--max-width); margin: 0 auto; }
-    .why-header { margin-bottom: 3rem; max-width: 50ch; }
-    .why-header p { font-size: 1.1rem; color: var(--gray); line-height: 1.6; margin-top: 0.5rem; }
+    /* Why section — soft, restrained */
+    .why-section { padding: 5rem 1.25rem; background: var(--page-bg); }
+    .why-container { max-width: 960px; margin: 0 auto; }
+    .why-header { margin-bottom: 2.5rem; max-width: 52ch; text-align: center; margin-left: auto; margin-right: auto; }
+    .section-eyebrow {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--orange);
+      margin-bottom: 0.55rem; display: block;
+    }
+    .section-h2 {
+      font-size: clamp(1.7rem, 4vw, 2.3rem); font-weight: 700;
+      line-height: 1.15; letter-spacing: -0.025em;
+      margin-bottom: 0.75rem;
+      color: var(--black);
+    }
+    .section-h2 em {
+      font-style: normal; color: var(--orange);
+      text-decoration: none;
+    }
+    .why-header p { font-size: 1rem; color: var(--text-secondary); line-height: 1.55; margin-top: 0.5rem; }
     .why-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;
     }
     .why-card {
-      position: relative; padding: 1.9rem 1.75rem;
-      border: 1.5px solid rgba(0, 0, 0, 0.1);
-      transition: border-color 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      background: var(--white); border-radius: 8px;
+      position: relative; padding: 1.6rem 1.5rem;
+      border: none;
+      background: var(--card-bg);
+      border-radius: 14px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
       display: flex; flex-direction: column;
     }
-    .why-card:hover { border-color: var(--orange); transform: translateY(-3px); }
+    .why-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); transform: none; }
     .why-card-num {
-      font-family: 'JetBrains Mono', ui-monospace, monospace;
-      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--orange); margin-bottom: 1rem;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--orange);
+      margin-bottom: 0.7rem;
     }
     .why-card-title {
-      font-size: 1.35rem; font-weight: 900; letter-spacing: -0.025em;
-      margin-bottom: 0.75rem; line-height: 1.15;
+      font-size: 1.1rem; font-weight: 600; letter-spacing: -0.015em;
+      margin-bottom: 0.5rem; line-height: 1.3;
+      color: var(--black);
     }
     .why-card-title em { font-style: normal; color: var(--orange); }
-    .why-card-text { color: var(--gray); line-height: 1.55; font-size: 0.95rem; }
+    .why-card-text { color: var(--text-secondary); line-height: 1.55; font-size: 0.94rem; }
 
     /* Final CTA */
-    .final-cta-section { padding: 7rem 1.5rem; text-align: center; background: var(--warm-white); }
-    .final-cta-container { max-width: 900px; margin: 0 auto; }
+    .final-cta-section { padding: 5rem 1.25rem 6rem; text-align: center; background: var(--page-bg); }
+    .final-cta-container { max-width: 640px; margin: 0 auto; }
     .final-cta-eyebrow {
-      font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--orange); margin-bottom: 0.75rem;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--orange); margin-bottom: 0.7rem;
     }
     .final-cta-h2 {
-      font-size: clamp(2.4rem, 6.5vw, 4.6rem); font-weight: 900; line-height: 1;
-      letter-spacing: -0.04em; margin-bottom: 2rem;
+      font-size: clamp(1.8rem, 4.5vw, 2.6rem);
+      font-weight: 700; line-height: 1.1;
+      letter-spacing: -0.025em; margin-bottom: 1rem;
+      color: var(--black);
     }
     .final-cta-h2 em {
       font-style: normal; color: var(--orange);
-      text-decoration: underline; text-decoration-color: rgba(255, 107, 53, 0.35);
-      text-decoration-thickness: 0.12em; text-underline-offset: 0.2em;
+      text-decoration: none;
     }
     .final-cta-sub {
-      font-size: 1.15rem; color: var(--gray); max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.55;
+      font-size: 1rem; color: var(--text-secondary);
+      max-width: 480px; margin: 0 auto 2rem; line-height: 1.55;
     }
-    .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .cta-btns { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; }
     .cta-btns .btn-solid-black {
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
-      padding: 1rem 2rem; background: var(--black); color: var(--white);
-      font-weight: 700; font-size: 0.95rem; text-decoration: none; border: 2.5px solid var(--black);
-      transition: all 0.25s ease; border-radius: 4px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+      padding: 0.7rem 1.4rem; background: var(--black); color: var(--white);
+      font-weight: 500; font-size: 0.95rem; text-decoration: none; border: none;
+      transition: background 0.18s ease;
+      border-radius: 980px; letter-spacing: -0.01em;
     }
-    .cta-btns .btn-solid-black:hover { background: var(--orange); border-color: var(--orange); transform: translateY(-3px); }
+    .cta-btns .btn-solid-black:hover { background: #000; transform: none; }
     .cta-btns .btn-ghost-dark {
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
-      padding: 1rem 2rem; background: transparent; color: var(--black);
-      font-weight: 700; font-size: 0.95rem; text-decoration: none; border: 2.5px solid var(--black);
-      transition: all 0.25s ease; border-radius: 4px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+      padding: 0.7rem 1.4rem; background: rgba(0,0,0,0.05); color: var(--black);
+      font-weight: 500; font-size: 0.95rem; text-decoration: none; border: none;
+      transition: background 0.18s ease;
+      border-radius: 980px; letter-spacing: -0.01em;
     }
-    .cta-btns .btn-ghost-dark:hover { background: var(--black); color: var(--white); transform: translateY(-3px); }
+    .cta-btns .btn-ghost-dark:hover { background: rgba(0,0,0,0.09); transform: none; }
 
     /* Footer */
     footer { padding: 0; border-top: 4px solid var(--orange); background: var(--black); color: var(--white); }
@@ -578,133 +627,54 @@
 
     /* Responsive */
     /* ── Tablet / large mobile ─────────── */
-    @media (max-width: 968px) {
-      :root { font-size: 16px; }
+    @media (max-width: 768px) {
+      body { font-size: 16px; }
 
-      .hero-billboard { padding: 6.5rem 1.25rem 2.5rem; min-height: auto; }
-      .hb-main { padding: 0.5rem 0 1rem; }
-      .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; padding-top: 1.25rem; }
-      .hb-sub { font-size: 1.02rem; max-width: 100%; }
-      .hb-stats { gap: 1.5rem; flex-wrap: wrap; }
-      .hb-stat-num { font-size: 1.85rem; }
-      .hb-stat-label { font-size: 0.6rem; letter-spacing: 0.12em; }
+      .hero-billboard { padding: 5.5rem 1rem 1.5rem; }
+      .hero-container { gap: 1.25rem; }
+      .hb-main h1 { font-size: clamp(1.8rem, 7vw, 2.4rem); }
+      .hb-stats { gap: 1.25rem; }
+      .hb-stat-num { font-size: 1.05rem; }
+      .hb-stat-label { font-size: 0.78rem; }
 
-      .game-section { padding: 2.75rem 1rem 4.5rem; }
-
-      .starting-card { padding: 1.5rem 1.4rem 1.6rem; }
-      .starting-text { font-size: clamp(1.1rem, 4vw, 1.45rem); line-height: 1.3; }
-      .starting-eyebrow { font-size: 0.64rem; margin-bottom: 0.7rem; }
-
-      .next-prompt { margin: 1.6rem 0 0.85rem; font-size: 0.66rem; letter-spacing: 0.18em; }
-
-      .cascade-step { padding: 1rem 1.15rem 1.05rem; }
-      .cascade-step-num { font-size: 0.64rem; margin-bottom: 0.4rem; }
+      .game-section { padding: 0.5rem 0.85rem 3rem; }
+      .game-meta-row { padding: 0.75rem 1.2rem; }
+      .starting-card { padding: 1.25rem 1.2rem 1.4rem; }
+      .starting-text { font-size: 1.05rem; }
+      .cascade-step { padding: 1rem 1.2rem 1.1rem; }
       .cascade-step-event { font-size: 0.97rem; }
-      .cascade-step-truth { font-size: 0.83rem; padding-top: 0.6rem; margin-top: 0.6rem; }
-      .cascade-connector { height: 16px; }
+      .cascade-step-truth { font-size: 0.88rem; }
+      .next-prompt { padding: 1rem 1.2rem 0.35rem; }
+      .pool-card { padding: 1rem 1.2rem; font-size: 0.97rem; }
+      .mistakes-row { padding: 0.85rem 1.2rem; font-size: 0.78rem; }
 
-      .pool { gap: 0.5rem; }
-      .pool-card { padding: 0.9rem 1rem; font-size: 0.94rem; gap: 0.7rem; }
-      .pool-card-arrow { width: 20px; height: 20px; font-size: 0.9rem; }
+      .result-section { padding: 1.25rem 0.85rem 4rem; }
+      .result-container { padding: 2rem 1.4rem 1.75rem; }
+      .stars-row { font-size: 1.9rem; letter-spacing: 0.25rem; margin-bottom: 1.25rem; }
+      .result-stat-num { font-size: 1.3rem; }
 
-      .mistakes-row { font-size: 0.8rem; }
+      .why-section { padding: 3.5rem 1rem; }
 
-      .result-section { padding: 4rem 1rem; }
-      .result-headline { font-size: clamp(1.7rem, 6vw, 2.4rem); margin-bottom: 1.25rem; }
-      .stars-row { font-size: 2.8rem; letter-spacing: 0.25rem; margin-bottom: 1.5rem; }
-      .result-summary { font-size: 0.98rem; }
-      .result-stats { gap: 1.5rem; }
-      .result-stat-num { font-size: 2.3rem; }
-      .countdown-row { font-size: 0.72rem; padding-top: 1.5rem; }
-
-      .why-section { padding: 4rem 1.25rem; }
-      .why-header { margin-bottom: 2rem; }
-      .why-card { padding: 1.65rem 1.4rem; }
-      .why-card-title { font-size: 1.2rem; }
-
-      .final-cta-section { padding: 5rem 1.25rem; }
-      .final-cta-h2 { font-size: clamp(2rem, 9vw, 3rem); }
-      .final-cta-sub { font-size: 1rem; }
+      .final-cta-section { padding: 3.5rem 1rem 4.5rem; }
 
       .footer-container { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .footer-brand-col { grid-column: 1 / -1; }
       .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
     }
 
-    /* ── Small mobile (phones) ─────────── */
     @media (max-width: 480px) {
-      .hero-billboard { padding: 6rem 1rem 2rem; }
-      .hb-main h1 { font-size: clamp(2.4rem, 12vw, 3.4rem); line-height: 0.96; letter-spacing: -0.045em; max-width: 100%; }
-      .hb-top { gap: 0.6rem; }
-      .hb-eyebrow { font-size: 0.6rem; letter-spacing: 0.14em; gap: 0.55rem; }
-      .hb-status { font-size: 0.58rem; letter-spacing: 0.13em; }
-      .hb-sub { font-size: 0.95rem; }
-      .hb-stats { gap: 1.1rem; }
-      .hb-stat-num { font-size: 1.55rem; }
-      .hb-stat-label { font-size: 0.56rem; }
-
-      .game-section { padding: 2.25rem 0.85rem 3.75rem; }
-      .game-meta-row { flex-direction: column; align-items: flex-start; gap: 0.65rem; padding-bottom: 1rem; }
-
-      .starting-card { padding: 1.25rem 1.15rem 1.35rem; }
-      .starting-eyebrow { font-size: 0.6rem; letter-spacing: 0.18em; margin-bottom: 0.55rem; }
-      .starting-text { font-size: 1.05rem; line-height: 1.32; letter-spacing: -0.01em; }
-
-      .next-prompt { font-size: 0.62rem; letter-spacing: 0.16em; margin: 1.4rem 0 0.75rem; gap: 0.55rem; }
-
-      .cascade-step { padding: 0.9rem 1.05rem 0.95rem; }
-      .cascade-step-num { font-size: 0.6rem; letter-spacing: 0.14em; margin-bottom: 0.35rem; }
-      .cascade-step-event { font-size: 0.92rem; line-height: 1.36; }
-      .cascade-step-truth { font-size: 0.78rem; padding-top: 0.55rem; margin-top: 0.55rem; line-height: 1.5; }
-      .cascade-connector { height: 14px; margin: 0.15rem 0; }
-
-      .pool-card { padding: 0.85rem 0.95rem; font-size: 0.9rem; gap: 0.6rem; }
-      .pool-card-arrow { width: 18px; height: 18px; font-size: 0.85rem; }
-
-      .mistakes-row { font-size: 0.76rem; }
-
-      .result-section { padding: 3.5rem 1rem; }
-      .result-eyebrow { font-size: 0.76rem; letter-spacing: 0.11em; }
-      .result-headline { font-size: 1.55rem; margin-bottom: 1.1rem; }
-      .stars-row { font-size: 2.5rem; letter-spacing: 0.18rem; margin-bottom: 1.35rem; }
-      .result-summary { font-size: 0.92rem; line-height: 1.5; }
-      .result-stats { grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
-      .result-stat-num { font-size: 1.9rem; }
-      .result-stat-label { font-size: 0.62rem; letter-spacing: 0.05em; }
-      .result-share-row { gap: 0.65rem; }
-      .btn-primary, .btn-secondary { padding: 0.85rem 1.4rem; font-size: 0.88rem; width: 100%; }
-      .countdown-row { font-size: 0.68rem; padding-top: 1.35rem; }
-
-      .why-section { padding: 3rem 1rem; }
-      .why-header { margin-bottom: 1.75rem; }
-      .why-grid { gap: 1.1rem; }
-      .why-card { padding: 1.4rem 1.2rem; }
-      .why-card-num { font-size: 0.64rem; margin-bottom: 0.85rem; }
-      .why-card-title { font-size: 1.15rem; margin-bottom: 0.6rem; }
-      .why-card-text { font-size: 0.9rem; }
-
-      .final-cta-section { padding: 4rem 1rem; }
-      .final-cta-eyebrow { font-size: 0.76rem; }
-      .final-cta-h2 { font-size: clamp(1.85rem, 10vw, 2.6rem); margin-bottom: 1.5rem; }
-      .final-cta-sub { font-size: 0.95rem; margin-bottom: 2rem; }
-      .cta-btns { gap: 0.65rem; }
-      .cta-btns .btn-solid-black, .cta-btns .btn-ghost-dark { padding: 0.85rem 1.5rem; font-size: 0.88rem; }
-
-      .squiggle-spacer { padding: 1.75rem 1rem; }
-
-      .footer-container { grid-template-columns: 1fr; padding: 3rem 1.5rem 0; gap: 2rem; }
-
-      .toast { font-size: 0.82rem; padding: 0.75rem 1.1rem; max-width: 92vw; }
-    }
-
-    /* ── Very narrow (≤360px) ─────────── */
-    @media (max-width: 360px) {
-      .hb-main h1 { font-size: 2.2rem; }
-      .starting-text { font-size: 1rem; }
-      .cascade-step-event { font-size: 0.88rem; }
-      .pool-card { font-size: 0.86rem; padding: 0.78rem 0.85rem; }
-      .stars-row { font-size: 2.2rem; letter-spacing: 0.15rem; }
-      .result-stat-num { font-size: 1.7rem; }
+      .hero-billboard { padding: 5.25rem 0.9rem 1.25rem; }
+      .hb-stats { gap: 1rem; flex-wrap: wrap; }
+      .game-section { padding: 0.5rem 0.7rem 3rem; }
+      .game-meta-row { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
+      .starting-card { padding: 1.15rem 1.1rem 1.25rem; }
+      .cascade-step { padding: 0.95rem 1.1rem 1rem; }
+      .pool-card { padding: 0.95rem 1.1rem; }
+      .next-prompt { padding: 0.95rem 1.1rem 0.3rem; }
+      .mistakes-row { padding: 0.8rem 1.1rem; }
+      .result-section { padding: 1rem 0.7rem 3.5rem; }
+      .result-container { padding: 1.85rem 1.2rem 1.6rem; }
+      .footer-container { grid-template-columns: 1fr; padding: 3rem 1.5rem 0; }
     }
   </style>
 </head>
@@ -897,13 +867,13 @@
       </div>
 
       <!-- Submission invite -->
-      <div style="margin-top: 3rem; padding: 1.5rem 1.6rem; border: 1.5px solid rgba(0,0,0,0.1); border-left: 3px solid var(--orange); border-radius: 6px; background: var(--warm-white); display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap;">
+      <div style="margin-top: 2rem; padding: 1.5rem 1.6rem; background: var(--card-bg); border-radius: 14px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; flex-wrap: wrap;">
         <div style="flex: 1; min-width: 220px;">
-          <div style="font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--orange); margin-bottom: 0.45rem;">Submit a cascade</div>
-          <div style="font-weight: 700; font-size: 1.05rem; line-height: 1.4; color: var(--black); margin-bottom: 0.2rem;">Got a money cascade from your country?</div>
-          <div style="font-size: 0.92rem; color: var(--gray); line-height: 1.5;">Share a real-world chain reaction from where you live. FinMango Research reviews every submission.</div>
+          <div style="font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--orange); margin-bottom: 0.4rem;">Submit a cascade</div>
+          <div style="font-weight: 600; font-size: 1.02rem; line-height: 1.4; color: var(--black); margin-bottom: 0.25rem; letter-spacing: -0.015em;">Got a money cascade from your country?</div>
+          <div style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.5;">Share a real-world chain reaction from where you live. FinMango Research reviews every submission.</div>
         </div>
-        <a href="submit-a-cascade.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; background: var(--black); color: var(--white); font-weight: 700; font-size: 0.92rem; text-decoration: none; border-radius: 4px; border: 2px solid var(--black); transition: all 0.2s ease; white-space: nowrap;" onmouseover="this.style.background='var(--orange)'; this.style.borderColor='var(--orange)';" onmouseout="this.style.background='var(--black)'; this.style.borderColor='var(--black)';">
+        <a href="submit-a-cascade.html" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.65rem 1.25rem; background: var(--black); color: var(--white); font-weight: 500; font-size: 0.92rem; text-decoration: none; border-radius: 980px; transition: background 0.18s ease; white-space: nowrap; letter-spacing: -0.01em;" onmouseover="this.style.background='var(--orange)';" onmouseout="this.style.background='var(--black)';">
           Submit one <span aria-hidden="true">→</span>
         </a>
       </div>
