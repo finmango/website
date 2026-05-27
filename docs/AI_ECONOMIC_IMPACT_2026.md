@@ -10,166 +10,145 @@
 
 ## Executive Summary
 
-The economic transition driven by artificial intelligence will not first appear in GDP, productivity statistics, or even the official unemployment rate. It will appear in household balance sheets — in rent that goes unpaid, in retraining searched at 2 a.m., in food-bank traffic in metros where a single occupation cluster has lost its footing. By the time the Bureau of Labor Statistics confirms the shift in its quarterly release, the affected households have already absorbed months of stress.
+If AI is going to break parts of the labor market over the next few years, the first place it'll show up isn't GDP. It's going to be in households: rent that doesn't get paid on time, food-bank lines that get longer in metros nobody was watching, search queries about reskilling at 2 a.m. The BLS will eventually confirm what happened, but by then the damage has already worked its way through people's savings, credit, and mental health.
 
-FinMango operates the **Financial Health Barometer**, a state-level signal infrastructure that fuses authoritative government data (BLS, Census, HUD), real-time behavioral signals (Google Health Trends), and academic calibration (Harvard JCHS). Since 2024 it has tracked four dimensions of household financial stress — Financial Anxiety, Food Insecurity, Housing Stress, and Affordability — at a cadence ranging from daily to annual depending on the input.
+We've been running the **FinMango Financial Health Barometer** since 2024. It's a state-level signal that combines slow, authoritative government data (BLS, Census, HUD) with real-time behavioral data (Google Health Trends search volumes) and an academic anchor (Harvard JCHS on housing). Four indices today: Financial Anxiety, Food Insecurity, Housing Stress, and Affordability.
 
-This brief proposes a focused extension of that infrastructure to produce the **first real-time, household-level signal of AI-driven economic disruption in the United States**. We outline:
+This brief makes a fairly narrow argument. We've already built the pipeline. With a focused set of extensions, the same pipeline can produce something that doesn't exist yet: a monthly, household-level read on how AI exposure is translating into financial stress, broken out by state and by the occupations most likely to be affected.
 
-1. The measurement gap that current labor-market statistics leave open;
-2. Four concrete extensions to the existing Barometer — an O\*NET-anchored AI-exposure layer, an AI-distress search ontology, a layoff cross-reference, and an industry × state signal cube;
-3. A 12-month roadmap to operational outputs, validation, and public release.
-
-The goal is to give policymakers, researchers, and grantmakers the kind of telemetry the OpenAI Foundation called for in *Economic Futures in the Age of AI* (May 2026): "measurement infrastructure that can detect distributional shifts as they happen, not after they have hardened into political crises."
+What follows: where current statistics fall short, the four pieces we'd add to the Barometer to fill that gap, and a 12-month plan for getting it shipped and validated. We're writing this with the OpenAI Foundation's May 2026 announcement in mind, but the work stands on its own merit either way.
 
 ---
 
-## 1. The Measurement Gap
+## 1. Why Current Statistics Aren't Enough
 
-Three categories of statistics dominate the current view of AI's economic impact, and each has a structural limitation.
+Anyone trying to track AI's economic impact today is working with three kinds of data, and each one has a hole in it.
 
-**Labor-market statistics (BLS LAUS, CPS, OEWS, JOLTS).** Authoritative and methodologically rigorous, but lagging by weeks to quarters. Occupation-level employment data is published annually. State-level unemployment is monthly, but moves only after layoffs are realized — not when households first sense exposure.
+The official labor-market series (BLS unemployment, OEWS occupational employment, JOLTS) are the most trustworthy numbers anyone has, but they lag. State unemployment is monthly. Occupational employment is annual. By the time the data confirms a shift, the households living through it have absorbed months of stress.
 
-**AI-exposure indices (Felten et al. 2021; Eloundou et al. 2023 "GPTs are GPTs"; Brynjolfsson et al. 2023).** Excellent for ranking *which* occupations are exposed to AI substitution or augmentation, but silent on *whether and where* exposure has translated into financial stress. They are static maps, not flowing signals.
+The academic AI-exposure indices (Felten et al., Eloundou et al., Brynjolfsson) are useful for a different reason. They tell you which occupations are at risk. They don't tell you whether the risk has actually shown up yet, in which places, or how hard. Static maps, not flowing signals.
 
-**Macro indicators (CPI, GDP, productivity).** Too aggregated. A 0.4-point national productivity bump can co-exist with severe localized displacement in administrative-support occupations in three Midwestern metros, and the macro signal will not surface it.
+Then there's macro: CPI, productivity, GDP. Too aggregated to be useful here. A national productivity bump can sit on top of a serious local collapse in administrative-support occupations across three Midwestern metros and never show up.
 
-The missing layer is a **household-stress signal stratified by AI exposure** — one that asks not "is AI changing the economy?" but "are the workers most exposed to AI showing measurable financial distress, where, and how fast?"
-
-FinMango's existing Barometer is uniquely positioned to fill that gap because it already operates at the intersection of structural government data and real-time behavioral signal. Adding an AI-exposure axis is an extension of an existing pipeline, not a new program.
+What's missing is the household-level read, stratified by AI exposure. The question isn't whether AI is changing the economy; it's whether the workers most exposed to it are showing financial stress, where, and how fast. We think the Barometer is the most direct way to answer that.
 
 ---
 
-## 2. Foundation: The Barometer Today
+## 2. What the Barometer Looks Like Today
 
-For context, the Barometer (v2.4, December 2025) measures four indices at US state level:
+Quick context, since some of this is in the methodology doc already:
 
-| Index | Primary Government Input | Behavioral Signal | Calibration |
+| Index | Government Input | Search Signal | Calibration |
 |---|---|---|---|
-| Financial Anxiety | BLS LAUS unemployment | Google Trends: "debt help", "bankruptcy" | — |
-| Food Insecurity | Census SAIPE poverty rate | Google Trends: "food bank near me" | — |
-| Housing Stress | Census ACS B25071, HUD FMR | Google Trends: "eviction help" | Harvard JCHS 2025 |
+| Financial Anxiety | BLS LAUS unemployment | "debt help", "bankruptcy" | — |
+| Food Insecurity | Census SAIPE poverty rate | "food bank near me" | — |
+| Housing Stress | Census ACS B25071, HUD FMR | "eviction help" | Harvard JCHS 2025 |
 | Affordability | Composite | — | — |
 
-Indices are scaled 80–200 with structural regional multipliers and published as state-level scores with full source attribution (`rent_burden_source`, `fmr_source`, etc.). The pipeline runs daily for unemployment, monthly for housing prices, and annually for structural inputs.
+Indices land on an 80–200 scale, adjusted by regional multipliers, with full source attribution on every output. The pipeline runs daily for unemployment, monthly for housing prices, annually for the structural inputs.
 
-The extensions proposed below sit on top of this pipeline. Nothing in the existing methodology changes.
+The four extensions below sit on top of this. The existing v2.4 methodology doesn't change.
 
 ---
 
-## 3. The AI Extension: Four Components
+## 3. The Four Extensions
 
-### 3.1 An O\*NET-Anchored AI-Exposure Layer
+### 3.1 An AI-Exposure Layer Anchored in O\*NET
 
-We propose constructing a state-level **AI Exposure Score** by combining occupational AI-exposure indices from the academic literature with BLS OEWS employment shares.
+For each SOC-coded occupation we'd build a composite AI-exposure score from three published indices: Felten/Raj/Seamans (AIOE), Eloundou et al. (GPT exposure), and Brynjolfsson's SML where it's available. Z-score normalize, equal-weight by default, and run the obvious sensitivity tests on alternative weightings.
 
-**Method.**
+To get from occupations to states, we use BLS OEWS state-level employment shares by SOC code:
 
-1. **Score occupations.** For each SOC-coded occupation, compute a composite AI-exposure score from three published indices:
-   - *AIOE* (Felten, Raj, Seamans 2021) — occupational exposure to AI capabilities
-   - *GPT exposure* (Eloundou et al. 2023) — task-level LLM exposure
-   - *Brynjolfsson SML* (suitability-for-machine-learning), where available
+```
+AIExposure_state = Σ_occ (employment_share_state,occ × ExposureScore_occ)
+```
 
-   Composite via z-score normalization and equal weighting (sensitivity tested with alternative weightings).
+The output lives at two granularities: an aggregate state score, and a state × occupation-cluster matrix that lets you say something like "AI-exposed administrative workers in Ohio" and have it mean a specific number.
 
-2. **Map to states.** Use BLS OEWS state-level employment by SOC code to compute an employment-weighted state AI-exposure score:
+This works because everything underneath is public. O\*NET tasks, OEWS employment, the published exposure indices. Nothing proprietary, nothing we can't show our work on. The cadence is annual, set by OEWS.
 
-   ```
-   AIExposure_state = Σ_occ (employment_share_state,occ × ExposureScore_occ)
-   ```
+### 3.2 An AI-Distress Search Ontology
 
-3. **Publish at two granularities:** an aggregate state score and a state × occupation-cluster matrix (e.g., "AI-exposed administrative support workers in Ohio").
+The current Barometer pulls Google Health Trends signals for things like "eviction help" and "food bank near me." We'd add a fifth category for AI-displacement distress. Some candidate terms, all of which need signal-to-noise testing before they go live:
 
-**Why this works.** O\*NET task descriptions are public, occupation-level exposure indices are peer-reviewed, and OEWS employment shares are released annually by state and metro. No proprietary data is required, and the entire pipeline is reproducible.
+- **Displacement awareness:** "will AI take my job", "AI replaced me", "job to AI"
+- **Reskilling intent:** "reskill from [occupation]", "career change at 40", "learn to code 2026"
+- **Acute distress:** "laid off tech", "severance negotiation", "unemployment after layoff"
+- **Adaptation (tracked separately):** "use ChatGPT at work", "AI tools for [occupation]" — this is augmentation, not displacement, and conflating them is a known failure mode
 
-**Output cadence.** Annual (limited by OEWS release). Occupational exposure scores are static between literature updates.
+The trick is normalization. Generic AI search interest is going up regardless of whether anyone is actually losing their job, so a raw spike in "will AI take my job" doesn't mean much. The signal is the *divergence* from the baseline. We'd validate the ontology against announced layoffs (next section) and against the state-level exposure scores from §3.1. If both correlate, the signal is real.
 
-### 3.2 An AI-Displacement Search Ontology
+### 3.3 Cross-Referencing Layoffs
 
-We propose extending the existing Google Trends search ontology with a fifth signal category targeting AI-displacement distress.
+Two additional structural inputs ground the search data in actual events:
 
-**Candidate terms** (to be tested for signal-to-noise prior to inclusion):
+- **WARN Act notices.** State-mandated layoff disclosures (50 or 100 employees depending on jurisdiction). Some states publish APIs, some have to be scraped or compiled from PDFs.
+- **BLS JOLTS.** Industry-level openings and turnover, monthly.
 
-- *Displacement awareness:* `"will AI take my job"`, `"AI replaced me"`, `"job to AI"`
-- *Reskilling intent:* `"reskill from [occupation]"`, `"career change at 40"`, `"learn to code 2026"`
-- *Acute distress:* `"laid off tech"`, `"severance negotiation"`, `"unemployment after layoff"`
-- *Adaptation:* `"use ChatGPT at work"`, `"AI tools for [occupation]"` — *augmentation, not displacement; tracked separately*
-
-**Method.** Same Google Health Trends API pipeline as the existing Barometer. Each term is normalized against a baseline search volume to control for general AI interest (a "Will AI take my job" spike that scales with overall ChatGPT search traffic is noise; one that diverges from it is signal).
-
-**Validation.** Compare term spikes against announced layoffs (see 3.3) and against AI-exposure scores by state. A high-quality signal should correlate with both.
-
-### 3.3 Layoff and JOLTS Cross-Reference
-
-We propose ingesting two additional structural data sources to ground the search signal in realized labor events:
-
-- **WARN Act notices** (state-level mandatory layoff disclosures, ≥50 or 100 employees depending on state) — manually compiled by labor-market trackers; some states publish APIs.
-- **BLS JOLTS** (Job Openings and Labor Turnover Survey) at the industry level, monthly.
-
-**Method.** For each layoff event, code the affected occupations using SOC codes and compute an exposure-weighted layoff intensity by state and quarter:
+For each layoff event we'd code the affected occupations to SOC and compute an exposure-weighted layoff intensity by state and quarter:
 
 ```
 AILayoffIntensity_state,q = Σ_event (workers × ExposureScore_occ) / labor_force_state
 ```
 
-This lets us distinguish a 500-person warehouse layoff (low AI exposure) from a 500-person paralegal or customer-service layoff (high AI exposure) — they look identical in standard layoff statistics but mean very different things for an AI-impact measurement.
+Why bother with the weighting? Because a 500-person warehouse layoff and a 500-person paralegal layoff look identical in standard layoff statistics and mean completely different things for an AI-impact measurement. The first is a logistics story; the second is a substitution story.
 
-### 3.4 An Industry × State Signal Cube
+### 3.4 A State × Industry Signal Cube
 
-The existing Barometer is one-dimensional: state. The proposed extension publishes results along **two dimensions**: state and occupation cluster.
+Right now the Barometer publishes at one dimension: state. The extension adds a second: occupation cluster. We'd start with six clusters chosen because their AI exposure varies a lot:
 
-We propose six occupation clusters chosen for AI-exposure heterogeneity:
+1. Office and administrative support (SOC 43) — high exposure
+2. Computer and mathematical (SOC 15) — mixed; lots of augmentation, some substitution
+3. Healthcare practitioner (SOC 29) — low to moderate
+4. Production (SOC 51) — moderate
+5. Transportation and material moving (SOC 53) — moderate, mostly autonomous-systems exposure
+6. Education, training, and library (SOC 25) — moderate, AI-tutor substitution risk
 
-1. Office and administrative support (SOC 43-xxxx) — high exposure
-2. Computer and mathematical (SOC 15-xxxx) — mixed exposure, high augmentation
-3. Healthcare practitioner (SOC 29-xxxx) — low–moderate exposure
-4. Production (SOC 51-xxxx) — moderate exposure
-5. Transportation and material moving (SOC 53-xxxx) — moderate (autonomous systems)
-6. Education, training, and library (SOC 25-xxxx) — moderate (AI-tutor substitution)
+What this enables is statements like:
 
-The cube enables outputs like:
+> Financial Anxiety for SOC 43 (administrative support) in Ohio rose 18 points between Q1 and Q2 2026 against a state aggregate change of +4. AI-exposed occupations are driving 80% of the state's anxiety increase.
 
-> *"Financial Anxiety Index for SOC 43 (administrative support) in Ohio rose 18 points between Q1 and Q2 2026, against a state aggregate change of +4. AI-exposed occupations are driving 80% of the state's anxiety increase."*
-
-This is the kind of statement no existing public data product can produce on a monthly cadence.
+That's not something anyone can publish today on a monthly cadence, which is the gap this whole program is trying to close.
 
 ---
 
-## 4. Proposed Outputs
+## 4. What Gets Shipped
 
-The extension would produce three public artifacts:
+Three outputs:
 
-**1. AI Economic Impact Dashboard.** A public web interface on `finmango.org` showing the state × occupation cube, updated monthly. Free, no login. Existing Barometer infrastructure is reused.
+A **public dashboard** on finmango.org showing the state × occupation cube, refreshed monthly. Free, no login, same hosting and design language as the existing Barometer.
 
-**2. Quarterly AI Impact Brief.** A short (8–12 page) data release describing what the prior quarter's signals showed, with state-level vignettes. Distributed to research partners (World Bank, IMF, Google Health, OpenAI Foundation as relevant) and the press.
+A **quarterly AI Impact Brief**, 8 to 12 pages, with state-level vignettes describing what the prior quarter's signals showed. Distributed to research partners (World Bank, IMF, Google Health, OpenAI Foundation as relevant) and to the press.
 
-**3. Open data + API.** State × occupation × month signal time series released as CSV and via a REST API under a permissive license (MIT, consistent with existing FinMango open-source posture). Methodology documentation hosted alongside.
-
----
-
-## 5. Validation Plan
-
-Three validation strategies, each independently sufficient:
-
-**Concurrent validation against realized outcomes.** Quarterly comparison of state × occupation signal levels against subsequently released BLS unemployment-by-occupation data. A high-quality signal should lead realized unemployment by 1–3 months in high-exposure occupations.
-
-**Cross-validation against academic exposure indices.** State aggregate AI-exposure scores should correlate strongly with independently constructed academic measures (e.g., Acemoglu/Restrepo regional exposure work). Divergence flags methodology issues.
-
-**Case-study validation.** For each release, identify the top three state × occupation cells by signal change and verify via news search and WARN notices that real events plausibly explain the movement. Misaligned signals trigger ontology review.
-
-All validation results are published alongside the data, consistent with the existing Barometer's source-attribution practice.
+**Open data and a REST API.** State × occupation × month time series under MIT license, methodology documentation alongside. The existing FinMango open-by-default posture extends to this.
 
 ---
 
-## 6. Why FinMango
+## 5. How We'll Know If It Works
 
-FinMango is a 501(c)(3) nonprofit with three properties relevant to this work:
+We've thought hard about how to keep this honest, because the easiest failure mode for a signal product is to publish something nobody can falsify. Three validation paths, each one good enough on its own:
 
-- **Operational measurement infrastructure.** The Barometer is not a proposal; it is a running pipeline with daily/monthly/annual data ingestion, source-attribution, and public release. The AI extension reuses this pipeline.
-- **Validated by institutional partners.** Existing research partnerships with the World Bank, IMF, WHO, and Google Health provide external validation of methodology and create natural distribution channels for AI-impact outputs.
-- **Open by default.** Methodology, data, and code are public under MIT license. There is no proprietary lock-in for downstream researchers or funders — a posture consistent with the OpenAI Foundation's stated goal of "concrete institutional options that can be tested, governed, revised, and scaled."
+The first is the obvious one. Compare quarterly signal levels against subsequently released BLS unemployment-by-occupation data. If the signal has any predictive content, it should lead realized unemployment by one to three months in high-exposure occupations. If it doesn't, we publish that result and reconsider the methodology.
 
-FinMango does not propose to design post-AI economic systems, model UBI, or advocate specific policies. The proposed role is narrower and complementary to the broader OpenAI Foundation program: **be the measurement layer**.
+The second is cross-checking against independent academic measures. Our state-aggregate exposure scores should correlate with regional exposure work like Acemoglu and Restrepo's. Divergence is informative.
+
+The third is the case-study check. Every release, we pick the top three state × occupation cells by signal change and look for real events (news, WARN notices) that plausibly explain the movement. When nothing matches, we go back to the ontology.
+
+All validation results get published alongside the data, the same way the existing Barometer attributes its sources.
+
+---
+
+## 6. Why This Should Sit at FinMango
+
+A few honest reasons.
+
+The infrastructure already exists. The Barometer isn't a proposal, it's a running pipeline with daily and monthly ingestion, source attribution, and a public site. The AI extension is a meaningful but bounded addition to something that ships today.
+
+The institutional validation is in place. World Bank, IMF, WHO, Google Health partnerships mean our methodology has been picked over by people who don't have to be polite. That same network is how outputs from this work get distributed.
+
+We're open by default. Methodology, data, code: all MIT-licensed and public. Nothing about this program would create a dependency on us; if FinMango disappears tomorrow, the methodology can be picked up by anyone.
+
+What we're not doing, and don't want to do: design post-AI economic systems, model UBI variants, or advocate for specific policy. That's not our lane and there are better people working on it. The role we're describing is narrower. We want to be the measurement layer that everyone else can build on.
 
 ---
 
@@ -177,39 +156,42 @@ FinMango does not propose to design post-AI economic systems, model UBI, or advo
 
 | Phase | Months | Deliverable |
 |---|---|---|
-| 1. Exposure layer construction | 0–2 | O\*NET + AIOE/GPT-exposure composite; state-level scores published |
-| 2. Search ontology extension | 1–3 | AI-displacement term set tested and added to Barometer pipeline |
-| 3. Layoff/JOLTS integration | 2–4 | WARN + JOLTS ingestion live; AI-weighted layoff intensity computed |
-| 4. Industry × state cube launch | 3–6 | Public dashboard live; first monthly data release |
+| 1. Exposure layer construction | 0–2 | Composite occupational scores; state-level rollup published |
+| 2. Search ontology extension | 1–3 | AI-distress terms tested, added to Barometer pipeline |
+| 3. Layoff/JOLTS integration | 2–4 | WARN + JOLTS ingestion live; weighted layoff intensity computed |
+| 4. Industry × state cube launch | 3–6 | Public dashboard live; first monthly release |
 | 5. Validation studies | 4–9 | Concurrent + cross-validation results published |
 | 6. First Quarterly AI Impact Brief | 6 | Public release; partner distribution |
-| 7. Open API + dataset release | 9–12 | Full programmatic access; methodology v3.0 frozen |
+| 7. Open API + dataset release | 9–12 | Full programmatic access |
 
 ---
 
-## 8. Open Questions
+## 8. What We Don't Know Yet
 
-A short and honest list, included because every methodology paper should have one:
+Four real ones, in no particular order:
 
-1. **Augmentation vs. substitution separation.** AI tools that *augment* knowledge workers may raise their productivity (and earnings) before any displacement appears. The search ontology must distinguish these, and we do not yet have a clean test for that distinction.
-2. **Search-signal saturation.** Generic AI search interest is rising fast enough that displacement-specific signals risk drowning in baseline noise. Normalization strategy (Section 3.2) is our best current answer but needs empirical testing.
-3. **Geographic resolution.** OEWS data supports MSA-level analysis in many states; whether to publish at MSA rather than state is a downstream decision that depends on validation results.
-4. **Causal attribution.** This methodology measures *correlation* between AI exposure and financial stress. Establishing AI as the *cause* of observed stress is a different research program. We are explicit about this limit in all outputs.
+**Augmentation vs. substitution.** AI that augments knowledge workers can raise their earnings before any displacement shows up. The search ontology needs to distinguish the two and we don't have a clean test for it yet. We have ideas, but they're ideas, not results.
+
+**Search-signal saturation.** Generic AI search interest is rising fast enough that displacement-specific queries risk drowning in the baseline. The divergence-from-baseline approach in §3.2 is our best current answer, but it needs empirical work before we trust it.
+
+**Geographic resolution.** OEWS supports MSA-level analysis in many states. State is the obvious starting point because it matches the existing Barometer, but MSA may be the right unit for some of these signals. We'll let validation tell us which.
+
+**Causal attribution.** Everything we're describing measures correlation between AI exposure and financial stress. Establishing AI as the cause of any specific household's distress is a different research program, and we'll be explicit about that limit in everything we publish. People will read causation into the data anyway; the best we can do is keep saying it isn't there.
 
 ---
 
 ## References
 
 ### AI Exposure Literature
-- Felten, E., Raj, M., & Seamans, R. (2021). *Occupational, industry, and geographic exposure to artificial intelligence.* Strategic Management Journal.
-- Eloundou, T., Manning, S., Mishkin, P., & Rock, D. (2023). *GPTs are GPTs: An early look at the labor market impact potential of large language models.* OpenAI / arXiv:2303.10130.
-- Brynjolfsson, E., Mitchell, T., & Rock, D. (2018). *What can machines learn, and what does it mean for occupations and the economy?* AEA Papers and Proceedings.
-- Acemoglu, D., & Restrepo, P. (2020). *Robots and jobs: Evidence from US labor markets.* Journal of Political Economy.
+- Felten, E., Raj, M., & Seamans, R. (2021). Occupational, industry, and geographic exposure to artificial intelligence. *Strategic Management Journal*.
+- Eloundou, T., Manning, S., Mishkin, P., & Rock, D. (2023). GPTs are GPTs: An early look at the labor market impact potential of large language models. OpenAI / arXiv:2303.10130.
+- Brynjolfsson, E., Mitchell, T., & Rock, D. (2018). What can machines learn, and what does it mean for occupations and the economy? *AEA Papers and Proceedings*.
+- Acemoglu, D., & Restrepo, P. (2020). Robots and jobs: Evidence from US labor markets. *Journal of Political Economy*.
 
 ### Data Sources (Proposed Additions)
 - O\*NET: https://www.onetonline.org/
-- BLS Occupational Employment and Wage Statistics (OEWS): https://www.bls.gov/oes/
-- BLS Job Openings and Labor Turnover Survey (JOLTS): https://www.bls.gov/jlt/
+- BLS OEWS: https://www.bls.gov/oes/
+- BLS JOLTS: https://www.bls.gov/jlt/
 - WARN Act state notices (varies by state)
 
 ### FinMango Foundation
