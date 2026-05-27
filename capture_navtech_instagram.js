@@ -22,8 +22,9 @@ const fs = require('fs');
     { id: 'ig7',  out: 'ig-07-quote.png' },
     { id: 'ig8a', out: 'ig-08-proof-slide-1-title.png' },
     { id: 'ig8b', out: 'ig-08-proof-slide-2-reach.png' },
-    { id: 'ig8c', out: 'ig-08-proof-slide-3-tools.png' },
-    { id: 'ig8e', out: 'ig-08-proof-slide-4-partners.png' },
+    { id: 'ig8f', out: 'ig-08-proof-slide-3-classrooms.png' },
+    { id: 'ig8c', out: 'ig-08-proof-slide-4-tools.png' },
+    { id: 'ig8e', out: 'ig-08-proof-slide-5-partners.png' },
   ];
 
   for (const t of targets) {
