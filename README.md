@@ -349,7 +349,7 @@ Quick overview:
 
 ## 📄 License
 
-© 2025 FinMango. All rights reserved.
+© 2026 FinMango. All rights reserved.
 
 **EIN:** 81-2543425
 
