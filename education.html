@@ -1280,6 +1280,100 @@
     ::-webkit-scrollbar-track { background: var(--light-gray); }
     ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }
+
+    /* ============================================
+       PROGRAM REFRESH — subhead + richer outcome cards
+       ============================================ */
+    .program-subhead {
+      font-size: 0.8rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gray); margin-bottom: 1.5rem;
+    }
+    .outcome-card { display: flex; flex-direction: column; }
+    .outcome-icon {
+      width: 54px; height: 54px; margin-bottom: 1.1rem; padding: 11px;
+      background: var(--orange-light); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 1; transition: background 0.3s ease;
+    }
+    .outcome-card:hover .outcome-icon { background: rgba(255, 255, 255, 0.2); }
+    .outcome-desc {
+      margin-top: 0.6rem; font-size: 0.92rem; line-height: 1.55; color: var(--gray);
+      position: relative; z-index: 1; transition: color 0.3s ease;
+    }
+    .outcome-card:hover .outcome-desc { color: rgba(255, 255, 255, 0.92); }
+
+    /* ============================================
+       PROOF / AGGREGATE CREDIBILITY (replaces thin testimonials)
+       ============================================ */
+    .proof-panel { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 1.75rem; align-items: stretch; }
+    .proof-feature {
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+      color: var(--white); border: 2px solid var(--black); border-radius: 4px;
+      box-shadow: 8px 8px 0 var(--black); padding: 2.75rem 2.5rem;
+      display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden;
+    }
+    .proof-feature::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0.2;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.7) 1px, transparent 1.2px);
+      background-size: 22px 22px;
+      mask-image: radial-gradient(ellipse 80% 80% at 75% 25%, #000 8%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 80% at 75% 25%, #000 8%, transparent 70%);
+    }
+    .proof-bignum { font-size: clamp(3.5rem, 8vw, 5.25rem); font-weight: 900; line-height: 0.92; letter-spacing: -0.04em; position: relative; z-index: 1; }
+    .proof-bignum-label { font-size: 1.05rem; font-weight: 700; margin-top: 0.55rem; line-height: 1.4; position: relative; z-index: 1; }
+    .proof-sub { font-size: 0.95rem; line-height: 1.6; opacity: 0.92; margin-top: 1rem; max-width: 36ch; position: relative; z-index: 1; }
+    .proof-buttons { display: flex; gap: 0.85rem; flex-wrap: wrap; margin-top: 1.75rem; position: relative; z-index: 1; }
+    .proof-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.8rem 1.4rem;
+      font-weight: 700; font-size: 0.9rem; text-decoration: none; border: 2px solid var(--white);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
+    }
+    .proof-btn-solid { background: var(--white); color: var(--orange-dark); }
+    .proof-btn-solid:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 var(--black); }
+    .proof-btn-ghost { background: transparent; color: var(--white); }
+    .proof-btn-ghost:hover { background: var(--black); border-color: var(--black); transform: translateY(-3px); }
+    .proof-points { display: grid; gap: 1rem; align-content: stretch; }
+    .proof-point {
+      background: var(--white); border: 2px solid var(--black); border-radius: 4px;
+      padding: 1.3rem 1.4rem 1.3rem 3.5rem; position: relative; display: flex; flex-direction: column; justify-content: center; flex: 1;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .proof-point:hover { transform: translateX(4px); box-shadow: -4px 4px 0 var(--orange); }
+    .proof-point::before { content: '★'; position: absolute; left: 1.15rem; top: 1.3rem; color: var(--orange); font-size: 1.2rem; }
+    .proof-point strong { display: block; font-size: 1.6rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1; margin-bottom: 0.3rem; }
+    .proof-point span { font-size: 0.9rem; color: var(--gray); line-height: 1.45; }
+    @media (max-width: 860px) {
+      .proof-panel { grid-template-columns: 1fr; }
+      .proof-feature { box-shadow: 5px 5px 0 var(--black); padding: 2.25rem 1.75rem; }
+    }
+
+    /* ============================================
+       EVENT GALLERY — dynamic mosaic (refresh)
+       ============================================ */
+    .event-gallery {
+      display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 168px;
+      gap: 1rem; grid-auto-flow: dense;
+    }
+    .event-gallery img {
+      width: 100%; height: 100%; object-fit: cover; border: 2px solid var(--black);
+      border-radius: 4px; display: block;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+    }
+    .event-gallery img:hover { transform: translateY(-4px); box-shadow: 5px 5px 0 var(--orange); position: relative; z-index: 2; }
+    .event-gallery .g-big { grid-column: span 2; grid-row: span 2; }
+    .event-gallery .g-wide { grid-column: span 2; }
+    .event-gallery .g-tall { grid-row: span 2; }
+    @media (max-width: 968px) {
+      .event-gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 150px; gap: 0.75rem; }
+      .event-gallery .g-big { grid-column: span 2; grid-row: span 2; }
+      .event-gallery .g-wide { grid-column: span 2; }
+      .event-gallery .g-tall { grid-row: span 1; }
+    }
+    @media (max-width: 540px) {
+      .event-gallery { grid-auto-rows: 132px; }
+      .event-gallery .g-big { grid-column: span 2; grid-row: span 2; }
+      .event-gallery .g-wide, .event-gallery .g-tall { grid-column: span 1; grid-row: span 1; }
+    }
   </style>
 
 
@@ -1491,14 +1585,7 @@
           actionable knowledge about brokerages, accounts, and investment timing—skills validated by 14,000+ students.
         </p>
 
-        <div class="learning-checklist">
-          <div class="check-item"><span class="check">✓</span><span>Compound interest mastery</span></div>
-          <div class="check-item"><span class="check">✓</span><span>Mutual fund evaluation</span></div>
-          <div class="check-item"><span class="check">✓</span><span>Market index comparison</span></div>
-          <div class="check-item"><span class="check">✓</span><span>Common investor pitfalls</span></div>
-          <div class="check-item"><span class="check">✓</span><span>Brokerage & account selection</span></div>
-          <div class="check-item"><span class="check">✓</span><span>Tax-free investing strategies</span></div>
-        </div>
+        <h4 class="program-subhead">What every student walks away with</h4>
 
         <!-- Hand-drawn outcome cards -->
         <div class="outcomes-grid">
@@ -1514,6 +1601,7 @@
               </svg>
             </div>
             <h3 class="outcome-title">Compound Interest & Growth</h3>
+            <p class="outcome-desc">How small, steady contributions snowball into life-changing sums — and why starting early matters most.</p>
           </div>
 
           <div class="outcome-card">
@@ -1530,6 +1618,7 @@
               </svg>
             </div>
             <h3 class="outcome-title">Fund Research & Analysis</h3>
+            <p class="outcome-desc">Reading expense ratios, returns, and holdings to tell a great fund from an expensive one.</p>
           </div>
 
           <div class="outcome-card">
@@ -1542,6 +1631,7 @@
               </svg>
             </div>
             <h3 class="outcome-title">Avoiding Common Pitfalls</h3>
+            <p class="outcome-desc">The behavioral traps — market timing, high fees, panic selling — and how to sidestep them.</p>
           </div>
 
           <div class="outcome-card">
@@ -1557,6 +1647,7 @@
               </svg>
             </div>
             <h3 class="outcome-title">Brokerage & Account Setup</h3>
+            <p class="outcome-desc">Choosing a brokerage and opening the right account, walked through step by step.</p>
           </div>
 
           <div class="outcome-card">
@@ -1571,6 +1662,7 @@
               </svg>
             </div>
             <h3 class="outcome-title">Market Index Comparison</h3>
+            <p class="outcome-desc">Benchmarking against the S&amp;P 500 and other indexes to judge a fund's real performance.</p>
           </div>
 
           <div class="outcome-card">
@@ -1584,6 +1676,7 @@
               </svg>
             </div>
             <h3 class="outcome-title">Tax-Free Investing</h3>
+            <p class="outcome-desc">Using Roth IRAs and tax-advantaged accounts to keep more of what you earn.</p>
           </div>
         </div>
 
@@ -1605,29 +1698,45 @@
   <!-- ============================================
        TESTIMONIALS
        ============================================ -->
-  <section class="section section-warm testimonials-section">
+  <section class="section section-warm testimonials-section proof-section">
     <div class="section-container reveal">
-      <span class="section-label">student feedback</span>
-      <h2 class="section-title">Real Feedback from Our Financial Literacy Program</h2>
+      <span class="section-label">the proof</span>
+      <h2 class="section-title">Don't just take our word for it</h2>
+      <p class="section-description" style="margin-bottom: 2.5rem;">
+        We don't cherry-pick the flattering quotes. After every program, students review it anonymously — and we
+        publish every response, unedited. Read them for yourself.
+      </p>
 
-      <div class="testimonials-grid">
-        <div class="testimonial-card">
-          <p class="testimonial-quote">
-            This program completely changed how I think about money and investing. I went from knowing nothing to
-            understanding compound interest, mutual funds, and how to actually start investing. Best week of financial
-            education I've ever had!
-          </p>
-          <div class="testimonial-author">Sarah M.</div>
-          <div class="testimonial-role">High School Senior</div>
+      <div class="proof-panel">
+        <div class="proof-feature">
+          <div class="proof-bignum"><span class="counter-val" data-count="14" data-suffix="K+">0</span></div>
+          <div class="proof-bignum-label">student reviews collected — public &amp; unedited</div>
+          <p class="proof-sub">Anonymous feedback from the students who sat through every lesson. No filter, no spin — the full record is open.</p>
+          <div class="proof-buttons">
+            <a href="https://docs.google.com/spreadsheets/d/1s6Cme1fAsFG-XFtyo9c1MSoLzafpK9MmASopbEvPBMA/edit?usp=sharing"
+              target="_blank" rel="noopener noreferrer" class="proof-btn proof-btn-solid">
+              <span>📝 Read every review</span>
+            </a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeQBBUATzlsxrX8IM7b1pHnc-am2Ih-CMR9iPgHvqzf7YF07A/viewform?usp=header"
+              target="_blank" rel="noopener noreferrer" class="proof-btn proof-btn-ghost">
+              <span>Take the survey →</span>
+            </a>
+          </div>
         </div>
 
-        <div class="testimonial-card">
-          <p class="testimonial-quote">
-            The way Bob teaches makes complex topics so easy to understand. I finally feel confident about my financial
-            future and have already started investing!
-          </p>
-          <div class="testimonial-author">Marcus T.</div>
-          <div class="testimonial-role">Recent Graduate</div>
+        <div class="proof-points">
+          <div class="proof-point">
+            <strong><span class="counter-val" data-count="100" data-suffix="K+">0</span></strong>
+            <span>students taught in classrooms to date</span>
+          </div>
+          <div class="proof-point">
+            <strong><span class="counter-val" data-count="30" data-suffix="+">0</span></strong>
+            <span>schools reached across Ohio and beyond, every year</span>
+          </div>
+          <div class="proof-point">
+            <strong>100%</strong>
+            <span>of reviews published unedited — straight from students</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1686,15 +1795,15 @@
         </div>
       </div>
 
-      <div class="event-images">
-        <img src="Barrier%20Breakers%202026%20Pics/IMG_3695.jpg" alt="Barrier Breakers 2026 opening event" loading="lazy">
-        <img src="Barrier%20Breakers%202026%20Pics/IMG_3777.jpg" alt="Students competing at Barrier Breakers 2026" loading="lazy">
+      <div class="event-gallery">
+        <img class="g-big" src="Barrier%20Breakers%202026%20Pics/IMG_3695.jpg" alt="Barrier Breakers 2026 opening event" loading="lazy">
+        <img class="g-tall" src="Barrier%20Breakers%202026%20Pics/IMG_3777.jpg" alt="Students competing at Barrier Breakers 2026" loading="lazy">
         <img src="Barrier%20Breakers%202026%20Pics/IMG_3834.jpg" alt="Students brainstorming at Barrier Breakers 2026" loading="lazy">
-        <img src="Barrier%20Breakers%202026%20Pics/IMG_9165.jpg" alt="Barrier Breakers 2026 group photo" loading="lazy">
+        <img class="g-wide" src="Barrier%20Breakers%202026%20Pics/IMG_9165.jpg" alt="Barrier Breakers 2026 group photo" loading="lazy">
         <img src="Barrier%20Breakers%202026%20Pics/IMG_9173.jpg" alt="Barrier Breakers 2026 event energy" loading="lazy">
         <img src="Barrier%20Breakers%202026%20Pics/IMG_9143.jpg" alt="Final presentations at Barrier Breakers 2026" loading="lazy">
         <img src="education1.jpg" alt="Barrier Breakers at Kent State University" loading="lazy">
-        <img src="FinMangoKent2025-43 (2).JPG" alt="Students competing at Barrier Breakers" loading="lazy">
+        <img class="g-wide" src="FinMangoKent2025-43 (2).JPG" alt="Students competing at Barrier Breakers" loading="lazy">
         <img src="education3.jpg" alt="Financial literacy competition" loading="lazy">
         <img src="education5.jpeg" alt="Kent State University event" loading="lazy">
       </div>
