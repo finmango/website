@@ -29,8 +29,12 @@ indices — Financial Anxiety, Food Insecurity, Housing Stress, and Affordabilit
 and a documented methodology. This paper (i) situates the Barometer within the economic
 "nowcasting" literature, (ii) documents the data architecture and index construction,
 (iii) is explicit about which components are empirically grounded versus heuristic, and
-(iv) reports a first validation against realized outcomes. **[TODO: one-line headline
-result once validation is run.]**
+(iv) reports a first cross-sectional validation. Against an independent benchmark (Feeding
+America's *Map the Meal Gap*), the Food Insecurity index's state ranking shows significant
+concurrent validity (Spearman ρ = 0.62, *n* = 51, *p* < 0.001). The same analysis reveals,
+and we report transparently, that this index is currently carried entirely by structural
+regional adjustments rather than its live data inputs — a finding that both validates the
+model's regional priors and bounds its present "real-time" claim.
 
 ---
 
@@ -127,25 +131,73 @@ This is the section a reviewer turns to first, so we are direct.
 We therefore recommend — and the open CSV provides — the **raw underlying metrics** for any
 econometric use, with the composite indices used as a communication and ranking layer.
 
-## 4. Validation **[TODO — empirical core]**
+## 4. Validation
 
-A search-based distress index is only credible if its movements track reality. We propose
-(and report) three checks; the first is the minimum bar for posting this paper:
+A distress index is only credible if it ranks places the way reality does. Because the
+public data is a single daily snapshot (we do not yet retain an index time series), this is
+a **cross-sectional concurrent-validity** test across the 50 states + DC (*n* = 51). It
+speaks to the validity of the state *ranking*, not to the temporal "nowcasting" claim,
+which remains untested (§5). All figures below are reproducible via
+[`scripts/validate-barometer.js`](../scripts/validate-barometer.js).
 
-1. **Lead/lag against realized outcomes.** Do month-over-month changes in Financial Anxiety
-   lead subsequent BLS unemployment revisions? Does Housing Stress co-move with
-   [Eviction Lab](https://evictionlab.org/) filing data? Does Food Insecurity track
-   Feeding America / USDA food-bank and SNAP-application series? Report correlation and
-   lead time by state. **If the signal has no predictive content, we say so and reconsider
-   the weights.**
-2. **Cross-validation against independent measures.** State Housing Stress vs. JCHS cost-burden
-   rates (held out, not used in calibration); Financial Anxiety vs. NY Fed Household Debt
-   and Credit / consumer-distress series.
-3. **Case-study check.** For the top-3 state-month movements each release, identify a real
-   event (WARN notices, plant closures, disaster declarations) that plausibly explains it.
+**Held-out benchmark.** We use state food-insecurity rates from Feeding America's *Map the
+Meal Gap* (via the County Health Rankings 2025 national file). This is genuinely held out:
+the Barometer's Food Insecurity index is nominally driven by Census SAIPE poverty, not by
+food-insecurity surveys. We report Spearman ρ (primary, since the indices are ordinal by
+design) and Pearson *r*.
 
-All validation results would be published alongside the data, consistent with the
-Barometer's existing per-cell source attribution.
+### 4.1 Results
+
+| Test | Pearson *r* | Spearman ρ | *p* | Reading |
+|---|---|---|---|---|
+| **Food Insecurity index vs. Map-the-Meal-Gap** (held out) | 0.70 | **0.62** | <0.001 | Moderate–strong concurrent validity |
+| Housing Stress vs. food insecurity (discriminant) | 0.24 | 0.24 | 0.085 | Weak, as it should be |
+| Financial Anxiety vs. food insecurity (discriminant) | 0.39 | 0.38 | 0.004 | Moderate (distress dimensions co-move) |
+| Financial Anxiety vs. BLS unemployment (input) | 0.86 | 0.84 | <0.001 | Internal consistency confirmed |
+| Housing Stress vs. ACS rent burden (input) | 0.75 | 0.68 | <0.001 | Internal consistency confirmed |
+| Housing Stress vs. JCHS cost burden (calibration) | 0.83 | 0.70 | <0.001 | Internal consistency confirmed |
+
+Two positive findings. First, the Food Insecurity index has **statistically significant
+concurrent validity against a fully independent benchmark** (ρ = 0.62, *p* < 0.001). Second,
+the indices show **discriminant validity**: the Food Insecurity index tracks food insecurity
+(ρ = 0.62) substantially better than the Housing (0.24) or Anxiety (0.38) indices do — they
+are not merely all measuring "generic state hardship."
+
+### 4.2 The finding that matters most (and why disclosing it makes the index *more* credible)
+
+The validation also surfaced something we are obligated to report. The Food Insecurity index
+correlates with the hand-set **regional stress multiplier at ρ = r = 1.00** — i.e., in this
+snapshot the index is *exactly* `base × regional multiplier`. The reason: `poverty_rate` was
+**null for all 51 states** (the SAIPE/Census feed did not populate), so the only term varying
+across states was the multiplier the designers assigned by region.
+
+The implication is precise, and double-edged:
+
+- **The structural priors are good priors.** Multipliers set from regional economic knowledge
+  (Deep South ≈ 1.25–1.35×, Plains ≈ 0.85–0.95×) correlate 0.62 with independent food
+  insecurity. That is a real, defensible result.
+- **But the "live data" layer contributed nothing to this index's ranking in this snapshot.**
+  The Food Insecurity index is presently a static structural prior, not a live measurement,
+  and its concurrent validity should be attributed to the multipliers, *not* to the data
+  pipeline. Claiming this index as "real-time" is not currently supportable.
+- **The other two data-bearing indices fare better.** Financial Anxiety retains independent
+  signal from BLS unemployment (ρ = 0.84) on top of the multiplier (ρ = 0.78), and Housing
+  Stress is genuinely data-driven (rent burden ρ = 0.68, JCHS ρ = 0.70) beyond the multiplier
+  (ρ = 0.66). So the degradation is specific to Food Insecurity, not systemic.
+
+This is also an **operational finding**: the production poverty feed has silently gone dark,
+quietly reducing Food Insecurity to a constant-per-region value. Restoring it is the single
+highest-value fix and a prerequisite to any "live" claim for that index.
+
+### 4.3 Remaining validation (next phase)
+
+- **Temporal / lead–lag.** Begin retaining the daily index series so month-over-month changes
+  can be tested against subsequently released BLS unemployment, [Eviction Lab](https://evictionlab.org/)
+  filings, and SNAP-application data. This is what would substantiate the *nowcasting* claim.
+- **Held-out housing.** Re-validate Housing Stress against an ACS cost-burden series *not* used
+  in calibration (the current JCHS check is partly circular).
+- **Case-study check.** For the largest state movements each release, identify a real event
+  (WARN notices, disaster declarations) that plausibly explains them.
 
 ## 5. Limitations
 
@@ -153,6 +205,10 @@ Barometer's existing per-cell source attribution.
   inputs revise monthly/annually. The dashboard's "LIVE" framing overstates this and should
   be revised to "daily-refreshed nowcast." *(This change also belongs on the public page.)*
 - **Heuristic weights.** See §3.3. Until estimated or validated, the composite is ordinal.
+- **Live-layer dependence.** Validation (§4.2) showed the Food Insecurity index currently
+  reduces to `base × regional multiplier` because its poverty input was unpopulated; its
+  cross-sectional validity reflects the regional priors, not live data. The data feeds must
+  be confirmed live before per-index "real-time" claims are made.
 - **Search-signal drift and saturation.** Per the Google Flu lesson, term performance decays;
   the ontology needs periodic re-validation.
 - **Ecological inference.** State-level signals do not describe individuals.
