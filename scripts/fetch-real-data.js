@@ -352,23 +352,45 @@ async function fetchCensusPoverty() {
                 const data = await fetchWithRetry(url);
 
                 if (data && data.length > 1) {
-                    // Skip header row
+                    // The SAIPE *timeseries* endpoint returns a `time` column
+                    // BEFORE the `state` geography column, e.g. header:
+                    //   ["NAME","SAEPOVRTALL_PT","SAEPOVRT0_17_PT","time","state"]
+                    // Reading by fixed position put the year ("2023") into
+                    // stateCode, so the FIPS->abbr lookup failed for every row
+                    // and poverty silently came back empty. Locate columns by
+                    // header name so we're robust to column ordering.
+                    const header = data[0];
+                    const colPov = header.indexOf('SAEPOVRTALL_PT');
+                    const colChild = header.indexOf('SAEPOVRT0_17_PT');
+                    const colState = header.indexOf('state');
+
+                    if (colState === -1 || colPov === -1) {
+                        console.log(`  ⚠️  Unexpected SAIPE columns, skipping ${year}: ${JSON.stringify(header)}`);
+                        continue;
+                    }
+
                     for (let i = 1; i < data.length; i++) {
-                        const [name, povertyRate, childPovertyRate, stateCode] = data[i];
+                        const row = data[i];
+                        const stateCode = String(row[colState]).padStart(2, '0');
 
                         // Find state abbreviation from FIPS
-                        const abbr = Object.entries(STATE_FIPS).find(([a, f]) => f === stateCode.padStart(2, '0'))?.[0];
+                        const abbr = Object.entries(STATE_FIPS).find(([, f]) => f === stateCode)?.[0];
 
                         if (abbr) {
                             results[abbr] = {
-                                povertyRate: parseFloat(povertyRate),
-                                childPovertyRate: parseFloat(childPovertyRate),
+                                povertyRate: parseFloat(row[colPov]),
+                                childPovertyRate: colChild !== -1 ? parseFloat(row[colChild]) : null,
                                 year: year
                             };
                         }
                     }
-                    console.log(`  ✓ Retrieved poverty data for ${Object.keys(results).length} states (${year})`);
-                    break;
+
+                    if (Object.keys(results).length > 0) {
+                        console.log(`  ✓ Retrieved poverty data for ${Object.keys(results).length} states (${year})`);
+                        break;
+                    }
+                    // Rows returned but nothing matched — log and try an earlier year
+                    console.log(`  ⚠️  SAIPE ${year} returned ${data.length - 1} rows but no states matched (FIPS mapping?)`);
                 }
             } catch (e) {
                 console.log(`  Year ${year} not available, trying earlier...`);
