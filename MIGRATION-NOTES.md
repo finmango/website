@@ -129,7 +129,57 @@ questions.
 - 320/375/768/1024/1440: zero horizontal overflow, no JS errors.
 - Tab switching, map coloring (51/51), tooltip layout, abstract toggles all verified.
 - Tablet tier active (hero scale-up + 2×2 premise stats); <560 full-width stacked CTAs.
-## education.html — pending
+## education.html — DONE
+
+### Removed (old system)
+- `css/navbar.css` + `js/navbar.js` (replaced by index.html's inline nav/footer/script).
+- **Aurora gradients + floating particle divs** in the hero (banned particle decoration) →
+  index hero glow only.
+- **Orange gradient backgrounds** on the proof feature card and the CTA section (banned) →
+  hairline proof plate on paper; CTA is now the ink coda. Giant 📧 emoji watermark removed.
+- Neo-brutalist remnants: 2–2.5px black borders, offset shadows (cards, gallery hover,
+  proof card), rotated "taped clipping" recognition card, ★ list markers, orange meta-badge
+  chips ("5 Days"/"2.5 Hours" → mono meta line), dot-grid hero texture, uppercase buttons,
+  squiggle section dividers (×3), sketchy-circle button decoration.
+- Button emojis (📝 📊 ✨ 📸) — labels kept, emojis dropped per the button system.
+- Reveal-on-scroll + animated counters (same call as previous pages — stats static).
+- Old declaration/video black sections consolidated: video keeps ink; the declaration
+  pull-quote moved to paper (ink budget: video + CTA→footer coda only).
+
+### Preserved
+- All meta (incl. COPPA block), OG/Twitter, canonical, robots, GA tag verbatim.
+- Every link: student reviews sheet, survey form, 3 curriculum resources (incl. the Beta
+  presentation, now marked with a mono BETA tag + original title attr), 3 Drive photo-folder
+  links, YouTube embed (`agm8O9-uCw4`) with full allow/title attributes,
+  `mailto:hello@finmango.org`, anchor `#millionaire-mindset`.
+- All copy: program description (program-title folded into the lead paragraph as a bold
+  opener), all 6 outcome titles + descriptions with their stroke-drawn icons (strokes
+  recolored `#1a1a1a` → `#0A0A0A`), proof copy + 3 proof points, event copy + stats,
+  founder bio (duplicate inner "Bob Gillingham" heading dropped — the section h2 carries
+  it; role moved under the photo as a mono line), both recognition entries, declaration
+  quote + attribution, CTA copy.
+- All 10 gallery images with original alts (verified 10/10 load), bob.jpg, education7.png.
+
+### New treatment highlights
+- Hero: index billboard with "LIVE IN 30+ SCHOOLS" mono status, 3 stats with orange
+  `<em>` units (warm-page direction), stroke under "informed".
+- Outcomes = 3×2 hairline lattice with mono numerals; "What every student walks away
+  with" as a dash-prefixed mono label.
+- Proof = hairline plate: big 14K+ display number | 3 ruled proof rows.
+- Recognition = hairline panel with mono meta lines (2024 · NORTHEAST REGION).
+- Hand-drawn ration spent (2): hero stroke + declaration squiggle.
+- `text-wrap: balance` added to section heads (orphan control without unbreakable runs —
+  this fixed a 1px overflow at 320 from an over-eager `&nbsp;`).
+
+### Content questions / flags
+- education7.png alt "FinMango Financial Education" is vague — better description welcome.
+- Old hero h1 was Title Case "From Beginners to Financially Informed Students" → sentence
+  case per the retone rule.
+
+### Verified (headless Chromium)
+- 320/375/768/1024/1440: zero horizontal overflow (after the balance fix), no JS errors.
+- Tablet tier active at 768; <560 full-width stacked CTAs and single-column grids;
+  gallery mosaic responsive (4 → 2 → tighter rows); all lazy images confirmed loading.
 ## ambassadors.html — pending
 ## barrier-breakers.html — pending
 ## navtech.html — pending
