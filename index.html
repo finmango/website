@@ -127,6 +127,7 @@
 
       /* Layout */
       --max-width: 1280px;
+      --hero-max: 1440px;
       --gutter: 2.5rem;
     }
 
@@ -300,21 +301,32 @@
     .dropdown:focus-within .dropdown-trigger::after { width: 100%; }
 
     .btn-get-involved {
+      display: inline-flex;
+      align-items: center;
       padding: .55rem 1rem !important;
       border: 1px solid var(--ink-line);
+      color: var(--ink) !important;
+      text-decoration: none !important;
       font-size: .82rem !important;
       font-weight: 600 !important;
+      letter-spacing: -.01em;
+      white-space: nowrap;
       transition: border-color .25s ease !important;
     }
     .btn-get-involved::after { display: none !important; }
     .btn-get-involved:hover { border-color: var(--ink); }
 
     .btn-donate {
+      display: inline-flex;
+      align-items: center;
       padding: .55rem 1.15rem !important;
       background: var(--orange);
       color: #fff !important;
+      text-decoration: none !important;
       font-size: .82rem !important;
       font-weight: 600 !important;
+      letter-spacing: -.01em;
+      white-space: nowrap;
       transition: background .25s ease !important;
     }
     .btn-donate::after { display: none !important; }
@@ -411,7 +423,7 @@
        ---------------------------------------------------------- */
     .hero {
       background: var(--paper);
-      padding: 8.5rem var(--gutter) 0;
+      padding: 8.5rem 2rem 0;
       min-height: 100svh;
       display: flex;
       flex-direction: column;
@@ -439,7 +451,7 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: var(--max-width);
+      max-width: var(--hero-max);
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -554,14 +566,14 @@
     .hero-trust {
       position: relative;
       z-index: 1;
-      max-width: var(--max-width);
+      max-width: var(--hero-max);
       margin: 0 auto;
       width: 100%;
-      padding: 1.75rem 0 2rem;
+      padding: 1.6rem 0 1.9rem;
+      border-top: 1px solid var(--ink-line-soft);
       display: flex;
       align-items: center;
-      gap: 2.75rem;
-      flex-wrap: wrap;
+      gap: 3rem;
     }
     .hero-trust-label {
       font-family: var(--font-mono);
@@ -572,15 +584,26 @@
       color: var(--ink-faint);
       flex-shrink: 0;
     }
-    .hero-trust-logos { display: flex; align-items: center; gap: 2.5rem; flex-wrap: wrap; }
-    .hero-trust img {
-      height: 30px;
-      width: auto;
-      filter: grayscale(1) brightness(0);
-      opacity: .32;
-      transition: opacity .25s ease;
+    .hero-trust-logos {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      min-width: 0;
     }
-    .hero-trust img:hover { opacity: .7; }
+    .hero-trust img {
+      height: auto;
+      max-height: 34px;
+      max-width: 120px;
+      width: auto;
+      object-fit: contain;
+      filter: grayscale(1) contrast(.85);
+      mix-blend-mode: multiply;
+      opacity: .55;
+      transition: opacity .25s ease, filter .25s ease;
+    }
+    .hero-trust img:hover { opacity: 1; filter: grayscale(0) contrast(1); }
 
     /* ----------------------------------------------------------
        BAROMETER — the instrument. Signature section.
@@ -1326,9 +1349,9 @@
       .hb-stats { gap: 2rem; flex-wrap: wrap; }
       .hb-cta-row { justify-content: flex-start; width: 100%; gap: .75rem; }
       .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
-      .hero-trust { gap: 1.5rem; padding: 2rem 0; }
-      .hero-trust-logos { gap: 1.75rem; }
-      .hero-trust img { height: 24px; }
+      .hero-trust { flex-direction: column; align-items: flex-start; gap: 1.1rem; padding: 1.5rem 0 1.75rem; }
+      .hero-trust-logos { width: 100%; justify-content: flex-start; flex-wrap: wrap; gap: 1.25rem 1.9rem; }
+      .hero-trust img { max-height: 24px; max-width: 88px; }
 
       .barometer-section { padding: 4.5rem var(--gutter) 5rem; }
       .barometer-head { grid-template-columns: 1fr; gap: 1.75rem; margin-bottom: 2.5rem; }
