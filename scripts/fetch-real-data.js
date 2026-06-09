@@ -619,8 +619,8 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             // Google Health Trends API Volatility Boost (+0 to +10 points)
             // The API returns P(term) × 10M — values typically 1-20 for our terms.
             // We use the raw value directly (capped at 10) as the boost.
-            if (trends?.financial_anxiety?.[abbr] != null) {
-                anxietyValue += Math.min(trends.financial_anxiety[abbr], 10);
+            if (trends?.states?.financial_anxiety?.[abbr] != null) {
+                anxietyValue += Math.min(trends.states.financial_anxiety[abbr], 10);
             }
 
             const change = unemp.previousValue
