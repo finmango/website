@@ -74,7 +74,61 @@ questions.
 
 ---
 
-## research.html — pending
+## research.html — DONE
+
+### Removed (old system)
+- `css/navbar.css` + `js/navbar.js` (replaced by index.html's inline nav/footer/script, as on about.html).
+- **Instrument Serif** font and all serif-italic "academic polish" ornaments (§ label numerals,
+  serif figure captions, serif tweet caption) → JetBrains Mono apparatus per the system.
+- **Orange section background on the CTA** (banned) → ink coda.
+- Neo-brutalist remnants: 2–3px black borders, offset/hover shadows on cards, pill chips
+  (leadership + recognition stamps), rotated "pinned clipping" tweet frame with tape +
+  drop shadow, dot-grid hero textures, navy `--ink: #1a3a5e` secondary palette (off-system),
+  colored tag chips, squiggle section dividers (×2), sketchy-circle button decoration,
+  recognition star icon, Twitter-blue icon fill (now ink-faint).
+- Reveal-on-scroll + animated counters (same call as about.html — stats are static).
+
+### Preserved
+- All meta/OG/Twitter/canonical/robots + GA tag verbatim. (This page has no COPPA block or
+  JSON-LD — none added.)
+- **Map preview works untouched**: `data/dashboard-data.js`, `scripts/map-svg.js`,
+  `scripts/research-map.js` kept verbatim in the same position; all hooks preserved
+  (`#barometer-preview`, `#barometer-map-container`, `#barometer-preview-map`,
+  `#preview-tooltip`, `#tooltip-state`, `#tooltip-value`, `#indicator-tabs`,
+  `.indicator-tab[data-indicator]`). research-map.js writes inline `var(--black)`/orange
+  styles on tab clicks, so the tokens include a `--black: #0A0A0A` legacy alias and the
+  tab CSS matches the JS-set states exactly (verified: tab click → orange active + map
+  recolor, 51/51 states painted, tooltip intact).
+- Expandable abstracts: `.paper-toggle` / `.paper-abstract-wrap` behavior and IDs
+  (`abs-whitepaper`, `abs-mango`, `abs-covid`) kept; lookup now goes through
+  `aria-controls` instead of `nextElementSibling` because the toggle moved into a links
+  row (same behavior, verified working).
+- Twitter embed (blockquote + platform.twitter.com/widgets.js) verbatim.
+- All anchors: `#approach`, `#partnerships`, `#focus`, `#publications`, `#team`,
+  `#methodology`, `#barometer-preview`.
+- All content: premise lede, 4 stats (30+ repos linked to GitHub), recognition copy +
+  stamps (now a mono meta line), figure caption, 4 approach cards, 2 collaborations with
+  Active/Archived status (now mono hairline tags), 6 open questions, 5 cited-by orgs,
+  3 published papers + 5 working papers with full author lists/journals/links/abstracts,
+  6 leadership names + initials, 5 academic collaborators, methodology list, CTA copy.
+
+### New treatment highlights
+- Publications = ruled list with mono meta lines (year · venue · authors · status);
+  "Featured"/"In Progress" rendered in orange within the meta line.
+- Premise = the page's ink moment (lede + 4 ruled stats with orange `<em>` units).
+- Open questions + research leadership = hairline lattice grids.
+- Hero live-signals strip kept as mono apparatus on the hero's bottom edge.
+- Hand-drawn ration: hero stroke + CTA squiggle (2). Card titles retoned to sentence case.
+
+### Content questions / flags
+- External Google Health logo (webflow CDN URL) kept as-is — consider self-hosting.
+- "Or read our roadmap" pattern n/a here; "Read Whitepaper (GitHub)" retoned to
+  "Read the whitepaper" (the GitHub destination is shown by the external arrow/source line).
+
+### Verified (headless Chromium)
+- 320/375/768/1024/1440: zero horizontal overflow, no JS errors.
+- Tab switching, map coloring (51/51), tooltip layout, abstract toggles all verified.
+- Tablet tier active (hero scale-up + 2×2 premise stats); <560 full-width stacked CTAs.
 ## education.html — pending
 ## ambassadors.html — pending
 ## barrier-breakers.html — pending
