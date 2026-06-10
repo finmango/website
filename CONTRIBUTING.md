@@ -110,7 +110,7 @@ open test.html
 Use our update template script:
 
 ```bash
-./update-template.sh
+./tools/update-template.sh
 ```
 
 ### Common Update Scenarios

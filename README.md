@@ -118,8 +118,8 @@ sed -i 's|old-link.html|new-link.html|g' *.html
 
 **Option 3: Using the helper script**
 ```bash
-# See update-template.sh in the repository
-./update-template.sh
+# See tools/update-template.sh in the repository
+./tools/update-template.sh
 ```
 
 ### Updating Common Styles
