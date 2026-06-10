@@ -184,7 +184,66 @@ questions.
 ## barrier-breakers.html — pending
 ## navtech.html — pending
 ## ai-economic-signal.html — pending
-## barometer.html — pending
+## barometer.html — DONE (out of order, by request)
+
+### The data promise
+`data/dashboard-data.js`, `scripts/us-map-content.js`, and `scripts/dashboard-app.js` are
+**byte-for-byte untouched** (git diff confirms barometer.html is the only change). Every
+DOM hook the app reads was preserved verbatim: all 32 IDs (`val-*`, `change-*`, `spark-*`,
+`us-map`, `state-tooltip`, `panel-*`, `trend-chart`, `chart-indicator`, `chart-period`,
+`rankings-*`, `page-*`, `prev/next-btn`, `download-csv/json`, `copy-citation`,
+`live-indicator`, `last-updated-date`, `stale-data-banner`, `embed-widget`, `methodology`),
+`data-indicator` / `data-sort` attributes, JS-toggled classes (`active`, `severity-*`,
+`open`, `visible`, `up`/`down`), and every class the app injects (panel indicators,
+rank badges, value bars/cells, sparkline containers). Chart.js CDN tag kept verbatim.
+
+### Treatment — full ink instrument
+- Whole page runs on ink with paper site chrome (index nav) on top; mono eyebrow
+  "LIVE INSTRUMENT · 50 STATES" + display title with orange em.
+- Indicator cards = hairline lattice cells in the index barometer style: mono labels,
+  900 values, mono deltas with **signal colors** (▲ = signal-bad, ▼ = signal-good),
+  severity classes now drive a 2px color-coded left rule (was 4px), active = orange rule +
+  orange tint (index exact). Sparklines work as-is (JS picks white-ish stroke on active,
+  orange otherwise — both legible on ink).
+- Map = hairline-framed plate; state strokes switched to the index ink-map treatment
+  (`rgba(10,10,10,.55)`); mono legend. Tooltip became a paper chip with mono readout.
+- **Chart plate stays paper inside the ink page** — dashboard-app.js hardcodes the line
+  color `#000000`, so the canvas keeps a paper ground rather than touching the JS.
+  Selects restyled as mono apparatus with `color-scheme: dark`.
+- Rankings = ruled table: mono headers/values, hairline circled rank badges (circles
+  allowed), JS-injected data-colored value bars kept (opacity tuned for ink), hairline
+  pagination buttons.
+- Tools toolbar + methodology panel + accordions (inline onclick handlers untouched) +
+  data dictionary + citation block restyled to hairlines/mono. Emojis dropped from tool
+  buttons (📥📋📄🔗📖), labels kept.
+- State panel = ink side sheet (bottom sheet on mobile — rounded corners removed per the
+  radius rule, drag pill became a hairline bar).
+- Replaced the minimal dashboard footer with the standard site footer; the citation +
+  MIT-license line moved into the methodology "Cite This Data" block (nothing dropped).
+- Old `#blob-canvas` CSS, segmented-toggle CSS, and `.highlighted` row CSS were dead
+  (no JS/markup references) and removed. Inter font → DM Sans/JetBrains Mono.
+
+### Functionally verified (headless Chromium, real data)
+- Load: national values populate (140.0 / 104.5 / 156.7 / 136.8), 4 sparklines render,
+  51/51 states colored, severity classes applied, LIVE badge + "June 9, 2026" date.
+- Card click → active state moves, map recolors, chart select syncs, rankings re-sort.
+- Hover Texas → tooltip "TEXAS / FINANCIAL ANXIETY: 141.0"; click → panel opens with 4
+  indicators, ranks, colored comparison bars; closes cleanly.
+- Chart.js: 60 points (5y), period switch to 12m works; chart canvas 1150×300.
+- Search ("tex" filters), pagination (page 2 = 11–20, prev re-enables), accordions
+  toggle, CSV/JSON download clicks error-free. Zero JS console errors.
+- Zero horizontal overflow at 320/375/768/1024/1440 — including the Chart.js-failure
+  path (added `canvas { max-width: 100% }` guard; the bare 300px canvas overflowed 320px
+  screens even on the old page). Note: the Chart.js CDN fails in the sandbox only due to
+  its TLS-intercepting proxy (`ERR_CERT_AUTHORITY_INVALID`); verified working with certs
+  ignored, and the tag is unchanged from production.
+
+### Flags
+- The `#embed-widget` "Embed" button has no handler in dashboard-app.js (pre-existing);
+  preserved as-is.
+- Stale-data states preserved: >26h swaps LIVE for the JS's amber STALE chip (inline
+  styles from the app, left untouched); >72h shows the banner — restyled to ink +
+  signal-red text (JS only toggles `display`).
 ## resources.html — pending
 ## get-involved.html — pending
 ## donate.html — pending
