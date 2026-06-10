@@ -411,6 +411,46 @@ rank badges, value bars/cells, sparkline containers). Chart.js CDN tag kept verb
 - Stale-data states preserved: >26h swaps LIVE for the JS's amber STALE chip (inline
   styles from the app, left untouched); >72h shows the banner — restyled to ink +
   signal-red text (JS only toggles `display`).
-## resources.html — pending
+## resources.html — DONE
+
+### What this page is
+A JS-rendered tool directory: a `resources` data array (25 tools, 6 featured) + a
+`sketchIcons` map of 27 hand-drawn stroke SVGs, rendered into `#featuredGrid`/`#mainGrid`
+with live search (`#searchInput`) and category filters (`.filter-btn[data-category]`).
+
+### Preserved (the page's engine, verbatim)
+- The full `resources` array — every title, description, link, category, featured flag.
+- The full `sketchIcons` map — the stroke icons were already perfect for the system
+  (currentColor line art); they now render ink and turn orange on card hover.
+- All render/filter/search/toggle JS and the `createCardHTML` template untouched,
+  including the `fadeUp` entrance (keyframes re-declared in the new CSS — the inline
+  card styles depend on it, or cards would stay at opacity 0).
+- Hooks: `#resourceCount` (kept inside the new hero status chip), `#searchInput`,
+  `#featuredGrid/#mainGrid`, `#featuredHeader/#mainHeader`, `#featuredCount/#mainCount`,
+  `#divider1`, `.filter-btn.active`.
+- **Functionally verified**: 25 count renders, 6 featured + 19 main, retirement filter
+  → 1+5, search "roth" → exactly Battle of the IRAs + Roth IRA Calculator, card click
+  navigates to mango-stories.html, no JS errors.
+
+### Removed / translated
+- `css/navbar.css` + `js/navbar.js` + Caveat font → index standard chrome + fonts.
+- Old card chrome (radius, shadows — 7 box-shadows on the page) → hairline-bordered
+  cards with the orange top-line hover; category tags → mono hairline chips;
+  "Featured" badge → orange mono label; section counts → mono.
+- 🔍 emoji search icon → stroke SVG magnifier; search input + filter chips restyled as
+  the directory's instrument panel under a hairline (active filter = orange fill, the
+  button-state precedent from the barometer tabs).
+- Hero: top-anchored billboard, stroke under "better" (the page's one hand-drawn
+  accent), `#resourceCount` pulse chip as the status readout.
+- Page stays all-paper (a directory has no ink moment); footer is the standard ink coda.
+
+### Added / flags
+- **GA tag added** — fourth page found without analytics.
+- No OG/canonical existed on this page; not invented (left as-was, flagging in case
+  you want them added).
+
+### Verified (headless Chromium)
+- Zero horizontal overflow at 320/375/768/1024/1440; tablet tier active; grid 3 → 2 →
+  1 columns; filters wrap at small widths.
 ## get-involved.html — pending
 ## donate.html — pending
