@@ -500,5 +500,47 @@ to every profile page.
 The structure is fully parametric (name, em-word, tagline, bio, photo, facts ×3,
 quote + em phrase + attribution, Q&A ×2, plan, OG/canonical slugs) — ready to apply
 to the rest of the profiles on approval.
+## Ambassador profile rollout (42 pages) — DONE
+
+### Scope
+All 42 remaining old-template ambassador profiles (cohorts 2023–2026), generated
+from the approved david-johnson.html design by a one-off extractor/generator
+(content parsed from each old page, re-emitted into the new template). **Not
+included:** the 7 team-member pages (soham-patel, sarah-cherian, scott-glasgow,
+oscar-wahltinez, bob-gillingham, anthony-schilt, ojasvinee-singh) — they share the
+old `profile-hero` CSS class but have a completely different body (team bios, no
+quote/philosophy/plan). They still run the old design and need their own pass.
+
+### Preserved per page
+- Entire head verbatim minus fonts/styles: title, description, keywords, OG block
+  (each page's own og:image and og:url — note older cohorts use
+  `/ambassadors/<slug>` canonical/og:url, left exactly as found), Twitter card,
+  canonical, robots, GA (all 42 had GA).
+- All content fields word-for-word: tagline (+ terminal period added), bio, quote,
+  attribution, both Q&As, goal/plan text. Photos unchanged (mixed jpg/png).
+
+### Cohort-aware template decisions
+- Quote eyebrow: "On financial health" only where the attribution is
+  "…on what financial health means to them" (2026 cohort); famous/mantra quotes
+  (Churchill, Coco Chanel, Proverbs, etc.) get "Words they live by".
+- Orange `<em>` inside the quote: first occurrence of "financial health" if
+  present (10 pages), otherwise no highlight — no algorithmic phrase-picking.
+- Section eyebrows carry each page's own labels, sentence-cased: 2023–25 =
+  "Personal philosophy" / "Current goal"; 2026 = "In their own words" /
+  "Their plan as ambassador".
+- Facts row: **value-only** ruled columns (no Country/University/Hometown labels).
+  Old tag pills are role descriptors on most cohorts ("Nonprofit Founder",
+  "Problem Solver") — inferred labels would be wrong. david-johnson.html keeps its
+  labels (manually verified for him).
+- Name `<em>` + hand stroke on the last name token (handles hyphenated
+  "Mike-Adeogun" and 4-word accented names like "María Manuela Córdoba Aguirre").
+- Same CTA fix as David's page: #apply → ambassadors.html.
+
+### Verified (headless Chromium)
+- All 42 pages × 5 widths (320/375/768/1024/1440): zero horizontal overflow, zero
+  JS errors. Visual sample inspected per cohort + edge-case names
+  (maria-manuela-cordoba-aguirre, dami-mike-adeogun, sophia-moffa) at desktop and
+  mobile.
 ## get-involved.html — pending
 ## donate.html — pending
+## Team profile pages (7) — pending (different template; see rollout note above)
