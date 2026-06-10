@@ -573,5 +573,43 @@ The lighter of the two conversion pages: hero + a 4-row "opportunity ladder"
 ### Verified (headless Chromium)
 - Zero horizontal overflow at 320/375/768/1024/1440; ladder rows stack
   (time chip above title) on mobile; CTA buttons full-width ≤560.
+## Team profile pages (7) — DONE
+
+### Scope
+scott-glasgow, soham-patel, sarah-cherian, oscar-wahltinez, bob-gillingham,
+anthony-schilt, ojasvinee-singh — the old team template (hero + ink CTA; Anthony
+adds a contributions grid; Scott adds journey/impact/featured-tweet/TEDx/personal).
+
+### Template
+- Hero mirrors the ambassador profile: "← Meet the team" back link (about.html#team),
+  "FinMango team" status chip, role as the eyebrow, name with the orange em + hand
+  stroke taken from each page's own `<span>` emphasis (handles "…Singh, JD"),
+  bio, the page's own hero buttons (first = primary with arrow), hairline 4:5
+  portrait with mono figcaption.
+- CTA coda: shared "Let's build the future of financial health." headline (each
+  page's own button preserved as primary, sentence-cased; added "Meet the team"
+  secondary). No subtitle existed, so the coda is headline + actions only.
+- Anthony: 5 contribution cards → ruled 2-col lattice, mono 01–05, emoji icons
+  dropped.
+- Scott: journey → eyebrow-rail narrative (strongs kept); "Driving Impact" 4 bare
+  titles → ruled 4-col strip; featured section keeps the live Google.org tweet
+  embed (widgets.js preserved) in a hairline frame; TEDx YouTube iframe → 16:9
+  hairline video frame; "Beyond the Work" → paragraph + mono interest chips
+  (emojis stripped).
+
+### Scott's new photo (user request)
+- `scott_new_pic.jpeg` (890×1113) now used on: his page hero portrait, his
+  og:image + twitter:image (were scott.jpg), and the about.html team grid.
+- The about grid's 96px circle showed the full-body shot too small → added a
+  `.team-photo-frame` zoom crop (scale 2.4, origin 50% 11%) so his face matches
+  the other tiles' framing; responsive sizes synced at 80px/72px tiers.
+
+### Preserved
+- Heads verbatim minus font/style swaps — including Scott's and Sarah's JSON-LD
+  Person schema; GA on all 7; every link/button href (LinkedIn, mailtos,
+  get-involved).
+
+### Verified (headless Chromium)
+- All 7 pages + about.html × 5 widths: zero overflow, zero JS errors. Visual
+  check: scott (full), anthony (grid), soham (mobile), about team grid crop.
 ## donate.html — pending
-## Team profile pages (7) — in progress
