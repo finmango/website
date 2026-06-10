@@ -541,6 +541,75 @@ quote/philosophy/plan). They still run the old design and need their own pass.
   JS errors. Visual sample inspected per cohort + edge-case names
   (maria-manuela-cordoba-aguirre, dami-mike-adeogun, sophia-moffa) at desktop and
   mobile.
-## get-involved.html — pending
+## get-involved.html — DONE
+
+### What this page is
+The lighter of the two conversion pages: hero + a 4-row "opportunity ladder"
+(newsletter / share / volunteer / partner) with time-commitment chips.
+
+### Preserved
+- Head verbatim (title, OG, twitter, canonical, robots, GA — no JSON-LD existed).
+- All four opportunities with exact hrefs (blog, x.com, volunteer Google form,
+  partnership mailto), titles and descriptions; "1 MIN / 2 MIN / 2-5 HRS/WK /
+  CUSTOM" time chips (now mono labels, en-dash for 2–5); `#opportunities` anchor.
+- Hero headline + the "fix itself" emphasis (old hand-underline → the system's
+  single hand stroke on the orange em).
+
+### Removed / translated
+- `css/navbar.css` + `js/navbar.js` → standard chrome; Inter-era font weights →
+  DM Sans (added 300) + JetBrains Mono.
+- Squiggle dividers (2) and footer squiggle → hairlines.
+- `.opp-card` boxes → ruled ladder rows (mono time chip | title+desc | arrow),
+  orange hover line.
+- Old hero subtitle split across the page, per the conversion-page brief (paper
+  ground, one ink CTA moment, single orange fill above the fold): sentence 1
+  ("Whether you have 2 minutes or 10 hours a week…") stays in the hero; sentence 2
+  ("Every contribution — big or small…") becomes the ink-coda subtitle.
+- New ink CTA coda (the old page ended at the ladder): "Ready to get involved?"
+  with Donate (primary) + Become an ambassador (secondary) — both real paths from
+  this page's own footer column. Flagging as the page's one piece of added copy.
+- Hero status chip "4 ways to start" (derived from the ladder count).
+
+### Verified (headless Chromium)
+- Zero horizontal overflow at 320/375/768/1024/1440; ladder rows stack
+  (time chip above title) on mobile; CTA buttons full-width ≤560.
+## Team profile pages (7) — DONE
+
+### Scope
+scott-glasgow, soham-patel, sarah-cherian, oscar-wahltinez, bob-gillingham,
+anthony-schilt, ojasvinee-singh — the old team template (hero + ink CTA; Anthony
+adds a contributions grid; Scott adds journey/impact/featured-tweet/TEDx/personal).
+
+### Template
+- Hero mirrors the ambassador profile: "← Meet the team" back link (about.html#team),
+  "FinMango team" status chip, role as the eyebrow, name with the orange em + hand
+  stroke taken from each page's own `<span>` emphasis (handles "…Singh, JD"),
+  bio, the page's own hero buttons (first = primary with arrow), hairline 4:5
+  portrait with mono figcaption.
+- CTA coda: shared "Let's build the future of financial health." headline (each
+  page's own button preserved as primary, sentence-cased; added "Meet the team"
+  secondary). No subtitle existed, so the coda is headline + actions only.
+- Anthony: 5 contribution cards → ruled 2-col lattice, mono 01–05, emoji icons
+  dropped.
+- Scott: journey → eyebrow-rail narrative (strongs kept); "Driving Impact" 4 bare
+  titles → ruled 4-col strip; featured section keeps the live Google.org tweet
+  embed (widgets.js preserved) in a hairline frame; TEDx YouTube iframe → 16:9
+  hairline video frame; "Beyond the Work" → paragraph + mono interest chips
+  (emojis stripped).
+
+### Scott's new photo (user request)
+- `scott_new_pic.jpeg` (890×1113) now used on: his page hero portrait, his
+  og:image + twitter:image (were scott.jpg), and the about.html team grid.
+- The about grid's 96px circle showed the full-body shot too small → added a
+  `.team-photo-frame` zoom crop (scale 2.4, origin 50% 11%) so his face matches
+  the other tiles' framing; responsive sizes synced at 80px/72px tiers.
+
+### Preserved
+- Heads verbatim minus font/style swaps — including Scott's and Sarah's JSON-LD
+  Person schema; GA on all 7; every link/button href (LinkedIn, mailtos,
+  get-involved).
+
+### Verified (headless Chromium)
+- All 7 pages + about.html × 5 widths: zero overflow, zero JS errors. Visual
+  check: scott (full), anthony (grid), soham (mobile), about team grid crop.
 ## donate.html — pending
-## Team profile pages (7) — pending (different template; see rollout note above)
