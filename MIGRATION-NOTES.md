@@ -270,7 +270,36 @@ all survive; only the chrome changed.
 ### Verified (headless Chromium)
 - Zero horizontal overflow at 320/375/768/1024/1440; no JS errors; tablet tier active;
   <560 stacked CTAs + single-column stats; masonry 4/3/2 columns.
-## navtech.html — pending
+## navtech.html — DONE
+
+### Same template family as ai-economic-signal.html — same reconciliation
+- **Particle canvas removed** (`#hero-canvas` + routing-network animation JS).
+- **Exact tokens** replace the near-misses (same drift set: `#FAFAFA`, .6/.35/.08 opacities,
+  `--bg-soft`, max 1400). `min-height:100vh` scaffold → padding rhythm. Hero em
+  ("literacy") trades the text-decoration slab for the hand stroke; CTA squiggle = the
+  second hand-drawn accent.
+- Old `fm-*` nav/menu/footer chrome → index standard; reveal observer + entrance
+  animations dropped; **stat count-up JS dropped** (stats static, per the established
+  precedent) — flagging as on earlier pages.
+- White-on-orange "NOW BUILDING" badge → orange-outline mono chip (kept inside the
+  featured phase summary, where it lives in the markup).
+- `.why-item` boxes → ruled rows; `phase-featured` 3px rule → 2px.
+- Ink rhythm: stakes (ink moment) + CTA coda; work/roadmap/why stay paper.
+
+### Preserved & verified
+- All copy verbatim: hero, 3 sourced stats (Urban Institute / Harvard JCHS / End
+  Homelessness links with ↗), the 4 work-list tools (disaster-desk,
+  food-assistance-calculator, food-desert-analyzer, barometer) with tags + descriptions,
+  "See all 25+ tools →" foot link, all 3 roadmap phases + tool lists (phase 02 featured
+  and open by default — verified toggling), why items, CTA copy + both buttons.
+- Anchors `#stakes #work #roadmap #why #contact`; hero → `#work` verified at the 84px
+  margin. Head meta/OG/Twitter/canonical verbatim. The work-list was already a ruled
+  index — kept with token swaps only.
+- **GA tag added** (third page in this template family without analytics).
+
+### Verified (headless Chromium)
+- Zero horizontal overflow at 320/375/768/1024/1440; no JS errors; canvas gone; details
+  toggling works; tablet tier active; <560 stacked CTAs.
 ## ai-economic-signal.html — DONE
 
 ### What this page actually was
