@@ -612,4 +612,39 @@ adds a contributions grid; Scott adds journey/impact/featured-tweet/TEDx/persona
 ### Verified (headless Chromium)
 - All 7 pages + about.html × 5 widths: zero overflow, zero JS errors. Visual
   check: scott (full), anthony (grid), soham (mobile), about team grid crop.
-## donate.html — pending
+## donate.html — DONE (final page of the original brief)
+
+### What this page is
+The primary conversion page: hero ask, 3 impact stats, transparency note, and the
+every.org embed widget that turns every.org links into a donation modal.
+
+### Preserved
+- Head verbatim (title, OG incl. site_name, twitter, canonical, robots, GA; no
+  JSON-LD existed).
+- **The every.org widget script pair verbatim** (`button.js?explicit=1` +
+  `createWidget` binding on `a[href*="every.org/finmango"]`) — both Donate
+  buttons and the mobile-menu donate keep matching hrefs (donate-page utm kept).
+- Hero copy (sentence-cased; both highlight words "research"/"advocates" keep
+  emphasis as orange ems, hand stroke on "research"); subtitle verbatim with the
+  em-dash spacing normalized; stats (10M+/5+/100K+ with their labels);
+  transparency note word-for-word (moved into the ink coda's subtitle slot).
+
+### Removed / translated
+- `css/navbar.css` + `js/navbar.js` + Inter font → standard chrome + system fonts.
+- Gray stats box → ruled 3-col strip on paper (orange + signs, mono labels).
+- Per the conversion brief: single orange `.btn-primary` above the fold ("Donate
+  now"); the one ink moment is the closing CTA — headline composed from the
+  page's own subtitle phrases ("Evidence they can't ignore. Voices they can't
+  silence."), with the transparency note as its subtitle and a second Donate ask +
+  "Research on GitHub" secondary (link from the note's own claim).
+- Nav: Donate chrome button carries aria-current.
+
+### Verified (headless Chromium)
+- Zero horizontal overflow at 320/375/768/1024/1440; no JS errors (every.org
+  widget degrades gracefully offline); buttons full-width ≤560.
+
+## about.html — team grid crop tweaks (post-merge, user request)
+- Scott's tile: `.team-photo-frame` now `object-position: 50% 0` +
+  `scale(2.35)` origin `50% 9%` after two rounds of user feedback (first showed
+  more headroom, then nudged back up); face framing now matches neighboring tiles.
+## Remaining: none — original brief complete (index was pre-existing reference).
