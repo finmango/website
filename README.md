@@ -8,9 +8,9 @@ Official website for FinMango, a 501(c)(3) nonprofit solving complex problems th
 [https://www.finmango.org](https://www.finmango.org)
 
 ## 📊 Impact
-- **1M+** people impacted globally
+- **10M+** people impacted globally
 - **100+** countries reached
-- **75K+** students educated
+- **100K+** students educated
 - Partnerships with Google Health, WHO, World Bank, IMF
 
 ## 🎯 Our Work
