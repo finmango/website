@@ -271,7 +271,57 @@ all survive; only the chrome changed.
 - Zero horizontal overflow at 320/375/768/1024/1440; no JS errors; tablet tier active;
   <560 stacked CTAs + single-column stats; masonry 4/3/2 columns.
 ## navtech.html — pending
-## ai-economic-signal.html — pending
+## ai-economic-signal.html — DONE
+
+### What this page actually was
+Not a live dashboard — a manifesto/proposal page that was already an early draft of the
+design language (paper/ink/orange, mono eyebrows with dashes, DM Sans 900 display,
+hairline grids, native `<details>` accordions). The job was reconciliation, not redesign.
+
+### Removed (banned / drifted)
+- **Particle network canvas** in the hero (`#hero-canvas` + its animation JS) — explicitly
+  banned; the index radial glow remains.
+- **`min-height: 100vh` centered section scaffold** → standard padding rhythm.
+- **Hero `text-decoration` underline slab** on the em → the hand-stroke SVG (the exact
+  swap the brief describes). Hand-drawn ration: hero stroke + CTA squiggle.
+- **Neo-brutalist `.arm` cards** (2px black borders + 6px/9px offset shadows) → hairline
+  plates with the orange top-line hover; arm-foot/arrow 2px borders → 1px.
+- **`.causation` callout** orange offset shadow → hairline plate with a 2px orange left
+  rule on a .04 orange tint.
+- **White-on-orange "NOW BUILDING" badge** → orange-outline mono chip with pulse (the
+  hard rule reserves white-on-orange for buttons).
+- **Token near-misses** → exact: `#FAFAFA→#FAFAF7`, dim .6→.62, faint .35→.38,
+  line .08→.1/.12, `--bg-soft`/`--bg-dark-soft`/`--orange-glow` dropped, max 1400→1280
+  (hero 1440).
+- Old `fm-nav`/`fm-mobile-menu`/`fm-footer` chrome (3px-border shadow dropdown) → index
+  standard (ids now `nav`/`mobileMenuBtn`/`mobileMenu`; this page's chrome JS replaced
+  wholesale — no external scripts referenced the fm-* ids).
+- Dead CSS removed: `.work-list/.work-item/.stat/.stakes-grid` families (no markup used
+  them). Reveal observer + entrance animations dropped per precedent.
+- `.why-item` boxes (bg-soft + full borders) → ruled rows with mono markers.
+
+### Ink rhythm fixed
+Was: problem (dark) → paper → paper → horizon (dark) → paper → paper CTA → dark footer.
+Now: **problem = the ink moment**; horizon keeps its exact components on paper; **CTA
+became the ink coda** flowing into the footer.
+
+### Preserved
+- All copy verbatim (problem cells, arms, bridge line, causation discipline statement,
+  all three `<details>` papers with their lists, horizon cells, why items, CTA).
+- Native `<details>` accordions untouched (verified toggling; Paper 1 stays open by
+  default); phases progress track kept; `phase-featured` emphasis kept (2px orange rule).
+- Anchors `#problem #building #research #horizon #why #contact` (hero → #building
+  verified at the 84px margin). Head meta/OG/Twitter/canonical verbatim.
+- The page's good bones: hero-top status pulse, mono `ARM 01 / MEASUREMENT` labels,
+  `phase-tag` meta lines, bridge mono sentence — all kept as-is.
+
+### Added / flags
+- **Google Analytics tag added** — like barrier-breakers, this page had none.
+- Fonts: trimmed to the system set (page loaded DM Sans 200/800 weights it barely used).
+
+### Verified (headless Chromium)
+- Zero horizontal overflow at 320/375/768/1024/1440; no JS errors; canvas confirmed gone;
+  tablet tier active; <560 stacked CTAs.
 ## barometer.html — DONE (out of order, by request)
 
 ### The data promise
