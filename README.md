@@ -101,26 +101,33 @@ vim about.html       # Vim
 
 ### Updating Navigation or Footer
 
-Since navigation and footer are in all 69 HTML files, use find & replace:
+The shared chrome (nav + mobile menu, footer, and their script) lives in
+`templates/` and is stamped into every page that carries chrome markers:
 
-**Option 1: Using VS Code**
-1. Open the entire folder in VS Code
-2. Press `Cmd/Ctrl + Shift + H` for global find & replace
-3. Find the old HTML snippet
-4. Replace with new snippet
-5. Replace in all files
-
-**Option 2: Using sed (terminal)**
 ```bash
-# Example: Update a navigation link
-sed -i 's|old-link.html|new-link.html|g' *.html
+# 1. Edit templates/nav.html, templates/footer.html, or
+#    templates/chrome-script.html
+# 2. Stamp the change into every marked page:
+python3 tools/stamp_chrome.py
+
+# Verify nothing is out of sync (useful in CI):
+python3 tools/stamp_chrome.py --check
+
+# Validate links and page invariants after any bulk change:
+python3 tools/check_pages.py
 ```
 
-**Option 3: Using the helper script**
-```bash
-# See tools/update-template.sh in the repository
-./tools/update-template.sh
+Pages mark their chrome like this — the stamper replaces everything between
+the markers, applying `aria-current="page"` to the link named by `active`:
+
+```html
+<!-- chrome:nav active="about.html" --> … <!-- /chrome:nav -->
+<!-- chrome:footer -->                 … <!-- /chrome:footer -->
+<!-- chrome:script -->                 … <!-- /chrome:script -->
 ```
+
+For one-off text changes across files, plain `sed -i 's|old|new|g' *.html`
+still works fine.
 
 ### Updating Common Styles
 
