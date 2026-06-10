@@ -226,7 +226,50 @@ all survive; only the chrome changed.
 - Zero horizontal overflow at 320/375/768/1024/1440; no JS errors.
 - Modal open/resize/close, FAQ exclusivity, cohort anchor scroll all pass.
 - Tablet tier active; <560: stacked CTAs, single-column stats, 2-col cohort grid.
-## barrier-breakers.html — pending
+## barrier-breakers.html — DONE
+
+### Removed (old system)
+- **Caveat handwriting font** everywhere (kicker, step numbers, $20k figure, year labels,
+  section labels) → mono eyebrows / display sans per the system. Aurora hero background +
+  scroll-bounce hint, squiggle break, fade-in observer JS, 3px-border/shadow dropdown.
+- **Medal pastel gradients** on prize rows and winner-card headers (off-palette golds/
+  silvers/bronzes) → ruled rows with mono place labels; 1st place reads orange; 🥇🥈🥉
+  emojis kept as content glyphs.
+- **Orange caption badge** on the problem photo (orange bg + white text, banned) → mono
+  caption line under a hairline-framed image. Grayscale photo filter dropped.
+- Pill resource links + button emojis (📋📝📄⭐) → btn-secondary row; rounded gallery
+  tiles → hairline-framed tiles; track icon boxes → bare emoji glyphs in a ruled list.
+- Ink budget: was 3 dark sections (problem, gallery, final CTA) → now gallery (the
+  photographic moment) + CTA→footer coda; the problem section moved to paper with a
+  ruled stat lattice.
+
+### Preserved & verified
+- **Lightbox fully working** (the page's one JS feature): script kept verbatim; all hooks
+  (`#lightbox`, `#lightbox-img/caption/counter`, `.gallery-item[data-caption]`,
+  `.lightbox-close/prev/next`) intact. The redundant `.gallery-row` wrappers were
+  flattened (CSS-columns masonry ignores them; JS queries `.gallery-item` only — DOM
+  order and the 23-item count unchanged). Verified: opens at "3 / 23" with caption,
+  arrow keys navigate, Escape closes.
+- All 23 gallery photos + captions/alts, `#gallery-2026` anchor (hero button verified at
+  the 84px margin), all prize figures + breakdowns + note, scoring rubric, 12 judges
+  (titles sans, orgs mono), 2025/2024 winners + photos, partnership logos, sponsor tiers
+  (💎/🥈 labels kept), all PDFs and mailto links, head meta/OG verbatim.
+- Hero meta trio became hb-stats with orange `<em>` units ($20K+ / 5 / 3); hero stroke
+  under "barriers." + CTA squiggle = the hand-drawn ration (2).
+
+### Added / flags
+- **Google Analytics tag added** — this page was the only one in the set without it;
+  flagging in case its absence was intentional.
+- Footer swapped to the standard index footer: the plain `mailto:info@finmango.org`
+  links became the Cloudflare email-protection links used site-wide (decode script added).
+- New secondary hero button "See the 2026 event" (anchors to the existing gallery) to
+  fill the index CTA-pair pattern — easy to drop if unwanted.
+- hb-status "2027 INTEREST OPEN" added as the hero's status readout (mirrors the page's
+  own "Applications for 2027 open soon"). Scroll-hint affordance dropped.
+
+### Verified (headless Chromium)
+- Zero horizontal overflow at 320/375/768/1024/1440; no JS errors; tablet tier active;
+  <560 stacked CTAs + single-column stats; masonry 4/3/2 columns.
 ## navtech.html — pending
 ## ai-economic-signal.html — pending
 ## barometer.html — DONE (out of order, by request)
