@@ -452,5 +452,53 @@ with live search (`#searchInput`) and category filters (`.filter-btn[data-catego
 ### Verified (headless Chromium)
 - Zero horizontal overflow at 320/375/768/1024/1440; tablet tier active; grid 3 → 2 →
   1 columns; filters wrap at small widths.
+## david-johnson.html — DONE (prototype for all ~40 ambassador/profile pages)
+
+### What this page is
+A template-generated ambassador profile: hero (photo + name + meta tags + bio),
+pull quote, two-question "In their own words" philosophy grid, "Their Plan as
+Ambassador" paragraph, and an apply CTA. If approved, the same treatment rolls out
+to every profile page.
+
+### Preserved
+- Every word of David's content: tagline, bio, full quote + attribution, both Q&A
+  cards, the plan paragraph, CTA copy.
+- Head verbatim: title, description, keywords, OG profile block (incl.
+  `ambassadors/david-johnson-og.png` + dims), Twitter card, canonical
+  (`/david-johnson`, no .html), robots, GA tag, favicon.
+- Photo `33.jpg` (1080×1080) — now a hairline-framed 4:5 editorial portrait with a
+  mono figcaption (name · cohort).
+
+### Removed / translated
+- `css/navbar.css` + `js/navbar.js` + Inter + DM Serif Display fonts → index
+  standard chrome + DM Sans/JetBrains Mono.
+- `.profile-badge` "2026 Ambassador" overlay chip → the hero status slot
+  (`● 2026 AMBASSADOR` pulse chip, top right).
+- `.profile-tag` pills (USA / Rice University / Smyrna, TN) → a ruled 3-column
+  dossier facts row (Country / University / Hometown) closing the hero.
+- Serif-italic pull quote → **the page's mid-page ink moment**: eyebrow
+  "On financial health", large light quote with one orange `<em>` phrase
+  ("having the legroom to not worry daily"), mono attribution.
+- Philosophy cards (boxes) → ruled 2-column lattice with mono 01/02 indices
+  and the orange hover line.
+- Goal section → editorial memo: eyebrow rail ("Their plan as ambassador") +
+  large light statement, hairline-topped.
+- Added a mono "← All ambassadors" back link in the hero top row (navigational aid;
+  the profile had no way back to the cohort).
+
+### Link fix (flagged)
+- Old CTA "Apply Now" → `ambassadors.html#apply`, but the migrated ambassadors page
+  replaced the #apply anchor with the apply modal. Now points to `ambassadors.html`
+  (where the apply modal lives). "Meet our ambassadors" → `#cohort-2025` still valid.
+
+### Verified (headless Chromium)
+- Zero horizontal overflow at 320/375/768/1024/1440; no JS errors; tablet tier
+  (600–968) keeps the side-by-side portrait and 3-col facts; ≤560 CTA buttons stack
+  full-width.
+
+### Rollout note
+The structure is fully parametric (name, em-word, tagline, bio, photo, facts ×3,
+quote + em phrase + attribution, Q&A ×2, plan, OG/canonical slugs) — ready to apply
+to the rest of the profiles on approval.
 ## get-involved.html — pending
 ## donate.html — pending
