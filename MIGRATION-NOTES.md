@@ -180,7 +180,52 @@ questions.
 - 320/375/768/1024/1440: zero horizontal overflow (after the balance fix), no JS errors.
 - Tablet tier active at 768; <560 full-width stacked CTAs and single-column grids;
   gallery mosaic responsive (4 → 2 → tighter rows); all lazy images confirmed loading.
-## ambassadors.html — pending
+## ambassadors.html — DONE
+
+### Approach
+Owner likes this page — treated as a *translation*, not a redesign. The photo collage
+hero, big cohort year marks, portrait grids with flag chips, FAQ, and apply-modal flow
+all survive; only the chrome changed.
+
+### Removed (old system)
+- 3px black photo borders + orange offset shadows on the collage (rotations kept, softened
+  to ≤3°; hover straightens with a hairline-to-orange border instead of a shadow).
+- 2px black borders + hover shadows on ambassador cards / benefit cards / FAQ boxes /
+  modal (10px black shadow → the index dropdown's soft elevation shadow), uppercase
+  buttons, orange-gradient CTA (→ ink coda), squiggle dividers, warm-white alternating
+  backgrounds, scrollbar styling, reveal/stagger animation JS+CSS.
+
+### Preserved
+- All meta/OG/canonical/GA verbatim; every bio link (43 ambassadors across 4 cohorts),
+  all portraits + flag emojis, anchors `#cohort-2026/25/24/23` (hero button verified
+  landing at the 84px scroll margin).
+- **Modal flow intact**: `#applyModal`, `#modalClose`, `#rollingApplyFrame` (same src/
+  title/scrolling), `.open-apply-modal` triggers (hero + CTA), overlay/Escape close,
+  postMessage `rbIframeHeight` resize + same-origin fallback — verified: iframe loads
+  and auto-sizes (5924px), Escape closes. Mobile full-screen sheet kept.
+- FAQ accordion JS + classes (`.faq-item/.faq-question/.faq-answer/.active`) — verified
+  exclusive open/close. All five Q&As verbatim, mailto kept.
+- Deliverable plate: Money Mango cascade copy, 🥭 label (already JetBrains Mono in the
+  old code — it predicted the system), links to money-mango-daily.html +
+  submit-a-cascade.html.
+- Benefit emojis (🌍🎓🛠️🤝) kept as in-content glyphs on this warmest page — say the
+  word if you'd rather have stroke-drawn icons like education's.
+
+### New treatment
+- Hero: eyebrow + display headline with stroke under "fighting" (hand-drawn 1 of 2);
+  collage photos hairline-framed with mono flag-name chips.
+- Stats: ink band, hairline lattice, orange `<em>` units (43 / 15+ / 4 / 300+).
+- Cohort headers: big year with orange apostrophe kept; subtitles retoned to mono meta
+  lines ("11 AMBASSADORS · 4 COUNTRIES"; '23 = "FOUNDING COHORT · …" — all counts kept);
+  hairline rule under each header; cards fluid 4:5 portraits.
+- Benefits: 4 ruled columns with hover top-line; FAQ: ruled list with orange +/×.
+- Modal header badge `.apply-badge` (previously unstyled) now a mono dash label.
+- CTA: ink coda with squiggle (hand-drawn 2 of 2) + "Apply on a rolling basis".
+
+### Verified (headless Chromium)
+- Zero horizontal overflow at 320/375/768/1024/1440; no JS errors.
+- Modal open/resize/close, FAQ exclusivity, cohort anchor scroll all pass.
+- Tablet tier active; <560: stacked CTAs, single-column stats, 2-col cohort grid.
 ## barrier-breakers.html — pending
 ## navtech.html — pending
 ## ai-economic-signal.html — pending
