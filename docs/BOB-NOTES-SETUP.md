@@ -4,32 +4,104 @@
 posts notes, photos, and videos himself — no code, no deploys, no one in the loop.
 
 ```
-  Bob's phone/laptop          Google                      finmango.org
-  ─────────────────────       ─────────────────────       ─────────────────────────
-  Private Google Form   ──►   Linked Google Sheet   ──►   education.html fetches the
-  (text, photos, videos)      (one row per post)          sheet on page load and
-                                                          renders the posts live
+  Bob's phone/laptop            Google                      finmango.org
+  ───────────────────────       ─────────────────────       ─────────────────────────
+  A: bob-post.html        ──►   Google Sheet          ──►   education.html fetches the
+     (custom form + Apps        (one row per post,          sheet on page load and
+      Script backend)            uploads in Drive)          renders the posts live
+  B: private Google Form  ──►
 ```
 
-He fills out the form whenever he wants; the post is on the website the next time
-anyone loads the page. Nothing to merge, nothing to schedule.
+He posts whenever he wants; it's on the website the next time anyone loads the page.
+The website only ever **reads** a public sheet — no credentials live in the repo.
 
-The section is **hidden on the live site until the sheet is connected**, so this can
-be deployed before the form exists. To see the design with sample content, open:
+The section is **hidden on the live site until a sheet is connected**, so everything
+can be deployed before the input side exists. Design preview with sample content:
 
 ```
 https://www.finmango.org/education.html?bobnotes=preview
 ```
 
+There are two ways to give Bob his posting tool. Both write the same sheet format, so
+you can start with one and switch later without touching the website section.
+
+|                          | **A · Custom form (`bob-post.html`)**       | **B · Google Form**                  |
+| ------------------------ | ------------------------------------------- | ------------------------------------ |
+| Bob's experience         | Branded FinMango page, one bookmark, posting code | Generic Google Form, must sign into Google to upload files |
+| Photos                   | ✅ auto-shrunk in the browser, auto-shared   | ✅ but the uploads folder must be shared manually |
+| Video files              | Up to ~25 MB each (bigger → YouTube/Drive link) | ✅ up to gigabytes                   |
+| Setup                    | ~15 min (paste & deploy an Apps Script)     | ~10 min (clicking, no code)          |
+| Maintenance              | Ours (redeploy script after edits)          | Google's                             |
+
+**Recommendation:** Option A, unless Bob will regularly upload large raw video files
+straight from his phone — that's the one thing only the Google Form handles well.
+
 ---
 
-## One-time setup (~10 minutes)
+## Option A — custom form + Apps Script (~15 minutes)
 
-### 1. Create the Google Form
+The repo already contains both halves: `bob-post.html` (the private posting page) and
+`tools/bob-notes-apps-script.js` (the backend that receives posts, saves uploads to
+Drive, and appends rows to the sheet).
 
-Go to [forms.google.com](https://forms.google.com) → blank form → name it **Bob Notes**.
-Add these questions (this wording is recommended, but the site matches loosely — see
-[Column matching](#column-matching) below):
+### 1. Create the sheet and install the script
+
+1. Create a Google Sheet named **Bob Notes (Website Feed)**.
+2. In the sheet: **Extensions → Apps Script**. Delete the default code and paste in
+   the full contents of `tools/bob-notes-apps-script.js`.
+3. At the top of the script, change `POSTING_CODE` from `CHANGE-ME` to a code only
+   Bob and FinMango know (this is what Bob types on the posting page).
+4. Run the `setup()` function once (▶ Run, pick `setup`). Approve the permission
+   prompts — the script runs as your account. `setup()` seeds the `Posts` tab with
+   headers, creates a **Bob Notes Uploads** folder, and makes the sheet and folder
+   link-viewable so the website can read them. The execution log prints the
+   `SHEET_ID` you'll need in step 3.
+
+### 2. Deploy the web app
+
+**Deploy → New deployment → Type: Web app**, with:
+
+- Execute as: **Me**
+- Who has access: **Anyone**
+
+Copy the Web App URL (ends in `/exec`).
+
+> "Anyone" means anyone who knows the URL can *call* the endpoint — posting is still
+> gated by the posting code, and the URL/code only live on an unlisted page. Wrong
+> codes just get rejected. To rotate the code: edit `POSTING_CODE`, then
+> **Deploy → Manage deployments → ✏️ → Version: New version → Deploy**
+> (script edits don't go live until a new version is published — easy to forget!).
+
+### 3. Wire the website
+
+Two paste-ins, both clearly marked:
+
+- `bob-post.html` — search for `PASTE APPS SCRIPT WEB APP URL HERE`, paste the
+  `/exec` URL into `SCRIPT_URL`.
+- `education.html` — search for `PASTE GOOGLE SHEET ID HERE`, paste the sheet ID
+  (the long string in the sheet's URL between `/d/` and `/edit`), and set
+  `SHEET_TAB = 'Posts'`.
+
+Commit and deploy the site.
+
+### 4. Send Bob his link
+
+Give Bob `https://www.finmango.org/bob-post.html` and his posting code. The page is
+unlisted (`noindex`, linked from nowhere) and remembers the code on his device after
+the first post. Phone tip: open the link → browser menu → **Add to Home Screen**.
+
+What the page does for him: shrinks big photos automatically before upload, shows an
+upload progress bar, and confirms with a "Posted." screen linking to the live section.
+Videos over 25 MB are blocked with a friendly nudge to use a YouTube/Drive link
+instead (Apps Script can't accept bigger uploads).
+
+---
+
+## Option B — Google Form (~10 minutes, zero code)
+
+### 1. Create the form
+
+[forms.google.com](https://forms.google.com) → blank form → name it **Bob Notes**:
 
 | Question                | Type         | Settings                                              |
 | ----------------------- | ------------ | ----------------------------------------------------- |
@@ -37,114 +109,78 @@ Add these questions (this wording is recommended, but the site matches loosely �
 | `What's on your mind?`  | Paragraph    | **Required**                                          |
 | `Photos`                | File upload  | Allow only **images**, max 10 files, 10 MB each       |
 | `Videos`                | File upload  | Allow only **videos**, max 5 files, 1 GB each         |
-| `Link (optional)`       | Short answer | Not required — for a YouTube/article link he mentions |
+| `Link (optional)`       | Short answer | Not required                                          |
 
-In form **Settings**:
-- Responses → **Limit to 1 response: OFF** (he'll post many times)
-- Responses → Collect email addresses: optional, not needed by the site
+Settings → Responses → **Limit to 1 response: OFF**.
 
-> **Heads-up on file uploads:** Google requires respondents to be signed into a
-> Google account for file-upload questions, and the uploads count against the form
-> owner's Drive storage. If that's a problem, drop the upload questions and have Bob
-> paste YouTube links into the `Link` field instead.
+> File-upload questions force respondents to sign into a Google account, and uploads
+> count against the form owner's Drive storage.
 
-### 2. Link responses to a Google Sheet
+### 2. Link to a sheet and share
 
-In the form: **Responses tab → "Link to Sheets" → Create a new spreadsheet** →
-accept the default name ("Bob Notes (Responses)"). A tab called
-`Form Responses 1` is created — that's what the website reads.
+1. **Responses → Link to Sheets → Create a new spreadsheet** (tab will be
+   `Form Responses 1`).
+2. Share the spreadsheet: **Anyone with the link: Viewer**.
+3. Share the uploads folder the same way: Drive creates **"Bob Notes (File
+   responses)"** in the form owner's My Drive (each upload question also has a
+   "View folder" link). Without this, photos/videos won't display on the site.
 
-### 3. Share two things publicly (view-only)
+### 3. Wire the website and send Bob the link
 
-The website reads these anonymously, so both must be link-viewable:
-
-1. **The spreadsheet** — Share → General access → **Anyone with the link: Viewer**.
-2. **The uploads folder** — when the form has file-upload questions, Drive creates a
-   folder named **"Bob Notes (File responses)"** in the form owner's My Drive
-   (each upload question also has a "View folder" link). Right-click that folder →
-   Share → **Anyone with the link: Viewer**. New uploads inherit this, so photos
-   and videos display on the site automatically.
-
-Nothing else in the Drive account is exposed — only that sheet and that folder.
-
-### 4. Connect the sheet to the website
-
-Copy the spreadsheet ID from its URL — the long string between `/d/` and `/edit`:
-
-```
-https://docs.google.com/spreadsheets/d/【THIS_PART】/edit#gid=0
-```
-
-In `education.html`, search for `PASTE GOOGLE SHEET ID HERE` and paste it:
-
-```js
-var SHEET_ID = 'paste-the-id-here';
-var SHEET_TAB = 'Form Responses 1';   // already correct if you accepted the default
-```
-
-Commit and deploy. The section appears as soon as the sheet has at least one post.
-
-### 5. Send Bob the form link
-
-Form → **Send** → link icon → copy (check "Shorten URL"). The link is private in the
-sense that only people who have it can post — don't publish it anywhere on the site.
-
-Tip for Bob's phone: open the form link → browser menu → **Add to Home Screen** →
-now posting is one tap.
+- `education.html` — paste the sheet ID into `SHEET_ID` (search for
+  `PASTE GOOGLE SHEET ID HERE`); leave `SHEET_TAB` as `Form Responses 1`.
+- Form → **Send** → link icon → copy → give it to Bob. Don't publish it on the site.
 
 ---
 
-## Managing posts (no code needed)
+## Managing posts (both options, no code)
 
-Everything is done in the Google Sheet; changes show up on the next page load.
+Everything is managed in the Google Sheet; changes show on the next page load.
 
 - **Edit a post** — edit the cell text directly.
-- **Unpublish a post** — add a column with the header `Hide` (rightmost is fine) and
-  type `yes` in that post's row. Clear it to republish.
+- **Unpublish a post** — put `yes` in the `Hide` column (Option B: add a `Hide`
+  column at the right edge first). Clear it to republish.
 - **Delete a post** — delete the row.
-- **Posts with no text** — a post renders as long as it has a title, text, photo, or
-  video; completely empty rows are skipped.
-
-Posts always display **newest first**. The first 4 are shown, with a
-"Show more notes" button for the rest.
+- Completely empty rows are skipped; posts render newest-first, 4 at a time with a
+  "Show more notes" button.
 
 ## Column matching
 
-The site finds columns by header text (the form question titles), case-insensitive,
-so exact wording is flexible:
+The site finds columns by header text, case-insensitive, so exact wording is
+flexible (Option A's headers and the recommended Option B questions both match):
 
-| Site field | Header must contain one of                          |
-| ---------- | --------------------------------------------------- |
-| Date       | `timestamp` (automatic — Forms adds this column)    |
-| Title      | `title`, `headline`, `subject`                      |
-| Body text  | `note`, `message`, `mind`, `update`, `story`, `text`, `share` |
-| Photos     | `photo`, `image`, `pic`                             |
-| Videos     | `video`, `clip`                                     |
-| Link       | `link`, `url`                                       |
-| Hide flag  | `hide`, `hold`, `draft`, `skip`                     |
+| Site field | Header must contain one of                                     |
+| ---------- | -------------------------------------------------------------- |
+| Date       | `timestamp`                                                     |
+| Title      | `title`, `headline`, `subject`                                  |
+| Body text  | `note`, `message`, `mind`, `update`, `story`, `text`, `share`   |
+| Photos     | `photo`, `image`, `pic`                                         |
+| Videos     | `video`, `clip`                                                 |
+| Link       | `link`, `url`                                                   |
+| Hide flag  | `hide`, `hold`, `draft`, `skip`                                 |
 
-Media handling: Drive photo uploads are displayed via Drive's image endpoint and
-click through to the full file. Videos play inline — YouTube links use the YouTube
-player, Drive uploads use the Drive player. Any other URL in the video/link fields
-becomes a button.
+Media handling: Drive photos display via Drive's image endpoint and click through to
+the full file. Videos play inline — YouTube links get the YouTube player, Drive files
+the Drive player. Other URLs become a button.
 
 ## Troubleshooting
 
 | Symptom | Likely cause / fix |
 | ------- | ------------------ |
-| Section doesn't appear at all | `SHEET_ID` not set, sheet not shared "Anyone with link: Viewer", or sheet has no visible posts. Check the browser console — the script logs the reason. |
-| Photos are blank / missing | The "Bob Notes (File responses)" folder isn't shared link-viewable (step 3.2). The site silently drops images it can't load. |
-| Video shows but won't play | Same sharing issue, or Drive is still processing a large upload (can take a few minutes after submission). |
-| Post missing | Row may be flagged in the `Hide` column, or the body/title/media cells are all empty. |
-| Wrong column picked up | Rename the sheet header (row 1) so it matches the table above — headers can be edited freely without breaking the form. |
+| Section doesn't appear at all | `SHEET_ID` not set, sheet not link-viewable, or no visible posts. The browser console logs the reason. |
+| Photos blank / missing | Uploads folder isn't link-viewable (Option B step 2.3 — Option A shares automatically). The site silently drops images it can't load. |
+| Video shows but won't play | Same sharing issue, or Drive is still processing a fresh upload (give it a few minutes). |
+| Post missing | `Hide` column flagged, or title/body/media cells all empty. |
+| Wrong column picked up | Rename the sheet header (row 1) to match the table above — safe to edit freely. |
+| "Wrong posting code" (A) | Code mismatch with `POSTING_CODE` — remember script edits need a **new version** deployment to take effect. |
+| "Unexpected reply…" on posting (A) | Web app not deployed with **Who has access: Anyone**, or `SCRIPT_URL` points at the editor URL instead of the `/exec` URL. |
+| Posted, but nothing on the site (A) | `SHEET_TAB` in education.html isn't `Posts` (or the Posts tab isn't the sheet's first tab). |
 
-## Why a Google Form instead of a custom form?
+## Notes on the architecture
 
-A custom form on the website can't upload photos/videos into Drive without a backend
-(Apps Script web app + OAuth), which adds moving parts, failure modes, and a sign-in
-flow we'd have to maintain. The Google Form gives Bob a private, phone-friendly
-posting tool with uploads, drafts, and edit-after-submit for free — and the website
-only ever *reads* public data, so there are no credentials anywhere in the repo.
-
-If Bob ever outgrows it, the renderer doesn't care where the rows come from — any
-process that writes to the same sheet (Apps Script, Zapier, manual entry) works.
+- The education.html renderer doesn't care where rows come from — the custom form,
+  a Google Form, Zapier, or typing into the sheet by hand all work, in any mix.
+- Option A's endpoint runs as the deploying account, writes only to this sheet and
+  uploads folder, and exposes nothing else from the Drive account.
+- Large-video limit (Option A) is an Apps Script request-size ceiling, not a design
+  choice; chunked uploads could lift it later if it ever matters.

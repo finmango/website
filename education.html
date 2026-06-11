@@ -1790,7 +1790,8 @@
   </section>
 
   <!-- ======================= BOB NOTES ======================= -->
-  <!-- Live feed Bob posts himself through a private Google Form.
+  <!-- Live feed Bob posts himself — via bob-post.html (custom form +
+       Apps Script) or a private Google Form; both feed the same sheet.
        Setup + content guide: docs/BOB-NOTES-SETUP.md
        The section stays hidden until the Google Sheet is connected
        (see the Bob Notes config in the script near the end of this file).
@@ -1952,18 +1953,21 @@
 
       /* ========================================================
          BOB NOTES — CONFIG
-         How it works: Bob submits a private Google Form, the
-         responses land in a linked Google Sheet, and this script
-         reads that sheet and renders the posts above.
+         How it works: Bob posts through bob-post.html (custom form
+         + Apps Script) or a private Google Form; either way the
+         posts land in a Google Sheet, and this script reads that
+         sheet and renders the posts above.
          Full setup walkthrough: docs/BOB-NOTES-SETUP.md
 
          To go live, paste the Google Sheet ID between the quotes
          below — the long string in the sheet URL between /d/ and
          /edit — and share the sheet as "Anyone with the link:
          Viewer". The section stays hidden until then.
+         SHEET_TAB: 'Posts' for the custom form, 'Form Responses 1'
+         for a Google Form (it falls back to the first tab anyway).
          ======================================================== */
       var SHEET_ID = '';                    /* <-- PASTE GOOGLE SHEET ID HERE */
-      var SHEET_TAB = 'Form Responses 1';   /* falls back to the first tab automatically */
+      var SHEET_TAB = 'Posts';              /* falls back to the first tab automatically */
       var INITIAL_NOTES = 4;
       var BATCH = 8;
 
