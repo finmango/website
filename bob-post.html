@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bob Notes — Private Posting Page</title>
+  <!-- Private tool: not linked from the site, kept out of search engines -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --paper: #FAFAF7;
+      --ink: #0A0A0A;
+      --orange: #FF6B35;
+      --orange-deep: #E5511B;
+      --ink-dim: rgba(10, 10, 10, .62);
+      --ink-faint: rgba(10, 10, 10, .38);
+      --ink-line: rgba(10, 10, 10, .14);
+      --ink-line-soft: rgba(10, 10, 10, .06);
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.5;
+      font-size: 17px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection { background: var(--orange); color: #fff; }
+    :focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+
+    .wrap {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    .wordmark { height: 40px; display: block; margin-bottom: 2.5rem; }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: .66rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--ink-faint);
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--orange); }
+
+    h1 {
+      font-size: clamp(2.2rem, 7vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.02;
+      letter-spacing: -.04em;
+      margin: 1.1rem 0 1.25rem;
+    }
+    h1 em { font-style: normal; color: var(--orange); }
+
+    .sub { font-weight: 300; color: var(--ink-dim); max-width: 50ch; margin-bottom: 3rem; }
+    .sub a { color: var(--ink); font-weight: 500; text-decoration-color: var(--orange); }
+
+    .banner {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      line-height: 1.6;
+      border: 1px solid rgba(255, 107, 53, .5);
+      background: rgba(255, 107, 53, .06);
+      padding: 1rem 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .field { display: block; margin-bottom: 2rem; }
+    .label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: .66rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: var(--ink);
+      margin-bottom: .65rem;
+    }
+    .label em { font-style: normal; color: var(--ink-faint); text-transform: none; letter-spacing: .05em; }
+
+    input[type="text"], input[type="password"], input[type="url"], textarea {
+      width: 100%;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--ink-line);
+      border-radius: 0;
+      padding: .9rem 1rem;
+      transition: border-color .2s ease;
+      -webkit-appearance: none;
+    }
+    textarea { resize: vertical; min-height: 9rem; line-height: 1.65; }
+    input:focus, textarea:focus { outline: none; border-color: var(--orange); }
+    ::placeholder { color: var(--ink-faint); }
+
+    .hint {
+      display: block;
+      font-size: .8rem;
+      font-weight: 300;
+      color: var(--ink-faint);
+      margin-top: .5rem;
+    }
+
+    .filebtn {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      border: 1px dashed rgba(10, 10, 10, .35);
+      padding: .85rem 1.25rem;
+      cursor: pointer;
+      transition: border-color .2s ease, color .2s ease;
+    }
+    .filebtn:hover { border-color: var(--orange); color: var(--orange); }
+
+    .previews {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+      gap: .6rem;
+      margin-top: 1rem;
+    }
+    .preview { position: relative; }
+    .preview img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      border: 1px solid var(--ink-line);
+    }
+    .preview .rm, .filerow .rm {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: none;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: .85rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .preview .rm:hover, .filerow .rm:hover { background: var(--orange-deep); }
+
+    .filelist { display: flex; flex-direction: column; gap: .6rem; margin-top: 1rem; }
+    .filerow {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      border: 1px solid var(--ink-line);
+      padding: .8rem 1rem;
+      overflow-wrap: anywhere;
+    }
+    .filerow span:last-of-type { color: var(--ink-faint); white-space: nowrap; }
+
+    .btn-post {
+      display: inline-flex;
+      align-items: center;
+      gap: .85rem;
+      padding: 1.1rem 2rem;
+      background: var(--orange);
+      color: #fff;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: -.01em;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background .25s ease;
+    }
+    .btn-post:hover { background: var(--ink); }
+    .btn-post:disabled { background: var(--ink-faint); cursor: wait; }
+
+    .progress { margin-top: 1.5rem; }
+    .progress-track { height: 3px; background: var(--ink-line-soft); }
+    .progress-bar { height: 3px; width: 0; background: var(--orange); transition: width .2s ease; }
+    .progress-text {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-top: .6rem;
+      display: block;
+    }
+
+    .status {
+      margin-top: 1.5rem;
+      font-size: .95rem;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+    .status.error { color: var(--orange-deep); }
+
+    .success { text-align: left; padding-top: 1rem; }
+    .success-mark {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.75rem;
+    }
+    .success h2 { font-size: 2.4rem; font-weight: 900; letter-spacing: -.04em; margin-bottom: .75rem; }
+    .success p { font-weight: 300; color: var(--ink-dim); margin-bottom: 2rem; }
+    .linklike {
+      display: block;
+      margin-top: 1.5rem;
+      background: none;
+      border: none;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink);
+      border-bottom: 1px solid var(--orange);
+      padding: 0 0 .2rem;
+      cursor: pointer;
+    }
+    .linklike:hover { color: var(--orange); }
+
+    [hidden] { display: none !important; }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <img src="finmango.png" alt="FinMango" class="wordmark">
+
+    <header>
+      <span class="eyebrow">Bob Notes · Private posting page</span>
+      <h1>What's happening, <em>Bob?</em></h1>
+      <p class="sub">
+        Write it, add photos or a video if you've got them, hit post. It shows up in the
+        <a href="education.html#bob-notes">Bob Notes section</a> of finmango.org right away.
+      </p>
+    </header>
+
+    <div class="banner" id="configBanner" hidden>
+      NOT CONNECTED YET — an admin needs to paste the Apps Script Web App URL into this page.
+      Setup guide: docs/BOB-NOTES-SETUP.md in the website repo.
+    </div>
+
+    <form id="postForm" novalidate>
+      <label class="field">
+        <span class="label">Posting code</span>
+        <input type="password" id="code" autocomplete="off" placeholder="The code Scott gave you">
+        <span class="hint">Remembered on this device after your first post.</span>
+      </label>
+
+      <label class="field">
+        <span class="label">Title <em>(optional)</em></span>
+        <input type="text" id="title" maxlength="200" placeholder="e.g. Great questions at Padua today">
+      </label>
+
+      <label class="field">
+        <span class="label">What's on your mind?</span>
+        <textarea id="note" maxlength="10000" placeholder="Write your note — a blank line starts a new paragraph."></textarea>
+      </label>
+
+      <div class="field">
+        <span class="label">Photos <em>(optional · up to 10)</em></span>
+        <label class="filebtn">+ Add photos<input type="file" id="photoInput" accept="image/*" multiple hidden></label>
+        <div class="previews" id="photoPreviews"></div>
+        <span class="hint">Big photos are shrunk automatically before upload — no need to resize anything.</span>
+      </div>
+
+      <div class="field">
+        <span class="label">Videos <em>(optional · up to 3 · max 25&nbsp;MB each)</em></span>
+        <label class="filebtn">+ Add videos<input type="file" id="videoInput" accept="video/*" multiple hidden></label>
+        <div class="filelist" id="videoList"></div>
+        <span class="hint">Bigger video? Put it on YouTube or Drive and paste the link below instead.</span>
+      </div>
+
+      <label class="field">
+        <span class="label">Link <em>(optional — YouTube, article, anything)</em></span>
+        <input type="url" id="link" maxlength="500" placeholder="https://…">
+      </label>
+
+      <button type="submit" class="btn-post" id="postBtn">
+        Post it
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+
+      <div class="progress" id="progress" hidden>
+        <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+        <span class="progress-text" id="progressText">Uploading…</span>
+      </div>
+
+      <div class="status" id="status" role="status"></div>
+    </form>
+
+    <div class="success" id="success" hidden>
+      <div class="success-mark" aria-hidden="true">✓</div>
+      <h2>Posted.</h2>
+      <p>Your note is live on the education page — nice work.</p>
+      <a class="btn-post" href="education.html#bob-notes">See it on the site
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <button type="button" class="linklike" id="againBtn">Post another note</button>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ========================================================
+         BOB NOTES POSTING PAGE — CONFIG
+         Paste the Apps Script Web App URL (ends in /exec) between
+         the quotes. It comes from deploying
+         tools/bob-notes-apps-script.js — see docs/BOB-NOTES-SETUP.md.
+         ======================================================== */
+      var SCRIPT_URL = '';   /* <-- PASTE APPS SCRIPT WEB APP URL HERE */
+
+      var MAX_PHOTOS = 10;
+      var MAX_VIDEOS = 3;
+      var MAX_VIDEO_BYTES = 25 * 1024 * 1024;
+      var MAX_TOTAL_BYTES = 40 * 1024 * 1024;  /* whole post, before base64 */
+      var MAX_IMAGE_EDGE = 1800;               /* photos resized down to this */
+      var JPEG_QUALITY = 0.85;
+
+      var form = document.getElementById('postForm');
+      var codeInput = document.getElementById('code');
+      var titleInput = document.getElementById('title');
+      var noteInput = document.getElementById('note');
+      var linkInput = document.getElementById('link');
+      var photoInput = document.getElementById('photoInput');
+      var videoInput = document.getElementById('videoInput');
+      var photoPreviews = document.getElementById('photoPreviews');
+      var videoList = document.getElementById('videoList');
+      var postBtn = document.getElementById('postBtn');
+      var progress = document.getElementById('progress');
+      var progressBar = document.getElementById('progressBar');
+      var progressText = document.getElementById('progressText');
+      var statusEl = document.getElementById('status');
+      var successEl = document.getElementById('success');
+
+      var photos = [];  /* {file} */
+      var videos = [];  /* {file} */
+
+      if (!SCRIPT_URL) {
+        document.getElementById('configBanner').hidden = false;
+      }
+      try { codeInput.value = localStorage.getItem('bobnotes_code') || ''; } catch (e) { /* private mode */ }
+
+      function setStatus(msg, isError) {
+        statusEl.textContent = msg || '';
+        statusEl.classList.toggle('error', !!isError);
+      }
+
+      function renderPhotos() {
+        photoPreviews.textContent = '';
+        photos.forEach(function (p, i) {
+          var cell = document.createElement('div');
+          cell.className = 'preview';
+          var img = document.createElement('img');
+          img.src = p.url;
+          img.alt = p.file.name;
+          cell.appendChild(img);
+          cell.appendChild(removeBtn(function () {
+            URL.revokeObjectURL(p.url);
+            photos.splice(i, 1);
+            renderPhotos();
+          }));
+          photoPreviews.appendChild(cell);
+        });
+      }
+
+      function renderVideos() {
+        videoList.textContent = '';
+        videos.forEach(function (v, i) {
+          var row = document.createElement('div');
+          row.className = 'filerow';
+          var name = document.createElement('span');
+          name.textContent = v.file.name;
+          var size = document.createElement('span');
+          size.textContent = (v.file.size / (1024 * 1024)).toFixed(1) + ' MB';
+          row.appendChild(name);
+          row.appendChild(size);
+          row.appendChild(removeBtn(function () {
+            videos.splice(i, 1);
+            renderVideos();
+          }));
+          videoList.appendChild(row);
+        });
+      }
+
+      function removeBtn(onClick) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'rm';
+        btn.textContent = '×';
+        btn.setAttribute('aria-label', 'Remove');
+        btn.addEventListener('click', onClick);
+        return btn;
+      }
+
+      photoInput.addEventListener('change', function () {
+        setStatus('');
+        Array.prototype.slice.call(photoInput.files).forEach(function (file) {
+          if (photos.length >= MAX_PHOTOS) return;
+          if (file.type.indexOf('image/') !== 0) return;
+          photos.push({ file: file, url: URL.createObjectURL(file) });
+        });
+        photoInput.value = '';
+        renderPhotos();
+      });
+
+      videoInput.addEventListener('change', function () {
+        setStatus('');
+        Array.prototype.slice.call(videoInput.files).forEach(function (file) {
+          if (videos.length >= MAX_VIDEOS) return;
+          if (file.type.indexOf('video/') !== 0) return;
+          if (file.size > MAX_VIDEO_BYTES) {
+            setStatus('"' + file.name + '" is over 25 MB — upload it to YouTube or Drive and paste the link instead.', true);
+            return;
+          }
+          videos.push({ file: file });
+        });
+        videoInput.value = '';
+        renderVideos();
+      });
+
+      /* Shrink big photos in the browser so multi-photo posts stay small.
+         Falls back to the original file if the image can't be decoded. */
+      function downscaleImage(file) {
+        if (file.size < 800 * 1024) return Promise.resolve(file);
+        return createImageBitmap(file).then(function (bmp) {
+          var scale = Math.min(1, MAX_IMAGE_EDGE / Math.max(bmp.width, bmp.height));
+          if (scale === 1 && file.type === 'image/jpeg') { bmp.close(); return file; }
+          var canvas = document.createElement('canvas');
+          canvas.width = Math.round(bmp.width * scale);
+          canvas.height = Math.round(bmp.height * scale);
+          canvas.getContext('2d').drawImage(bmp, 0, 0, canvas.width, canvas.height);
+          bmp.close();
+          return new Promise(function (resolve) {
+            canvas.toBlob(function (blob) {
+              if (blob && blob.size < file.size) {
+                resolve(new File([blob], file.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' }));
+              } else {
+                resolve(file);
+              }
+            }, 'image/jpeg', JPEG_QUALITY);
+          });
+        }).catch(function () { return file; });
+      }
+
+      function fileToBase64(file) {
+        return new Promise(function (resolve, reject) {
+          var reader = new FileReader();
+          reader.onload = function () {
+            resolve(String(reader.result).split(',')[1] || '');
+          };
+          reader.onerror = function () { reject(new Error('Could not read ' + file.name)); };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function packFiles(list, transform) {
+        return Promise.all(list.map(function (item) {
+          var prep = transform ? transform(item.file) : Promise.resolve(item.file);
+          return prep.then(function (file) {
+            return fileToBase64(file).then(function (b64) {
+              return { name: file.name, type: file.type, size: file.size, data: b64 };
+            });
+          });
+        }));
+      }
+
+      function send(payload, onProgress) {
+        return new Promise(function (resolve, reject) {
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', SCRIPT_URL);
+          /* No Content-Type header: the request stays a CORS "simple request"
+             (text/plain), so Apps Script accepts it and the JSON reply is readable. */
+          xhr.upload.addEventListener('progress', function (e) {
+            if (e.lengthComputable && onProgress) onProgress(e.loaded / e.total);
+          });
+          xhr.addEventListener('load', function () {
+            try {
+              resolve(JSON.parse(xhr.responseText));
+            } catch (e) {
+              reject(new Error('Unexpected reply — is the web app deployed with access set to "Anyone"?'));
+            }
+          });
+          xhr.addEventListener('error', function () { reject(new Error('Network error — check your connection and try again.')); });
+          xhr.addEventListener('timeout', function () { reject(new Error('Upload timed out — try again, or with fewer files.')); });
+          xhr.timeout = 5 * 60 * 1000;
+          xhr.send(JSON.stringify(payload));
+        });
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        setStatus('');
+
+        if (!SCRIPT_URL) {
+          setStatus('This page is not connected to the backend yet — see the note at the top.', true);
+          return;
+        }
+        var code = codeInput.value.trim();
+        if (!code) {
+          setStatus('Enter your posting code first.', true);
+          codeInput.focus();
+          return;
+        }
+        if (!titleInput.value.trim() && !noteInput.value.trim() && !photos.length && !videos.length) {
+          setStatus('Write a note or attach a photo or video — there is nothing to post yet.', true);
+          noteInput.focus();
+          return;
+        }
+
+        postBtn.disabled = true;
+        progress.hidden = false;
+        progressBar.style.width = '0%';
+        progressText.textContent = 'Preparing photos…';
+
+        Promise.all([
+          packFiles(photos, downscaleImage),
+          packFiles(videos, null)
+        ]).then(function (packed) {
+          var totalBytes = packed[0].concat(packed[1]).reduce(function (sum, f) { return sum + f.size; }, 0);
+          if (totalBytes > MAX_TOTAL_BYTES) {
+            throw new Error('This post is too big to upload in one go — remove a video (or share it as a link) and try again.');
+          }
+          progressText.textContent = 'Uploading…';
+          return send({
+            code: code,
+            title: titleInput.value.trim(),
+            note: noteInput.value.trim(),
+            link: linkInput.value.trim(),
+            photos: packed[0],
+            videos: packed[1]
+          }, function (frac) {
+            progressBar.style.width = Math.round(frac * 100) + '%';
+            progressText.textContent = 'Uploading… ' + Math.round(frac * 100) + '%';
+          });
+        }).then(function (res) {
+          if (!res || !res.ok) {
+            throw new Error((res && res.error) || 'Something went wrong — please try again.');
+          }
+          try { localStorage.setItem('bobnotes_code', code); } catch (err) { /* private mode */ }
+          form.hidden = true;
+          progress.hidden = true;
+          successEl.hidden = false;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }).catch(function (err) {
+          progress.hidden = true;
+          setStatus(err.message || String(err), true);
+        }).then(function () {
+          postBtn.disabled = false;
+        });
+      });
+
+      document.getElementById('againBtn').addEventListener('click', function () {
+        titleInput.value = '';
+        noteInput.value = '';
+        linkInput.value = '';
+        photos.forEach(function (p) { URL.revokeObjectURL(p.url); });
+        photos = [];
+        videos = [];
+        renderPhotos();
+        renderVideos();
+        progressBar.style.width = '0%';
+        setStatus('');
+        successEl.hidden = true;
+        form.hidden = false;
+      });
+    })();
+  </script>
+</body>
+
+</html>
