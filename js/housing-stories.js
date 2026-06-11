@@ -507,36 +507,8 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 50) {
-    nav.classList.add('scrolled');
-  } else {
-    nav.classList.remove('scrolled');
-  }
-});
-
-function initializeMobileMenu() {
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-  const mobileMenu = document.getElementById('mobileMenu');
-
-  mobileMenuBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('active');
-    mobileMenuBtn.classList.toggle('active');
-    document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-  });
-
-  document.querySelectorAll('.mobile-menu a').forEach(link => {
-    link.addEventListener('click', () => {
-      mobileMenu.classList.remove('active');
-      mobileMenuBtn.classList.remove('active');
-      document.body.style.overflow = '';
-    });
-  });
-}
 
 document.addEventListener('DOMContentLoaded', function () {
-  initializeMobileMenu();
   initializeStories();
 
   const viewer = document.getElementById('storyViewer');

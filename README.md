@@ -8,9 +8,9 @@ Official website for FinMango, a 501(c)(3) nonprofit solving complex problems th
 [https://www.finmango.org](https://www.finmango.org)
 
 ## 📊 Impact
-- **1M+** people impacted globally
+- **10M+** people impacted globally
 - **100+** countries reached
-- **75K+** students educated
+- **100K+** students educated
 - Partnerships with Google Health, WHO, World Bank, IMF
 
 ## 🎯 Our Work
@@ -52,7 +52,7 @@ website/
 ├── approach.html          # Our methodology
 ├── [tool].html            # Calculator pages
 ├── [person].html          # Team/ambassador profiles
-├── *.png, *.jpg           # Images (120MB total)
+├── *.png, *.jpg           # Images (~45MB, compressed)
 └── favicon.png            # Site icon
 ```
 
@@ -101,26 +101,33 @@ vim about.html       # Vim
 
 ### Updating Navigation or Footer
 
-Since navigation and footer are in all 69 HTML files, use find & replace:
+The shared chrome (nav + mobile menu, footer, and their script) lives in
+`templates/` and is stamped into every page that carries chrome markers:
 
-**Option 1: Using VS Code**
-1. Open the entire folder in VS Code
-2. Press `Cmd/Ctrl + Shift + H` for global find & replace
-3. Find the old HTML snippet
-4. Replace with new snippet
-5. Replace in all files
-
-**Option 2: Using sed (terminal)**
 ```bash
-# Example: Update a navigation link
-sed -i 's|old-link.html|new-link.html|g' *.html
+# 1. Edit templates/nav.html, templates/footer.html, or
+#    templates/chrome-script.html
+# 2. Stamp the change into every marked page:
+python3 tools/stamp_chrome.py
+
+# Verify nothing is out of sync (useful in CI):
+python3 tools/stamp_chrome.py --check
+
+# Validate links and page invariants after any bulk change:
+python3 tools/check_pages.py
 ```
 
-**Option 3: Using the helper script**
-```bash
-# See update-template.sh in the repository
-./update-template.sh
+Pages mark their chrome like this — the stamper replaces everything between
+the markers, applying `aria-current="page"` to the link named by `active`:
+
+```html
+<!-- chrome:nav active="about.html" --> … <!-- /chrome:nav -->
+<!-- chrome:footer -->                 … <!-- /chrome:footer -->
+<!-- chrome:script -->                 … <!-- /chrome:script -->
 ```
+
+For one-off text changes across files, plain `sed -i 's|old|new|g' *.html`
+still works fine.
 
 ### Updating Common Styles
 
@@ -135,7 +142,7 @@ All pages share similar CSS variables. To update global styles:
 
 ## 🖼️ Image Optimization
 
-**Current State:** 120MB of images (some files 1-3MB each)
+**Current State:** ~45MB of images (compressed June 2026 via tools/compress_images.py)
 
 ### Recommended Optimization Process
 
@@ -171,12 +178,6 @@ All pages share similar CSS variables. To update global styles:
 - Total size: ~30-40MB (down from 120MB)
 - Largest file: <500KB
 - Page load: <2 seconds on 4G
-
-## 🔗 Fixing Dead Links
-
-Current dead links to fix:
-- Footer: Privacy and Terms links (`#`) → `privacy.html`, `terms.html`
-- Team page: Some member links go to `#` → Create profile pages or remove links
 
 ## 🧪 Testing
 

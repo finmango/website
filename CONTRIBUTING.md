@@ -110,7 +110,7 @@ open test.html
 Use our update template script:
 
 ```bash
-./update-template.sh
+./tools/update-template.sh
 ```
 
 ### Common Update Scenarios
@@ -296,7 +296,7 @@ Or use browser dev tools:
 
 **Do:**
 - Use clear, direct language
-- Focus on impact ("75,000+ students educated")
+- Focus on impact ("100,000+ students educated")
 - Include specific numbers and data
 - Write for action (CTAs)
 - Break up long paragraphs
