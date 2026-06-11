@@ -203,8 +203,16 @@
     .btn-post:disabled { background: var(--ink-faint); cursor: wait; }
 
     .progress { margin-top: 1.5rem; }
-    .progress-track { height: 3px; background: var(--ink-line-soft); }
+    .progress-track { height: 3px; background: var(--ink-line-soft); overflow: hidden; }
     .progress-bar { height: 3px; width: 0; background: var(--orange); transition: width .2s ease; }
+    .progress-bar.indeterminate { width: 40%; animation: bobnotes-slide 1.2s ease-in-out infinite; }
+    @keyframes bobnotes-slide {
+      from { transform: translateX(-110%); }
+      to { transform: translateX(280%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .progress-bar.indeterminate { animation: none; width: 100%; opacity: .5; }
+    }
     .progress-text {
       font-family: var(--font-mono);
       font-size: .68rem;
@@ -505,27 +513,37 @@
         }));
       }
 
-      function send(payload, onProgress) {
-        return new Promise(function (resolve, reject) {
-          var xhr = new XMLHttpRequest();
-          xhr.open('POST', SCRIPT_URL);
-          /* No Content-Type header: the request stays a CORS "simple request"
-             (text/plain), so Apps Script accepts it and the JSON reply is readable. */
-          xhr.upload.addEventListener('progress', function (e) {
-            if (e.lengthComputable && onProgress) onProgress(e.loaded / e.total);
-          });
-          xhr.addEventListener('load', function () {
-            try {
-              resolve(JSON.parse(xhr.responseText));
-            } catch (e) {
-              reject(new Error('Unexpected reply — is the web app deployed with access set to "Anyone"?'));
-            }
-          });
-          xhr.addEventListener('error', function () { reject(new Error('Network error — check your connection and try again.')); });
-          xhr.addEventListener('timeout', function () { reject(new Error('Upload timed out — try again, or with fewer files.')); });
-          xhr.timeout = 5 * 60 * 1000;
-          xhr.send(JSON.stringify(payload));
-        });
+      /* Plain fetch with a string body and NO custom headers keeps this a
+         CORS "simple request" — no preflight, which Apps Script web apps
+         can't answer. (An XHR upload-progress listener forces a preflight,
+         which is why there's no percentage meter here.) */
+      function send(payload) {
+        var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 5 * 60 * 1000) : null;
+        function done(result) {
+          if (timer) clearTimeout(timer);
+          return result;
+        }
+        return fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+          signal: ctrl ? ctrl.signal : undefined
+        }).then(function (res) {
+          return res.text();
+        }).then(function (text) {
+          try {
+            return JSON.parse(text);
+          } catch (e) {
+            throw new Error('Unexpected reply — is the web app deployed with access set to "Anyone"?');
+          }
+        }).catch(function (err) {
+          if (err && err.name === 'AbortError') throw new Error('Upload timed out — try again, or with fewer files.');
+          if (err instanceof TypeError) throw new Error('Could not reach the posting service — check your connection and try again.');
+          throw err;
+        }).then(
+          function (v) { return done(v); },
+          function (e) { done(); throw e; }
+        );
       }
 
       form.addEventListener('submit', function (e) {
@@ -561,7 +579,8 @@
           if (totalBytes > MAX_TOTAL_BYTES) {
             throw new Error('This post is too big to upload in one go — remove a video (or share it as a link) and try again.');
           }
-          progressText.textContent = 'Uploading…';
+          progressText.textContent = 'Uploading — hang tight…';
+          progressBar.classList.add('indeterminate');
           return send({
             code: code,
             title: titleInput.value.trim(),
@@ -569,9 +588,6 @@
             link: linkInput.value.trim(),
             photos: packed[0],
             videos: packed[1]
-          }, function (frac) {
-            progressBar.style.width = Math.round(frac * 100) + '%';
-            progressText.textContent = 'Uploading… ' + Math.round(frac * 100) + '%';
           });
         }).then(function (res) {
           if (!res || !res.ok) {
@@ -586,6 +602,7 @@
           progress.hidden = true;
           setStatus(err.message || String(err), true);
         }).then(function () {
+          progressBar.classList.remove('indeterminate');
           postBtn.disabled = false;
         });
       });
