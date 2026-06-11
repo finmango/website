@@ -225,8 +225,8 @@ def main():
     chrome_block = ('<!-- chrome:script -->\n  ' + script_tpl
                     + '\n  <!-- /chrome:script -->')
     LEGACY_CHUNKS = [
-        re.compile(r"[ \t]*//\s*Navigation scroll effect\s*\n"
-                   r"\s*const nav = document\.getElementById\('nav'\);"
+        re.compile(r"[ \t]*(?://\s*Nav[^\n]*\n)?"
+                   r"[ \t]*const nav = document\.getElementById\('nav'\);"
                    r".*?\n[ \t]*\}\);\n", re.S),
         re.compile(r"[ \t]*//\s*Smooth scroll[^\n]*\n"
                    r"\s*document\.querySelectorAll\('a\[href\^=\"#\"\]'\)"
