@@ -62,14 +62,86 @@ def drop_block(c, start_marker, opening='<div', closing='</div>', label=''):
     return c[:s] + c[e:], True
 
 
+CHROME_SEL = re.compile(
+    r'(^|[,\s])(nav|footer)\b|\.(nav|logo|footer|mobile|announcement|'
+    r'dropdown|btn-donate|btn-get-involved|skip)[-\w]*|::selection|'
+    r'^\s*(body|html|\*)\s*[,{]')
+
+
+def reskin_css(css):
+    """Token-swap legacy component CSS to editorial values and drop its
+    chrome rules (the editorial foundation supplies those)."""
+    # split into top-level rules (handles @media nesting one level deep)
+    out, i, n = [], 0, len(css)
+    while i < n:
+        m = re.compile(r'[^{}]+\{').search(css, i)
+        if not m:
+            out.append(('', css[i:]))
+            break
+        sel = css[m.start():m.end() - 1]
+        depth, j = 1, m.end()
+        while depth and j < n:
+            if css[j] == '{':
+                depth += 1
+            elif css[j] == '}':
+                depth -= 1
+            j += 1
+        out.append((sel, css[m.start():j]))
+        i = j
+    kept = []
+    for sel, rule in out:
+        s = sel.strip()
+        if s.startswith('@media'):
+            inner = rule[rule.find('{') + 1:rule.rfind('}')]
+            kept.append(rule[:rule.find('{') + 1] + reskin_css(inner) + '}')
+        elif s.startswith(('@keyframes', '@font-face', '@import')):
+            kept.append(rule)
+        elif s and not s.startswith(':root') and CHROME_SEL.search(s):
+            continue
+        else:
+            kept.append(rule)
+    css = '\n'.join(kept)
+
+    swaps = [
+        (r'#1a1a1a\b', '#0A0A0A'), (r'#FF8F00\b|#ff8f00\b', '#FF6B35'),
+        (r'#FFF8F0\b|#fff8f0\b|#fdf6ee\b|#FDF6EE\b|#FFFDF9\b|#fffdf9\b',
+         '#FAFAF7'),
+        (r"font-family:\s*['\"]?(Poppins|Inter|Montserrat|Nunito|Lato|"
+         r"Caveat|Instrument Serif)[^;]*;", 'font-family: var(--font-body);'),
+        (r'#111111\b|#111\b|#222\b|#2d3748\b', 'var(--ink)'),
+        (r'#444\b|#555\b|#666666\b|#666\b|#6B6560\b', 'var(--ink-dim)'),
+        (r'#777\b|#888\b|#999\b|#aaa\b', 'var(--ink-faint)'),
+        (r'#e5e5e5\b|#eee\b|#f3f3f3\b|#f5f5f5\b|#edf2f7\b|#e2e8f0\b',
+         'var(--ink-line)'),
+        (r'#FAF8F5\b|#faf8f5\b|#fdfbf7\b|#fcfaf5\b|#FFFCF8\b|#fffcf8\b',
+         'var(--paper)'),
+        (r'#FF8C61\b|#E55A2B\b|#e55a2b\b|#ff7a45\b', 'var(--orange-deep)'),
+        (r'box-shadow:[^;}]+;', ''),
+        (r'text-shadow:[^;}]+;', ''),
+        (r'border-radius:\s*(?!50%)[^;}]+;', 'border-radius: 0;'),
+        (r'border(-top|-right|-bottom|-left)?:\s*[2-9]px solid',
+         r'border\1: 1px solid'),
+    ]
+    for rx, repl in swaps:
+        css = re.sub(rx, repl, css)
+    return css
+
+
 def main():
-    page, css_files = sys.argv[1], sys.argv[2:]
+    args = [a for a in sys.argv[1:] if a != '--reskin']
+    reskin = '--reskin' in sys.argv
+    page, css_files = args[0], args[1:]
     c = read(page)
     notes = []
 
     style_css = read('templates/editorial-foundation.css')
     for f in css_files:
         style_css += '\n\n' + read(f)
+    if reskin:
+        m = re.search(r'<style>(.*?)</style>', c, re.S)
+        style_css += ('\n\n    /* ---- reskinned legacy component css ---- */'
+                      + reskin_css(m.group(1)))
+        notes.append('reskin')
 
     # ---- HEAD ----
     # all google-fonts link tags -> canonical pattern (placed where the
@@ -152,19 +224,38 @@ def main():
     script_tpl = read('templates/chrome-script.html').rstrip('\n')
     chrome_block = ('<!-- chrome:script -->\n  ' + script_tpl
                     + '\n  <!-- /chrome:script -->')
+    LEGACY_CHUNKS = [
+        re.compile(r"[ \t]*//\s*Navigation scroll effect\s*\n"
+                   r"\s*const nav = document\.getElementById\('nav'\);"
+                   r".*?\n[ \t]*\}\);\n", re.S),
+        re.compile(r"[ \t]*//\s*Smooth scroll[^\n]*\n"
+                   r"\s*document\.querySelectorAll\('a\[href\^=\"#\"\]'\)"
+                   r".*?\n[ \t]*\}\);\n[ \t]*\}\);\n", re.S),
+        re.compile(r"[ \t]*(?://[^\n]*\n\s*)?document\.querySelectorAll"
+                   r"\('\.mobile-dropdown-toggle'\)"
+                   r".*?\n[ \t]*\}\);\n[ \t]*\}\);\n", re.S),
+    ]
     replaced = False
     for sm in re.finditer(r'<script>(.*?)</script>', c, re.S):
         body = sm.group(1)
         if ('mobileMenuBtn' in body or 'mobile-menu-btn' in body
                 or 'Navigation scroll effect' in body
                 or "getElementById('nav')" in body):
-            foreign = [t for t in ('DOMContentLoaded', 'fetch(', 'Chart',
-                       'calculate', 'localStorage')
-                       if t in body and 'announcement' not in body.lower()]
-            if foreign:
-                notes.append(f'WARNING: chrome script has page code '
-                             f'({",".join(foreign)}) — left in place, '
-                             f'chrome script appended separately')
+            stripped = body
+            for rx in LEGACY_CHUNKS:
+                stripped = rx.sub('', stripped)
+            leftover = ('mobileMenuBtn' in stripped
+                        or "getElementById('nav')" in stripped)
+            if stripped != body and not leftover:
+                # page script with legacy chrome chunks appended: keep the
+                # page code, drop the chrome chunks (template supplies them)
+                c = c[:sm.start()] + '<script>' + stripped + '</script>' \
+                    + c[sm.end():]
+                notes.append('chrome-chunks-stripped')
+                break
+            if leftover:
+                notes.append('WARNING: unrecognized chrome JS left in page '
+                             'script — manual review needed')
                 continue
             c = c[:sm.start()] + chrome_block + c[sm.end():]
             replaced = True
