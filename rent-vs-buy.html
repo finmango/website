@@ -2064,28 +2064,6 @@ body {
 
 <script>
 
-// Mobile menu
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const mobileMenu = document.getElementById('mobileMenu');
-mobileMenuBtn.addEventListener('click', () => {
-  mobileMenu.classList.toggle('active');
-  mobileMenuBtn.classList.toggle('active');
-  document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-});
-document.querySelectorAll('.mobile-menu a').forEach(link => {
-  link.addEventListener('click', () => {
-    mobileMenu.classList.remove('active');
-    mobileMenuBtn.classList.remove('active');
-    document.body.style.overflow = '';
-  });
-});
-document.querySelectorAll('.mobile-dropdown-toggle').forEach(toggle => {
-  toggle.addEventListener('click', function() {
-    this.classList.toggle('active');
-    this.nextElementSibling.classList.toggle('open');
-  });
-});
-
 // Advanced toggle
 function toggleAdvanced() {
   const content = document.getElementById('advancedContent');
@@ -2400,31 +2378,35 @@ calculate();
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <!-- chrome:script -->
   <script>
-    // Navigation scroll effect
+    // Navigation scroll effect (null-safe: embed views may strip the chrome)
     const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 50);
-    }, { passive: true });
+    if (nav) {
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 50);
+      }, { passive: true });
+    }
 
     // Mobile menu
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
 
-    mobileMenuBtn.addEventListener('click', () => {
-      const open = mobileMenu.classList.toggle('active');
-      mobileMenuBtn.classList.toggle('active', open);
-      mobileMenuBtn.setAttribute('aria-expanded', open);
-      document.body.style.overflow = open ? 'hidden' : '';
-    });
-
-    document.querySelectorAll('.mobile-menu a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-        mobileMenuBtn.classList.remove('active');
-        mobileMenuBtn.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        const open = mobileMenu.classList.toggle('active');
+        mobileMenuBtn.classList.toggle('active', open);
+        mobileMenuBtn.setAttribute('aria-expanded', open);
+        document.body.style.overflow = open ? 'hidden' : '';
       });
-    });
+
+      document.querySelectorAll('.mobile-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.remove('active');
+          mobileMenuBtn.classList.remove('active');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        });
+      });
+    }
 
     // Mobile accordion
     document.querySelectorAll('.mobile-dropdown-toggle').forEach(toggle => {
