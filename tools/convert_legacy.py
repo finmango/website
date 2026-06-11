@@ -127,6 +127,23 @@ def reskin_css(css):
     return css
 
 
+CHROME_GUARD = """
+    /* ----------------------------------------------------------
+       CHROME GUARD — re-asserts chrome state after reskinned
+       legacy CSS; must stay the last rules in this style block
+       ---------------------------------------------------------- */
+    .mobile-menu { display: none; }
+    .mobile-menu.active { display: flex; }
+    .mobile-controls, .mobile-menu-btn { display: none; }
+    @media (max-width: 968px) {
+      .nav-right { display: none; }
+      .mobile-controls { display: flex; }
+      .mobile-menu-btn { display: block; }
+      .mobile-menu.active { display: flex; }
+    }
+"""
+
+
 def main():
     args = [a for a in sys.argv[1:] if a != '--reskin']
     reskin = '--reskin' in sys.argv
@@ -142,6 +159,7 @@ def main():
         style_css += ('\n\n    /* ---- reskinned legacy component css ---- */'
                       + reskin_css(m.group(1)))
         notes.append('reskin')
+        style_css += CHROME_GUARD
 
     # ---- HEAD ----
     # all google-fonts link tags -> canonical pattern (placed where the
