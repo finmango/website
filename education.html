@@ -851,6 +851,105 @@
     }
 
     /* ----------------------------------------------------------
+       BOB NOTES — live feed Bob posts via a private Google Form
+       (setup: docs/BOB-NOTES-SETUP.md · hidden until sheet is wired)
+       ---------------------------------------------------------- */
+    .bobnotes { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+    .bobnotes-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding-top: 6rem;
+      border-top: 1px solid var(--ink-line-soft);
+    }
+    .bobnotes-feed { border-top: 1px solid var(--ink-line); }
+    .bobnote {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr);
+      gap: 3rem;
+      padding: 2.75rem 0;
+      border-bottom: 1px solid var(--ink-line-soft);
+    }
+    .bobnote-date {
+      font-family: var(--font-mono);
+      font-size: .66rem;
+      font-weight: 500;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      padding-top: .45rem;
+      white-space: nowrap;
+    }
+    .bobnote-title {
+      font-size: 1.3rem;
+      font-weight: 900;
+      letter-spacing: -.025em;
+      line-height: 1.25;
+      margin-bottom: .85rem;
+      max-width: 40ch;
+    }
+    .bobnote-text p {
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--ink-dim);
+      letter-spacing: -.005em;
+      max-width: 66ch;
+      margin-bottom: 1rem;
+    }
+    .bobnote-text p:last-child { margin-bottom: 0; }
+    .bobnote-photos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: .75rem;
+      margin-top: 1.5rem;
+    }
+    .bobnote-photo { display: block; }
+    .bobnote-photo img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      border: 1px solid var(--ink-line);
+      background: var(--ink-line-soft);
+    }
+    .bobnote-video {
+      aspect-ratio: 16 / 9;
+      max-width: 720px;
+      margin-top: 1.5rem;
+      border: 1px solid var(--ink-line);
+      background: var(--ink);
+    }
+    .bobnote-video iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .bobnote-extlink {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      margin-top: 1.35rem;
+      margin-right: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--orange);
+      padding-bottom: .2rem;
+    }
+    .bobnote-extlink:hover { color: var(--orange); }
+    .bobnotes-more { margin-top: 2.75rem; }
+    /* display rules above would defeat the hidden attribute the JS relies on */
+    .bobnotes[hidden], .bobnotes [hidden] { display: none !important; }
+
+    @media (max-width: 968px) {
+      .bobnotes { padding: 0 var(--gutter) 5rem; }
+      .bobnotes-container { padding-top: 4rem; }
+      .bobnote { grid-template-columns: 1fr; gap: 1rem; padding: 2.25rem 0; }
+      .bobnote-date { padding-top: 0; }
+      .bobnote-photos { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+    }
+
+    /* ----------------------------------------------------------
        DECLARATION — paper pull-quote (hand-drawn accent 2 of 2)
        ---------------------------------------------------------- */
     .declaration { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
@@ -1690,6 +1789,34 @@
     </div>
   </section>
 
+  <!-- ======================= BOB NOTES ======================= -->
+  <!-- Live feed Bob posts himself through a private Google Form.
+       Setup + content guide: docs/BOB-NOTES-SETUP.md
+       The section stays hidden until the Google Sheet is connected
+       (see the Bob Notes config in the script near the end of this file).
+       Design preview with sample posts: education.html?bobnotes=preview -->
+  <section class="bobnotes" id="bob-notes" hidden>
+    <div class="bobnotes-container">
+      <div class="section-head">
+        <span class="eyebrow">Straight from Bob</span>
+        <h2>Bob <em>Notes.</em></h2>
+        <div class="meta-line" id="bobnotesMeta">Posted by Bob himself · Newest first</div>
+        <p class="section-sub">
+          Classroom moments, market lessons, and snapshots from the road — <strong>posted by Bob himself, whenever there's something worth sharing.</strong> No filter, no schedule.
+        </p>
+      </div>
+
+      <div class="bobnotes-feed" id="bobnotesFeed"></div>
+
+      <div class="bobnotes-more">
+        <button type="button" class="btn-secondary" id="bobnotesMore" hidden>
+          Show more notes
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
   <!-- ======================= DECLARATION ======================= -->
   <section class="declaration" aria-label="Our conviction">
     <div class="declaration-container">
@@ -1817,6 +1944,279 @@
     });
   </script>
   <!-- /chrome:script -->
+
+  <!-- Bob Notes feed (page-specific) -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* ========================================================
+         BOB NOTES — CONFIG
+         How it works: Bob submits a private Google Form, the
+         responses land in a linked Google Sheet, and this script
+         reads that sheet and renders the posts above.
+         Full setup walkthrough: docs/BOB-NOTES-SETUP.md
+
+         To go live, paste the Google Sheet ID between the quotes
+         below — the long string in the sheet URL between /d/ and
+         /edit — and share the sheet as "Anyone with the link:
+         Viewer". The section stays hidden until then.
+         ======================================================== */
+      var SHEET_ID = '';                    /* <-- PASTE GOOGLE SHEET ID HERE */
+      var SHEET_TAB = 'Form Responses 1';   /* falls back to the first tab automatically */
+      var INITIAL_NOTES = 4;
+      var BATCH = 8;
+
+      var section = document.getElementById('bob-notes');
+      var feed = document.getElementById('bobnotesFeed');
+      var meta = document.getElementById('bobnotesMeta');
+      var moreBtn = document.getElementById('bobnotesMore');
+      if (!section || !feed) return;
+
+      var posts = [];
+      var shown = 0;
+
+      /* Sheet columns are matched by header text, so the exact Google Form
+         question wording is flexible. First match wins, in this order. */
+      var COLUMN_PATTERNS = {
+        timestamp: /timestamp/i,
+        hide: /hide|hold|draft|skip/i,
+        photos: /photo|image|pic/i,
+        videos: /video|clip/i,
+        link: /link|url/i,
+        title: /title|headline|subject/i,
+        body: /note|message|mind|update|story|text|share/i
+      };
+
+      function safeUrl(raw) {
+        try {
+          var u = new URL(String(raw).trim());
+          return (u.protocol === 'https:' || u.protocol === 'http:') ? u.href : null;
+        } catch (e) { return null; }
+      }
+      function driveFileId(url) {
+        var m = url.match(/[?&]id=([A-Za-z0-9_-]{10,})/) || url.match(/\/(?:file\/)?d\/([A-Za-z0-9_-]{10,})/);
+        return m ? m[1] : null;
+      }
+      function youTubeId(url) {
+        if (!/youtube\.com|youtu\.be/.test(url)) return null;
+        var m = url.match(/youtu\.be\/([A-Za-z0-9_-]{6,})/) ||
+                url.match(/[?&]v=([A-Za-z0-9_-]{6,})/) ||
+                url.match(/\/(?:shorts|embed|live)\/([A-Za-z0-9_-]{6,})/);
+        return m ? m[1] : null;
+      }
+      function splitUrls(cell) {
+        return String(cell || '').split(/[,\n]+/).map(safeUrl).filter(Boolean);
+      }
+      function parseGvizDate(v) {
+        var m = /Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?/.exec(String(v || ''));
+        return m ? new Date(+m[1], +m[2], +m[3], +(m[4] || 0), +(m[5] || 0), +(m[6] || 0)) : null;
+      }
+      var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      function formatDate(d) {
+        return MONTHS[d.getMonth()] + ' ' + d.getDate() + ' · ' + d.getFullYear();
+      }
+      function cellText(cell) {
+        if (!cell) return '';
+        if (cell.v === null || cell.v === undefined) return cell.f || '';
+        return String(cell.v);
+      }
+      function el(tag, className, parent) {
+        var node = document.createElement(tag);
+        if (className) node.className = className;
+        if (parent) parent.appendChild(node);
+        return node;
+      }
+
+      function gvizUrl(tab) {
+        return 'https://docs.google.com/spreadsheets/d/' + SHEET_ID +
+          '/gviz/tq?tqx=out:json&headers=1' + (tab ? '&sheet=' + encodeURIComponent(tab) : '');
+      }
+      function fetchTable(tab) {
+        return fetch(gvizUrl(tab)).then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.text();
+        }).then(function (text) {
+          var json = JSON.parse(text.substring(text.indexOf('(') + 1, text.lastIndexOf(')')));
+          if (json.status === 'error') throw new Error('gviz error on tab "' + tab + '"');
+          return json.table;
+        });
+      }
+
+      function mapColumns(labels) {
+        var map = {}, claimed = {};
+        ['timestamp', 'hide', 'photos', 'videos', 'link', 'title', 'body'].forEach(function (key) {
+          labels.forEach(function (label, i) {
+            if (map[key] === undefined && !claimed[i] && COLUMN_PATTERNS[key].test(label)) {
+              map[key] = i;
+              claimed[i] = true;
+            }
+          });
+        });
+        return map;
+      }
+
+      function tableToPosts(table) {
+        var labels = (table.cols || []).map(function (c) { return (c && c.label) || ''; });
+        var rows = table.rows || [];
+        if (labels.join('') === '' && rows.length) {
+          labels = (rows[0].c || []).map(cellText);
+          rows = rows.slice(1);
+        }
+        var col = mapColumns(labels);
+        var out = [];
+        rows.forEach(function (row) {
+          var c = row.c || [];
+          function val(key) { return col[key] === undefined ? '' : cellText(c[col[key]]); }
+          if (/^(y|yes|true|x|1|hide|hold|draft)$/i.test(val('hide').trim())) return;
+          var tsCell = col.timestamp === undefined ? null : c[col.timestamp];
+          var post = {
+            date: tsCell ? parseGvizDate(tsCell.v) : null,
+            dateText: tsCell && tsCell.f ? String(tsCell.f).split(' ')[0] : '',
+            title: val('title').trim(),
+            body: val('body').trim(),
+            photos: splitUrls(val('photos')),
+            videos: splitUrls(val('videos')),
+            link: safeUrl(val('link'))
+          };
+          if (!post.title && !post.body && !post.photos.length && !post.videos.length) return;
+          out.push(post);
+        });
+        out.sort(function (a, b) {
+          return (b.date ? b.date.getTime() : 0) - (a.date ? a.date.getTime() : 0);
+        });
+        return out;
+      }
+
+      function renderPost(post) {
+        var article = el('article', 'bobnote');
+        el('div', 'bobnote-date', article).textContent =
+          post.date ? formatDate(post.date) : post.dateText;
+        var body = el('div', 'bobnote-body', article);
+
+        if (post.title) el('h3', 'bobnote-title', body).textContent = post.title;
+
+        if (post.body) {
+          var text = el('div', 'bobnote-text', body);
+          post.body.split(/\n+/).forEach(function (para) {
+            para = para.trim();
+            if (para) el('p', '', text).textContent = para;
+          });
+        }
+
+        if (post.photos.length) {
+          var grid = el('div', 'bobnote-photos', body);
+          post.photos.forEach(function (url) {
+            var id = driveFileId(url);
+            var a = el('a', 'bobnote-photo', grid);
+            a.href = id ? 'https://drive.google.com/file/d/' + id + '/view' : url;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            var img = el('img', '', a);
+            img.src = id ? 'https://drive.google.com/thumbnail?id=' + id + '&sz=w1600' : url;
+            img.alt = 'Photo posted by Bob';
+            img.loading = 'lazy';
+            /* file not shared publicly, or not an image — drop it cleanly */
+            img.addEventListener('error', function () { a.remove(); });
+          });
+        }
+
+        post.videos.forEach(function (url) {
+          var yt = youTubeId(url);
+          var id = yt ? null : driveFileId(url);
+          if (yt || id) {
+            var wrap = el('div', 'bobnote-video', body);
+            var iframe = el('iframe', '', wrap);
+            iframe.src = yt
+              ? 'https://www.youtube.com/embed/' + yt
+              : 'https://drive.google.com/file/d/' + id + '/preview';
+            iframe.title = 'Video posted by Bob';
+            iframe.loading = 'lazy';
+            iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+            iframe.setAttribute('allowfullscreen', '');
+          } else {
+            var a = el('a', 'bobnote-extlink', body);
+            a.href = url;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.textContent = 'Watch video ↗';
+          }
+        });
+
+        if (post.link) {
+          var a = el('a', 'bobnote-extlink', body);
+          a.href = post.link;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          var host = '';
+          try { host = new URL(post.link).hostname.replace(/^www\./, ''); } catch (e) { /* keep fallback */ }
+          a.textContent = (host || 'Open link') + ' ↗';
+        }
+
+        return article;
+      }
+
+      function renderMore() {
+        var next = Math.min(shown + (shown ? BATCH : INITIAL_NOTES), posts.length);
+        for (; shown < next; shown++) feed.appendChild(renderPost(posts[shown]));
+        if (moreBtn) moreBtn.hidden = shown >= posts.length;
+      }
+
+      function show(list, metaText) {
+        posts = list;
+        if (!posts.length) return;
+        renderMore();
+        if (meta) {
+          meta.textContent = metaText ||
+            (posts.length + (posts.length === 1 ? ' note' : ' notes') + ' · Posted by Bob himself · Newest first');
+        }
+        section.hidden = false;
+      }
+
+      if (moreBtn) moreBtn.addEventListener('click', renderMore);
+
+      /* Design preview with sample content: education.html?bobnotes=preview */
+      if (/[?&]bobnotes=preview/.test(location.search)) {
+        show([
+          {
+            date: new Date(2026, 5, 9),
+            title: 'Sample note — this is what a post with photos looks like',
+            body: 'This is placeholder content shown only in preview mode. Once the Google Form and Sheet are connected, everything Bob submits shows up here automatically.\nNotes can run multiple paragraphs, and photos drop into the grid below.',
+            photos: ['education1.jpg', 'education5.jpeg'],
+            videos: [],
+            link: null
+          },
+          {
+            date: new Date(2026, 5, 2),
+            title: 'Sample note — videos embed right in the feed',
+            body: 'YouTube links and videos uploaded through the form both play inline.',
+            photos: [],
+            videos: ['https://www.youtube.com/watch?v=agm8O9-uCw4'],
+            link: null
+          },
+          {
+            date: new Date(2026, 4, 27),
+            title: '',
+            body: 'A quick text-only note works too — no title, no media, just a thought. Links Bob shares get a tidy button below.',
+            photos: [],
+            videos: [],
+            link: 'https://www.finmango.org/'
+          }
+        ], 'Preview · Sample content — connect the Google Sheet to go live');
+        return;
+      }
+
+      if (!SHEET_ID) {
+        console.info('Bob Notes: no Google Sheet connected yet, section stays hidden. Setup: docs/BOB-NOTES-SETUP.md');
+        return;
+      }
+
+      fetchTable(SHEET_TAB)
+        .catch(function () { return fetchTable(''); })
+        .then(function (table) { show(tableToPosts(table), null); })
+        .catch(function (err) { console.warn('Bob Notes: could not load the sheet —', err); });
+    })();
+  </script>
 
 </body>
 </html>
