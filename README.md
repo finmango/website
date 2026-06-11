@@ -52,7 +52,7 @@ website/
 ├── approach.html          # Our methodology
 ├── [tool].html            # Calculator pages
 ├── [person].html          # Team/ambassador profiles
-├── *.png, *.jpg           # Images (120MB total)
+├── *.png, *.jpg           # Images (~45MB, compressed)
 └── favicon.png            # Site icon
 ```
 
@@ -142,7 +142,7 @@ All pages share similar CSS variables. To update global styles:
 
 ## 🖼️ Image Optimization
 
-**Current State:** 120MB of images (some files 1-3MB each)
+**Current State:** ~45MB of images (compressed June 2026 via tools/compress_images.py)
 
 ### Recommended Optimization Process
 
@@ -178,12 +178,6 @@ All pages share similar CSS variables. To update global styles:
 - Total size: ~30-40MB (down from 120MB)
 - Largest file: <500KB
 - Page load: <2 seconds on 4G
-
-## 🔗 Fixing Dead Links
-
-Current dead links to fix:
-- Footer: Privacy and Terms links (`#`) → `privacy.html`, `terms.html`
-- Team page: Some member links go to `#` → Create profile pages or remove links
 
 ## 🧪 Testing
 

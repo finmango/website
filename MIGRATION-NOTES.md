@@ -648,3 +648,43 @@ every.org embed widget that turns every.org links into a donation modal.
   `scale(2.35)` origin `50% 9%` after two rounds of user feedback (first showed
   more headroom, then nudged back up); face framing now matches neighboring tiles.
 ## Remaining: none — original brief complete (index was pre-existing reference).
+
+---
+
+## Sitewide completion sweep — 64 legacy pages migrated (June 2026)
+
+All remaining nav-bearing legacy pages are now on the editorial system.
+Four core pages were fully hand-migrated (approach, history,
+covid-19-open-data-project, intelligence-platform); the other 60 went
+through `tools/convert_legacy.py` — chrome (nav/menu/footer/JS) replaced
+with the marked templates, fonts swapped to the system pair, the legacy
+style block replaced by `templates/editorial-foundation.css` plus either
+authored family CSS (privacy/terms) or the page's own component CSS
+token-swapped to system values (`--reskin` mode: palette, fonts,
+box-shadows stripped, radii squared, 2px+ borders -> hairlines). Content
+markup and functional JS byte-identical, verified by
+`tools/diff_scripts.py` against pre-migration snapshots, plus headless
+Chromium screenshots at 1280/375 (zero horizontal overflow, no JS errors)
+for every converted page.
+
+### Genuine bugs fixed along the way
+- food-desert-analyzer shipped with a stray `}` that killed its entire
+  analyzer script in production — fixed; the tool now runs.
+- housing-policy-lab double-loaded `data/dashboard-data.js`
+  (const redeclaration) — duplicate include removed.
+- Duplicate legacy nav handlers removed from food-assistance-calculator,
+  rent-vs-buy, js/housing-stories.js (the last was double-binding the
+  mobile menu toggle).
+- intelligence-platform had no GA tag and no canonical URL — added.
+
+### Flags / open questions
+- Module/category tag colors on lessons + strategy pages kept (rainbow
+  accents; a content feature, but off the strict five-color palette) —
+  say the word to normalize them to mono hairline tags.
+- Reskinned tool pages are token-faithful but not re-composed: heroes
+  stay centered where legacy had them centered, and tool panels keep
+  their legacy layout. Full editorial recomposition (ruled lists, ink
+  moments) remains open per page if wanted.
+- Standalone documents (print one-pagers, social graphic templates,
+  judging tools, barrier-breakers sub-pages without site chrome) were
+  intentionally NOT migrated: they aren't part of the site chrome system.
