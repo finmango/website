@@ -608,10 +608,11 @@
     }
     .outcome-cell {
       background: var(--paper);
-      padding: 2.25rem 2rem;
+      padding: 1.5rem 1.6rem;
       position: relative;
       display: flex;
-      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.1rem;
     }
     .outcome-cell::before {
       content: '';
@@ -632,17 +633,26 @@
       letter-spacing: .16em;
       text-transform: uppercase;
       color: var(--ink-faint);
-      margin-bottom: 1.25rem;
+      flex-shrink: 0;
     }
-    .outcome-icon { width: 48px; height: 48px; margin-bottom: 1.1rem; }
+    .outcome-icon { width: 36px; height: 36px; flex-shrink: 0; margin-top: .1rem; }
     .outcome-icon svg { width: 100%; height: 100%; }
     @keyframes drawLine { from { stroke-dashoffset: 200; } to { stroke-dashoffset: 0; } }
     @keyframes pulsePoint { 0%, 100% { r: 3; opacity: .8; } 50% { r: 4.5; opacity: 1; } }
     .outcome-icon .draw-in { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawLine 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     .outcome-icon .draw-in-delay { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawLine 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; }
     .outcome-icon .pulse-dot { animation: pulsePoint 2.5s ease infinite; }
-    .outcome-title { font-size: 1.08rem; font-weight: 900; letter-spacing: -.02em; margin-bottom: .55rem; }
-    .outcome-desc { font-size: .88rem; font-weight: 300; line-height: 1.55; color: var(--ink-dim); }
+    .outcome-body { min-width: 0; }
+    .outcome-title {
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: -.02em;
+      margin-bottom: .4rem;
+      display: flex;
+      align-items: baseline;
+      gap: .6rem;
+    }
+    .outcome-desc { font-size: .85rem; font-weight: 300; line-height: 1.5; color: var(--ink-dim); }
 
     .resource-links { display: flex; gap: .9rem; flex-wrap: wrap; margin-top: 3rem; }
 
@@ -1166,7 +1176,8 @@
 
       .program { padding: 5rem var(--gutter); }
       .outcomes-grid { grid-template-columns: 1fr; }
-      .outcome-cell { padding: 1.75rem 1.5rem; }
+      .outcome-cell { padding: 1.25rem 1.25rem; gap: .95rem; }
+      .outcome-icon { width: 32px; height: 32px; }
       .resource-links { margin-top: 2rem; }
       .resource-links .btn-secondary { flex: 1; justify-content: center; min-width: 14rem; }
 
@@ -1418,7 +1429,6 @@
 
       <div class="outcomes-grid">
         <div class="outcome-cell">
-          <div class="outcome-num">01</div>
           <div class="outcome-icon" aria-hidden="true">
             <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8 48 C20 48.3, 40 47.8, 52 48" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
@@ -1427,12 +1437,13 @@
               <path d="M44 14 L48 18 L52 14" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6"/>
             </svg>
           </div>
-          <h3 class="outcome-title">Compound Interest &amp; Growth</h3>
-          <p class="outcome-desc">How small, steady contributions snowball into life-changing sums — and why starting early matters most.</p>
+          <div class="outcome-body">
+            <h3 class="outcome-title"><span class="outcome-num">01</span>Compound Interest &amp; Growth</h3>
+            <p class="outcome-desc">How small, steady contributions snowball into life-changing sums — and why starting early matters most.</p>
+          </div>
         </div>
 
         <div class="outcome-cell">
-          <div class="outcome-num">02</div>
           <div class="outcome-icon" aria-hidden="true">
             <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="10" y="12" width="28" height="36" rx="2" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round" fill="none"/>
@@ -1443,24 +1454,26 @@
               <path d="M49 35 L55 41" stroke="#0A0A0A" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </div>
-          <h3 class="outcome-title">Fund Research &amp; Analysis</h3>
-          <p class="outcome-desc">Reading expense ratios, returns, and holdings to tell a great fund from an expensive one.</p>
+          <div class="outcome-body">
+            <h3 class="outcome-title"><span class="outcome-num">02</span>Fund Research &amp; Analysis</h3>
+            <p class="outcome-desc">Reading expense ratios, returns, and holdings to tell a great fund from an expensive one.</p>
+          </div>
         </div>
 
         <div class="outcome-cell">
-          <div class="outcome-num">03</div>
           <div class="outcome-icon" aria-hidden="true">
             <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path class="draw-in" d="M30 8 L10 18 C10 18, 8 38, 30 52 C52 38, 50 18, 50 18 Z" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
               <path class="draw-in-delay" d="M22 30 L28 36 L40 24" stroke="#FF6B35" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
             </svg>
           </div>
-          <h3 class="outcome-title">Avoiding Common Pitfalls</h3>
-          <p class="outcome-desc">The behavioral traps — market timing, high fees, panic selling — and how to sidestep them.</p>
+          <div class="outcome-body">
+            <h3 class="outcome-title"><span class="outcome-num">03</span>Avoiding Common Pitfalls</h3>
+            <p class="outcome-desc">The behavioral traps — market timing, high fees, panic selling — and how to sidestep them.</p>
+          </div>
         </div>
 
         <div class="outcome-cell">
-          <div class="outcome-num">04</div>
           <div class="outcome-icon" aria-hidden="true">
             <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="10" y="16" width="40" height="28" rx="3" stroke="#0A0A0A" stroke-width="1.4" fill="none"/>
@@ -1470,12 +1483,13 @@
               <path d="M16 34 L30 34" stroke="#0A0A0A" stroke-width="0.8" stroke-linecap="round" opacity="0.3"/>
             </svg>
           </div>
-          <h3 class="outcome-title">Brokerage &amp; Account Setup</h3>
-          <p class="outcome-desc">Choosing a brokerage and opening the right account, walked through step by step.</p>
+          <div class="outcome-body">
+            <h3 class="outcome-title"><span class="outcome-num">04</span>Brokerage &amp; Account Setup</h3>
+            <p class="outcome-desc">Choosing a brokerage and opening the right account, walked through step by step.</p>
+          </div>
         </div>
 
         <div class="outcome-cell">
-          <div class="outcome-num">05</div>
           <div class="outcome-icon" aria-hidden="true">
             <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M8 50 C20 50.2, 40 49.8, 52 50" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
@@ -1484,12 +1498,13 @@
               <rect class="draw-in" x="40" y="24" width="8" height="25" rx="1" stroke="#0A0A0A" stroke-width="1.3" fill="none" opacity="0.5"/>
             </svg>
           </div>
-          <h3 class="outcome-title">Market Index Comparison</h3>
-          <p class="outcome-desc">Benchmarking against the S&amp;P 500 and other indexes to judge a fund's real performance.</p>
+          <div class="outcome-body">
+            <h3 class="outcome-title"><span class="outcome-num">05</span>Market Index Comparison</h3>
+            <p class="outcome-desc">Benchmarking against the S&amp;P 500 and other indexes to judge a fund's real performance.</p>
+          </div>
         </div>
 
         <div class="outcome-cell">
-          <div class="outcome-num">06</div>
           <div class="outcome-icon" aria-hidden="true">
             <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="30" cy="30" r="20" stroke="#0A0A0A" stroke-width="1.4" fill="none"/>
@@ -1497,8 +1512,10 @@
               <path class="draw-in-delay" d="M22 22 C22 18, 38 18, 38 24 C38 30, 22 28, 22 34 C22 40, 38 40, 38 36" stroke="#FF6B35" stroke-width="1.8" stroke-linecap="round" fill="none"/>
             </svg>
           </div>
-          <h3 class="outcome-title">Tax-Free Investing</h3>
-          <p class="outcome-desc">Using Roth IRAs and tax-advantaged accounts to keep more of what you earn.</p>
+          <div class="outcome-body">
+            <h3 class="outcome-title"><span class="outcome-num">06</span>Tax-Free Investing</h3>
+            <p class="outcome-desc">Using Roth IRAs and tax-advantaged accounts to keep more of what you earn.</p>
+          </div>
         </div>
       </div>
 
