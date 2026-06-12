@@ -221,6 +221,9 @@ const SegmentCaptions: React.FC<{ seg: 's1' | 's2' | 's3' | 's4'; raise?: boolea
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const segT = frame / fps;
+  // REMOTION_NO_CAPTIONS=1 renders clean picture for external editors (Canva
+  // handoff) — captions are burned in only on the full deliverable
+  if (process.env.REMOTION_NO_CAPTIONS === '1') return null;
   return (
     <Captions
       caps={T.captions[seg]}
