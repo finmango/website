@@ -4,15 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Table Banking Game — How Community Savings Groups Work — FinMango</title>
-<meta name="description" content="Join a savings group for 6 meetings. Contribute, vote on loans, weather emergencies, and see how community banking actually works — the system tens of millions rely on.">
+<meta name="description" content="Run a year inside a community savings group: contribute, vote on loans, weather an emergency, share out the box. Playable in English, Español, Français, Português & Kiswahili — with your local currency.">
 <link rel="canonical" href="https://finmango.org/table-banking-game">
 <link rel="icon" type="image/png" href="favicon.png">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://finmango.org/table-banking-game">
 <meta property="og:title" content="Table Banking — A Community Savings Simulator">
-<meta property="og:description" content="A village bank runs on trust, not credit scores. Play through 6 meetings and see how community finance works.">
+<meta property="og:description" content="A village bank runs on trust, not credit scores. Play a full year in 5 languages, in your own currency — chama, tanda, susu, stokvel, tontine.">
 <meta property="og:image" content="https://finmango.org/finmango-og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "Table Banking Game — A Community Savings Simulator",
+  "description": "An interactive simulation of a community savings group (chama, tanda, susu, stokvel, tontine). Players contribute monthly, vote on loans, handle an emergency round, and share out the box at year-end.",
+  "url": "https://finmango.org/table-banking-game",
+  "learningResourceType": "Simulation",
+  "educationalUse": "Classroom activity, self-study",
+  "inLanguage": ["en", "es", "fr", "pt", "sw"],
+  "isAccessibleForFree": true,
+  "provider": { "@type": "Organization", "name": "FinMango", "url": "https://finmango.org" }
+}
+</script>
 
   <!-- Performance: Preconnect to external domains -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1106,6 +1121,86 @@ body { font-family: var(--font-body); background: var(--warm-white); color: var(
 @media (max-width: 480px) { }
 
 
+/* ============================================
+   WORLD EDITION — setup, ledger, discuss,
+   settlement, glossary, print
+   ============================================ */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Setup card on the hero */
+.setup-card { max-width: 660px; margin: 0 auto 1.75rem; background: var(--white); border: 1px solid rgba(0,0,0,0.08); padding: 1.4rem 1.5rem 1.5rem; text-align: left; }
+.setup-title { font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--orange); margin-bottom: 1rem; }
+.setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 0.85rem; }
+.setup-field { display: flex; flex-direction: column; gap: 0.35rem; font-family: var(--font-mono); font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-medium); }
+.setup-field select, .setup-field input { font-family: var(--font-body); font-size: 0.92rem; font-weight: 600; color: var(--ink); background: var(--warm-white); border: 1.5px solid rgba(0,0,0,0.12); padding: 0.62rem 0.7rem; border-radius: 0; width: 100%; appearance: auto; }
+.setup-field select:focus, .setup-field input:focus { outline: 2px solid var(--orange); outline-offset: 1px; border-color: var(--orange); }
+.setup-card .hero-facts { margin: 0 0 1.1rem; width: 100%; justify-content: flex-start; background: var(--warm-white); border-color: rgba(0,0,0,0.06); }
+.setup-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+.btn-resume { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--white); color: var(--ink); padding: 1rem 1.6rem; font-weight: 700; font-size: 0.95rem; border: 1.5px solid var(--ink); cursor: pointer; transition: all 0.25s ease; font-family: var(--font-body); }
+.btn-resume:hover { background: var(--orange); border-color: var(--orange); color: var(--white); }
+
+/* In-game tradition line */
+.table-meta { font-family: var(--font-mono); font-size: 0.62rem; color: var(--gray-medium); letter-spacing: 0.06em; margin-top: 0.35rem; }
+
+/* The group ledger — "the book" */
+.ledger { margin-top: 1.1rem; border: 1px solid rgba(0,0,0,0.08); background: var(--warm-white); }
+.ledger summary { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 0.7rem 0.95rem; cursor: pointer; font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); list-style: none; }
+.ledger summary::-webkit-details-marker { display: none; }
+.ledger summary .ledger-hint { color: var(--gray-soft); font-weight: 500; letter-spacing: 0.04em; text-transform: none; }
+.ledger-rows { max-height: 250px; overflow-y: auto; border-top: 1px solid rgba(0,0,0,0.06); }
+.ledger-row { display: grid; grid-template-columns: 2.1rem 1fr auto auto; gap: 0.6rem; padding: 0.45rem 0.95rem; font-family: var(--font-mono); font-size: 0.66rem; border-bottom: 1px solid rgba(0,0,0,0.04); align-items: baseline; }
+.ledger-row:last-child { border-bottom: none; }
+.ledger-m { color: var(--gray-soft); }
+.ledger-desc { color: var(--gray); font-family: var(--font-body); font-size: 0.78rem; font-weight: 500; }
+.ledger-delta { font-variant-numeric: tabular-nums; font-weight: 700; }
+.ledger-delta.pos { color: var(--green); }
+.ledger-delta.neg { color: var(--red); }
+.ledger-delta.neu { color: var(--gray-soft); }
+.ledger-runbal { color: var(--gray-soft); font-variant-numeric: tabular-nums; }
+.ledger-empty { padding: 0.75rem 0.95rem; font-size: 0.78rem; color: var(--gray-soft); }
+
+/* Discussion prompts — classroom mode */
+.discuss { margin-top: 0.9rem; border: 1px dashed rgba(196,136,46,0.45); background: var(--cream); }
+.discuss summary { display: flex; align-items: baseline; gap: 0.6rem; padding: 0.6rem 0.85rem; cursor: pointer; font-family: var(--font-mono); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); list-style: none; }
+.discuss summary::-webkit-details-marker { display: none; }
+.discuss summary .discuss-hint { color: var(--gray-soft); font-weight: 500; letter-spacing: 0.04em; text-transform: none; }
+.discuss-q { padding: 0 0.85rem 0.65rem; font-size: 0.82rem; color: var(--gray); line-height: 1.5; }
+.discuss-q::before { content: '—'; color: var(--amber); margin-right: 0.45rem; }
+
+/* Year-end settlement table */
+.settle-table { margin: 0.85rem 0 1rem; border: 1px solid rgba(0,0,0,0.08); background: var(--white); }
+.settle-row { display: flex; justify-content: space-between; gap: 1rem; padding: 0.5rem 0.8rem; font-size: 0.8rem; color: var(--gray); border-bottom: 1px solid rgba(0,0,0,0.05); }
+.settle-row span:last-child { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink); white-space: nowrap; }
+.settle-row.total { background: var(--ink); color: var(--white); font-weight: 700; border-bottom: none; }
+.settle-row.total span:last-child { color: var(--white); }
+.settle-row .neg { color: var(--red); }
+.settle-row .pos { color: var(--green); }
+
+/* Glossary — one idea, many names */
+.glossary-card { background: var(--white); border: 1px solid rgba(0,0,0,0.08); padding: 2rem; }
+.glossary-card h3 { font-size: 1.35rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 0.5rem; color: var(--ink); }
+.glossary-card > p { font-size: 0.9rem; color: var(--gray); line-height: 1.5; }
+.glossary-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.1rem; }
+.chip { font-family: var(--font-mono); font-size: 0.64rem; border: 1px solid rgba(0,0,0,0.12); padding: 0.32rem 0.6rem; color: var(--gray-medium); letter-spacing: 0.02em; }
+.chip strong { color: var(--ink); font-weight: 700; }
+
+@media (max-width: 640px) {
+  .setup-grid { grid-template-columns: 1fr; }
+  .setup-card { padding: 1.1rem 1rem 1.25rem; }
+  .glossary-card { padding: 1.5rem; }
+}
+
+@media print {
+  nav, footer, .mobile-menu, .end-actions, .discuss, .hero, .game-section { display: none !important; }
+  body { background: #fff; }
+  .end-section { padding: 1rem 0; }
+  .end-hero { background: #fff; color: #0a0a0a; border: 1px solid #ddd; }
+  .end-hero::before { display: none; }
+  .end-subtitle, .end-stat-label, .end-stat-value { color: #0a0a0a; }
+  .end-stat-item { border-color: #ddd; }
+}
+
+
   </style>
 
 </head>
@@ -1241,26 +1336,55 @@ body { font-family: var(--font-body); background: var(--warm-white); color: var(
     <div class="hero-content">
       <div class="hero-eyebrow">
         <span class="hero-eyebrow-dot"></span>
-        Interactive Simulator · 6 Meetings · 8 Members
+        <span id="heroEyebrowText">Interactive Simulator · 5 Languages · Your Currency</span>
       </div>
-      <h1>
+      <h1 id="heroH1">
         A village bank runs on
         <span class="highlight">trust<svg viewBox="0 0 200 14" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M3 9 C 30 3, 60 11, 90 7 S 150 3, 197 8" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none"/></svg></span>
         — not credit scores.
       </h1>
-      <p class="hero-sub">
-        Join eight neighbors around a shared table. Over six monthly meetings, you'll contribute to a common pool, vote on who gets loans, weather emergencies, and build (or break) trust with the group. This kind of group is called a <em>chama</em> in Kenya, a <em>tanda</em> in Mexico, <em>susu</em> in Ghana, <em>hui</em> in China. Tens of millions of people bank this way — especially where&nbsp;banks&nbsp;won't&nbsp;go.
+      <p class="hero-sub" id="heroSub">
+        Join eight neighbors around a shared table. Over six monthly meetings, you'll contribute to a common pool, vote on who gets loans, weather emergencies, and build (or break) trust with the group. Kenya calls it a <em>chama</em>, Mexico a <em>tanda</em>, Ghana a <em>susu</em>, South Africa a <em>stokvel</em>. Hundreds of millions of people bank this way — especially where&nbsp;banks&nbsp;won't&nbsp;go.
       </p>
-      <div class="hero-facts">
-        <span class="hero-fact"><span>Members</span> <span class="hero-fact-value">8</span></span>
-        <span class="hero-fact"><span>Meetings</span> <span class="hero-fact-value">6</span></span>
-        <span class="hero-fact"><span>Monthly Dues</span> <span class="hero-fact-value">500</span></span>
+
+      <div class="setup-card">
+        <div class="setup-title" id="setupTitle">Set your table</div>
+        <div class="setup-grid">
+          <label class="setup-field">
+            <span id="langLabel">Language</span>
+            <select id="langSelect" autocomplete="off">
+              <option value="en">English</option>
+              <option value="es">Español</option>
+              <option value="fr">Français</option>
+              <option value="pt">Português</option>
+              <option value="sw">Kiswahili</option>
+            </select>
+          </label>
+          <label class="setup-field">
+            <span id="placeLabel">Tradition &amp; currency</span>
+            <select id="presetSelect" autocomplete="off"></select>
+          </label>
+        </div>
+        <div class="setup-grid hidden" id="customRow">
+          <label class="setup-field">
+            <span id="symLabel">Currency symbol</span>
+            <input id="symInput" maxlength="6" value="$" autocomplete="off">
+          </label>
+          <label class="setup-field">
+            <span id="amtLabel">Monthly contribution</span>
+            <input id="amtInput" type="number" min="1" step="1" value="20" inputmode="numeric" autocomplete="off">
+          </label>
+        </div>
+        <div class="hero-facts" id="heroFacts"></div>
+        <div class="setup-actions">
+          <button class="btn-start" id="startGameBtn">
+            <span id="startLabel">Take your seat</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+          <button class="btn-resume hidden" id="resumeBtn"></button>
+        </div>
       </div>
-      <br>
-      <button class="btn-start" id="startGameBtn">
-        Take your seat
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </button>
+
     </div>
   </div>
 </section>
@@ -1274,54 +1398,64 @@ body { font-family: var(--font-body); background: var(--warm-white); color: var(
       <div class="table-card" id="tableCard">
         <div class="table-header">
           <div class="table-header-left">
-            <div class="table-eyebrow">The Table</div>
-            <div class="table-title" id="meetingTitle">Meeting 1 · First Sitting</div>
+            <div class="table-eyebrow" id="tableEyebrow">The Table</div>
+            <div class="table-title" id="meetingTitle">Meeting 1</div>
+            <div class="table-meta" id="tableMeta"></div>
           </div>
-          <div class="progress-dots" id="progressDots"></div>
+          <div class="progress-dots" id="progressDots" aria-hidden="true"></div>
+          <span class="sr-only" id="srProgress" role="status"></span>
         </div>
 
         <div class="table-viz" id="tableViz">
           <div class="table-circle">
             <div class="pool-inner">
-              <div class="pool-label">Group Pool</div>
+              <div class="pool-label" id="poolLabel">In the box</div>
               <div class="pool-amount" id="poolAmount">0</div>
-              <div class="pool-usd" id="poolUsd">pooled together</div>
+              <div class="pool-usd" id="poolSub">the group's money</div>
             </div>
           </div>
           <!-- Members injected by JS -->
         </div>
+
+        <details class="ledger" id="ledgerBox">
+          <summary>
+            <span id="ledgerTitle">The book — group ledger</span>
+            <span class="ledger-hint" id="ledgerBal"></span>
+          </summary>
+          <div class="ledger-rows" id="ledgerRows"></div>
+        </details>
       </div>
 
       <!-- RIGHT: Stats + Scenario -->
       <div class="side-col">
 
-        <div class="stats-card">
-          <div class="stats-card-eyebrow">Your Position</div>
+        <div class="stats-card" aria-live="polite">
+          <div class="stats-card-eyebrow" id="statsEyebrow">Your position</div>
           <div class="stats-grid">
             <div class="stat-row">
-              <span class="stat-label">Cash on hand</span>
-              <span class="stat-value" id="statCash">5,000</span>
+              <span class="stat-label" id="lblCash">Cash on hand</span>
+              <span class="stat-value" id="statCash">0</span>
             </div>
             <div class="stat-row">
-              <span class="stat-label">In the pool</span>
+              <span class="stat-label" id="lblSavings">Saved in the box</span>
               <span class="stat-value" id="statSavings">0</span>
             </div>
             <div class="stat-row">
-              <span class="stat-label">Loans owed</span>
+              <span class="stat-label" id="lblLoans">You owe</span>
               <span class="stat-value" id="statLoans">0</span>
             </div>
             <div class="stat-row">
-              <span class="stat-label">Meeting</span>
+              <span class="stat-label" id="lblMeeting">Meeting</span>
               <span class="stat-value" id="statMeeting">1 / 6</span>
             </div>
           </div>
           <div class="trust-meter">
             <div class="trust-top">
-              <span class="trust-label">Group trust in you</span>
+              <span class="trust-label" id="trustLabel">The group's trust in you</span>
               <span class="trust-value" id="trustValue">75</span>
             </div>
-            <div class="trust-bar"><div class="trust-fill" id="trustFill"></div></div>
-            <div class="trust-caption" id="trustCaption">Welcomed as a new member</div>
+            <div class="trust-bar" role="meter" aria-labelledby="trustLabel" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" id="trustBar"><div class="trust-fill" id="trustFill"></div></div>
+            <div class="trust-caption" id="trustCaption"></div>
           </div>
         </div>
 
@@ -1341,63 +1475,71 @@ body { font-family: var(--font-body); background: var(--warm-white); color: var(
     <div class="end-grid">
 
       <div class="end-hero">
-        <div class="end-eyebrow" id="endVerdict">Your year, complete</div>
-        <h1 class="end-title" id="endTitle">The meeting ends.</h1>
-        <p class="end-subtitle" id="endSubtitle">Here's how your year went.</p>
+        <div class="end-eyebrow" id="endVerdict"></div>
+        <h1 class="end-title" id="endTitle"></h1>
+        <p class="end-subtitle" id="endSubtitle"></p>
 
         <div class="end-stats">
           <div class="end-stat-item">
-            <div class="end-stat-label">Starting cash</div>
-            <div class="end-stat-value">5,000</div>
+            <div class="end-stat-label" id="lblEndStart">You started with</div>
+            <div class="end-stat-value" id="endStart">0</div>
           </div>
           <div class="end-stat-item">
-            <div class="end-stat-label">Total wealth</div>
+            <div class="end-stat-label" id="lblEndWealth">You ended with</div>
             <div class="end-stat-value" id="endWealth">0</div>
           </div>
           <div class="end-stat-item">
-            <div class="end-stat-label">Net change</div>
+            <div class="end-stat-label" id="lblEndNet">Net change</div>
             <div class="end-stat-value" id="endNet">+0</div>
           </div>
           <div class="end-stat-item">
-            <div class="end-stat-label">Final trust</div>
+            <div class="end-stat-label" id="lblEndTrust">Final trust</div>
             <div class="end-stat-value" id="endTrust">75 / 100</div>
           </div>
         </div>
       </div>
 
       <div class="end-journey">
-        <h3>Your journey</h3>
+        <h3 id="endJourneyTitle">Your year at the table</h3>
         <div class="end-journey-list" id="endJourneyList"></div>
       </div>
 
       <div class="end-lesson">
-        <div class="end-lesson-eyebrow">What just happened</div>
-        <h3 id="endLessonTitle">The real lesson of community banking</h3>
-        <p id="endLesson1">Group savings clubs run on <strong>trust</strong>, not collateral. You didn't need a credit score, a bank account, or ID verification. You needed eight people willing to show up every month and vouch for each other.</p>
-        <p id="endLesson2">Tens of millions of people bank this way. In Kenya they call it a <em>chama</em>, in Mexico a <em>tanda</em>, in Ghana a <em>susu</em>, in China a <em>hui</em>, in Ethiopia an <em>ekub</em>. Same idea — pool the money, lend it out, share the profit. Older than banks, and still going strong where banks won't reach.</p>
+        <div class="end-lesson-eyebrow" id="endLessonEyebrow">What just happened</div>
+        <h3 id="endLessonTitle"></h3>
+        <p id="endLesson1"></p>
+        <p id="endLesson2"></p>
+        <p id="endExtra" class="hidden"></p>
 
         <div class="impact-grid">
           <div class="impact-stat">
-            <div class="impact-label">Kenya alone</div>
+            <div class="impact-label" id="impactLabel1">Kenya alone</div>
             <div class="impact-value">300K</div>
-            <div class="impact-sub">Chamas managing $3.4B in assets <a href="https://en.wikipedia.org/wiki/Chama_(investment)" target="_blank" rel="noopener noreferrer" class="impact-cite">↗</a></div>
+            <div class="impact-sub" id="impactSub1">Chamas managing $3.4B in assets <a href="https://en.wikipedia.org/wiki/Chama_(investment)" target="_blank" rel="noopener noreferrer" class="impact-cite">↗</a></div>
           </div>
           <div class="impact-stat">
-            <div class="impact-label">CARE VSLAs</div>
+            <div class="impact-label" id="impactLabel2">CARE VSLAs</div>
             <div class="impact-value">30M</div>
-            <div class="impact-sub">Members in 67 countries saved $11.5B <a href="https://www.care.org/our-work/economic-growth/savings-groups/" target="_blank" rel="noopener noreferrer" class="impact-cite">↗</a></div>
+            <div class="impact-sub" id="impactSub2">Members in 67 countries saved $11.5B <a href="https://www.care.org/our-work/economic-growth/savings-groups/" target="_blank" rel="noopener noreferrer" class="impact-cite">↗</a></div>
           </div>
           <div class="impact-stat">
-            <div class="impact-label">Women-led</div>
+            <div class="impact-label" id="impactLabel3">Women-led</div>
             <div class="impact-value">70%</div>
-            <div class="impact-sub">Of Kenyan table banking groups <a href="https://www.meda.org/news/blog/how-table-banking-has-paved-the-way-for-innovation-and-economic-empowerment-for-women-in-kenya/" target="_blank" rel="noopener noreferrer" class="impact-cite">↗</a></div>
+            <div class="impact-sub" id="impactSub3">Of Kenyan table banking groups <a href="https://www.meda.org/news/blog/how-table-banking-has-paved-the-way-for-innovation-and-economic-empowerment-for-women-in-kenya/" target="_blank" rel="noopener noreferrer" class="impact-cite">↗</a></div>
           </div>
         </div>
       </div>
 
+      <div class="glossary-card">
+        <h3 id="glossaryTitle">One idea, many names</h3>
+        <p id="glossarySub">Wherever you are in the world, someone near you runs a table like this.</p>
+        <div class="glossary-chips" id="glossaryChips"></div>
+      </div>
+
       <div class="end-actions">
-        <button class="btn-end primary" onclick="location.reload()">Play again</button>
-        <a href="education.html" class="btn-end secondary">Explore financial education →</a>
+        <button class="btn-end primary" id="playAgainBtn">Play again</button>
+        <button class="btn-end secondary" id="shareBtn">Share your result</button>
+        <a href="education.html" class="btn-end secondary" id="exploreLink">Explore financial education →</a>
       </div>
 
     </div>
@@ -1437,32 +1579,38 @@ body { font-family: var(--font-body); background: var(--warm-white); color: var(
 
 <script>
 /* ============================================
-   TABLE BANKING GAME — rebuilt
+   TABLE BANKING — WORLD EDITION
+   i18n (en/es/fr/pt/sw) · local currency presets
+   honest group ledger · save/resume · classroom prompts
    ============================================ */
+(function () {
+'use strict';
 const $ = (id) => document.getElementById(id);
-const KSH_TO_USD = 130; // rough exchange
+const CFG_KEY = 'tbg.cfg.v2';
+const SAVE_KEY = 'tbg.save.v2';
 
-function fmtKSh(n) { return Math.round(n).toLocaleString(); }
-function fmtUsd(n) { return '$' + Math.round(n).toLocaleString(); }
-function safeScroll(el, opts) {
-  if (el && typeof el.scrollIntoView === 'function') {
-    try { el.scrollIntoView(opts); } catch(e) { /* older browsers or jsdom */ }
-  }
-}
-
-/* === MEMBERS === reliability drives behavior === */
-const initialMembers = [
-  { id: 'mama', name: 'The Elder', emoji: 'elder', role: 'Treasurer · never misses', reliability: 0.98, savings: 0, loanOwed: 0, contributed: true },
-  { id: 'wanjiku', name: 'The Trader', emoji: 'trader', role: 'Runs a market stall', reliability: 0.92, savings: 0, loanOwed: 0, contributed: false },
-  { id: 'akinyi', name: 'The Teacher', emoji: 'teacher', role: 'Teaches at the local school', reliability: 0.96, savings: 0, loanOwed: 0, contributed: false },
-  { id: 'kamau', name: 'The Rider', emoji: 'rider', role: 'Motorbike taxi driver', reliability: 0.78, savings: 0, loanOwed: 0, contributed: false },
-  { id: 'you', name: 'You', emoji: 'you', role: 'New member', reliability: null, savings: 0, loanOwed: 0, contributed: false, isPlayer: true },
-  { id: 'omondi', name: 'The Farmer', emoji: 'farmer', role: 'Young, unpredictable', reliability: 0.65, savings: 0, loanOwed: 0, contributed: false },
-  { id: 'kipchoge', name: 'The Builder', emoji: 'builder', role: 'Works construction', reliability: 0.82, savings: 0, loanOwed: 0, contributed: false },
-  { id: 'zawadi', name: 'The Parent', emoji: 'parent', role: 'Caring for a new baby', reliability: 0.85, savings: 0, loanOwed: 0, contributed: false },
+/* ---------- Tradition & currency presets ----------
+   amt = a realistic monthly contribution in local currency.
+   Every other amount in the game scales from it. */
+const PRESETS = [
+  { id: 'ke', name: 'Chama',        regionKey: 'ke', sym: 'KSh',   after: false, amt: 500 },
+  { id: 'ng', name: 'Esusu / Ajo',  regionKey: 'ng', sym: '₦',     after: false, amt: 5000 },
+  { id: 'za', name: 'Stokvel',      regionKey: 'za', sym: 'R',     after: false, amt: 500 },
+  { id: 'gh', name: 'Susu',         regionKey: 'gh', sym: 'GH₵',   after: false, amt: 100 },
+  { id: 'et', name: 'Ekub',         regionKey: 'et', sym: 'Br',    after: false, amt: 500 },
+  { id: 'sn', name: 'Tontine',      regionKey: 'sn', sym: 'F CFA', after: true,  amt: 5000 },
+  { id: 'in', name: 'Committee',    regionKey: 'in', sym: '₹',     after: false, amt: 1000 },
+  { id: 'ph', name: 'Paluwagan',    regionKey: 'ph', sym: '₱',     after: false, amt: 500 },
+  { id: 'id', name: 'Arisan',       regionKey: 'id', sym: 'Rp',    after: false, amt: 100000 },
+  { id: 'mx', name: 'Tanda',        regionKey: 'mx', sym: '$',     after: false, amt: 500 },
+  { id: 'br', name: 'Caixinha',     regionKey: 'br', sym: 'R$',    after: false, amt: 100 },
+  { id: 'us', name: 'Savings club', regionKey: 'us', sym: '$',     after: false, amt: 20 },
+  { id: 'custom', name: null,       regionKey: 'custom', sym: '$', after: false, amt: 20 }
 ];
 
-/* Stick figure SVGs — simple line drawings, each visually distinct */
+const LOCALE = { en: 'en', es: 'es', fr: 'fr', pt: 'pt-BR', sw: 'sw-KE' };
+
+/* ---------- Stick-figure avatars (one per role) ---------- */
 const avatarSvg = {
   elder: `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="20" cy="14" r="5"/>
@@ -1564,624 +1712,1454 @@ const avatarSvg = {
   </svg>`
 };
 
-const state = {
-  meeting: 1,
-  maxMeetings: 6,
-  monthlyContribution: 500, // KSh
-  loanInterestRate: 0.10,
-  pool: 0,
-  cash: 5000,
-  savings: 0,
-  loans: 0,
-  trust: 75,
-  members: JSON.parse(JSON.stringify(initialMembers)),
-  journey: [], // log of events for the end screen
-  flags: {}, // for tracking scenario choices
+/* ============================================
+   I18N — full game content in 5 languages
+   ============================================ */
+const I18N = {};
+
+I18N.en = {
+  ui: {
+    eyebrow: "Interactive Simulator · 5 Languages · Your Currency",
+    h1pre: "A village bank runs on", h1word: "trust", h1post: "— not credit scores.",
+    sub: "Join eight neighbors around a shared table. Over six monthly meetings, you'll feed a common box, vote on loans, weather an emergency, and build — or break — trust. Kenya calls it a <em>chama</em>, Mexico a <em>tanda</em>, Ghana a <em>susu</em>, South Africa a <em>stokvel</em>. Hundreds of millions of people bank this way — especially where banks won't go.",
+    setupTitle: "Set your table", langLabel: "Language", placeLabel: "Tradition & currency",
+    symLabel: "Currency symbol", amtLabel: "Monthly contribution", customName: "My own table…",
+    start: "Take your seat", resume: "Resume — meeting {n} of 6",
+    factMembers: "Members", factMeetings: "Meetings", factMonthly: "Monthly",
+    tableEyebrow: "The Table", meetingTitle: "Meeting {n} · {title}",
+    poolLabel: "In the box", poolSub: "the group's money",
+    ledgerTitle: "The book — group ledger", ledgerEmpty: "Nothing written yet.",
+    statsEyebrow: "Your position", lblCash: "Cash on hand", lblSavings: "Saved in the box",
+    lblLoans: "You owe", lblMeeting: "Meeting", trustLabel: "The group's trust in you",
+    trustCaptions: ["Deeply respected at this table", "A member in good standing", "Accepted — and watched", "On thin ice", "One vote from being shown the door"],
+    decisionEyebrow: "Meeting {n} · Your call",
+    toMeeting: "On to meeting {n}", seeResults: "See how your year went", unavailable: "unavailable",
+    discussTitle: "Talk about it", discussHint: "for classrooms & clubs",
+    srMeeting: "Meeting {n} of 6", rulesTitle: "The constitution, recited aloud:"
+  },
+  members: { elder: "The Elder", trader: "The Trader", teacher: "The Teacher", rider: "The Rider", you: "You", farmer: "The Farmer", builder: "The Builder", parent: "The Parent" },
+  roles: { elder: "Treasurer · never misses", trader: "Runs a market stall", teacher: "Teaches at the school", rider: "Motorbike taxi driver", you: "New member", farmer: "Young, unproven", builder: "Works construction", parent: "Caring for a newborn" },
+  regions: { ke: "Kenya", ng: "Nigeria", za: "South Africa", gh: "Ghana", et: "Ethiopia", sn: "West Africa", in: "India", ph: "Philippines", id: "Indonesia", mx: "Mexico", br: "Brazil", us: "United States" },
+  ledger: {
+    contrib: "Contributions collected ×{k}", contribYou: "Your contribution",
+    loanOut: "Loan out — {name}", repaid: "Loan repaid — {name}",
+    welfare: "Emergency round — collected & paid to the hospital",
+    writeoff: "Written off — {name}'s loan", shareout: "Share-out — box distributed to members"
+  },
+  journey: {
+    contrib: "Meeting {n} — monthly contribution", missed: "Meeting {n} — couldn't contribute · fine {fine}",
+    joined: "Joined the table with your first contribution", watched: "Watched the first meeting without contributing",
+    farmerYes: "Voted YES on the Farmer's seed loan", farmerNo: "Voted NO on the Farmer's loan",
+    farmerMid: "Negotiated a smaller loan for the Farmer",
+    borrowed: "Borrowed {price} from the box and bought the stock",
+    shark: "Borrowed {price} from the moneylender and bought the stock",
+    passed: "Let the deal pass", sold: "Sold the stock for {revenue}",
+    soldBad: "Sold the stock for only {revenue} — the market was flooded",
+    emFull: "Gave {em} to the Rider's emergency round", emHalf: "Gave {emHalf} to the Rider's emergency round",
+    emSkip: "Skipped the Rider's emergency round",
+    teacherYes: "Voted YES on the Teacher's enterprise loan", teacherNo: "Voted NO on the Teacher's loan",
+    repaidGroup: "Repaid the box {amt} — loan plus interest", repaidShark: "Paid the moneylender {amt}",
+    sharkGrew: "Moneylender debt compounded to {amt}", stuckGroup: "Couldn't repay the box this year",
+    shareout: "Share-out — you received {payout}"
+  },
+  scn: {
+    joining: {
+      title: "First Sitting",
+      speech: "Welcome, friend. Same table, same day, every month. Everyone puts in {due}. We lend from the box to whoever the table approves, and at year's end we open it and share it out.",
+      body: "<p>Eight chairs, a cloth pouch, a notebook — that's the whole bank. No contract, no branch, no credit check. The constitution is recited out loud, and everyone saw you walk in.</p><p>To take a seat, you pay your first month.</p>",
+      rules: ["Monthly contribution: {due}", "Loans from the box: 10% interest, approved by vote", "Missed month: {fine} fine", "Year-end: the box is shared out by what each member saved"],
+      choices: [
+        { t: "Put in {due} — take your seat", tag: "−{due}", d: "You're all in.",
+          fb: { type: "good", label: "Seated", text: "The pouch passes hand to hand and comes back heavier. The Elder writes your name in the book. <strong>Trust +5.</strong>" } },
+        { t: "Watch this month, decide next", tag: "no contribution", d: "See how it runs first. Some faces harden.",
+          fb: { type: "bad", label: "Hesitation noted", text: "“The box only works if everyone feeds it,” the Trader says — not quite to you, not quite to anyone. <strong>Trust −10.</strong> You can still join next month, if no one objects." } }
+      ],
+      discuss: ["What would it take for you to hand savings to neighbors with no contract — just a notebook and witnesses?", "Why do groups like this thrive even in places where banks exist?"]
+    },
+    farmer: {
+      title: "The Farmer's Request",
+      speech: "The rains failed. My field is dust. I need {loan} for seed before planting season closes. You have my word.",
+      body: "<p>The box holds {pool}. His word is the only collateral on the table — young, unproven, and genuinely in need. If he defaults, everyone's savings take the hit. The vote goes around the table and stops at you.</p>",
+      choices: [
+        { t: "Vote YES — approve {loan}", tag: "group decision", d: "This is what the table is for. Trust is a choice.",
+          fb: { type: "good", label: "Motion carried", text: "Six hands rise; two stay down. He gets his seed money and owes {owe} back — principal plus 10%. <strong>Trust +3.</strong> The table just did what no bank would." } },
+        { t: "Vote NO — too risky", tag: "protect the box", d: "The lowest reliability in the room.",
+          fb: { type: "bad", label: "Denied", text: "The motion fails. He walks home with nothing. The Rider — his friend — holds your eye a beat too long. <strong>Trust −2.</strong>" } },
+        { t: "Counter: {small}, repaid over two months", tag: "middle path", d: "Enough for seed. Less risk in the box.",
+          fb: { type: "good", label: "Wise move", text: "The table agrees. Enough for seed, half the exposure. The Elder's pen pauses over the book — then she nods at you. <strong>Trust +7.</strong>" } }
+      ],
+      discuss: ["The table votes on loans; a bank runs an algorithm. Which would judge you more fairly? And your neighbor?", "What happens to a group that votes yes to everyone? To one that votes no to everyone?"]
+    },
+    opportunity: {
+      title: "Your Opportunity",
+      speech: "A wholesaler is clearing stock: {price} buys goods that resell for {revenue} within a few weeks. But the {price} is due today.",
+      body: "<p>Three doors. Ask the table — 10% interest, a public vote, every coin recorded. The moneylender outside — 50% a month, cash in five minutes, no questions. Or let it pass. Trading carries risk: if the market floods, the stock can sell for less than you paid.</p>",
+      choices: [
+        { t: "Ask the table for {price}", tag: "owe {gOwe}", d: "The community rate: 10%, on the record.",
+          fb: { type: "good", label: "Loan approved", text: "Hands go up; the box opens; the stock is yours. {gOwe} due by share-out — every coin of it written in the book." } },
+        { t: "Take the moneylender's cash", tag: "owe {shOwe} in 30 days", d: "Fast and private. The rate is brutal.",
+          fb: { type: "bad", label: "Shadow money", text: "Five minutes, no questions, no witnesses — and no mercy. {shOwe} due in thirty days, and it grows if you're late. Notice: this loan appears nowhere in the group's book." } },
+        { t: "Let it pass", tag: "no risk", d: "Keep your cash and your sleep.",
+          fb: { type: "good", label: "Patient", text: "Deals come back around. Money you don't owe a moneylender is its own kind of profit." } }
+      ],
+      discuss: ["Why is the moneylender faster than the table? What is that speed worth — and what does it cost?", "When is borrowing to invest wise, and when is it gambling with the rent money?"]
+    },
+    emergency: {
+      title: "The Rider's Accident",
+      speech: "The Rider went down on wet tarmac yesterday. Broken leg. The hospital wants {bill} before they'll release him. If we each give {em}, he goes home today.",
+      body: "<p>No insurance company reaches this road. The emergency round <em>is</em> the insurance — collected in minutes, paid the same day, written in the book. But it lands on top of your regular {due}.</p>",
+      choices: [
+        { t: "Give {em} — the full share", tag: "−{em}", d: "He'd do it for you. That's the deal.",
+          fb: { type: "good", label: "Solidarity", text: "Coins cross the table without a speech. By evening the bill is paid. The Farmer gives nothing — and everyone notices that, too. <strong>Trust +8.</strong>" } },
+        { t: "Give {emHalf} — what you can spare", tag: "−{emHalf}", d: "A partial share, honestly offered.",
+          fb: { type: "good", label: "Counted", text: "“What you can” is still something. The Elder records it without comment. <strong>Trust +2.</strong>" } },
+        { t: "Keep your money this month", tag: "no contribution", d: "A gamble with your standing.",
+          fb: { type: "bad", label: "Silence", text: "The pouch passes you without stopping. Nobody says a word — which is the loudest thing that's happened all day. <strong>Trust −15.</strong>" } }
+      ],
+      discuss: ["What does insurance look like in places no insurer will go?", "Everyone pays the same emergency share regardless of income. Is that fair? How would you design it?"]
+    },
+    teacher: {
+      title: "The Teacher's Dream",
+      speech: "My cousin's shop is closing. {tLoan} buys her entire stock, and I'd open a school-supplies stall. Six years at this table and I've never missed a month. I'll return {tOwe} by share-out.",
+      body: "<p>The biggest ask ever written in the book — from the most reliable hands at the table. The Rider is back, on crutches; he remembers exactly who gave. This is the moment a savings club becomes an engine: capital moving into a real business.</p>",
+      choices: [
+        { t: "Vote YES — back her", tag: "invest {tLoan}", d: "Perfect record. Real plan. This is the point.",
+          fb: { type: "good", label: "Unanimous", text: "Every hand rises — even the Farmer's. The Teacher laughs and cries at the same time. <strong>Trust +5.</strong> Watch what this does to the box at share-out." } },
+        { t: "Vote NO — too large", tag: "play it safe", d: "Even proven members can fail.",
+          fb: { type: "bad", label: "Outvoted", text: "It passes 7–1, and your lone hand down is what the table remembers. <strong>Trust −10.</strong> A table that won't back its strongest member isn't protecting the box — it's starving it." } }
+      ],
+      discuss: ["What's the difference between saving together and investing together?", "A bank calls her “unbankable” — no collateral, informal income. The table calls her its safest bet. Who is right?"]
+    },
+    shareout: {
+      title: "Share-Out Day",
+      speech: "Six months, one box, every coin written down. Today we settle the loans, read the book aloud, and share out what we built.",
+      body: "<p>The Elder turns the notebook so everyone can see the arithmetic. Savings go back to their owners; whatever the box earned is shared in proportion to what each member saved.</p>",
+      evTeacher: "The Teacher repays {tOwe} — early, beaming, her stall already profitable.",
+      evFarmerPaid: "The Farmer counts out {owe}, coin by coin — the harvest came good.",
+      evFarmerDefault: "The Farmer stands, hat in hand: the seed went in, but the rains failed again. He cannot pay. The table writes off {loan} — the loss belongs to everyone.",
+      evFarmerSmall: "The Farmer repays {smallOwe}, exactly as agreed.",
+      evFarmerDenied: "The Farmer replanted by selling his goat. He's still at the table — quieter than before.",
+      evShark: "Outside this room, the moneylender is still owed {amt}. That debt follows you home.",
+      st: { box: "Counted in the box", sav: "Members' savings", surplus: "The box earned (interest & fines)", loss: "The box lost (a written-off loan)", yourSav: "Your savings", share: "Your share of earnings", fines: "Your fines", withheld: "Earnings withheld by vote — trust too low", payout: "You receive" },
+      choices: [
+        { t: "Take your share", tag: "+{payout}", d: "Close the year.",
+          fb: { type: "good", label: "The box is empty, the year is full", text: "Your share crosses the table: <strong>{payout}</strong>. The box goes home empty, the book goes home full, and eight people are already arguing — warmly — about next year." } }
+      ],
+      discuss: ["The whole year fit in one notebook. What did this group actually need a bank for — and what not?", "If the box had lost money this year, would joining still have been worth it?"]
+    }
+  },
+  end: {
+    verdicts: {
+      best: { v: "Welcomed back", t: "The table votes to keep your seat warm.", s: "You grew your money and your name. Both matter here." },
+      out: { v: "Not invited back", t: "The group quietly closes the book on you.", s: "Your cash survived. Your name didn't. Here, the name is the currency." },
+      flat: { v: "Year closed", t: "You kept your seat. The math was hard.", s: "Emergencies and obligations ate the margin — but eight people carried them with you." },
+      solid: { v: "A solid year", t: "You leave with more than you brought.", s: "Money, yes. But also a table that knows your name." }
+    },
+    lessons: {
+      best1: "This is community finance working as designed. You didn't just grow savings — you grew <strong>social capital</strong>, the asset banks can't see and these tables run on.",
+      best2: "Most of these systems were built by women whom banks refused to serve. Decades later, the tables they built move billions — and are often sturdier than the banks that said no.",
+      out1: "Missed rounds, skipped emergencies, votes against proven members — each one cost <strong>trust</strong>, and trust is the collateral here. Lose it and the table can't lend to you, vouch for you, or share with you.",
+      out2: "It isn't cruelty — it's how the system protects everyone else's savings. A table that tolerates free riders collapses; one that removes them lasts generations.",
+      flat1: "The group absorbed your shocks: an emergency that might have crushed one family alone was split eight ways and written in a notebook. Coming out flat with your dignity intact <em>is</em> the product.",
+      flat2: "That's why hundreds of millions of people keep tables like this — not to get rich, but so that no single bad month can ruin them.",
+      solid1: "You found the balance: feed the box, vote with judgment, take measured risk. The table gave you credit at 10% that a bank would have priced at triple — if it lent to you at all.",
+      solid2: "Multiply your year by a few hundred million tables and you get one of the largest financial systems on earth — run from notebooks, on trust."
+    },
+    extraShark: "And the moneylender is still owed <strong>{amt}</strong>, compounding at 50% a month while you sleep. This is the trap the table exists to replace.",
+    extraDefault: "The Farmer's default cost the box <strong>{amt}</strong> — and notice what happened: nobody was ruined. Eight people each absorbed a small piece of one person's disaster. That is the entire technology, and it's why these tables survive.",
+    lblStart: "You started with", lblWealth: "You ended with", lblNet: "Net change", lblTrust: "Final trust",
+    journeyTitle: "Your year at the table", lessonEyebrow: "What just happened", lessonTitle: "The real lesson of community banking",
+    impactLabel1: "Kenya alone", impactSub1: "Chamas managing $3.4B in assets",
+    impactLabel2: "CARE VSLAs", impactSub2: "Members in 67 countries saved $11.5B",
+    impactLabel3: "Women-led", impactSub3: "Of Kenyan table banking groups",
+    glossaryTitle: "One idea, many names",
+    glossarySub: "Wherever you are, someone near you runs a table like this. Economists call them ROSCAs — rotating savings and credit associations. Members just call them the group.",
+    glossary: [["Chama", "Kenya"], ["Tanda", "Mexico"], ["Susu", "Ghana & the Caribbean"], ["Stokvel", "South Africa"], ["Tontine", "West Africa"], ["Esusu / Ajo", "Nigeria"], ["Ekub", "Ethiopia"], ["Hui", "China"], ["Hụi", "Vietnam"], ["Kye", "Korea"], ["Tanomoshikō", "Japan"], ["Paluwagan", "Philippines"], ["Arisan", "Indonesia"], ["Committee", "India & Pakistan"], ["Gam’eya", "Egypt"], ["Pardna", "Jamaica & UK"], ["Cundina", "Northern Mexico"], ["Caixinha", "Brazil"]],
+    playAgain: "Play again", share: "Share your result", copied: "Copied!", explore: "Explore financial education →",
+    shareText: "I ran a full year inside a virtual {trad}: net {net}, trust {trust}/100. Community banking, no credit score — play it in EN · ES · FR · PT · SW:"
+  }
 };
 
-/* === SCENARIOS === 6 meetings, each with choices === */
-const scenarios = [
-  // Meeting 1 — joining
-  {
-    id: 'joining',
-    title: 'First Sitting',
-    speaker: 'mama',
-    speech: "Welcome, friend. We meet once a month, same table, same time. Everyone puts <strong>500</strong> into the pot. We lend to each other. At year's end, we share what we've earned.",
-    body: "<p>You've been invited by a neighbor. Eight of you sit around a wooden table. A cloth pouch gets passed around — the box, the pot, whatever your community calls it.</p><p>To join, you pay your first month's contribution. This is when you commit, or don't.</p>",
-    choices: [
-      {
-        title: 'Contribute 500 — join the group',
-        tag: '-500', tagType: 'cost',
-        desc: "The standard thing. You're all in.",
-        primary: true,
-        effect: (s) => {
-          s.cash -= 500; s.savings += 500; s.pool += 500;
-          const me = s.members.find(m => m.isPlayer);
-          me.contributed = true; me.savings += 500;
-          s.trust += 5;
-          animateContribute('you');
-          pushJourney('🤝', "Joined the group with your first 500", 0);
-        },
-        feedback: { type: 'good', label: 'Seated', text: "You're one of them now. The Elder nods. <strong>Trust +5</strong>. Your 500 is in the box." }
-      },
-      {
-        title: "Watch this month, commit next",
-        tag: 'No contribution', tagType: 'neutral',
-        desc: "You want to see how it runs first. Some members look wary.",
-        effect: (s) => {
-          s.trust -= 10;
-          pushJourney('👀', "Watched the first meeting, didn't contribute", 0);
-          s.flags.hesitant = true;
-        },
-        feedback: { type: 'bad', label: 'Hesitation noted', text: "The Farmer whispers something to the Rider. You can feel doubt settle in the room. <strong>Trust -10</strong>. You can still contribute next month — if they let you stay." }
-      }
-    ]
+I18N.es = {
+  ui: {
+    eyebrow: "Simulador interactivo · 5 idiomas · Tu moneda",
+    h1pre: "Un banco comunitario funciona con", h1word: "confianza", h1post: "— no con historial crediticio.",
+    sub: "Siéntate con ocho vecinos alrededor de una mesa. Durante seis reuniones mensuales alimentarás una caja común, votarás préstamos, enfrentarás una emergencia y construirás — o romperás — la confianza. En Kenia se llama <em>chama</em>; en México, <em>tanda</em>; en Ghana, <em>susu</em>; en Sudáfrica, <em>stokvel</em>. Cientos de millones de personas ahorran así — sobre todo donde los bancos no llegan.",
+    setupTitle: "Prepara tu mesa", langLabel: "Idioma", placeLabel: "Tradición y moneda",
+    symLabel: "Símbolo de moneda", amtLabel: "Aporte mensual", customName: "Mi propia mesa…",
+    start: "Toma tu lugar", resume: "Continuar — reunión {n} de 6",
+    factMembers: "Integrantes", factMeetings: "Reuniones", factMonthly: "Mensual",
+    tableEyebrow: "La Mesa", meetingTitle: "Reunión {n} · {title}",
+    poolLabel: "En la caja", poolSub: "el dinero del grupo",
+    ledgerTitle: "El cuaderno — libro del grupo", ledgerEmpty: "Aún no hay nada escrito.",
+    statsEyebrow: "Tu posición", lblCash: "Efectivo en mano", lblSavings: "Ahorrado en la caja",
+    lblLoans: "Debes", lblMeeting: "Reunión", trustLabel: "La confianza del grupo en ti",
+    trustCaptions: ["Profundamente respetado en esta mesa", "Integrante en buena posición", "Aceptado — y observado", "En la cuerda floja", "A un voto de quedar fuera"],
+    decisionEyebrow: "Reunión {n} · Tú decides",
+    toMeeting: "A la reunión {n}", seeResults: "Ver cómo te fue en el año", unavailable: "no disponible",
+    discussTitle: "Para conversar", discussHint: "para aulas y clubes",
+    srMeeting: "Reunión {n} de 6", rulesTitle: "El reglamento, leído en voz alta:"
   },
-
-  // Meeting 2 — The Farmer needs a loan
-  {
-    id: 'omondi-loan',
-    title: "The Farmer's Request",
-    speaker: 'omondi',
-    speech: "The rains failed. My crop is finished. I need <strong>2,000</strong> to buy new seed before planting season ends. I swear I'll repay.",
-    body: "<p>The pool has {{pool}}. The Farmer is young, his reliability isn't proven. If he defaults, it hurts the whole group. But the whole point of this table is moments like this.</p><p>The group looks at you. Your vote matters.</p>",
-    beforeRender: (s) => { 
-      doContribution(s);
+  members: { elder: "La Anciana", trader: "La Comerciante", teacher: "La Maestra", rider: "El Mototaxista", you: "Tú", farmer: "El Agricultor", builder: "El Albañil", parent: "La Madre" },
+  roles: { elder: "Tesorera · nunca falta", trader: "Tiene un puesto en el mercado", teacher: "Enseña en la escuela", rider: "Taxista de moto", you: "Nuevo integrante", farmer: "Joven, sin historial", builder: "Trabaja en construcción", parent: "Cuida a un recién nacido" },
+  regions: { ke: "Kenia", ng: "Nigeria", za: "Sudáfrica", gh: "Ghana", et: "Etiopía", sn: "África Occidental", in: "India", ph: "Filipinas", id: "Indonesia", mx: "México", br: "Brasil", us: "Estados Unidos" },
+  ledger: {
+    contrib: "Aportes recibidos ×{k}", contribYou: "Tu aporte",
+    loanOut: "Préstamo otorgado — {name}", repaid: "Préstamo devuelto — {name}",
+    welfare: "Colecta de emergencia — entregada al hospital",
+    writeoff: "Cancelado — préstamo de {name}", shareout: "Reparto — la caja se distribuye entre el grupo"
+  },
+  journey: {
+    contrib: "Reunión {n} — aporte mensual", missed: "Reunión {n} — no pudiste aportar · multa {fine}",
+    joined: "Te uniste a la mesa con tu primer aporte", watched: "Observaste la primera reunión sin aportar",
+    farmerYes: "Votaste SÍ al préstamo de semillas del Agricultor", farmerNo: "Votaste NO al préstamo del Agricultor",
+    farmerMid: "Negociaste un préstamo menor para el Agricultor",
+    borrowed: "Pediste {price} a la caja y compraste la mercancía",
+    shark: "Pediste {price} al prestamista y compraste la mercancía",
+    passed: "Dejaste pasar el negocio", sold: "Vendiste la mercancía por {revenue}",
+    soldBad: "La mercancía solo se vendió por {revenue} — el mercado estaba saturado",
+    emFull: "Diste {em} a la colecta del Mototaxista", emHalf: "Diste {emHalf} a la colecta del Mototaxista",
+    emSkip: "No participaste en la colecta del Mototaxista",
+    teacherYes: "Votaste SÍ al préstamo de la Maestra", teacherNo: "Votaste NO al préstamo de la Maestra",
+    repaidGroup: "Devolviste {amt} a la caja — préstamo más interés", repaidShark: "Pagaste {amt} al prestamista",
+    sharkGrew: "La deuda con el prestamista creció a {amt}", stuckGroup: "No pudiste devolver el préstamo a la caja",
+    shareout: "Reparto — recibiste {payout}"
+  },
+  scn: {
+    joining: {
+      title: "Primera sentada",
+      speech: "Bienvenido. Misma mesa, mismo día, cada mes. Cada quien pone {due}. Prestamos de la caja a quien la mesa apruebe, y a fin de año la abrimos y repartimos.",
+      body: "<p>Ocho sillas, una bolsa de tela, un cuaderno — ese es todo el banco. Sin contrato, sin sucursal, sin buró de crédito. El reglamento se recita en voz alta, y todos te vieron entrar.</p><p>Para ocupar tu silla, pagas tu primer mes.</p>",
+      rules: ["Aporte mensual: {due}", "Préstamos de la caja: 10% de interés, aprobados por votación", "Mes sin aportar: multa de {fine}", "Fin de año: la caja se reparte según lo que cada quien ahorró"],
+      choices: [
+        { t: "Poner {due} — tomar tu lugar", tag: "−{due}", d: "Vas con todo.",
+          fb: { type: "good", label: "Sentado", text: "La bolsa pasa de mano en mano y vuelve más pesada. La Anciana escribe tu nombre en el cuaderno. <strong>Confianza +5.</strong>" } },
+        { t: "Observar este mes y decidir después", tag: "sin aporte", d: "Primero quieres ver cómo funciona. Algunas miradas se endurecen.",
+          fb: { type: "bad", label: "Duda anotada", text: "“La caja solo funciona si todos la alimentan”, dice la Comerciante — sin mirarte, sin mirar a nadie. <strong>Confianza −10.</strong> Aún puedes entrar el próximo mes, si nadie se opone." } }
+      ],
+      discuss: ["¿Qué te haría falta para confiar tus ahorros a tus vecinos sin contrato — solo un cuaderno y testigos?", "¿Por qué estos grupos prosperan incluso donde sí hay bancos?"]
     },
-    choices: [
-      {
-        title: "Vote YES — approve the loan",
-        tag: 'Group decision', tagType: 'neutral',
-        desc: "Community banking exists for this. Trust is a choice.",
-        primary: true,
-        effect: (s) => {
-          s.flags.omondiApproved = true;
-          s.pool -= 2000;
-          s.members.find(m => m.id === 'omondi').loanOwed = 2200;
-          s.trust += 3;
-          animateBorrow('omondi');
-          pushJourney('✅', "Voted YES on the Farmer's 2,000 loan", 0);
-        },
-        feedback: { type: 'good', label: 'Motion carried', text: "Six yeses, two nos — it passes. The Farmer exhales. <strong>Trust +3</strong> (solidarity). He owes 2,200 back (principal + 10%)." }
-      },
-      {
-        title: "Vote NO — too risky",
-        tag: 'Protect the pool', tagType: 'neutral',
-        desc: "His reliability is the lowest in the room.",
-        effect: (s) => {
-          s.flags.omondiDenied = true;
-          s.trust -= 2;
-          s.members.find(m => m.id === 'omondi').reliability -= 0.1;
-          pushJourney('🙅', "Voted NO on the Farmer's loan", 0);
-        },
-        feedback: { type: 'bad', label: 'Denied', text: "The motion fails. The Farmer walks home with nothing. The Rider, his friend, looks at you differently now. <strong>Trust -2</strong>." }
-      },
-      {
-        title: "Counter — smaller loan, 1,000, repay in 2 months",
-        tag: 'Middle way', tagType: 'gain',
-        desc: "Safer for the pool, still helps.",
-        effect: (s) => {
-          s.flags.omondiCompromise = true;
-          s.pool -= 1000;
-          s.members.find(m => m.id === 'omondi').loanOwed = 1100;
-          s.trust += 7;
-          animateBorrow('omondi');
-          pushJourney('🤝', "Negotiated smaller loan for the Farmer", 0);
-        },
-        feedback: { type: 'good', label: 'Wise move', text: "The group agrees. He gets what he actually needs for seed. The Elder gives you a small nod. <strong>Trust +7</strong>. The group respects people who protect the pool <em>and</em> help members." }
-      }
-    ]
-  },
-
-  // Meeting 3 — Your opportunity
-  {
-    id: 'your-opp',
-    title: "Your Opportunity",
-    speaker: 'you',
-    speech: "A wholesaler is clearing out inventory. <strong>3,000 worth of stock for 3,000</strong> — you could resell it at double in three weeks. But you'd need the money now.",
-    body: "<p>Three options: borrow from the group (if they'll allow it, 10% interest), borrow from a loan shark at <strong>50% per month</strong>, or skip the deal.</p>",
-    beforeRender: (s) => { doContribution(s); },
-    choices: [
-      {
-        title: "Request 3,000 from the group",
-        tag: '+3,000 / owe 3,300', tagType: 'gain',
-        desc: "The community way. 10% interest.",
-        primary: true,
-        requires: (s) => s.pool >= 3000 && s.trust > 40,
-        effect: (s) => {
-          s.pool -= 3000; s.cash += 3000; s.loans += 3300;
-          const me = s.members.find(m => m.isPlayer);
-          me.loanOwed = 3300;
-          animateBorrow('you');
-          s.flags.tookChamaLoan = true;
-          pushJourney('💼', "Borrowed 3,000 from the group", 3000);
-          s.flags.pendingDeal = true;
-        },
-        feedback: { type: 'good', label: 'Loan approved', text: "The group votes 7-1 (the Farmer votes no — he's still sore). You have 3,000 in hand and owe 3,300 back. Go make the deal." }
-      },
-      {
-        title: "Take a loan shark loan — 3,000 at 50%",
-        tag: '+3,000 / owe 4,500', tagType: 'cost',
-        desc: "Fast, private. But the interest is brutal.",
-        effect: (s) => {
-          s.cash += 3000; s.loans += 4500;
-          s.flags.tookShylockLoan = true;
-          s.flags.pendingDeal = true;
-          pushJourney('🦈', "Took a loan shark loan instead", 3000);
-        },
-        feedback: { type: 'bad', label: 'Shadow deal', text: "No vote, no questions. 3,000 in your pocket, but you owe 4,500 in 30 days. Miss it and the interest compounds." }
-      },
-      {
-        title: "Skip the deal",
-        tag: 'Safe', tagType: 'neutral',
-        desc: "You keep your cash and your peace.",
-        effect: (s) => {
-          pushJourney('🚶', "Let the opportunity pass", 0);
-        },
-        feedback: { type: 'good', label: 'Patient', text: "Opportunities come and go. You'll find another. At least you didn't borrow from a loan shark." }
-      }
-    ]
-  },
-
-  // Meeting 4 — The Rider emergency
-  {
-    id: 'kamau-emergency',
-    title: "The Rider's Accident",
-    speaker: 'mama',
-    speech: "The Rider was in a crash yesterday. Broken leg, in hospital. We need <strong>5,000 in emergency contributions</strong> — 625 from each of us — to cover his bill.",
-    body: "<p>This is why community banking exists. Emergency funds are the real safety net for families without insurance. But the ask is real — 625 on top of your regular 500.</p>",
-    beforeRender: (s) => { 
-      doContribution(s);
-      if (s.flags.pendingDeal) {
-        s.cash += 3000;
-        pushJourney('📈', "The deal paid off — earned 3,000", 3000);
-        s.flags.pendingDeal = false;
-        s.flags.dealPaid = true;
-      }
+    farmer: {
+      title: "La petición del Agricultor",
+      speech: "Las lluvias fallaron. Mi campo es puro polvo. Necesito {loan} para semilla antes de que cierre la temporada de siembra. Tienen mi palabra.",
+      body: "<p>La caja tiene {pool}. Su palabra es la única garantía sobre la mesa — joven, sin historial, y con una necesidad real. Si no paga, los ahorros de todos reciben el golpe. El voto recorre la mesa y se detiene en ti.</p>",
+      choices: [
+        { t: "Votar SÍ — aprobar {loan}", tag: "decisión del grupo", d: "Para esto existe la mesa. Confiar es una decisión.",
+          fb: { type: "good", label: "Moción aprobada", text: "Seis manos se levantan; dos se quedan abajo. Recibe su dinero para semilla y deberá {owe} — capital más 10%. <strong>Confianza +3.</strong> La mesa acaba de hacer lo que ningún banco haría." } },
+        { t: "Votar NO — demasiado riesgo", tag: "proteger la caja", d: "El historial menos confiable de la sala.",
+          fb: { type: "bad", label: "Denegado", text: "La moción no pasa. Se va a casa con las manos vacías. El Mototaxista — su amigo — te sostiene la mirada un segundo de más. <strong>Confianza −2.</strong>" } },
+        { t: "Contraoferta: {small}, a pagar en dos meses", tag: "camino medio", d: "Alcanza para la semilla. Menos riesgo para la caja.",
+          fb: { type: "good", label: "Jugada sabia", text: "La mesa acepta. Suficiente para sembrar, la mitad del riesgo. La pluma de la Anciana se detiene sobre el cuaderno — y luego te hace un gesto de aprobación. <strong>Confianza +7.</strong>" } }
+      ],
+      discuss: ["La mesa vota los préstamos; un banco usa un algoritmo. ¿Cuál te juzgaría con más justicia? ¿Y a tu vecino?", "¿Qué le pasa a un grupo que le dice sí a todos? ¿Y a uno que le dice no a todos?"]
     },
-    choices: [
-      {
-        title: "Contribute 625 to the emergency fund",
-        tag: '-625', tagType: 'cost',
-        desc: "You step up. He'd do the same for you.",
-        primary: true,
-        effect: (s) => {
-          s.cash -= 625; s.pool += 625;
-          s.members.find(m => m.id === 'kamau').savings += 625;
-          s.trust += 8;
-          pushJourney('🏥', "Gave 625 to the Rider's emergency fund", -625);
-          animateContribute('you');
-        },
-        feedback: { type: 'good', label: 'Solidarity', text: "Everyone contributes except the Farmer, who says he's broke. The Rider's family sends a message of gratitude. <strong>Trust +8</strong>. This is the real reason these groups matter." }
-      },
-      {
-        title: "Contribute 250 — what you can spare",
-        tag: '-250', tagType: 'neutral',
-        desc: "A partial contribution shows you tried.",
-        effect: (s) => {
-          s.cash -= 250; s.pool += 250;
-          s.members.find(m => m.id === 'kamau').savings += 250;
-          s.trust += 2;
-          pushJourney('🏥', "Gave 250 to the Rider's emergency", -250);
-        },
-        feedback: { type: 'good', label: 'Noted', text: "Not full, but still given. The group accepts it. <strong>Trust +2</strong>." }
-      },
-      {
-        title: "Skip — you need your cash",
-        tag: 'No contribution', tagType: 'cost',
-        desc: "A gamble with your standing.",
-        effect: (s) => {
-          s.trust -= 15;
-          pushJourney('🚫', "Skipped the Rider's emergency contribution", 0);
-        },
-        feedback: { type: 'bad', label: 'Silence at the table', text: "You're not the only one — the Farmer skipped too — but the others remember. The Elder doesn't meet your eye on the way out. <strong>Trust -15</strong>." }
-      }
-    ]
-  },
-
-  // Meeting 5 — The Teacher's enterprise loan
-  {
-    id: 'akinyi-enterprise',
-    title: "The Teacher's Dream",
-    speaker: 'akinyi',
-    speech: "My cousin's shop is closing. I can buy her inventory for <strong>5,000</strong> and turn it into a tutoring supply business. I've never missed a contribution. I'll repay 5,500 in four months.",
-    body: "<p>The Teacher is the most reliable member here. She's also asking for the biggest loan anyone has requested. If it works, this is the origin story of real community finance — capital flowing into a real enterprise.</p><p>The Rider is out of hospital now. He knows who contributed, and who didn't.</p>",
-    beforeRender: (s) => { 
-      doContribution(s);
-      if (s.flags.tookChamaLoan && s.loans === 3300 && s.cash >= 3300 && !s.flags.chamaLoanRepaid) {
-        autoRepay(s, 3300, 'chama');
-      } else if (s.flags.tookShylockLoan && s.loans >= 4500 && s.cash >= 4500 && !s.flags.shylockRepaid) {
-        autoRepay(s, 4500, 'shylock');
-      }
+    opportunity: {
+      title: "Tu oportunidad",
+      speech: "Un mayorista está liquidando mercancía: con {price} compras lo que se revende en {revenue} en pocas semanas. Pero los {price} se pagan hoy.",
+      body: "<p>Tres puertas. Pedirle a la mesa — 10% de interés, votación pública, cada moneda registrada. El prestamista de afuera — 50% al mes, efectivo en cinco minutos, sin preguntas. O dejarlo pasar. Comerciar tiene riesgo: si el mercado se satura, la mercancía puede venderse por menos de lo que pagaste.</p>",
+      choices: [
+        { t: "Pedir {price} a la mesa", tag: "deberás {gOwe}", d: "La tasa comunitaria: 10%, todo registrado.",
+          fb: { type: "good", label: "Préstamo aprobado", text: "Las manos se levantan; la caja se abre; la mercancía es tuya. {gOwe} a pagar antes del reparto — cada moneda anotada en el cuaderno." } },
+        { t: "Tomar el efectivo del prestamista", tag: "deberás {shOwe} en 30 días", d: "Rápido y privado. La tasa es brutal.",
+          fb: { type: "bad", label: "Dinero en la sombra", text: "Cinco minutos, sin preguntas, sin testigos — y sin piedad. {shOwe} en treinta días, y crece si te atrasas. Fíjate: este préstamo no aparece en ningún cuaderno del grupo." } },
+        { t: "Dejarlo pasar", tag: "sin riesgo", d: "Conservas tu efectivo y tu sueño.",
+          fb: { type: "good", label: "Paciencia", text: "Los negocios vuelven. El dinero que no le debes a un prestamista es otra forma de ganancia." } }
+      ],
+      discuss: ["¿Por qué el prestamista es más rápido que la mesa? ¿Cuánto vale esa velocidad — y cuánto cuesta?", "¿Cuándo es sabio endeudarse para invertir, y cuándo es apostar el dinero de la renta?"]
     },
-    choices: [
-      {
-        title: "Vote YES — trust her record",
-        tag: 'Back the dream', tagType: 'gain',
-        desc: "Her reliability is perfect. This is what the group is for.",
-        primary: true,
-        requires: (s) => s.pool >= 5000,
-        effect: (s) => {
-          s.pool -= 5000;
-          s.members.find(m => m.id === 'akinyi').loanOwed = 5500;
-          s.trust += 5;
-          animateBorrow('akinyi');
-          pushJourney('🌱', "Voted YES on the Teacher's enterprise loan", 0);
-          s.flags.akinyiApproved = true;
-        },
-        feedback: { type: 'good', label: 'Unanimous', text: "The vote is unanimous (even the Farmer votes yes this time). The Teacher is in tears. <strong>Trust +5</strong>. This is the moment a savings group becomes more than savings — it becomes an engine." }
-      },
-      {
-        title: "Vote NO — the loan is too large",
-        tag: 'Risk-averse', tagType: 'cost',
-        desc: "Even reliable members can have setbacks.",
-        effect: (s) => {
-          s.trust -= 10;
-          pushJourney('❌', "Voted NO on the Teacher's loan", 0);
-        },
-        feedback: { type: 'bad', label: 'Outvoted', text: "The motion passes 6-2 despite your no. The Teacher notices. The Elder shakes her head. <strong>Trust -10</strong>. The group's job is to <em>take measured risk</em> for its most proven members." }
-      }
-    ]
-  },
-
-  // Meeting 6 — Year-end
-  {
-    id: 'year-end',
-    title: "Year-End Reckoning",
-    speaker: 'mama',
-    speech: "We've been together six meetings. The box is full. Today we count what's in it, settle the debts, and share the profit — if you've earned your share.",
-    body: "<p>The Teacher's business is thriving — she repaid early with interest. The Farmer paid back his loan too (if you approved one). The Rider is back on his feet.</p><p>Now the dividend gets calculated. Members in good standing share the interest the pool earned. Members with low trust? That's where it gets uncomfortable.</p>",
-    beforeRender: (s) => { 
-      doContribution(s);
-      if (s.flags.tookChamaLoan && s.loans > 0 && s.cash >= s.loans && !s.flags.chamaLoanRepaid) {
-        autoRepay(s, s.loans, 'chama');
-      }
-      if (s.flags.tookShylockLoan && s.loans > 0 && !s.flags.shylockRepaid) {
-        s.loans = Math.round(s.loans * 1.5);
-        if (s.cash >= s.loans) autoRepay(s, s.loans, 'shylock');
-        else {
-          pushJourney('⚠️', `Loan shark debt compounded to ${fmtKSh(s.loans)}`, -s.loans);
-          s.flags.shylockStuck = true;
-        }
-      }
-      s.pool += 2200 + (s.flags.omondiCompromise ? -1100 + 1100 : 0);
-      if (s.flags.akinyiApproved) s.pool += 500;
+    emergency: {
+      title: "El accidente del Mototaxista",
+      speech: "El Mototaxista se cayó ayer en el asfalto mojado. Pierna rota. El hospital pide {bill} antes de darlo de alta. Si cada quien da {em}, hoy mismo vuelve a casa.",
+      body: "<p>Ninguna aseguradora llega a este camino. La colecta de emergencia <em>es</em> el seguro — se junta en minutos, se paga el mismo día, se anota en el cuaderno. Pero cae encima de tu aporte normal de {due}.</p>",
+      choices: [
+        { t: "Dar {em} — la parte completa", tag: "−{em}", d: "Él lo haría por ti. Ese es el trato.",
+          fb: { type: "good", label: "Solidaridad", text: "Las monedas cruzan la mesa sin discursos. Al anochecer, la cuenta está pagada. El Agricultor no da nada — y eso también lo notan todos. <strong>Confianza +8.</strong>" } },
+        { t: "Dar {emHalf} — lo que puedes", tag: "−{emHalf}", d: "Una parte, ofrecida con honestidad.",
+          fb: { type: "good", label: "Contado", text: "“Lo que se pueda” también cuenta. La Anciana lo anota sin comentarios. <strong>Confianza +2.</strong>" } },
+        { t: "Guardar tu dinero este mes", tag: "sin aporte", d: "Una apuesta con tu reputación.",
+          fb: { type: "bad", label: "Silencio", text: "La bolsa pasa frente a ti sin detenerse. Nadie dice una palabra — y eso es lo más ruidoso que ha pasado en todo el día. <strong>Confianza −15.</strong>" } }
+      ],
+      discuss: ["¿Cómo se ve un seguro en los lugares a donde ninguna aseguradora quiere ir?", "Todos pagan la misma cuota de emergencia sin importar su ingreso. ¿Es justo? ¿Cómo lo diseñarías tú?"]
     },
-    choices: [
-      {
-        title: "Accept the year-end dividend",
-        tag: 'Distribute', tagType: 'gain',
-        desc: "Take your share. Close the year.",
-        primary: true,
-        effect: (s) => {
-          const trustFactor = Math.max(0.2, Math.min(1.2, s.trust / 75));
-          const baseInterest = 800;
-          const share = Math.round(baseInterest * trustFactor);
-          s.cash += s.savings + share;
-          pushJourney('💰', `Received ${s.savings.toLocaleString()} savings + ${share} dividend`, s.savings + share);
-          s.savings = 0;
-          s.flags.dividendAmount = share;
-        }
-      }
-    ]
+    teacher: {
+      title: "El sueño de la Maestra",
+      speech: "La tienda de mi prima va a cerrar. Con {tLoan} compro todo su inventario y abro un puesto de útiles escolares. Llevo seis años en esta mesa sin fallar un solo mes. Devuelvo {tOwe} antes del reparto.",
+      body: "<p>La petición más grande jamás escrita en el cuaderno — y viene de las manos más confiables de la mesa. El Mototaxista volvió, en muletas; recuerda exactamente quién dio. Este es el momento en que un club de ahorro se convierte en motor: capital entrando a un negocio real.</p>",
+      choices: [
+        { t: "Votar SÍ — respaldarla", tag: "invertir {tLoan}", d: "Historial perfecto. Plan real. Para esto es todo.",
+          fb: { type: "good", label: "Unánime", text: "Todas las manos se levantan — hasta la del Agricultor. La Maestra ríe y llora al mismo tiempo. <strong>Confianza +5.</strong> Mira lo que esto le hace a la caja en el reparto." } },
+        { t: "Votar NO — es demasiado", tag: "ir a lo seguro", d: "Hasta los probados pueden fallar.",
+          fb: { type: "bad", label: "En minoría", text: "Pasa 7 a 1, y tu única mano abajo es lo que la mesa recuerda. <strong>Confianza −10.</strong> Una mesa que no respalda a su mejor integrante no está protegiendo la caja — la está matando de hambre." } }
+      ],
+      discuss: ["¿Cuál es la diferencia entre ahorrar juntos e invertir juntos?", "El banco la llama “no bancarizable” — sin garantías, con ingresos informales. La mesa la llama su apuesta más segura. ¿Quién tiene razón?"]
+    },
+    shareout: {
+      title: "Día del reparto",
+      speech: "Seis meses, una caja, cada moneda anotada. Hoy se liquidan los préstamos, se lee el cuaderno en voz alta y se reparte lo que construimos.",
+      body: "<p>La Anciana gira el cuaderno para que todos vean las cuentas. Los ahorros vuelven a sus dueños; lo que la caja ganó se reparte en proporción a lo que cada quien ahorró.</p>",
+      evTeacher: "La Maestra devuelve {tOwe} — antes de tiempo, radiante, con su puesto ya dando ganancias.",
+      evFarmerPaid: "El Agricultor cuenta {owe}, moneda por moneda — la cosecha salió buena.",
+      evFarmerDefault: "El Agricultor se pone de pie, sombrero en mano: la semilla se sembró, pero las lluvias volvieron a fallar. No puede pagar. La mesa cancela {loan} — la pérdida es de todos.",
+      evFarmerSmall: "El Agricultor devuelve {smallOwe}, exactamente como se acordó.",
+      evFarmerDenied: "El Agricultor resembró vendiendo su cabra. Sigue en la mesa — más callado que antes.",
+      evShark: "Afuera de este cuarto, al prestamista todavía se le deben {amt}. Esa deuda te sigue hasta tu casa.",
+      st: { box: "Contado en la caja", sav: "Ahorros de los integrantes", surplus: "La caja ganó (interés y multas)", loss: "La caja perdió (préstamo cancelado)", yourSav: "Tus ahorros", share: "Tu parte de las ganancias", fines: "Tus multas", withheld: "Ganancias retenidas por votación — confianza muy baja", payout: "Recibes" },
+      choices: [
+        { t: "Tomar tu parte", tag: "+{payout}", d: "Cerrar el año.",
+          fb: { type: "good", label: "La caja queda vacía, el año queda lleno", text: "Tu parte cruza la mesa: <strong>{payout}</strong>. La caja se va vacía, el cuaderno se va lleno, y ocho personas ya discuten — con cariño — sobre el próximo año." } }
+      ],
+      discuss: ["Todo el año cupo en un cuaderno. ¿Para qué necesitaba este grupo un banco — y para qué no?", "Si la caja hubiera perdido dinero este año, ¿habría valido la pena unirse de todos modos?"]
+    }
+  },
+  end: {
+    verdicts: {
+      best: { v: "Bienvenido de vuelta", t: "La mesa vota por guardarte tu silla.", s: "Hiciste crecer tu dinero y tu nombre. Aquí importan los dos." },
+      out: { v: "No te invitan a volver", t: "El grupo cierra el cuaderno contigo, en silencio.", s: "Tu efectivo sobrevivió. Tu nombre no. Y aquí, el nombre es la moneda." },
+      flat: { v: "Año cerrado", t: "Conservaste tu silla. Las cuentas fueron duras.", s: "Las emergencias y obligaciones se comieron el margen — pero ocho personas las cargaron contigo." },
+      solid: { v: "Un año sólido", t: "Te vas con más de lo que trajiste.", s: "Dinero, sí. Pero también una mesa que sabe tu nombre." }
+    },
+    lessons: {
+      best1: "Así funcionan las finanzas comunitarias cuando funcionan bien. No solo hiciste crecer tus ahorros — hiciste crecer tu <strong>capital social</strong>, el activo que los bancos no ven y del que viven estas mesas.",
+      best2: "La mayoría de estos sistemas los construyeron mujeres a quienes los bancos se negaron a atender. Décadas después, sus mesas mueven miles de millones — y suelen ser más sólidas que los bancos que les dijeron que no.",
+      out1: "Rondas perdidas, emergencias ignoradas, votos contra integrantes probados — cada una costó <strong>confianza</strong>, y aquí la confianza es la garantía. Si la pierdes, la mesa no puede prestarte, avalarte ni compartir contigo.",
+      out2: "No es crueldad — es como el sistema protege los ahorros de los demás. Una mesa que tolera aprovechados se derrumba; una que los aparta dura generaciones.",
+      flat1: "El grupo absorbió tus golpes: una emergencia que habría aplastado a una sola familia se dividió entre ocho y se anotó en un cuaderno. Salir tablas con la dignidad intacta <em>es</em> el producto.",
+      flat2: "Por eso cientos de millones de personas mantienen mesas como esta — no para hacerse ricas, sino para que ningún mes malo pueda arruinarlas.",
+      solid1: "Encontraste el equilibrio: alimentar la caja, votar con criterio, tomar riesgos medidos. La mesa te dio crédito al 10% que un banco habría cobrado al triple — si es que te prestaba.",
+      solid2: "Multiplica tu año por unos cientos de millones de mesas y obtienes uno de los sistemas financieros más grandes del planeta — administrado en cuadernos, sobre confianza."
+    },
+    extraShark: "Y al prestamista todavía se le deben <strong>{amt}</strong>, capitalizando al 50% mensual mientras duermes. Esta es la trampa que la mesa existe para reemplazar.",
+    extraDefault: "El impago del Agricultor le costó a la caja <strong>{amt}</strong> — y fíjate qué pasó: nadie quedó arruinado. Ocho personas absorbieron, cada una, un pedacito del desastre de una sola. Esa es toda la tecnología, y por eso estas mesas sobreviven.",
+    lblStart: "Empezaste con", lblWealth: "Terminaste con", lblNet: "Cambio neto", lblTrust: "Confianza final",
+    journeyTitle: "Tu año en la mesa", lessonEyebrow: "Lo que acaba de pasar", lessonTitle: "La verdadera lección de la banca comunitaria",
+    impactLabel1: "Solo en Kenia", impactSub1: "Chamas que administran $3.4 mil millones",
+    impactLabel2: "VSLA de CARE", impactSub2: "Integrantes en 67 países ahorraron $11.5 mil millones",
+    impactLabel3: "Lideradas por mujeres", impactSub3: "De los grupos de banca comunitaria en Kenia",
+    glossaryTitle: "Una idea, muchos nombres",
+    glossarySub: "Estés donde estés, alguien cerca de ti lleva una mesa como esta. Los economistas las llaman ROSCA — asociaciones rotativas de ahorro y crédito. Sus integrantes simplemente las llaman el grupo.",
+    glossary: [["Chama", "Kenia"], ["Tanda", "México"], ["Susu", "Ghana y el Caribe"], ["Stokvel", "Sudáfrica"], ["Tontine", "África Occidental"], ["Esusu / Ajo", "Nigeria"], ["Ekub", "Etiopía"], ["Hui", "China"], ["Hụi", "Vietnam"], ["Kye", "Corea"], ["Tanomoshikō", "Japón"], ["Paluwagan", "Filipinas"], ["Arisan", "Indonesia"], ["Committee", "India y Pakistán"], ["Gam’eya", "Egipto"], ["Pardna", "Jamaica y Reino Unido"], ["Cundina", "Norte de México"], ["Caixinha", "Brasil"]],
+    playAgain: "Jugar de nuevo", share: "Compartir tu resultado", copied: "¡Copiado!", explore: "Explorar educación financiera →",
+    shareText: "Viví un año entero dentro de una {trad} virtual: resultado neto {net}, confianza {trust}/100. Banca comunitaria, sin historial crediticio — juégalo en EN · ES · FR · PT · SW:"
   }
+};
+
+I18N.fr = {
+  ui: {
+    eyebrow: "Simulateur interactif · 5 langues · Votre monnaie",
+    h1pre: "Une banque de village repose sur la", h1word: "confiance", h1post: "— pas sur un score de crédit.",
+    sub: "Prenez place avec huit voisins autour d'une même table. Au fil de six réunions mensuelles, vous alimenterez une caisse commune, voterez des prêts, ferez face à une urgence et bâtirez — ou briserez — la confiance. Au Kenya on l'appelle <em>chama</em>, au Mexique <em>tanda</em>, au Ghana <em>susu</em>, en Afrique de l'Ouest <em>tontine</em>. Des centaines de millions de personnes épargnent ainsi — surtout là où les banques ne vont pas.",
+    setupTitle: "Préparez votre table", langLabel: "Langue", placeLabel: "Tradition et monnaie",
+    symLabel: "Symbole monétaire", amtLabel: "Cotisation mensuelle", customName: "Ma propre table…",
+    start: "Prenez votre place", resume: "Reprendre — réunion {n} sur 6",
+    factMembers: "Membres", factMeetings: "Réunions", factMonthly: "Par mois",
+    tableEyebrow: "La Table", meetingTitle: "Réunion {n} · {title}",
+    poolLabel: "Dans la caisse", poolSub: "l'argent du groupe",
+    ledgerTitle: "Le cahier — registre du groupe", ledgerEmpty: "Rien d'écrit pour l'instant.",
+    statsEyebrow: "Votre situation", lblCash: "Argent en main", lblSavings: "Épargné dans la caisse",
+    lblLoans: "Vous devez", lblMeeting: "Réunion", trustLabel: "La confiance du groupe en vous",
+    trustCaptions: ["Profondément respecté à cette table", "Membre en règle", "Accepté — et observé", "Sur la corde raide", "À un vote de la porte"],
+    decisionEyebrow: "Réunion {n} · À vous de décider",
+    toMeeting: "Vers la réunion {n}", seeResults: "Voir le bilan de votre année", unavailable: "indisponible",
+    discussTitle: "Pour en discuter", discussHint: "pour les classes et les clubs",
+    srMeeting: "Réunion {n} sur 6", rulesTitle: "Le règlement, récité à voix haute :"
+  },
+  members: { elder: "L'Aînée", trader: "La Commerçante", teacher: "L'Institutrice", rider: "Le Moto-taxi", you: "Vous", farmer: "Le Cultivateur", builder: "Le Maçon", parent: "La Maman" },
+  roles: { elder: "Trésorière · jamais absente", trader: "Tient un étal au marché", teacher: "Enseigne à l'école", rider: "Conducteur de moto-taxi", you: "Nouveau membre", farmer: "Jeune, sans références", builder: "Travaille sur les chantiers", parent: "S'occupe d'un nouveau-né" },
+  regions: { ke: "Kenya", ng: "Nigéria", za: "Afrique du Sud", gh: "Ghana", et: "Éthiopie", sn: "Afrique de l'Ouest", in: "Inde", ph: "Philippines", id: "Indonésie", mx: "Mexique", br: "Brésil", us: "États-Unis" },
+  ledger: {
+    contrib: "Cotisations collectées ×{k}", contribYou: "Votre cotisation",
+    loanOut: "Prêt accordé — {name}", repaid: "Prêt remboursé — {name}",
+    welfare: "Collecte d'urgence — versée à l'hôpital",
+    writeoff: "Passé en perte — prêt de {name}", shareout: "Partage — la caisse est distribuée aux membres"
+  },
+  journey: {
+    contrib: "Réunion {n} — cotisation mensuelle", missed: "Réunion {n} — cotisation impossible · amende {fine}",
+    joined: "Vous avez rejoint la table avec votre première cotisation", watched: "Vous avez observé la première réunion sans cotiser",
+    farmerYes: "Vous avez voté OUI au prêt de semences du Cultivateur", farmerNo: "Vous avez voté NON au prêt du Cultivateur",
+    farmerMid: "Vous avez négocié un prêt réduit pour le Cultivateur",
+    borrowed: "Vous avez emprunté {price} à la caisse et acheté le stock",
+    shark: "Vous avez emprunté {price} à l'usurier et acheté le stock",
+    passed: "Vous avez laissé passer l'affaire", sold: "Vous avez revendu le stock pour {revenue}",
+    soldBad: "Le stock ne s'est revendu que {revenue} — le marché était saturé",
+    emFull: "Vous avez donné {em} à la collecte pour le Moto-taxi", emHalf: "Vous avez donné {emHalf} à la collecte pour le Moto-taxi",
+    emSkip: "Vous n'avez rien donné à la collecte pour le Moto-taxi",
+    teacherYes: "Vous avez voté OUI au prêt d'entreprise de l'Institutrice", teacherNo: "Vous avez voté NON au prêt de l'Institutrice",
+    repaidGroup: "Vous avez remboursé {amt} à la caisse — prêt plus intérêts", repaidShark: "Vous avez payé {amt} à l'usurier",
+    sharkGrew: "La dette envers l'usurier a gonflé à {amt}", stuckGroup: "Impossible de rembourser la caisse cette année",
+    shareout: "Partage — vous avez reçu {payout}"
+  },
+  scn: {
+    joining: {
+      title: "Première séance",
+      speech: "Bienvenue. Même table, même jour, chaque mois. Chacun met {due}. La caisse prête à qui la table approuve, et en fin d'année on l'ouvre et on partage.",
+      body: "<p>Huit chaises, une bourse en tissu, un cahier — voilà toute la banque. Pas de contrat, pas d'agence, pas de dossier de crédit. Le règlement se récite à voix haute, et tout le monde vous a vu entrer.</p><p>Pour prendre place, vous payez votre premier mois.</p>",
+      rules: ["Cotisation mensuelle : {due}", "Prêts de la caisse : 10% d'intérêt, approuvés par vote", "Mois manqué : amende de {fine}", "Fin d'année : la caisse est partagée selon l'épargne de chacun"],
+      choices: [
+        { t: "Mettre {due} — prendre votre place", tag: "−{due}", d: "Vous y êtes pleinement.",
+          fb: { type: "good", label: "Installé", text: "La bourse passe de main en main et revient plus lourde. L'Aînée écrit votre nom dans le cahier. <strong>Confiance +5.</strong>" } },
+        { t: "Observer ce mois-ci, décider ensuite", tag: "aucune cotisation", d: "Voir d'abord comment ça tourne. Des visages se ferment.",
+          fb: { type: "bad", label: "Hésitation notée", text: "« La caisse ne marche que si tout le monde la nourrit », dit la Commerçante — sans s'adresser à vous, sans s'adresser à personne. <strong>Confiance −10.</strong> Vous pourrez encore entrer le mois prochain, si personne ne s'y oppose." } }
+      ],
+      discuss: ["Que vous faudrait-il pour confier votre épargne à des voisins sans contrat — juste un cahier et des témoins ?", "Pourquoi ces groupes prospèrent-ils même là où les banques existent ?"]
+    },
+    farmer: {
+      title: "La demande du Cultivateur",
+      speech: "Les pluies ont manqué. Mon champ n'est que poussière. Il me faut {loan} pour des semences avant la fin des semis. Vous avez ma parole.",
+      body: "<p>La caisse contient {pool}. Sa parole est la seule garantie posée sur la table — jeune, sans références, et dans un vrai besoin. S'il fait défaut, c'est l'épargne de tous qui encaisse. Le vote fait le tour de la table et s'arrête sur vous.</p>",
+      choices: [
+        { t: "Voter OUI — accorder {loan}", tag: "décision du groupe", d: "C'est pour cela que la table existe. La confiance est un choix.",
+          fb: { type: "good", label: "Motion adoptée", text: "Six mains se lèvent ; deux restent baissées. Il reçoit son argent de semences et devra {owe} — capital plus 10%. <strong>Confiance +3.</strong> La table vient de faire ce qu'aucune banque n'aurait fait." } },
+        { t: "Voter NON — trop risqué", tag: "protéger la caisse", d: "Le profil le moins fiable de la pièce.",
+          fb: { type: "bad", label: "Refusé", text: "La motion échoue. Il rentre les mains vides. Le Moto-taxi — son ami — soutient votre regard un instant de trop. <strong>Confiance −2.</strong>" } },
+        { t: "Contre-proposition : {small}, remboursés sur deux mois", tag: "voie médiane", d: "Assez pour les semences. Moins de risque pour la caisse.",
+          fb: { type: "good", label: "Sage décision", text: "La table accepte. De quoi semer, moitié moins d'exposition. Le stylo de l'Aînée s'arrête au-dessus du cahier — puis elle vous adresse un signe de tête. <strong>Confiance +7.</strong>" } }
+      ],
+      discuss: ["La table vote les prêts ; une banque fait tourner un algorithme. Lequel vous jugerait le plus justement ? Et votre voisin ?", "Que devient un groupe qui dit oui à tout le monde ? Et un groupe qui dit non à tout le monde ?"]
+    },
+    opportunity: {
+      title: "Votre opportunité",
+      speech: "Un grossiste liquide son stock : {price} pour des marchandises qui se revendent {revenue} en quelques semaines. Mais les {price} se paient aujourd'hui.",
+      body: "<p>Trois portes. Demander à la table — 10% d'intérêt, un vote public, chaque pièce consignée. L'usurier du dehors — 50% par mois, du liquide en cinq minutes, aucune question. Ou laisser passer. Le commerce comporte un risque : si le marché se sature, le stock peut se revendre moins cher que vous ne l'avez payé.</p>",
+      choices: [
+        { t: "Demander {price} à la table", tag: "devoir {gOwe}", d: "Le taux communautaire : 10%, tout est consigné.",
+          fb: { type: "good", label: "Prêt accordé", text: "Les mains se lèvent ; la caisse s'ouvre ; le stock est à vous. {gOwe} à rendre avant le partage — chaque pièce inscrite au cahier." } },
+        { t: "Prendre l'argent de l'usurier", tag: "devoir {shOwe} sous 30 jours", d: "Rapide et discret. Le taux est brutal.",
+          fb: { type: "bad", label: "Argent de l'ombre", text: "Cinq minutes, aucune question, aucun témoin — et aucune pitié. {shOwe} sous trente jours, et ça gonfle au moindre retard. Remarquez : ce prêt n'apparaît nulle part dans le cahier du groupe." } },
+        { t: "Laisser passer", tag: "aucun risque", d: "Vous gardez votre argent et votre sommeil.",
+          fb: { type: "good", label: "Patience", text: "Les affaires reviennent toujours. L'argent qu'on ne doit pas à un usurier est une forme de profit." } }
+      ],
+      discuss: ["Pourquoi l'usurier est-il plus rapide que la table ? Que vaut cette vitesse — et que coûte-t-elle ?", "Quand est-il sage d'emprunter pour investir, et quand est-ce jouer l'argent du loyer ?"]
+    },
+    emergency: {
+      title: "L'accident du Moto-taxi",
+      speech: "Le Moto-taxi est tombé hier sur le bitume mouillé. Jambe cassée. L'hôpital exige {bill} avant de le laisser sortir. Si chacun donne {em}, il rentre chez lui ce soir.",
+      body: "<p>Aucun assureur ne dessert cette route. La collecte d'urgence, <em>c'est</em> l'assurance — réunie en quelques minutes, versée le jour même, inscrite au cahier. Mais elle s'ajoute à votre cotisation normale de {due}.</p>",
+      choices: [
+        { t: "Donner {em} — la part entière", tag: "−{em}", d: "Il le ferait pour vous. C'est le pacte.",
+          fb: { type: "good", label: "Solidarité", text: "Les pièces traversent la table sans discours. Le soir même, la facture est réglée. Le Cultivateur ne donne rien — et ça aussi, tout le monde le remarque. <strong>Confiance +8.</strong>" } },
+        { t: "Donner {emHalf} — ce que vous pouvez", tag: "−{emHalf}", d: "Une part honnêtement offerte.",
+          fb: { type: "good", label: "Compté", text: "« Ce qu'on peut » compte aussi. L'Aînée l'inscrit sans commentaire. <strong>Confiance +2.</strong>" } },
+        { t: "Garder votre argent ce mois-ci", tag: "aucune contribution", d: "Un pari sur votre réputation.",
+          fb: { type: "bad", label: "Silence", text: "La bourse passe devant vous sans s'arrêter. Personne ne dit mot — et c'est le bruit le plus assourdissant de la journée. <strong>Confiance −15.</strong>" } }
+      ],
+      discuss: ["À quoi ressemble une assurance là où aucun assureur ne va ?", "Chacun paie la même part d'urgence, quel que soit son revenu. Est-ce juste ? Comment feriez-vous ?"]
+    },
+    teacher: {
+      title: "Le rêve de l'Institutrice",
+      speech: "La boutique de ma cousine ferme. Avec {tLoan}, je rachète tout son stock et j'ouvre un étal de fournitures scolaires. Six ans à cette table sans manquer un seul mois. Je rends {tOwe} avant le partage.",
+      body: "<p>La plus grosse demande jamais inscrite au cahier — portée par les mains les plus fiables de la table. Le Moto-taxi est revenu, sur béquilles ; il se souvient exactement de qui a donné. C'est l'instant où un club d'épargne devient un moteur : du capital qui entre dans une vraie entreprise.</p>",
+      choices: [
+        { t: "Voter OUI — la soutenir", tag: "investir {tLoan}", d: "Parcours impeccable. Plan concret. C'est tout l'enjeu.",
+          fb: { type: "good", label: "Unanime", text: "Toutes les mains se lèvent — même celle du Cultivateur. L'Institutrice rit et pleure à la fois. <strong>Confiance +5.</strong> Regardez ce que cela fera à la caisse au partage." } },
+        { t: "Voter NON — trop gros", tag: "jouer la prudence", d: "Même les plus fiables peuvent échouer.",
+          fb: { type: "bad", label: "Mis en minorité", text: "La motion passe à 7 contre 1, et votre main restée baissée est ce que la table retiendra. <strong>Confiance −10.</strong> Une table qui ne soutient pas son meilleur membre ne protège pas la caisse — elle l'affame." } }
+      ],
+      discuss: ["Quelle différence entre épargner ensemble et investir ensemble ?", "La banque la dit « non bancarisable » — pas de garanties, des revenus informels. La table la considère comme son pari le plus sûr. Qui a raison ?"]
+    },
+    shareout: {
+      title: "Jour du partage",
+      speech: "Six mois, une caisse, chaque pièce consignée. Aujourd'hui on solde les prêts, on lit le cahier à voix haute, et on partage ce qu'on a bâti.",
+      body: "<p>L'Aînée tourne le cahier pour que chacun voie les comptes. L'épargne revient à ses propriétaires ; ce que la caisse a gagné se partage au prorata de ce que chacun a épargné.</p>",
+      evTeacher: "L'Institutrice rembourse {tOwe} — en avance, rayonnante, son étal déjà rentable.",
+      evFarmerPaid: "Le Cultivateur compte {owe}, pièce par pièce — la récolte a été bonne.",
+      evFarmerDefault: "Le Cultivateur se lève, chapeau à la main : les semences sont en terre, mais les pluies ont encore manqué. Il ne peut pas payer. La table passe {loan} en perte — la perte appartient à tous.",
+      evFarmerSmall: "Le Cultivateur rembourse {smallOwe}, exactement comme convenu.",
+      evFarmerDenied: "Le Cultivateur a resemé en vendant sa chèvre. Il est toujours à la table — plus silencieux qu'avant.",
+      evShark: "Hors de cette pièce, l'usurier attend encore {amt}. Cette dette vous suit jusque chez vous.",
+      st: { box: "Compté dans la caisse", sav: "Épargne des membres", surplus: "La caisse a gagné (intérêts et amendes)", loss: "La caisse a perdu (prêt passé en perte)", yourSav: "Votre épargne", share: "Votre part des gains", fines: "Vos amendes", withheld: "Part des gains retenue par vote — confiance trop basse", payout: "Vous recevez" },
+      choices: [
+        { t: "Prendre votre part", tag: "+{payout}", d: "Clore l'année.",
+          fb: { type: "good", label: "La caisse rentre vide, l'année est pleine", text: "Votre part traverse la table : <strong>{payout}</strong>. La caisse repart vide, le cahier repart plein, et huit personnes débattent déjà — chaleureusement — de l'année prochaine." } }
+      ],
+      discuss: ["Toute l'année a tenu dans un cahier. Pour quoi ce groupe avait-il vraiment besoin d'une banque — et pour quoi pas ?", "Si la caisse avait perdu de l'argent cette année, aurait-il quand même valu la peine d'adhérer ?"]
+    }
+  },
+  end: {
+    verdicts: {
+      best: { v: "Réinvité", t: "La table vote pour vous garder votre chaise.", s: "Vous avez fait grandir votre argent et votre nom. Ici, les deux comptent." },
+      out: { v: "Pas réinvité", t: "Le groupe referme le cahier sur vous, sans bruit.", s: "Votre argent a survécu. Pas votre nom. Et ici, le nom est la monnaie." },
+      flat: { v: "Année close", t: "Vous avez gardé votre chaise. Les comptes ont été rudes.", s: "Urgences et obligations ont mangé la marge — mais huit personnes les ont portées avec vous." },
+      solid: { v: "Une année solide", t: "Vous repartez avec plus que vous n'avez apporté.", s: "De l'argent, oui. Mais aussi une table qui connaît votre nom." }
+    },
+    lessons: {
+      best1: "Voilà la finance communautaire telle qu'elle doit fonctionner. Vous n'avez pas seulement fait croître votre épargne — vous avez fait croître votre <strong>capital social</strong>, l'actif que les banques ne voient pas et dont vivent ces tables.",
+      best2: "La plupart de ces systèmes ont été bâtis par des femmes que les banques refusaient de servir. Des décennies plus tard, leurs tables brassent des milliards — souvent plus solides que les banques qui leur avaient dit non.",
+      out1: "Tours manqués, urgences ignorées, votes contre des membres éprouvés — chacun a coûté de la <strong>confiance</strong>, et ici la confiance est la garantie. Perdez-la et la table ne peut plus vous prêter, se porter garante de vous, ni partager avec vous.",
+      out2: "Ce n'est pas de la cruauté — c'est ainsi que le système protège l'épargne des autres. Une table qui tolère les passagers clandestins s'effondre ; une table qui les écarte traverse les générations.",
+      flat1: "Le groupe a absorbé vos chocs : une urgence qui aurait écrasé une famille seule a été divisée en huit et inscrite dans un cahier. Finir à l'équilibre, dignité intacte, <em>c'est</em> le produit.",
+      flat2: "C'est pourquoi des centaines de millions de personnes tiennent des tables comme celle-ci — non pour devenir riches, mais pour qu'aucun mauvais mois ne puisse les ruiner.",
+      solid1: "Vous avez trouvé l'équilibre : nourrir la caisse, voter avec discernement, prendre des risques mesurés. La table vous a prêté à 10% ce qu'une banque aurait facturé le triple — si tant est qu'elle vous ait prêté.",
+      solid2: "Multipliez votre année par quelques centaines de millions de tables et vous obtenez l'un des plus grands systèmes financiers du monde — tenu dans des cahiers, sur la confiance."
+    },
+    extraShark: "Et l'usurier attend toujours <strong>{amt}</strong>, à 50% par mois, qui gonflent pendant votre sommeil. Voilà le piège que la table existe pour remplacer.",
+    extraDefault: "Le défaut du Cultivateur a coûté <strong>{amt}</strong> à la caisse — et regardez ce qui s'est passé : personne n'a été ruiné. Huit personnes ont chacune absorbé un petit morceau du désastre d'une seule. C'est toute la technologie, et c'est pourquoi ces tables survivent.",
+    lblStart: "Vous avez commencé avec", lblWealth: "Vous terminez avec", lblNet: "Variation nette", lblTrust: "Confiance finale",
+    journeyTitle: "Votre année à la table", lessonEyebrow: "Ce qui vient de se passer", lessonTitle: "La vraie leçon de la banque communautaire",
+    impactLabel1: "Rien qu'au Kenya", impactSub1: "Chamas gérant 3,4 milliards $ d'actifs",
+    impactLabel2: "VSLA de CARE", impactSub2: "Membres dans 67 pays : 11,5 milliards $ épargnés",
+    impactLabel3: "Menés par des femmes", impactSub3: "Des groupes de table banking au Kenya",
+    glossaryTitle: "Une idée, mille noms",
+    glossarySub: "Où que vous soyez, quelqu'un près de chez vous tient une table comme celle-ci. Les économistes parlent de ROSCA — associations rotatives d'épargne et de crédit. Les membres disent simplement : le groupe.",
+    glossary: [["Chama", "Kenya"], ["Tanda", "Mexique"], ["Susu", "Ghana et Caraïbes"], ["Stokvel", "Afrique du Sud"], ["Tontine", "Afrique de l'Ouest"], ["Esusu / Ajo", "Nigéria"], ["Ekub", "Éthiopie"], ["Hui", "Chine"], ["Hụi", "Vietnam"], ["Kye", "Corée"], ["Tanomoshikō", "Japon"], ["Paluwagan", "Philippines"], ["Arisan", "Indonésie"], ["Committee", "Inde et Pakistan"], ["Gam’eya", "Égypte"], ["Pardna", "Jamaïque et Royaume-Uni"], ["Cundina", "Nord du Mexique"], ["Caixinha", "Brésil"]],
+    playAgain: "Rejouer", share: "Partager votre résultat", copied: "Copié !", explore: "Explorer l'éducation financière →",
+    shareText: "J'ai passé une année entière dans une {trad} virtuelle : résultat net {net}, confiance {trust}/100. La banque communautaire, sans score de crédit — jouable en EN · ES · FR · PT · SW :"
+  }
+};
+
+I18N.pt = {
+  ui: {
+    eyebrow: "Simulador interativo · 5 idiomas · Sua moeda",
+    h1pre: "Um banco comunitário funciona com", h1word: "confiança", h1post: "— não com score de crédito.",
+    sub: "Sente-se com oito vizinhos ao redor de uma mesa. Ao longo de seis reuniões mensais, você vai alimentar uma caixinha comum, votar empréstimos, enfrentar uma emergência e construir — ou quebrar — a confiança. No Quênia chamam de <em>chama</em>; no México, <em>tanda</em>; em Gana, <em>susu</em>; no Brasil, <em>caixinha</em>. Centenas de milhões de pessoas poupam assim — principalmente onde os bancos não chegam.",
+    setupTitle: "Monte a sua mesa", langLabel: "Idioma", placeLabel: "Tradição e moeda",
+    symLabel: "Símbolo da moeda", amtLabel: "Contribuição mensal", customName: "Minha própria mesa…",
+    start: "Sente-se à mesa", resume: "Continuar — reunião {n} de 6",
+    factMembers: "Integrantes", factMeetings: "Reuniões", factMonthly: "Por mês",
+    tableEyebrow: "A Mesa", meetingTitle: "Reunião {n} · {title}",
+    poolLabel: "Na caixinha", poolSub: "o dinheiro do grupo",
+    ledgerTitle: "O caderno — livro do grupo", ledgerEmpty: "Nada anotado ainda.",
+    statsEyebrow: "Sua posição", lblCash: "Dinheiro na mão", lblSavings: "Guardado na caixinha",
+    lblLoans: "Você deve", lblMeeting: "Reunião", trustLabel: "A confiança do grupo em você",
+    trustCaptions: ["Profundamente respeitado nesta mesa", "Integrante em boa situação", "Aceito — e observado", "Na corda bamba", "A um voto de ficar de fora"],
+    decisionEyebrow: "Reunião {n} · Você decide",
+    toMeeting: "Para a reunião {n}", seeResults: "Ver como foi o seu ano", unavailable: "indisponível",
+    discussTitle: "Para conversar", discussHint: "para salas de aula e grupos",
+    srMeeting: "Reunião {n} de 6", rulesTitle: "O regulamento, lido em voz alta:"
+  },
+  members: { elder: "A Anciã", trader: "A Comerciante", teacher: "A Professora", rider: "O Mototaxista", you: "Você", farmer: "O Agricultor", builder: "O Pedreiro", parent: "A Mãe" },
+  roles: { elder: "Tesoureira · nunca falta", trader: "Tem uma banca no mercado", teacher: "Dá aula na escola", rider: "Motorista de mototáxi", you: "Novo integrante", farmer: "Jovem, sem histórico", builder: "Trabalha na construção", parent: "Cuida de um recém-nascido" },
+  regions: { ke: "Quênia", ng: "Nigéria", za: "África do Sul", gh: "Gana", et: "Etiópia", sn: "África Ocidental", in: "Índia", ph: "Filipinas", id: "Indonésia", mx: "México", br: "Brasil", us: "Estados Unidos" },
+  ledger: {
+    contrib: "Contribuições recebidas ×{k}", contribYou: "Sua contribuição",
+    loanOut: "Empréstimo concedido — {name}", repaid: "Empréstimo devolvido — {name}",
+    welfare: "Vaquinha de emergência — paga ao hospital",
+    writeoff: "Baixado — empréstimo de {name}", shareout: "Partilha — a caixinha é distribuída aos integrantes"
+  },
+  journey: {
+    contrib: "Reunião {n} — contribuição mensal", missed: "Reunião {n} — não conseguiu contribuir · multa {fine}",
+    joined: "Você entrou na mesa com a primeira contribuição", watched: "Você observou a primeira reunião sem contribuir",
+    farmerYes: "Votou SIM no empréstimo de sementes do Agricultor", farmerNo: "Votou NÃO no empréstimo do Agricultor",
+    farmerMid: "Negociou um empréstimo menor para o Agricultor",
+    borrowed: "Pegou {price} emprestado da caixinha e comprou a mercadoria",
+    shark: "Pegou {price} com o agiota e comprou a mercadoria",
+    passed: "Deixou o negócio passar", sold: "Vendeu a mercadoria por {revenue}",
+    soldBad: "A mercadoria só vendeu por {revenue} — o mercado estava saturado",
+    emFull: "Deu {em} na vaquinha do Mototaxista", emHalf: "Deu {emHalf} na vaquinha do Mototaxista",
+    emSkip: "Ficou de fora da vaquinha do Mototaxista",
+    teacherYes: "Votou SIM no empréstimo da Professora", teacherNo: "Votou NÃO no empréstimo da Professora",
+    repaidGroup: "Devolveu {amt} à caixinha — empréstimo mais juros", repaidShark: "Pagou {amt} ao agiota",
+    sharkGrew: "A dívida com o agiota cresceu para {amt}", stuckGroup: "Não conseguiu devolver o empréstimo à caixinha",
+    shareout: "Partilha — você recebeu {payout}"
+  },
+  scn: {
+    joining: {
+      title: "Primeira sentada",
+      speech: "Bem-vindo. Mesma mesa, mesmo dia, todo mês. Cada um põe {due}. Emprestamos da caixinha a quem a mesa aprovar, e no fim do ano a gente abre e divide.",
+      body: "<p>Oito cadeiras, uma bolsinha de pano, um caderno — esse é o banco inteiro. Sem contrato, sem agência, sem consulta ao crédito. O regulamento é recitado em voz alta, e todo mundo viu você entrar.</p><p>Para ocupar a cadeira, você paga o primeiro mês.</p>",
+      rules: ["Contribuição mensal: {due}", "Empréstimos da caixinha: 10% de juros, aprovados por votação", "Mês perdido: multa de {fine}", "Fim de ano: a caixinha é dividida conforme o que cada um guardou"],
+      choices: [
+        { t: "Pôr {due} — sentar à mesa", tag: "−{due}", d: "Você está dentro.",
+          fb: { type: "good", label: "Sentado", text: "A bolsinha passa de mão em mão e volta mais pesada. A Anciã escreve seu nome no caderno. <strong>Confiança +5.</strong>" } },
+        { t: "Observar este mês e decidir depois", tag: "sem contribuição", d: "Ver primeiro como funciona. Alguns rostos se fecham.",
+          fb: { type: "bad", label: "Hesitação anotada", text: "“A caixinha só funciona se todo mundo alimentar”, diz a Comerciante — sem olhar para você, sem olhar para ninguém. <strong>Confiança −10.</strong> Você ainda pode entrar no mês que vem, se ninguém se opuser." } }
+      ],
+      discuss: ["O que faria você entregar suas economias aos vizinhos sem contrato — só com um caderno e testemunhas?", "Por que grupos assim prosperam até onde existem bancos?"]
+    },
+    farmer: {
+      title: "O pedido do Agricultor",
+      speech: "As chuvas falharam. Meu campo virou poeira. Preciso de {loan} para sementes antes do fim do plantio. Vocês têm a minha palavra.",
+      body: "<p>A caixinha tem {pool}. A palavra dele é a única garantia sobre a mesa — jovem, sem histórico, e com uma necessidade real. Se ele não pagar, a poupança de todos sofre. O voto dá a volta na mesa e para em você.</p>",
+      choices: [
+        { t: "Votar SIM — aprovar {loan}", tag: "decisão do grupo", d: "É para isso que a mesa existe. Confiar é uma escolha.",
+          fb: { type: "good", label: "Moção aprovada", text: "Seis mãos sobem; duas ficam abaixadas. Ele recebe o dinheiro das sementes e deverá {owe} — principal mais 10%. <strong>Confiança +3.</strong> A mesa acabou de fazer o que nenhum banco faria." } },
+        { t: "Votar NÃO — arriscado demais", tag: "proteger a caixinha", d: "O histórico menos confiável da sala.",
+          fb: { type: "bad", label: "Negado", text: "A moção não passa. Ele volta para casa de mãos vazias. O Mototaxista — amigo dele — segura o seu olhar um segundo a mais. <strong>Confiança −2.</strong>" } },
+        { t: "Contraproposta: {small}, pagos em dois meses", tag: "meio-termo", d: "Dá para as sementes. Menos risco para a caixinha.",
+          fb: { type: "good", label: "Jogada sábia", text: "A mesa aceita. O suficiente para plantar, metade da exposição. A caneta da Anciã para sobre o caderno — e então ela faz que sim para você. <strong>Confiança +7.</strong>" } }
+      ],
+      discuss: ["A mesa vota os empréstimos; o banco roda um algoritmo. Qual julgaria você com mais justiça? E o seu vizinho?", "O que acontece com um grupo que diz sim para todo mundo? E com um que diz não para todo mundo?"]
+    },
+    opportunity: {
+      title: "Sua oportunidade",
+      speech: "Um atacadista está queimando estoque: {price} compra mercadoria que revende por {revenue} em poucas semanas. Mas os {price} vencem hoje.",
+      body: "<p>Três portas. Pedir à mesa — 10% de juros, votação pública, cada moeda registrada. O agiota lá fora — 50% ao mês, dinheiro em cinco minutos, sem perguntas. Ou deixar passar. Comércio tem risco: se o mercado saturar, a mercadoria pode vender por menos do que você pagou.</p>",
+      choices: [
+        { t: "Pedir {price} à mesa", tag: "dever {gOwe}", d: "A taxa comunitária: 10%, tudo registrado.",
+          fb: { type: "good", label: "Empréstimo aprovado", text: "As mãos sobem; a caixinha abre; a mercadoria é sua. {gOwe} a devolver até a partilha — cada moeda anotada no caderno." } },
+        { t: "Pegar o dinheiro do agiota", tag: "dever {shOwe} em 30 dias", d: "Rápido e discreto. A taxa é brutal.",
+          fb: { type: "bad", label: "Dinheiro das sombras", text: "Cinco minutos, sem perguntas, sem testemunhas — e sem piedade. {shOwe} em trinta dias, e cresce se você atrasar. Repare: esse empréstimo não aparece em caderno nenhum do grupo." } },
+        { t: "Deixar passar", tag: "sem risco", d: "Você fica com seu dinheiro e seu sono.",
+          fb: { type: "good", label: "Paciência", text: "Negócio bom volta. Dinheiro que você não deve a agiota é um tipo de lucro." } }
+      ],
+      discuss: ["Por que o agiota é mais rápido que a mesa? Quanto vale essa velocidade — e quanto ela custa?", "Quando pegar emprestado para investir é sábio, e quando é apostar o dinheiro do aluguel?"]
+    },
+    emergency: {
+      title: "O acidente do Mototaxista",
+      speech: "O Mototaxista caiu ontem no asfalto molhado. Perna quebrada. O hospital quer {bill} antes de liberar. Se cada um der {em}, ele volta para casa hoje.",
+      body: "<p>Nenhuma seguradora chega a esta estrada. A vaquinha de emergência <em>é</em> o seguro — juntada em minutos, paga no mesmo dia, anotada no caderno. Mas cai em cima da sua contribuição normal de {due}.</p>",
+      choices: [
+        { t: "Dar {em} — a cota inteira", tag: "−{em}", d: "Ele faria por você. Esse é o trato.",
+          fb: { type: "good", label: "Solidariedade", text: "As moedas cruzam a mesa sem discurso. Ao anoitecer, a conta está paga. O Agricultor não dá nada — e todo mundo repara nisso também. <strong>Confiança +8.</strong>" } },
+        { t: "Dar {emHalf} — o que dá", tag: "−{emHalf}", d: "Uma parte, oferecida com honestidade.",
+          fb: { type: "good", label: "Contado", text: "“O que der” também é alguma coisa. A Anciã anota sem comentários. <strong>Confiança +2.</strong>" } },
+        { t: "Guardar seu dinheiro este mês", tag: "sem contribuição", d: "Uma aposta com a sua reputação.",
+          fb: { type: "bad", label: "Silêncio", text: "A bolsinha passa por você sem parar. Ninguém diz uma palavra — e esse é o som mais alto do dia inteiro. <strong>Confiança −15.</strong>" } }
+      ],
+      discuss: ["Como é um seguro nos lugares aonde nenhuma seguradora vai?", "Todos pagam a mesma cota de emergência, independentemente da renda. É justo? Como você desenharia?"]
+    },
+    teacher: {
+      title: "O sonho da Professora",
+      speech: "A loja da minha prima vai fechar. Com {tLoan} eu compro o estoque inteiro e abro uma banca de material escolar. Seis anos nesta mesa sem perder um mês sequer. Devolvo {tOwe} até a partilha.",
+      body: "<p>O maior pedido já escrito no caderno — vindo das mãos mais confiáveis da mesa. O Mototaxista voltou, de muletas; ele lembra exatamente quem deu. Este é o momento em que um grupo de poupança vira motor: capital entrando num negócio de verdade.</p>",
+      choices: [
+        { t: "Votar SIM — apoiar", tag: "investir {tLoan}", d: "Histórico perfeito. Plano real. É disso que se trata.",
+          fb: { type: "good", label: "Unânime", text: "Todas as mãos sobem — até a do Agricultor. A Professora ri e chora ao mesmo tempo. <strong>Confiança +5.</strong> Repare no que isso faz com a caixinha na partilha." } },
+        { t: "Votar NÃO — grande demais", tag: "jogar seguro", d: "Até os mais confiáveis podem falhar.",
+          fb: { type: "bad", label: "Voto vencido", text: "Passa por 7 a 1, e a sua única mão abaixada é o que a mesa vai lembrar. <strong>Confiança −10.</strong> Uma mesa que não apoia seu melhor integrante não está protegendo a caixinha — está deixando ela morrer de fome." } }
+      ],
+      discuss: ["Qual é a diferença entre poupar juntos e investir juntos?", "O banco diz que ela é “não bancarizável” — sem garantias, renda informal. A mesa diz que ela é a aposta mais segura. Quem está certo?"]
+    },
+    shareout: {
+      title: "Dia da partilha",
+      speech: "Seis meses, uma caixinha, cada moeda anotada. Hoje a gente acerta os empréstimos, lê o caderno em voz alta e divide o que construímos.",
+      body: "<p>A Anciã vira o caderno para todos verem as contas. As poupanças voltam para os donos; o que a caixinha rendeu é dividido na proporção do que cada um guardou.</p>",
+      evTeacher: "A Professora devolve {tOwe} — adiantado, radiante, com a banca já dando lucro.",
+      evFarmerPaid: "O Agricultor conta {owe}, moeda por moeda — a colheita veio boa.",
+      evFarmerDefault: "O Agricultor se levanta, chapéu na mão: a semente foi plantada, mas as chuvas falharam de novo. Ele não pode pagar. A mesa dá baixa em {loan} — o prejuízo é de todos.",
+      evFarmerSmall: "O Agricultor devolve {smallOwe}, exatamente como combinado.",
+      evFarmerDenied: "O Agricultor replantou vendendo a cabra. Continua na mesa — mais quieto do que antes.",
+      evShark: "Fora desta sala, o agiota ainda espera {amt}. Essa dívida segue você até em casa.",
+      st: { box: "Contado na caixinha", sav: "Poupança dos integrantes", surplus: "A caixinha rendeu (juros e multas)", loss: "A caixinha perdeu (empréstimo baixado)", yourSav: "Sua poupança", share: "Sua parte dos rendimentos", fines: "Suas multas", withheld: "Rendimentos retidos por votação — confiança baixa demais", payout: "Você recebe" },
+      choices: [
+        { t: "Pegar a sua parte", tag: "+{payout}", d: "Fechar o ano.",
+          fb: { type: "good", label: "A caixinha vai vazia, o ano vai cheio", text: "Sua parte cruza a mesa: <strong>{payout}</strong>. A caixinha volta vazia, o caderno volta cheio, e oito pessoas já discutem — com carinho — o ano que vem." } }
+      ],
+      discuss: ["O ano inteiro coube num caderno. Para que esse grupo precisava de um banco — e para que não?", "Se a caixinha tivesse perdido dinheiro este ano, ainda teria valido a pena entrar?"]
+    }
+  },
+  end: {
+    verdicts: {
+      best: { v: "Convidado a voltar", t: "A mesa vota para manter a sua cadeira.", s: "Você fez crescer o seu dinheiro e o seu nome. Aqui, os dois importam." },
+      out: { v: "Não convidado a voltar", t: "O grupo fecha o caderno para você, em silêncio.", s: "Seu dinheiro sobreviveu. Seu nome, não. E aqui, o nome é a moeda." },
+      flat: { v: "Ano encerrado", t: "Você manteve a cadeira. As contas foram duras.", s: "Emergências e obrigações comeram a margem — mas oito pessoas as carregaram com você." },
+      solid: { v: "Um ano sólido", t: "Você sai com mais do que trouxe.", s: "Dinheiro, sim. Mas também uma mesa que sabe o seu nome." }
+    },
+    lessons: {
+      best1: "Isto são as finanças comunitárias funcionando como devem. Você não fez crescer só a poupança — fez crescer o seu <strong>capital social</strong>, o ativo que os bancos não enxergam e do qual essas mesas vivem.",
+      best2: "A maioria desses sistemas foi construída por mulheres que os bancos se recusaram a atender. Décadas depois, as mesas que elas criaram movimentam bilhões — e costumam ser mais sólidas que os bancos que disseram não.",
+      out1: "Rodadas perdidas, emergências ignoradas, votos contra integrantes comprovados — cada um custou <strong>confiança</strong>, e aqui a confiança é a garantia. Sem ela, a mesa não pode emprestar a você, responder por você, nem dividir com você.",
+      out2: "Não é crueldade — é assim que o sistema protege a poupança dos outros. Uma mesa que tolera caronas desaba; uma que as afasta dura gerações.",
+      flat1: "O grupo absorveu os seus choques: uma emergência que esmagaria uma família sozinha foi dividida por oito e anotada num caderno. Sair no zero a zero com a dignidade intacta <em>é</em> o produto.",
+      flat2: "É por isso que centenas de milhões de pessoas mantêm mesas assim — não para enriquecer, mas para que nenhum mês ruim consiga arruiná-las.",
+      solid1: "Você achou o equilíbrio: alimentar a caixinha, votar com critério, correr riscos medidos. A mesa lhe deu crédito a 10% que um banco cobraria o triplo — se emprestasse.",
+      solid2: "Multiplique o seu ano por algumas centenas de milhões de mesas e você terá um dos maiores sistemas financeiros do planeta — tocado em cadernos, na base da confiança."
+    },
+    extraShark: "E o agiota ainda espera <strong>{amt}</strong>, rendendo 50% ao mês enquanto você dorme. Esta é a armadilha que a mesa existe para substituir.",
+    extraDefault: "O calote do Agricultor custou <strong>{amt}</strong> à caixinha — e repare no que aconteceu: ninguém ficou arruinado. Oito pessoas absorveram, cada uma, um pedacinho do desastre de uma só. Essa é a tecnologia inteira, e é por isso que essas mesas sobrevivem.",
+    lblStart: "Você começou com", lblWealth: "Você terminou com", lblNet: "Variação líquida", lblTrust: "Confiança final",
+    journeyTitle: "Seu ano na mesa", lessonEyebrow: "O que acabou de acontecer", lessonTitle: "A verdadeira lição do banco comunitário",
+    impactLabel1: "Só no Quênia", impactSub1: "Chamas administrando US$ 3,4 bilhões",
+    impactLabel2: "VSLAs da CARE", impactSub2: "Integrantes em 67 países pouparam US$ 11,5 bilhões",
+    impactLabel3: "Lideradas por mulheres", impactSub3: "Dos grupos de table banking no Quênia",
+    glossaryTitle: "Uma ideia, muitos nomes",
+    glossarySub: "Onde quer que você esteja, alguém perto de você toca uma mesa como esta. Os economistas chamam de ROSCA — associações rotativas de poupança e crédito. Os integrantes chamam só de grupo.",
+    glossary: [["Chama", "Quênia"], ["Tanda", "México"], ["Susu", "Gana e Caribe"], ["Stokvel", "África do Sul"], ["Tontine", "África Ocidental"], ["Esusu / Ajo", "Nigéria"], ["Ekub", "Etiópia"], ["Hui", "China"], ["Hụi", "Vietnã"], ["Kye", "Coreia"], ["Tanomoshikō", "Japão"], ["Paluwagan", "Filipinas"], ["Arisan", "Indonésia"], ["Committee", "Índia e Paquistão"], ["Gam’eya", "Egito"], ["Pardna", "Jamaica e Reino Unido"], ["Cundina", "Norte do México"], ["Caixinha", "Brasil"]],
+    playAgain: "Jogar de novo", share: "Compartilhar resultado", copied: "Copiado!", explore: "Explorar educação financeira →",
+    shareText: "Passei um ano inteiro dentro de uma {trad} virtual: resultado líquido {net}, confiança {trust}/100. Banco comunitário, sem score de crédito — jogue em EN · ES · FR · PT · SW:"
+  }
+};
+
+I18N.sw = {
+  ui: {
+    eyebrow: "Mchezo Shirikishi · Lugha 5 · Sarafu Yako",
+    h1pre: "Benki ya kijiji inaendeshwa kwa", h1word: "kuaminiana", h1post: "— si kwa alama za mikopo.",
+    sub: "Keti na majirani wanane kwenye meza moja. Katika mikutano sita ya kila mwezi, utachangia sanduku la pamoja, utapiga kura za mikopo, utakabiliana na dharura, na utajenga — au kuvunja — kuaminiana. Kenya tunaita <em>chama</em>; Meksiko wanaita <em>tanda</em>; Ghana <em>susu</em>; Afrika Kusini <em>stokvel</em>. Mamia ya mamilioni ya watu wanaweka akiba hivi — hasa pale benki hazifiki.",
+    setupTitle: "Andaa meza yako", langLabel: "Lugha", placeLabel: "Utamaduni na sarafu",
+    symLabel: "Alama ya sarafu", amtLabel: "Mchango wa kila mwezi", customName: "Meza yangu mwenyewe…",
+    start: "Keti mezani", resume: "Endelea — mkutano wa {n} kati ya 6",
+    factMembers: "Wanachama", factMeetings: "Mikutano", factMonthly: "Kila mwezi",
+    tableEyebrow: "Meza", meetingTitle: "Mkutano {n} · {title}",
+    poolLabel: "Ndani ya sanduku", poolSub: "pesa za kikundi",
+    ledgerTitle: "Daftari — kumbukumbu za kikundi", ledgerEmpty: "Hakuna kilichoandikwa bado.",
+    statsEyebrow: "Hali yako", lblCash: "Pesa mkononi", lblSavings: "Akiba sandukuni",
+    lblLoans: "Unadaiwa", lblMeeting: "Mkutano", trustLabel: "Imani ya kikundi kwako",
+    trustCaptions: ["Unaheshimika sana mezani", "Mwanachama mwema", "Umekubaliwa — lakini unaangaliwa", "Uko hatarini", "Kura moja tu kabla ya kuondolewa"],
+    decisionEyebrow: "Mkutano {n} · Uamuzi wako",
+    toMeeting: "Twende mkutano wa {n}", seeResults: "Ona mwaka wako ulivyokwenda", unavailable: "haipatikani",
+    discussTitle: "Jadilini", discussHint: "kwa madarasa na vikundi",
+    srMeeting: "Mkutano wa {n} kati ya 6", rulesTitle: "Katiba, inasomwa kwa sauti:"
+  },
+  members: { elder: "Mzee", trader: "Mfanyabiashara", teacher: "Mwalimu", rider: "Bodaboda", you: "Wewe", farmer: "Mkulima", builder: "Fundi", parent: "Mzazi" },
+  roles: { elder: "Mweka hazina · hakosi kamwe", trader: "Ana genge sokoni", teacher: "Anafundisha shuleni", rider: "Dereva wa bodaboda", you: "Mwanachama mpya", farmer: "Kijana, hajathibitishwa", builder: "Anafanya kazi za ujenzi", parent: "Analea mtoto mchanga" },
+  regions: { ke: "Kenya", ng: "Naijeria", za: "Afrika Kusini", gh: "Ghana", et: "Ethiopia", sn: "Afrika Magharibi", in: "India", ph: "Ufilipino", id: "Indonesia", mx: "Meksiko", br: "Brazili", us: "Marekani" },
+  ledger: {
+    contrib: "Michango iliyopokelewa ×{k}", contribYou: "Mchango wako",
+    loanOut: "Mkopo umetolewa — {name}", repaid: "Mkopo umelipwa — {name}",
+    welfare: "Mchango wa dharura — umepelekwa hospitalini",
+    writeoff: "Deni limefutwa — mkopo wa {name}", shareout: "Mgawanyo — sanduku limegawanywa kwa wanachama"
+  },
+  journey: {
+    contrib: "Mkutano wa {n} — mchango wa mwezi", missed: "Mkutano wa {n} — hukuweza kuchanga · faini {fine}",
+    joined: "Umejiunga na meza kwa mchango wako wa kwanza", watched: "Uliangalia mkutano wa kwanza bila kuchanga",
+    farmerYes: "Ulipiga kura ya NDIYO kwa mkopo wa mbegu wa Mkulima", farmerNo: "Ulipiga kura ya HAPANA kwa mkopo wa Mkulima",
+    farmerMid: "Ulipatanisha mkopo mdogo kwa Mkulima",
+    borrowed: "Ulikopa {price} kutoka sandukuni na kununua bidhaa",
+    shark: "Ulikopa {price} kwa mkopeshaji wa mtaani na kununua bidhaa",
+    passed: "Uliachana na biashara hiyo", sold: "Uliuza bidhaa kwa {revenue}",
+    soldBad: "Bidhaa ziliuzwa kwa {revenue} tu — soko lilikuwa limejaa",
+    emFull: "Ulitoa {em} kwa dharura ya Bodaboda", emHalf: "Ulitoa {emHalf} kwa dharura ya Bodaboda",
+    emSkip: "Hukuchangia dharura ya Bodaboda",
+    teacherYes: "Ulipiga kura ya NDIYO kwa mkopo wa biashara wa Mwalimu", teacherNo: "Ulipiga kura ya HAPANA kwa mkopo wa Mwalimu",
+    repaidGroup: "Ulirudisha {amt} sandukuni — mkopo na riba", repaidShark: "Ulimlipa mkopeshaji {amt}",
+    sharkGrew: "Deni la mkopeshaji limekua hadi {amt}", stuckGroup: "Hukuweza kulipa deni la sanduku mwaka huu",
+    shareout: "Mgawanyo — ulipokea {payout}"
+  },
+  scn: {
+    joining: {
+      title: "Kikao cha Kwanza",
+      speech: "Karibu, rafiki. Meza ile ile, siku ile ile, kila mwezi. Kila mtu anaweka {due}. Tunakopesha kutoka sandukuni kwa yeyote ambaye meza itamkubali, na mwisho wa mwaka tunalifungua na kugawana.",
+      body: "<p>Viti vinane, mfuko wa kitambaa, daftari moja — hiyo ndiyo benki yote. Hakuna mkataba, hakuna tawi, hakuna ukaguzi wa mikopo. Katiba inasomwa kwa sauti, na kila mtu amekuona ukiingia.</p><p>Ili kupata kiti, unalipa mwezi wako wa kwanza.</p>",
+      rules: ["Mchango wa kila mwezi: {due}", "Mikopo kutoka sandukuni: riba ya 10%, inapitishwa kwa kura", "Kukosa mwezi: faini ya {fine}", "Mwisho wa mwaka: sanduku linagawanywa kulingana na akiba ya kila mwanachama"],
+      choices: [
+        { t: "Weka {due} — chukua kiti chako", tag: "−{due}", d: "Umeingia kikamilifu.",
+          fb: { type: "good", label: "Umeketi", text: "Mfuko unapita mkono hadi mkono na kurudi mzito zaidi. Mzee anaandika jina lako daftarini. <strong>Imani +5.</strong>" } },
+        { t: "Angalia mwezi huu, amua baadaye", tag: "bila mchango", d: "Kwanza uone jinsi kinavyoendeshwa. Nyuso zingine zinabadilika.",
+          fb: { type: "bad", label: "Kusita kumeonekana", text: "“Sanduku linafanya kazi tu kama kila mtu analilisha,” anasema Mfanyabiashara — si kwako moja kwa moja, si kwa yeyote. <strong>Imani −10.</strong> Bado unaweza kujiunga mwezi ujao, kama hakuna atakayepinga." } }
+      ],
+      discuss: ["Ungehitaji nini ili kukabidhi akiba yako kwa majirani bila mkataba — daftari na mashahidi tu?", "Kwa nini vikundi kama hiki vinastawi hata pale ambapo benki zipo?"]
+    },
+    farmer: {
+      title: "Ombi la Mkulima",
+      speech: "Mvua zimekosa. Shamba langu ni vumbi tupu. Nahitaji {loan} kwa mbegu kabla msimu wa kupanda haujaisha. Nawapa neno langu.",
+      body: "<p>Sanduku lina {pool}. Neno lake ndilo dhamana pekee mezani — kijana, hajathibitishwa, na ana shida ya kweli. Akishindwa kulipa, akiba ya kila mtu itaumia. Kura inazunguka meza na kusimama kwako.</p>",
+      choices: [
+        { t: "Piga kura ya NDIYO — idhinisha {loan}", tag: "uamuzi wa kikundi", d: "Meza ipo kwa ajili ya haya. Kuaminiana ni uamuzi.",
+          fb: { type: "good", label: "Hoja imepita", text: "Mikono sita inainuka; miwili inabaki chini. Anapata pesa za mbegu na atarudisha {owe} — mkopo na riba ya 10%. <strong>Imani +3.</strong> Meza imefanya kile ambacho hakuna benki ingefanya." } },
+        { t: "Piga kura ya HAPANA — hatari mno", tag: "linda sanduku", d: "Rekodi dhaifu kuliko zote chumbani.",
+          fb: { type: "bad", label: "Imekataliwa", text: "Hoja imeanguka. Anarudi nyumbani mikono mitupu. Bodaboda — rafiki yake — anakutazama kwa muda mrefu kidogo. <strong>Imani −2.</strong>" } },
+        { t: "Pendekezo jingine: {small}, ilipwe ndani ya miezi miwili", tag: "njia ya kati", d: "Inatosha kwa mbegu. Hatari ndogo kwa sanduku.",
+          fb: { type: "good", label: "Hekima", text: "Meza imekubali. Inatosha kupanda, hatari ni nusu. Kalamu ya Mzee inasimama juu ya daftari — kisha anakukubalia kwa kichwa. <strong>Imani +7.</strong>" } }
+      ],
+      discuss: ["Meza inapiga kura za mikopo; benki inatumia kanuni za kompyuta. Ipi ingekuhukumu kwa haki zaidi? Na jirani yako?", "Kikundi kinachokubali kila mtu kitakuwaje? Na kinachokataa kila mtu?"]
+    },
+    opportunity: {
+      title: "Fursa Yako",
+      speech: "Muuzaji wa jumla anauza bidhaa kwa bei ya kutupa: {price} inanunua bidhaa zinazoweza kuuzwa kwa {revenue} ndani ya wiki chache. Lakini {price} inahitajika leo.",
+      body: "<p>Milango mitatu. Omba mezani — riba ya 10%, kura ya wazi, kila senti inaandikwa. Mkopeshaji wa mtaani — 50% kwa mwezi, pesa ndani ya dakika tano, hakuna maswali. Au achana nayo. Biashara ina hatari: soko likijaa, bidhaa zinaweza kuuzwa chini ya ulivyolipa.</p>",
+      choices: [
+        { t: "Omba {price} mezani", tag: "utadaiwa {gOwe}", d: "Riba ya kijamii: 10%, kwenye kumbukumbu.",
+          fb: { type: "good", label: "Mkopo umeidhinishwa", text: "Mikono inainuka; sanduku linafunguliwa; bidhaa ni zako. {gOwe} irudishwe kabla ya mgawanyo — kila senti imeandikwa daftarini." } },
+        { t: "Chukua pesa za mkopeshaji wa mtaani", tag: "utadaiwa {shOwe} ndani ya siku 30", d: "Haraka na faragha. Riba ni kali sana.",
+          fb: { type: "bad", label: "Pesa za gizani", text: "Dakika tano, hakuna maswali, hakuna mashahidi — na hakuna huruma. {shOwe} ndani ya siku thelathini, na inakua ukichelewa. Angalia: mkopo huu hauonekani popote katika daftari la kikundi." } },
+        { t: "Achana nayo", tag: "hakuna hatari", d: "Unabaki na pesa zako na usingizi wako.",
+          fb: { type: "good", label: "Subira", text: "Biashara zitarudi tena. Pesa usiyodaiwa na mkopeshaji ni aina yake ya faida." } }
+      ],
+      discuss: ["Kwa nini mkopeshaji wa mtaani ni mwepesi kuliko meza? Kasi hiyo ina thamani gani — na gharama gani?", "Ni lini kukopa ili kuwekeza ni hekima, na ni lini ni kucheza kamari na pesa ya kodi?"]
+    },
+    emergency: {
+      title: "Ajali ya Bodaboda",
+      speech: "Bodaboda alianguka jana kwenye lami yenye mvua. Mguu umevunjika. Hospitali inataka {bill} kabla ya kumruhusu kutoka. Kila mmoja akitoa {em}, anarudi nyumbani leo.",
+      body: "<p>Hakuna kampuni ya bima inayofika barabara hii. Mchango wa dharura <em>ndiyo</em> bima — unakusanywa ndani ya dakika, unalipwa siku hiyo hiyo, unaandikwa daftarini. Lakini unaongezeka juu ya mchango wako wa kawaida wa {due}.</p>",
+      choices: [
+        { t: "Toa {em} — fungu kamili", tag: "−{em}", d: "Angekufanyia vivyo hivyo. Ndiyo makubaliano.",
+          fb: { type: "good", label: "Mshikamano", text: "Sarafu zinavuka meza bila hotuba. Kufikia jioni, bili imelipwa. Mkulima hatoi chochote — na kila mtu anaona hilo pia. <strong>Imani +8.</strong>" } },
+        { t: "Toa {emHalf} — unachoweza", tag: "−{emHalf}", d: "Fungu la nusu, limetolewa kwa uaminifu.",
+          fb: { type: "good", label: "Limehesabiwa", text: "“Unachoweza” pia ni kitu. Mzee analiandika bila maneno. <strong>Imani +2.</strong>" } },
+        { t: "Shika pesa yako mwezi huu", tag: "bila mchango", d: "Kamari kwa heshima yako.",
+          fb: { type: "bad", label: "Kimya", text: "Mfuko unakupita bila kusimama. Hakuna anayesema neno — na hicho ndicho kitu chenye sauti kubwa zaidi siku nzima. <strong>Imani −15.</strong>" } }
+      ],
+      discuss: ["Bima inaonekanaje mahali ambapo hakuna kampuni ya bima inayofika?", "Kila mtu analipa fungu sawa la dharura bila kujali kipato. Je, ni haki? Wewe ungelipangaje?"]
+    },
+    teacher: {
+      title: "Ndoto ya Mwalimu",
+      speech: "Duka la binamu yangu linafungwa. {tLoan} inanunua bidhaa zake zote, na nitafungua kibanda cha vifaa vya shule. Miaka sita kwenye meza hii sijakosa mwezi hata mmoja. Nitarudisha {tOwe} kabla ya mgawanyo.",
+      body: "<p>Ombi kubwa kuliko yote kuwahi kuandikwa daftarini — kutoka kwa mikono ya kuaminika kuliko yote mezani. Bodaboda amerudi, kwa magongo; anakumbuka vizuri nani alitoa. Huu ndio wakati kikundi cha akiba kinakuwa injini: mtaji unaingia kwenye biashara ya kweli.</p>",
+      choices: [
+        { t: "Piga kura ya NDIYO — muunge mkono", tag: "wekeza {tLoan}", d: "Rekodi safi. Mpango halisi. Hii ndiyo maana yake.",
+          fb: { type: "good", label: "Kwa kauli moja", text: "Mikono yote inainuka — hata ya Mkulima. Mwalimu anacheka na kulia kwa wakati mmoja. <strong>Imani +5.</strong> Angalia kitakachotokea kwenye sanduku siku ya mgawanyo." } },
+        { t: "Piga kura ya HAPANA — ni kubwa mno", tag: "tahadhari", d: "Hata waliothibitishwa wanaweza kushindwa.",
+          fb: { type: "bad", label: "Umezidiwa kwa kura", text: "Inapita 7 kwa 1, na mkono wako pekee uliobaki chini ndio meza itakaoukumbuka. <strong>Imani −10.</strong> Meza isiyomuunga mkono mwanachama wake bora hailindi sanduku — inalinyima chakula." } }
+      ],
+      discuss: ["Kuna tofauti gani kati ya kuweka akiba pamoja na kuwekeza pamoja?", "Benki inamwita “asiyeweza kuhudumiwa” — hana dhamana, kipato si rasmi. Meza inamwita dau lake salama zaidi. Nani yuko sahihi?"]
+    },
+    shareout: {
+      title: "Siku ya Mgawanyo",
+      speech: "Miezi sita, sanduku moja, kila senti imeandikwa. Leo tunamaliza mikopo, tunasoma daftari kwa sauti, na tunagawana tulichojenga.",
+      body: "<p>Mzee anageuza daftari ili kila mtu aone hesabu. Akiba zinarudi kwa wenyewe; faida ya sanduku inagawanywa kulingana na akiba ya kila mwanachama.</p>",
+      evTeacher: "Mwalimu analipa {tOwe} — mapema, akitabasamu, kibanda chake tayari kina faida.",
+      evFarmerPaid: "Mkulima anahesabu {owe}, sarafu kwa sarafu — mavuno yalikuwa mazuri.",
+      evFarmerDefault: "Mkulima anasimama, kofia mkononi: mbegu zilipandwa, lakini mvua zimekosa tena. Hawezi kulipa. Meza inafuta {loan} — hasara ni ya kila mtu.",
+      evFarmerSmall: "Mkulima analipa {smallOwe}, sawasawa na makubaliano.",
+      evFarmerDenied: "Mkulima alipanda tena kwa kuuza mbuzi wake. Bado yupo mezani — kimya zaidi kuliko awali.",
+      evShark: "Nje ya chumba hiki, mkopeshaji bado anadai {amt}. Deni hilo linakufuata nyumbani.",
+      st: { box: "Kilichohesabiwa sandukuni", sav: "Akiba za wanachama", surplus: "Sanduku limepata (riba na faini)", loss: "Sanduku limepoteza (deni lililofutwa)", yourSav: "Akiba yako", share: "Fungu lako la faida", fines: "Faini zako", withheld: "Faida imezuiliwa kwa kura — imani ndogo mno", payout: "Unapokea" },
+      choices: [
+        { t: "Chukua fungu lako", tag: "+{payout}", d: "Funga mwaka.",
+          fb: { type: "good", label: "Sanduku tupu, mwaka umejaa", text: "Fungu lako linavuka meza: <strong>{payout}</strong>. Sanduku linaenda nyumbani tupu, daftari linaenda limejaa, na watu wanane tayari wanajadiliana — kwa furaha — kuhusu mwaka ujao." } }
+      ],
+      discuss: ["Mwaka mzima umetoshea kwenye daftari moja. Kikundi hiki kilihitaji benki kwa lipi hasa — na kwa lipi hakikuhitaji?", "Kama sanduku lingepoteza pesa mwaka huu, je, kujiunga kungekuwa na maana bado?"]
+    }
+  },
+  end: {
+    verdicts: {
+      best: { v: "Umekaribishwa tena", t: "Meza imepiga kura kukuhifadhia kiti chako.", s: "Umekuza pesa yako na jina lako. Hapa, vyote viwili vina maana." },
+      out: { v: "Hujaalikwa tena", t: "Kikundi kinakufungia daftari, kimya kimya.", s: "Pesa yako imepona. Jina lako halikupona. Na hapa, jina ndilo sarafu." },
+      flat: { v: "Mwaka umefungwa", t: "Umebaki na kiti chako. Hesabu zilikuwa ngumu.", s: "Dharura na wajibu vimekula faida — lakini watu wanane walivibeba pamoja nawe." },
+      solid: { v: "Mwaka imara", t: "Unaondoka na zaidi ya ulivyokuja navyo.", s: "Pesa, ndiyo. Lakini pia meza inayojua jina lako." }
+    },
+    lessons: {
+      best1: "Hivi ndivyo fedha za kijamii zinavyofanya kazi zinapofanya vizuri. Hukukuza akiba tu — ulikuza <strong>mtaji wa kijamii</strong>, mali ambayo benki haziioni na ambayo meza hizi zinaitegemea.",
+      best2: "Mifumo mingi kati ya hii ilijengwa na wanawake ambao benki zilikataa kuwahudumia. Miongo kadhaa baadaye, meza walizozijenga zinazungusha mabilioni — na mara nyingi ni imara kuliko benki zilizowakatalia.",
+      out1: "Michango uliyoikosa, dharura ulizoziruka, kura dhidi ya wanachama waliothibitishwa — kila moja iligharimu <strong>imani</strong>, na hapa imani ndiyo dhamana. Ukiipoteza, meza haiwezi kukukopesha, kukudhamini, wala kugawana nawe.",
+      out2: "Si ukatili — ndivyo mfumo unavyolinda akiba za wengine. Meza inayowavumilia wanaokwepa inaporomoka; inayowaondoa inadumu vizazi.",
+      flat1: "Kikundi kilibeba mishtuko yako: dharura ambayo ingeiponda familia moja peke yake iligawanywa mara nane na kuandikwa daftarini. Kutoka bila hasara, heshima ikiwa salama, <em>ndiyo</em> huduma yenyewe.",
+      flat2: "Ndiyo maana mamia ya mamilioni ya watu wanaendesha meza kama hii — si ili kutajirika, bali ili mwezi mmoja mbaya usiweze kuwaangamiza.",
+      solid1: "Ulipata uwiano: lisha sanduku, piga kura kwa busara, chukua hatari zilizopimwa. Meza ilikupa mkopo kwa riba ya 10% ambao benki ingeutoza mara tatu — kama ingekukopesha kabisa.",
+      solid2: "Zidisha mwaka wako kwa mamia ya mamilioni ya meza na unapata mojawapo ya mifumo mikubwa zaidi ya fedha duniani — inayoendeshwa kwa madaftari, kwa kuaminiana."
+    },
+    extraShark: "Na mkopeshaji bado anadai <strong>{amt}</strong>, ikikua kwa 50% kila mwezi unapolala. Huu ndio mtego ambao meza ipo kuuondoa.",
+    extraDefault: "Kushindwa kulipa kwa Mkulima kuligharimu sanduku <strong>{amt}</strong> — na angalia kilichotokea: hakuna aliyeangamia. Watu wanane kila mmoja alibeba kipande kidogo cha janga la mtu mmoja. Hiyo ndiyo teknolojia yote, na ndiyo sababu meza hizi zinadumu.",
+    lblStart: "Ulianza na", lblWealth: "Umemaliza na", lblNet: "Badiliko halisi", lblTrust: "Imani ya mwisho",
+    journeyTitle: "Mwaka wako mezani", lessonEyebrow: "Kilichotokea sasa hivi", lessonTitle: "Somo halisi la benki ya kijamii",
+    impactLabel1: "Kenya pekee", impactSub1: "Vyama vinavyosimamia dola bilioni 3.4",
+    impactLabel2: "VSLA za CARE", impactSub2: "Wanachama katika nchi 67 wameweka akiba ya dola bilioni 11.5",
+    impactLabel3: "Zinaongozwa na wanawake", impactSub3: "Ya vikundi vya table banking nchini Kenya",
+    glossaryTitle: "Wazo moja, majina mengi",
+    glossarySub: "Popote ulipo, kuna mtu karibu nawe anayeendesha meza kama hii. Wachumi wanaziita ROSCA — vyama vya mzunguko vya akiba na mikopo. Wanachama wanaviita tu kikundi.",
+    glossary: [["Chama", "Kenya"], ["Tanda", "Meksiko"], ["Susu", "Ghana na Karibiani"], ["Stokvel", "Afrika Kusini"], ["Tontine", "Afrika Magharibi"], ["Esusu / Ajo", "Naijeria"], ["Ekub", "Ethiopia"], ["Hui", "China"], ["Hụi", "Vietnam"], ["Kye", "Korea"], ["Tanomoshikō", "Japani"], ["Paluwagan", "Ufilipino"], ["Arisan", "Indonesia"], ["Committee", "India na Pakistani"], ["Gam’eya", "Misri"], ["Pardna", "Jamaika na Uingereza"], ["Cundina", "Kaskazini mwa Meksiko"], ["Caixinha", "Brazili"]],
+    playAgain: "Cheza tena", share: "Shiriki matokeo yako", copied: "Imenakiliwa!", explore: "Chunguza elimu ya fedha →",
+    shareText: "Nimeishi mwaka mzima ndani ya {trad} pepe: matokeo halisi {net}, imani {trust}/100. Benki ya kijamii, bila alama za mikopo — icheze kwa EN · ES · FR · PT · SW:"
+  }
+};
+
+/* ============================================
+   CONFIG, MONEY & STATE
+   ============================================ */
+let cfg = { lang: 'en', preset: 'ke', sym: '$', amt: 20 };
+let L = I18N.en;
+let M = {};
+let state = null;
+
+function presetById(id) { return PRESETS.find(p => p.id === id) || PRESETS[0]; }
+function cleanSym(s) { return String(s || '$').replace(/[<>&"']/g, '').slice(0, 6) || '$'; }
+function activeSym() { const p = presetById(cfg.preset); return p.id === 'custom' ? cleanSym(cfg.sym) : p.sym; }
+function activeAmt() {
+  const p = presetById(cfg.preset);
+  const a = p.id === 'custom' ? Number(cfg.amt) : p.amt;
+  return Math.min(1e9, Math.max(1, Math.round(isFinite(a) ? a : 20)));
+}
+function activeAfter() { const p = presetById(cfg.preset); return p.id === 'custom' ? false : !!p.after; }
+
+function fmt(n) {
+  const v = Math.round(n).toLocaleString(LOCALE[cfg.lang] || 'en');
+  const sym = activeSym();
+  if (activeAfter()) return v + ' ' + sym;
+  return /[A-Za-z]$/.test(sym) ? sym + ' ' + v : sym + v;
+}
+function tmpl(str, slots) { return String(str).replace(/\{(\w+)\}/g, (m, k) => (slots && slots[k] !== undefined) ? slots[k] : m); }
+
+function buildMoney() {
+  const a = activeAmt(); const r = x => Math.max(1, Math.round(x * a));
+  M = { due: r(1), start: r(10), fine: r(0.2),
+        fLoan: r(4), fOwe: r(4.4), fSmall: r(2), fSmallOwe: r(2.2),
+        price: r(6), revenue: r(12), revenueBad: r(5), gOwe: r(6.6), shOwe: r(9),
+        em: r(1.25), emHalf: r(0.5), bill: r(10), tLoan: r(10), tOwe: r(11) };
+}
+function moneySlots() {
+  const s = { due: fmt(M.due), fine: fmt(M.fine), loan: fmt(M.fLoan), owe: fmt(M.fOwe),
+    small: fmt(M.fSmall), smallOwe: fmt(M.fSmallOwe), price: fmt(M.price), revenue: fmt(M.revenue),
+    gOwe: fmt(M.gOwe), shOwe: fmt(M.shOwe), em: fmt(M.em), emHalf: fmt(M.emHalf), bill: fmt(M.bill),
+    tLoan: fmt(M.tLoan), tOwe: fmt(M.tOwe), start: fmt(M.start) };
+  if (state) { s.pool = fmt(state.pool); s.amt = fmt(state.loans); if (state.flags.so) s.payout = fmt(state.flags.so.payout); }
+  return s;
+}
+
+function freshMembers() {
+  return [
+    { id: 'elder',   reliability: 0.98, savings: 0, contributed: false },
+    { id: 'trader',  reliability: 0.92, savings: 0, contributed: false },
+    { id: 'teacher', reliability: 0.96, savings: 0, contributed: false },
+    { id: 'rider',   reliability: 0.78, savings: 0, contributed: false },
+    { id: 'you',     reliability: null, savings: 0, contributed: false, isPlayer: true },
+    { id: 'farmer',  reliability: 0.68, savings: 0, contributed: false },
+    { id: 'builder', reliability: 0.82, savings: 0, contributed: false },
+    { id: 'parent',  reliability: 0.85, savings: 0, contributed: false }
+  ];
+}
+function freshState() {
+  return { meeting: 1, phase: 'choice', choice: -1, pool: 0, cash: M.start, savings: 0,
+    loans: 0, trust: 75, fines: 0, members: freshMembers(), journey: [], ledger: [], flags: {} };
+}
+
+function pushJourney(icon, text, delta) { state.journey.push({ icon, text, delta }); }
+function pushLedger(text, delta) { state.ledger.push({ m: state.meeting, text, delta, bal: state.pool }); }
+function me() { return state.members.find(m => m.isPlayer); }
+function member(id) { return state.members.find(m => m.id === id); }
+function clampTrust() { state.trust = Math.max(0, Math.min(100, state.trust)); }
+
+/* Regular monthly round: you first (if you can), then neighbors by reliability. One ledger line. */
+function doContribution() {
+  const s = state; let k = 0;
+  if (s.cash >= M.due) {
+    s.cash -= M.due; s.savings += M.due; s.pool += M.due;
+    me().savings += M.due; me().contributed = true; k++;
+    pushJourney('💵', tmpl(L.journey.contrib, { n: s.meeting }), -M.due);
+  } else {
+    me().contributed = false; s.trust -= 8; s.fines += M.fine;
+    pushJourney('⚠️', tmpl(L.journey.missed, { n: s.meeting, fine: fmt(M.fine) }), 0);
+  }
+  s.members.forEach(m => {
+    if (m.isPlayer) return;
+    if (Math.random() < m.reliability) { m.savings += M.due; s.pool += M.due; m.contributed = true; k++; }
+    else m.contributed = false;
+  });
+  pushLedger(tmpl(L.ledger.contrib, { k }), k * M.due);
+}
+
+/* Your loan settlement — group loan repays as soon as you can; the street loan compounds if you can't. */
+function settleYourLoan(isFinal) {
+  const s = state;
+  if (!s.loans) return;
+  if (s.flags.loan === 'group') {
+    if (s.cash >= s.loans) {
+      const amt = s.loans; s.cash -= amt; s.pool += amt; s.loans = 0; s.trust += 10; s.flags.repaid = true;
+      pushLedger(tmpl(L.ledger.repaid, { name: L.members.you }), amt);
+      pushJourney('✅', tmpl(L.journey.repaidGroup, { amt: fmt(amt) }), -amt);
+    } else if (isFinal) { s.flags.stuckGroup = true; s.trust -= 20; pushJourney('⚠️', L.journey.stuckGroup, 0); }
+  } else if (s.flags.loan === 'shark') {
+    if (isFinal && s.cash < s.loans) s.loans = Math.round(s.loans * 1.5);
+    if (s.cash >= s.loans) {
+      const amt = s.loans; s.cash -= amt; s.loans = 0; s.flags.sharkPaid = true;
+      pushJourney('🦈', tmpl(L.journey.repaidShark, { amt: fmt(amt) }), -amt);
+    } else if (isFinal) { s.flags.sharkStuck = true; pushJourney('🚨', tmpl(L.journey.sharkGrew, { amt: fmt(s.loans) }), 0); }
+  }
+}
+
+/* ============================================
+   SCENARIOS — logic only; words live in I18N
+   ============================================ */
+const scenarios = [
+  { id: 'joining', speaker: 'elder',
+    before() { const s = state; let k = 0;
+      s.members.forEach(m => { if (m.isPlayer) return;
+        if (Math.random() < m.reliability) { m.savings += M.due; s.pool += M.due; m.contributed = true; k++; }
+        else m.contributed = false; });
+      pushLedger(tmpl(L.ledger.contrib, { k }), k * M.due);
+    },
+    choices: [
+      { primary: true, tagType: 'cost', effect() { const s = state;
+          s.cash -= M.due; s.savings += M.due; s.pool += M.due;
+          me().savings += M.due; me().contributed = true; s.trust += 5;
+          pushLedger(L.ledger.contribYou, M.due);
+          animateContribute('you'); pushJourney('🤝', L.journey.joined, -M.due); } },
+      { tagType: 'neutral', effect() { state.trust -= 10; state.flags.hesitant = true; pushJourney('👀', L.journey.watched, 0); } }
+    ] },
+  { id: 'farmer', speaker: 'farmer', before() { doContribution(); },
+    choices: [
+      { primary: true, tagType: 'neutral', effect() { const s = state;
+          s.flags.farmerFull = true; s.pool -= M.fLoan; s.trust += 3;
+          pushLedger(tmpl(L.ledger.loanOut, { name: L.members.farmer }), -M.fLoan);
+          animateBorrow('farmer'); pushJourney('✅', L.journey.farmerYes, 0); } },
+      { tagType: 'neutral', effect() { const s = state;
+          s.flags.farmerDenied = true; s.trust -= 2; member('farmer').reliability -= 0.1;
+          pushJourney('🙅', L.journey.farmerNo, 0); } },
+      { tagType: 'gain', effect() { const s = state;
+          s.flags.farmerSmall = true; s.pool -= M.fSmall; s.trust += 7;
+          pushLedger(tmpl(L.ledger.loanOut, { name: L.members.farmer }), -M.fSmall);
+          animateBorrow('farmer'); pushJourney('🤝', L.journey.farmerMid, 0); } }
+    ] },
+  { id: 'opportunity', speaker: 'you', before() { doContribution(); },
+    choices: [
+      { primary: true, tagType: 'gain', requires() { return state.pool >= M.price && state.trust > 40; },
+        effect() { const s = state;
+          s.pool -= M.price; s.loans = M.gOwe; s.flags.loan = 'group'; s.flags.stock = true;
+          pushLedger(tmpl(L.ledger.loanOut, { name: L.members.you }), -M.price);
+          animateBorrow('you'); pushJourney('💼', tmpl(L.journey.borrowed, { price: fmt(M.price) }), 0); } },
+      { tagType: 'cost', effect() { const s = state;
+          s.loans = M.shOwe; s.flags.loan = 'shark'; s.flags.stock = true;
+          pushJourney('🦈', tmpl(L.journey.shark, { price: fmt(M.price) }), 0); } },
+      { tagType: 'neutral', effect() { pushJourney('🚶', L.journey.passed, 0); } }
+    ] },
+  { id: 'emergency', speaker: 'elder',
+    before() { doContribution();
+      if (state.flags.stock) {
+        const good = Math.random() < 0.75;
+        const rev = good ? M.revenue : M.revenueBad;
+        state.cash += rev; state.flags.stock = false; state.flags.sold = true; state.flags.soldBad = !good;
+        pushJourney(good ? '📈' : '📉', tmpl(good ? L.journey.sold : L.journey.soldBad, { revenue: fmt(rev) }), rev);
+      }
+      pushLedger(L.ledger.welfare, 0);
+    },
+    choices: [
+      { primary: true, tagType: 'cost', effect() { state.cash -= M.em; state.trust += 8;
+          animateContribute('you'); pushJourney('🏥', tmpl(L.journey.emFull, { em: fmt(M.em) }), -M.em); } },
+      { tagType: 'neutral', effect() { state.cash -= M.emHalf; state.trust += 2;
+          pushJourney('🏥', tmpl(L.journey.emHalf, { emHalf: fmt(M.emHalf) }), -M.emHalf); } },
+      { tagType: 'cost', effect() { state.trust -= 15; pushJourney('🚫', L.journey.emSkip, 0); } }
+    ] },
+  { id: 'teacher', speaker: 'teacher',
+    before() { doContribution(); settleYourLoan(false); },
+    choices: [
+      { primary: true, tagType: 'gain', requires() { return state.pool >= M.tLoan; },
+        effect() { const s = state;
+          s.flags.teacherYes = true; s.pool -= M.tLoan; s.trust += 5;
+          pushLedger(tmpl(L.ledger.loanOut, { name: L.members.teacher }), -M.tLoan);
+          animateBorrow('teacher'); pushJourney('🌱', L.journey.teacherYes, 0); } },
+      { tagType: 'cost', effect() { state.trust -= 10; pushJourney('❌', L.journey.teacherNo, 0); } }
+    ] },
+  { id: 'shareout', speaker: 'elder',
+    before() { const s = state;
+      doContribution(); settleYourLoan(true);
+      if (s.flags.teacherYes) { s.pool += M.tOwe; pushLedger(tmpl(L.ledger.repaid, { name: L.members.teacher }), M.tOwe); }
+      if (s.flags.farmerFull) {
+        if (Math.random() < 0.2) { s.flags.farmerDefault = true; pushLedger(tmpl(L.ledger.writeoff, { name: L.members.farmer }), 0); }
+        else { s.pool += M.fOwe; pushLedger(tmpl(L.ledger.repaid, { name: L.members.farmer }), M.fOwe); }
+      } else if (s.flags.farmerSmall) {
+        s.pool += M.fSmallOwe; pushLedger(tmpl(L.ledger.repaid, { name: L.members.farmer }), M.fSmallOwe);
+      }
+      const totalSav = s.members.reduce((a, m) => a + m.savings, 0);
+      const surplus = s.pool - totalSav;
+      const withheld = s.trust < 40;
+      const share = (withheld || totalSav <= 0) ? 0 : Math.round(surplus * (s.savings / totalSav));
+      const payout = Math.max(0, s.savings + share - s.fines);
+      s.flags.so = { box: s.pool, totalSav, surplus, share, fines: s.fines, payout, withheld };
+    },
+    choices: [
+      { primary: true, tagType: 'gain', effect() { const s = state, so = s.flags.so;
+          s.cash += so.payout; me().savings = 0; s.savings = 0;
+          const boxOut = s.pool; s.pool = 0;
+          pushLedger(L.ledger.shareout, -boxOut);
+          pushJourney('💰', tmpl(L.journey.shareout, { payout: fmt(so.payout) }), so.payout); } }
+    ] }
 ];
 
-/* === Helpers === */
-
-function doContribution(s) {
-  // Auto-contribute the player's regular KSh 500 at the start of meetings 2-6
-  // unless they can't afford it
-  if (s.cash >= 500) {
-    s.cash -= 500; s.savings += 500; s.pool += 500;
-    const me = s.members.find(m => m.isPlayer);
-    me.contributed = true; me.savings += 500;
-    pushJourney('💵', `Meeting ${s.meeting} contribution: 500`, -500);
-    // Other members contribute based on reliability
-    s.members.forEach(m => {
-      if (m.isPlayer) return;
-      if (Math.random() < m.reliability) {
-        m.savings += 500; s.pool += 500; m.contributed = true;
-      } else {
-        m.contributed = false;
-      }
-    });
-  } else {
-    const me = s.members.find(m => m.isPlayer);
-    me.contributed = false;
-    s.trust -= 8;
-    pushJourney('💸', `Couldn't contribute in meeting ${s.meeting}`, 0);
-  }
-}
-
-function autoRepay(s, amount, source) {
-  s.cash -= amount;
-  if (source === 'chama') {
-    s.pool += amount;
-    pushJourney('✅', `Repaid ${amount.toLocaleString()} to the group`, -amount);
-    s.flags.chamaLoanRepaid = true;
-    s.trust += 10;
-  } else {
-    pushJourney('🦈', `Paid loan shark ${amount.toLocaleString()}`, -amount);
-    s.flags.shylockRepaid = true;
-  }
-  s.loans = 0;
-}
-
-function pushJourney(icon, text, delta) {
-  state.journey.push({ icon, text, delta });
-}
-
-/* === Rendering === */
-
+/* ============================================
+   RENDERING
+   ============================================ */
 function positionMembers() {
   const viz = $('tableViz');
-  const existing = viz.querySelectorAll('.member-seat');
-  existing.forEach(e => e.remove());
-
-  const n = state.members.length;
-  const radius = 43; // % from center
+  viz.querySelectorAll('.member-seat').forEach(e => e.remove());
+  const n = state.members.length, radius = 43;
   state.members.forEach((m, i) => {
-    const angle = (i / n) * 2 * Math.PI - Math.PI / 2; // start at top
+    const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
     const x = 50 + radius * Math.cos(angle);
     const y = 50 + radius * Math.sin(angle);
     const seat = document.createElement('div');
     seat.className = 'member-seat';
-    seat.style.left = x + '%';
-    seat.style.top = y + '%';
+    seat.style.left = x + '%'; seat.style.top = y + '%';
     seat.style.transform = 'translateY(-50%)';
     seat.setAttribute('data-member', m.id);
-    seat.innerHTML = `
-      <div class="member-avatar ${m.isPlayer ? 'you' : ''}">
-        ${avatarSvg[m.emoji] || avatarSvg.you}
-        <span class="member-status-dot ${m.contributed ? 'contributed' : ''}"></span>
-      </div>
-      <div class="member-name">${m.name}</div>
-      <div class="member-savings">${fmtKSh(m.savings)}</div>
-    `;
+    seat.innerHTML = '<div class="member-avatar ' + (m.isPlayer ? 'you' : '') + '">' +
+      (avatarSvg[m.id] || avatarSvg.you) +
+      '<span class="member-status-dot ' + (m.contributed ? 'contributed' : '') + '"></span></div>' +
+      '<div class="member-name">' + L.members[m.id] + '</div>' +
+      '<div class="member-savings">' + fmt(m.savings) + '</div>';
     viz.appendChild(seat);
   });
 }
 
-function renderProgress() {
+function renderLedger() {
+  const rows = $('ledgerRows');
+  $('ledgerTitle').textContent = L.ui.ledgerTitle;
+  $('ledgerBal').textContent = fmt(state.pool);
+  if (!state.ledger.length) { rows.innerHTML = '<div class="ledger-empty">' + L.ui.ledgerEmpty + '</div>'; return; }
+  rows.innerHTML = state.ledger.slice().reverse().map(e =>
+    '<div class="ledger-row"><span class="ledger-m">M' + e.m + '</span>' +
+    '<span class="ledger-desc">' + e.text + '</span>' +
+    '<span class="ledger-delta ' + (e.delta > 0 ? 'pos' : e.delta < 0 ? 'neg' : 'neu') + '">' +
+    (e.delta === 0 ? '—' : (e.delta > 0 ? '+' : '−') + fmt(Math.abs(e.delta))) + '</span>' +
+    '<span class="ledger-runbal">' + fmt(e.bal) + '</span></div>').join('');
+}
+
+function renderHUD() {
+  const scn = scenarios[state.meeting - 1];
+  $('statCash').textContent = fmt(state.cash);
+  $('statSavings').textContent = fmt(state.savings);
+  $('statLoans').textContent = fmt(state.loans);
+  $('statLoans').classList.toggle('negative', state.loans > 0);
+  $('statMeeting').textContent = state.meeting + ' / 6';
+  $('poolAmount').textContent = fmt(state.pool);
+  $('poolLabel').textContent = L.ui.poolLabel;
+  $('poolSub').textContent = L.ui.poolSub;
+  $('tableEyebrow').textContent = L.ui.tableEyebrow;
+  $('statsEyebrow').textContent = L.ui.statsEyebrow;
+  $('lblCash').textContent = L.ui.lblCash; $('lblSavings').textContent = L.ui.lblSavings;
+  $('lblLoans').textContent = L.ui.lblLoans; $('lblMeeting').textContent = L.ui.lblMeeting;
+  $('trustLabel').textContent = L.ui.trustLabel;
+  $('meetingTitle').textContent = tmpl(L.ui.meetingTitle, { n: state.meeting, title: L.scn[scn.id].title });
+  const p = presetById(cfg.preset);
+  const tradName = p.id === 'custom' ? L.ui.customName.replace(/…$/, '') : p.name;
+  const region = p.id === 'custom' ? '' : ' · ' + L.regions[p.regionKey];
+  $('tableMeta').textContent = tradName + region + ' · ' + fmt(M.due) + ' / ' + L.ui.factMonthly.toLowerCase();
+
+  const trust = Math.max(0, Math.min(100, state.trust));
+  $('trustValue').textContent = trust;
+  $('trustFill').style.width = trust + '%';
+  $('trustBar').setAttribute('aria-valuenow', trust);
+  $('trustValue').classList.toggle('low', trust < 40);
+  $('trustValue').classList.toggle('high', trust >= 80);
+  const caps = L.ui.trustCaptions;
+  $('trustCaption').textContent = trust >= 85 ? caps[0] : trust >= 65 ? caps[1] : trust >= 40 ? caps[2] : trust >= 20 ? caps[3] : caps[4];
+
   const dots = $('progressDots');
   dots.innerHTML = '';
-  for (let i = 0; i < state.maxMeetings; i++) {
+  for (let i = 0; i < 6; i++) {
     const dot = document.createElement('div');
     dot.className = 'progress-dot';
     if (i < state.meeting - 1) dot.classList.add('completed');
     if (i === state.meeting - 1) dot.classList.add('active');
     dots.appendChild(dot);
   }
-}
-
-function renderStats() {
-  $('statCash').textContent = fmtKSh(state.cash);
-  $('statSavings').textContent = fmtKSh(state.savings);
-  $('statLoans').textContent = fmtKSh(state.loans);
-  const loansEl = $('statLoans');
-  loansEl.classList.toggle('negative', state.loans > 0);
-  $('statMeeting').textContent = state.meeting + ' / ' + state.maxMeetings;
-
-  $('poolAmount').textContent = fmtKSh(state.pool);
-  // pool caption stays static, no need to update
-
-  const trust = Math.max(0, Math.min(100, state.trust));
-  $('trustValue').textContent = trust;
-  $('trustFill').style.width = trust + '%';
-  const tv = $('trustValue');
-  tv.classList.toggle('low', trust < 40);
-  tv.classList.toggle('high', trust >= 80);
-  let caption = '';
-  if (trust >= 85) caption = 'Deeply respected by the group';
-  else if (trust >= 65) caption = 'A trusted member in good standing';
-  else if (trust >= 40) caption = 'Neutral — you have standing but not stature';
-  else if (trust >= 20) caption = "On thin ice. Some members doubt you.";
-  else caption = "At risk of being voted out";
-  $('trustCaption').textContent = caption;
-}
-
-function renderScenario(scn, afterChoice) {
-  const card = $('scenarioCard');
-  const speaker = state.members.find(m => m.id === scn.speaker);
-  
-  if (scn.beforeRender && !afterChoice) scn.beforeRender(state);
-
-  $('meetingTitle').textContent = `Meeting ${state.meeting} · ${scn.title}`;
-  renderProgress();
-  renderStats();
+  $('srProgress').textContent = tmpl(L.ui.srMeeting, { n: state.meeting });
+  renderLedger();
   positionMembers();
+}
 
-  if (afterChoice) {
-    // Show feedback + continue button
-    card.innerHTML = `
-      <div class="feedback-card ${afterChoice.type}">
-        <div class="feedback-label">${afterChoice.label}</div>
-        <div class="feedback-text">${afterChoice.text}</div>
-      </div>
-      <div class="choice-list">
-        <button class="choice-btn primary" onclick="nextMeeting()">
-          <div class="choice-title">${state.meeting < state.maxMeetings ? 'Proceed to Meeting ' + (state.meeting + 1) : 'See year-end results'}
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-left:auto;"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </div>
-        </button>
-      </div>
-    `;
-    return;
+function discussHtml(scnId) {
+  const qs = L.scn[scnId].discuss;
+  if (!qs || !qs.length) return '';
+  return '<details class="discuss"><summary>💬 ' + L.ui.discussTitle +
+    ' <span class="discuss-hint">· ' + L.ui.discussHint + '</span></summary>' +
+    qs.map(q => '<div class="discuss-q">' + q + '</div>').join('') + '</details>';
+}
+
+function settlementHtml() {
+  const so = state.flags.so, T = L.scn.shareout, rows = [];
+  rows.push(['<span>' + T.st.box + '</span><span>' + fmt(so.box) + '</span>', '']);
+  rows.push(['<span>' + T.st.sav + '</span><span>' + fmt(so.totalSav) + '</span>', '']);
+  if (so.surplus >= 0) rows.push(['<span>' + T.st.surplus + '</span><span class="pos">+' + fmt(so.surplus) + '</span>', '']);
+  else rows.push(['<span>' + T.st.loss + '</span><span class="neg">−' + fmt(Math.abs(so.surplus)) + '</span>', '']);
+  rows.push(['<span>' + T.st.yourSav + '</span><span>' + fmt(state.savings) + '</span>', '']);
+  if (so.withheld) rows.push(['<span>' + T.st.withheld + '</span><span class="neg">0</span>', '']);
+  else rows.push(['<span>' + T.st.share + '</span><span class="' + (so.share >= 0 ? 'pos' : 'neg') + '">' + (so.share >= 0 ? '+' : '−') + fmt(Math.abs(so.share)) + '</span>', '']);
+  if (so.fines > 0) rows.push(['<span>' + T.st.fines + '</span><span class="neg">−' + fmt(so.fines) + '</span>', '']);
+  return '<div class="settle-table">' +
+    rows.map(r => '<div class="settle-row">' + r[0] + '</div>').join('') +
+    '<div class="settle-row total"><span>' + T.st.payout + '</span><span>' + fmt(so.payout) + '</span></div></div>';
+}
+
+function shareoutEventsHtml(slots) {
+  const T = L.scn.shareout, f = state.flags, ps = [];
+  if (f.teacherYes) ps.push(T.evTeacher);
+  if (f.farmerFull && !f.farmerDefault) ps.push(T.evFarmerPaid);
+  if (f.farmerDefault) ps.push(T.evFarmerDefault);
+  if (f.farmerSmall) ps.push(T.evFarmerSmall);
+  if (f.farmerDenied) ps.push(T.evFarmerDenied);
+  if (f.sharkStuck) ps.push(T.evShark);
+  return ps.map(t => '<p>' + tmpl(t, slots) + '</p>').join('');
+}
+
+function renderMeeting() {
+  const scn = scenarios[state.meeting - 1], T = L.scn[scn.id], slots = moneySlots();
+  renderHUD();
+  const card = $('scenarioCard');
+  const speaker = member(scn.speaker);
+
+  let bodyHtml = tmpl(T.body, slots);
+  if (T.rules) {
+    bodyHtml += '<p><strong>' + L.ui.rulesTitle + '</strong></p><ul style="margin:0 0 0 1.1rem; font-size:0.85rem; color:var(--gray); line-height:1.6;">' +
+      T.rules.map(r => '<li>' + tmpl(r, slots) + '</li>').join('') + '</ul>';
   }
+  if (scn.id === 'shareout') bodyHtml = shareoutEventsHtml(slots) + bodyHtml + settlementHtml();
 
-  const choicesHtml = scn.choices.map((c, i) => {
-    const disabled = c.requires && !c.requires(state);
-    return `
-      <button class="choice-btn ${c.primary ? 'primary' : ''}" onclick="handleChoice(${i})" ${disabled ? 'disabled' : ''}>
-        <div class="choice-title">
-          ${c.title}
-          ${c.tag ? `<span class="choice-tag ${c.tagType || 'neutral'}">${c.tag}</span>` : ''}
-        </div>
-        <div class="choice-desc">${c.desc}${disabled ? ' · <em>unavailable</em>' : ''}</div>
-      </button>
-    `;
+  const choicesHtml = T.choices.map((c, i) => {
+    const logic = scn.choices[i];
+    const disabled = logic.requires && !logic.requires();
+    return '<button class="choice-btn ' + (logic.primary ? 'primary' : '') + '" data-act="choose" data-i="' + i + '" ' + (disabled ? 'disabled' : '') + '>' +
+      '<div class="choice-title">' + tmpl(c.t, slots) +
+      (c.tag ? '<span class="choice-tag ' + (logic.tagType || 'neutral') + '">' + tmpl(c.tag, slots) + '</span>' : '') + '</div>' +
+      '<div class="choice-desc">' + tmpl(c.d, slots) + (disabled ? ' · <em>' + L.ui.unavailable + '</em>' : '') + '</div></button>';
   }).join('');
 
-  card.innerHTML = `
-    <div class="scenario-eyebrow"><span class="scenario-eyebrow-dot"></span>Meeting ${state.meeting} · Decision</div>
-    <div class="scenario-title">${scn.title}</div>
-    ${speaker ? `
-      <div class="scenario-speaker">
-        <div class="speaker-avatar">${avatarSvg[speaker.emoji] || avatarSvg.you}</div>
-        <div class="speaker-text"><strong>${speaker.name}${speaker.role ? ' · ' + speaker.role : ''}:</strong> "${scn.speech}"</div>
-      </div>
-    ` : ''}
-    <div class="scenario-body">${(scn.body || '').replace(/\{\{pool\}\}/g, fmtKSh(state.pool))}</div>
-    <div class="choice-list">${choicesHtml}</div>
-  `;
+  card.innerHTML =
+    '<div class="scenario-eyebrow"><span class="scenario-eyebrow-dot"></span>' + tmpl(L.ui.decisionEyebrow, { n: state.meeting }) + '</div>' +
+    '<div class="scenario-title" tabindex="-1" data-focus>' + T.title + '</div>' +
+    (speaker ? '<div class="scenario-speaker"><div class="speaker-avatar">' + (avatarSvg[speaker.id] || avatarSvg.you) + '</div>' +
+      '<div class="speaker-text"><strong>' + L.members[speaker.id] + ' · ' + L.roles[speaker.id] + ':</strong> “' + tmpl(T.speech, slots) + '”</div></div>' : '') +
+    '<div class="scenario-body">' + bodyHtml + '</div>' +
+    '<div class="choice-list">' + choicesHtml + '</div>' +
+    discussHtml(scn.id);
+  focusCard();
 }
 
-/* === Animations === */
+function renderFeedback() {
+  const scn = scenarios[state.meeting - 1], T = L.scn[scn.id], slots = moneySlots();
+  renderHUD();
+  const fb = T.choices[state.choice] && T.choices[state.choice].fb;
+  const last = state.meeting >= 6;
+  const card = $('scenarioCard');
+  card.innerHTML =
+    (fb ? '<div class="feedback-card ' + fb.type + '"><div class="feedback-label" tabindex="-1" data-focus>' + fb.label + '</div>' +
+      '<div class="feedback-text">' + tmpl(fb.text, slots) + '</div></div>' : '') +
+    '<div class="choice-list"><button class="choice-btn primary" data-act="next">' +
+    '<div class="choice-title">' + (last ? L.ui.seeResults : tmpl(L.ui.toMeeting, { n: state.meeting + 1 })) +
+    '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="margin-left:auto;" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>' +
+    '</div></button></div>' +
+    discussHtml(scn.id);
+  focusCard();
+}
 
-function animateContribute(memberId) {
-  const seat = document.querySelector(`.member-seat[data-member="${memberId}"] .member-avatar`);
-  if (seat) {
-    seat.classList.add('contributing');
-    setTimeout(() => seat.classList.remove('contributing'), 700);
-  }
+function focusCard() {
+  const t = $('scenarioCard').querySelector('[data-focus]');
+  if (t) { try { t.focus({ preventScroll: true }); } catch (e) { } }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+function pulse(memberId, cls) {
+  const seat = document.querySelector('.member-seat[data-member="' + memberId + '"] .member-avatar');
+  if (seat) { seat.classList.add(cls); setTimeout(() => seat.classList.remove(cls), 700); }
   const pool = $('poolAmount');
   pool.classList.add('updated');
   setTimeout(() => pool.classList.remove('updated'), 600);
 }
+function animateContribute(id) { pulse(id, 'contributing'); }
+function animateBorrow(id) { pulse(id, 'borrowing'); }
 
-function animateBorrow(memberId) {
-  const seat = document.querySelector(`.member-seat[data-member="${memberId}"] .member-avatar`);
-  if (seat) {
-    seat.classList.add('borrowing');
-    setTimeout(() => seat.classList.remove('borrowing'), 700);
-  }
-  const pool = $('poolAmount');
-  pool.classList.add('updated');
-  setTimeout(() => pool.classList.remove('updated'), 600);
+/* ============================================
+   GAME FLOW + PERSISTENCE
+   ============================================ */
+function track(ev, params) { try { if (typeof gtag === 'function') gtag('event', ev, params || {}); } catch (e) { } }
+function saveCfg() { try { localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); } catch (e) { } }
+function loadCfg() { try { const c = JSON.parse(localStorage.getItem(CFG_KEY)); if (c && I18N[c.lang] && presetById(c.preset)) cfg = Object.assign(cfg, c); else autoDetect(); } catch (e) { autoDetect(); } }
+function autoDetect() {
+  const nl = ((navigator.language || navigator.userLanguage) || 'en').toLowerCase().slice(0, 2);
+  if (I18N[nl]) cfg.lang = nl;
+  cfg.preset = { es: 'mx', fr: 'sn', pt: 'br', sw: 'ke' }[cfg.lang] || 'ke';
+}
+function saveGame() { try { localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 2, cfg, state })); } catch (e) { } }
+function loadGame() {
+  try {
+    const d = JSON.parse(localStorage.getItem(SAVE_KEY));
+    if (d && d.v === 2 && d.state && d.state.meeting >= 1 && d.state.meeting <= 6 && I18N[d.cfg.lang] && presetById(d.cfg.preset)) return d;
+  } catch (e) { }
+  return null;
+}
+function clearGame() { try { localStorage.removeItem(SAVE_KEY); } catch (e) { } }
+
+function applyLang() { L = I18N[cfg.lang] || I18N.en; document.documentElement.lang = cfg.lang; }
+
+function enterMeeting(n) {
+  state.meeting = n; state.phase = 'choice'; state.choice = -1;
+  const scn = scenarios[n - 1];
+  if (scn.before) scn.before();
+  clampTrust();
+  saveGame();
+  renderMeeting();
+  if (window.innerWidth <= 968) safeScroll($('gameSection'), { behavior: 'smooth', block: 'start' });
+}
+function choose(i) {
+  if (state.phase !== 'choice') return;
+  const scn = scenarios[state.meeting - 1], c = scn.choices[i];
+  if (!c || (c.requires && !c.requires())) return;
+  c.effect();
+  clampTrust();
+  state.phase = 'feedback'; state.choice = i;
+  saveGame();
+  renderFeedback();
+}
+function next() {
+  if (state.phase !== 'feedback') return;
+  if (state.meeting >= 6) { finish(); return; }
+  enterMeeting(state.meeting + 1);
 }
 
-/* === Game flow === */
-
-function handleChoice(idx) {
-  const scn = scenarios[state.meeting - 1];
-  const choice = scn.choices[idx];
-  if (!choice) return;
-  choice.effect(state);
-  // Clamp trust
-  state.trust = Math.max(0, Math.min(100, state.trust));
-  renderScenario(scn, choice.feedback || { type: 'good', label: 'Done', text: 'Decision recorded.' });
-}
-
-function nextMeeting() {
-  state.meeting++;
-  if (state.meeting > state.maxMeetings) {
-    showEnd();
-    return;
-  }
-  const scn = scenarios[state.meeting - 1];
-  renderScenario(scn, null);
-  // Scroll to top of game on mobile
-  if (window.innerWidth <= 968) {
-    safeScroll($("gameSection"), { behavior: "smooth", block: "start" });
-  }
-}
-
-function showEnd() {
+function finish() {
+  clearGame();
   $('gameSection').classList.add('hidden');
   const end = $('endSection');
   end.classList.remove('hidden');
 
-  const totalWealth = state.cash + state.savings;
-  const net = totalWealth - 5000;
-  const gain = net >= 0;
+  const wealth = state.cash - state.loans;
+  const net = wealth - M.start;
+  const gain = net > 0;
+  const trust = Math.max(0, Math.min(100, state.trust));
 
-  $('endWealth').textContent = fmtKSh(totalWealth);
-  $('endNet').textContent = (gain ? '+' : '') + fmtKSh(net);
-  $('endNet').classList.add(gain ? 'gain' : 'loss');
-  $('endTrust').textContent = state.trust + ' / 100';
+  let verdict;
+  if (trust < 40) verdict = 'out';
+  else if (trust >= 75 && gain) verdict = 'best';
+  else if (!gain) verdict = 'flat';
+  else verdict = 'solid';
+  const V = L.end.verdicts[verdict];
 
-  // Title + lesson based on outcome
-  let verdict, title, subtitle, lesson1, lesson2;
-  if (state.trust >= 75 && gain) {
-    verdict = 'Welcomed back';
-    title = 'The group invites you back for year two.';
-    subtitle = "You built savings, helped neighbors, and the group trusts you more than when you arrived.";
-    lesson1 = "This is how community banking works at its best. You didn't just grow your money — you grew your <strong>social capital</strong>, which is far more valuable in communities that formal banks ignore.";
-    lesson2 = "Women built most of these systems because banks wouldn't serve them. 70% of table banking groups worldwide are women-led. A century later, they're often stronger than the banks that rejected them.";
-  } else if (state.trust < 40) {
-    verdict = 'Voted out';
-    title = "The group quietly decides not to invite you back.";
-    subtitle = "Your money is fine. Your reputation isn't. That's the real currency here.";
-    lesson1 = "Missing contributions, skipping emergencies, voting against reliable members — each costs you <strong>trust</strong>. And in a group like this, trust is what lets you borrow, vouch for others, and claim a dividend at year-end.";
-    lesson2 = "These groups work because membership is hard-earned. When trust breaks, the group self-heals by removing the broken tooth. That's why they've outlasted empires.";
-  } else if (!gain) {
-    verdict = 'Year closed';
-    title = 'You kept your seat. The math was harder than expected.';
-    subtitle = "Emergencies, loans, and life. You held your trust but lost on cash.";
-    lesson1 = "The group absorbed your shocks — emergencies that would have crushed you alone got distributed across eight people. Even when you come out flat, you come out <strong>supported</strong>.";
-    lesson2 = "This is why tens of millions of people worldwide use savings clubs. Not to get rich, but to have a net when life punches you.";
-  } else {
-    verdict = 'Solid year';
-    title = 'You made money and kept your standing.';
-    subtitle = "A good first year. The group knows you now.";
-    lesson1 = "You found the balance: contribute regularly, vote thoughtfully, take calculated risks. <strong>Group lending</strong> let you access capital that banks would have charged you 20%+ for — if they'd lent at all.";
-    lesson2 = "Small savings groups worldwide manage tens of billions of dollars in assets — built one contribution at a time, by people the formal system forgot.";
-  }
+  $('endVerdict').textContent = V.v;
+  $('endTitle').textContent = V.t;
+  $('endSubtitle').textContent = V.s;
+  $('lblEndStart').textContent = L.end.lblStart; $('lblEndWealth').textContent = L.end.lblWealth;
+  $('lblEndNet').textContent = L.end.lblNet; $('lblEndTrust').textContent = L.end.lblTrust;
+  $('endStart').textContent = fmt(M.start);
+  $('endWealth').textContent = fmt(wealth);
+  $('endNet').textContent = (net >= 0 ? '+' : '−') + fmt(Math.abs(net));
+  $('endNet').classList.remove('gain', 'loss');
+  $('endNet').classList.add(net >= 0 ? 'gain' : 'loss');
+  $('endTrust').textContent = trust + ' / 100';
 
-  $('endVerdict').textContent = verdict;
-  $('endTitle').textContent = title;
-  $('endSubtitle').textContent = subtitle;
-  $('endLesson1').innerHTML = lesson1;
-  $('endLesson2').innerHTML = lesson2;
+  $('endJourneyTitle').textContent = L.end.journeyTitle;
+  $('endLessonEyebrow').textContent = L.end.lessonEyebrow;
+  $('endLessonTitle').textContent = L.end.lessonTitle;
+  $('endLesson1').innerHTML = L.end.lessons[verdict + '1'];
+  $('endLesson2').innerHTML = L.end.lessons[verdict + '2'];
 
-  // Render journey
-  const list = $('endJourneyList');
-  list.innerHTML = state.journey.map(item => `
-    <div class="journey-item">
-      <div class="journey-icon">${item.icon}</div>
-      <div class="journey-text">${item.text}</div>
-      <div class="journey-delta ${item.delta > 0 ? 'pos' : item.delta < 0 ? 'neg' : 'neu'}">${
-        item.delta === 0 ? '—' : (item.delta > 0 ? '+' : '') + fmtKSh(item.delta)
-      }</div>
-    </div>
-  `).join('');
+  const extras = [];
+  if (state.flags.sharkStuck) extras.push(tmpl(L.end.extraShark, { amt: fmt(state.loans) }));
+  if (state.flags.farmerDefault) extras.push(tmpl(L.end.extraDefault, { amt: fmt(M.fLoan) }));
+  const ex = $('endExtra');
+  if (extras.length) { ex.classList.remove('hidden'); ex.innerHTML = extras.join(' '); }
+  else ex.classList.add('hidden');
 
+  $('impactLabel1').textContent = L.end.impactLabel1; $('impactLabel2').textContent = L.end.impactLabel2; $('impactLabel3').textContent = L.end.impactLabel3;
+  const cites = [
+    'https://en.wikipedia.org/wiki/Chama_(investment)',
+    'https://www.care.org/our-work/economic-growth/savings-groups/',
+    'https://www.meda.org/news/blog/how-table-banking-has-paved-the-way-for-innovation-and-economic-empowerment-for-women-in-kenya/'
+  ];
+  [L.end.impactSub1, L.end.impactSub2, L.end.impactSub3].forEach((txt, i) => {
+    $('impactSub' + (i + 1)).innerHTML = txt + ' <a href="' + cites[i] + '" target="_blank" rel="noopener noreferrer" class="impact-cite">↗</a>';
+  });
+
+  $('glossaryTitle').textContent = L.end.glossaryTitle;
+  $('glossarySub').textContent = L.end.glossarySub;
+  $('glossaryChips').innerHTML = L.end.glossary.map(g => '<span class="chip"><strong>' + g[0] + '</strong> · ' + g[1] + '</span>').join('');
+
+  $('playAgainBtn').textContent = L.end.playAgain;
+  $('shareBtn').textContent = L.end.share;
+  $('exploreLink').textContent = L.end.explore;
+
+  $('endJourneyList').innerHTML = state.journey.map(item =>
+    '<div class="journey-item"><div class="journey-icon">' + item.icon + '</div>' +
+    '<div class="journey-text">' + item.text + '</div>' +
+    '<div class="journey-delta ' + (item.delta > 0 ? 'pos' : item.delta < 0 ? 'neg' : 'neu') + '">' +
+    (item.delta === 0 ? '—' : (item.delta > 0 ? '+' : '−') + fmt(Math.abs(item.delta))) + '</div></div>').join('');
+
+  track('tbg_finish', { verdict, trust, lang: cfg.lang, preset: cfg.preset });
   safeScroll(end, { behavior: 'smooth' });
 }
 
-/* === Init === */
-
-document.addEventListener('DOMContentLoaded', () => {
-  const nav = $('nav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-  });
-
-  const mobileMenuBtn = $('mobileMenuBtn');
-  const mobileMenu = $('mobileMenu');
-  if (mobileMenuBtn && mobileMenu) {
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenuBtn.classList.toggle('active');
-      mobileMenu.classList.toggle('active');
-      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-    });
+function shareResult() {
+  const p = presetById(cfg.preset);
+  const trad = p.id === 'custom' ? 'ROSCA' : p.name;
+  const wealth = state ? state.cash - state.loans : 0;
+  const net = wealth - M.start;
+  const text = tmpl(L.end.shareText, { trad, net: (net >= 0 ? '+' : '−') + fmt(Math.abs(net)), trust: Math.max(0, Math.min(100, state.trust)) });
+  const url = 'https://finmango.org/table-banking-game';
+  track('tbg_share', { lang: cfg.lang });
+  if (navigator.share) { navigator.share({ text: text, url: url }).catch(() => { }); return; }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text + ' ' + url).then(() => {
+      const btn = $('shareBtn'); const old = btn.textContent;
+      btn.textContent = L.end.copied;
+      setTimeout(() => { btn.textContent = old; }, 2000);
+    }).catch(() => { });
   }
-  document.querySelectorAll('.mobile-dropdown-toggle').forEach(toggle => {
-    toggle.addEventListener('click', function() {
-      this.classList.toggle('active');
-      this.nextElementSibling.classList.toggle('open');
-    });
+}
+
+function safeScroll(el, opts) {
+  if (el && typeof el.scrollIntoView === 'function') {
+    try { el.scrollIntoView(opts); } catch (e) { }
+  }
+}
+
+/* ============================================
+   HERO / SETUP
+   ============================================ */
+const SQUIGGLE = '<svg viewBox="0 0 200 14" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M3 9 C 30 3, 60 11, 90 7 S 150 3, 197 8" stroke="#FF6B35" stroke-width="3" stroke-linecap="round" fill="none"/></svg>';
+
+function presetOptionLabel(p) {
+  if (p.id === 'custom') return L.ui.customName;
+  const amtStr = p.amt.toLocaleString(LOCALE[cfg.lang] || 'en');
+  const sample = p.after ? amtStr + ' ' + p.sym : (/[A-Za-z]$/.test(p.sym) ? p.sym + ' ' + amtStr : p.sym + amtStr);
+  return p.name + ' · ' + L.regions[p.regionKey] + ' · ' + sample;
+}
+
+function renderHero() {
+  applyLang();
+  $('heroEyebrowText').textContent = L.ui.eyebrow;
+  $('heroH1').innerHTML = L.ui.h1pre + ' <span class="highlight">' + L.ui.h1word + SQUIGGLE + '</span> ' + L.ui.h1post;
+  $('heroSub').innerHTML = L.ui.sub;
+  $('setupTitle').textContent = L.ui.setupTitle;
+  $('langLabel').textContent = L.ui.langLabel;
+  $('placeLabel').textContent = L.ui.placeLabel;
+  $('symLabel').textContent = L.ui.symLabel;
+  $('amtLabel').textContent = L.ui.amtLabel;
+  $('startLabel').textContent = L.ui.start;
+
+  const sel = $('presetSelect');
+  sel.innerHTML = PRESETS.map(p => '<option value="' + p.id + '">' + presetOptionLabel(p) + '</option>').join('');
+  sel.value = cfg.preset;
+  $('langSelect').value = cfg.lang;
+  $('customRow').classList.toggle('hidden', cfg.preset !== 'custom');
+
+  const due = (cfg.preset === 'custom')
+    ? (cleanSym($('symInput').value) + Number($('amtInput').value || 20).toLocaleString(LOCALE[cfg.lang] || 'en'))
+    : presetOptionLabel(presetById(cfg.preset)).split(' · ')[2];
+  $('heroFacts').innerHTML =
+    '<span class="hero-fact"><span>' + L.ui.factMembers + '</span> <span class="hero-fact-value">8</span></span>' +
+    '<span class="hero-fact"><span>' + L.ui.factMeetings + '</span> <span class="hero-fact-value">6</span></span>' +
+    '<span class="hero-fact"><span>' + L.ui.factMonthly + '</span> <span class="hero-fact-value">' + due + '</span></span>';
+
+  const sv = loadGame();
+  const rb = $('resumeBtn');
+  if (sv && !rb.dataset.consumed) {
+    rb.classList.remove('hidden');
+    rb.textContent = tmpl(I18N[sv.cfg.lang].ui.resume, { n: sv.state.meeting });
+  } else rb.classList.add('hidden');
+}
+
+function startGame() {
+  cfg.lang = $('langSelect').value;
+  cfg.preset = $('presetSelect').value;
+  if (cfg.preset === 'custom') {
+    cfg.sym = cleanSym($('symInput').value);
+    cfg.amt = Number($('amtInput').value) || 20;
+  }
+  applyLang(); saveCfg(); buildMoney();
+  state = freshState();
+  track('tbg_start', { lang: cfg.lang, preset: cfg.preset });
+  $('heroSection').classList.add('hidden');
+  $('gameSection').classList.remove('hidden');
+  enterMeeting(1);
+  safeScroll($('gameSection'), { behavior: 'smooth', block: 'start' });
+}
+
+function resumeGame(sv) {
+  cfg = sv.cfg;
+  applyLang(); saveCfg(); buildMoney();
+  state = sv.state;
+  track('tbg_resume', { lang: cfg.lang, meeting: state.meeting });
+  $('heroSection').classList.add('hidden');
+  $('gameSection').classList.remove('hidden');
+  if (state.phase === 'feedback') renderFeedback(); else renderMeeting();
+  safeScroll($('gameSection'), { behavior: 'smooth', block: 'start' });
+}
+
+/* ============================================
+   INIT
+   ============================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  loadCfg();
+  renderHero();
+
+  $('langSelect').addEventListener('change', () => { cfg.lang = $('langSelect').value; saveCfg(); renderHero(); });
+  $('presetSelect').addEventListener('change', () => { cfg.preset = $('presetSelect').value; saveCfg(); renderHero(); });
+  $('symInput').addEventListener('input', renderHero);
+  $('amtInput').addEventListener('input', renderHero);
+
+  $('startGameBtn').addEventListener('click', startGame);
+  $('resumeBtn').addEventListener('click', () => { const sv = loadGame(); if (sv) resumeGame(sv); else renderHero(); });
+
+  $('scenarioCard').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-act]');
+    if (!btn || btn.disabled) return;
+    if (btn.dataset.act === 'choose') choose(Number(btn.dataset.i));
+    else if (btn.dataset.act === 'next') next();
   });
 
-  $('startGameBtn').addEventListener('click', () => {
-    $('heroSection').classList.add('hidden');
-    $('gameSection').classList.remove('hidden');
-    renderScenario(scenarios[0], null);
-    safeScroll($("gameSection"), { behavior: "smooth", block: "start" });
-  });
+  $('playAgainBtn').addEventListener('click', () => { clearGame(); location.reload(); });
+  $('shareBtn').addEventListener('click', shareResult);
 });
+
+})();
 </script>
 
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
