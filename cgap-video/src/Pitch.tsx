@@ -116,8 +116,8 @@ const Montage: React.FC = () => {
           </AbsoluteFill>
         );
       })}
-      {T.montage.stats.map((s, i) => (
-        <StatCard key={i} stat={s} segT={segT} />
+      {T.montage.stats.map((s: any, i: number) => (
+        <StatCard key={i} stat={{ ...s, logo: s.logo ? staticFile(s.logo) : undefined }} segT={segT} />
       ))}
     </AbsoluteFill>
   );

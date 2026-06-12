@@ -1,6 +1,6 @@
 # FinMango CGAP pitch — timing report
 
-Generated: 2026-06-12T17:45:56.163Z
+Generated: 2026-06-12T19:58:40.363Z
 
 ## ⚠️ Placeholder mode
 
@@ -39,5 +39,5 @@ Caption timing source: proportional (reference script).
 
 ## Rendered file
 
-- `output/finmango-cgap-pitch.mp4` — 88.04s, 49.3 MB (limit 2 GB ✅)
+- `output/finmango-cgap-pitch.mp4` — 88.04s, 49.2 MB (limit 2 GB ✅)
 - 1920x1080 @ 30fps, H.264 + AAC

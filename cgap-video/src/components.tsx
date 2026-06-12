@@ -178,7 +178,9 @@ type Stat = {
   number?: number;
   suffix?: string;
   text?: string;
-  label: string;
+  label?: string;
+  labelAbove?: string;
+  logo?: string; // partner lockup, shown on a white plate above the text
   countUp: boolean;
 };
 
@@ -223,6 +225,34 @@ export const StatCard: React.FC<{ stat: Stat; segT: number }> = ({ stat, segT })
         }}
       >
         <div style={{ height: 1, background: HAIRLINE, marginBottom: 14 }} />
+        {stat.logo ? (
+          <div
+            style={{
+              background: '#FFFFFF',
+              border: `1px solid ${HAIRLINE}`,
+              padding: '10px 18px',
+              display: 'inline-block',
+              marginBottom: 16,
+            }}
+          >
+            <Img src={stat.logo} style={{ height: 58, display: 'block' }} />
+          </div>
+        ) : null}
+        {stat.labelAbove ? (
+          <div
+            style={{
+              fontFamily: MONO,
+              fontSize: 21,
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              color: INK,
+              marginBottom: 10,
+              opacity: 0.85,
+            }}
+          >
+            {stat.labelAbove}
+          </div>
+        ) : null}
         <div
           style={{
             fontFamily: SANS,
@@ -236,19 +266,21 @@ export const StatCard: React.FC<{ stat: Stat; segT: number }> = ({ stat, segT })
         >
           {big}
         </div>
-        <div
-          style={{
-            fontFamily: MONO,
-            fontSize: 21,
-            letterSpacing: '0.16em',
-            textTransform: 'uppercase',
-            color: INK,
-            marginTop: 10,
-            opacity: 0.85,
-          }}
-        >
-          {stat.label}
-        </div>
+        {stat.label ? (
+          <div
+            style={{
+              fontFamily: MONO,
+              fontSize: 21,
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              color: INK,
+              marginTop: 10,
+              opacity: 0.85,
+            }}
+          >
+            {stat.label}
+          </div>
+        ) : null}
         <div style={{ height: 1, background: HAIRLINE, marginTop: 14 }} />
       </div>
     </div>

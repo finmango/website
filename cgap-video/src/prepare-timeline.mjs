@@ -114,6 +114,7 @@ const photoFiles = [
   'montage-2-ambassadors.jpg',
   'montage-3-workshop.jpg',
   'montage-4-team.jpg',
+  'google-health-lockup.png',
 ];
 for (const f of photoFiles) {
   if (existsSync(A('photos', f))) copyFileSync(A('photos', f), PUB('photos', f));
@@ -194,7 +195,7 @@ const montage = {
   stats: [
     { at: cue.students, until: cue.countries - 0.25, number: 100000, suffix: '+', label: 'students reached', countUp: true },
     { at: cue.countries, until: cue.research - 0.25, number: 13, suffix: '', label: 'countries', countUp: true },
-    { at: cue.research, until: Math.max(cue.research + 3.0, barometerSpoken - 0.3), text: 'WHO · World Bank · IMF', label: 'research used by', countUp: false },
+    { at: cue.research, until: Math.max(cue.research + 3.0, barometerSpoken - 0.3), text: 'WHO · World Bank · IMF', labelAbove: 'research used by', logo: 'photos/google-health-lockup.png', countUp: false },
     { at: cue.barometer, until: seg.s3 - 0.4, text: 'Financial Health Barometer', label: 'near real-time', countUp: false },
   ],
 };

@@ -47,7 +47,10 @@ Rules that kept the rough cut honest:
   in JetBrains Mono on a paper chip with a 4px orange bar on the left.
   `graphics/ref-name-card.png` shows the exact look.
 - Stat cards already baked into segment 3 at: 100,000+ students (~0:40),
-  13 countries (~0:42), WHO·World Bank·IMF (~0:44), Barometer (~0:53).
+  13 countries (~0:42), WHO·World Bank·IMF with the FinMango × Google
+  Health partnership lockup (~0:44), Barometer (~0:53). The cropped
+  lockup lives at `assets/photos/google-health-lockup.png` if you need
+  it as a separate element in Canva.
 
 ## If you change your mind
 
