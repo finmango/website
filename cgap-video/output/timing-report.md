@@ -1,6 +1,6 @@
 # FinMango CGAP pitch — timing report
 
-Generated: 2026-06-12T17:38:00.037Z
+Generated: 2026-06-12T17:45:56.163Z
 
 ## ⚠️ Placeholder mode
 
@@ -33,6 +33,11 @@ Caption timing source: proportional (reference script).
 
 ## Audio
 
-- Music bed: generated 44.0s, fades in under segment 2, lifts slightly at segment 3, fully out 0.1s+1.6s before/into the close boundary — segment 4 is clean voice only.
+- Music bed: generated 44.0s — fades in under segment 2, lifts slightly at segment 3, fade-out completes 0.1s before segment 4 begins. The close is clean voice only.
 - Speech normalization: pending (no speech assets yet).
 - Final-mix loudness normalization is skipped in placeholder mode (music-only mix would be cranked to -16 LUFS and defeat the “felt not heard” bed).
+
+## Rendered file
+
+- `output/finmango-cgap-pitch.mp4` — 88.04s, 49.3 MB (limit 2 GB ✅)
+- 1920x1080 @ 30fps, H.264 + AAC

@@ -322,7 +322,7 @@ lines.push(`Caption timing source: ${captionSource}.`);
 lines.push('');
 lines.push('## Audio');
 lines.push('');
-lines.push(`- Music bed: generated ${musicDur.toFixed(1)}s, fades in under segment 2, lifts slightly at segment 3, fully out ${ (starts.s4 - timeline.music.fadeOutEnd).toFixed(1) }s+${timeline.music.fadeOut.toFixed(1)}s before/into the close boundary — segment 4 is clean voice only.`);
+lines.push(`- Music bed: generated ${musicDur.toFixed(1)}s — fades in under segment 2, lifts slightly at segment 3, fade-out completes ${(starts.s4 - timeline.music.fadeOutEnd).toFixed(1)}s before segment 4 begins. The close is clean voice only.`);
 lines.push(`- Speech normalization: ${have.vo2 || have.vo3 || have.cam1 || have.cam2 ? 'loudnorm I=-16, TP=-1.5 applied to provided audio' : 'pending (no speech assets yet)'}.`);
 if (placeholderMode) {
   lines.push('- Final-mix loudness normalization is skipped in placeholder mode (music-only mix would be cranked to -16 LUFS and defeat the “felt not heard” bed).');

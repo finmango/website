@@ -58,23 +58,26 @@ export const KenBurnsImage: React.FC<{ src: string; kb: KB; p: number }> = ({ sr
 
 /* ------------------------------------------------------------------ */
 /** Thin editorial lower-third label for screen recordings. */
-export const RecordingLabel: React.FC<{ text: string; appearFrame?: number }> = ({
+export const RecordingLabel: React.FC<{ text: string; appearFrame?: number; outAt?: number }> = ({
   text,
   appearFrame = 12,
+  outAt = 4.2,
 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const a = interpolate(frame, [appearFrame, appearFrame + 0.35 * fps], [0, 1], {
-    easing: Easing.out(Easing.cubic),
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  const a = interpolate(
+    frame,
+    [appearFrame, appearFrame + 0.35 * fps, outAt * fps, (outAt + 0.4) * fps],
+    [0, 1, 1, 0],
+    { easing: Easing.out(Easing.cubic), extrapolateLeft: 'clamp', extrapolateRight: 'clamp' },
+  );
+  if (a <= 0.001) return null;
   return (
     <div
       style={{
         position: 'absolute',
         left: 64,
-        bottom: 168, /* clear of the burned-in caption zone */
+        top: 56, /* captions own the bottom band */
         display: 'flex',
         alignItems: 'stretch',
         opacity: a,
@@ -224,7 +227,7 @@ export const StatCard: React.FC<{ stat: Stat; segT: number }> = ({ stat, segT })
           style={{
             fontFamily: SANS,
             fontWeight: 700,
-            fontSize: isText ? 44 : 76,
+            fontSize: isText ? 48 : 92,
             lineHeight: 1.04,
             color: ORANGE,
             letterSpacing: isText ? '-0.01em' : '-0.02em',
@@ -236,7 +239,7 @@ export const StatCard: React.FC<{ stat: Stat; segT: number }> = ({ stat, segT })
         <div
           style={{
             fontFamily: MONO,
-            fontSize: 19,
+            fontSize: 21,
             letterSpacing: '0.16em',
             textTransform: 'uppercase',
             color: INK,

@@ -47,6 +47,10 @@ const probe = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=d
 const dur = parseFloat(/duration=([\d.]+)/.exec(probe)?.[1] ?? '0');
 const size = parseInt(/size=(\d+)/.exec(probe)?.[1] ?? '0', 10);
 const report = path.join(ROOT, 'output', 'timing-report.md');
+// replace any footer from a previous render of this build
+const existing = readFileSync(report, 'utf8');
+const stripped = existing.split('## Rendered file')[0].trimEnd() + '\n\n';
+writeFileSync(report, stripped);
 appendFileSync(report, [
   '## Rendered file',
   '',
