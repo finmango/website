@@ -3,13 +3,18 @@
 **Companion to** `ACADEMIC_PAPER_FEASIBILITY_2026.md`
 Prepared June 2026 · reproducible via `docs/barometer_decomposition.py`
 
-This note reports the first concrete validation work on the Financial Health Barometer.
-The original plan was an **external** convergent-validity check (does the index track an
-independent ground-truth survey?). That step is partially blocked by data-access limits in the
-build environment (see §3), so it is fully specified and ready to run. In its place we completed
-an **internal decomposition** that turns out to be just as decisive for the paper: it answers
-*"does the index measure anything beyond its own inputs, and does the real-time search signal
-actually move it?"*
+This note reports the first concrete validation work on the Financial Health Barometer, on two
+fronts: (a) an **internal decomposition** — does the index measure anything beyond its own inputs,
+and does the real-time search signal actually move it? — and (b) a first **external
+convergent-validity** check against an independent ground-truth survey (USDA food insecurity).
+Both point to the same conclusion and are reproducible from the repo.
+
+> **Bottom line:** the Food Insecurity index is a *valid proxy* (r = 0.75 with USDA's independent
+> measure) but does **not beat the Census poverty rate it is built from** (poverty alone: r = 0.75;
+> the index's partial correlation controlling for poverty is just 0.18, n.s.). The composite is
+> real but redundant with its inputs — so the publishable contribution has to come from the
+> **search signal** adding information beyond official statistics, or a **re-derived index** that
+> demonstrably beats its inputs.
 
 ---
 
@@ -63,30 +68,38 @@ the paper's thesis considerably.
 
 ---
 
-## 3. External convergent-validity check — specified, ready to run
+## 3. External convergent-validity check — first pass complete
 
-This is the step that still needs one clean external dataset. Everything except the data fetch is
-ready in `docs/barometer_decomposition.py` (correlation/partial-correlation helpers).
+Run via `docs/barometer_external_validation.py` against `data/external/usda_food_insecurity_state.csv`.
+The target is USDA ERS state food-insecurity prevalence — independent of the index's inputs, since
+the index drives Food Insecurity off **Census poverty (SAIPE)**, not the USDA food-security survey.
 
-- **Target (independent of the index's inputs):** USDA ERS state food-insecurity prevalence
-  (3-yr average). The index drives Food Insecurity off **Census poverty (SAIPE)**, *not* the USDA
-  food-security survey, so this is a genuine convergent-validity test.
-- **Verified anchors** (use to validate any fetched table before trusting it):
-  - 2021–2023 average: low = **New Hampshire 7.4%**, high = **Arkansas 18.9%**, U.S. = **12.2%**.
-  - 2022–2024 average: low = **North Dakota 9.0%**, high = **Arkansas 19.4%**.
-- **Authoritative source:** USDA ERS, *Household Food Security in the United States in 2023*
-  (ERR-337) and the Food Security data product (Excel/CSV).
-  https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us/interactive-charts-and-highlights
-- **Why it's not done here:** the sandbox lacks PDF/Excel tooling, the ERS data is behind
-  JS charts / Excel downloads, and Ag Data Commons returned 403. Downloading the CSV in a normal
-  browser takes ~30 seconds — drop it in as `data/external/usda_food_insecurity_state.csv`.
-- **Test design once data is in hand:**
-  1. Pearson + Spearman: Barometer Food Insecurity (state) vs USDA food insecurity (state).
-  2. **Partial correlation controlling for poverty rate** — the decisive test: does the index track
-     food insecurity *beyond* what poverty alone explains? Given Finding 1, the honest prior is
-     "barely," and confirming that quantitatively is itself a publishable result.
-  3. Repeat for the financial-anxiety construct against the **Census Household Pulse Survey**
-     ("difficulty paying usual household expenses"), which is independent of the index's inputs.
+**Result (n = 51 matched):**
+
+| Comparison | r |
+|---|---|
+| Barometer Food Insecurity vs USDA food insecurity | **0.753** (Spearman 0.638) |
+| Census poverty (the input) vs USDA food insecurity | **0.751** ← baseline to beat |
+| Barometer Food Insecurity vs poverty | 0.958 (≈ poverty by construction) |
+| **Partial r(Barometer FI, USDA \| poverty)** | **0.179** (n.s.; critical r≈0.28 at n=51) |
+
+**Interpretation.** The index is a *valid proxy* — states it flags as food-insecure are food-insecure
+in USDA's independent survey. But it is statistically indistinguishable from simply using the Census
+poverty rate (0.753 vs 0.751), and once poverty is controlled for it adds nothing significant (0.179).
+This is the external confirmation of Finding 1: **for research, use poverty (or USDA) directly; the
+composite is redundant with its inputs.**
+
+**Data provenance & caveat.** First pass uses USDA's **2019–2021** 3-yr average (via World Population
+Review, citing USDA ERS; single automated extraction). State food-insecurity ranks are highly
+persistent, so the directional conclusion is robust to vintage — but for a publication-grade number,
+swap in the latest official table and re-run (it's a drop-in). Verified anchors to validate any
+replacement: 2021–2023 → NH 7.4 / AR 18.9 / US 12.2; 2022–2024 → ND 9.0 / AR 19.4.
+Authoritative source: USDA ERS, *Household Food Security in the United States* (ERR-337) /
+https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us/interactive-charts-and-highlights
+
+**Still to do (needs a browser / independent target):** repeat for the financial-anxiety construct
+against the **Census Household Pulse Survey** ("difficulty paying usual household expenses"), which is
+independent of the index's unemployment input.
 
 ---
 
@@ -103,7 +116,12 @@ ready in `docs/barometer_decomposition.py` (correlation/partial-correlation help
 
 ## 5. Recommended next action
 
-1. Drop in the USDA CSV and run the §3 external check (the one thing needing a browser).
-2. If the partial correlation confirms the index ≈ its inputs, pivot the flagship paper firmly to
-   **"does absolute-probability Health-Trends search add nowcast signal beyond official inputs?"** —
-   which the decomposition shows is the live, unanswered question.
+The external check now confirms (Finding 1, externally): the composite is redundant with its inputs.
+So:
+
+1. **Commit the flagship paper to the live question** the decomposition + validation isolate:
+   *"does absolute-probability Google Health Trends search add nowcast signal for state household
+   distress **beyond** the lagged official inputs?"* That is the only path where the contribution is
+   not already contained in BLS/Census data.
+2. Swap the latest USDA vintage into `data/external/` and re-run §3 for the publication number.
+3. Extend the external check to the **financial-anxiety construct** vs Census Household Pulse.
