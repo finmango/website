@@ -919,6 +919,36 @@
             line-height: 1.55;
         }
 
+        /* Prizes — the page's dark showcase (the $20k+ moment) */
+        .prizes { background: var(--ink); color: var(--paper); }
+        .prizes .prizes-hero-sub { color: var(--paper-dim); }
+        .prizes .sponsored-note { color: var(--paper-faint); }
+        .prizes .sponsored-note img { filter: brightness(0) invert(1); opacity: .7; }
+        .prizes .prize-division { border-color: var(--paper-line); }
+        .prizes .prize-division-desc { color: var(--paper-dim); }
+        .prizes .prize-row { border-top-color: var(--paper-line); }
+        .prizes .prize-row-place { color: var(--paper-faint); }
+        .prizes .prize-row:first-of-type .prize-row-place { color: var(--orange); }
+        .prizes .prize-row-amount { color: var(--paper); }
+        .prizes .prize-row-breakdown { color: var(--paper-faint); }
+        .prizes .prize-note { color: var(--paper-faint); }
+        /* keep the line-art legible on ink: structural strokes flip to paper */
+        .prizes .prize-icon path[stroke="#0A0A0A"],
+        .prizes .prize-icon rect[stroke="#0A0A0A"] { stroke: var(--paper); }
+
+        /* Scroll-reveal — progressive enhancement; without the .js flag (no JS),
+           or under reduced-motion (handled in JS), everything stays visible */
+        .js .section-head, .js .problem-copy, .js .problem-visual, .js .step-item,
+        .js .track-row, .js .prizes-head, .js .prize-division, .js .resources-links,
+        .js .scoring-card, .js .judge-card-bb, .js .winner-year-block-bb,
+        .js .partnership-container, .js .sponsor-tier, .js .sponsor-silver-item,
+        .js .final-cta-container, .js .gallery-header {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity .7s cubic-bezier(.16, 1, .3, 1), transform .7s cubic-bezier(.16, 1, .3, 1);
+        }
+        .js .in-view { opacity: 1; transform: none; }
+
         /* ----------------------------------------------------------
            RESOURCES & SCORING
            ---------------------------------------------------------- */
@@ -1518,6 +1548,7 @@
             .gallery-masonry { columns: 3; }
         }
     </style>
+    <script>document.documentElement.classList.add('js');</script>
 </head>
 
 <body>
@@ -1991,50 +2022,6 @@
             </div>
         </div>
 
-        <!-- ======================= PRIZES ======================= -->
-        <section class="prizes">
-            <div class="prizes-container">
-                <div class="prizes-head">
-                    <span class="eyebrow">Rewards</span>
-                    <span class="sponsored-note">Sponsored by <img src="valmark.svg" alt="Valmark Financial Group"></span>
-                    <div class="prizes-hero-number">$20,000<em>+</em></div>
-                    <div class="prizes-hero-sub">In cash prizes, scholarships, and school grants.</div>
-                </div>
-
-                <div class="prizes-divisions">
-                    <!-- Demo Day -->
-                    <div class="prize-division">
-                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.5 C14.8 5.3 16 9 16 12.5 L8 12.5 C8 9 9.2 5.3 12 2.5 Z" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="1.7" stroke="#FF6B35" stroke-width="1.4"/><path d="M8 12.5 L5 15.5 L8.2 14.6 M16 12.5 L19 15.5 L15.8 14.6" stroke="#0A0A0A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 16 C10.6 18 11 19.2 12 21 C13 19.2 13.4 18 14 16" stroke="#FF6B35" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Demo Day</h3>
-                        <div class="prize-division-desc">Top team per track. 5-min pitch + 2-min Q&amp;A. Cash + scholarships + school grants.</div>
-                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span><span class="prize-row-amount">$7,500</span><span class="prize-row-breakdown">($4k cash + $2.5k scholarship + $1k school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span><span class="prize-row-amount">$4,650</span><span class="prize-row-breakdown">($2.5k cash + $1.5k scholarship + $650 school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span><span class="prize-row-amount">$2,750</span><span class="prize-row-breakdown">($1.25k cash + $1k scholarship + $500 school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">4th Place</span><span><span class="prize-row-amount">$1,850</span><span class="prize-row-breakdown">($750 cash + $750 scholarship + $350 school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">5th Place</span><span><span class="prize-row-amount">$1,250</span><span class="prize-row-breakdown">($500 cash + $500 scholarship + $250 school)</span></span></div>
-                        <p class="prize-note">Cash &amp; scholarships split among team members. Scholarships require attending KSU &amp; selecting ACCBE major/minor. School grants go directly to the school.</p>
-                    </div>
-
-                    <!-- Innovation Gallery -->
-                    <div class="prize-division">
-                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3.5" width="16" height="17" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 16.5 V12 M12 16.5 V8.5 M16 16.5 V13.5" stroke="#FF6B35" stroke-width="1.6" stroke-linecap="round"/></svg></span>Innovation Gallery</h3>
-                        <div class="prize-division-desc">Poster presentations. 1-on-1 with judges.</div>
-                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span class="prize-row-amount">$1,250</span></div>
-                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span class="prize-row-amount">$750</span></div>
-                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span class="prize-row-amount">$250</span></div>
-                    </div>
-
-                    <!-- Knowledge Track -->
-                    <div class="prize-division">
-                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.2 17 C7 15.6 5.5 13.2 5.5 10.5 C5.5 6.9 8.4 4 12 4 C15.6 4 18.5 6.9 18.5 10.5 C18.5 13.2 17 15.6 14.8 17" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.2 17 V19 H14.8 V17" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><path d="M10 21 H14" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round"/><path d="M12 7.5 V12 M12 12 L10 10 M12 12 L14 10" stroke="#FF6B35" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Knowledge Track</h3>
-                        <div class="prize-division-desc">20-30 min financial literacy test. Open to all.</div>
-                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span class="prize-row-amount">$250</span></div>
-                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span class="prize-row-amount">$150</span></div>
-                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span class="prize-row-amount">$100</span></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- ======================= RESOURCES & SCORING ======================= -->
         <section class="resources">
             <div class="resources-container">
@@ -2084,6 +2071,50 @@
                             <div class="scoring-item-name">Impact</div>
                             <div class="scoring-item-pts">25 pts</div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= PRIZES (dark showcase) ======================= -->
+        <section class="prizes on-ink">
+            <div class="prizes-container">
+                <div class="prizes-head">
+                    <span class="eyebrow">Rewards</span>
+                    <span class="sponsored-note">Sponsored by <img src="valmark.svg" alt="Valmark Financial Group"></span>
+                    <div class="prizes-hero-number">$20,000<em>+</em></div>
+                    <div class="prizes-hero-sub">In cash prizes, scholarships, and school grants.</div>
+                </div>
+
+                <div class="prizes-divisions">
+                    <!-- Demo Day -->
+                    <div class="prize-division">
+                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.5 C14.8 5.3 16 9 16 12.5 L8 12.5 C8 9 9.2 5.3 12 2.5 Z" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="1.7" stroke="#FF6B35" stroke-width="1.4"/><path d="M8 12.5 L5 15.5 L8.2 14.6 M16 12.5 L19 15.5 L15.8 14.6" stroke="#0A0A0A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 16 C10.6 18 11 19.2 12 21 C13 19.2 13.4 18 14 16" stroke="#FF6B35" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Demo Day</h3>
+                        <div class="prize-division-desc">Top team per track. 5-min pitch + 2-min Q&amp;A. Cash + scholarships + school grants.</div>
+                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span><span class="prize-row-amount">$7,500</span><span class="prize-row-breakdown">($4k cash + $2.5k scholarship + $1k school)</span></span></div>
+                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span><span class="prize-row-amount">$4,650</span><span class="prize-row-breakdown">($2.5k cash + $1.5k scholarship + $650 school)</span></span></div>
+                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span><span class="prize-row-amount">$2,750</span><span class="prize-row-breakdown">($1.25k cash + $1k scholarship + $500 school)</span></span></div>
+                        <div class="prize-row"><span class="prize-row-place">4th Place</span><span><span class="prize-row-amount">$1,850</span><span class="prize-row-breakdown">($750 cash + $750 scholarship + $350 school)</span></span></div>
+                        <div class="prize-row"><span class="prize-row-place">5th Place</span><span><span class="prize-row-amount">$1,250</span><span class="prize-row-breakdown">($500 cash + $500 scholarship + $250 school)</span></span></div>
+                        <p class="prize-note">Cash &amp; scholarships split among team members. Scholarships require attending KSU &amp; selecting ACCBE major/minor. School grants go directly to the school.</p>
+                    </div>
+
+                    <!-- Innovation Gallery -->
+                    <div class="prize-division">
+                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3.5" width="16" height="17" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 16.5 V12 M12 16.5 V8.5 M16 16.5 V13.5" stroke="#FF6B35" stroke-width="1.6" stroke-linecap="round"/></svg></span>Innovation Gallery</h3>
+                        <div class="prize-division-desc">Poster presentations. 1-on-1 with judges.</div>
+                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span class="prize-row-amount">$1,250</span></div>
+                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span class="prize-row-amount">$750</span></div>
+                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span class="prize-row-amount">$250</span></div>
+                    </div>
+
+                    <!-- Knowledge Track -->
+                    <div class="prize-division">
+                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.2 17 C7 15.6 5.5 13.2 5.5 10.5 C5.5 6.9 8.4 4 12 4 C15.6 4 18.5 6.9 18.5 10.5 C18.5 13.2 17 15.6 14.8 17" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.2 17 V19 H14.8 V17" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><path d="M10 21 H14" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round"/><path d="M12 7.5 V12 M12 12 L10 10 M12 12 L14 10" stroke="#FF6B35" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Knowledge Track</h3>
+                        <div class="prize-division-desc">20-30 min financial literacy test. Open to all.</div>
+                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span class="prize-row-amount">$250</span></div>
+                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span class="prize-row-amount">$150</span></div>
+                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span class="prize-row-amount">$100</span></div>
                     </div>
                 </div>
             </div>
@@ -2467,6 +2498,44 @@
                 if (e.key === 'ArrowLeft') navigate(-1);
                 if (e.key === 'ArrowRight') navigate(1);
             });
+        })();
+    </script>
+
+    <!-- Scroll-reveal: fade sections in as they enter the viewport -->
+    <script>
+        (function () {
+            var sel = '.section-head, .problem-copy, .problem-visual, .step-item, .track-row, .prizes-head, .prize-division, .resources-links, .scoring-card, .judge-card-bb, .winner-year-block-bb, .partnership-container, .sponsor-tier, .sponsor-silver-item, .final-cta-container, .gallery-header';
+            var els = Array.prototype.slice.call(document.querySelectorAll(sel));
+            if (!els.length) return;
+            var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduce) { els.forEach(function (el) { el.classList.add('in-view'); }); return; }
+            // gentle stagger within sibling groups (cards, rows, steps)
+            els.forEach(function (el) {
+                var i = 0, p = el.previousElementSibling;
+                while (p) { if (p.className === el.className) i++; p = p.previousElementSibling; }
+                if (i > 0) el.style.transitionDelay = Math.min(i * 0.07, 0.28) + 's';
+            });
+            function check() {
+                var vh = window.innerHeight || document.documentElement.clientHeight;
+                for (var i = els.length - 1; i >= 0; i--) {
+                    if (els[i].getBoundingClientRect().top < vh * 0.9) {
+                        els[i].classList.add('in-view');
+                        els.splice(i, 1);
+                    }
+                }
+                if (!els.length) {
+                    window.removeEventListener('scroll', onScroll);
+                    window.removeEventListener('resize', onScroll);
+                }
+            }
+            var ticking = false;
+            function onScroll() {
+                if (!ticking) { ticking = true; requestAnimationFrame(function () { ticking = false; check(); }); }
+            }
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', onScroll);
+            window.addEventListener('load', check);
+            check();
         })();
     </script>
 </body>
