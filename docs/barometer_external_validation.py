@@ -8,21 +8,17 @@ whether it adds anything beyond the Census poverty rate it is built from.
 Data: data/external/usda_food_insecurity_state.csv (see header for provenance/vintage).
 Stdlib only. Run:  python3 docs/barometer_external_validation.py
 """
-import json, math, statistics as st
+import json, math, csv, statistics as st
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 raw = (ROOT / "data" / "dashboard-data.js").read_text(encoding="utf-8")
 bar = json.loads(raw[raw.index("{"):raw.rindex("}") + 1])["states"]
 
-# Load external target (skip comment lines)
-usda = {}
-for line in (ROOT / "data" / "external" / "usda_food_insecurity_state.csv").read_text().splitlines():
-    line = line.strip()
-    if not line or line.startswith("#") or line.startswith("state,"):
-        continue
-    name, val = line.rsplit(",", 1)
-    usda[name] = float(val)
+# Load external target (skip comment lines, parse by header)
+csv_path = ROOT / "data" / "external" / "usda_food_insecurity_state.csv"
+_lines = [l for l in csv_path.read_text(encoding="utf-8").splitlines() if not l.startswith("#")]
+usda = {row["state"]: float(row["food_insecurity_pct"]) for row in csv.DictReader(_lines)}
 
 
 def pearson(xs, ys):

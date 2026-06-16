@@ -9,11 +9,12 @@ and does the real-time search signal actually move it? — and (b) a first **ext
 convergent-validity** check against an independent ground-truth survey (USDA food insecurity).
 Both point to the same conclusion and are reproducible from the repo.
 
-> **Bottom line:** the Food Insecurity index is a *valid proxy* (r = 0.75 with USDA's independent
-> measure) but does **not beat the Census poverty rate it is built from** (poverty alone: r = 0.75;
-> the index's partial correlation controlling for poverty is just 0.18, n.s.). The composite is
-> real but redundant with its inputs — so the publishable contribution has to come from the
-> **search signal** adding information beyond official statistics, or a **re-derived index** that
+> **Bottom line:** the Food Insecurity index is a *valid proxy* (r = 0.69 with USDA's independent
+> 2022–24 measure) but does **not beat the Census poverty rate it is built from** — poverty alone
+> scores an identical r = 0.69, and the index's partial correlation controlling for poverty is just
+> 0.14 (n.s.). The result is robust across data vintages (2019–21: r = 0.75 / partial 0.18). The
+> composite is real but redundant with its inputs — so the publishable contribution has to come from
+> the **search signal** adding information beyond official statistics, or a **re-derived index** that
 > demonstrably beats its inputs.
 
 ---
@@ -74,28 +75,28 @@ Run via `docs/barometer_external_validation.py` against `data/external/usda_food
 The target is USDA ERS state food-insecurity prevalence — independent of the index's inputs, since
 the index drives Food Insecurity off **Census poverty (SAIPE)**, not the USDA food-security survey.
 
-**Result (n = 51 matched):**
+**Result (n = 51 matched; USDA 2022–2024 average):**
 
 | Comparison | r |
 |---|---|
-| Barometer Food Insecurity vs USDA food insecurity | **0.753** (Spearman 0.638) |
-| Census poverty (the input) vs USDA food insecurity | **0.751** ← baseline to beat |
+| Barometer Food Insecurity vs USDA food insecurity | **0.685** (Spearman 0.675) |
+| Census poverty (the input) vs USDA food insecurity | **0.685** ← baseline to beat |
 | Barometer Food Insecurity vs poverty | 0.958 (≈ poverty by construction) |
-| **Partial r(Barometer FI, USDA \| poverty)** | **0.179** (n.s.; critical r≈0.28 at n=51) |
+| **Partial r(Barometer FI, USDA \| poverty)** | **0.140** (n.s.; critical r≈0.28 at n=51) |
 
 **Interpretation.** The index is a *valid proxy* — states it flags as food-insecure are food-insecure
 in USDA's independent survey. But it is statistically indistinguishable from simply using the Census
-poverty rate (0.753 vs 0.751), and once poverty is controlled for it adds nothing significant (0.179).
-This is the external confirmation of Finding 1: **for research, use poverty (or USDA) directly; the
-composite is redundant with its inputs.**
+poverty rate (0.685 vs 0.685, identical to three decimals), and once poverty is controlled for it adds
+nothing significant (0.140). This is the external confirmation of Finding 1: **for research, use
+poverty (or USDA) directly; the composite is redundant with its inputs.** The finding is robust across
+vintages (2019–21: r = 0.75, partial 0.18).
 
-**Data provenance & caveat.** First pass uses USDA's **2019–2021** 3-yr average (via World Population
-Review, citing USDA ERS; single automated extraction). State food-insecurity ranks are highly
-persistent, so the directional conclusion is robust to vintage — but for a publication-grade number,
-swap in the latest official table and re-run (it's a drop-in). Verified anchors to validate any
-replacement: 2021–2023 → NH 7.4 / AR 18.9 / US 12.2; 2022–2024 → ND 9.0 / AR 19.4.
-Authoritative source: USDA ERS, *Household Food Security in the United States* (ERR-337) /
-https://www.ers.usda.gov/topics/food-nutrition-assistance/food-security-in-the-us/interactive-charts-and-highlights
+**Data provenance.** `data/external/usda_food_insecurity_state.csv` is the USDA **2022–2024** 3-yr
+average, extracted directly (no manual transcription) from the official ERS download
+(`food-security-csv-data-files.zip`, file `foodsecurity-state-2024.csv`), source = Current Population
+Survey Food Security Supplement (CPS-FSS). Anchors verified: lowest ND 9.0, highest AR 19.4.
+To refresh in future, re-download the ZIP from the ERS *Food Security in the U.S. — Interactive Charts
+and Highlights* page (see the CSV header for the exact URL) and re-run this script.
 
 **Still to do (needs a browser / independent target):** repeat for the financial-anxiety construct
 against the **Census Household Pulse Survey** ("difficulty paying usual household expenses"), which is

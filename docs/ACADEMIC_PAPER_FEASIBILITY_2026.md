@@ -220,11 +220,12 @@ USDA ERS Household Food Security; NY Fed Survey of Consumer Expectations; Prince
 - [ ] Reconcile the §2 data issues (scale mismatch, 0–200 bound, 2022 break) — these are quick wins
       that also harden the live tool.
 - [ ] Stand up the **raw GHT pull archive** so an honest panel accrues from today forward.
-- [x] **External convergent-validity first pass done** — Barometer Food Insecurity vs independent
-      USDA survey: r=0.75, but identical to raw poverty (0.75) and partial r|poverty=0.18 (n.s.).
-      The composite is a valid but *redundant* proxy. (`BAROMETER_VALIDATION_2026.md` §3.)
-- [ ] Swap the **latest USDA vintage** into `data/external/` for the publication-grade number, and
-      extend the check to financial-anxiety vs Census Household Pulse.
+- [x] **External convergent-validity done (official USDA 2022–24)** — Barometer Food Insecurity vs
+      independent USDA survey: r=0.685, *identical* to raw poverty (0.685); partial r|poverty=0.14
+      (n.s.). Robust across vintages. The composite is a valid but *redundant* proxy.
+      (`BAROMETER_VALIDATION_2026.md` §3.)
+- [ ] Extend the external check to **financial-anxiety vs Census Household Pulse** ("difficulty
+      paying usual household expenses"), independent of the unemployment input.
 - [ ] If validation holds, draft Path B for an infodemiology venue (JMIR Public Health / PLOS ONE).
 
 *Note: FinMango's research artifacts live at github.com/finmango/research; this roadmap may be a
