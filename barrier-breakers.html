@@ -181,6 +181,30 @@
         .on-ink .btn-secondary:hover { border-color: var(--paper); }
 
         /* ----------------------------------------------------------
+           ICON SYSTEM — hand-drawn line art (mirrors the homepage)
+           ---------------------------------------------------------- */
+        @keyframes drawLine { from { stroke-dashoffset: 200; } to { stroke-dashoffset: 0; } }
+        @keyframes pulsePoint { 0%, 100% { r: 2.6; opacity: .75; } 50% { r: 4; opacity: 1; } }
+        @keyframes floatUp { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+        .line-icon .draw-in { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawLine 1.5s cubic-bezier(.16, 1, .3, 1) forwards; }
+        .line-icon .draw-in-delay-1 { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawLine 1.5s cubic-bezier(.16, 1, .3, 1) .18s forwards; }
+        .line-icon .draw-in-delay-2 { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawLine 1.5s cubic-bezier(.16, 1, .3, 1) .36s forwards; }
+        .line-icon .pulse-dot { animation: pulsePoint 2.6s ease infinite; }
+        .line-icon .float-element { animation: floatUp 3s ease infinite; }
+
+        /* Step icons — the page's animated illustrations */
+        .step-icon { width: 58px; height: 58px; margin-bottom: 1.4rem; transition: transform .35s cubic-bezier(.16, 1, .3, 1); }
+        .step-icon svg { width: 100%; height: 100%; display: block; }
+        .step-item:hover .step-icon { transform: translateY(-3px); }
+
+        /* Small inline marks */
+        .prize-icon { width: 24px; height: 24px; flex-shrink: 0; }
+        .sponsor-mark { width: 15px; height: 15px; display: inline-flex; flex-shrink: 0; }
+        .winner-medal { width: 17px; height: 17px; display: inline-flex; flex-shrink: 0; }
+        .prize-icon svg, .sponsor-mark svg, .winner-medal svg { width: 100%; height: 100%; display: block; }
+
+        /* ----------------------------------------------------------
            NAVIGATION
            ---------------------------------------------------------- */
         nav {
@@ -646,16 +670,20 @@
         }
         .track-row {
             display: grid;
-            grid-template-columns: 44px 1fr;
+            grid-template-columns: 40px 1fr 24px;
             gap: 1.25rem;
-            align-items: start;
-            padding: 1.5rem .5rem;
+            align-items: center;
+            padding: 1.4rem .85rem 1.4rem .5rem;
             transition: background .2s ease;
             position: relative;
         }
         .track-row + .track-row { border-top: 1px solid var(--ink-line-soft); }
         .track-row:hover { background: rgba(255, 107, 53, .05); }
-        .track-row-icon { font-size: 1.35rem; line-height: 1; padding-top: .15rem; }
+        .track-row-icon { display: flex; align-items: center; justify-content: center; }
+        .track-row-icon svg { width: 30px; height: 30px; display: block; }
+        .track-row-arrow { color: var(--ink-faint); opacity: 0; transform: translateX(-6px); transition: opacity .25s ease, transform .25s ease, color .25s ease; }
+        .track-row-arrow svg { width: 17px; height: 17px; display: block; }
+        .track-row:hover .track-row-arrow { opacity: 1; transform: translateX(0); color: var(--orange); }
         .track-row-title { font-size: 1.02rem; font-weight: 700; letter-spacing: -.015em; margin-bottom: .15rem; }
         .track-row-desc { font-size: .88rem; font-weight: 300; color: var(--ink-dim); line-height: 1.5; }
 
@@ -730,12 +758,8 @@
             padding: .75rem;
         }
         .gallery-item:hover .gallery-overlay { opacity: 1; }
-        .gallery-expand-icon {
-            font-family: var(--font-mono);
-            font-size: .95rem;
-            color: var(--paper);
-            line-height: 1;
-        }
+        .gallery-expand-icon { color: var(--paper); line-height: 0; display: inline-flex; }
+        .gallery-expand-icon svg { width: 16px; height: 16px; display: block; }
         .gallery-counter {
             text-align: left;
             max-width: 1400px;
@@ -857,7 +881,7 @@
         }
         .prizes-divisions > .prize-division:first-child { grid-column: 1 / -1; }
         .prize-division { border: 1px solid var(--ink-line); padding: 2.25rem 2.25rem 2rem; }
-        .prize-division h3 { font-size: 1.15rem; font-weight: 900; letter-spacing: -.02em; margin-bottom: .35rem; }
+        .prize-division h3 { font-size: 1.15rem; font-weight: 900; letter-spacing: -.02em; margin-bottom: .35rem; display: flex; align-items: center; gap: .6rem; }
         .prize-division-desc { font-size: .88rem; font-weight: 300; color: var(--ink-dim); margin-bottom: 1.5rem; }
         .prize-row {
             display: flex;
@@ -1086,6 +1110,9 @@
             text-transform: uppercase;
             letter-spacing: .16em;
             color: var(--ink-faint);
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
         }
         .sponsor-tier img { max-width: 280px; width: 60%; height: auto; display: block; }
         .sponsor-tier-amount {
@@ -1708,16 +1735,50 @@
                 </div>
                 <div class="steps-grid">
                     <div class="step-item">
+                        <div class="step-icon line-icon" aria-hidden="true">
+                            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="36" cy="42" r="22" stroke="#0A0A0A" stroke-width="1.4"/>
+                                <circle class="draw-in" cx="36" cy="42" r="13" stroke="#FF6B35" stroke-width="1.3"/>
+                                <path d="M36 13 L36 21 M36 63 L36 71 M7 42 L15 42 M57 42 L65 42" stroke="#0A0A0A" stroke-width="1.1" stroke-linecap="round" opacity=".45"/>
+                                <circle class="pulse-dot" cx="36" cy="42" r="3" fill="#FF6B35"/>
+                                <g class="float-element">
+                                    <path d="M64 16 L43 37" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round"/>
+                                    <path d="M43 37 L43 29 M43 37 L51 37" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round"/>
+                                </g>
+                            </svg>
+                        </div>
                         <div class="step-number">01</div>
                         <div class="step-title">Pick a barrier</div>
                         <div class="step-desc">Choose a track: transportation, housing, healthcare, financial literacy, or bring your own. Research why it exists and who it hurts most.</div>
                     </div>
                     <div class="step-item">
+                        <div class="step-icon line-icon" aria-hidden="true">
+                            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 64 H69" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
+                                <rect class="draw-in" x="17" y="47" width="14" height="17" stroke="#FF6B35" stroke-width="1.3" stroke-linejoin="round"/>
+                                <rect class="draw-in-delay-1" x="33" y="37" width="14" height="27" stroke="#FF6B35" stroke-width="1.3" stroke-linejoin="round"/>
+                                <rect class="draw-in-delay-2" x="49" y="27" width="14" height="37" stroke="#FF6B35" stroke-width="1.3" stroke-linejoin="round"/>
+                                <g class="float-element">
+                                    <path d="M56 19 L56 9 M51 14 L61 14" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round"/>
+                                </g>
+                            </svg>
+                        </div>
                         <div class="step-number">02</div>
                         <div class="step-title">Build a solution</div>
                         <div class="step-desc">Policy proposal, app prototype, community tool, financial literacy campaign. Use AI tools. Prototype fast. Make it real.</div>
                     </div>
                     <div class="step-item">
+                        <div class="step-icon line-icon" aria-hidden="true">
+                            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="14" y="14" width="44" height="32" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/>
+                                <path d="M28 46 L22 64 M44 46 L50 64 M36 46 L36 56" stroke="#0A0A0A" stroke-width="1.2" stroke-linecap="round" opacity=".55"/>
+                                <path class="draw-in" d="M20 38 L30 30 L38 34 L52 19" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle class="pulse-dot" cx="52" cy="19" r="2.6" fill="#FF6B35"/>
+                                <g class="float-element">
+                                    <path d="M62 50 C62.6 55, 63 55.4, 68 56 C63 56.6, 62.6 57, 62 62 C61.4 57, 61 56.6, 56 56 C61 55.4, 61.4 55, 62 50 Z" stroke="#FF6B35" stroke-width="1.2" stroke-linejoin="round"/>
+                                </g>
+                            </svg>
+                        </div>
                         <div class="step-number">03</div>
                         <div class="step-title">Present and compete</div>
                         <div class="step-desc">Demo Day for oral presentations. Innovation Gallery for posters. Knowledge Track for financial literacy. Everyone who applies competes.</div>
@@ -1736,39 +1797,75 @@
                 </div>
                 <div class="tracks-list">
                     <div class="track-row">
-                        <div class="track-row-icon" aria-hidden="true">🚗</div>
+                        <div class="track-row-icon" aria-hidden="true">
+                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 22 V18.5 L7 12.5 C7.4 11.6 8 11.2 9 11.2 H21.5 C22.4 11.2 23.1 11.6 23.6 12.4 L27 18 L28 18.6 V22" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M4 22 H28" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
+                                <path d="M8 12 H21" stroke="#0A0A0A" stroke-width="1.2" opacity=".4"/>
+                                <circle cx="10" cy="22" r="2.4" stroke="#FF6B35" stroke-width="1.5"/>
+                                <circle cx="22" cy="22" r="2.4" stroke="#FF6B35" stroke-width="1.5"/>
+                            </svg>
+                        </div>
                         <div>
                             <div class="track-row-title">Transportation</div>
                             <div class="track-row-desc">Car costs, insurance, and transit gaps blocking stable employment.</div>
                         </div>
+                        <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
                     </div>
                     <div class="track-row">
-                        <div class="track-row-icon" aria-hidden="true">🏠</div>
+                        <div class="track-row-icon" aria-hidden="true">
+                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 15 L16 6 L27 15" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 13 V26 H24 V13" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M13.5 26 V19 H18.5 V26" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
                         <div>
                             <div class="track-row-title">Housing Affordability</div>
                             <div class="track-row-desc">Rent burden, deposits, and credit barriers to stable housing.</div>
                         </div>
+                        <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
                     </div>
                     <div class="track-row">
-                        <div class="track-row-icon" aria-hidden="true">🏥</div>
+                        <div class="track-row-icon" aria-hidden="true">
+                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 25.5 C16 25.5 5.5 19 5.5 12 C5.5 8.7 8 6.5 10.8 6.5 C13.1 6.5 15 8 16 10 C17 8 18.9 6.5 21.2 6.5 C24 6.5 26.5 8.7 26.5 12 C26.5 19 16 25.5 16 25.5 Z" stroke="#0A0A0A" stroke-width="1.5" stroke-linejoin="round"/>
+                                <path d="M7.5 14.5 H12 L13.8 11 L16.4 18 L18 14.5 H24.5" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
                         <div>
                             <div class="track-row-title">Healthcare Access</div>
                             <div class="track-row-desc">Medical debt and high costs devastating young adults.</div>
                         </div>
+                        <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
                     </div>
                     <div class="track-row">
-                        <div class="track-row-icon" aria-hidden="true">📚</div>
+                        <div class="track-row-icon" aria-hidden="true">
+                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 9.5 C13 7.5 8.5 7.5 5.5 8.5 V24 C8.5 23 13 23 16 25 C19 23 23.5 23 26.5 24 V8.5 C24.5 7.7 21 7.7 18.5 9" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M16 9.5 V25" stroke="#0A0A0A" stroke-width="1.2" opacity=".45"/>
+                                <path d="M19.5 19 L22 16.3 L24 18 L26.5 14.8" stroke="#FF6B35" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M26.5 14.8 L24 14.9 M26.5 14.8 L26.4 17.3" stroke="#FF6B35" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
                         <div>
                             <div class="track-row-title">Literacy &amp; Investment</div>
                             <div class="track-row-desc">Limited financial education preventing generational wealth.</div>
                         </div>
+                        <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
                     </div>
                     <div class="track-row">
-                        <div class="track-row-icon" aria-hidden="true">🌟</div>
+                        <div class="track-row-icon" aria-hidden="true">
+                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 5 C16 13 17.5 14.5 25.5 15.5 C17.5 16.5 16 18 15 26 C14 18 12.5 16.5 4.5 15.5 C12.5 14.5 14 13 15 5 Z" stroke="#FF6B35" stroke-width="1.5" stroke-linejoin="round"/>
+                                <circle cx="25" cy="7" r="1.7" stroke="#0A0A0A" stroke-width="1.3"/>
+                            </svg>
+                        </div>
                         <div>
                             <div class="track-row-title">Open Track</div>
                             <div class="track-row-desc">Any financial barrier. Childcare, food insecurity, student debt, or your own idea.</div>
                         </div>
+                        <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
                     </div>
                 </div>
             </div>
@@ -1785,95 +1882,95 @@
             <div class="gallery-masonry">
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 at Kent State University">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3695.jpg" alt="Barrier Breakers 2026 event" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Students competing at Barrier Breakers 2026">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3777.jpg" alt="Students competing" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Innovation and collaboration on display">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3779.jpg" alt="Innovation on display" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Teams presenting their solutions">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3780.jpg" alt="Teams presenting solutions" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Breaking barriers at Kent State">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3788.JPEG" alt="Breaking barriers at Kent State" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3817.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3825.JPEG" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3829.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3834.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3837.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3838.JPEG" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3840.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3842.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_3845.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_9133.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_9137.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_9143.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_9144.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_9151.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_9155.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_9160.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_9165.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
                 <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
                     <img src="Barrier%20Breakers%202026%20Pics/IMG_9173.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon">⤢</span></div>
+                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
                 </div>
             </div>
 
@@ -1907,7 +2004,7 @@
                 <div class="prizes-divisions">
                     <!-- Demo Day -->
                     <div class="prize-division">
-                        <h3>🚀 Demo Day</h3>
+                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.5 C14.8 5.3 16 9 16 12.5 L8 12.5 C8 9 9.2 5.3 12 2.5 Z" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="1.7" stroke="#FF6B35" stroke-width="1.4"/><path d="M8 12.5 L5 15.5 L8.2 14.6 M16 12.5 L19 15.5 L15.8 14.6" stroke="#0A0A0A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 16 C10.6 18 11 19.2 12 21 C13 19.2 13.4 18 14 16" stroke="#FF6B35" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Demo Day</h3>
                         <div class="prize-division-desc">Top team per track. 5-min pitch + 2-min Q&amp;A. Cash + scholarships + school grants.</div>
                         <div class="prize-row"><span class="prize-row-place">1st Place</span><span><span class="prize-row-amount">$7,500</span><span class="prize-row-breakdown">($4k cash + $2.5k scholarship + $1k school)</span></span></div>
                         <div class="prize-row"><span class="prize-row-place">2nd Place</span><span><span class="prize-row-amount">$4,650</span><span class="prize-row-breakdown">($2.5k cash + $1.5k scholarship + $650 school)</span></span></div>
@@ -1919,7 +2016,7 @@
 
                     <!-- Innovation Gallery -->
                     <div class="prize-division">
-                        <h3>📊 Innovation Gallery</h3>
+                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3.5" width="16" height="17" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 16.5 V12 M12 16.5 V8.5 M16 16.5 V13.5" stroke="#FF6B35" stroke-width="1.6" stroke-linecap="round"/></svg></span>Innovation Gallery</h3>
                         <div class="prize-division-desc">Poster presentations. 1-on-1 with judges.</div>
                         <div class="prize-row"><span class="prize-row-place">1st Place</span><span class="prize-row-amount">$1,250</span></div>
                         <div class="prize-row"><span class="prize-row-place">2nd Place</span><span class="prize-row-amount">$750</span></div>
@@ -1928,7 +2025,7 @@
 
                     <!-- Knowledge Track -->
                     <div class="prize-division">
-                        <h3>🧠 Knowledge Track</h3>
+                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.2 17 C7 15.6 5.5 13.2 5.5 10.5 C5.5 6.9 8.4 4 12 4 C15.6 4 18.5 6.9 18.5 10.5 C18.5 13.2 17 15.6 14.8 17" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.2 17 V19 H14.8 V17" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><path d="M10 21 H14" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round"/><path d="M12 7.5 V12 M12 12 L10 10 M12 12 L14 10" stroke="#FF6B35" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Knowledge Track</h3>
                         <div class="prize-division-desc">20-30 min financial literacy test. Open to all.</div>
                         <div class="prize-row"><span class="prize-row-place">1st Place</span><span class="prize-row-amount">$250</span></div>
                         <div class="prize-row"><span class="prize-row-place">2nd Place</span><span class="prize-row-amount">$150</span></div>
@@ -2095,21 +2192,21 @@
                     <div class="winner-photo-bb"><img src="2025-winner.jpg" alt="2025 Barrier Breakers Winners" loading="lazy"></div>
                     <div class="winners-grid-bb">
                         <div class="winner-card-bb gold">
-                            <div class="winner-card-bb-header"><span>1st Place</span><span aria-hidden="true">🥇</span></div>
+                            <div class="winner-card-bb-header"><span>1st Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
                             <div class="winner-card-bb-body">
                                 <div class="winner-card-bb-name">Dylan Quinones</div>
                                 <div class="winner-card-bb-school">Polaris Career Center</div>
                             </div>
                         </div>
                         <div class="winner-card-bb silver">
-                            <div class="winner-card-bb-header"><span>2nd Place</span><span aria-hidden="true">🥈</span></div>
+                            <div class="winner-card-bb-header"><span>2nd Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
                             <div class="winner-card-bb-body">
                                 <div class="winner-card-bb-name">Rogan Allen</div>
                                 <div class="winner-card-bb-school">Stow-Munroe Falls High</div>
                             </div>
                         </div>
                         <div class="winner-card-bb bronze">
-                            <div class="winner-card-bb-header"><span>3rd Place</span><span aria-hidden="true">🥉</span></div>
+                            <div class="winner-card-bb-header"><span>3rd Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
                             <div class="winner-card-bb-body">
                                 <div class="winner-card-bb-name">Katherine Rosner</div>
                                 <div class="winner-card-bb-school">Chagrin Falls High School</div>
@@ -2123,21 +2220,21 @@
                     <div class="winner-photo-bb"><img src="2024-winner.jpg" alt="2024 Barrier Breakers Winners" loading="lazy"></div>
                     <div class="winners-grid-bb">
                         <div class="winner-card-bb gold">
-                            <div class="winner-card-bb-header"><span>1st Place</span><span aria-hidden="true">🥇</span></div>
+                            <div class="winner-card-bb-header"><span>1st Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
                             <div class="winner-card-bb-body">
                                 <div class="winner-card-bb-name">Brianna Johnson</div>
                                 <div class="winner-card-bb-school">Stow-Munroe Falls High</div>
                             </div>
                         </div>
                         <div class="winner-card-bb silver">
-                            <div class="winner-card-bb-header"><span>2nd Place</span><span aria-hidden="true">🥈</span></div>
+                            <div class="winner-card-bb-header"><span>2nd Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
                             <div class="winner-card-bb-body">
                                 <div class="winner-card-bb-name">Samuel Denys</div>
                                 <div class="winner-card-bb-school">Westlake High School</div>
                             </div>
                         </div>
                         <div class="winner-card-bb bronze">
-                            <div class="winner-card-bb-header"><span>3rd Place</span><span aria-hidden="true">🥉</span></div>
+                            <div class="winner-card-bb-header"><span>3rd Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
                             <div class="winner-card-bb-body">
                                 <div class="winner-card-bb-name">Cullen Rooney</div>
                                 <div class="winner-card-bb-school">Normandy High School</div>
@@ -2171,19 +2268,19 @@
 
                 <div class="sponsors-stack">
                     <div class="sponsor-tier">
-                        <div class="sponsor-tier-label">💎 Platinum Sponsor</div>
+                        <div class="sponsor-tier-label"><span class="sponsor-mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6 L8 1.5 L13.5 6 L8 14.5 Z" stroke="#FF6B35" stroke-width="1.2" stroke-linejoin="round"/><path d="M2.5 6 H13.5 M5.6 6 L8 14.5 M10.4 6 L8 14.5 M5.6 6 L8 1.5 L10.4 6" stroke="#FF6B35" stroke-width="1" stroke-linejoin="round" opacity=".55"/></svg></span>Platinum Sponsor</div>
                         <img src="valmark.svg" alt="Valmark Financial Group">
                         <div class="sponsor-tier-amount">$25,000 Commitment</div>
                     </div>
 
                     <div class="sponsor-silver-row">
                         <div class="sponsor-silver-item">
-                            <div class="sponsor-tier-label">🥈 Silver Sponsor</div>
+                            <div class="sponsor-tier-label"><span class="sponsor-mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="6" r="4" stroke="currentColor" stroke-width="1.2"/><path d="M5.6 9.2 L4.5 14.5 L8 12.3 L11.5 14.5 L10.4 9.2" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></span>Silver Sponsor</div>
                             <img src="1stday.png" alt="1st Day School Supplies" class="sponsor-silver-img">
                             <div class="sponsor-tier-amount">$2,500 Commitment</div>
                         </div>
                         <div class="sponsor-silver-item">
-                            <div class="sponsor-tier-label">🥈 Silver Sponsor</div>
+                            <div class="sponsor-tier-label"><span class="sponsor-mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="6" r="4" stroke="currentColor" stroke-width="1.2"/><path d="M5.6 9.2 L4.5 14.5 L8 12.3 L11.5 14.5 L10.4 9.2" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></span>Silver Sponsor</div>
                             <img src="gilly.jpg" alt="Bob Gillingham" class="sponsor-portrait">
                             <div class="sponsor-silver-name">Bob Gillingham</div>
                             <div class="sponsor-silver-sub">Executive Board Member &amp; Lead Instructor</div>
