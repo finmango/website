@@ -226,7 +226,9 @@ USDA ERS Household Food Security; NY Fed Survey of Consumer Expectations; Prince
       (`BAROMETER_VALIDATION_2026.md` §3.)
 - [ ] Extend the external check to **financial-anxiety vs Census Household Pulse** ("difficulty
       paying usual household expenses"), independent of the unemployment input.
-- [ ] If validation holds, draft Path B for an infodemiology venue (JMIR Public Health / PLOS ONE).
+- [x] **Path B working draft created** — `PATH_B_PAPER_DRAFT.md` (manuscript + preregistration-style
+      protocol; §3 preliminary results grounded, core nowcasting results pending the panel build).
+- [ ] Assemble the state-month panel + raw search pulls (§4 of the draft) to fill in §6 results.
 
 *Note: FinMango's research artifacts live at github.com/finmango/research; this roadmap may be a
 better fit there than in the website repo — moved here because it is the repo in scope.*
