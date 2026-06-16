@@ -212,11 +212,16 @@ USDA ERS Household Food Security; NY Fed Survey of Consumer Expectations; Prince
 
 ## 8. Next actions
 
+- [x] **First validation pass complete** — see `BAROMETER_VALIDATION_2026.md`. Key result: the
+      composites are ~deterministic re-expressions of their official inputs (corr 0.98–0.997), the
+      hand-set regional multiplier drives ~40% of cross-state spread, and the search signal is a
+      ≤10-pt nudge (6–10% of level). This sharpens the flagship thesis (Path B).
 - [ ] Decide path: **A now + B as the flagship** (recommended).
 - [ ] Reconcile the §2 data issues (scale mismatch, 0–200 bound, 2022 break) — these are quick wins
       that also harden the live tool.
 - [ ] Stand up the **raw GHT pull archive** so an honest panel accrues from today forward.
-- [ ] Pull one validation target (Household Pulse is easiest) and run a first convergent-validity check.
+- [ ] **Drop in USDA CSV** (`data/external/`) and run the specified external convergent-validity
+      check — the one step needing a browser (see `BAROMETER_VALIDATION_2026.md` §3).
 - [ ] If validation holds, draft Path B for an infodemiology venue (JMIR Public Health / PLOS ONE).
 
 *Note: FinMango's research artifacts live at github.com/finmango/research; this roadmap may be a
