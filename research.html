@@ -1118,6 +1118,161 @@
     .working-head { margin-top: 5rem; }
 
     /* ----------------------------------------------------------
+       REPORTS & BRIEFS — house publications, data-driven.
+       Hairline cards, no shadow. Type tags in mono. The whole
+       section renders from the REPORTS array near the foot of the
+       page; type tags name a disciplined series, and each card
+       makes the report ↔ data ↔ publication triangle explicit.
+       ---------------------------------------------------------- */
+    .reports-section { padding: 7.5rem var(--gutter); background: var(--paper); }
+    .reports-container { max-width: var(--max-width); margin: 0 auto; }
+
+    /* type legend — names the series under the head */
+    .reports-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 2.5rem;
+      margin-bottom: 3.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--ink-line-soft);
+    }
+    .reports-legend-item {
+      display: flex;
+      align-items: baseline;
+      gap: .7rem;
+      font-size: .82rem;
+      font-weight: 300;
+      line-height: 1.5;
+      color: var(--ink-dim);
+      max-width: 34ch;
+      letter-spacing: -.005em;
+    }
+
+    .reports-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    .report-card {
+      border: 1px solid var(--ink-line);
+      padding: 2.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.05rem;
+      position: relative;
+      transition: border-color .25s ease;
+    }
+    .report-card:hover { border-color: var(--ink-faint); }
+    .report-card::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: 0;
+      height: 2px;
+      background: var(--orange);
+      transition: width .4s cubic-bezier(.16, 1, .3, 1);
+    }
+    .report-card:hover::before { width: calc(100% + 2px); }
+
+    /* the mono type tag — small, understated, orange-keyed */
+    .report-type {
+      font-family: var(--font-mono);
+      font-size: .58rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: .3rem .65rem;
+      border: 1px solid rgba(255, 107, 53, .4);
+      color: var(--orange);
+      align-self: flex-start;
+      white-space: nowrap;
+    }
+    .reports-legend-item .report-type { flex-shrink: 0; }
+
+    .report-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: -.025em;
+      line-height: 1.25;
+      max-width: 34ch;
+    }
+    .report-authors {
+      font-size: .9rem;
+      font-weight: 300;
+      line-height: 1.55;
+      color: var(--ink-dim);
+      max-width: 54ch;
+    }
+    .report-authors .aff { color: var(--ink-faint); }
+    .report-meta {
+      font-family: var(--font-mono);
+      font-size: .6rem;
+      font-weight: 500;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: .35rem .6rem;
+    }
+    .report-meta > span + span::before { content: '·'; margin-right: .6rem; color: var(--ink-line); }
+    .report-summary {
+      font-size: .98rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--ink-dim);
+      letter-spacing: -.005em;
+      max-width: 56ch;
+    }
+    .report-tags { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
+    .report-tag {
+      font-family: var(--font-mono);
+      font-size: .56rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .report-tag::before { content: '#'; color: var(--orange); margin-right: .05rem; }
+
+    /* the triangle — explicit links down to data and up to the paper */
+    .report-links {
+      margin-top: auto;
+      padding-top: 1.35rem;
+      border-top: 1px solid var(--ink-line-soft);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: .65rem 1.6rem;
+    }
+    .report-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      transition: color .2s ease;
+    }
+    .report-link:hover { color: var(--orange); }
+    .report-link .dir {
+      color: var(--orange);
+      font-size: .85rem;
+      line-height: 1;
+      transition: transform .25s cubic-bezier(.16, 1, .3, 1);
+    }
+    .report-link:hover .dir.down { transform: translateY(2px); }
+    .report-link:hover .dir.up { transform: translateY(-2px); }
+    .report-link.pdf { color: var(--ink-dim); }
+    .report-link.pdf:hover { color: var(--orange); }
+
+    /* ----------------------------------------------------------
        TEAM — leadership lattice + ruled collaborators
        ---------------------------------------------------------- */
     .team-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
@@ -1531,6 +1686,10 @@
       .approach-section, .partnerships-section, .focus-section,
       .team-section, .methodology-section { padding: 0 var(--gutter) 5rem; }
       .publications-section { padding: 5rem var(--gutter); }
+      .reports-section { padding: 5rem var(--gutter); }
+      .reports-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+      .report-card { padding: 1.75rem; }
+      .reports-legend { gap: .85rem 1.75rem; margin-bottom: 2.5rem; }
 
       .approach-grid { grid-template-columns: 1fr; }
       .approach-card { padding: 1.9rem 0; border-bottom: 1px solid var(--ink-line-soft); }
@@ -1826,6 +1985,169 @@
       </div>
     </div>
   </section>
+
+  <!-- ======================= REPORTS & BRIEFS ======================= -->
+  <!-- Data-driven: cards render from the REPORTS array in the inline script
+       directly below this section. Add a report by adding one object there. -->
+  <section class="reports-section" id="reports">
+    <div class="reports-container">
+      <div class="section-head">
+        <span class="eyebrow">Reports &amp; Briefs</span>
+        <h2>Our data, in <em>plain language.</em></h2>
+        <p class="section-sub">A house series that reads our own open data so policymakers and journalists don't have to parse a repository first. Each brief links down to the dataset it's built on — and up to the peer-reviewed paper it became, where one exists.</p>
+      </div>
+
+      <div class="reports-legend">
+        <span class="reports-legend-item"><span class="report-type">Focus Note</span> Short. One finding. Written for a policy audience.</span>
+        <span class="reports-legend-item"><span class="report-type">Working Paper</span> Longer and methodological — our pre-journal work.</span>
+        <span class="reports-legend-item"><span class="report-type">Data Spotlight</span> A light, frequent read off a Barometer release.</span>
+      </div>
+
+      <div class="reports-grid" id="reports-grid"></div>
+    </div>
+  </section>
+
+  <script>
+    /* ============================================================
+       REPORTS & BRIEFS — single content model.
+       Add a report by appending one object to REPORTS below; the
+       cards render from this array. Structured so a future
+       All / Reports / Data / Publications filter is a front-end
+       swap, not a rewrite: renderReports() already takes a list,
+       each card carries data-type / data-tags for filtering, and
+       the model is exposed on window.FinMangoReports.
+       ============================================================ */
+    (function () {
+      const REPORT_TYPES = {
+        'focus-note':     { label: 'Focus Note' },     // short, one finding, policy audience
+        'working-paper':  { label: 'Working Paper' },  // longer, methodological, pre-journal
+        'data-spotlight': { label: 'Data Spotlight' }, // light, frequent, off a release
+      };
+
+      const REPORTS = [
+        {
+          id: 'eviction-signals',
+          type: 'working-paper',
+          title: 'Predictive Signals: Do Mental Health-Related Google Searches Reflect Eviction Trends?',
+          authors: [
+            { name: 'Dr. Eren Cifci', affiliation: 'Austin Peay State University' },
+            { name: 'Anthony Ramos', affiliation: 'FinMango' },
+            { name: 'Scott Glasgow', affiliation: 'FinMango' },
+          ],
+          date: '2026',
+          note: 'Presented at ARES',
+          plainLanguageSummary: 'When people search for help with anxiety, depression, and stress, do those searches climb before evictions do? We test whether mental health-related search behavior moves ahead of eviction filings — a possible early-warning signal, months before families reach housing court.',
+          pdfUrl: '#',
+          dataUrl: 'https://github.com/finmango/research',
+          publicationUrl: null,
+          doi: null,
+          tags: ['housing'],
+        },
+        {
+          id: 'sustainable-investment-search',
+          type: 'working-paper',
+          title: 'Sustainable Investment Search Behavior as a Predictor of Market Activity',
+          authors: [
+            { name: 'Dr. Madhavi Venkatesan', affiliation: 'Northeastern University' },
+            { name: 'FinMango Research', affiliation: 'FinMango' },
+          ],
+          date: '2026',
+          note: null,
+          plainLanguageSummary: 'Before money moves into sustainable and ESG investments, interest often shows up first as online searches. We examine whether the public’s search behavior around sustainable investing anticipates real shifts in market activity — and how early the signal arrives.',
+          pdfUrl: '#',
+          dataUrl: 'https://github.com/finmango/research',
+          publicationUrl: null,
+          doi: null,
+          tags: ['investing'],
+        },
+        {
+          id: 'financial-literacy-mandates',
+          type: 'focus-note',
+          title: 'Financial Literacy Search Patterns: Mandated vs. Non-Mandated States',
+          authors: [
+            { name: 'Dr. John Longo', affiliation: 'Rutgers University' },
+            { name: 'Danny Jang', affiliation: 'Financial Futures' },
+            { name: 'FinMango Research', affiliation: 'FinMango' },
+          ],
+          date: '2026',
+          note: null,
+          plainLanguageSummary: 'Do state laws that require personal-finance education change what people still have to look up on their own? We compare financial-literacy search patterns in states that mandate the coursework against those that don’t — asking whether mandates leave people better equipped, or just shift where the questions get asked.',
+          pdfUrl: '#',
+          dataUrl: 'https://github.com/finmango/research',
+          publicationUrl: null,
+          doi: null,
+          tags: ['financial education'],
+        },
+        {
+          id: 'barometer-spotlight-2026q1',
+          type: 'data-spotlight',
+          title: 'Reading the Latest Barometer: Where Financial Stress Moved This Quarter',
+          authors: [
+            { name: 'FinMango Research', affiliation: 'FinMango' },
+          ],
+          date: 'June 2026',
+          note: 'Built off the latest Financial Health Barometer release',
+          plainLanguageSummary: 'A short read on the newest Financial Health Barometer release: which states saw financial anxiety, housing stress, and food insecurity climb or ease — and what the movement tells us. A plain-language tour of the numbers behind the map.',
+          pdfUrl: '#',
+          dataUrl: 'barometer.html',
+          publicationUrl: null,
+          doi: null,
+          tags: ['barometer'],
+        },
+      ];
+
+      const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+      function authorsHtml(authors) {
+        return authors
+          .map((a) => `${esc(a.name)}<span class="aff"> (${esc(a.affiliation)})</span>`)
+          .join(', ');
+      }
+
+      function linksHtml(r) {
+        const out = [];
+        if (r.pdfUrl) {
+          const ext = r.pdfUrl === '#' ? '' : ' target="_blank" rel="noopener noreferrer"';
+          out.push(`<a class="report-link pdf" href="${esc(r.pdfUrl)}"${ext}>Read (PDF)</a>`);
+        }
+        if (r.dataUrl) {
+          out.push(`<a class="report-link" href="${esc(r.dataUrl)}" target="_blank" rel="noopener noreferrer"><span class="dir down" aria-hidden="true">↓</span> Underlying data</a>`);
+        }
+        if (r.publicationUrl) {
+          const doi = r.doi ? ` · ${esc(r.doi)}` : '';
+          out.push(`<a class="report-link" href="${esc(r.publicationUrl)}" target="_blank" rel="noopener noreferrer"><span class="dir up" aria-hidden="true">↑</span> Peer-reviewed paper${doi}</a>`);
+        }
+        return out.join('');
+      }
+
+      function cardHtml(r) {
+        const t = REPORT_TYPES[r.type] || { label: r.type };
+        const meta = [r.date, r.note].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join('');
+        const tags = (r.tags && r.tags.length)
+          ? `<div class="report-tags">${r.tags.map((tg) => `<span class="report-tag">${esc(tg)}</span>`).join('')}</div>`
+          : '';
+        return `<article class="report-card" data-type="${esc(r.type)}" data-tags="${esc((r.tags || []).join(' '))}">
+          <span class="report-type">${esc(t.label)}</span>
+          <h3 class="report-title">${esc(r.title)}</h3>
+          <p class="report-authors">${authorsHtml(r.authors)}</p>
+          <div class="report-meta">${meta}</div>
+          <p class="report-summary">${esc(r.plainLanguageSummary)}</p>
+          ${tags}
+          <div class="report-links">${linksHtml(r)}</div>
+        </article>`;
+      }
+
+      function renderReports(list) {
+        const grid = document.getElementById('reports-grid');
+        if (grid) grid.innerHTML = list.map(cardHtml).join('');
+      }
+
+      renderReports(REPORTS);
+
+      // Exposed for a future filtered library (All / Reports / Data / Publications).
+      window.FinMangoReports = { REPORTS, REPORT_TYPES, renderReports };
+    })();
+  </script>
 
   <!-- ======================= BAROMETER MAP PREVIEW ======================= -->
   <section class="map-section" id="barometer-preview">
