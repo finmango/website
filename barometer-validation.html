@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Barometer: Methodology &amp; Validation | FinMango Research</title>
+    <meta name="description"
+        content="How the FinMango Financial Health Barometer is built, how it validates against independent ground-truth data, and the open research frontier: can real-time search add early warning beyond official statistics?">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://finmango.org/barometer-validation.html">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Barometer: Methodology &amp; Validation | FinMango Research">
+    <meta property="og:description"
+        content="How the Financial Health Barometer is built, how it validates against independent data, and our open research question on real-time search signals.">
+    <meta property="og:url" content="https://finmango.org/barometer-validation.html">
+
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --paper: #FAFAF7; --ink: #0A0A0A; --orange: #FF6B35; --orange-deep: #E5511B;
+            --ink-dim: rgba(10,10,10,.62); --ink-faint: rgba(10,10,10,.38);
+            --ink-line: rgba(10,10,10,.1); --ink-line-soft: rgba(10,10,10,.06);
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+            --max-width: 920px; --gutter: 2rem;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body); background: var(--paper); color: var(--ink);
+            line-height: 1.65; font-size: 17px; -webkit-font-smoothing: antialiased;
+        }
+        ::selection { background: var(--orange); color: #fff; }
+        a { color: var(--orange-deep); }
+
+        nav {
+            position: sticky; top: 0; z-index: 50; background: rgba(250,250,247,.92);
+            -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--ink-line-soft);
+        }
+        .nav-container {
+            max-width: var(--max-width); margin: 0 auto; padding: 1.1rem var(--gutter);
+            display: flex; justify-content: space-between; align-items: center; gap: 1.5rem;
+        }
+        .logo img { height: 34px; display: block; }
+        .nav-right { display: flex; gap: 1.5rem; align-items: center; }
+        .nav-right a {
+            color: var(--ink); text-decoration: none; font-weight: 500; font-size: .9rem; white-space: nowrap;
+        }
+        .nav-right a:hover { color: var(--orange-deep); }
+        .nav-right .btn {
+            border: 1px solid var(--ink-line); padding: .5rem .9rem; font-weight: 600; font-size: .82rem;
+        }
+        .nav-right .btn:hover { border-color: var(--ink); }
+
+        main { max-width: var(--max-width); margin: 0 auto; padding: 4rem var(--gutter) 5rem; }
+
+        .eyebrow {
+            font-family: var(--font-mono); font-size: .68rem; font-weight: 500; text-transform: uppercase;
+            letter-spacing: .18em; color: var(--ink-faint); display: inline-flex; align-items: center; gap: .75rem;
+        }
+        .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--orange); }
+
+        h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; letter-spacing: -.03em; line-height: 1.05; margin: 1rem 0 1.25rem; }
+        h1 em { font-style: normal; color: var(--orange); }
+        .lede { font-size: 1.2rem; color: var(--ink-dim); font-weight: 300; max-width: 60ch; }
+
+        h2 {
+            font-size: 1.5rem; font-weight: 900; letter-spacing: -.025em; margin: 3rem 0 1rem;
+            padding-top: 2rem; border-top: 1px solid var(--ink-line);
+        }
+        h3 { font-size: 1.05rem; font-weight: 700; letter-spacing: -.01em; margin: 1.5rem 0 .5rem; }
+        p { margin-bottom: 1rem; max-width: 70ch; }
+        ul { margin: .5rem 0 1.25rem 0; padding-left: 0; list-style: none; max-width: 70ch; }
+        li { padding-left: 1.6rem; position: relative; margin-bottom: .55rem; }
+        li::before { content: ''; position: absolute; left: 0; top: .8em; width: 16px; height: 1px; background: var(--orange); }
+        strong { font-weight: 700; }
+
+        .callout {
+            border: 1px solid var(--ink-line); border-left: 3px solid var(--orange);
+            padding: 1.25rem 1.5rem; margin: 1.5rem 0; background: #fff;
+        }
+        .callout p:last-child { margin-bottom: 0; }
+
+        table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: .92rem; }
+        th, td { text-align: left; padding: .7rem 1rem; border-bottom: 1px solid var(--ink-line); }
+        th {
+            font-family: var(--font-mono); font-size: .62rem; font-weight: 500; text-transform: uppercase;
+            letter-spacing: .12em; color: var(--ink-faint);
+        }
+        td.num, th.num { font-family: var(--font-mono); text-align: right; }
+
+        .tools { display: flex; flex-wrap: wrap; gap: .6rem; margin: 1.25rem 0; }
+        .tool {
+            display: inline-flex; align-items: center; gap: .4rem; padding: .55rem 1rem;
+            border: 1px solid var(--ink-line); text-decoration: none; color: var(--ink);
+            font-size: .85rem; font-weight: 600;
+        }
+        .tool:hover { border-color: var(--ink); color: var(--orange-deep); }
+
+        .citation {
+            border: 1px solid var(--ink-line); padding: 1rem; font-family: var(--font-mono);
+            font-size: .8rem; line-height: 1.7; color: var(--ink-dim); background: #fff;
+        }
+        .note { font-size: .82rem; color: var(--ink-faint); font-family: var(--font-mono); letter-spacing: .04em; }
+
+        footer {
+            border-top: 1px solid var(--ink-line); margin-top: 4rem;
+            max-width: var(--max-width); margin-left: auto; margin-right: auto;
+            padding: 2rem var(--gutter); display: flex; justify-content: space-between; gap: 1rem;
+            flex-wrap: wrap; font-family: var(--font-mono); font-size: .68rem; color: var(--ink-faint);
+            letter-spacing: .06em;
+        }
+        footer a { color: var(--ink-dim); text-decoration: none; }
+        footer a:hover { color: var(--orange-deep); }
+
+        @media (max-width: 600px) {
+            :root { --gutter: 1.25rem; }
+            .nav-right a:not(.btn) { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo"><img src="finmango.png" alt="FinMango"></a>
+            <div class="nav-right">
+                <a href="research.html">Research</a>
+                <a href="barometer.html">Barometer</a>
+                <a href="barometer.html" class="btn">Open the live tool ↗</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <span class="eyebrow">Research · Transparency</span>
+        <h1>Barometer: Methodology &amp; <em>Validation</em></h1>
+        <p class="lede">How the Financial Health Barometer is built, how it holds up against
+            independent ground-truth data, and the open research question we're pursuing in the open.</p>
+
+        <h2>What the Barometer is</h2>
+        <p>The <a href="barometer.html">Financial Health Barometer</a> is a real-time, readable
+            summary of household economic stress across all 50 states and DC. It combines official U.S.
+            government statistics — unemployment (BLS), poverty (Census SAIPE), rent burden (Census ACS),
+            fair-market rent (HUD), house prices (FRED), and Harvard JCHS housing data — with
+            search-interest signals, and expresses them on a single 0–200 stress scale across four
+            indicators: Financial Anxiety, Food Insecurity, Housing Stress, and Affordability.</p>
+        <p>It is designed as a <strong>directional instrument</strong> for relative comparison between
+            states and over time — not as a substitute for the underlying official measures. We say so
+            on the tool itself, and this page makes the evidence behind that statement explicit.</p>
+
+        <h2>How it validates</h2>
+        <p>We tested the Barometer two ways, and publish both results openly — including the
+            uncomfortable parts. The analysis is fully reproducible (links below).</p>
+
+        <h3>1. It faithfully reflects the official data it is built from</h3>
+        <p>Each index can be reconstructed from its published formula and the underlying official
+            metrics almost perfectly — confirming the tool does exactly what it documents:</p>
+        <table>
+            <thead><tr><th>Indicator</th><th class="num">Reconstruction r</th></tr></thead>
+            <tbody>
+                <tr><td>Financial Anxiety</td><td class="num">0.995</td></tr>
+                <tr><td>Food Insecurity</td><td class="num">0.984</td></tr>
+                <tr><td>Housing Stress</td><td class="num">0.997</td></tr>
+                <tr><td>Affordability</td><td class="num">0.991</td></tr>
+            </tbody>
+        </table>
+
+        <h3>2. It tracks independent ground truth — as well as the official data does</h3>
+        <p>Compared against the USDA's independent food-security survey (CPS-FSS, 2022–24 state
+            averages), the Barometer's Food Insecurity index is a valid proxy — and it tracks that
+            survey about as closely as the raw Census poverty rate does:</p>
+        <table>
+            <thead><tr><th>Comparison</th><th class="num">Correlation (r)</th></tr></thead>
+            <tbody>
+                <tr><td>Barometer Food Insecurity vs USDA survey</td><td class="num">0.685</td></tr>
+                <tr><td>Census poverty rate vs USDA survey</td><td class="num">0.685</td></tr>
+                <tr><td>Barometer, controlling for poverty (partial)</td><td class="num">0.14</td></tr>
+            </tbody>
+        </table>
+        <p class="note">n = 51 states + DC · robust across data vintages (2019–21: 0.75 / 0.18)</p>
+
+        <div class="callout">
+            <p><strong>What this means, plainly.</strong> Because the Barometer is built from official
+                statistics, it <em>faithfully reflects</em> them — its readings are a clean, real-time
+                summary of the government's own data. The flip side is that, by construction, it
+                inherits the release lag of those sources. So the honest question is not "is it
+                accurate?" (it tracks ground truth) but "can it warn us <em>earlier</em> than the
+                official releases allow?"</p>
+        </div>
+
+        <h2>The open research frontier</h2>
+        <p>That question defines our current research: <strong>can real-time internet-search signals
+            provide early warning of household financial distress beyond what lagged official statistics
+            already tell us?</strong> Specifically, we are testing whether absolute-probability signals
+            from the Google Health Trends API improve out-of-sample nowcasts of state-level distress —
+            validated against the Census Household Pulse Survey — over and above the official inputs, and
+            whether those absolute signals beat the freely available relative Google Trends series.</p>
+        <p>We're running this as a preregistered study and will publish the result either way — including
+            if the answer is "search adds nothing." Transparency about what a tool can and cannot do is
+            the point.</p>
+
+        <h2>Data &amp; reproducibility</h2>
+        <p>The Barometer is open (MIT-licensed). Downloadable artifacts behind the analysis above:</p>
+        <div class="tools">
+            <a class="tool" href="data/barometer_state_cross_section.csv" download>State cross-section (CSV)</a>
+            <a class="tool" href="data/external/usda_food_insecurity_state.csv" download>USDA food insecurity (CSV)</a>
+            <a class="tool" href="data/panel/state_month_panel.csv" download>State-month panel scaffold (CSV)</a>
+            <a class="tool" href="barometer.html">Live tool ↗</a>
+        </div>
+        <p class="note">Reproducible analysis scripts and the working paper live in the project
+            repository under <span style="font-family:var(--font-mono)">/docs</span>.</p>
+
+        <h3>Cite this work</h3>
+        <div class="citation">
+            FinMango Research Team. (2026). <em>Financial Health Barometer: Methodology &amp;
+            Validation</em>. FinMango. https://finmango.org/barometer-validation.html
+        </div>
+    </main>
+
+    <footer>
+        <div>© 2026 FinMango · 501(c)(3) · EIN 81-2543425</div>
+        <div><a href="barometer.html">Barometer</a> · <a href="research.html">Research</a> · <a href="index.html">Home</a></div>
+    </footer>
+</body>
+
+</html>
