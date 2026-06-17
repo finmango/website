@@ -1118,6 +1118,68 @@
     .working-head { margin-top: 5rem; }
 
     /* ----------------------------------------------------------
+       REPORTS & BRIEFS — house publications, data-driven.
+       Renders from the REPORTS array near the foot of the page.
+       Featured working papers get a two-column treatment; shorter
+       briefs sit in a 2-up grid. Each card surfaces its source
+       documents and links down to the data/tools it informed.
+       ---------------------------------------------------------- */
+    .reports-section { padding: 7.5rem var(--gutter); background: var(--paper); }
+    .reports-container { max-width: var(--max-width); margin: 0 auto; }
+    .reports-legend { display: flex; flex-wrap: wrap; gap: 1rem 2.5rem; margin-bottom: 3.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--ink-line-soft); }
+    .reports-legend-item { display: flex; align-items: baseline; gap: .7rem; font-size: .82rem; font-weight: 300; line-height: 1.5; color: var(--ink-dim); max-width: 34ch; letter-spacing: -.005em; }
+    .reports-legend-item .report-type { flex-shrink: 0; }
+    .report-type { font-family: var(--font-mono); font-size: .58rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; padding: .3rem .65rem; border: 1px solid rgba(255,107,53,.4); color: var(--orange); align-self: flex-start; white-space: nowrap; }
+    .report-title { font-weight: 900; letter-spacing: -.025em; line-height: 1.22; }
+    .report-authors { font-size: .9rem; font-weight: 300; line-height: 1.55; color: var(--ink-dim); }
+    .report-authors .aff { color: var(--ink-faint); }
+    .report-meta { font-family: var(--font-mono); font-size: .6rem; font-weight: 500; letter-spacing: .13em; text-transform: uppercase; color: var(--ink-faint); display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .6rem; }
+    .report-meta > span + span::before { content: '·'; margin-right: .6rem; color: var(--ink-line); }
+    .report-summary { font-size: .98rem; font-weight: 300; line-height: 1.6; color: var(--ink-dim); letter-spacing: -.005em; }
+    .report-tags { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
+    .report-tag { font-family: var(--font-mono); font-size: .56rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
+    .report-tag::before { content: '#'; color: var(--orange); margin-right: .05rem; }
+    .report-docs { display: flex; flex-direction: column; gap: .55rem; }
+    .report-doc, .report-link { display: inline-flex; align-items: baseline; gap: .55rem; font-family: var(--font-mono); font-size: .64rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--ink); transition: color .2s ease; }
+    .report-doc:hover, .report-link:hover { color: var(--orange); }
+    .report-doc .kind, .report-link .dir { color: var(--orange); flex-shrink: 0; font-size: .56rem; letter-spacing: .1em; }
+    .report-link .dir { font-size: .85rem; line-height: 1; transition: transform .25s cubic-bezier(.16,1,.3,1); }
+    .report-link:hover .dir.down { transform: translateY(2px); }
+    .report-link:hover .dir.up { transform: translateY(-2px); }
+    .reports-featured { display: flex; flex-direction: column; gap: 1.5rem; }
+    .report-featured { border: 1px solid var(--ink-line); display: grid; grid-template-columns: 1.5fr 1fr; position: relative; }
+    .report-featured::before { content: ''; position: absolute; top: -1px; left: -1px; width: 0; height: 2px; background: var(--orange); transition: width .45s cubic-bezier(.16,1,.3,1); }
+    .report-featured:hover::before { width: calc(100% + 2px); }
+    .rf-main { padding: 2.75rem; display: flex; flex-direction: column; gap: 1.15rem; }
+    .rf-main .report-title { font-size: clamp(1.45rem, 2.2vw, 1.95rem); max-width: 26ch; }
+    .rf-side { padding: 2.75rem; border-left: 1px solid var(--ink-line); display: flex; flex-direction: column; gap: 1.75rem; }
+    .rf-block-label { font-family: var(--font-mono); font-size: .6rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: .9rem; }
+    .findings-list { list-style: none; }
+    .findings-list li { font-size: .9rem; font-weight: 300; line-height: 1.5; color: var(--ink-dim); padding-left: 1.6rem; position: relative; margin-bottom: .8rem; letter-spacing: -.005em; }
+    .findings-list li:last-child { margin-bottom: 0; }
+    .findings-list li::before { content: ''; position: absolute; left: 0; top: .65em; width: 16px; height: 1px; background: var(--orange); }
+    .rf-links { display: flex; flex-direction: column; gap: .55rem; }
+    .reports-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .report-card { border: 1px solid var(--ink-line); padding: 2.25rem; display: flex; flex-direction: column; gap: 1rem; position: relative; transition: border-color .25s ease; }
+    .report-card:hover { border-color: var(--ink-faint); }
+    .report-card::before { content: ''; position: absolute; top: -1px; left: -1px; width: 0; height: 2px; background: var(--orange); transition: width .4s cubic-bezier(.16,1,.3,1); }
+    .report-card:hover::before { width: calc(100% + 2px); }
+    .report-card .report-title { font-size: 1.18rem; max-width: 34ch; }
+    .report-card .report-summary { font-size: .94rem; }
+    .report-card .report-docs { margin-top: auto; padding-top: 1.1rem; border-top: 1px solid var(--ink-line-soft); }
+    .reports-sub-head { margin-top: 5.5rem; }
+    @media (max-width: 968px) {
+      .reports-section { padding: 5rem var(--gutter); }
+      .report-featured { grid-template-columns: 1fr; }
+      .rf-main, .rf-side { padding: 1.75rem; }
+      .rf-side { border-left: none; border-top: 1px solid var(--ink-line); }
+      .reports-grid { grid-template-columns: 1fr; }
+      .report-card { padding: 1.75rem; }
+      .reports-legend { gap: .85rem 1.75rem; margin-bottom: 2.5rem; }
+      .reports-sub-head { margin-top: 4rem; }
+    }
+
+    /* ----------------------------------------------------------
        TEAM — leadership lattice + ruled collaborators
        ---------------------------------------------------------- */
     .team-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
@@ -1826,6 +1888,267 @@
       </div>
     </div>
   </section>
+
+  <!-- ======================= REPORTS & BRIEFS ======================= -->
+  <section class="reports-section" id="reports">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Reports &amp; Briefs</span>
+        <h2>Our research, in <em>plain language.</em></h2>
+        <p class="section-sub">Preliminary research and house briefs that read our own work so policymakers, journalists, and partners don't have to parse a repository first. Each brief links to its source documents — and down to the FinMango tools and data it informed.</p>
+      </div>
+
+      <div class="reports-legend">
+        <span class="reports-legend-item"><span class="report-type">Working Paper</span> Longer, methodological field studies — our pre-journal work.</span>
+        <span class="reports-legend-item"><span class="report-type">Focus Note</span> Short. One finding or recommendation, for a policy audience.</span>
+        <span class="reports-legend-item"><span class="report-type">Data Spotlight</span> A light read built off a dataset or measurement tool.</span>
+      </div>
+
+      <div class="reports-featured" id="reports-featured"></div>
+
+      <div class="section-head reports-sub-head">
+        <span class="eyebrow">More from preliminary research</span>
+        <h3>Shorter <em>briefs.</em></h3>
+      </div>
+
+      <div class="reports-grid" id="reports-grid"></div>
+    </div>
+  </section>
+
+  <script>
+    /* ============================================================
+       REPORTS & BRIEFS — single content model (DRAFT).
+       Seeded from finmango/research → "3 - Preliminary Research.md".
+       Add a report by appending one object to REPORTS. Each card
+       renders from this array; featured: true gets the large
+       two-column treatment with key findings + related tools.
+       Structured so a future All / Reports / Data / Publications
+       filter is a front-end swap (data-type / data-tags on cards).
+       ============================================================ */
+    (function () {
+      const REPORT_TYPES = {
+        'working-paper':  { label: 'Working Paper' },
+        'focus-note':     { label: 'Focus Note' },
+        'data-spotlight': { label: 'Data Spotlight' },
+      };
+
+      const REPO = 'https://github.com/finmango/research/blob/main/';
+
+      const REPORTS = [
+        {
+          id: 'housing-affordability-seed-s26',
+          type: 'working-paper',
+          featured: true,
+          title: 'Analyzing the American Housing Affordability Crisis',
+          partner: 'SEED Consulting · University of Virginia',
+          term: 'Spring 2026',
+          authors: [
+            { name: 'Claudia Dean', affiliation: 'Project Leader, SEED Consulting (UVA)' },
+            { name: 'Shreeya Suresh', affiliation: 'SEED Consulting (UVA)' },
+            { name: 'Tyler George', affiliation: 'SEED Consulting (UVA)' },
+            { name: 'Christopher Wang', affiliation: 'SEED Consulting (UVA)' },
+          ],
+          plainLanguageSummary: 'An examination of the U.S. housing affordability crisis across five very different places — New York City, Los Angeles, Portland, McKinney (TX), and McCall (ID) — chosen to show how the same crisis looks different in cities, suburbs, and rural towns. Housing counts as "unaffordable" once rent and utilities pass 30% of monthly income, and the brief traces how that pressure spills into health, education, and the wider economy.',
+          keyFindings: [
+            '53% of Americans spend more than half of household income on housing',
+            '49% of renters are cost-burdened',
+            'Suburban home prices are up 40% since 2020',
+            'Rural residents now need ~$75K/year to afford a median-priced home — a 105% jump vs. pre-pandemic',
+          ],
+          documents: [
+            { label: 'Final Presentation — SEED × FinMango (S26)', kind: 'PPTX', url: REPO + 'preliminary-research/housing-affordability-seed-s26/SEED_x_FinMango_S26_Final_Presentation.pptx' },
+          ],
+          relatedTools: [
+            { label: 'Mango Stories: Understand the Housing Crisis', url: 'housing-affordability-stories.html' },
+            { label: 'Housing Affordability Calculator', url: 'housing-calculator.html' },
+            { label: 'Rent vs. Buy Calculator', url: 'rent-vs-buy.html' },
+            { label: 'Financial Health Barometer', url: 'barometer.html' },
+          ],
+          publicationUrl: null,
+          doi: null,
+          tags: ['housing'],
+        },
+        {
+          id: 'food-insecurity-snap-seed-f25',
+          type: 'working-paper',
+          featured: true,
+          title: 'Food Insecurity & SNAP Access Across the United States',
+          partner: 'SEED Consulting · University of Virginia',
+          term: 'Fall 2025',
+          authors: [
+            { name: 'Jaiden Khemani', affiliation: 'Project Leader, SEED Consulting (UVA)' },
+            { name: 'Henna Fernandez', affiliation: 'SEED Consulting (UVA)' },
+            { name: 'Alex Jennings', affiliation: 'SEED Consulting (UVA)' },
+            { name: 'Mae Bledsoe', affiliation: 'SEED Consulting (UVA)' },
+            { name: 'Matt Tam', affiliation: 'SEED Consulting (UVA)' },
+          ],
+          plainLanguageSummary: 'A look at food insecurity and SNAP access across five diverse communities — Atlanta, Chicago, Kansas City, Twin Falls (ID), and Wolfe County (KY). The finding: hunger is driven less by an absolute shortage of food than by structural barriers — transportation gaps, the uneven spread of SNAP retailers that stock fresh produce, restrictive state eligibility rules, and benefits that haven’t kept pace with housing and grocery costs.',
+          keyFindings: [
+            'Every $1 in SNAP benefits generates roughly $1.54 in GDP',
+            'Transportation gaps and car dependency limit access more than food supply does',
+            'Regional food banks are strained as benefits are cut',
+          ],
+          documents: [
+            { label: 'Client Presentation — FinMango × SEED (F25)', kind: 'PPTX', url: REPO + 'preliminary-research/food-insecurity-snap-seed-f25/FinMango_x_SEED_F25_Client_Presentation.pptx' },
+            { label: 'Atlanta, GA — Case Study', kind: 'PDF', url: REPO + 'preliminary-research/food-insecurity-snap-seed-f25/Atlanta_GA_Case_Study.pdf' },
+            { label: 'Chicago, IL — Case Study', kind: 'PDF', url: REPO + 'preliminary-research/food-insecurity-snap-seed-f25/Chicago_IL_Case_Study.pdf' },
+            { label: 'Kansas City, MO — Case Study', kind: 'PDF', url: REPO + 'preliminary-research/food-insecurity-snap-seed-f25/Kansas_City_MO_Case_Study.pdf' },
+            { label: 'Twin Falls, ID — Case Study', kind: 'PDF', url: REPO + 'preliminary-research/food-insecurity-snap-seed-f25/Twin_Falls_ID_Case_Study.pdf' },
+            { label: 'Wolfe County, KY — Case Study', kind: 'PDF', url: REPO + 'preliminary-research/food-insecurity-snap-seed-f25/Wolfe_County_KY_Case_Study.pdf' },
+          ],
+          relatedTools: [
+            { label: 'Food Assistance / SNAP Eligibility Calculator', url: 'food-assistance-calculator.html' },
+            { label: 'Mango Stories: Food Insecurity', url: 'food-insecurity-stories.html' },
+            { label: 'Food Security Hub', url: 'food-security.html' },
+          ],
+          publicationUrl: null,
+          doi: null,
+          tags: ['food security'],
+        },
+        {
+          id: 'affordable-housing-calculator-rec',
+          type: 'focus-note',
+          title: 'A Recommendation: Affordable Housing via an Accessible Calculator & Partnerships',
+          plainLanguageSummary: 'A recommendation for improving financial health through affordable housing, built on two moves: a housing affordability calculator that combines market data and connects people to available grants, and strategic partnerships with organizations like LISC to stretch community impact through shared resources.',
+          documents: [{ label: 'Read the recommendation', kind: 'DRIVE', url: 'https://drive.google.com/file/d/1f66Mv64vBMVF4POt-gb6QqypWVBtCZeT/view?usp=sharing' }],
+          tags: ['housing'],
+        },
+        {
+          id: 'climate-migration-colombia',
+          type: 'focus-note',
+          title: 'Climate Migration in Colombia',
+          plainLanguageSummary: 'Climate change is displacing Colombians through disasters, food insecurity, and poverty, driving migration both within the country and beyond its borders. The brief argues the response demands global investment, local aid, and far greater awareness of climate impacts.',
+          documents: [{ label: 'Read the brief', kind: 'DRIVE', url: 'https://drive.google.com/file/d/1EC66P2aeLugNyLeMIIQIugiC6I-8bpY5/view?usp=sharing' }],
+          tags: ['climate migration'],
+        },
+        {
+          id: 'immigration-policy-analysis',
+          type: 'focus-note',
+          title: 'Immigration Policy Analysis',
+          plainLanguageSummary: 'A review of immigration policies around the world through the lens of climate change, regional challenges, and migration trends. It recommends better data tracking and deeper partnerships with NGOs.',
+          documents: [{ label: 'Read the brief', kind: 'DRIVE', url: 'https://drive.google.com/file/d/1KGVGTxRUwprXvkxlKStAdw5seJCfktof/view?usp=sharing' }],
+          tags: ['immigration'],
+        },
+        {
+          id: 'climate-migration-trend-scanner',
+          type: 'data-spotlight',
+          title: 'Climate Migration Trend Scanner',
+          plainLanguageSummary: 'A concept report, developed with SEED Consulting, for a Climate Migration Trend Scanner — laying out the strategy, target audiences, data sources, and the machine-learning approach behind a future early-detection tool.',
+          documents: [{ label: 'Open the report folder', kind: 'FOLDER', url: 'https://drive.google.com/drive/folders/1uC4ukGnMD8vc7IXRcHpsTfxWP_noAGKA?usp=sharing' }],
+          tags: ['climate migration'],
+        },
+        {
+          id: 'brazilian-financial-ecosystem',
+          type: 'focus-note',
+          title: 'Brazilian Financial Ecosystem Report',
+          plainLanguageSummary: 'Brazil’s financial ecosystem is vast and layered, with many kinds of providers operating side by side. The report maps six key sectors, each with its own players, macroeconomic effects, and challenges.',
+          documents: [{ label: 'Read the report', kind: 'DRIVE', url: 'https://drive.google.com/file/d/18xVHMDV9eue0tWoRXS6KSYhRDiAEhoTi/view?usp=sharing' }],
+          tags: ['brazil', 'global markets'],
+        },
+        {
+          id: 'financial-health-measurement-toolkit',
+          type: 'data-spotlight',
+          title: 'Financial Health Measurement Toolkit',
+          plainLanguageSummary: 'A breakdown of what "financial health" actually means, a survey of existing financial-health measurement instruments, and suggestions for where the field should go next. FinMango maintains a running catalog of these tools for thought leaders and policymakers.',
+          documents: [{ label: 'Read the report', kind: 'DRIVE', url: 'https://drive.google.com/file/d/1We_uKQtuPK2e7j8BOuDsgceAiVWb1neO/view?usp=sharing' }],
+          tags: ['financial health'],
+        },
+        {
+          id: 'returning-citizens-barriers',
+          type: 'focus-note',
+          title: 'Acknowledging the Barriers Returning Citizens Face',
+          plainLanguageSummary: 'Drawing on interviews, this brief maps the wide-ranging barriers faced by people returning from incarceration, then works to prioritize which of those barriers can realistically be addressed first.',
+          documents: [{ label: 'View the presentation', kind: 'DRIVE', url: 'https://drive.google.com/file/d/1-hCuYY9u1JamtS9D6J7SSCSITBeRrSeL/view?usp=sharing' }],
+          tags: ['equity'],
+        },
+        {
+          id: 'argentina-brazil-comparative',
+          type: 'focus-note',
+          title: 'Comparative Study: Argentina & Brazil',
+          plainLanguageSummary: 'Financial illiteracy is widespread among lower-income households in Argentina, limiting access to credit and slowing economic mobility. The study argues for stronger public-private partnerships to expand financial education and opportunity.',
+          documents: [{ label: 'Read the study', kind: 'DRIVE', url: 'https://drive.google.com/file/d/10yJ4JvT52VMCHem8Cy07AkKzQ_lR7Jrc/view?usp=sharing' }],
+          tags: ['financial literacy', 'global markets'],
+        },
+        {
+          id: 'nigerian-economic-data',
+          type: 'data-spotlight',
+          title: 'Case Study of Nigerian Economic Data',
+          plainLanguageSummary: 'FinMango’s analysis of Nigeria’s economic data surfaced recurring problems — outdated information and a thin set of reporting sources — that point to a need for standardized data collection. In response, FinMango is building automated data-collection tools and pushing for better reporting.',
+          documents: [{ label: 'Read the case study', kind: 'DRIVE', url: 'https://drive.google.com/file/d/1ytHEvcw3x_jqj6WzBB7pk4IkT4AyjPCB/view?usp=sharing' }],
+          tags: ['nigeria', 'data'],
+        },
+      ];
+
+      const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+      function authorsHtml(authors) {
+        return authors.map((a) => `${esc(a.name)}<span class="aff"> (${esc(a.affiliation)})</span>`).join(', ');
+      }
+      function metaHtml(r) {
+        return [r.partner, r.term].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join('');
+      }
+      function tagsHtml(r) {
+        if (!r.tags || !r.tags.length) return '';
+        return `<div class="report-tags">${r.tags.map((t) => `<span class="report-tag">${esc(t)}</span>`).join('')}</div>`;
+      }
+      function docsHtml(docs) {
+        return (docs || []).map((d) =>
+          `<a class="report-doc" href="${esc(d.url)}" target="_blank" rel="noopener noreferrer"><span class="kind">${esc(d.kind)}</span> ${esc(d.label)}</a>`
+        ).join('');
+      }
+      function upLinkHtml(r) {
+        if (!r.publicationUrl) return '';
+        const doi = r.doi ? ` · ${esc(r.doi)}` : '';
+        return `<a class="report-link" href="${esc(r.publicationUrl)}" target="_blank" rel="noopener noreferrer"><span class="dir up" aria-hidden="true">↑</span> Peer-reviewed paper${doi}</a>`;
+      }
+
+      function featuredHtml(r) {
+        const t = REPORT_TYPES[r.type] || { label: r.type };
+        const findings = (r.keyFindings || []).map((f) => `<li>${esc(f)}</li>`).join('');
+        const tools = (r.relatedTools || []).map((tool) =>
+          `<a class="report-link" href="${esc(tool.url)}"><span class="dir down" aria-hidden="true">↓</span> ${esc(tool.label)}</a>`
+        ).join('');
+        return `<article class="report-featured" data-type="${esc(r.type)}" data-tags="${esc((r.tags || []).join(' '))}">
+          <div class="rf-main">
+            <span class="report-type">${esc(t.label)}</span>
+            <h3 class="report-title">${esc(r.title)}</h3>
+            <div class="report-meta">${metaHtml(r)}</div>
+            <p class="report-authors">${authorsHtml(r.authors || [])}</p>
+            <p class="report-summary">${esc(r.plainLanguageSummary)}</p>
+            ${tagsHtml(r)}
+            <div class="report-docs">${docsHtml(r.documents)}${upLinkHtml(r)}</div>
+          </div>
+          <div class="rf-side">
+            ${findings ? `<div><div class="rf-block-label">Key findings</div><ul class="findings-list">${findings}</ul></div>` : ''}
+            ${tools ? `<div><div class="rf-block-label">What it informed ↓</div><div class="rf-links">${tools}</div></div>` : ''}
+          </div>
+        </article>`;
+      }
+
+      function cardHtml(r) {
+        const t = REPORT_TYPES[r.type] || { label: r.type };
+        return `<article class="report-card" data-type="${esc(r.type)}" data-tags="${esc((r.tags || []).join(' '))}">
+          <span class="report-type">${esc(t.label)}</span>
+          <h3 class="report-title">${esc(r.title)}</h3>
+          <p class="report-summary">${esc(r.plainLanguageSummary)}</p>
+          ${tagsHtml(r)}
+          <div class="report-docs">${docsHtml(r.documents)}${upLinkHtml(r)}</div>
+        </article>`;
+      }
+
+      function render(list) {
+        const featured = list.filter((r) => r.featured);
+        const standard = list.filter((r) => !r.featured);
+        const fEl = document.getElementById('reports-featured');
+        const gEl = document.getElementById('reports-grid');
+        if (fEl) fEl.innerHTML = featured.map(featuredHtml).join('');
+        if (gEl) gEl.innerHTML = standard.map(cardHtml).join('');
+      }
+
+      render(REPORTS);
+      window.FinMangoReports = { REPORTS, REPORT_TYPES, render };
+    })();
+  </script>
 
   <!-- ======================= BAROMETER MAP PREVIEW ======================= -->
   <section class="map-section" id="barometer-preview">
