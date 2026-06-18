@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Review Panel - FinMango (internal)</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --paper: #FAFAF7; --ink: #0A0A0A; --orange: #FF6B35; --orange-deep: #E5511B;
+      --good: #1f9d57; --bad: #d23f3f; --warn: #b8791b;
+      --ink-dim: rgba(10,10,10,.62); --ink-faint: rgba(10,10,10,.38);
+      --ink-line: rgba(10,10,10,.1); --ink-line-soft: rgba(10,10,10,.06);
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+      --gutter: 2rem;
+    }
+    body { font-family: var(--font-body); background: var(--paper); color: var(--ink); line-height: 1.5; font-size: 16px;
+      -webkit-font-smoothing: antialiased; font-feature-settings: "ss01" on, "cv11" on; }
+    a { color: var(--orange); }
+    .mono { font-family: var(--font-mono); }
+
+    .topbar { position: sticky; top: 0; z-index: 20; background: var(--ink); color: #fff; padding: .9rem var(--gutter);
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .topbar .brand { display: flex; align-items: center; gap: .8rem; font-weight: 700; letter-spacing: -.02em; }
+    .topbar .brand img { height: 24px; filter: brightness(0) invert(1); }
+    .topbar .tag { font-family: var(--font-mono); font-size: .58rem; letter-spacing: .16em; text-transform: uppercase; color: rgba(250,250,247,.5); border: 1px solid rgba(250,250,247,.2); padding: .15rem .45rem; }
+    .topbar .actions { display: flex; align-items: center; gap: .8rem; }
+    .topbar .who { font-family: var(--font-mono); font-size: .7rem; color: rgba(250,250,247,.6); }
+    .topbar button { font-family: inherit; font-size: .8rem; font-weight: 600; padding: .4rem .8rem; background: transparent; color: #fff; border: 1px solid rgba(250,250,247,.25); cursor: pointer; }
+    .topbar button:hover { border-color: #fff; }
+
+    /* gate */
+    .gate { max-width: 420px; margin: 6rem auto; padding: 2.5rem; border: 1px solid var(--ink-line); background: #fff; }
+    .gate h1 { font-size: 1.6rem; font-weight: 900; letter-spacing: -.03em; margin-bottom: .4rem; }
+    .gate p { color: var(--ink-dim); font-size: .92rem; margin-bottom: 1.5rem; }
+    .gate label { display: block; font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-dim); margin-bottom: .4rem; }
+    .gate input { width: 100%; padding: .8rem .9rem; font-family: inherit; font-size: .95rem; border: 1px solid var(--ink-line); margin-bottom: 1rem; }
+    .gate input:focus { outline: none; border-color: var(--orange); }
+    .gate button { width: 100%; padding: .9rem; background: var(--orange); color: #fff; border: none; font-weight: 600; font-size: .95rem; cursor: pointer; }
+    .gate button:hover { background: var(--ink); }
+    .gate .err { color: var(--bad); font-size: .82rem; min-height: 1.1rem; margin-bottom: .5rem; }
+
+    .layout { display: none; grid-template-columns: 340px 1fr; min-height: calc(100vh - 50px); }
+    .layout.show { display: grid; }
+    .list { border-right: 1px solid var(--ink-line); overflow-y: auto; max-height: calc(100vh - 50px); position: sticky; top: 50px; }
+    .filters { display: flex; gap: .3rem; padding: .8rem; border-bottom: 1px solid var(--ink-line-soft); flex-wrap: wrap; }
+    .filters button { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .08em; padding: .35rem .55rem; background: transparent; border: 1px solid var(--ink-line); cursor: pointer; color: var(--ink-dim); }
+    .filters button.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .item { padding: 1rem 1.1rem; border-bottom: 1px solid var(--ink-line-soft); cursor: pointer; transition: background .15s; }
+    .item:hover { background: #fff; }
+    .item.active { background: #fff; box-shadow: inset 3px 0 0 var(--orange); }
+    .item-title { font-weight: 700; letter-spacing: -.02em; font-size: .95rem; line-height: 1.25; }
+    .item-sub { font-family: var(--font-mono); font-size: .62rem; color: var(--ink-faint); margin-top: .35rem; letter-spacing: .04em; display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; }
+    .badge { font-family: var(--font-mono); font-size: .56rem; text-transform: uppercase; letter-spacing: .1em; padding: .12rem .4rem; border: 1px solid currentColor; }
+    .b-pending { color: var(--warn); } .b-approved, .b-published { color: var(--good); } .b-rejected { color: var(--bad); } .b-changes { color: var(--orange-deep); }
+
+    .detail { overflow-y: auto; max-height: calc(100vh - 50px); }
+    .detail-inner { max-width: 800px; margin: 0 auto; padding: 2.5rem var(--gutter) 5rem; }
+    .detail-empty { display: flex; align-items: center; justify-content: center; height: 60vh; color: var(--ink-faint); }
+
+    .reviewbar { position: sticky; top: 50px; z-index: 10; background: rgba(250,250,247,.95); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--ink-line); padding: .8rem var(--gutter); display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; }
+    .reviewbar .btn { font-family: inherit; font-size: .82rem; font-weight: 600; padding: .55rem .9rem; border: 1px solid var(--ink-line); background: #fff; cursor: pointer; }
+    .reviewbar .btn:hover { border-color: var(--ink); }
+    .reviewbar .btn.approve { background: var(--good); color: #fff; border-color: var(--good); }
+    .reviewbar .btn.changes { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .reviewbar .btn.reject { background: transparent; color: var(--bad); border-color: var(--bad); }
+    .reviewbar .btn.publish { background: var(--ink); color: #fff; border-color: var(--ink); margin-left: auto; }
+    .reviewbar .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+    /* rendered article (same look as post.html) */
+    .article-cat { font-family: var(--font-mono); font-size: .62rem; font-weight: 500; text-transform: uppercase; letter-spacing: .16em; color: var(--orange); display: block; margin-bottom: 1rem; }
+    .article-title { font-size: 2.2rem; font-weight: 900; line-height: 1.05; letter-spacing: -.04em; }
+    .article-dek { font-size: 1.2rem; font-weight: 300; color: var(--ink-dim); margin-top: .8rem; }
+    .article-meta { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .04em; color: var(--ink-faint); text-transform: uppercase; margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid var(--ink-line); }
+    .article-meta strong { color: var(--ink); font-weight: 500; }
+    .article-cover { margin: 2rem 0; } .article-cover img { width: 100%; display: block; }
+    .article-body { font-size: 1.1rem; line-height: 1.7; margin-top: 1.5rem; }
+    .article-body p { margin: 1.2rem 0; }
+    .article-body h2 { font-size: 1.6rem; font-weight: 900; letter-spacing: -.03em; margin: 2.2rem 0 .8rem; }
+    .article-body h3 { font-size: 1.2rem; font-weight: 700; margin: 1.6rem 0 .6rem; }
+    .article-body img { width: 100%; display: block; margin: 1.6rem 0; }
+    .article-body blockquote { border-left: 3px solid var(--orange); padding-left: 1.4rem; margin: 1.6rem 0; font-size: 1.25rem; font-weight: 300; }
+    .article-body a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--orange); }
+    .article-body ul, .article-body ol { margin: 1.2rem 0; padding-left: 1.4rem; }
+    .article-body hr { border: none; border-top: 1px solid var(--ink-line); margin: 2rem 0; }
+
+    .reviews { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--ink-line); }
+    .reviews h3 { font-family: var(--font-mono); font-size: .62rem; text-transform: uppercase; letter-spacing: .14em; color: var(--ink-faint); margin-bottom: 1rem; }
+    .review { padding: .9rem 0; border-bottom: 1px solid var(--ink-line-soft); font-size: .9rem; }
+    .review .r-head { display: flex; gap: .6rem; align-items: center; margin-bottom: .3rem; }
+    .review .r-name { font-weight: 700; }
+    .review .r-vote { font-family: var(--font-mono); font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; padding: .1rem .4rem; border: 1px solid currentColor; }
+    .review .r-when { font-family: var(--font-mono); font-size: .6rem; color: var(--ink-faint); margin-left: auto; }
+    .review .r-comment { color: var(--ink-dim); }
+    .review-input { margin-top: 1rem; }
+    .review-input textarea { width: 100%; padding: .8rem; font-family: inherit; font-size: .9rem; border: 1px solid var(--ink-line); min-height: 70px; }
+    .review-input textarea:focus { outline: none; border-color: var(--orange); }
+
+    .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(160%); background: var(--ink); color: #fff;
+      padding: .85rem 1.4rem; font-size: .88rem; z-index: 2000; transition: transform .3s; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.bad { background: var(--bad); }
+
+    @media (max-width: 860px) { .layout.show { grid-template-columns: 1fr; } .list { position: static; max-height: none; border-right: none; border-bottom: 1px solid var(--ink-line); } .detail { max-height: none; } }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="brand"><img src="finmango.png" alt="FinMango"> Post Review Panel <span class="tag">Internal</span></div>
+    <div class="actions">
+      <span class="who" id="who"></span>
+      <button id="refreshBtn" style="display:none">Refresh</button>
+      <button id="signoutBtn" style="display:none">Sign out</button>
+    </div>
+  </div>
+
+  <!-- gate -->
+  <div class="gate" id="gate">
+    <h1>Reviewer access</h1>
+    <p>Enter your name and the review passphrase to see submitted posts.</p>
+    <label for="reviewerName">Your name</label>
+    <input type="text" id="reviewerName" placeholder="e.g. Maya">
+    <label for="reviewKey">Review passphrase</label>
+    <input type="password" id="reviewKey" placeholder="••••••••">
+    <div class="err" id="gateErr"></div>
+    <button id="enterBtn">Enter</button>
+  </div>
+
+  <!-- panel -->
+  <div class="layout" id="layout">
+    <aside class="list">
+      <div class="filters" id="filters">
+        <button data-f="pending" class="active">Pending</button>
+        <button data-f="changes">Changes</button>
+        <button data-f="approved">Approved</button>
+        <button data-f="published">Published</button>
+        <button data-f="rejected">Rejected</button>
+        <button data-f="all">All</button>
+      </div>
+      <div id="itemList"></div>
+    </aside>
+    <main class="detail" id="detail">
+      <div class="detail-empty">Select a post to review.</div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast">—</div>
+
+  <script>
+    // Paste your deployed Apps Script Web App URL (see docs/POSTS-SETUP.md).
+    const API_URL = 'REPLACE_WITH_APPS_SCRIPT_WEB_APP_URL';
+
+    const $ = id => document.getElementById(id);
+    const toast = (m, bad) => { const t = $('toast'); t.textContent = m; t.classList.toggle('bad', !!bad); t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); };
+    const escapeHtml = s => (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const fmtDate = iso => { try { return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); } catch { return ''; } };
+
+    // sanitizer (same contract)
+    const ALLOWED = { H2:[], H3:[], P:[], BR:[], STRONG:[], B:[], EM:[], I:[], U:[], A:['href'], UL:[], OL:[], LI:[], BLOCKQUOTE:[], HR:[], IMG:['src','alt'], FIGURE:[], FIGCAPTION:[], DIV:[], SPAN:[] };
+    function sanitize(html) {
+      const doc = new DOMParser().parseFromString('<div>' + (html || '') + '</div>', 'text/html');
+      const root = doc.body.firstChild;
+      (function walk(node) { [...node.childNodes].forEach(child => {
+        if (child.nodeType === 1) { const tag = child.tagName;
+          if (!ALLOWED[tag]) { while (child.firstChild) node.insertBefore(child.firstChild, child); node.removeChild(child); return walk(node); }
+          [...child.attributes].forEach(a => { const ok = ALLOWED[tag].includes(a.name);
+            const sh = a.name === 'href' && !/^\s*javascript:/i.test(a.value);
+            const ss = a.name === 'src' && /^(https?:|data:image\/)/i.test(a.value);
+            if (!ok || (a.name === 'href' && !sh) || (a.name === 'src' && !ss)) child.removeAttribute(a.name); });
+          if (tag === 'A' && child.getAttribute('href')) { child.setAttribute('target', '_blank'); child.setAttribute('rel', 'noopener noreferrer'); }
+          walk(child);
+        } else if (child.nodeType !== 3) node.removeChild(child);
+      }); })(root);
+      return root.innerHTML;
+    }
+
+    let KEY = '', NAME = '', FILTER = 'pending', POSTS = [], CURRENT = null;
+    const SS = sessionStorage;
+
+    function api(params) {
+      const q = new URLSearchParams(params).toString();
+      return fetch(API_URL + '?' + q).then(r => r.json());
+    }
+
+    async function enter() {
+      const name = $('reviewerName').value.trim(), key = $('reviewKey').value;
+      if (!name || !key) { $('gateErr').textContent = 'Name and passphrase required.'; return; }
+      if (API_URL === 'REPLACE_WITH_APPS_SCRIPT_WEB_APP_URL') { $('gateErr').textContent = 'Backend URL not set (docs/POSTS-SETUP.md).'; return; }
+      $('enterBtn').disabled = true; $('enterBtn').textContent = 'Checking…';
+      try {
+        const res = await api({ action: 'list', key, status: 'pending' });
+        if (res.result !== 'success') throw new Error(res.error || 'Wrong passphrase');
+        KEY = key; NAME = name; SS.setItem('pr_key', key); SS.setItem('pr_name', name);
+        $('gate').style.display = 'none'; $('layout').classList.add('show');
+        $('refreshBtn').style.display = ''; $('signoutBtn').style.display = '';
+        $('who').textContent = 'Reviewing as ' + NAME;
+        load();
+      } catch (e) {
+        $('gateErr').textContent = e.message || 'Could not verify.';
+      } finally { $('enterBtn').disabled = false; $('enterBtn').textContent = 'Enter'; }
+    }
+
+    async function load() {
+      $('itemList').innerHTML = '<div style="padding:1.2rem;color:var(--ink-faint);font-size:.85rem">Loading…</div>';
+      try {
+        const res = await api({ action: 'list', key: KEY, status: 'all' });
+        if (res.result !== 'success') throw new Error(res.error);
+        POSTS = res.posts || [];
+        renderList();
+      } catch (e) { $('itemList').innerHTML = '<div style="padding:1.2rem;color:var(--bad);font-size:.85rem">' + escapeHtml(e.message || 'Failed to load') + '</div>'; }
+    }
+
+    function statusBadge(s) { return '<span class="badge b-' + s + '">' + s + '</span>'; }
+    function renderList() {
+      const items = POSTS.filter(p => FILTER === 'all' ? true : p.status === FILTER);
+      if (!items.length) { $('itemList').innerHTML = '<div style="padding:1.2rem;color:var(--ink-faint);font-size:.85rem">Nothing here.</div>'; return; }
+      $('itemList').innerHTML = items.map(p =>
+        '<div class="item" data-id="' + escapeHtml(p.id) + '">' +
+          '<div class="item-title">' + escapeHtml(p.title || '(untitled)') + '</div>' +
+          '<div class="item-sub">' + statusBadge(p.status) + '<span>' + escapeHtml(p.authorName || '') + '</span><span>' + escapeHtml(fmtDate(p.createdAt)) + '</span></div>' +
+        '</div>').join('');
+      document.querySelectorAll('.item').forEach(el => el.addEventListener('click', () => openPost(el.dataset.id)));
+      if (CURRENT) { const a = document.querySelector('.item[data-id="' + CSS.escape(CURRENT) + '"]'); if (a) a.classList.add('active'); }
+    }
+
+    async function openPost(id) {
+      CURRENT = id;
+      document.querySelectorAll('.item').forEach(el => el.classList.toggle('active', el.dataset.id === id));
+      $('detail').innerHTML = '<div class="detail-empty">Loading…</div>';
+      try {
+        const res = await api({ action: 'review-get', id, key: KEY });
+        if (res.result !== 'success' || !res.post) throw new Error(res.error || 'Not found');
+        renderDetail(res.post);
+      } catch (e) { $('detail').innerHTML = '<div class="detail-empty">' + escapeHtml(e.message || 'Failed') + '</div>'; }
+    }
+
+    function renderDetail(p) {
+      const tagLine = [p.category, (p.tags || []).join(' · ')].filter(Boolean).join('  ·  ');
+      const cover = p.cover ? '<div class="article-cover"><img src="' + escapeHtml(p.cover) + '" alt=""></div>' : '';
+      const reviews = (p.reviews || []).map(r =>
+        '<div class="review"><div class="r-head"><span class="r-name">' + escapeHtml(r.reviewer) + '</span>' +
+        '<span class="r-vote">' + escapeHtml(r.vote) + '</span><span class="r-when">' + escapeHtml(fmtDate(r.at)) + '</span></div>' +
+        (r.comment ? '<div class="r-comment">' + escapeHtml(r.comment) + '</div>' : '') + '</div>').join('') || '<p style="color:var(--ink-faint);font-size:.85rem">No reviews yet.</p>';
+      const isPublished = p.status === 'published';
+      $('detail').innerHTML =
+        '<div class="reviewbar">' +
+          statusBadge(p.status) +
+          '<button class="btn approve" data-vote="approve">Approve</button>' +
+          '<button class="btn changes" data-vote="changes">Request changes</button>' +
+          '<button class="btn reject" data-vote="reject">Reject</button>' +
+          '<button class="btn publish" id="publishBtn"' + (isPublished ? ' disabled' : '') + '>' + (isPublished ? 'Published ✓' : 'Publish to site') + '</button>' +
+        '</div>' +
+        '<div class="detail-inner">' +
+          '<article class="article">' +
+            '<span class="article-cat">' + escapeHtml(tagLine) + '</span>' +
+            '<h1 class="article-title">' + escapeHtml(p.title) + '</h1>' +
+            (p.dek ? '<p class="article-dek">' + escapeHtml(p.dek) + '</p>' : '') +
+            '<div class="article-meta"><strong>' + escapeHtml(p.authorName || '') + '</strong>' + (p.authorAffiliation ? ' — ' + escapeHtml(p.authorAffiliation) : '') +
+              ' · ' + escapeHtml(p.authorEmail || '') + ' · ' + escapeHtml(fmtDate(p.createdAt)) + '</div>' +
+            cover +
+            '<div class="article-body">' + sanitize(p.body) + '</div>' +
+          '</article>' +
+          '<div class="reviews"><h3>Reviews &amp; votes</h3>' + reviews +
+            '<div class="review-input"><textarea id="commentBox" placeholder="Leave a comment with your vote (optional)…"></textarea></div>' +
+          '</div>' +
+        '</div>';
+      document.querySelectorAll('.reviewbar .btn[data-vote]').forEach(b => b.addEventListener('click', () => vote(p.id, b.dataset.vote)));
+      $('publishBtn').addEventListener('click', () => publish(p.id));
+    }
+
+    async function vote(id, v) {
+      const comment = ($('commentBox') && $('commentBox').value.trim()) || '';
+      try {
+        const res = await api({ action: 'review', id, key: KEY, reviewer: NAME, vote: v, comment });
+        if (res.result !== 'success') throw new Error(res.error);
+        toast('Recorded: ' + v);
+        await load(); openPost(id);
+      } catch (e) { toast(e.message || 'Failed', true); }
+    }
+    async function publish(id) {
+      if (!confirm('Publish this post to finmango.org? It will appear publicly on Community Posts.')) return;
+      try {
+        const res = await api({ action: 'publish', id, key: KEY, reviewer: NAME });
+        if (res.result !== 'success') throw new Error(res.error);
+        toast('Published ✓');
+        await load(); openPost(id);
+      } catch (e) { toast(e.message || 'Failed', true); }
+    }
+
+    // filters / chrome
+    document.querySelectorAll('.filters button').forEach(b => b.addEventListener('click', () => {
+      document.querySelectorAll('.filters button').forEach(x => x.classList.remove('active'));
+      b.classList.add('active'); FILTER = b.dataset.f; renderList();
+    }));
+    $('enterBtn').addEventListener('click', enter);
+    $('reviewKey').addEventListener('keydown', e => { if (e.key === 'Enter') enter(); });
+    $('refreshBtn').addEventListener('click', load);
+    $('signoutBtn').addEventListener('click', () => { SS.removeItem('pr_key'); SS.removeItem('pr_name'); location.reload(); });
+
+    // resume session
+    (function () {
+      const k = SS.getItem('pr_key'), n = SS.getItem('pr_name');
+      if (k && n) { $('reviewerName').value = n; $('reviewKey').value = k; enter(); }
+    })();
+  </script>
+</body>
+</html>
