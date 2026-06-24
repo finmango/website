@@ -1,11 +1,11 @@
 // Financial Health Barometer Data
-// Auto-generated: 2026-06-23T06:28:24.099Z
+// Auto-generated: 2026-06-24T06:26:34.180Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
-  "as_of": "2026-06-23",
+  "as_of": "2026-06-24",
   "meta": {
-    "generated": "2026-06-23T06:28:24.062Z",
+    "generated": "2026-06-24T06:26:34.144Z",
     "version": "2.4",
     "source": "BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs",
     "update_frequency": "daily",
@@ -19,12 +19,12 @@ const DASHBOARD_DATA = {
       "jchs_calibration": "Harvard JCHS State of the Nation's Housing 2025",
       "trends": "Google Trends"
     },
-    "augmented_at": "2026-06-23T06:28:24.099Z"
+    "augmented_at": "2026-06-24T06:26:34.180Z"
   },
   "national": {
     "financial_anxiety": {
-      "value": 140.8,
-      "change": 5.2,
+      "value": 139.7,
+      "change": 4.2,
       "trend": "up"
     },
     "food_insecurity": {
@@ -38,7 +38,7 @@ const DASHBOARD_DATA = {
       "trend": "up"
     },
     "affordability": {
-      "value": 136.8,
+      "value": 136.6,
       "change": 0,
       "trend": "up"
     }
@@ -48,9 +48,9 @@ const DASHBOARD_DATA = {
       "name": "Alabama",
       "abbr": "AL",
       "financial_anxiety": {
-        "value": 134,
-        "change": -3.4,
-        "rank": 31
+        "value": 139,
+        "change": 3.4,
+        "rank": 26
       },
       "food_insecurity": {
         "value": 145,
@@ -68,7 +68,7 @@ const DASHBOARD_DATA = {
         "rank": 8
       },
       "metrics": {
-        "unemployment_rate": 2.8,
+        "unemployment_rate": 3,
         "poverty_rate": 15.2,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
@@ -97,9 +97,9 @@ const DASHBOARD_DATA = {
       "name": "Alaska",
       "abbr": "AK",
       "financial_anxiety": {
-        "value": 153,
-        "change": 2.2,
-        "rank": 19
+        "value": 151,
+        "change": 0,
+        "rank": 20
       },
       "food_insecurity": {
         "value": 94,
@@ -117,7 +117,7 @@ const DASHBOARD_DATA = {
         "rank": 28
       },
       "metrics": {
-        "unemployment_rate": 4.7,
+        "unemployment_rate": 4.6,
         "poverty_rate": 10.3,
         "rent_burden_pct": 26.5,
         "rent_burden_source": "census_acs",
@@ -146,9 +146,9 @@ const DASHBOARD_DATA = {
       "name": "Arizona",
       "abbr": "AZ",
       "financial_anxiety": {
-        "value": 156,
-        "change": 11.9,
-        "rank": 15
+        "value": 158,
+        "change": 11.6,
+        "rank": 14
       },
       "food_insecurity": {
         "value": 106,
@@ -166,7 +166,7 @@ const DASHBOARD_DATA = {
         "rank": 24
       },
       "metrics": {
-        "unemployment_rate": 4.7,
+        "unemployment_rate": 4.8,
         "poverty_rate": 11.9,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
@@ -195,9 +195,9 @@ const DASHBOARD_DATA = {
       "name": "Arkansas",
       "abbr": "AR",
       "financial_anxiety": {
-        "value": 164,
-        "change": 10.3,
-        "rank": 11
+        "value": 162,
+        "change": 5,
+        "rank": 10
       },
       "food_insecurity": {
         "value": 142,
@@ -215,7 +215,7 @@ const DASHBOARD_DATA = {
         "rank": 13
       },
       "metrics": {
-        "unemployment_rate": 4.3,
+        "unemployment_rate": 4.2,
         "poverty_rate": 15.3,
         "rent_burden_pct": 28.1,
         "rent_burden_source": "census_acs",
@@ -245,7 +245,7 @@ const DASHBOARD_DATA = {
       "abbr": "CA",
       "financial_anxiety": {
         "value": 181,
-        "change": -1.9,
+        "change": -3.6,
         "rank": 2
       },
       "food_insecurity": {
@@ -294,8 +294,8 @@ const DASHBOARD_DATA = {
       "abbr": "CO",
       "financial_anxiety": {
         "value": 130,
-        "change": -7.1,
-        "rank": 35
+        "change": -4.9,
+        "rank": 34
       },
       "food_insecurity": {
         "value": 84,
@@ -342,9 +342,9 @@ const DASHBOARD_DATA = {
       "name": "Connecticut",
       "abbr": "CT",
       "financial_anxiety": {
-        "value": 150,
-        "change": 31.6,
-        "rank": 23
+        "value": 152,
+        "change": 34.2,
+        "rank": 19
       },
       "food_insecurity": {
         "value": 87,
@@ -362,7 +362,7 @@ const DASHBOARD_DATA = {
         "rank": 16
       },
       "metrics": {
-        "unemployment_rate": 5,
+        "unemployment_rate": 5.1,
         "poverty_rate": 10.1,
         "rent_burden_pct": 32.1,
         "rent_burden_source": "census_acs",
@@ -391,9 +391,9 @@ const DASHBOARD_DATA = {
       "name": "Delaware",
       "abbr": "DE",
       "financial_anxiety": {
-        "value": 152,
-        "change": 17.8,
-        "rank": 20
+        "value": 149,
+        "change": 13.3,
+        "rank": 22
       },
       "food_insecurity": {
         "value": 86,
@@ -411,7 +411,7 @@ const DASHBOARD_DATA = {
         "rank": 36
       },
       "metrics": {
-        "unemployment_rate": 5.3,
+        "unemployment_rate": 5.1,
         "poverty_rate": 10.1,
         "rent_burden_pct": 30.1,
         "rent_burden_source": "census_acs",
@@ -440,8 +440,8 @@ const DASHBOARD_DATA = {
       "name": "District of Columbia",
       "abbr": "DC",
       "financial_anxiety": {
-        "value": 199,
-        "change": 1.6,
+        "value": 197,
+        "change": 0,
         "rank": 1
       },
       "food_insecurity": {
@@ -460,7 +460,7 @@ const DASHBOARD_DATA = {
         "rank": 10
       },
       "metrics": {
-        "unemployment_rate": 6.2,
+        "unemployment_rate": 6.1,
         "poverty_rate": 16.4,
         "rent_burden_pct": 29,
         "rent_burden_source": "census_acs",
@@ -489,9 +489,9 @@ const DASHBOARD_DATA = {
       "name": "Florida",
       "abbr": "FL",
       "financial_anxiety": {
-        "value": 175,
+        "value": 165,
         "change": 29.7,
-        "rank": 4
+        "rank": 8
       },
       "food_insecurity": {
         "value": 122,
@@ -538,9 +538,9 @@ const DASHBOARD_DATA = {
       "name": "Georgia",
       "abbr": "GA",
       "financial_anxiety": {
-        "value": 132,
-        "change": 6.1,
-        "rank": 33
+        "value": 130,
+        "change": 3,
+        "rank": 35
       },
       "food_insecurity": {
         "value": 112,
@@ -558,7 +558,7 @@ const DASHBOARD_DATA = {
         "rank": 18
       },
       "metrics": {
-        "unemployment_rate": 3.5,
+        "unemployment_rate": 3.4,
         "poverty_rate": 12.8,
         "rent_burden_pct": 31.6,
         "rent_burden_source": "census_acs",
@@ -588,7 +588,7 @@ const DASHBOARD_DATA = {
       "abbr": "HI",
       "financial_anxiety": {
         "value": 122,
-        "change": 0,
+        "change": 4.2,
         "rank": 40
       },
       "food_insecurity": {
@@ -636,8 +636,8 @@ const DASHBOARD_DATA = {
       "name": "Idaho",
       "abbr": "ID",
       "financial_anxiety": {
-        "value": 128,
-        "change": 0,
+        "value": 130,
+        "change": 2.8,
         "rank": 36
       },
       "food_insecurity": {
@@ -656,7 +656,7 @@ const DASHBOARD_DATA = {
         "rank": 40
       },
       "metrics": {
-        "unemployment_rate": 3.6,
+        "unemployment_rate": 3.7,
         "poverty_rate": 10.4,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
@@ -686,7 +686,7 @@ const DASHBOARD_DATA = {
       "abbr": "IL",
       "financial_anxiety": {
         "value": 156,
-        "change": 13.3,
+        "change": 15.9,
         "rank": 16
       },
       "food_insecurity": {
@@ -734,9 +734,9 @@ const DASHBOARD_DATA = {
       "name": "Indiana",
       "abbr": "IN",
       "financial_anxiety": {
-        "value": 119,
-        "change": -13.5,
-        "rank": 42
+        "value": 121,
+        "change": -10.8,
+        "rank": 41
       },
       "food_insecurity": {
         "value": 102,
@@ -754,7 +754,7 @@ const DASHBOARD_DATA = {
         "rank": 29
       },
       "metrics": {
-        "unemployment_rate": 3.2,
+        "unemployment_rate": 3.3,
         "poverty_rate": 12.1,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
@@ -783,9 +783,9 @@ const DASHBOARD_DATA = {
       "name": "Iowa",
       "abbr": "IA",
       "financial_anxiety": {
-        "value": 107,
-        "change": -8.3,
-        "rank": 45
+        "value": 105,
+        "change": -11.1,
+        "rank": 46
       },
       "food_insecurity": {
         "value": 85,
@@ -803,7 +803,7 @@ const DASHBOARD_DATA = {
         "rank": 49
       },
       "metrics": {
-        "unemployment_rate": 3.3,
+        "unemployment_rate": 3.2,
         "poverty_rate": 11.2,
         "rent_burden_pct": 27.2,
         "rent_burden_source": "census_acs",
@@ -832,8 +832,8 @@ const DASHBOARD_DATA = {
       "name": "Kansas",
       "abbr": "KS",
       "financial_anxiety": {
-        "value": 127,
-        "change": 2.6,
+        "value": 125,
+        "change": 0,
         "rank": 38
       },
       "food_insecurity": {
@@ -852,7 +852,7 @@ const DASHBOARD_DATA = {
         "rank": 41
       },
       "metrics": {
-        "unemployment_rate": 3.9,
+        "unemployment_rate": 3.8,
         "poverty_rate": 10.9,
         "rent_burden_pct": 27.1,
         "rent_burden_source": "census_acs",
@@ -881,9 +881,9 @@ const DASHBOARD_DATA = {
       "name": "Kentucky",
       "abbr": "KY",
       "financial_anxiety": {
-        "value": 159,
-        "change": -8.5,
-        "rank": 12
+        "value": 163,
+        "change": -4.3,
+        "rank": 9
       },
       "food_insecurity": {
         "value": 139,
@@ -901,7 +901,7 @@ const DASHBOARD_DATA = {
         "rank": 12
       },
       "metrics": {
-        "unemployment_rate": 4.3,
+        "unemployment_rate": 4.5,
         "poverty_rate": 15.4,
         "rent_burden_pct": 27.9,
         "rent_burden_source": "census_acs",
@@ -930,8 +930,8 @@ const DASHBOARD_DATA = {
       "name": "Louisiana",
       "abbr": "LA",
       "financial_anxiety": {
-        "value": 177,
-        "change": 2.3,
+        "value": 179,
+        "change": 4.7,
         "rank": 3
       },
       "food_insecurity": {
@@ -947,10 +947,10 @@ const DASHBOARD_DATA = {
       "affordability": {
         "value": 174,
         "change": 0,
-        "rank": 3
+        "rank": 2
       },
       "metrics": {
-        "unemployment_rate": 4.4,
+        "unemployment_rate": 4.5,
         "poverty_rate": 18.6,
         "rent_burden_pct": 32.5,
         "rent_burden_source": "census_acs",
@@ -981,7 +981,7 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 107,
         "change": -6.1,
-        "rank": 46
+        "rank": 45
       },
       "food_insecurity": {
         "value": 84,
@@ -1029,8 +1029,8 @@ const DASHBOARD_DATA = {
       "abbr": "MD",
       "financial_anxiety": {
         "value": 136,
-        "change": 15.8,
-        "rank": 26
+        "change": 10,
+        "rank": 27
       },
       "food_insecurity": {
         "value": 80,
@@ -1077,9 +1077,9 @@ const DASHBOARD_DATA = {
       "name": "Massachusetts",
       "abbr": "MA",
       "financial_anxiety": {
-        "value": 144,
-        "change": 6.8,
-        "rank": 25
+        "value": 141,
+        "change": 2.3,
+        "rank": 24
       },
       "food_insecurity": {
         "value": 85,
@@ -1097,7 +1097,7 @@ const DASHBOARD_DATA = {
         "rank": 22
       },
       "metrics": {
-        "unemployment_rate": 4.7,
+        "unemployment_rate": 4.5,
         "poverty_rate": 9.8,
         "rent_burden_pct": 31.1,
         "rent_burden_source": "census_acs",
@@ -1126,9 +1126,9 @@ const DASHBOARD_DATA = {
       "name": "Michigan",
       "abbr": "MI",
       "financial_anxiety": {
-        "value": 159,
-        "change": -3.8,
-        "rank": 13
+        "value": 161,
+        "change": 0,
+        "rank": 11
       },
       "food_insecurity": {
         "value": 114,
@@ -1146,7 +1146,7 @@ const DASHBOARD_DATA = {
         "rank": 17
       },
       "metrics": {
-        "unemployment_rate": 5,
+        "unemployment_rate": 5.1,
         "poverty_rate": 13.4,
         "rent_burden_pct": 30.7,
         "rent_burden_source": "census_acs",
@@ -1175,9 +1175,9 @@ const DASHBOARD_DATA = {
       "name": "Minnesota",
       "abbr": "MN",
       "financial_anxiety": {
-        "value": 155,
-        "change": 25,
-        "rank": 17
+        "value": 153,
+        "change": 18.9,
+        "rank": 18
       },
       "food_insecurity": {
         "value": 90,
@@ -1195,7 +1195,7 @@ const DASHBOARD_DATA = {
         "rank": 33
       },
       "metrics": {
-        "unemployment_rate": 4.5,
+        "unemployment_rate": 4.4,
         "poverty_rate": 9.3,
         "rent_burden_pct": 29.1,
         "rent_burden_source": "census_acs",
@@ -1226,7 +1226,7 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 169,
         "change": -2.6,
-        "rank": 9
+        "rank": 6
       },
       "food_insecurity": {
         "value": 160,
@@ -1239,9 +1239,9 @@ const DASHBOARD_DATA = {
         "rank": 7
       },
       "affordability": {
-        "value": 183,
+        "value": 173,
         "change": 0,
-        "rank": 2
+        "rank": 3
       },
       "metrics": {
         "unemployment_rate": 3.8,
@@ -1275,7 +1275,7 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 132,
         "change": -5,
-        "rank": 34
+        "rank": 31
       },
       "food_insecurity": {
         "value": 103,
@@ -1322,9 +1322,9 @@ const DASHBOARD_DATA = {
       "name": "Montana",
       "abbr": "MT",
       "financial_anxiety": {
-        "value": 120,
-        "change": 12.9,
-        "rank": 41
+        "value": 118,
+        "change": 6.2,
+        "rank": 42
       },
       "food_insecurity": {
         "value": 87,
@@ -1342,7 +1342,7 @@ const DASHBOARD_DATA = {
         "rank": 45
       },
       "metrics": {
-        "unemployment_rate": 3.5,
+        "unemployment_rate": 3.4,
         "poverty_rate": 10.4,
         "rent_burden_pct": 27,
         "rent_burden_source": "census_acs",
@@ -1420,9 +1420,9 @@ const DASHBOARD_DATA = {
       "name": "Nevada",
       "abbr": "NV",
       "financial_anxiety": {
-        "value": 171,
+        "value": 169,
         "change": 0,
-        "rank": 6
+        "rank": 7
       },
       "food_insecurity": {
         "value": 107,
@@ -1440,7 +1440,7 @@ const DASHBOARD_DATA = {
         "rank": 14
       },
       "metrics": {
-        "unemployment_rate": 5.3,
+        "unemployment_rate": 5.2,
         "poverty_rate": 11.8,
         "rent_burden_pct": 34,
         "rent_burden_source": "census_acs",
@@ -1469,8 +1469,8 @@ const DASHBOARD_DATA = {
       "name": "New Hampshire",
       "abbr": "NH",
       "financial_anxiety": {
-        "value": 99,
-        "change": -3.1,
+        "value": 98,
+        "change": -6.3,
         "rank": 48
       },
       "food_insecurity": {
@@ -1489,7 +1489,7 @@ const DASHBOARD_DATA = {
         "rank": 46
       },
       "metrics": {
-        "unemployment_rate": 3.1,
+        "unemployment_rate": 3,
         "poverty_rate": 7.3,
         "rent_burden_pct": 29.8,
         "rent_burden_source": "census_acs",
@@ -1518,9 +1518,9 @@ const DASHBOARD_DATA = {
       "name": "New Jersey",
       "abbr": "NJ",
       "financial_anxiety": {
-        "value": 151,
-        "change": -5.9,
-        "rank": 21
+        "value": 149,
+        "change": -9.6,
+        "rank": 23
       },
       "food_insecurity": {
         "value": 84,
@@ -1538,7 +1538,7 @@ const DASHBOARD_DATA = {
         "rank": 15
       },
       "metrics": {
-        "unemployment_rate": 4.8,
+        "unemployment_rate": 4.7,
         "poverty_rate": 9.2,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
@@ -1568,8 +1568,8 @@ const DASHBOARD_DATA = {
       "abbr": "NM",
       "financial_anxiety": {
         "value": 171,
-        "change": 19.5,
-        "rank": 7
+        "change": 22.5,
+        "rank": 5
       },
       "food_insecurity": {
         "value": 141,
@@ -1616,9 +1616,9 @@ const DASHBOARD_DATA = {
       "name": "New York",
       "abbr": "NY",
       "financial_anxiety": {
-        "value": 171,
-        "change": 12.2,
-        "rank": 8
+        "value": 161,
+        "change": 9.5,
+        "rank": 12
       },
       "food_insecurity": {
         "value": 135,
@@ -1667,7 +1667,7 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 133,
         "change": -2.6,
-        "rank": 32
+        "rank": 30
       },
       "food_insecurity": {
         "value": 109,
@@ -1763,9 +1763,9 @@ const DASHBOARD_DATA = {
       "name": "Ohio",
       "abbr": "OH",
       "financial_anxiety": {
-        "value": 135,
-        "change": -18.8,
-        "rank": 28
+        "value": 131,
+        "change": -21.3,
+        "rank": 33
       },
       "food_insecurity": {
         "value": 107,
@@ -1783,7 +1783,7 @@ const DASHBOARD_DATA = {
         "rank": 26
       },
       "metrics": {
-        "unemployment_rate": 3.9,
+        "unemployment_rate": 3.7,
         "poverty_rate": 12.6,
         "rent_burden_pct": 29,
         "rent_burden_source": "census_acs",
@@ -1812,9 +1812,9 @@ const DASHBOARD_DATA = {
       "name": "Oklahoma",
       "abbr": "OK",
       "financial_anxiety": {
-        "value": 148,
-        "change": 29,
-        "rank": 24
+        "value": 150,
+        "change": 32.3,
+        "rank": 21
       },
       "food_insecurity": {
         "value": 131,
@@ -1832,7 +1832,7 @@ const DASHBOARD_DATA = {
         "rank": 23
       },
       "metrics": {
-        "unemployment_rate": 4,
+        "unemployment_rate": 4.1,
         "poverty_rate": 14.8,
         "rent_burden_pct": 28.4,
         "rent_burden_source": "census_acs",
@@ -1862,8 +1862,8 @@ const DASHBOARD_DATA = {
       "abbr": "OR",
       "financial_anxiety": {
         "value": 158,
-        "change": 2,
-        "rank": 14
+        "change": 0,
+        "rank": 15
       },
       "food_insecurity": {
         "value": 100,
@@ -1959,9 +1959,9 @@ const DASHBOARD_DATA = {
       "name": "Rhode Island",
       "abbr": "RI",
       "financial_anxiety": {
-        "value": 135,
-        "change": 2.3,
-        "rank": 30
+        "value": 132,
+        "change": -2.3,
+        "rank": 32
       },
       "food_insecurity": {
         "value": 95,
@@ -1979,7 +1979,7 @@ const DASHBOARD_DATA = {
         "rank": 27
       },
       "metrics": {
-        "unemployment_rate": 4.5,
+        "unemployment_rate": 4.3,
         "poverty_rate": 12,
         "rent_burden_pct": 30.5,
         "rent_burden_source": "census_acs",
@@ -2008,9 +2008,9 @@ const DASHBOARD_DATA = {
       "name": "South Carolina",
       "abbr": "SC",
       "financial_anxiety": {
-        "value": 165,
-        "change": 14.3,
-        "rank": 10
+        "value": 161,
+        "change": 7,
+        "rank": 13
       },
       "food_insecurity": {
         "value": 121,
@@ -2028,7 +2028,7 @@ const DASHBOARD_DATA = {
         "rank": 9
       },
       "metrics": {
-        "unemployment_rate": 4.8,
+        "unemployment_rate": 4.6,
         "poverty_rate": 13.3,
         "rent_burden_pct": 31.4,
         "rent_burden_source": "census_acs",
@@ -2057,8 +2057,8 @@ const DASHBOARD_DATA = {
       "name": "South Dakota",
       "abbr": "SD",
       "financial_anxiety": {
-        "value": 85,
-        "change": 10,
+        "value": 83,
+        "change": 5,
         "rank": 51
       },
       "food_insecurity": {
@@ -2077,7 +2077,7 @@ const DASHBOARD_DATA = {
         "rank": 50
       },
       "metrics": {
-        "unemployment_rate": 2.2,
+        "unemployment_rate": 2.1,
         "poverty_rate": 10.5,
         "rent_burden_pct": 26.9,
         "rent_burden_source": "census_acs",
@@ -2108,7 +2108,7 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 136,
         "change": 2.9,
-        "rank": 27
+        "rank": 28
       },
       "food_insecurity": {
         "value": 117,
@@ -2155,9 +2155,9 @@ const DASHBOARD_DATA = {
       "name": "Texas",
       "abbr": "TX",
       "financial_anxiety": {
-        "value": 151,
+        "value": 141,
         "change": 4.9,
-        "rank": 22
+        "rank": 25
       },
       "food_insecurity": {
         "value": 121,
@@ -2204,8 +2204,8 @@ const DASHBOARD_DATA = {
       "name": "Utah",
       "abbr": "UT",
       "financial_anxiety": {
-        "value": 128,
-        "change": 11.8,
+        "value": 126,
+        "change": 5.7,
         "rank": 37
       },
       "food_insecurity": {
@@ -2224,7 +2224,7 @@ const DASHBOARD_DATA = {
         "rank": 43
       },
       "metrics": {
-        "unemployment_rate": 3.8,
+        "unemployment_rate": 3.7,
         "poverty_rate": 8.4,
         "rent_burden_pct": 29.4,
         "rent_burden_source": "census_acs",
@@ -2353,7 +2353,7 @@ const DASHBOARD_DATA = {
       "financial_anxiety": {
         "value": 154,
         "change": 15.6,
-        "rank": 18
+        "rank": 17
       },
       "food_insecurity": {
         "value": 87,
@@ -2400,9 +2400,9 @@ const DASHBOARD_DATA = {
       "name": "West Virginia",
       "abbr": "WV",
       "financial_anxiety": {
-        "value": 174,
-        "change": 12.8,
-        "rank": 5
+        "value": 172,
+        "change": 7.5,
+        "rank": 4
       },
       "food_insecurity": {
         "value": 160,
@@ -2420,7 +2420,7 @@ const DASHBOARD_DATA = {
         "rank": 6
       },
       "metrics": {
-        "unemployment_rate": 4.4,
+        "unemployment_rate": 4.3,
         "poverty_rate": 16.2,
         "rent_burden_pct": 28.4,
         "rent_burden_source": "census_acs",
@@ -2449,8 +2449,8 @@ const DASHBOARD_DATA = {
       "name": "Wisconsin",
       "abbr": "WI",
       "financial_anxiety": {
-        "value": 114,
-        "change": 9.4,
+        "value": 112,
+        "change": 9.7,
         "rank": 43
       },
       "food_insecurity": {
@@ -2469,7 +2469,7 @@ const DASHBOARD_DATA = {
         "rank": 44
       },
       "metrics": {
-        "unemployment_rate": 3.5,
+        "unemployment_rate": 3.4,
         "poverty_rate": 10.3,
         "rent_burden_pct": 27.9,
         "rent_burden_source": "census_acs",
@@ -2498,8 +2498,8 @@ const DASHBOARD_DATA = {
       "name": "Wyoming",
       "abbr": "WY",
       "financial_anxiety": {
-        "value": 114,
-        "change": 9.4,
+        "value": 112,
+        "change": 6.2,
         "rank": 44
       },
       "food_insecurity": {
@@ -2518,7 +2518,7 @@ const DASHBOARD_DATA = {
         "rank": 48
       },
       "metrics": {
-        "unemployment_rate": 3.5,
+        "unemployment_rate": 3.4,
         "poverty_rate": 10,
         "rent_burden_pct": 26.5,
         "rent_burden_source": "census_acs",
@@ -2561,19 +2561,19 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2016-10-01",
-          "value": 38
+          "value": 37
         },
         {
           "date": "2016-11-01",
-          "value": 40
+          "value": 39
         },
         {
           "date": "2016-12-01",
-          "value": 38
+          "value": 37
         },
         {
           "date": "2017-01-01",
-          "value": 39
+          "value": 38
         },
         {
           "date": "2017-02-01",
@@ -2589,35 +2589,35 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2017-05-01",
-          "value": 40
-        },
-        {
-          "date": "2017-06-01",
-          "value": 40
-        },
-        {
-          "date": "2017-07-01",
-          "value": 40
-        },
-        {
-          "date": "2017-08-01",
           "value": 39
         },
         {
+          "date": "2017-06-01",
+          "value": 39
+        },
+        {
+          "date": "2017-07-01",
+          "value": 39
+        },
+        {
+          "date": "2017-08-01",
+          "value": 38
+        },
+        {
           "date": "2017-09-01",
-          "value": 41
+          "value": 40
         },
         {
           "date": "2017-10-01",
-          "value": 42
-        },
-        {
-          "date": "2017-11-01",
           "value": 41
         },
         {
+          "date": "2017-11-01",
+          "value": 40
+        },
+        {
           "date": "2017-12-01",
-          "value": 38
+          "value": 37
         },
         {
           "date": "2018-01-01",
@@ -2629,23 +2629,23 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-03-01",
-          "value": 38
-        },
-        {
-          "date": "2018-04-01",
-          "value": 39
-        },
-        {
-          "date": "2018-05-01",
-          "value": 38
-        },
-        {
-          "date": "2018-06-01",
           "value": 37
         },
         {
+          "date": "2018-04-01",
+          "value": 38
+        },
+        {
+          "date": "2018-05-01",
+          "value": 37
+        },
+        {
+          "date": "2018-06-01",
+          "value": 36
+        },
+        {
           "date": "2018-07-01",
-          "value": 35
+          "value": 34
         },
         {
           "date": "2018-08-01",
@@ -2653,7 +2653,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-09-01",
-          "value": 35
+          "value": 34
         },
         {
           "date": "2018-10-01",
@@ -2661,63 +2661,63 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-11-01",
-          "value": 38
+          "value": 37
         },
         {
           "date": "2018-12-01",
-          "value": 37
-        },
-        {
-          "date": "2019-01-01",
-          "value": 39
-        },
-        {
-          "date": "2019-02-01",
-          "value": 39
-        },
-        {
-          "date": "2019-03-01",
-          "value": 42
-        },
-        {
-          "date": "2019-04-01",
-          "value": 41
-        },
-        {
-          "date": "2019-05-01",
-          "value": 40
-        },
-        {
-          "date": "2019-06-01",
-          "value": 38
-        },
-        {
-          "date": "2019-07-01",
           "value": 36
         },
         {
-          "date": "2019-08-01",
+          "date": "2019-01-01",
+          "value": 38
+        },
+        {
+          "date": "2019-02-01",
+          "value": 38
+        },
+        {
+          "date": "2019-03-01",
+          "value": 40
+        },
+        {
+          "date": "2019-04-01",
+          "value": 40
+        },
+        {
+          "date": "2019-05-01",
+          "value": 39
+        },
+        {
+          "date": "2019-06-01",
           "value": 37
         },
         {
+          "date": "2019-07-01",
+          "value": 35
+        },
+        {
+          "date": "2019-08-01",
+          "value": 35
+        },
+        {
           "date": "2019-09-01",
-          "value": 39
+          "value": 37
         },
         {
           "date": "2019-10-01",
-          "value": 41
-        },
-        {
-          "date": "2019-11-01",
-          "value": 41
-        },
-        {
-          "date": "2019-12-01",
           "value": 39
         },
         {
+          "date": "2019-11-01",
+          "value": 39
+        },
+        {
+          "date": "2019-12-01",
+          "value": 38
+        },
+        {
           "date": "2020-01-01",
-          "value": 40
+          "value": 39
         },
         {
           "date": "2020-02-01",
@@ -2725,19 +2725,19 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2020-03-01",
-          "value": 44
+          "value": 43
         },
         {
           "date": "2020-04-01",
-          "value": 42
+          "value": 41
         },
         {
           "date": "2020-05-01",
-          "value": 38
+          "value": 37
         },
         {
           "date": "2020-06-01",
-          "value": 36
+          "value": 35
         },
         {
           "date": "2020-07-01",
@@ -2745,39 +2745,39 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2020-08-01",
-          "value": 32
+          "value": 31
         },
         {
           "date": "2020-09-01",
-          "value": 34
+          "value": 33
         },
         {
           "date": "2020-10-01",
-          "value": 37
-        },
-        {
-          "date": "2020-11-01",
-          "value": 38
-        },
-        {
-          "date": "2020-12-01",
-          "value": 38
-        },
-        {
-          "date": "2021-01-01",
           "value": 36
         },
         {
-          "date": "2021-02-01",
+          "date": "2020-11-01",
           "value": 37
         },
         {
+          "date": "2020-12-01",
+          "value": 37
+        },
+        {
+          "date": "2021-01-01",
+          "value": 35
+        },
+        {
+          "date": "2021-02-01",
+          "value": 36
+        },
+        {
           "date": "2021-03-01",
-          "value": 38
+          "value": 37
         },
         {
           "date": "2021-04-01",
-          "value": 39
+          "value": 38
         },
         {
           "date": "2021-05-01",
@@ -2785,23 +2785,23 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2021-06-01",
-          "value": 36
+          "value": 35
         },
         {
           "date": "2021-07-01",
-          "value": 34
+          "value": 33
         },
         {
           "date": "2021-08-01",
-          "value": 31
+          "value": 30
         },
         {
           "date": "2021-09-01",
-          "value": 34
+          "value": 32
         },
         {
           "date": "2021-10-01",
-          "value": 36
+          "value": 35
         },
         {
           "date": "2021-11-01",
@@ -2809,385 +2809,385 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2021-12-01",
-          "value": 38
+          "value": 37
         },
         {
           "date": "2022-01-01",
-          "value": 39
+          "value": 38
         },
         {
           "date": "2022-02-01",
-          "value": 43
+          "value": 41
         },
         {
           "date": "2022-03-01",
-          "value": 48
+          "value": 46
         },
         {
           "date": "2022-04-01",
-          "value": 54
+          "value": 53
         },
         {
           "date": "2022-05-01",
-          "value": 56
+          "value": 54
         },
         {
           "date": "2022-06-01",
-          "value": 53
+          "value": 51
         },
         {
           "date": "2022-07-01",
-          "value": 45
+          "value": 44
         },
         {
           "date": "2022-08-01",
-          "value": 43
+          "value": 42
         },
         {
           "date": "2022-09-01",
-          "value": 47
+          "value": 46
         },
         {
           "date": "2022-10-01",
-          "value": 52
+          "value": 51
         },
         {
           "date": "2022-11-01",
-          "value": 54
+          "value": 53
         },
         {
           "date": "2022-12-01",
-          "value": 53
-        },
-        {
-          "date": "2023-01-01",
-          "value": 53
-        },
-        {
-          "date": "2023-02-01",
-          "value": 56
-        },
-        {
-          "date": "2023-03-01",
-          "value": 60
-        },
-        {
-          "date": "2023-04-01",
-          "value": 63
-        },
-        {
-          "date": "2023-05-01",
-          "value": 66
-        },
-        {
-          "date": "2023-06-01",
-          "value": 61
-        },
-        {
-          "date": "2023-07-01",
-          "value": 54
-        },
-        {
-          "date": "2023-08-01",
-          "value": 47
-        },
-        {
-          "date": "2023-09-01",
-          "value": 53
-        },
-        {
-          "date": "2023-10-01",
-          "value": 62
-        },
-        {
-          "date": "2023-11-01",
-          "value": 71
-        },
-        {
-          "date": "2023-12-01",
-          "value": 71
-        },
-        {
-          "date": "2024-01-01",
-          "value": 69
-        },
-        {
-          "date": "2024-02-01",
-          "value": 70
-        },
-        {
-          "date": "2024-03-01",
-          "value": 73
-        },
-        {
-          "date": "2024-04-01",
-          "value": 79
-        },
-        {
-          "date": "2024-05-01",
-          "value": 75
-        },
-        {
-          "date": "2024-06-01",
-          "value": 67
-        },
-        {
-          "date": "2024-07-01",
-          "value": 56
-        },
-        {
-          "date": "2024-08-01",
           "value": 52
         },
         {
-          "date": "2024-09-01",
+          "date": "2023-01-01",
+          "value": 52
+        },
+        {
+          "date": "2023-02-01",
+          "value": 55
+        },
+        {
+          "date": "2023-03-01",
           "value": 59
         },
         {
-          "date": "2024-10-01",
+          "date": "2023-04-01",
+          "value": 62
+        },
+        {
+          "date": "2023-05-01",
+          "value": 64
+        },
+        {
+          "date": "2023-06-01",
+          "value": 59
+        },
+        {
+          "date": "2023-07-01",
+          "value": 52
+        },
+        {
+          "date": "2023-08-01",
+          "value": 46
+        },
+        {
+          "date": "2023-09-01",
+          "value": 52
+        },
+        {
+          "date": "2023-10-01",
+          "value": 61
+        },
+        {
+          "date": "2023-11-01",
+          "value": 70
+        },
+        {
+          "date": "2023-12-01",
+          "value": 69
+        },
+        {
+          "date": "2024-01-01",
+          "value": 67
+        },
+        {
+          "date": "2024-02-01",
           "value": 68
         },
         {
-          "date": "2024-11-01",
+          "date": "2024-03-01",
+          "value": 71
+        },
+        {
+          "date": "2024-04-01",
           "value": 76
         },
         {
-          "date": "2024-12-01",
-          "value": 74
-        },
-        {
-          "date": "2025-01-01",
+          "date": "2024-05-01",
           "value": 72
         },
         {
+          "date": "2024-06-01",
+          "value": 65
+        },
+        {
+          "date": "2024-07-01",
+          "value": 54
+        },
+        {
+          "date": "2024-08-01",
+          "value": 50
+        },
+        {
+          "date": "2024-09-01",
+          "value": 57
+        },
+        {
+          "date": "2024-10-01",
+          "value": 66
+        },
+        {
+          "date": "2024-11-01",
+          "value": 73
+        },
+        {
+          "date": "2024-12-01",
+          "value": 72
+        },
+        {
+          "date": "2025-01-01",
+          "value": 71
+        },
+        {
           "date": "2025-02-01",
-          "value": 77
+          "value": 76
         },
         {
           "date": "2025-03-01",
-          "value": 82
+          "value": 79
         },
         {
           "date": "2025-04-01",
-          "value": 87
+          "value": 83
         },
         {
           "date": "2025-05-01",
-          "value": 81
+          "value": 77
         },
         {
           "date": "2025-06-01",
-          "value": 78
-        },
-        {
-          "date": "2025-07-01",
           "value": 75
         },
         {
+          "date": "2025-07-01",
+          "value": 72
+        },
+        {
           "date": "2025-08-01",
-          "value": 78
+          "value": 75
         },
         {
           "date": "2025-09-01",
-          "value": 86
+          "value": 84
         },
         {
           "date": "2025-10-01",
-          "value": 93
+          "value": 91
         },
         {
           "date": "2025-11-01",
-          "value": 99
+          "value": 97
         },
         {
           "date": "2025-12-01",
-          "value": 101
+          "value": 96
         },
         {
           "date": "2026-01-01",
-          "value": 103
+          "value": 99
         },
         {
           "date": "2026-02-01",
-          "value": 106
+          "value": 104
         },
         {
           "date": "2026-03-01",
-          "value": 115
+          "value": 118
         },
         {
           "date": "2026-04-01",
-          "value": 130
+          "value": 133
         },
         {
           "date": "2026-05-01",
-          "value": 144
+          "value": 145
         },
         {
           "date": "2026-06-01",
-          "value": 141
+          "value": 140
         }
       ],
       "food_insecurity": [
         {
           "date": "2016-07-01",
-          "value": 95
+          "value": 96
         },
         {
           "date": "2016-08-01",
-          "value": 100
+          "value": 103
         },
         {
           "date": "2016-09-01",
-          "value": 100
-        },
-        {
-          "date": "2016-10-01",
-          "value": 101
-        },
-        {
-          "date": "2016-11-01",
-          "value": 95
-        },
-        {
-          "date": "2016-12-01",
-          "value": 89
-        },
-        {
-          "date": "2017-01-01",
-          "value": 89
-        },
-        {
-          "date": "2017-02-01",
-          "value": 89
-        },
-        {
-          "date": "2017-03-01",
-          "value": 88
-        },
-        {
-          "date": "2017-04-01",
-          "value": 82
-        },
-        {
-          "date": "2017-05-01",
-          "value": 81
-        },
-        {
-          "date": "2017-06-01",
-          "value": 87
-        },
-        {
-          "date": "2017-07-01",
-          "value": 92
-        },
-        {
-          "date": "2017-08-01",
-          "value": 99
-        },
-        {
-          "date": "2017-09-01",
-          "value": 108
-        },
-        {
-          "date": "2017-10-01",
-          "value": 121
-        },
-        {
-          "date": "2017-11-01",
-          "value": 118
-        },
-        {
-          "date": "2017-12-01",
-          "value": 105
-        },
-        {
-          "date": "2018-01-01",
-          "value": 97
-        },
-        {
-          "date": "2018-02-01",
-          "value": 99
-        },
-        {
-          "date": "2018-03-01",
-          "value": 98
-        },
-        {
-          "date": "2018-04-01",
-          "value": 90
-        },
-        {
-          "date": "2018-05-01",
-          "value": 82
-        },
-        {
-          "date": "2018-06-01",
-          "value": 86
-        },
-        {
-          "date": "2018-07-01",
-          "value": 91
-        },
-        {
-          "date": "2018-08-01",
-          "value": 98
-        },
-        {
-          "date": "2018-09-01",
-          "value": 98
-        },
-        {
-          "date": "2018-10-01",
-          "value": 97
-        },
-        {
-          "date": "2018-11-01",
-          "value": 91
-        },
-        {
-          "date": "2018-12-01",
-          "value": 87
-        },
-        {
-          "date": "2019-01-01",
-          "value": 120
-        },
-        {
-          "date": "2019-02-01",
-          "value": 126
-        },
-        {
-          "date": "2019-03-01",
-          "value": 127
-        },
-        {
-          "date": "2019-04-01",
-          "value": 91
-        },
-        {
-          "date": "2019-05-01",
-          "value": 86
-        },
-        {
-          "date": "2019-06-01",
-          "value": 89
-        },
-        {
-          "date": "2019-07-01",
-          "value": 98
-        },
-        {
-          "date": "2019-08-01",
           "value": 102
         },
         {
-          "date": "2019-09-01",
+          "date": "2016-10-01",
+          "value": 106
+        },
+        {
+          "date": "2016-11-01",
+          "value": 99
+        },
+        {
+          "date": "2016-12-01",
+          "value": 93
+        },
+        {
+          "date": "2017-01-01",
+          "value": 92
+        },
+        {
+          "date": "2017-02-01",
+          "value": 90
+        },
+        {
+          "date": "2017-03-01",
+          "value": 89
+        },
+        {
+          "date": "2017-04-01",
+          "value": 81
+        },
+        {
+          "date": "2017-05-01",
+          "value": 82
+        },
+        {
+          "date": "2017-06-01",
+          "value": 88
+        },
+        {
+          "date": "2017-07-01",
+          "value": 97
+        },
+        {
+          "date": "2017-08-01",
           "value": 101
         },
         {
-          "date": "2019-10-01",
+          "date": "2017-09-01",
+          "value": 115
+        },
+        {
+          "date": "2017-10-01",
+          "value": 125
+        },
+        {
+          "date": "2017-11-01",
+          "value": 124
+        },
+        {
+          "date": "2017-12-01",
+          "value": 107
+        },
+        {
+          "date": "2018-01-01",
+          "value": 98
+        },
+        {
+          "date": "2018-02-01",
+          "value": 102
+        },
+        {
+          "date": "2018-03-01",
+          "value": 101
+        },
+        {
+          "date": "2018-04-01",
           "value": 93
+        },
+        {
+          "date": "2018-05-01",
+          "value": 85
+        },
+        {
+          "date": "2018-06-01",
+          "value": 89
+        },
+        {
+          "date": "2018-07-01",
+          "value": 92
+        },
+        {
+          "date": "2018-08-01",
+          "value": 100
+        },
+        {
+          "date": "2018-09-01",
+          "value": 101
+        },
+        {
+          "date": "2018-10-01",
+          "value": 101
+        },
+        {
+          "date": "2018-11-01",
+          "value": 94
+        },
+        {
+          "date": "2018-12-01",
+          "value": 90
+        },
+        {
+          "date": "2019-01-01",
+          "value": 126
+        },
+        {
+          "date": "2019-02-01",
+          "value": 134
+        },
+        {
+          "date": "2019-03-01",
+          "value": 134
+        },
+        {
+          "date": "2019-04-01",
+          "value": 94
+        },
+        {
+          "date": "2019-05-01",
+          "value": 88
+        },
+        {
+          "date": "2019-06-01",
+          "value": 90
+        },
+        {
+          "date": "2019-07-01",
+          "value": 99
+        },
+        {
+          "date": "2019-08-01",
+          "value": 105
+        },
+        {
+          "date": "2019-09-01",
+          "value": 104
+        },
+        {
+          "date": "2019-10-01",
+          "value": 94
         },
         {
           "date": "2019-11-01",
@@ -3199,247 +3199,247 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2020-01-01",
-          "value": 87
+          "value": 89
         },
         {
           "date": "2020-02-01",
-          "value": 88
+          "value": 91
         },
         {
           "date": "2020-03-01",
-          "value": 120
-        },
-        {
-          "date": "2020-04-01",
-          "value": 188
-        },
-        {
-          "date": "2020-05-01",
-          "value": 217
-        },
-        {
-          "date": "2020-06-01",
-          "value": 204
-        },
-        {
-          "date": "2020-07-01",
-          "value": 153
-        },
-        {
-          "date": "2020-08-01",
-          "value": 142
-        },
-        {
-          "date": "2020-09-01",
-          "value": 135
-        },
-        {
-          "date": "2020-10-01",
-          "value": 134
-        },
-        {
-          "date": "2020-11-01",
-          "value": 132
-        },
-        {
-          "date": "2020-12-01",
-          "value": 134
-        },
-        {
-          "date": "2021-01-01",
-          "value": 141
-        },
-        {
-          "date": "2021-02-01",
-          "value": 147
-        },
-        {
-          "date": "2021-03-01",
-          "value": 142
-        },
-        {
-          "date": "2021-04-01",
-          "value": 127
-        },
-        {
-          "date": "2021-05-01",
-          "value": 120
-        },
-        {
-          "date": "2021-06-01",
-          "value": 127
-        },
-        {
-          "date": "2021-07-01",
-          "value": 136
-        },
-        {
-          "date": "2021-08-01",
-          "value": 150
-        },
-        {
-          "date": "2021-09-01",
-          "value": 159
-        },
-        {
-          "date": "2021-10-01",
-          "value": 159
-        },
-        {
-          "date": "2021-11-01",
-          "value": 148
-        },
-        {
-          "date": "2021-12-01",
-          "value": 132
-        },
-        {
-          "date": "2022-01-01",
-          "value": 137
-        },
-        {
-          "date": "2022-02-01",
-          "value": 141
-        },
-        {
-          "date": "2022-03-01",
-          "value": 147
-        },
-        {
-          "date": "2022-04-01",
-          "value": 139
-        },
-        {
-          "date": "2022-05-01",
-          "value": 135
-        },
-        {
-          "date": "2022-06-01",
-          "value": 145
-        },
-        {
-          "date": "2022-07-01",
-          "value": 157
-        },
-        {
-          "date": "2022-08-01",
-          "value": 167
-        },
-        {
-          "date": "2022-09-01",
-          "value": 169
-        },
-        {
-          "date": "2022-10-01",
-          "value": 170
-        },
-        {
-          "date": "2022-11-01",
-          "value": 162
-        },
-        {
-          "date": "2022-12-01",
-          "value": 149
-        },
-        {
-          "date": "2023-01-01",
-          "value": 143
-        },
-        {
-          "date": "2023-02-01",
-          "value": 139
-        },
-        {
-          "date": "2023-03-01",
-          "value": 133
-        },
-        {
-          "date": "2023-04-01",
-          "value": 118
-        },
-        {
-          "date": "2023-05-01",
-          "value": 115
-        },
-        {
-          "date": "2023-06-01",
-          "value": 122
-        },
-        {
-          "date": "2023-07-01",
-          "value": 132
-        },
-        {
-          "date": "2023-08-01",
-          "value": 138
-        },
-        {
-          "date": "2023-09-01",
-          "value": 139
-        },
-        {
-          "date": "2023-10-01",
-          "value": 134
-        },
-        {
-          "date": "2023-11-01",
           "value": 125
         },
         {
-          "date": "2023-12-01",
-          "value": 115
+          "date": "2020-04-01",
+          "value": 194
         },
         {
-          "date": "2024-01-01",
-          "value": 114
+          "date": "2020-05-01",
+          "value": 223
         },
         {
-          "date": "2024-02-01",
-          "value": 111
+          "date": "2020-06-01",
+          "value": 212
         },
         {
-          "date": "2024-03-01",
-          "value": 108
+          "date": "2020-07-01",
+          "value": 161
         },
         {
-          "date": "2024-04-01",
-          "value": 100
+          "date": "2020-08-01",
+          "value": 150
         },
         {
-          "date": "2024-05-01",
-          "value": 100
+          "date": "2020-09-01",
+          "value": 141
         },
         {
-          "date": "2024-06-01",
-          "value": 108
+          "date": "2020-10-01",
+          "value": 141
         },
         {
-          "date": "2024-07-01",
-          "value": 114
+          "date": "2020-11-01",
+          "value": 140
         },
         {
-          "date": "2024-08-01",
+          "date": "2020-12-01",
+          "value": 144
+        },
+        {
+          "date": "2021-01-01",
+          "value": 149
+        },
+        {
+          "date": "2021-02-01",
+          "value": 153
+        },
+        {
+          "date": "2021-03-01",
+          "value": 147
+        },
+        {
+          "date": "2021-04-01",
+          "value": 135
+        },
+        {
+          "date": "2021-05-01",
+          "value": 131
+        },
+        {
+          "date": "2021-06-01",
+          "value": 137
+        },
+        {
+          "date": "2021-07-01",
+          "value": 144
+        },
+        {
+          "date": "2021-08-01",
+          "value": 157
+        },
+        {
+          "date": "2021-09-01",
+          "value": 167
+        },
+        {
+          "date": "2021-10-01",
+          "value": 168
+        },
+        {
+          "date": "2021-11-01",
+          "value": 156
+        },
+        {
+          "date": "2021-12-01",
+          "value": 140
+        },
+        {
+          "date": "2022-01-01",
+          "value": 143
+        },
+        {
+          "date": "2022-02-01",
+          "value": 148
+        },
+        {
+          "date": "2022-03-01",
+          "value": 153
+        },
+        {
+          "date": "2022-04-01",
+          "value": 146
+        },
+        {
+          "date": "2022-05-01",
+          "value": 140
+        },
+        {
+          "date": "2022-06-01",
+          "value": 152
+        },
+        {
+          "date": "2022-07-01",
+          "value": 165
+        },
+        {
+          "date": "2022-08-01",
+          "value": 177
+        },
+        {
+          "date": "2022-09-01",
+          "value": 178
+        },
+        {
+          "date": "2022-10-01",
+          "value": 179
+        },
+        {
+          "date": "2022-11-01",
+          "value": 171
+        },
+        {
+          "date": "2022-12-01",
+          "value": 157
+        },
+        {
+          "date": "2023-01-01",
+          "value": 149
+        },
+        {
+          "date": "2023-02-01",
+          "value": 142
+        },
+        {
+          "date": "2023-03-01",
+          "value": 136
+        },
+        {
+          "date": "2023-04-01",
+          "value": 122
+        },
+        {
+          "date": "2023-05-01",
           "value": 120
         },
         {
-          "date": "2024-09-01",
+          "date": "2023-06-01",
+          "value": 127
+        },
+        {
+          "date": "2023-07-01",
+          "value": 137
+        },
+        {
+          "date": "2023-08-01",
+          "value": 144
+        },
+        {
+          "date": "2023-09-01",
+          "value": 145
+        },
+        {
+          "date": "2023-10-01",
+          "value": 139
+        },
+        {
+          "date": "2023-11-01",
+          "value": 130
+        },
+        {
+          "date": "2023-12-01",
+          "value": 119
+        },
+        {
+          "date": "2024-01-01",
+          "value": 119
+        },
+        {
+          "date": "2024-02-01",
           "value": 117
         },
         {
-          "date": "2024-10-01",
-          "value": 118
-        },
-        {
-          "date": "2024-11-01",
+          "date": "2024-03-01",
           "value": 112
         },
         {
+          "date": "2024-04-01",
+          "value": 102
+        },
+        {
+          "date": "2024-05-01",
+          "value": 99
+        },
+        {
+          "date": "2024-06-01",
+          "value": 107
+        },
+        {
+          "date": "2024-07-01",
+          "value": 116
+        },
+        {
+          "date": "2024-08-01",
+          "value": 124
+        },
+        {
+          "date": "2024-09-01",
+          "value": 124
+        },
+        {
+          "date": "2024-10-01",
+          "value": 125
+        },
+        {
+          "date": "2024-11-01",
+          "value": 119
+        },
+        {
           "date": "2024-12-01",
-          "value": 105
+          "value": 110
         },
         {
           "date": "2025-01-01",
-          "value": 109
+          "value": 112
         },
         {
           "date": "2025-02-01",
@@ -3447,55 +3447,55 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-03-01",
-          "value": 113
+          "value": 112
         },
         {
           "date": "2025-04-01",
-          "value": 102
+          "value": 100
         },
         {
           "date": "2025-05-01",
-          "value": 95
-        },
-        {
-          "date": "2025-06-01",
           "value": 98
         },
         {
+          "date": "2025-06-01",
+          "value": 102
+        },
+        {
           "date": "2025-07-01",
-          "value": 103
+          "value": 109
         },
         {
           "date": "2025-08-01",
-          "value": 108
+          "value": 113
         },
         {
           "date": "2025-09-01",
-          "value": 107
+          "value": 112
         },
         {
           "date": "2025-10-01",
-          "value": 159
+          "value": 164
         },
         {
           "date": "2025-11-01",
-          "value": 196
+          "value": 203
         },
         {
           "date": "2025-12-01",
-          "value": 195
+          "value": 201
         },
         {
           "date": "2026-01-01",
-          "value": 143
+          "value": 147
         },
         {
           "date": "2026-02-01",
-          "value": 101
+          "value": 102
         },
         {
           "date": "2026-03-01",
-          "value": 100
+          "value": 101
         },
         {
           "date": "2026-04-01",
@@ -3503,7 +3503,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2026-05-01",
-          "value": 101
+          "value": 100
         },
         {
           "date": "2026-06-01",
@@ -3521,19 +3521,19 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2016-09-01",
-          "value": 45
+          "value": 44
         },
         {
           "date": "2016-10-01",
-          "value": 45
+          "value": 44
         },
         {
           "date": "2016-11-01",
-          "value": 45
+          "value": 44
         },
         {
           "date": "2016-12-01",
-          "value": 45
+          "value": 46
         },
         {
           "date": "2017-01-01",
@@ -3549,7 +3549,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2017-04-01",
-          "value": 41
+          "value": 40
         },
         {
           "date": "2017-05-01",
@@ -3557,7 +3557,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2017-06-01",
-          "value": 49
+          "value": 48
         },
         {
           "date": "2017-07-01",
@@ -3569,7 +3569,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2017-09-01",
-          "value": 56
+          "value": 57
         },
         {
           "date": "2017-10-01",
@@ -3585,11 +3585,11 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-01-01",
-          "value": 48
+          "value": 49
         },
         {
           "date": "2018-02-01",
-          "value": 46
+          "value": 47
         },
         {
           "date": "2018-03-01",
@@ -3601,23 +3601,23 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-05-01",
-          "value": 46
+          "value": 47
         },
         {
           "date": "2018-06-01",
-          "value": 51
+          "value": 50
         },
         {
           "date": "2018-07-01",
-          "value": 56
+          "value": 55
         },
         {
           "date": "2018-08-01",
-          "value": 59
+          "value": 58
         },
         {
           "date": "2018-09-01",
-          "value": 58
+          "value": 59
         },
         {
           "date": "2018-10-01",
@@ -3629,15 +3629,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-12-01",
-          "value": 52
+          "value": 50
         },
         {
           "date": "2019-01-01",
-          "value": 51
+          "value": 50
         },
         {
           "date": "2019-02-01",
-          "value": 50
+          "value": 49
         },
         {
           "date": "2019-03-01",
@@ -3645,43 +3645,43 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2019-04-01",
-          "value": 46
+          "value": 45
         },
         {
           "date": "2019-05-01",
-          "value": 48
+          "value": 47
         },
         {
           "date": "2019-06-01",
-          "value": 50
+          "value": 49
         },
         {
           "date": "2019-07-01",
-          "value": 53
+          "value": 51
         },
         {
           "date": "2019-08-01",
-          "value": 55
+          "value": 53
         },
         {
           "date": "2019-09-01",
-          "value": 56
+          "value": 55
         },
         {
           "date": "2019-10-01",
-          "value": 56
+          "value": 55
         },
         {
           "date": "2019-11-01",
-          "value": 54
+          "value": 53
         },
         {
           "date": "2019-12-01",
-          "value": 54
+          "value": 53
         },
         {
           "date": "2020-01-01",
-          "value": 54
+          "value": 53
         },
         {
           "date": "2020-02-01",
@@ -3693,15 +3693,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2020-04-01",
-          "value": 44
+          "value": 42
         },
         {
           "date": "2020-05-01",
-          "value": 39
+          "value": 38
         },
         {
           "date": "2020-06-01",
-          "value": 36
+          "value": 35
         },
         {
           "date": "2020-07-01",
@@ -3713,23 +3713,23 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2020-09-01",
-          "value": 63
+          "value": 62
         },
         {
           "date": "2020-10-01",
-          "value": 65
+          "value": 64
         },
         {
           "date": "2020-11-01",
-          "value": 60
+          "value": 59
         },
         {
           "date": "2020-12-01",
-          "value": 61
+          "value": 60
         },
         {
           "date": "2021-01-01",
-          "value": 65
+          "value": 63
         },
         {
           "date": "2021-02-01",
@@ -3737,11 +3737,11 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2021-03-01",
-          "value": 62
+          "value": 61
         },
         {
           "date": "2021-04-01",
-          "value": 52
+          "value": 53
         },
         {
           "date": "2021-05-01",
@@ -3761,27 +3761,27 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2021-09-01",
-          "value": 67
+          "value": 65
         },
         {
           "date": "2021-10-01",
-          "value": 66
+          "value": 63
         },
         {
           "date": "2021-11-01",
-          "value": 60
+          "value": 58
         },
         {
           "date": "2021-12-01",
-          "value": 55
+          "value": 54
         },
         {
           "date": "2022-01-01",
-          "value": 61
+          "value": 60
         },
         {
           "date": "2022-02-01",
-          "value": 64
+          "value": 63
         },
         {
           "date": "2022-03-01",
@@ -3797,15 +3797,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2022-06-01",
-          "value": 71
+          "value": 70
         },
         {
           "date": "2022-07-01",
-          "value": 79
+          "value": 78
         },
         {
           "date": "2022-08-01",
-          "value": 85
+          "value": 84
         },
         {
           "date": "2022-09-01",
@@ -3813,19 +3813,19 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2022-10-01",
-          "value": 80
+          "value": 81
         },
         {
           "date": "2022-11-01",
-          "value": 79
+          "value": 80
         },
         {
           "date": "2022-12-01",
-          "value": 77
+          "value": 78
         },
         {
           "date": "2023-01-01",
-          "value": 77
+          "value": 78
         },
         {
           "date": "2023-02-01",
@@ -3841,23 +3841,23 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2023-05-01",
-          "value": 76
+          "value": 75
         },
         {
           "date": "2023-06-01",
-          "value": 78
+          "value": 77
         },
         {
           "date": "2023-07-01",
-          "value": 82
+          "value": 80
         },
         {
           "date": "2023-08-01",
-          "value": 83
+          "value": 82
         },
         {
           "date": "2023-09-01",
-          "value": 83
+          "value": 81
         },
         {
           "date": "2023-10-01",
@@ -3865,7 +3865,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2023-11-01",
-          "value": 86
+          "value": 85
         },
         {
           "date": "2023-12-01",
@@ -3901,7 +3901,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2024-08-01",
-          "value": 82
+          "value": 81
         },
         {
           "date": "2024-09-01",
@@ -3909,7 +3909,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2024-10-01",
-          "value": 84
+          "value": 83
         },
         {
           "date": "2024-11-01",
@@ -3925,7 +3925,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-02-01",
-          "value": 76
+          "value": 75
         },
         {
           "date": "2025-03-01",
@@ -3933,11 +3933,11 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-04-01",
-          "value": 70
+          "value": 69
         },
         {
           "date": "2025-05-01",
-          "value": 70
+          "value": 69
         },
         {
           "date": "2025-06-01",
@@ -3945,23 +3945,23 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-07-01",
-          "value": 81
+          "value": 83
         },
         {
           "date": "2025-08-01",
-          "value": 90
+          "value": 91
         },
         {
           "date": "2025-09-01",
-          "value": 94
-        },
-        {
-          "date": "2025-10-01",
           "value": 95
         },
         {
-          "date": "2025-11-01",
+          "date": "2025-10-01",
           "value": 96
+        },
+        {
+          "date": "2025-11-01",
+          "value": 97
         },
         {
           "date": "2025-12-01",
@@ -3969,23 +3969,23 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2026-01-01",
-          "value": 114
+          "value": 112
         },
         {
           "date": "2026-02-01",
-          "value": 120
+          "value": 118
         },
         {
           "date": "2026-03-01",
-          "value": 127
+          "value": 124
         },
         {
           "date": "2026-04-01",
-          "value": 133
+          "value": 132
         },
         {
           "date": "2026-05-01",
-          "value": 149
+          "value": 148
         },
         {
           "date": "2026-06-01",
@@ -3995,19 +3995,19 @@ const DASHBOARD_DATA = {
       "affordability": [
         {
           "date": "2016-07-01",
-          "value": 79
-        },
-        {
-          "date": "2016-08-01",
           "value": 76
         },
         {
-          "date": "2016-09-01",
+          "date": "2016-08-01",
           "value": 75
         },
         {
-          "date": "2016-10-01",
+          "date": "2016-09-01",
           "value": 73
+        },
+        {
+          "date": "2016-10-01",
+          "value": 72
         },
         {
           "date": "2016-11-01",
@@ -4015,31 +4015,31 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2016-12-01",
-          "value": 73
+          "value": 75
         },
         {
           "date": "2017-01-01",
-          "value": 76
+          "value": 77
         },
         {
           "date": "2017-02-01",
-          "value": 78
+          "value": 79
         },
         {
           "date": "2017-03-01",
-          "value": 83
+          "value": 82
         },
         {
           "date": "2017-04-01",
-          "value": 84
+          "value": 82
         },
         {
           "date": "2017-05-01",
-          "value": 84
+          "value": 82
         },
         {
           "date": "2017-06-01",
-          "value": 84
+          "value": 83
         },
         {
           "date": "2017-07-01",
@@ -4047,15 +4047,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2017-08-01",
-          "value": 83
+          "value": 84
         },
         {
           "date": "2017-09-01",
-          "value": 80
+          "value": 79
         },
         {
           "date": "2017-10-01",
-          "value": 77
+          "value": 76
         },
         {
           "date": "2017-11-01",
@@ -4063,19 +4063,19 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2017-12-01",
-          "value": 78
+          "value": 77
         },
         {
           "date": "2018-01-01",
-          "value": 82
+          "value": 80
         },
         {
           "date": "2018-02-01",
-          "value": 84
+          "value": 81
         },
         {
           "date": "2018-03-01",
-          "value": 87
+          "value": 84
         },
         {
           "date": "2018-04-01",
@@ -4091,83 +4091,83 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-07-01",
-          "value": 89
+          "value": 87
         },
         {
           "date": "2018-08-01",
-          "value": 90
-        },
-        {
-          "date": "2018-09-01",
-          "value": 89
-        },
-        {
-          "date": "2018-10-01",
-          "value": 87
-        },
-        {
-          "date": "2018-11-01",
-          "value": 85
-        },
-        {
-          "date": "2018-12-01",
-          "value": 82
-        },
-        {
-          "date": "2019-01-01",
-          "value": 84
-        },
-        {
-          "date": "2019-02-01",
-          "value": 87
-        },
-        {
-          "date": "2019-03-01",
-          "value": 92
-        },
-        {
-          "date": "2019-04-01",
-          "value": 90
-        },
-        {
-          "date": "2019-05-01",
           "value": 88
         },
         {
-          "date": "2019-06-01",
-          "value": 87
-        },
-        {
-          "date": "2019-07-01",
-          "value": 86
-        },
-        {
-          "date": "2019-08-01",
-          "value": 86
-        },
-        {
-          "date": "2019-09-01",
+          "date": "2018-09-01",
           "value": 85
         },
         {
-          "date": "2019-10-01",
+          "date": "2018-10-01",
           "value": 84
         },
         {
-          "date": "2019-11-01",
+          "date": "2018-11-01",
           "value": 82
         },
         {
-          "date": "2019-12-01",
-          "value": 82
+          "date": "2018-12-01",
+          "value": 80
         },
         {
-          "date": "2020-01-01",
+          "date": "2019-01-01",
+          "value": 83
+        },
+        {
+          "date": "2019-02-01",
+          "value": 85
+        },
+        {
+          "date": "2019-03-01",
+          "value": 89
+        },
+        {
+          "date": "2019-04-01",
+          "value": 89
+        },
+        {
+          "date": "2019-05-01",
           "value": 87
         },
         {
+          "date": "2019-06-01",
+          "value": 85
+        },
+        {
+          "date": "2019-07-01",
+          "value": 84
+        },
+        {
+          "date": "2019-08-01",
+          "value": 84
+        },
+        {
+          "date": "2019-09-01",
+          "value": 84
+        },
+        {
+          "date": "2019-10-01",
+          "value": 82
+        },
+        {
+          "date": "2019-11-01",
+          "value": 80
+        },
+        {
+          "date": "2019-12-01",
+          "value": 81
+        },
+        {
+          "date": "2020-01-01",
+          "value": 86
+        },
+        {
           "date": "2020-02-01",
-          "value": 92
+          "value": 91
         },
         {
           "date": "2020-03-01",
@@ -4183,19 +4183,19 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2020-06-01",
-          "value": 62
+          "value": 61
         },
         {
           "date": "2020-07-01",
-          "value": 67
+          "value": 68
         },
         {
           "date": "2020-08-01",
-          "value": 71
+          "value": 73
         },
         {
           "date": "2020-09-01",
-          "value": 72
+          "value": 73
         },
         {
           "date": "2020-10-01",
@@ -4207,39 +4207,39 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2020-12-01",
-          "value": 69
+          "value": 68
         },
         {
           "date": "2021-01-01",
-          "value": 70
+          "value": 69
         },
         {
           "date": "2021-02-01",
-          "value": 75
+          "value": 73
         },
         {
           "date": "2021-03-01",
-          "value": 76
+          "value": 75
         },
         {
           "date": "2021-04-01",
-          "value": 74
-        },
-        {
-          "date": "2021-05-01",
           "value": 70
         },
         {
+          "date": "2021-05-01",
+          "value": 67
+        },
+        {
           "date": "2021-06-01",
-          "value": 71
+          "value": 69
         },
         {
           "date": "2021-07-01",
-          "value": 72
+          "value": 73
         },
         {
           "date": "2021-08-01",
-          "value": 73
+          "value": 75
         },
         {
           "date": "2021-09-01",
@@ -4247,7 +4247,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2021-10-01",
-          "value": 74
+          "value": 75
         },
         {
           "date": "2021-11-01",
@@ -4255,7 +4255,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2021-12-01",
-          "value": 74
+          "value": 75
         },
         {
           "date": "2022-01-01",
@@ -4263,15 +4263,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2022-02-01",
-          "value": 92
+          "value": 91
         },
         {
           "date": "2022-03-01",
-          "value": 103
+          "value": 101
         },
         {
           "date": "2022-04-01",
-          "value": 103
+          "value": 101
         },
         {
           "date": "2022-05-01",
@@ -4279,59 +4279,59 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2022-06-01",
-          "value": 98
+          "value": 100
         },
         {
           "date": "2022-07-01",
-          "value": 96
+          "value": 100
         },
         {
           "date": "2022-08-01",
-          "value": 95
+          "value": 97
         },
         {
           "date": "2022-09-01",
-          "value": 92
+          "value": 93
         },
         {
           "date": "2022-10-01",
-          "value": 92
+          "value": 93
         },
         {
           "date": "2022-11-01",
-          "value": 90
+          "value": 91
         },
         {
           "date": "2022-12-01",
-          "value": 86
+          "value": 87
         },
         {
           "date": "2023-01-01",
-          "value": 84
+          "value": 83
         },
         {
           "date": "2023-02-01",
-          "value": 86
+          "value": 84
         },
         {
           "date": "2023-03-01",
-          "value": 89
+          "value": 88
         },
         {
           "date": "2023-04-01",
-          "value": 90
+          "value": 88
         },
         {
           "date": "2023-05-01",
-          "value": 90
+          "value": 89
         },
         {
           "date": "2023-06-01",
-          "value": 90
+          "value": 89
         },
         {
           "date": "2023-07-01",
-          "value": 91
+          "value": 90
         },
         {
           "date": "2023-08-01",
@@ -4347,59 +4347,59 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2023-11-01",
-          "value": 93
-        },
-        {
-          "date": "2023-12-01",
-          "value": 91
-        },
-        {
-          "date": "2024-01-01",
-          "value": 92
-        },
-        {
-          "date": "2024-02-01",
-          "value": 93
-        },
-        {
-          "date": "2024-03-01",
-          "value": 95
-        },
-        {
-          "date": "2024-04-01",
-          "value": 95
-        },
-        {
-          "date": "2024-05-01",
           "value": 94
         },
         {
-          "date": "2024-06-01",
+          "date": "2023-12-01",
           "value": 92
+        },
+        {
+          "date": "2024-01-01",
+          "value": 94
+        },
+        {
+          "date": "2024-02-01",
+          "value": 91
+        },
+        {
+          "date": "2024-03-01",
+          "value": 94
+        },
+        {
+          "date": "2024-04-01",
+          "value": 92
+        },
+        {
+          "date": "2024-05-01",
+          "value": 93
+        },
+        {
+          "date": "2024-06-01",
+          "value": 90
         },
         {
           "date": "2024-07-01",
-          "value": 91
+          "value": 88
         },
         {
           "date": "2024-08-01",
-          "value": 90
+          "value": 87
         },
         {
           "date": "2024-09-01",
-          "value": 91
+          "value": 87
         },
         {
           "date": "2024-10-01",
-          "value": 89
+          "value": 86
         },
         {
           "date": "2024-11-01",
-          "value": 92
+          "value": 89
         },
         {
           "date": "2024-12-01",
-          "value": 90
+          "value": 89
         },
         {
           "date": "2025-01-01",
@@ -4407,11 +4407,11 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-02-01",
-          "value": 91
+          "value": 93
         },
         {
           "date": "2025-03-01",
-          "value": 94
+          "value": 97
         },
         {
           "date": "2025-04-01",
@@ -4423,7 +4423,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-06-01",
-          "value": 89
+          "value": 87
         },
         {
           "date": "2025-07-01",
@@ -4431,43 +4431,43 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-08-01",
-          "value": 109
+          "value": 107
         },
         {
           "date": "2025-09-01",
-          "value": 110
+          "value": 109
         },
         {
           "date": "2025-10-01",
-          "value": 103
+          "value": 102
         },
         {
           "date": "2025-11-01",
-          "value": 116
+          "value": 115
         },
         {
           "date": "2025-12-01",
-          "value": 135
+          "value": 132
         },
         {
           "date": "2026-01-01",
-          "value": 157
+          "value": 153
         },
         {
           "date": "2026-02-01",
-          "value": 166
+          "value": 164
         },
         {
           "date": "2026-03-01",
-          "value": 172
+          "value": 170
         },
         {
           "date": "2026-04-01",
-          "value": 167
+          "value": 164
         },
         {
           "date": "2026-05-01",
-          "value": 157
+          "value": 155
         },
         {
           "date": "2026-06-01",
