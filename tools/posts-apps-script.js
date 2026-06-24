@@ -237,16 +237,23 @@ function publicSummary_(r) {
 // ============================== IMAGE HANDLING ============================
 // Save a base64 data URL into the post folder, return a public display URL.
 function storeDataUrl_(dataUrl, folder, baseName) {
-  const m = /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/.exec(dataUrl);
-  if (!m) return '';
-  const mime = m[1];
-  const ext = (mime.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
-  const bytes = Utilities.base64Decode(m[2]);
-  const blob = Utilities.newBlob(bytes, mime, baseName + '.' + ext);
-  const file = folder.createFile(blob);
-  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  // Reliable embeddable URL for public Drive images.
-  return 'https://drive.google.com/thumbnail?id=' + file.getId() + '&sz=w2000';
+  try {
+    const m = /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/.exec(dataUrl);
+    if (!m) return '';
+    const mime = m[1];
+    const ext = (mime.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
+    const bytes = Utilities.base64Decode(m[2]);
+    const blob = Utilities.newBlob(bytes, mime, baseName + '.' + ext);
+    const file = folder.createFile(blob);
+    // Best-effort: some Workspace domains block programmatic "anyone" sharing and
+    // setSharing() throws. The parent folder already grants link access, so treat
+    // this as non-fatal — an image must never abort the whole submission.
+    try { file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW); } catch (e) { /* non-fatal */ }
+    // Reliable embeddable URL for public Drive images.
+    return 'https://drive.google.com/thumbnail?id=' + file.getId() + '&sz=w2000';
+  } catch (e) {
+    return ''; // an image problem must never lose the whole submission
+  }
 }
 
 // Replace every inline data:image in the body with a stored Drive URL.
