@@ -8,6 +8,15 @@
   <meta name="description" content="Notes, briefs, and stories written by FinMango Ambassadors and published after peer review.">
   <link rel="canonical" href="https://www.finmango.org/posts.html">
   <link rel="icon" type="image/png" href="favicon.png">
+  <script>
+    // Kick off the posts request immediately — before the browser parses the rest
+    // of the page (nav, footer, fonts). The render script at the bottom of <body>
+    // awaits this promise, so the network round-trip overlaps with parsing/CSS
+    // instead of starting only once the body script is reached.
+    // Errors propagate to the render script's try/catch (it always awaits this),
+    // so a real failure still shows the "Could not load posts" state.
+    window.__postsReq = fetch('/api/posts?action=published').then(function (r) { return r.json(); });
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" as="style"
@@ -370,8 +379,8 @@
 
     (async function () {
       try {
-        const res = await fetch(API_URL + '?action=published');
-        const data = await res.json();
+        // Reuse the request started in <head>; fall back to a fresh fetch.
+        const data = await (window.__postsReq || fetch(API_URL + '?action=published').then(r => r.json()));
         const posts = (data && data.posts) || [];
         if (!posts.length) return emptyState('No posts yet', 'Be the first — <a href="write.html">write a post →</a>');
         document.getElementById('grid').innerHTML = posts.map(card).join('');
