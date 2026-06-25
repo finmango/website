@@ -345,8 +345,9 @@
   <!-- /chrome:footer -->
 
   <script>
-    // Paste your deployed Apps Script Web App URL (see docs/POSTS-SETUP.md).
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyw06JczRZVwdf3vw70xeshZ_shp2J1zzvPvPqhR-2_FSqzSBFaq0Yu-OZ7KjKYfCuthQ/exec';
+    // Reads go through the same-origin, edge-cached proxy (functions/api/posts.js)
+    // so the list loads fast and survives Apps Script cold starts — see docs/POSTS-SETUP.md.
+    const API_URL = '/api/posts';
 
     const escapeHtml = s => (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const fmtDate = iso => { try { return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }); } catch { return ''; } };
@@ -357,7 +358,7 @@
     function card(p) {
       const cover = p.cover ? '<div class="card-cover"><img src="' + escapeHtml(p.cover) + '" alt="" loading="lazy"></div>' : '';
       const meta = [escapeHtml(p.authorName || 'FinMango'), escapeHtml(fmtDate(p.publishedAt || p.createdAt))].filter(Boolean).join(' · ');
-      return '<a class="card" href="post.html?id=' + encodeURIComponent(p.id) + '">' + cover +
+      return '<a class="card" href="/post?id=' + encodeURIComponent(p.id) + '">' + cover +
         '<div class="card-cat">' + escapeHtml(p.category || 'Post') + '</div>' +
         '<div class="card-title">' + escapeHtml(p.title) + '</div>' +
         (p.dek ? '<div class="card-dek">' + escapeHtml(p.dek) + '</div>' : '') +
@@ -365,7 +366,6 @@
     }
 
     (async function () {
-      if (API_URL === 'REPLACE_WITH_APPS_SCRIPT_WEB_APP_URL') return emptyState('Not configured yet', 'Set the posts backend URL — see <code>docs/POSTS-SETUP.md</code>.');
       try {
         const res = await fetch(API_URL + '?action=published');
         const data = await res.json();
