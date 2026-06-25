@@ -15,32 +15,70 @@
 // here by the existing /*.html → clean-URL redirect (crawlers follow 301s).
 // ============================================================================
 
-import { SITE_BASE, DEFAULT_OG_IMAGE, escapeHtml, jsonForScript, fetchPostJson } from './_shared.js';
+import { SITE_BASE, DEFAULT_OG_IMAGE, EDGE_TTL, escapeHtml, jsonForScript, fetchPostJson } from './_shared.js';
 
 export async function onRequestGet(context) {
-  const { request, env } = context;
+  const { request, env, waitUntil } = context;
   const url = new URL(request.url);
   const id = url.searchParams.get('id') || '';
 
-  // Load the static template. "/post" resolves to post.html via Pages clean-URL
-  // asset serving and is NOT matched by the /*.html redirect, so this returns
-  // the raw shell (env.ASSETS never re-invokes this Function — no loop).
-  const templateRes = await env.ASSETS.fetch(new URL('/post', url.origin));
-  if (!templateRes.ok) return templateRes;
+  // How long the browser/edge may keep serving a stale copy while a fresh one is
+  // fetched in the background. The full rendered page is otherwise re-built (and
+  // re-fetched from the slow Apps Script backend) on every single navigation.
+  const SWR = 86400; // 1 day
 
-  const post = id ? await fetchPostJson(id) : null;
-  const meta = buildMeta(post, id);
+  // Build the fully rendered page. Returns { res, cacheable } — only a real,
+  // found post is cacheable; "not found" / no-id pages stay uncached so they
+  // retry (and pick up a post the moment it's published).
+  async function renderFresh() {
+    // Load the static template. "/post" resolves to post.html via Pages clean-URL
+    // asset serving and is NOT matched by the /*.html redirect, so this returns
+    // the raw shell (env.ASSETS never re-invokes this Function — no loop).
+    const templateRes = await env.ASSETS.fetch(new URL('/post', url.origin));
+    if (!templateRes.ok) return { res: templateRes, cacheable: false };
 
-  const rewriter = new HTMLRewriter()
-    .on('title', { element(el) { el.setInnerContent(meta.title); } })
-    .on('meta[name="description"]', { element(el) { el.setAttribute('content', meta.description); } })
-    .on('head', { element(el) { el.append(meta.headHtml, { html: true }); } });
+    const post = id ? await fetchPostJson(id) : null;
+    const meta = buildMeta(post, id);
 
-  const headers = new Headers(templateRes.headers);
-  headers.set('content-type', 'text/html; charset=utf-8');
-  headers.set('cache-control', 'public, max-age=300');
+    const rewriter = new HTMLRewriter()
+      .on('title', { element(el) { el.setInnerContent(meta.title); } })
+      .on('meta[name="description"]', { element(el) { el.setAttribute('content', meta.description); } })
+      .on('head', { element(el) { el.append(meta.headHtml, { html: true }); } });
 
-  return rewriter.transform(new Response(templateRes.body, { status: 200, headers }));
+    const headers = new Headers(templateRes.headers);
+    headers.set('content-type', 'text/html; charset=utf-8');
+    headers.set('cache-control', `public, max-age=${EDGE_TTL}, s-maxage=${SWR}, stale-while-revalidate=${SWR}`);
+    headers.set('x-cached-at', String(Date.now()));
+
+    const res = rewriter.transform(new Response(templateRes.body, { status: 200, headers }));
+    return { res, cacheable: !!(id && post) };
+  }
+
+  const cache = caches.default;
+  const cacheKey = new Request(url.origin + url.pathname + url.search, { method: 'GET' });
+
+  const hit = await cache.match(cacheKey);
+  if (hit) {
+    // Serve the cached page instantly. If it's older than EDGE_TTL, refresh it
+    // in the background so the next visitor gets fresh content — this visitor
+    // never waits on the Apps Script round-trip or the HTML rewrite.
+    const cachedAt = Number(hit.headers.get('x-cached-at')) || 0;
+    const isStale = (Date.now() - cachedAt) > EDGE_TTL * 1000;
+    if (isStale) {
+      waitUntil((async () => {
+        try {
+          const fresh = await renderFresh();
+          if (fresh.cacheable) await cache.put(cacheKey, fresh.res.clone());
+        } catch (e) { /* keep serving the stale copy */ }
+      })());
+    }
+    return hit;
+  }
+
+  // Cold cache: this navigation builds the page (and waits on the backend once).
+  const { res, cacheable } = await renderFresh();
+  if (cacheable) waitUntil(cache.put(cacheKey, res.clone()));
+  return res;
 }
 
 function buildMeta(post, id) {
