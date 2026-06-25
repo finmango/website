@@ -75,8 +75,12 @@
     .reviewbar .btn.approve { background: var(--good); color: #fff; border-color: var(--good); }
     .reviewbar .btn.changes { background: var(--orange); color: #fff; border-color: var(--orange); }
     .reviewbar .btn.reject { background: transparent; color: var(--bad); border-color: var(--bad); }
-    .reviewbar .btn.publish { background: var(--ink); color: #fff; border-color: var(--ink); margin-left: auto; }
+    .reviewbar .btn.publish { background: var(--ink); color: #fff; border-color: var(--ink); }
     .reviewbar .btn:disabled { opacity: .5; cursor: not-allowed; }
+    .reviewbar .kbd-hint { margin-right: auto; font-family: var(--font-mono); font-size: .58rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-faint); }
+    .reviewbar .kbd-hint kbd { border: 1px solid var(--ink-line); padding: 0 .25rem; border-radius: 3px; color: var(--ink-dim); }
+    .filters button .cnt { opacity: .55; margin-left: .25rem; }
+    .filters button.active .cnt { opacity: .8; }
 
     /* rendered article (same look as post.html) */
     .article-cat { font-family: var(--font-mono); font-size: .62rem; font-weight: 500; text-transform: uppercase; letter-spacing: .16em; color: var(--orange); display: block; margin-bottom: 1rem; }
@@ -144,12 +148,10 @@
   <div class="layout" id="layout">
     <aside class="list">
       <div class="filters" id="filters">
-        <button data-f="pending" class="active">Pending</button>
-        <button data-f="changes">Changes</button>
-        <button data-f="approved">Approved</button>
-        <button data-f="published">Published</button>
-        <button data-f="rejected">Rejected</button>
-        <button data-f="all">All</button>
+        <button data-f="pending" class="active">Pending <span class="cnt" data-c="pending"></span></button>
+        <button data-f="published">Published <span class="cnt" data-c="published"></span></button>
+        <button data-f="rejected">Rejected <span class="cnt" data-c="rejected"></span></button>
+        <button data-f="all">All <span class="cnt" data-c="all"></span></button>
       </div>
       <div id="itemList"></div>
     </aside>
@@ -225,7 +227,7 @@
         $('gate').style.display = 'none'; $('layout').classList.add('show');
         $('refreshBtn').style.display = ''; $('signoutBtn').style.display = '';
         $('who').textContent = 'Reviewing as ' + NAME;
-        load();
+        await load(); ensureSelection();
       } catch (e) {
         $('gateErr').textContent = e.message || 'Could not verify.';
       } finally { $('enterBtn').disabled = false; $('enterBtn').textContent = 'Enter'; }
@@ -237,8 +239,28 @@
         const res = await api({ action: 'list', key: KEY, status: 'all' });
         if (res.result !== 'success') throw new Error(res.error);
         POSTS = res.posts || [];
+        updateCounts();
         renderList();
       } catch (e) { $('itemList').innerHTML = '<div style="padding:1.2rem;color:var(--bad);font-size:.85rem">' + escapeHtml(e.message || 'Failed to load') + '</div>'; }
+    }
+
+    // The notes currently visible under the active filter.
+    function currentView() { return POSTS.filter(p => FILTER === 'all' ? true : p.status === FILTER); }
+
+    function updateCounts() {
+      const c = { pending: 0, published: 0, rejected: 0, all: POSTS.length };
+      POSTS.forEach(p => { if (c[p.status] !== undefined) c[p.status]++; });
+      document.querySelectorAll('.filters .cnt').forEach(el => { el.textContent = c[el.dataset.c] != null ? c[el.dataset.c] : ''; });
+    }
+
+    // Keep a note open: keep the current one if it's still in view, else open the
+    // first one, else show an empty state. Drives auto-open and auto-advance.
+    function ensureSelection() {
+      const v = currentView();
+      if (CURRENT && v.some(p => p.id === CURRENT)) { openPost(CURRENT); return; }
+      if (v.length) { openPost(v[0].id); return; }
+      CURRENT = null;
+      $('detail').innerHTML = '<div class="detail-empty">Nothing to review here — queue clear ✓</div>';
     }
 
     function statusBadge(s) { return '<span class="badge b-' + s + '">' + s + '</span>'; }
@@ -257,6 +279,7 @@
     async function openPost(id) {
       CURRENT = id;
       document.querySelectorAll('.item').forEach(el => el.classList.toggle('active', el.dataset.id === id));
+      const activeItem = document.querySelector('.item.active'); if (activeItem) activeItem.scrollIntoView({ block: 'nearest' });
       $('detail').innerHTML = '<div class="detail-empty">Loading…</div>';
       try {
         const res = await api({ action: 'review-get', id, key: KEY });
@@ -276,9 +299,8 @@
       $('detail').innerHTML =
         '<div class="reviewbar">' +
           statusBadge(p.status) +
-          '<button class="btn approve" data-vote="approve">Approve</button>' +
-          '<button class="btn changes" data-vote="changes">Request changes</button>' +
-          '<button class="btn reject" data-vote="reject">Reject</button>' +
+          '<span class="kbd-hint"><kbd>J</kbd>/<kbd>K</kbd> next · <kbd>P</kbd> publish · <kbd>X</kbd> reject</span>' +
+          '<button class="btn reject" id="rejectBtn"' + (p.status === 'rejected' ? ' disabled' : '') + '>' + (p.status === 'rejected' ? 'Rejected' : 'Reject') + '</button>' +
           '<button class="btn publish" id="publishBtn"' + (isPublished ? ' disabled' : '') + '>' + (isPublished ? 'Published ✓' : 'Publish to site') + '</button>' +
         '</div>' +
         '<div class="detail-inner">' +
@@ -292,20 +314,33 @@
             '<div class="article-body">' + sanitize(p.body) + '</div>' +
           '</article>' +
           '<div class="reviews"><h3>Reviews &amp; votes</h3>' + reviews +
-            '<div class="review-input"><textarea id="commentBox" placeholder="Leave a comment with your vote (optional)…"></textarea></div>' +
+            '<div class="review-input"><textarea id="commentBox" placeholder="Optional note (e.g. why you rejected it)…"></textarea></div>' +
           '</div>' +
         '</div>';
-      document.querySelectorAll('.reviewbar .btn[data-vote]').forEach(b => b.addEventListener('click', () => vote(p.id, b.dataset.vote)));
-      $('publishBtn').addEventListener('click', () => publish(p.id));
+      $('detail').scrollTop = 0;
+      const pb = $('publishBtn'); if (pb) pb.addEventListener('click', () => publish(p.id));
+      const rb = $('rejectBtn'); if (rb) rb.addEventListener('click', () => reject(p.id));
     }
 
-    async function vote(id, v) {
+    // After acting on a note, reload and jump to the next one in the queue so you
+    // can blast through a backlog without re-clicking.
+    async function advanceAfter(id) {
+      const view = currentView();
+      const i = view.findIndex(p => p.id === id);
+      const nextId = (view[i + 1] && view[i + 1].id) || null;
+      await load();
+      const after = currentView();
+      if (nextId && after.some(p => p.id === nextId)) { CURRENT = nextId; openPost(nextId); }
+      else ensureSelection();
+    }
+
+    async function reject(id) {
       const comment = ($('commentBox') && $('commentBox').value.trim()) || '';
       try {
-        const res = await api({ action: 'review', id, key: KEY, reviewer: NAME, vote: v, comment });
+        const res = await api({ action: 'review', id, key: KEY, reviewer: NAME, vote: 'reject', comment });
         if (res.result !== 'success') throw new Error(res.error);
-        toast('Recorded: ' + v);
-        await load(); openPost(id);
+        toast('Rejected — hidden from the queue');
+        advanceAfter(id);
       } catch (e) { toast(e.message || 'Failed', true); }
     }
     async function publish(id) {
@@ -314,18 +349,33 @@
         const res = await api({ action: 'publish', id, key: KEY, reviewer: NAME });
         if (res.result !== 'success') throw new Error(res.error);
         toast('Published ✓');
-        await load(); openPost(id);
+        advanceAfter(id);
       } catch (e) { toast(e.message || 'Failed', true); }
     }
 
     // filters / chrome
     document.querySelectorAll('.filters button').forEach(b => b.addEventListener('click', () => {
       document.querySelectorAll('.filters button').forEach(x => x.classList.remove('active'));
-      b.classList.add('active'); FILTER = b.dataset.f; renderList();
+      b.classList.add('active'); FILTER = b.dataset.f; renderList(); ensureSelection();
     }));
     $('enterBtn').addEventListener('click', enter);
     $('reviewKey').addEventListener('keydown', e => { if (e.key === 'Enter') enter(); });
-    $('refreshBtn').addEventListener('click', load);
+    $('refreshBtn').addEventListener('click', () => load().then(ensureSelection));
+
+    // Keyboard triage: J/K to move through the queue, P to publish, X to reject.
+    document.addEventListener('keydown', e => {
+      if (!$('layout').classList.contains('show')) return;
+      const tag = (e.target.tagName || '').toLowerCase();
+      if (tag === 'textarea' || tag === 'input' || e.metaKey || e.ctrlKey || e.altKey) return;
+      const v = currentView();
+      if (!v.length) return;
+      const i = v.findIndex(p => p.id === CURRENT);
+      const k = e.key.toLowerCase();
+      if (k === 'j' || e.key === 'ArrowDown') { e.preventDefault(); openPost((v[i + 1] || v[0]).id); }
+      else if (k === 'k' || e.key === 'ArrowUp') { e.preventDefault(); openPost((v[i - 1] || v[v.length - 1]).id); }
+      else if (k === 'p') { e.preventDefault(); if (CURRENT) publish(CURRENT); }
+      else if (k === 'x') { e.preventDefault(); if (CURRENT) reject(CURRENT); }
+    });
     $('signoutBtn').addEventListener('click', () => { SS.removeItem('pr_key'); SS.removeItem('pr_name'); location.reload(); });
 
     // resume session
