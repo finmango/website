@@ -13,6 +13,7 @@ const AMBASSADORS_2026 = [
   { slug: 'aren-inan',           name: 'Aren Inan',            photo: '../41.jpg', flag: '🇺🇸', country: 'United States',      tagline: 'Founding developer of Futures Financials — teaching 10,000+ students nationwide.' },
   { slug: 'hayley-foote',        name: 'Hayley Foote',         photo: '../42.jpg', flag: '🇺🇸', country: 'United States',      tagline: 'Building a campus Financial Health System at Ohio State.' },
   { slug: 'sophie-hong',         name: 'Sophie Hong',          photo: '../43.jpg', flag: '🇺🇸', country: 'United States',      tagline: 'Financial literacy for vulnerable communities.' },
+  { slug: 'devin-acar',           name: 'Devin Acar',           photo: '../44.jpg', flag: '🇺🇸', country: 'United States',      tagline: 'Researching why financial confidence — not knowledge — makes money work.' },
 ];
 
 (async () => {
