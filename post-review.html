@@ -90,6 +90,8 @@
     .article-body h2 { font-size: 1.6rem; font-weight: 900; letter-spacing: -.03em; margin: 2.2rem 0 .8rem; }
     .article-body h3 { font-size: 1.2rem; font-weight: 700; margin: 1.6rem 0 .6rem; }
     .article-body img { width: 100%; display: block; margin: 1.6rem 0; }
+    .article-body figure { margin: 1.6rem 0; }
+    .article-body iframe { width: 100%; aspect-ratio: 16 / 9; height: auto; border: 0; display: block; margin: 1.6rem 0; }
     .article-body blockquote { border-left: 3px solid var(--orange); padding-left: 1.4rem; margin: 1.6rem 0; font-size: 1.25rem; font-weight: 300; }
     .article-body a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--orange); }
     .article-body ul, .article-body ol { margin: 1.2rem 0; padding-left: 1.4rem; }
@@ -168,13 +170,30 @@
     const fmtDate = iso => { try { return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); } catch { return ''; } };
 
     // sanitizer (same contract)
-    const ALLOWED = { H2:[], H3:[], P:[], BR:[], STRONG:[], B:[], EM:[], I:[], U:[], A:['href'], UL:[], OL:[], LI:[], BLOCKQUOTE:[], HR:[], IMG:['src','alt'], FIGURE:[], FIGCAPTION:[], DIV:[], SPAN:[] };
+    const ALLOWED = { H2:[], H3:[], P:[], BR:[], STRONG:[], B:[], EM:[], I:[], U:[], A:['href'], UL:[], OL:[], LI:[], BLOCKQUOTE:[], HR:[], IMG:['src','alt'], FIGURE:[], FIGCAPTION:[], DIV:[], SPAN:[], IFRAME:[] };
+    // Only a YouTube embed URL survives — returns a normalized embed src or null.
+    function ytEmbedSrc(src) {
+      const m = String(src || '').match(/^https?:\/\/(?:www\.)?(?:youtube\.com|youtube-nocookie\.com)\/embed\/([A-Za-z0-9_-]{11})(?:[?#].*)?$/);
+      return m ? 'https://www.youtube-nocookie.com/embed/' + m[1] : null;
+    }
     function sanitize(html) {
       const doc = new DOMParser().parseFromString('<div>' + (html || '') + '</div>', 'text/html');
       const root = doc.body.firstChild;
       (function walk(node) { [...node.childNodes].forEach(child => {
         if (child.nodeType === 1) { const tag = child.tagName;
           if (!ALLOWED[tag]) { while (child.firstChild) node.insertBefore(child.firstChild, child); node.removeChild(child); return walk(node); }
+          if (tag === 'IFRAME') {
+            const yt = ytEmbedSrc(child.getAttribute('src'));
+            if (!yt) { node.removeChild(child); return; }
+            [...child.attributes].forEach(a => child.removeAttribute(a.name));
+            child.setAttribute('src', yt);
+            child.setAttribute('title', 'Embedded video');
+            child.setAttribute('loading', 'lazy');
+            child.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+            child.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+            child.setAttribute('allowfullscreen', '');
+            return;
+          }
           [...child.attributes].forEach(a => { const ok = ALLOWED[tag].includes(a.name);
             const sh = a.name === 'href' && !/^\s*javascript:/i.test(a.value);
             const ss = a.name === 'src' && /^(https?:|data:image\/)/i.test(a.value);

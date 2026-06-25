@@ -194,6 +194,8 @@
       font-size: 1.35rem; font-weight: 300; line-height: 1.45; letter-spacing: -.015em; color: var(--ink); }
     .article-body img { width: 100%; height: auto; display: block; margin: 2rem 0; }
     .article-body figure { margin: 2rem 0; }
+    .article-body iframe { width: 100%; aspect-ratio: 16 / 9; height: auto; border: 0; display: block; margin: 2rem 0; }
+    .article-body figure { margin: 2rem 0; }
     .article-body figcaption { font-family: var(--font-mono); font-size: .66rem; letter-spacing: .04em;
       color: var(--ink-faint); margin-top: .6rem; text-transform: uppercase; }
     .article-body hr { border: none; border-top: 1px solid var(--ink-line); margin: 2.6rem 0; }
@@ -530,6 +532,7 @@
           <button type="button" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
           <span class="sep"></span>
           <button type="button" id="insertImageBtn" title="Insert image">Image</button>
+          <button type="button" id="insertVideoBtn" title="Embed a YouTube video">Video</button>
           <button type="button" data-cmd="insertHorizontalRule" title="Divider">Divider</button>
           <span class="sep"></span>
           <button type="button" data-cmd="formatBlock" data-val="p" title="Normal text">Body</button>
@@ -623,7 +626,12 @@
     const escapeHtml = s => (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
     // ---- HTML sanitizer (whitelist) — shared contract with post.html ----
-    const ALLOWED = { H2:[], H3:[], P:[], BR:[], STRONG:[], B:[], EM:[], I:[], U:[], A:['href'], UL:[], OL:[], LI:[], BLOCKQUOTE:[], HR:[], IMG:['src','alt'], FIGURE:[], FIGCAPTION:[], DIV:[], SPAN:[] };
+    const ALLOWED = { H2:[], H3:[], P:[], BR:[], STRONG:[], B:[], EM:[], I:[], U:[], A:['href'], UL:[], OL:[], LI:[], BLOCKQUOTE:[], HR:[], IMG:['src','alt'], FIGURE:[], FIGCAPTION:[], DIV:[], SPAN:[], IFRAME:[] };
+    // Only a YouTube embed URL survives — returns a normalized embed src or null.
+    function ytEmbedSrc(src) {
+      const m = String(src || '').match(/^https?:\/\/(?:www\.)?(?:youtube\.com|youtube-nocookie\.com)\/embed\/([A-Za-z0-9_-]{11})(?:[?#].*)?$/);
+      return m ? 'https://www.youtube-nocookie.com/embed/' + m[1] : null;
+    }
     function sanitize(html) {
       const doc = new DOMParser().parseFromString('<div>' + html + '</div>', 'text/html');
       const root = doc.body.firstChild;
@@ -636,6 +644,18 @@
               while (child.firstChild) node.insertBefore(child.firstChild, child);
               node.removeChild(child);
               return walk(node);
+            }
+            if (tag === 'IFRAME') {
+              const yt = ytEmbedSrc(child.getAttribute('src'));
+              if (!yt) { node.removeChild(child); return; }
+              [...child.attributes].forEach(a => child.removeAttribute(a.name));
+              child.setAttribute('src', yt);
+              child.setAttribute('title', 'Embedded video');
+              child.setAttribute('loading', 'lazy');
+              child.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+              child.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+              child.setAttribute('allowfullscreen', '');
+              return;
             }
             [...child.attributes].forEach(attr => {
               const ok = ALLOWED[tag].includes(attr.name);
@@ -731,6 +751,31 @@
         refreshPreview();
       } catch (err) { toast(err.message || 'Image failed', true); }
       e.target.value = '';
+    });
+
+    // ---- inline YouTube embed ----
+    // Pull the 11-char video ID out of any common YouTube URL form (watch, youtu.be,
+    // shorts, embed, live) — or accept a bare ID. Returns null if it isn't YouTube.
+    function youTubeId(url) {
+      url = (url || '').trim();
+      if (/^[A-Za-z0-9_-]{11}$/.test(url)) return url;
+      let m;
+      if ((m = url.match(/[?&]v=([A-Za-z0-9_-]{11})/))) return m[1];
+      if ((m = url.match(/youtu\.be\/([A-Za-z0-9_-]{11})/))) return m[1];
+      if ((m = url.match(/youtube(?:-nocookie)?\.com\/(?:embed|shorts|live|v)\/([A-Za-z0-9_-]{11})/))) return m[1];
+      return null;
+    }
+    $('insertVideoBtn').addEventListener('mousedown', e => e.preventDefault());
+    $('insertVideoBtn').addEventListener('click', () => {
+      const url = prompt('Paste a YouTube link — the video will embed in your note:');
+      if (url === null) return;
+      const id = youTubeId(url);
+      if (!id) return toast("That doesn't look like a YouTube link.", true);
+      editor.focus();
+      const embed = '<figure><iframe src="https://www.youtube-nocookie.com/embed/' + id +
+        '" title="Embedded video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></figure><p><br></p>';
+      document.execCommand('insertHTML', false, embed);
+      refreshPreview();
     });
 
     // ---- cover upload ----

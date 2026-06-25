@@ -78,6 +78,14 @@ which has a 50k-char-per-cell limit).
   rendering (`write.html`, `post.html`, `post-review.html`) — only a small set
   of tags/attributes survive, `javascript:` URLs are stripped, and links are
   forced to `rel="noopener noreferrer"`. Human review is still the backstop.
+- **Video embeds** are YouTube-only and locked down: the editor's *Video*
+  button takes a YouTube link (watch / `youtu.be` / Shorts), extracts the video
+  ID, and inserts a single `youtube-nocookie.com/embed/…` iframe. The sanitizer
+  allows `<iframe>` **only** when its `src` is a valid YouTube embed URL, and
+  rebuilds the element's attributes from scratch — so a hand-crafted iframe
+  (other hosts, `srcdoc`, event handlers) can never survive. Videos embed
+  inline in the note body and render responsively (16:9); nothing is uploaded
+  or stored on our side.
 - The `REVIEW_KEY` lives in the Apps Script (server-side), not in the public
   pages.
 
