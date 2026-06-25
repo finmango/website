@@ -340,8 +340,11 @@
   <!-- /chrome:footer -->
 
   <script>
-    // Paste your deployed Apps Script Web App URL (see docs/POSTS-SETUP.md).
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyw06JczRZVwdf3vw70xeshZ_shp2J1zzvPvPqhR-2_FSqzSBFaq0Yu-OZ7KjKYfCuthQ/exec';
+    // Reads go through the same-origin, edge-cached proxy (functions/api/posts.js)
+    // so repeat visits skip the slow Apps Script round-trip. The /post Function
+    // also inlines the post as window.__POST__ for an instant first paint — see
+    // docs/POSTS-SETUP.md.
+    const API_URL = '/api/posts';
 
     const escapeHtml = s => (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -398,9 +401,11 @@
     }
 
     (async function () {
+      // The /post Function inlines the post for an instant paint — use it and skip the fetch.
+      if (window.__POST__ && window.__POST__.title) return render(window.__POST__);
+
       const id = new URLSearchParams(location.search).get('id');
       if (!id) return showState('Post not found', 'No post was specified. <a href="posts.html">Browse all posts →</a>');
-      if (API_URL === 'REPLACE_WITH_APPS_SCRIPT_WEB_APP_URL') return showState('Not configured yet', 'The posts backend URL has not been set. See <code>docs/POSTS-SETUP.md</code>.');
       try {
         const res = await fetch(API_URL + '?action=post&id=' + encodeURIComponent(id));
         const data = await res.json();

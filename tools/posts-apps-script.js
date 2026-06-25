@@ -189,7 +189,7 @@ function publishPost_(p) {
   // commitStaticPage_(post);
 
   notifyAuthorPublished_(post);
-  return { result: 'success', id: post.id, url: CONFIG.SITE_BASE + '/post.html?id=' + encodeURIComponent(post.id) };
+  return { result: 'success', id: post.id, url: CONFIG.SITE_BASE + '/post?id=' + encodeURIComponent(post.id) };
 }
 
 // ============================== STORAGE HELPERS ============================
@@ -302,7 +302,7 @@ function notifyAuthorPublished_(post) {
       subject: 'Your FinMango post is published: ' + (post.title || ''),
       htmlBody:
         '<p>Great news — your post is now live on FinMango.</p>' +
-        '<p><a href="' + CONFIG.SITE_BASE + '/post.html?id=' + encodeURIComponent(post.id) + '">Read it here</a></p>' +
+        '<p><a href="' + CONFIG.SITE_BASE + '/post?id=' + encodeURIComponent(post.id) + '">Read it here</a></p>' +
         '<p>Thank you for contributing. — The FinMango team</p>'
     });
   } catch (err) { /* ignore */ }

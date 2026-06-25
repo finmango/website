@@ -12,8 +12,9 @@ Drive as storage.
 | `write.html` | Substack-style editor with a **live finmango.org preview**; submits a draft | Contributors (public) |
 | `post-review.html` | Peer-review panel: read, comment, vote, publish | Reviewers (passphrase) |
 | `posts.html` | Public index of published posts | Everyone |
-| `post.html?id=…` | Renders a single published post in full site chrome | Everyone |
+| `post.html` (served at `/post?id=…`) | Renders a single published post in full site chrome | Everyone |
 | `tools/posts-apps-script.js` | The backend (deploy to Apps Script) | One-time setup |
+| `functions/` | Cloudflare edge layer: speed + social share previews | Auto (no setup) |
 
 ## How it flows
 
@@ -80,10 +81,37 @@ which has a 50k-char-per-cell limit).
 - The `REVIEW_KEY` lives in the Apps Script (server-side), not in the public
   pages.
 
+## Speed & social share previews (the `functions/` edge layer)
+
+The site runs on **Cloudflare Pages**, so the `functions/` folder is picked up
+automatically — no setup, no secrets, no dashboard changes. It deploys with the
+repo. Three small functions sit between visitors and the Apps Script backend:
+
+| Route | File | What it does |
+| --- | --- | --- |
+| `/api/posts?action=published` / `…&action=post&id=…` | `functions/api/posts.js` | Same-origin, **edge-cached** read proxy. `posts.html` and `post.html` call this instead of the slow Apps Script URL, so repeat visits (and crawlers) skip the round-trip. Read-only — reviewer/submit actions are refused. |
+| `/post?id=…` | `functions/post.js` | Server-renders the post's `<head>`: real Open Graph / Twitter tags (title, description, **cover image**) so shared links show the cover instead of the bare logo. Also inlines the post as `window.__POST__`, so the page paints **instantly** with no "Loading…". |
+| `/post-image?id=…` | `functions/post-image.js` | Serves the post's cover from our own domain (Google Drive thumbnail URLs are flaky for crawlers). This is the `og:image`. Falls back to `og-image.png` when a post has no cover. |
+
+Shared helpers (and the one copy of the backend URL) live in
+`functions/_shared.js`. Posts with **no** cover image fall back to the default
+FinMango card automatically.
+
+Notes:
+- Old `/post.html?id=…` links still work — the existing clean-URL redirect sends
+  them to `/post?id=…`, and crawlers follow it.
+- To preview a new cover in a share, use the platform's debugger to re-scrape
+  (e.g. [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/),
+  [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/)); they
+  cache previews aggressively.
+- Test locally with `npx wrangler pages dev .` (serves the functions like
+  production).
+
 ## Optional upgrade: pre-render to static files (SEO)
 
-By default, published posts render dynamically via `post.html?id=…` — robust
-and zero-secret. If you later want each post committed as its own static HTML
+By default, published posts render dynamically via `/post?id=…` (with the edge
+layer above) — robust and zero-secret. If you later want each post committed as
+its own static HTML
 file (better SEO / works if the Apps Script is ever unavailable), enable the
 `commitStaticPage_(post)` hook in `publishPost_()` and add a fine-scoped GitHub
 token to the script's properties. This trades a stored secret for static output;
