@@ -179,6 +179,8 @@
       padding-top: 1.4rem; border-top: 1px solid var(--ink-line); font-family: var(--font-mono); font-size: .68rem;
       letter-spacing: .04em; color: var(--ink-faint); text-transform: uppercase; }
     .article-meta strong { color: var(--ink); font-weight: 500; }
+    .pv-avatar { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; display: block; flex: none; }
+    .article-meta .pv-linked { border-bottom: 1px solid var(--ink-line); padding-bottom: 1px; }
     .article-cover { margin: 2.5rem 0; }
     .article-cover img { width: 100%; height: auto; display: block; }
     .article-body { font-size: 1.16rem; line-height: 1.72; color: var(--ink); letter-spacing: -.003em; }
@@ -567,7 +569,7 @@
             <span class="article-cat" id="pvCat"></span>
             <h1 class="article-title" id="pvTitle"></h1>
             <p class="article-dek" id="pvDek"></p>
-            <div class="article-meta" id="pvMeta"><strong id="pvAuthor">Your name</strong> · <span id="pvDate"></span></div>
+            <div class="article-meta" id="pvMeta"><img id="pvAvatar" class="pv-avatar" alt="" hidden><strong id="pvAuthor">Your name</strong> · <span id="pvDate"></span></div>
             <div class="article-cover" id="pvCoverWrap" style="display:none;"><img id="pvCover" alt=""></div>
             <div class="article-body" id="pvBody"><p style="color:var(--ink-faint)">Your story will appear here as you write.</p></div>
           </article>
@@ -713,12 +715,20 @@
     const editor = $('editor');
     let coverDataUrl = '';
     function fmtDate(d) { return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
+    let ambassadorRoster = []; // filled by loadAmbassadors(); used to preview the selected profile
     function refreshPreview() {
       $('pvCat').textContent = [$('category').value, ($('tags').value || '').split(',').map(s => s.trim()).filter(Boolean).join(' · ')].filter(Boolean).join('  ·  ');
       $('pvTitle').textContent = $('title').value;
       const dek = $('dek').value.trim();
       $('pvDek').textContent = dek; $('pvDek').style.display = dek ? '' : 'none';
       $('pvAuthor').textContent = $('authorName').value.trim() || 'Your name';
+      // Mirror the selected ambassador profile: show their photo and mark the
+      // byline as linked, exactly as it will appear on the published post.
+      const amb = ambassadorRoster.find(a => a.slug === $('ambassadorSlug').value);
+      const av = $('pvAvatar');
+      if (amb && amb.img) { av.src = amb.img; av.alt = amb.name || ''; av.hidden = false; }
+      else { av.hidden = true; av.removeAttribute('src'); }
+      $('pvAuthor').classList.toggle('pv-linked', !!amb);
       $('pvDate').textContent = fmtDate(new Date());
       $('pvCoverWrap').style.display = coverDataUrl ? '' : 'none';
       if (coverDataUrl) $('pvCover').src = coverDataUrl;
@@ -728,6 +738,7 @@
       $('bodyCount').textContent = words + (words === 1 ? ' word' : ' words');
     }
     ['authorName', 'category', 'tags', 'title', 'dek'].forEach(id => $(id).addEventListener('input', refreshPreview));
+    $('ambassadorSlug').addEventListener('change', refreshPreview);
     editor.addEventListener('input', refreshPreview);
 
     // ---- toolbar ----
@@ -847,8 +858,8 @@
       try {
         const res = await fetch('data/ambassadors.json', { cache: 'no-cache' });
         if (!res.ok) return;
-        const roster = await res.json();
-        roster.forEach(a => {
+        ambassadorRoster = await res.json();
+        ambassadorRoster.forEach(a => {
           if (!a || !a.slug) return;
           const opt = document.createElement('option');
           opt.value = a.slug;
@@ -857,6 +868,7 @@
         });
         // Re-apply a value restored from a local draft once options exist.
         if (sel.dataset.pending) { sel.value = sel.dataset.pending; delete sel.dataset.pending; }
+        refreshPreview(); // reflect a restored/selected profile in the preview
       } catch { /* non-fatal — the field just stays optional/empty */ }
     })();
 
