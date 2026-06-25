@@ -142,7 +142,8 @@
     .article-byline { max-width: 700px; margin: 1.9rem auto 0; padding-top: 1.5rem; border-top: 1px solid var(--ink-line);
       display: flex; align-items: center; gap: .9rem; }
     .byline-avatar { width: 44px; height: 44px; border-radius: 50%; flex: none; background: linear-gradient(135deg, var(--orange), var(--orange-deep));
-      color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.05rem; letter-spacing: -.02em; }
+      color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.05rem; letter-spacing: -.02em; overflow: hidden; }
+    .byline-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .byline-text { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
     .byline-name { font-size: .98rem; font-weight: 600; letter-spacing: -.01em; }
     .byline-name span { color: var(--ink-dim); font-weight: 400; }
@@ -450,6 +451,39 @@
       if (!parts.length) return 'FM';
       return (parts[0][0] + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase();
     }
+    // ---- ambassador profile resolution ----
+    // A note links to a profile either explicitly (ambassadorSlug, set on the form)
+    // or automatically by matching the author's name to the ambassador roster — so
+    // older notes and ones where the writer skipped the dropdown still connect.
+    function normName(s) {
+      return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+    }
+    let _rosterPromise = null;
+    function getRoster() {
+      return _rosterPromise || (_rosterPromise = fetch('/data/ambassadors.json')
+        .then(r => r.ok ? r.json() : []).catch(() => []));
+    }
+    async function enrichAmbassador(p, name) {
+      try {
+        const roster = await getRoster();
+        const explicit = (p.ambassadorSlug || '').replace(/[^a-z0-9-]/gi, '');
+        let amb = explicit ? (roster.find(a => a.slug === explicit) || { slug: explicit }) : null;
+        if (!amb && name) { const n = normName(name); amb = roster.find(a => normName(a.name) === n) || null; }
+        if (!amb || !amb.slug) return;
+        // Link the byline name to the profile (rebuild keeps the affiliation span).
+        const nameEl = document.querySelector('.byline-name');
+        if (nameEl) {
+          const affil = p.authorAffiliation ? ' <span>· ' + escapeHtml(p.authorAffiliation) + '</span>' : '';
+          nameEl.innerHTML = '<a href="/' + amb.slug + '.html" class="byline-profile-link">' + escapeHtml(name) + '</a>' + affil;
+        }
+        // Swap the initials chip for the ambassador's photo.
+        if (amb.img) {
+          const av = document.getElementById('bylineAvatar');
+          if (av) av.innerHTML = '<img src="/' + escapeHtml(amb.img) + '" alt="' + escapeHtml(name) + '" loading="lazy">';
+        }
+      } catch (e) { /* enrichment is best-effort */ }
+    }
+
     // Reading time from the post body (~200 wpm), floored at 1 minute.
     function readingTime(html) {
       const text = (html || '').replace(/<[^>]+>/g, ' ');
@@ -502,7 +536,7 @@
             (p.dek ? '<p class="article-dek">' + escapeHtml(p.dek) + '</p>' : '') +
           '</div>' +
           '<div class="article-byline">' +
-            '<div class="byline-avatar" aria-hidden="true">' + escapeHtml(initials(name)) + '</div>' +
+            '<div class="byline-avatar" id="bylineAvatar" aria-hidden="true">' + escapeHtml(initials(name)) + '</div>' +
             '<div class="byline-text">' +
               '<div class="byline-name">' + nameHtml + affil + '</div>' +
               '<div class="byline-meta">' + metaBits + '</div>' +
@@ -525,6 +559,7 @@
       const md = document.querySelector('meta[name="description"]');
       if (md && p.dek) md.setAttribute('content', p.dek);
       wireArticleInteractions();
+      enrichAmbassador(p, name);
     }
 
     // Copy-link buttons + reading-progress bar (only meaningful once an article is rendered).
