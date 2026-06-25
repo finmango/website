@@ -1,5 +1,5 @@
 // ============================================================================
-// /api/posts — same-origin, edge-cached read proxy for the Community Posts API
+// /api/posts — same-origin, edge-cached read proxy for the Ambassador Notes API
 // ----------------------------------------------------------------------------
 // posts.html and post.html call this instead of hitting the Google Apps Script
 // web app directly. Two wins:

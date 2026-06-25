@@ -1,5 +1,5 @@
 // ============================================================================
-// /post — server-rendered head for a single Community Post
+// /post — server-rendered head for a single Ambassador Note
 // ----------------------------------------------------------------------------
 // The static post.html is a blank shell that fetches its content client-side,
 // so (a) it shows "Loading…" until a slow Apps Script call returns, and (b)
@@ -45,13 +45,13 @@ export async function onRequestGet(context) {
 
 function buildMeta(post, id) {
   if (!post) {
-    const desc = 'A community-authored report, brief, or story published on FinMango.';
+    const desc = 'A note, brief, or story written by a FinMango Ambassador.';
     return {
-      title: 'Community Post — FinMango',
+      title: 'Ambassador Note — FinMango',
       description: desc,
       headHtml: ogBlock({
         url: SITE_BASE + '/post' + (id ? '?id=' + encodeURIComponent(id) : ''),
-        title: 'FinMango Community Post',
+        title: 'FinMango Ambassador Note',
         description: desc,
         image: DEFAULT_OG_IMAGE,
         imageAlt: 'FinMango',
@@ -61,8 +61,8 @@ function buildMeta(post, id) {
     };
   }
 
-  const title = post.title || 'Community Post';
-  const desc = post.dek || ('A community post by ' + (post.authorName || 'a FinMango contributor') + ' on FinMango.');
+  const title = post.title || 'Ambassador Note';
+  const desc = post.dek || ('An Ambassador note by ' + (post.authorName || 'a FinMango Ambassador') + ' on FinMango.');
   const canonical = SITE_BASE + '/post?id=' + encodeURIComponent(post.id);
   // When the post has a cover, point at our same-origin image proxy — Google
   // Drive thumbnail URLs are unreliable for crawlers. Otherwise fall back to the

@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * FinMango — Community Posts backend (Google Apps Script Web App)
+ * FinMango — Ambassador Notes backend (Google Apps Script Web App)
  * ============================================================================
  * Powers write.html (submit), posts.html / post.html (public read), and
  * post-review.html (peer-review panel).
@@ -286,7 +286,7 @@ function notifyEditors_(post) {
   try {
     MailApp.sendEmail({
       to: CONFIG.EDITOR_EMAIL,
-      subject: 'New community post submitted: ' + (post.title || '(untitled)'),
+      subject: 'New Ambassador Note submitted: ' + (post.title || '(untitled)'),
       htmlBody:
         '<p><strong>' + esc_(post.authorName) + '</strong> (' + esc_(post.authorEmail) + ') submitted a ' + esc_(post.category || 'post') + '.</p>' +
         '<p><strong>' + esc_(post.title) + '</strong><br>' + esc_(post.dek || '') + '</p>' +
@@ -299,9 +299,9 @@ function notifyAuthorPublished_(post) {
   try {
     MailApp.sendEmail({
       to: post.authorEmail,
-      subject: 'Your FinMango post is published: ' + (post.title || ''),
+      subject: 'Your FinMango Ambassador Note is published: ' + (post.title || ''),
       htmlBody:
-        '<p>Great news — your post is now live on FinMango.</p>' +
+        '<p>Great news — your Ambassador Note is now live on FinMango.</p>' +
         '<p><a href="' + CONFIG.SITE_BASE + '/post?id=' + encodeURIComponent(post.id) + '">Read it here</a></p>' +
         '<p>Thank you for contributing. — The FinMango team</p>'
     });
