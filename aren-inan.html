@@ -1251,8 +1251,8 @@
   </section>
 
   <!-- ======================= AMBASSADOR NOTES (auto-populated) ======================= -->
-  <!-- Self-contained: reads this page's slug, fetches published notes, shows the ones
-       this ambassador authored, and stays hidden if there are none. -->
+  <!-- Self-contained: matches notes to this profile (by ambassadorSlug OR author name),
+       shows them, and stays hidden if there are none. -->
   <section class="amb-notes" id="ambNotes" hidden aria-labelledby="ambNotesHead">
     <style>
       .amb-notes { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
@@ -1283,13 +1283,21 @@
         if (!slug) return;
         var grid = document.getElementById('ambNotesGrid');
         var sec = document.getElementById('ambNotes');
+        var h1 = document.querySelector('.hero h1');
+        var pageName = h1 ? h1.textContent : '';
+        var first = (pageName.trim().split(/\s+/)[0] || '');
+        var norm = function (s) { return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim(); };
+        var nn = norm(pageName);
         var esc = function (s) { return (s || '').replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); };
         var fmt = function (iso) { try { return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }); } catch (e) { return ''; } };
         fetch('/api/posts?action=published').then(function (r) { return r.json(); }).then(function (d) {
-          var posts = ((d && d.posts) || []).filter(function (p) { return p && p.ambassadorSlug === slug; });
+          // Match a note to this profile by explicit slug OR by the author's name.
+          var posts = ((d && d.posts) || []).filter(function (p) {
+            if (!p) return false;
+            if (p.ambassadorSlug && p.ambassadorSlug === slug) return true;
+            return nn && norm(p.authorName) === nn;
+          });
           if (!posts.length) return;
-          var h1 = document.querySelector('.hero h1');
-          var first = h1 ? (h1.textContent.trim().split(/\s+/)[0] || '') : '';
           if (first) document.getElementById('ambNotesHead').innerHTML = 'Notes from <em>' + esc(first) + '.</em>';
           grid.innerHTML = posts.slice(0, 6).map(function (p) {
             return '<a class="amb-note-card" href="/post?id=' + encodeURIComponent(p.id) + '">' +
