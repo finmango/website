@@ -48,7 +48,7 @@ TPL = {
 
 # Top-level nav links eligible for an active state.
 ACTIVE_LINKS = ('about.html', 'research.html', 'education.html',
-                'get-involved.html', 'donate.html')
+                'ambassadors.html', 'get-involved.html', 'donate.html')
 
 MARK = {
     'nav': (re.compile(
