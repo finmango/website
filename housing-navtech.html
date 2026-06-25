@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Housing NavTech | FinMango</title>
+<meta name="description" content="Housing help that arrives before the crisis. FinMango is building a navigation layer that moves families from at-risk to stabilized — and gives frontline workers the workflow to drive it.">
+<link rel="icon" type="image/png" href="favicon.png">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.finmango.org/housing-navtech.html">
+<meta property="og:title" content="Housing NavTech | FinMango">
+<meta property="og:description" content="Housing help that arrives before the crisis. FinMango is building a navigation layer that moves families from at-risk to stabilized — and gives frontline workers the workflow to drive it.">
+<meta property="og:image" content="https://www.finmango.org/og-image.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://www.finmango.org/housing-navtech.html">
+<meta name="twitter:title" content="Housing NavTech | FinMango">
+<meta name="twitter:description" content="Housing help that arrives before the crisis. FinMango is building a navigation layer that moves families from at-risk to stabilized — and gives frontline workers the workflow to drive it.">
+<meta name="twitter:image" content="https://www.finmango.org/og-image.png">
+
+<link rel="canonical" href="https://www.finmango.org/housing-navtech.html">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" as="style"
+  onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
+</noscript>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-DW5HBYS9JW');
+</script>
+
+<style>
+/* ==========================================================
+   FINMANGO — EDITORIAL SYSTEM
+   One paper, one ink, one orange. Mono for data, Sans for voice.
+   ========================================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Palette — the whole page runs on these five */
+  --paper: #FAFAF7;
+  --ink: #0A0A0A;
+  --orange: #FF6B35;
+  --orange-deep: #E5511B;
+  --signal-good: #34D399;   /* used only on ink */
+  --signal-bad: #F87171;    /* used only on ink */
+
+  /* Derived ink opacities */
+  --ink-dim: rgba(10, 10, 10, .62);
+  --ink-faint: rgba(10, 10, 10, .38);
+  --ink-line: rgba(10, 10, 10, .1);
+  --ink-line-soft: rgba(10, 10, 10, .06);
+
+  /* Derived paper opacities (for ink sections) */
+  --paper-dim: rgba(250, 250, 247, .64);
+  --paper-faint: rgba(250, 250, 247, .4);
+  --paper-line: rgba(250, 250, 247, .12);
+
+  /* Type */
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+
+  /* Layout */
+  --max-width: 1280px;
+  --hero-max: 1440px;
+  --gutter: 2.5rem;
+}
+
+html { scroll-behavior: smooth; }
+section[id] { scroll-margin-top: 84px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.5;
+  font-size: 17px;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01" on, "cv11" on;
+}
+
+::selection { background: var(--orange); color: #fff; }
+
+:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+}
+
+/* ----------------------------------------------------------
+   SHARED PRIMITIVES
+   ---------------------------------------------------------- */
+.section-container {
+  max-width: var(--max-width);
+  width: 100%;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: var(--ink-faint);
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+}
+.eyebrow::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--orange);
+  flex-shrink: 0;
+}
+.on-ink .eyebrow { color: var(--paper-faint); }
+
+/* Buttons — ONE system, everywhere */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: .85rem;
+  padding: 1.05rem 1.7rem;
+  background: var(--orange);
+  color: #FFFFFF;
+  font-weight: 600;
+  font-size: .95rem;
+  text-decoration: none;
+  letter-spacing: -.01em;
+  border: none;
+  transition: background .3s cubic-bezier(.16, 1, .3, 1), color .3s cubic-bezier(.16, 1, .3, 1);
+  white-space: nowrap;
+  font-family: inherit;
+  cursor: pointer;
+}
+.btn-primary:hover { background: var(--ink); color: var(--paper); }
+.on-ink .btn-primary:hover { background: var(--paper); color: var(--ink); }
+.btn-primary svg {
+  width: 14px; height: 14px;
+  transition: transform .3s cubic-bezier(.16, 1, .3, 1);
+}
+.btn-primary:hover svg { transform: translateX(4px); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: .95rem;
+  text-decoration: none;
+  letter-spacing: -.01em;
+  border: 1px solid var(--ink-line);
+  transition: border-color .3s ease;
+  white-space: nowrap;
+  font-family: inherit;
+  cursor: pointer;
+}
+.btn-secondary:hover { border-color: var(--ink); }
+.btn-secondary svg { width: 13px; height: 13px; transition: transform .3s cubic-bezier(.16,1,.3,1); }
+.btn-secondary:hover svg { transform: translateX(3px); }
+.on-ink .btn-secondary { color: var(--paper); border-color: var(--paper-line); }
+.on-ink .btn-secondary:hover { border-color: var(--paper); }
+
+/* ----------------------------------------------------------
+   NAVIGATION
+   ---------------------------------------------------------- */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(250, 250, 247, .92);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  z-index: 1050;
+  padding: 1.4rem 0;
+  transition: padding .3s ease, border-color .3s ease;
+  border-bottom: 1px solid transparent;
+}
+nav.scrolled {
+  padding: .9rem 0;
+  border-bottom-color: var(--ink-line-soft);
+}
+
+.nav-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.logo { display: flex; align-items: center; text-decoration: none; }
+.logo img { height: 40px; transition: height .3s ease; display: block; }
+nav.scrolled .logo img { height: 34px; }
+
+.nav-right { display: flex; gap: 2rem; align-items: center; }
+
+.nav-right > a,
+.nav-right .dropdown-trigger {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: .92rem;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  position: relative;
+  transition: color .2s ease;
+}
+.nav-right > a:not(.btn-donate):not(.btn-get-involved)::after,
+.nav-right .dropdown-trigger::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--orange);
+  transition: width .25s ease;
+}
+.nav-right > a:not(.btn-donate):not(.btn-get-involved):hover::after,
+.dropdown:hover .dropdown-trigger::after,
+.dropdown:focus-within .dropdown-trigger::after { width: 100%; }
+
+.btn-get-involved {
+  display: inline-flex;
+  align-items: center;
+  padding: .55rem 1rem !important;
+  border: 1px solid var(--ink-line);
+  color: var(--ink) !important;
+  text-decoration: none !important;
+  font-size: .82rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  transition: border-color .25s ease !important;
+}
+.btn-get-involved::after { display: none !important; }
+.btn-get-involved:hover { border-color: var(--ink); }
+
+.btn-donate {
+  display: inline-flex;
+  align-items: center;
+  padding: .55rem 1.15rem !important;
+  background: var(--orange);
+  color: #fff !important;
+  text-decoration: none !important;
+  font-size: .82rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  transition: background .25s ease !important;
+}
+.btn-donate::after { display: none !important; }
+.btn-donate:hover { background: var(--ink); }
+
+/* Dropdown — keyboard accessible via focus-within */
+.dropdown { position: relative; }
+.dropdown-trigger {
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  padding: 0;
+}
+.dropdown-trigger .chev {
+  font-size: .6rem;
+  transition: transform .25s ease;
+  color: var(--ink-faint);
+}
+.dropdown:hover .chev, .dropdown:focus-within .chev { transform: rotate(180deg); color: var(--orange); }
+
+.dropdown-content {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+  position: absolute;
+  top: calc(100% + 14px);
+  right: -1rem;
+  background: var(--paper);
+  min-width: 600px;
+  border: 1px solid var(--ink-line);
+  box-shadow: 0 24px 60px -24px rgba(10, 10, 10, .18);
+  z-index: 1001;
+  transition: opacity .2s ease, transform .2s ease, visibility .2s;
+}
+.dropdown::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: -1rem;
+  right: -1rem;
+  height: 16px;
+}
+.dropdown:hover .dropdown-content,
+.dropdown:focus-within .dropdown-content {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dropdown-mega-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.dropdown-mega-col { padding: .85rem 0; }
+.dropdown-mega-col:first-child { border-right: 1px solid var(--ink-line-soft); }
+.dropdown-mega-col-label {
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: var(--ink-faint);
+  padding: .5rem 1.4rem .45rem;
+}
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .62rem 1.4rem;
+  text-decoration: none;
+  transition: background .15s ease;
+}
+.dropdown-item:hover, .dropdown-item:focus-visible { background: rgba(255, 107, 53, .06); }
+.dropdown-item-text { display: flex; flex-direction: column; gap: .12rem; }
+.dropdown-item-name {
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -.01em;
+  transition: color .15s ease;
+}
+.dropdown-item:hover .dropdown-item-name { color: var(--orange); }
+.dropdown-item-desc { font-size: .7rem; font-weight: 400; color: var(--ink-dim); letter-spacing: .005em; }
+.dropdown-external { font-size: .8rem; color: var(--ink-faint); transition: all .15s ease; flex-shrink: 0; }
+.dropdown-item:hover .dropdown-external { color: var(--orange); transform: translate(2px, -2px); }
+
+.mobile-controls { display: none; gap: 1rem; align-items: center; }
+
+/* ----------------------------------------------------------
+   HERO — top-anchored billboard
+   ---------------------------------------------------------- */
+.hero {
+  background: var(--paper);
+  padding: 6.5rem 2.5rem 6.5rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  top: 30%;
+  left: -10%;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(255, 107, 53, .1) 0%, transparent 60%);
+  filter: blur(40px);
+}
+
+.hero-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--hero-max);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding-top: 1.5rem;
+}
+
+.hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.hero-status {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  white-space: nowrap;
+}
+.hero-status .pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 0 0 rgba(255, 107, 53, .5);
+  animation: pulse 2.4s ease-out infinite;
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, .5); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 107, 53, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
+}
+
+.hero h1 {
+  font-size: clamp(3.2rem, 9.5vw, 10.5rem);
+  font-weight: 900;
+  line-height: .94;
+  letter-spacing: -.05em;
+  max-width: 15ch;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--orange);
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+/* hand-drawn underline replaces the heavy text-decoration slab */
+.hero h1 em svg.hand-stroke {
+  position: absolute;
+  left: -1%;
+  bottom: -.08em;
+  width: 102%;
+  height: .14em;
+  pointer-events: none;
+}
+.hero h1 em svg.hand-stroke path {
+  stroke: var(--orange);
+  stroke-width: 5;
+  stroke-linecap: round;
+  fill: none;
+  opacity: .5;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw-stroke 1.2s cubic-bezier(.16, 1, .3, 1) .5s forwards;
+}
+@keyframes draw-stroke { to { stroke-dashoffset: 0; } }
+
+.hero-bottom {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 3rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--ink-line-soft);
+}
+.hero-sub {
+  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+  font-weight: 300;
+  line-height: 1.4;
+  color: var(--ink-dim);
+  max-width: 42ch;
+  letter-spacing: -.015em;
+}
+.hero-sub strong { color: var(--ink); font-weight: 500; }
+
+/* ----------------------------------------------------------
+   THE STAKES — the page's ink moment
+   ---------------------------------------------------------- */
+.stakes {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 7rem 2.5rem 7.5rem;
+}
+.stakes-container { width: 100%; max-width: var(--max-width); margin: 0 auto; }
+
+.stakes-header {
+  margin-bottom: 4.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+.stakes-title {
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: .95;
+  letter-spacing: -.045em;
+  max-width: 18ch;
+}
+.stakes-title em { font-style: normal; color: var(--orange); }
+
+.stakes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--paper-line);
+}
+.stat {
+  padding: 3rem 3rem 0 0;
+  border-right: 1px solid var(--paper-line);
+  position: relative;
+}
+.stat::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--orange);
+  transition: width .4s cubic-bezier(.16, 1, .3, 1);
+}
+.stat:hover::before { width: calc(100% - 3rem); }
+.stat:not(:first-child):hover::before { left: 3rem; }
+.stat:last-child { border-right: none; padding-right: 0; }
+.stat:last-child:hover::before { width: 100%; }
+.stat:not(:first-child) { padding-left: 3rem; }
+.stat-num {
+  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-weight: 900;
+  letter-spacing: -.05em;
+  line-height: .9;
+  margin-bottom: 1.5rem;
+}
+.stat-num em { font-style: normal; color: var(--orange); }
+.stat-desc {
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--paper-dim);
+  line-height: 1.4;
+  margin-bottom: 1.5rem;
+  max-width: 24ch;
+}
+.stat-source {
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--paper-faint);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  transition: color .2s ease;
+}
+a.stat-source:hover { color: var(--orange); }
+a.stat-source svg { width: 9px; height: 9px; transition: transform .2s ease; }
+a.stat-source:hover svg { transform: translate(2px, -2px); }
+
+/* ----------------------------------------------------------
+   WORK — ruled tool index
+   ---------------------------------------------------------- */
+.work {
+  background: var(--paper);
+  padding: 7.5rem 2.5rem;
+}
+.work-header {
+  margin-bottom: 4.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: end;
+}
+.work-title {
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: .95;
+  letter-spacing: -.045em;
+}
+.work-title em { font-style: normal; color: var(--orange); }
+.work-aside {
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--ink-dim);
+  max-width: 36ch;
+  line-height: 1.55;
+}
+
+.work-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--ink-line);
+}
+.work-item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto auto;
+  align-items: center;
+  gap: 3rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--ink-line);
+  text-decoration: none;
+  color: var(--ink);
+  transition: padding .3s cubic-bezier(.16, 1, .3, 1);
+  position: relative;
+}
+.work-item::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--orange);
+  transition: width .4s cubic-bezier(.16, 1, .3, 1);
+  z-index: 1;
+}
+.work-item:hover::before { width: 100%; }
+.work-item:hover { padding-left: 1rem; }
+.work-num {
+  font-family: var(--font-mono);
+  font-size: .8rem;
+  font-weight: 500;
+  letter-spacing: .1em;
+  color: var(--ink-faint);
+  transition: color .3s ease;
+}
+.work-item:hover .work-num { color: var(--orange); }
+.work-name-wrap { display: flex; flex-direction: column; gap: .3rem; }
+.work-name {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -.025em;
+  line-height: 1.1;
+}
+.work-desc {
+  font-size: .88rem;
+  font-weight: 300;
+  color: var(--ink-faint);
+  line-height: 1.4;
+  letter-spacing: -.01em;
+}
+.work-tag {
+  font-family: var(--font-mono);
+  font-size: .64rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+.work-arrow {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--ink-line);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .3s cubic-bezier(.16, 1, .3, 1);
+  flex-shrink: 0;
+}
+.work-arrow svg {
+  width: 14px;
+  height: 14px;
+  transition: transform .3s cubic-bezier(.16, 1, .3, 1);
+  color: var(--ink-dim);
+}
+.work-item:hover .work-arrow { background: var(--orange); border-color: var(--orange); }
+.work-item:hover .work-arrow svg { color: #fff; transform: translate(2px, -2px); }
+
+.work-foot { margin-top: 3rem; text-align: right; }
+.work-foot a {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink-line);
+  padding-bottom: .4rem;
+  transition: color .2s ease, border-color .2s ease;
+}
+.work-foot a:hover { color: var(--orange); border-bottom-color: var(--orange); }
+
+/* ----------------------------------------------------------
+   ROADMAP — phases as native disclosures
+   ---------------------------------------------------------- */
+.roadmap {
+  background: var(--paper);
+  padding: 0 2.5rem 7.5rem;
+}
+.roadmap-header { margin-bottom: 4rem; }
+.roadmap-title {
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: .95;
+  letter-spacing: -.045em;
+  max-width: 18ch;
+}
+.roadmap-title em { font-style: normal; color: var(--orange); }
+
+.phases {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--ink-line);
+  position: relative;
+}
+.phases::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 39px;
+  width: 1px;
+  background: var(--ink-line);
+  z-index: 0;
+  pointer-events: none;
+}
+.phase {
+  border-bottom: 1px solid var(--ink-line);
+  overflow: hidden;
+}
+.phase-featured {
+  border-left: 2px solid var(--orange);
+  background: rgba(255, 107, 53, .05);
+}
+.now-building {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  border: 1px solid rgba(255, 107, 53, .45);
+  color: var(--orange);
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  padding: .3rem .65rem;
+  margin-bottom: .35rem;
+  width: fit-content;
+}
+.now-building .nb-pulse {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 0 0 rgba(255, 107, 53, .5);
+  animation: pulse 2.4s ease-out infinite;
+}
+.phase summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 2.5rem 0;
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  align-items: center;
+  gap: 3rem;
+  user-select: none;
+  position: relative;
+  transition: padding .3s cubic-bezier(.16, 1, .3, 1);
+}
+.phase summary::-webkit-details-marker { display: none; }
+.phase summary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 107, 53, .04) 50%, transparent);
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+.phase:hover summary::before { opacity: 1; }
+.phase:hover summary { padding-left: 1rem; }
+.phase-num {
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  color: var(--ink-faint);
+  transition: all .3s cubic-bezier(.16, 1, .3, 1);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  background: var(--paper);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+.phase:hover .phase-num,
+.phase[open] .phase-num {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff !important;
+}
+.phase-titles { display: flex; flex-direction: column; gap: .4rem; }
+.phase-name {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -.025em;
+  line-height: 1.1;
+}
+.phase-tag {
+  font-family: var(--font-mono);
+  font-size: .66rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.phase-toggle {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--ink-line);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 300;
+  line-height: 1;
+  flex-shrink: 0;
+  color: var(--ink-dim);
+  transition: all .3s cubic-bezier(.16, 1, .3, 1);
+}
+.phase[open] .phase-toggle {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+  transform: rotate(45deg);
+}
+.phase-content {
+  padding: 0 0 3rem 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  animation: slideDown .4s cubic-bezier(.16, 1, .3, 1);
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.phase-thesis {
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: var(--ink-dim);
+  line-height: 1.5;
+  letter-spacing: -.015em;
+}
+.phase-thesis strong { color: var(--ink); font-weight: 500; }
+.phase-tools {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--ink-line);
+}
+.phase-tools li {
+  list-style: none;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--ink-line);
+  font-size: .95rem;
+  font-weight: 300;
+  color: var(--ink-dim);
+  line-height: 1.5;
+}
+.phase-tools li strong {
+  display: block;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: .25rem;
+  letter-spacing: -.01em;
+}
+
+/* ----------------------------------------------------------
+   WHY — ruled credibility list
+   ---------------------------------------------------------- */
+.why {
+  background: var(--paper);
+  padding: 0 2.5rem 7.5rem;
+}
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: start;
+}
+.why-title {
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: .95;
+  letter-spacing: -.045em;
+  margin-top: 1.5rem;
+}
+.why-title em { font-style: normal; color: var(--orange); }
+.why-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--ink-line);
+}
+.why-item {
+  padding: 1.6rem 0;
+  border-bottom: 1px solid var(--ink-line);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  position: relative;
+  transition: background .25s ease;
+}
+.why-item::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--orange);
+  transition: width .35s cubic-bezier(.16, 1, .3, 1);
+}
+.why-item:hover::before { width: 100%; }
+.why-item:hover { background: rgba(255, 107, 53, .04); }
+.why-marker {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .1em;
+  color: var(--orange);
+  padding-top: .35rem;
+}
+.why-item-content strong {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin-bottom: .35rem;
+}
+.why-item-content span {
+  font-size: .98rem;
+  color: var(--ink-dim);
+  font-weight: 300;
+  line-height: 1.55;
+}
+
+/* ----------------------------------------------------------
+   CTA — ink coda
+   ---------------------------------------------------------- */
+.cta {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 7.5rem 2.5rem 7rem;
+  position: relative;
+  overflow: hidden;
+}
+.cta-container {
+  text-align: left;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+.cta h2 {
+  font-size: clamp(2.8rem, 7.5vw, 7rem);
+  font-weight: 900;
+  line-height: .96;
+  letter-spacing: -.05em;
+  max-width: 13ch;
+}
+.cta h2 em { font-style: normal; color: var(--orange); }
+.cta-sub {
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  font-weight: 300;
+  color: var(--paper-dim);
+  max-width: 48ch;
+  line-height: 1.5;
+  letter-spacing: -.015em;
+}
+.cta-audience {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--paper-faint);
+  margin-top: -.75rem;
+}
+.cta-buttons {
+  display: flex;
+  gap: .9rem;
+  flex-wrap: wrap;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--paper-line);
+}
+/* the one hand-drawn flourish kept beyond the hero stroke */
+.cta-squiggle { width: 110px; height: 12px; opacity: .35; }
+
+/* ----------------------------------------------------------
+   FOOTER — continues the ink, separated by hairline
+   ---------------------------------------------------------- */
+footer {
+  background: var(--ink);
+  color: var(--paper);
+  border-top: 1px solid var(--paper-line);
+}
+.footer-newsletter { padding: 2.25rem var(--gutter); border-bottom: 1px solid var(--paper-line); }
+.footer-newsletter-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.footer-newsletter h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -.02em; margin-bottom: .2rem; }
+.footer-newsletter p { font-size: .88rem; color: var(--paper-dim); font-weight: 300; }
+.footer-newsletter-btn {
+  display: inline-block;
+  padding: .8rem 1.6rem;
+  font-size: .88rem;
+  font-weight: 600;
+  background: var(--orange);
+  color: #fff;
+  text-decoration: none;
+  transition: background .25s ease, color .25s ease;
+  white-space: nowrap;
+}
+.footer-newsletter-btn:hover { background: var(--paper); color: var(--ink); }
+
+.footer-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 4rem var(--gutter) 3rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+}
+.footer-brand-col { display: flex; flex-direction: column; gap: 1.1rem; }
+.footer-brand img { height: 30px; filter: brightness(0) invert(1); opacity: .95; }
+.footer-tagline { color: var(--paper-dim); line-height: 1.6; font-size: .92rem; font-weight: 300; max-width: 34ch; }
+.footer-ein { font-family: var(--font-mono); font-size: .64rem; letter-spacing: .1em; color: var(--paper-faint); }
+.footer-social { display: flex; gap: .65rem; margin-top: .25rem; }
+.footer-social a {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px;
+  border: 1px solid var(--paper-line);
+  color: var(--paper);
+  text-decoration: none;
+  transition: border-color .2s ease, color .2s ease;
+}
+.footer-social a:hover { border-color: var(--orange); color: var(--orange); }
+.footer-social a svg { width: 15px; height: 15px; fill: currentColor; }
+.footer-section h4 {
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  margin-bottom: 1.35rem;
+  color: var(--paper-faint);
+}
+.footer-section a {
+  display: block;
+  color: var(--paper-dim);
+  text-decoration: none;
+  margin-bottom: .65rem;
+  transition: color .2s ease;
+  font-size: .92rem;
+  font-weight: 400;
+}
+.footer-section a:hover { color: var(--orange); }
+.footer-bottom {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1.75rem var(--gutter);
+  border-top: 1px solid var(--paper-line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: .66rem;
+  letter-spacing: .06em;
+  color: var(--paper-faint);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.footer-bottom a { color: var(--paper-dim); text-decoration: none; transition: color .2s ease; margin-left: 1.25rem; }
+.footer-bottom a:hover { color: var(--orange); }
+
+/* ----------------------------------------------------------
+   MOBILE MENU
+   ---------------------------------------------------------- */
+.mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; padding: .25rem 0; }
+.mobile-get-involved { display: none; }
+.mobile-menu-btn span { display: block; width: 26px; height: 2px; background: var(--ink); margin: 6px 0; transition: all .3s ease; }
+.mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+.mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(6px, -6px); }
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  background: var(--paper);
+  z-index: 1040;
+  padding: 6rem 1.75rem 2rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex-direction: column;
+}
+.mobile-menu.active { display: flex; }
+.mobile-menu-nav > a {
+  display: block;
+  padding: 1rem 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink-line-soft);
+  opacity: 0;
+  transform: translateY(12px);
+  animation: mobileSlideIn .35s cubic-bezier(.16, 1, .3, 1) forwards;
+}
+.mobile-menu.active .mobile-menu-nav > a:nth-child(1) { animation-delay: .04s; }
+.mobile-menu.active .mobile-menu-nav > a:nth-child(2) { animation-delay: .08s; }
+.mobile-menu.active .mobile-menu-nav > a:nth-child(3) { animation-delay: .12s; }
+.mobile-menu.active .mobile-dropdown { opacity: 0; transform: translateY(12px); animation: mobileSlideIn .35s cubic-bezier(.16, 1, .3, 1) .16s forwards; }
+@keyframes mobileSlideIn { to { opacity: 1; transform: translateY(0); } }
+
+.mobile-dropdown-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--ink-line-soft);
+  padding: 1rem 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+.mobile-dropdown-toggle .arrow {
+  font-size: .85rem;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--ink-line);
+  border-radius: 50%;
+  transition: transform .3s ease, background .3s ease, color .3s ease, border-color .3s ease;
+}
+.mobile-dropdown-toggle.active .arrow { transform: rotate(180deg); background: var(--orange); color: #fff; border-color: var(--orange); }
+
+.mobile-dropdown-content { max-height: 0; overflow: hidden; transition: max-height .4s ease-out; }
+.mobile-dropdown-content.open { max-height: 1200px; padding: .85rem 0; }
+.mobile-cards-label {
+  font-family: var(--font-mono);
+  font-size: .58rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--ink-faint);
+  padding: .7rem 0 .4rem;
+}
+.mobile-card {
+  display: flex;
+  flex-direction: column;
+  gap: .1rem;
+  padding: .7rem 0;
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink-line-soft);
+}
+.mobile-card:last-child { border-bottom: none; }
+.mobile-card-name { font-size: .98rem; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: .35rem; letter-spacing: -.01em; }
+.mobile-card-desc { font-size: .74rem; font-weight: 300; color: var(--ink-dim); line-height: 1.35; }
+.mobile-card-external { font-size: .78rem; color: var(--ink-faint); }
+.mobile-card:active .mobile-card-name { color: var(--orange); }
+
+.mobile-menu-footer {
+  padding-top: 1.25rem;
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .9rem;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: mobileSlideIn .35s ease .25s forwards;
+}
+.mobile-menu-footer .btn-mobile-cta {
+  display: block;
+  text-align: center;
+  padding: 1rem 1.5rem;
+  font-size: .95rem;
+  font-weight: 600;
+  text-decoration: none;
+  background: var(--orange);
+  color: #fff;
+  transition: background .2s ease;
+}
+.mobile-menu-footer .btn-mobile-cta:active { background: var(--orange-deep); }
+.mobile-menu-footer-links { display: flex; justify-content: center; gap: 1.75rem; padding-top: .25rem; }
+.mobile-menu-footer-links a {
+  font-family: var(--font-mono);
+  font-size: .68rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  text-decoration: none;
+}
+
+/* ----------------------------------------------------------
+   RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 1080px) {
+  .nav-right { gap: 1.5rem; }
+  .dropdown-content { min-width: 540px; }
+}
+
+@media (max-width: 968px) {
+  :root { --gutter: 1.5rem; }
+  body { font-size: 16px; }
+
+  .nav-right { display: none; }
+  .mobile-controls { display: flex; }
+  .mobile-menu-btn { display: block; }
+  .mobile-get-involved {
+    display: inline-block;
+    padding: .45rem .85rem !important;
+    font-size: .74rem !important;
+  }
+
+  .hero { padding: 6rem 1.5rem 4rem; }
+  .hero-container { gap: 2rem; padding-top: 0; }
+  .hero-top { align-items: flex-start; gap: 1rem; }
+  .hero h1 { font-size: clamp(2.2rem, 10vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
+  .hero-bottom { grid-template-columns: 1fr; gap: 1.75rem; padding-top: 1.5rem; align-items: start; }
+  .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
+
+  .stakes { padding: 4.5rem 1.5rem 5rem; }
+  .stakes-header { margin-bottom: 2.75rem; }
+  .stakes-grid { grid-template-columns: 1fr; }
+  .stat { padding: 2.25rem 0 !important; border-right: none; border-bottom: 1px solid var(--paper-line); }
+  .stat:last-child { border-bottom: none; padding-bottom: 0 !important; }
+  .stat:hover::before, .stat:not(:first-child):hover::before { width: 100%; left: 0; }
+
+  .work { padding: 5rem 1.5rem; }
+  .work-header { grid-template-columns: 1fr; gap: 1.75rem; margin-bottom: 2.75rem; }
+  .work-item { grid-template-columns: 60px 1fr auto; gap: 1.5rem; }
+  .work-item:hover { padding-left: 0; }
+  .work-tag { display: none; }
+
+  .roadmap { padding: 0 1.5rem 5rem; }
+  .roadmap-header { margin-bottom: 2.75rem; }
+  .phase summary { grid-template-columns: 60px 1fr auto; gap: 1.5rem; padding: 2rem 0; }
+  .phase:hover summary { padding-left: 0; }
+  .phase-content { grid-template-columns: 1fr; gap: 2rem; padding-left: 0; padding-bottom: 2.5rem; }
+  .phase-num { width: 36px; height: 36px; font-size: .66rem; }
+  .phases::before { left: 29px; }
+
+  .why { padding: 0 1.5rem 5rem; }
+  .why-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+
+  .cta { padding: 5rem 1.5rem; }
+  .cta h2 { font-size: clamp(2.4rem, 9vw, 3.4rem); }
+  .cta-buttons { width: 100%; }
+  .cta-buttons .btn-primary, .cta-buttons .btn-secondary { flex: 1; justify-content: center; }
+
+  .footer-container { grid-template-columns: 1fr 1fr; gap: 2.25rem; padding: 3rem var(--gutter) 2.5rem; }
+  .footer-brand-col { grid-column: 1 / -1; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .footer-bottom a { margin: 0 .6rem; }
+}
+
+@media (max-width: 560px) {
+  .cta-buttons { flex-direction: column; }
+  .cta-buttons .btn-primary, .cta-buttons .btn-secondary { width: 100%; justify-content: center; }
+  .hero-bottom .btn-primary { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 400px) {
+  .hero-top .eyebrow { font-size: .56rem; letter-spacing: .1em; }
+  .hero-status { font-size: .56rem; letter-spacing: .1em; }
+}
+
+/* Tablet tier (iPads in portrait, small landscape) — scale the hero up
+   from phone sizing so it uses the wider canvas */
+@media (min-width: 600px) and (max-width: 968px) {
+  .hero h1 { font-size: clamp(3.4rem, 8.8vw, 5rem); }
+  .hero-bottom { grid-template-columns: 1.2fr auto; gap: 2rem 3rem; align-items: end; }
+  .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
+  .stat-num { font-size: clamp(2.8rem, 7vw, 4rem); }
+}
+</style>
+</head>
+<body>
+
+<!-- chrome:nav -->
+  <nav id="nav">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <img src="finmango.png" alt="FinMango">
+      </a>
+
+      <div class="nav-right">
+        <a href="about.html">About</a>
+        <a href="research.html">Research</a>
+        <a href="education.html">Education</a>
+
+        <div class="dropdown">
+          <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">Our Work <span class="chev">▾</span></button>
+          <div class="dropdown-content">
+            <div class="dropdown-mega-grid">
+              <div class="dropdown-mega-col">
+                <div class="dropdown-mega-col-label">Build</div>
+                <a href="education.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Millionaire Mindset</span>
+                    <span class="dropdown-item-desc">In-school programming · 100k+ taught</span>
+                  </span>
+                </a>
+                <a href="barrier-breakers.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Barrier Breakers</span>
+                    <span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span>
+                  </span>
+                </a>
+                <a href="ambassadors.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Ambassador Program</span>
+                    <span class="dropdown-item-desc">Powered by young adults globally</span>
+                  </span>
+                </a>
+                <a href="navtech.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">NavTech</span>
+                    <span class="dropdown-item-desc">Navigation tech across food, housing, health &amp; jobs</span>
+                  </span>
+                </a>
+              </div>
+              <div class="dropdown-mega-col">
+                <div class="dropdown-mega-col-label">Measure</div>
+                <a href="ai-economic-signal.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">AI Economic Signal</span>
+                    <span class="dropdown-item-desc">AI exposure meets household stress · monthly</span>
+                  </span>
+                </a>
+                <a href="barometer.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Financial Health Barometer</span>
+                    <span class="dropdown-item-desc">Real-time economic pulse · 50 states</span>
+                  </span>
+                </a>
+                <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">GitHub</span>
+                    <span class="dropdown-item-desc">Research to reality</span>
+                  </span>
+                  <span class="dropdown-external">↗</span>
+                </a>
+                <a href="resources.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Resources</span>
+                    <span class="dropdown-item-desc">Guides, tools &amp; worksheets</span>
+                  </span>
+                </a>
+                <a href="posts.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Community Posts</span>
+                    <span class="dropdown-item-desc">Reports &amp; briefs by our community</span>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+        <a href="donate.html" class="btn-donate">Donate</a>
+      </div>
+
+      <div class="mobile-controls">
+        <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-nav">
+      <a href="about.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="education.html">Education</a>
+      <div class="mobile-dropdown">
+        <button class="mobile-dropdown-toggle" aria-expanded="false">Our Work <span class="arrow">▾</span></button>
+        <div class="mobile-dropdown-content">
+          <div class="mobile-cards-group">
+            <div class="mobile-cards-label">Build</div>
+            <a href="education.html" class="mobile-card"><span class="mobile-card-name">Millionaire Mindset</span><span class="mobile-card-desc">In-school programming · 100k+ taught</span></a>
+            <a href="barrier-breakers.html" class="mobile-card"><span class="mobile-card-name">Barrier Breakers</span><span class="mobile-card-desc">Powered by Valmark · $20k+ in prizes</span></a>
+            <a href="ambassadors.html" class="mobile-card"><span class="mobile-card-name">Ambassador Program</span><span class="mobile-card-desc">Powered by young adults globally</span></a>
+            <a href="navtech.html" class="mobile-card"><span class="mobile-card-name">NavTech</span><span class="mobile-card-desc">Navigation tech across food, housing, health &amp; jobs</span></a>
+          </div>
+          <div class="mobile-cards-group">
+            <div class="mobile-cards-label">Measure</div>
+            <a href="ai-economic-signal.html" class="mobile-card"><span class="mobile-card-name">AI Economic Signal</span><span class="mobile-card-desc">AI exposure meets household stress · monthly</span></a>
+            <a href="barometer.html" class="mobile-card"><span class="mobile-card-name">Financial Health Barometer</span><span class="mobile-card-desc">Real-time economic pulse · 50 states</span></a>
+            <a href="https://github.com/finmango/research" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">GitHub <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Research to reality</span></a>
+            <a href="resources.html" class="mobile-card"><span class="mobile-card-name">Resources</span><span class="mobile-card-desc">Guides, tools &amp; worksheets</span></a>
+            <a href="posts.html" class="mobile-card"><span class="mobile-card-name">Community Posts</span><span class="mobile-card-desc">Reports &amp; briefs by our community</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mobile-menu-footer">
+      <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-mobile#/donate" target="_blank" rel="noopener noreferrer" class="btn-mobile-cta">Donate</a>
+      <div class="mobile-menu-footer-links">
+        <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a>
+        <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="/cdn-cgi/l/email-protection#0a626f6666654a6c6364676b646d652465786d">Contact</a>
+      </div>
+    </div>
+  </div>
+  <!-- /chrome:nav -->
+
+<!-- ============================================ HERO ============================================ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-container">
+
+    <div class="hero-top">
+      <div class="eyebrow">Housing · Navigation Technology</div>
+      <div class="hero-status"><span class="pulse"></span>Building Now</div>
+    </div>
+
+    <h1>Housing help that arrives <em>before<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em> the crisis.</h1>
+
+    <div class="hero-bottom">
+      <p class="hero-sub">
+        We're building the navigation layer that moves a family from <strong>at-risk to stabilized</strong> — and gives the frontline worker the workflow to drive it.
+      </p>
+      <a href="#work" class="btn-primary">
+        See the work
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================ THE STAKES (ink moment) ============================================ -->
+<section class="stakes on-ink" id="stakes">
+  <div class="stakes-container">
+
+    <div class="stakes-header">
+      <span class="eyebrow">The Stakes</span>
+      <h2 class="stakes-title">One late notice from <em>losing home.</em></h2>
+    </div>
+
+    <div class="stakes-grid">
+      <div class="stat">
+        <div class="stat-num">12.1<em>M</em></div>
+        <div class="stat-desc">renters spend 50%+ on housing</div>
+        <a class="stat-source" href="https://www.jchs.harvard.edu/americas-rental-housing-2024" target="_blank" rel="noopener noreferrer">
+          Harvard JCHS
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3.6<em>M</em></div>
+        <div class="stat-desc">eviction cases filed a year</div>
+        <a class="stat-source" href="https://evictionlab.org/" target="_blank" rel="noopener noreferrer">
+          Eviction Lab
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+      <div class="stat">
+        <div class="stat-num">770<em>K+</em></div>
+        <div class="stat-desc">experiencing homelessness</div>
+        <a class="stat-source" href="https://endhomelessness.org/homelessness-in-america/homelessness-statistics/state-of-homelessness/" target="_blank" rel="noopener noreferrer">
+          End Homelessness
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================ WORK ============================================ -->
+<section class="work" id="work">
+  <div class="section-container">
+
+    <div class="work-header">
+      <h2 class="work-title">Live <em>today.</em></h2>
+      <p class="work-aside">The diagnostic, detection, and context layers already run. The navigation layer is what we build on top.</p>
+    </div>
+
+    <div class="work-list">
+      <a href="housing-calculator.html" class="work-item">
+        <span class="work-num">01</span>
+        <span class="work-name-wrap">
+          <span class="work-name">Housing Calculator</span>
+          <span class="work-desc">See the affordability gap — and what it takes to close it.</span>
+        </span>
+        <span class="work-tag">Diagnostic + Intake</span>
+        <span class="work-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <a href="rent-vs-buy.html" class="work-item">
+        <span class="work-num">02</span>
+        <span class="work-name-wrap">
+          <span class="work-name">Rent vs. Buy Calculator</span>
+          <span class="work-desc">Model the real cost of staying, moving, or buying.</span>
+        </span>
+        <span class="work-tag">Diagnostic + Intake</span>
+        <span class="work-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <a href="barometer.html" class="work-item">
+        <span class="work-num">03</span>
+        <span class="work-name-wrap">
+          <span class="work-name">Financial Health Barometer</span>
+          <span class="work-desc">Real-time housing-stress signals across all 50 states.</span>
+        </span>
+        <span class="work-tag">Detection</span>
+        <span class="work-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <a href="housing-affordability-stories.html" class="work-item">
+        <span class="work-num">04</span>
+        <span class="work-name-wrap">
+          <span class="work-name">Housing Stories</span>
+          <span class="work-desc">The human reality behind the housing numbers.</span>
+        </span>
+        <span class="work-tag">Context</span>
+        <span class="work-arrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+    </div>
+
+    <div class="work-foot">
+      <a href="resources.html">See all 25+ tools →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================ ROADMAP ============================================ -->
+<section class="roadmap" id="roadmap">
+  <div class="section-container">
+
+    <div class="roadmap-header">
+      <span class="eyebrow">What's Next</span>
+      <h2 class="roadmap-title" style="margin-top:1.5rem">From diagnosis to <em>done.</em></h2>
+    </div>
+
+    <div class="phases">
+
+      <details class="phase">
+        <summary>
+          <span class="phase-num">01</span>
+          <div class="phase-titles">
+            <span class="phase-name">The navigation layer.</span>
+            <span class="phase-tag">Eviction prevention · Rental assistance · Path to ownership</span>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">+</span>
+        </summary>
+        <div class="phase-content">
+          <p class="phase-thesis">Today our tools tell a family where they stand. <strong>Phase 01 turns that into the specific next action.</strong></p>
+          <ul class="phase-tools">
+            <li><strong>Eviction Prevention</strong>Legal aid, rental assistance, and mediation — matched to your county.</li>
+            <li><strong>Rental Assistance Router</strong>Every program you qualify for, with deadlines tracked.</li>
+            <li><strong>Path to Ownership</strong>Down-payment assistance and first-time-buyer programs.</li>
+            <li><strong>Utility &amp; Arrears Help</strong>LIHEAP and back-rent relief before the shutoff.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="phase phase-featured" open>
+        <summary>
+          <span class="phase-num">02</span>
+          <div class="phase-titles">
+            <span class="now-building"><span class="nb-pulse"></span>Now Building</span>
+            <span class="phase-name">Frontline-worker dashboard.</span>
+            <span class="phase-tag">One workflow for housing counselors &amp; benefits navigators</span>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">+</span>
+        </summary>
+        <div class="phase-content">
+          <p class="phase-thesis">30 minutes of paperwork. <strong>Becomes 3 minutes of routing.</strong></p>
+          <ul class="phase-tools">
+            <li><strong>Caseload Dashboard</strong>Every household, every barrier, in one view.</li>
+            <li><strong>AI Intake → Action</strong>A 5-minute intake becomes a ranked action plan.</li>
+            <li><strong>Verified Program Database</strong>Real local housing resources. Geo-matched.</li>
+            <li><strong>Follow-up &amp; Status</strong>Submitted applications and what comes next.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="phase">
+        <summary>
+          <span class="phase-num">03</span>
+          <div class="phase-titles">
+            <span class="phase-name">Feedback loop to policy.</span>
+            <span class="phase-tag">Every navigation becomes signal</span>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">+</span>
+        </summary>
+        <div class="phase-content">
+          <p class="phase-thesis">Aggregated and anonymized, <strong>each navigation becomes a real-time housing-stress signal.</strong></p>
+          <ul class="phase-tools">
+            <li><strong>Hotspot Alerts</strong>Eviction waves and rent spikes, as they emerge.</li>
+            <li><strong>Policy Dashboard</strong>Where the housing system is failing, in real time.</li>
+            <li><strong>Research API</strong>Open, aggregate housing-stress data.</li>
+            <li><strong>Community Briefings</strong>Auto-generated, hyperlocal.</li>
+          </ul>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ WHY ============================================ -->
+<section class="why" id="why">
+  <div class="section-container">
+
+    <div class="why-grid">
+
+      <div>
+        <span class="eyebrow">Why FinMango</span>
+        <h2 class="why-title">Built <em>for this.</em></h2>
+      </div>
+
+      <div class="why-list">
+        <div class="why-item">
+          <span class="why-marker">01</span>
+          <div class="why-item-content">
+            <strong>AI-native</strong>
+            <span>Claude already powers our work.</span>
+          </div>
+        </div>
+        <div class="why-item">
+          <span class="why-marker">02</span>
+          <div class="why-item-content">
+            <strong>Trust by default</strong>
+            <span>Free. Open source. No data collection.</span>
+          </div>
+        </div>
+        <div class="why-item">
+          <span class="why-marker">03</span>
+          <div class="why-item-content">
+            <strong>Proven</strong>
+            <span>10M+ reached, with housing tools already live. Partners include Google Health, Harvard JCHS, UVA, and Kent State.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ CTA ============================================ -->
+<section class="cta on-ink" id="contact">
+  <div class="section-container">
+    <div class="cta-container">
+      <svg class="cta-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span class="eyebrow">Build With Us</span>
+      <h2>Let's <em>talk.</em></h2>
+      <p class="cta-sub">
+        We're building the housing navigation layer and the frontline-worker dashboard that ties it together — and partnering with employers, housing agencies, and researchers to put it in front of the families who need it.
+      </p>
+      <p class="cta-audience">Employers. Housing agencies. Frontline orgs. Researchers.</p>
+      <div class="cta-buttons">
+        <a href="mailto:hello@finmango.org" class="btn-primary">
+          Email FinMango
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="affordability-lab.html" class="btn-secondary">
+          Explore the Affordability Lab
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ FOOTER ============================================ -->
+<!-- chrome:footer -->
+  <footer>
+    <div class="footer-newsletter">
+      <div class="footer-newsletter-container">
+        <div>
+          <h3>Stay updated</h3>
+          <p>Research, education, and advocacy updates. No spam.</p>
+        </div>
+        <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a>
+      </div>
+    </div>
+    <div class="footer-container">
+      <div class="footer-brand-col">
+        <div class="footer-brand"><img src="finmango.png" alt="FinMango" loading="lazy"></div>
+        <p class="footer-tagline">A 501(c)(3) non-profit solving complex problems that endanger the financial health of young adults.</p>
+        <p class="footer-ein">EIN 81-2543425</p>
+        <div class="footer-social">
+          <a href="https://www.linkedin.com/company/finmango/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+          <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="https://www.instagram.com/finmango" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+          <a href="/cdn-cgi/l/email-protection#6109040d0d0e2107080f0c000f060e4f0e1306" aria-label="Email"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-section"><h4>Our Work</h4><a href="research.html">Research</a><a href="education.html">Education</a><a href="barometer.html">Barometer</a><a href="affordability-lab.html">Affordability Lab</a><a href="resources.html">Resources</a></div>
+      <div class="footer-section"><h4>Initiatives</h4><a href="barrier-breakers.html">Barrier Breakers</a><a href="ambassadors.html">Ambassador Program</a><a href="navtech.html">NavTech</a><a href="talent.html">Talent</a><a href="https://github.com/finmango/research" target="_blank" rel="noopener noreferrer">GitHub</a></div>
+      <div class="footer-section"><h4>Get Involved</h4><a href="donate.html">Donate</a><a href="write.html">Write a Post</a><a href="posts.html">Community Posts</a><a href="ambassadors.html">Become an Ambassador</a><a href="/cdn-cgi/l/email-protection#d9b1bcb5b5b699bfb0b7b4b8b7beb6f7b6abbe">Partner With Us</a><a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer</a><a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">Blog</a></div>
+    </div>
+    <div class="footer-bottom"><div>&copy; 2026 FinMango. All rights reserved.</div><div><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div>
+  </footer>
+  <!-- /chrome:footer -->
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<!-- chrome:script -->
+  <script>
+    // Navigation scroll effect (null-safe: embed views may strip the chrome)
+    const nav = document.getElementById('nav');
+    if (nav) {
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 50);
+      }, { passive: true });
+    }
+
+    // Mobile menu
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        const open = mobileMenu.classList.toggle('active');
+        mobileMenuBtn.classList.toggle('active', open);
+        mobileMenuBtn.setAttribute('aria-expanded', open);
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+
+      document.querySelectorAll('.mobile-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.remove('active');
+          mobileMenuBtn.classList.remove('active');
+          mobileMenuBtn.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        });
+      });
+    }
+
+    // Mobile accordion
+    document.querySelectorAll('.mobile-dropdown-toggle').forEach(toggle => {
+      toggle.addEventListener('click', function () {
+        const open = this.classList.toggle('active');
+        this.setAttribute('aria-expanded', open);
+        this.nextElementSibling.classList.toggle('open', open);
+      });
+    });
+
+    // Desktop dropdown: keep aria-expanded in sync (open/close handled by CSS :hover/:focus-within)
+    document.querySelectorAll('.dropdown').forEach(dd => {
+      const trigger = dd.querySelector('.dropdown-trigger');
+      const sync = (v) => trigger.setAttribute('aria-expanded', v);
+      dd.addEventListener('mouseenter', () => sync('true'));
+      dd.addEventListener('mouseleave', () => sync('false'));
+      dd.addEventListener('focusin', () => sync('true'));
+      dd.addEventListener('focusout', (e) => { if (!dd.contains(e.relatedTarget)) sync('false'); });
+    });
+
+    // Smooth anchor scroll (offset under fixed nav handled by scroll-margin)
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      });
+    });
+  </script>
+  <!-- /chrome:script -->
+
+</body>
+</html>
