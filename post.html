@@ -146,6 +146,8 @@
     .byline-text { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
     .byline-name { font-size: .98rem; font-weight: 600; letter-spacing: -.01em; }
     .byline-name span { color: var(--ink-dim); font-weight: 400; }
+    .byline-profile-link { color: inherit; text-decoration: none; border-bottom: 1px solid var(--ink-line); transition: border-color .2s ease; }
+    .byline-profile-link:hover { border-bottom-color: var(--ink); }
     .byline-meta { font-family: var(--font-mono); font-size: .64rem; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-faint);
       display: flex; gap: .6rem; flex-wrap: wrap; }
     .byline-meta .dot { color: var(--ink-line); }
@@ -482,6 +484,11 @@
       const cover = p.cover ? '<figure class="article-cover"><img src="' + escapeHtml(p.cover) + '" alt=""></figure>' : '';
       const affil = p.authorAffiliation ? ' <span>· ' + escapeHtml(p.authorAffiliation) + '</span>' : '';
       const name = p.authorName || 'FinMango contributor';
+      // If the author tied this note to their ambassador profile, link the byline to it.
+      const ambSlug = (p.ambassadorSlug || '').replace(/[^a-z0-9-]/gi, '');
+      const nameHtml = ambSlug
+        ? '<a href="/' + ambSlug + '.html" class="byline-profile-link">' + escapeHtml(name) + '</a>'
+        : escapeHtml(name);
       const bodyHtml = sanitize(p.body);
       const metaBits = [escapeHtml(fmtDate(p.publishedAt || p.createdAt)), readingTime(bodyHtml)]
         .filter(Boolean).map(b => '<span>' + b + '</span>').join('<span class="dot">·</span>');
@@ -497,7 +504,7 @@
           '<div class="article-byline">' +
             '<div class="byline-avatar" aria-hidden="true">' + escapeHtml(initials(name)) + '</div>' +
             '<div class="byline-text">' +
-              '<div class="byline-name">' + escapeHtml(name) + affil + '</div>' +
+              '<div class="byline-name">' + nameHtml + affil + '</div>' +
               '<div class="byline-meta">' + metaBits + '</div>' +
             '</div>' +
           '</div>' +

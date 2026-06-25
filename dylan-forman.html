@@ -1250,6 +1250,60 @@
     </div>
   </section>
 
+  <!-- ======================= AMBASSADOR NOTES (auto-populated) ======================= -->
+  <!-- Self-contained: reads this page's slug, fetches published notes, shows the ones
+       this ambassador authored, and stays hidden if there are none. -->
+  <section class="amb-notes" id="ambNotes" hidden aria-labelledby="ambNotesHead">
+    <style>
+      .amb-notes { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+      .amb-notes-container { max-width: var(--max-width); margin: 0 auto; }
+      .amb-notes-head { border-top: 1px solid var(--ink-line-soft); padding-top: 3rem; margin-bottom: 2.5rem; }
+      .amb-notes-head h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 600; letter-spacing: -.02em; line-height: 1.06; margin-top: .6rem; }
+      .amb-notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ink-line-soft); border: 1px solid var(--ink-line-soft); }
+      .amb-note-card { background: var(--paper); padding: 1.75rem; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; gap: .7rem; transition: background .2s ease; }
+      .amb-note-card:hover { background: #fff; }
+      .amb-note-cat { font-family: var(--font-mono); font-size: .6rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); }
+      .amb-note-title { font-size: 1.15rem; font-weight: 600; letter-spacing: -.01em; line-height: 1.25; }
+      .amb-note-dek { font-size: .9rem; color: var(--ink-dim); line-height: 1.5; }
+      .amb-note-meta { margin-top: auto; font-family: var(--font-mono); font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+      .amb-notes-all { display: inline-block; margin-top: 2rem; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+      @media (max-width: 900px) { .amb-notes-grid { grid-template-columns: 1fr; } .amb-notes { padding-bottom: 5rem; } }
+    </style>
+    <div class="amb-notes-container">
+      <div class="amb-notes-head">
+        <span class="eyebrow">Published on FinMango</span>
+        <h2 id="ambNotesHead">Notes from <em>this ambassador.</em></h2>
+      </div>
+      <div class="amb-notes-grid" id="ambNotesGrid"></div>
+      <a class="amb-notes-all" href="posts.html">All ambassador notes &rarr;</a>
+    </div>
+    <script>
+      (function () {
+        var slug = (location.pathname.split('/').pop() || '').replace(/\.html$/i, '');
+        if (!slug) return;
+        var grid = document.getElementById('ambNotesGrid');
+        var sec = document.getElementById('ambNotes');
+        var esc = function (s) { return (s || '').replace(/[&<>"']/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]; }); };
+        var fmt = function (iso) { try { return new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }); } catch (e) { return ''; } };
+        fetch('/api/posts?action=published').then(function (r) { return r.json(); }).then(function (d) {
+          var posts = ((d && d.posts) || []).filter(function (p) { return p && p.ambassadorSlug === slug; });
+          if (!posts.length) return;
+          var h1 = document.querySelector('.hero h1');
+          var first = h1 ? (h1.textContent.trim().split(/\s+/)[0] || '') : '';
+          if (first) document.getElementById('ambNotesHead').innerHTML = 'Notes from <em>' + esc(first) + '.</em>';
+          grid.innerHTML = posts.slice(0, 6).map(function (p) {
+            return '<a class="amb-note-card" href="/post?id=' + encodeURIComponent(p.id) + '">' +
+              '<span class="amb-note-cat">' + esc(p.category || 'Note') + '</span>' +
+              '<span class="amb-note-title">' + esc(p.title) + '</span>' +
+              (p.dek ? '<span class="amb-note-dek">' + esc(p.dek) + '</span>' : '') +
+              '<span class="amb-note-meta">' + esc(fmt(p.publishedAt || p.createdAt)) + '</span></a>';
+          }).join('');
+          sec.hidden = false;
+        }).catch(function () { /* leave hidden on error */ });
+      })();
+    </script>
+  </section>
+
   <!-- ======================= CTA ======================= -->
   <section class="cta on-ink">
     <div class="cta-container">

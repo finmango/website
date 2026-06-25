@@ -479,6 +479,12 @@
           <label for="authorAffiliation">Affiliation <span style="color:var(--ink-faint)">(school, program, optional)</span></label>
           <input type="text" id="authorAffiliation" maxlength="160" placeholder="University of Virginia · FinMango Ambassador">
         </div>
+        <div class="field">
+          <label for="ambassadorSlug">Your ambassador profile <span style="color:var(--ink-faint)">(optional — links this note to your profile page)</span></label>
+          <select id="ambassadorSlug">
+            <option value="">I'm not a FinMango ambassador (skip)</option>
+          </select>
+        </div>
 
         <div class="field-row">
           <div class="field">
@@ -810,6 +816,7 @@
       return {
         authorName: $('authorName').value.trim(), authorEmail: $('authorEmail').value.trim(),
         authorAffiliation: $('authorAffiliation').value.trim(), category: $('category').value,
+        ambassadorSlug: $('ambassadorSlug').value,
         tags: $('tags').value.trim(), title: $('title').value.trim(), dek: $('dek').value.trim(),
         cover: coverDataUrl, body: sanitize(editor.innerHTML)
       };
@@ -823,12 +830,35 @@
         const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); if (!d) return;
         $('authorName').value = d.authorName || ''; $('authorEmail').value = d.authorEmail || '';
         $('authorAffiliation').value = d.authorAffiliation || ''; $('category').value = d.category || '';
+        if (d.ambassadorSlug) $('ambassadorSlug').dataset.pending = d.ambassadorSlug;
         $('tags').value = d.tags || ''; $('title').value = d.title || ''; $('dek').value = d.dek || '';
         if (d.cover) { coverDataUrl = d.cover; $('coverImg').src = d.cover; $('coverThumb').classList.add('show'); }
         if (d.body) editor.innerHTML = d.body;
       } catch {}
     })();
     refreshPreview();
+
+    // ---- ambassador profile dropdown ----
+    // Populated from the shared roster so a contributor can tie their note to
+    // their profile page (write.html → post → /<slug>.html). Optional; if the
+    // roster can't load we just leave the single "skip" option in place.
+    (async function loadAmbassadors() {
+      const sel = $('ambassadorSlug');
+      try {
+        const res = await fetch('data/ambassadors.json', { cache: 'no-cache' });
+        if (!res.ok) return;
+        const roster = await res.json();
+        roster.forEach(a => {
+          if (!a || !a.slug) return;
+          const opt = document.createElement('option');
+          opt.value = a.slug;
+          opt.textContent = a.name || a.slug;
+          sel.appendChild(opt);
+        });
+        // Re-apply a value restored from a local draft once options exist.
+        if (sel.dataset.pending) { sel.value = sel.dataset.pending; delete sel.dataset.pending; }
+      } catch { /* non-fatal — the field just stays optional/empty */ }
+    })();
 
     // ---- submit ----
     function validate(d) {
