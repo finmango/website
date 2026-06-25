@@ -1,5 +1,5 @@
 // ============================================================================
-// Shared helpers for the Community Posts edge layer (Cloudflare Pages Functions)
+// Shared helpers for the Ambassador Notes edge layer (Cloudflare Pages Functions)
 // ----------------------------------------------------------------------------
 // Files prefixed with "_" are NOT routed by Pages — this is a plain module that
 // functions/api/posts.js, functions/post.js and functions/post-image.js import.

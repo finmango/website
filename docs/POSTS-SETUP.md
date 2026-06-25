@@ -1,7 +1,7 @@
-# Community Posts — setup & operations
+# Ambassador Notes — setup & operations
 
-A lightweight "write → peer review → publish" pipeline for community-authored
-reports, briefs, and stories. No server to run: the backend is a Google Apps
+A lightweight "write → peer review → publish" pipeline for Ambassador-authored
+notes, briefs, and stories. No server to run: the backend is a Google Apps
 Script web app (same pattern as the site's other forms), with Google Sheets +
 Drive as storage.
 
