@@ -125,6 +125,29 @@ file (better SEO / works if the Apps Script is ever unavailable), enable the
 token to the script's properties. This trades a stored secret for static output;
 keep it disabled unless you need it.
 
+## Ambassador profile linking
+
+Contributors can tie a note to their ambassador profile page. In `write.html`
+there's an optional **"Your ambassador profile"** dropdown (populated from
+`data/ambassadors.json`, generated from the `ambassadors.html` directory). When
+chosen, the post stores an `ambassadorSlug`, which:
+
+- turns the author's byline on the published post (`post.html`) into a link to
+  `/<slug>.html`, and
+- makes the note appear in a **"Notes from …"** section near the bottom of that
+  ambassador's profile page (auto-hidden when they have no published notes).
+
+The profile-page section is self-contained: it derives its slug from the page's
+own filename and calls `/api/posts?action=published`, so no per-page wiring is
+needed. To add the section to a brand-new profile page, copy the
+`<section class="amb-notes" id="ambNotes" …>…</section>` block from any existing
+profile (it sits just before the CTA section), and add the ambassador to
+`data/ambassadors.json` so they show up in the `write.html` dropdown.
+
+> The `ambassadorSlug` field is added to the Apps Script (`HEADERS`,
+> `submitPost_`, `publicSummary_`). **Redeploy the Apps Script** (Deploy → Manage
+> deployments → Edit → New version) so submissions start capturing it.
+
 ## Troubleshooting
 
 - **"Not configured yet"** — the `/exec` URL placeholder wasn't replaced.

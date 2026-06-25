@@ -41,8 +41,8 @@ const CONFIG = {
 const SHEET_NAME = 'Posts';
 const HEADERS = [
   'id', 'createdAt', 'status', 'authorName', 'authorEmail', 'authorAffiliation',
-  'category', 'tags', 'title', 'dek', 'hasCover', 'folderId', 'jsonFileId',
-  'publishedAt', 'reviewsSummary'
+  'ambassadorSlug', 'category', 'tags', 'title', 'dek', 'hasCover', 'folderId',
+  'jsonFileId', 'publishedAt', 'reviewsSummary'
 ];
 
 // ============================== ROUTING ====================================
@@ -97,6 +97,9 @@ function submitPost_(data) {
     authorName: (data.authorName || '').toString().slice(0, 160),
     authorEmail: (data.authorEmail || '').toString().slice(0, 200),
     authorAffiliation: (data.authorAffiliation || '').toString().slice(0, 200),
+    // Links the note to an ambassador profile page (/<slug>.html). Constrained to
+    // a safe slug shape so it can be dropped straight into a URL.
+    ambassadorSlug: (data.ambassadorSlug || '').toString().toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 80),
     category: (data.category || '').toString().slice(0, 60),
     tags: (data.tags || '').toString().split(',').map(s => s.trim()).filter(Boolean).slice(0, 12),
     title: (data.title || '').toString().slice(0, 200),
@@ -230,6 +233,7 @@ function publicSummary_(r) {
   return {
     id: post.id, title: post.title, dek: post.dek, category: post.category,
     tags: post.tags || [], authorName: post.authorName, cover: post.cover,
+    ambassadorSlug: post.ambassadorSlug || '',
     publishedAt: post.publishedAt, createdAt: post.createdAt
   };
 }
