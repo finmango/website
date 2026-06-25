@@ -377,6 +377,24 @@
         '<div class="card-meta">' + meta + '</div></a>';
     }
 
+    // On hover/touch, prefetch the post page so the click feels instant — it
+    // warms both the browser cache and the edge cache for that /post?id=… URL.
+    function enablePrefetch() {
+      const prefetched = new Set();
+      const warm = href => {
+        if (!href || prefetched.has(href)) return;
+        prefetched.add(href);
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = href;
+        document.head.appendChild(link);
+      };
+      document.querySelectorAll('a.card').forEach(a => {
+        a.addEventListener('mouseenter', () => warm(a.getAttribute('href')));
+        a.addEventListener('touchstart', () => warm(a.getAttribute('href')), { passive: true });
+      });
+    }
+
     (async function () {
       try {
         // Reuse the request started in <head>; fall back to a fresh fetch.
@@ -384,6 +402,7 @@
         const posts = (data && data.posts) || [];
         if (!posts.length) return emptyState('No posts yet', 'Be the first — <a href="write.html">write a post →</a>');
         document.getElementById('grid').innerHTML = posts.map(card).join('');
+        enablePrefetch();
       } catch (e) {
         emptyState('Could not load posts', 'Please try again later, or <a href="write.html">write a post →</a>');
       }
