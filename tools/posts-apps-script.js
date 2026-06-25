@@ -41,8 +41,10 @@ const CONFIG = {
 const SHEET_NAME = 'Posts';
 const HEADERS = [
   'id', 'createdAt', 'status', 'authorName', 'authorEmail', 'authorAffiliation',
-  'ambassadorSlug', 'category', 'tags', 'title', 'dek', 'hasCover', 'folderId',
-  'jsonFileId', 'publishedAt', 'reviewsSummary'
+  'category', 'tags', 'title', 'dek', 'hasCover', 'folderId', 'jsonFileId',
+  'publishedAt', 'reviewsSummary',
+  // Appended at the END so existing Sheet rows keep their column alignment.
+  'ambassadorSlug'
 ];
 
 // ============================== ROUTING ====================================
