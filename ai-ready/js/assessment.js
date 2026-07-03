@@ -29,6 +29,13 @@
   // Results (populated after scoring)
   let results = null;
 
+  // Employer cohort mode: assessments opened via an org link (?org=CODE)
+  // contribute anonymous scores to that org's aggregate dashboard.
+  // See docs/AI-READY-WORKFORCE-SETUP.md. Individuals without a link are
+  // unaffected — nothing is ever submitted for them.
+  const orgParam = new URLSearchParams(window.location.search).get('org') || '';
+  const orgCode = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,39}$/.test(orgParam) ? orgParam.toLowerCase() : '';
+
 
   // ============================================================
   // DOM REFERENCES
@@ -66,8 +73,33 @@
       select.addEventListener('change', handleSelectChange);
     });
 
+    // Cohort mode: tell the user exactly what their employer will (and won't) see
+    if (orgCode) showCohortNotice();
+
     // Show initial step
     showStep(0);
+  }
+
+  function showCohortNotice() {
+    const wrapper = document.querySelector('.assessment-wrapper');
+    if (!wrapper) return;
+    const notice = document.createElement('div');
+    notice.setAttribute('role', 'note');
+    notice.style.cssText = 'max-width:640px;margin:0 auto 1.25rem;padding:0.75rem 1rem;' +
+      'background:rgba(255,107,53,0.08);border:1px solid rgba(255,107,53,0.3);border-radius:10px;' +
+      'font-size:0.85rem;line-height:1.5;color:inherit;';
+    notice.innerHTML = '🔒 <strong>You\'re taking this through your organization.</strong> ' +
+      'Your results stay anonymous — no name, email, or identifier is collected. Your organization ' +
+      'only sees combined scores across everyone who participates, never individual answers.';
+    wrapper.insertBefore(notice, wrapper.firstChild);
+
+    // The intro's "No data collected or stored" claim is written for individual
+    // mode; in cohort mode anonymous scores ARE stored, so keep the copy honest.
+    document.querySelectorAll('.step[data-step="0"] span').forEach(span => {
+      if (span.textContent.trim() === 'No data collected or stored') {
+        span.textContent = 'Anonymous — scores shared with your org only in aggregate';
+      }
+    });
   }
 
 
@@ -260,6 +292,25 @@
 
     // Calculate scores using functions from data.js
     results = calculateResults(answers);
+
+    // Cohort mode: contribute this result to the org's anonymous aggregate.
+    // Fire-and-forget — a backend hiccup must never block someone's results.
+    if (orgCode) {
+      try {
+        fetch('/api/ai-ready', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          keepalive: true,
+          body: JSON.stringify({
+            action: 'submit',
+            org: orgCode,
+            total: results.total,
+            scores: results.scores,
+            category: results.category.key
+          })
+        }).catch(() => {});
+      } catch (e) { /* ignore */ }
+    }
 
     // Hide steps, show results
     stepsContainer.style.display = 'none';

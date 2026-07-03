@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Ready Workforce — Employer Dashboard | FinMango</title>
+  <meta name="description" content="Anonymous, aggregate financial resilience results for your workforce. Part of FinMango's AI-Ready Workforce program.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #FF6B35;
+      --orange-light: #FF8C5A;
+      --ink: #1a1a2e;
+      --muted: #64748b;
+      --surface: #f8fafc;
+      --border: #e2e8f0;
+      --great: #2e9e5b;
+      --good: #e0a800;
+      --caution: #e07b00;
+      --warning: #d64545;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      background: var(--surface);
+      line-height: 1.5;
+    }
+    .topbar {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .topbar img { height: 30px; width: auto; display: block; }
+    .topbar a { color: var(--orange); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+    .eyebrow {
+      color: var(--orange);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.78rem;
+      margin-bottom: 0.3rem;
+    }
+    h1 { font-size: 1.7rem; margin-bottom: 0.4rem; }
+    .sub { color: var(--muted); margin-bottom: 2rem; max-width: 46rem; }
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .demo-banner {
+      background: linear-gradient(135deg, rgba(255,107,53,0.12), rgba(255,140,90,0.06));
+      border: 1px solid rgba(255,107,53,0.35);
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      font-size: 0.88rem;
+      margin-bottom: 1.25rem;
+    }
+    /* Access form */
+    .access-form label { display: block; font-weight: 600; font-size: 0.88rem; margin: 0.9rem 0 0.25rem; }
+    .access-form input {
+      width: 100%;
+      max-width: 380px;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font: inherit;
+      font-size: 0.95rem;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 1.1rem;
+      background: var(--orange);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 0.65rem 1.5rem;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn:hover { background: var(--orange-light); }
+    .demo-link { margin-top: 0.9rem; font-size: 0.88rem; color: var(--muted); }
+    .demo-link a { color: var(--orange); font-weight: 600; }
+    .error { color: var(--warning); font-size: 0.9rem; margin-top: 0.9rem; display: none; }
+    /* Report */
+    .report-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; }
+    .report-head h2 { font-size: 1.25rem; }
+    .updated { color: var(--muted); font-size: 0.8rem; }
+    .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1.25rem; }
+    .stat { background: var(--surface); border-radius: 10px; padding: 1rem; text-align: center; }
+    .stat .num { font-size: 1.9rem; font-weight: 700; color: var(--orange); }
+    .stat .lbl { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+    h3.section-title { font-size: 1.02rem; margin-bottom: 1rem; }
+    .dim-row { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 0.8rem; }
+    .dim-row .name { flex: 0 0 190px; font-size: 0.9rem; font-weight: 600; }
+    .dim-row .bar { flex: 1; height: 12px; background: var(--surface); border-radius: 999px; overflow: hidden; }
+    .dim-row .bar > div { height: 100%; background: linear-gradient(90deg, var(--orange), var(--orange-light)); border-radius: 999px; width: 0; transition: width 0.8s ease; }
+    .dim-row .val { flex: 0 0 62px; text-align: right; font-weight: 700; font-size: 0.9rem; }
+    .cat-bar { display: flex; height: 26px; border-radius: 999px; overflow: hidden; margin-bottom: 0.9rem; }
+    .cat-bar > div { min-width: 2px; }
+    .legend { display: flex; flex-wrap: wrap; gap: 0.9rem; font-size: 0.83rem; color: var(--muted); }
+    .legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
+    .locked { text-align: center; padding: 2.5rem 1rem; }
+    .locked .big { font-size: 2.2rem; margin-bottom: 0.4rem; }
+    .locked p { color: var(--muted); max-width: 34rem; margin: 0 auto; }
+    .share-line { background: var(--surface); border-radius: 10px; padding: 0.8rem 1rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; font-size: 0.88rem; }
+    .share-line code { background: white; border: 1px solid var(--border); border-radius: 6px; padding: 0.25rem 0.55rem; font-size: 0.82rem; }
+    .share-line button { background: none; border: 1px solid var(--orange); color: var(--orange); border-radius: 999px; padding: 0.25rem 0.9rem; font: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
+    .privacy-note { font-size: 0.83rem; color: var(--muted); margin-top: 1.25rem; }
+    footer { text-align: center; color: var(--muted); font-size: 0.83rem; padding: 0 1rem 2.5rem; }
+    footer a { color: var(--orange); }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a href="../index.html"><img src="../finmango.png" alt="FinMango"></a>
+    <a href="../ai-ready-workforce-one-pager.html">About the program →</a>
+  </div>
+
+  <div class="wrap">
+    <div class="eyebrow">AI-Ready Workforce</div>
+    <h1>Employer Dashboard</h1>
+    <p class="sub">Anonymous, aggregate financial resilience results for your organization. Individual answers are
+      never collected or shown — this report unlocks only after enough employees have participated.</p>
+
+    <div class="demo-banner" id="demo-banner" style="display:none;">
+      👋 <strong>You're viewing sample data.</strong> This is what your dashboard looks like once your team starts
+      taking the assessment. <a href="mailto:scott@finmango.org" style="color:var(--orange);font-weight:600;">Contact us</a>
+      to launch a pilot for your organization.
+    </div>
+
+    <!-- Access form -->
+    <div class="card access-form" id="access-card">
+      <h3 class="section-title">View your organization's report</h3>
+      <label for="org-input">Organization code</label>
+      <input id="org-input" type="text" autocomplete="off" placeholder="e.g. acme-credit-union">
+      <label for="key-input">Report key</label>
+      <input id="key-input" type="text" autocomplete="off" placeholder="Provided by FinMango">
+      <br>
+      <button class="btn" id="view-btn">View report</button>
+      <div class="error" id="access-error"></div>
+      <div class="demo-link">No access yet? <a href="employer.html?demo=1">Explore the demo dashboard</a> or
+        <a href="mailto:scott@finmango.org">get in touch</a>.</div>
+    </div>
+
+    <!-- Report -->
+    <div id="report" style="display:none;">
+      <div class="card">
+        <div class="report-head">
+          <h2 id="org-name">—</h2>
+          <span class="updated" id="updated"></span>
+        </div>
+        <div class="stat-row">
+          <div class="stat"><div class="num" id="stat-count">—</div><div class="lbl">Participants</div></div>
+          <div class="stat"><div class="num" id="stat-avg">—</div><div class="lbl">Avg. AI-Ready Score (of 100)</div></div>
+          <div class="stat"><div class="num" id="stat-profile">—</div><div class="lbl">Workforce Profile</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="section-title">Average score by dimension (of 25)</h3>
+        <div id="dims"></div>
+      </div>
+
+      <div class="card">
+        <h3 class="section-title">How your workforce is distributed</h3>
+        <div class="cat-bar" id="cat-bar"></div>
+        <div class="legend" id="cat-legend"></div>
+      </div>
+
+      <div class="card">
+        <h3 class="section-title">Grow participation</h3>
+        <div class="share-line">
+          <span>Your team's assessment link:</span>
+          <code id="share-url">—</code>
+          <button id="copy-btn">Copy</button>
+        </div>
+        <p class="privacy-note">🔒 Scores are anonymous and aggregate-only. FinMango never collects names, emails, or
+          identifiers, and reports stay locked below a minimum participation threshold so no individual is identifiable.</p>
+      </div>
+    </div>
+
+    <!-- Locked state -->
+    <div class="card locked" id="locked" style="display:none;">
+      <div class="big">🔒</div>
+      <h3 id="locked-title">Not enough participants yet</h3>
+      <p id="locked-text"></p>
+    </div>
+  </div>
+
+  <footer>
+    AI-Ready Workforce is a program of FinMango, a 501(c)(3) nonprofit ·
+    <a href="../ai-ready-workforce-one-pager.html">Program overview</a> ·
+    <a href="assessment.html">Take the assessment</a>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+
+      var CATEGORIES = [
+        { key: 'well-positioned', label: 'Well-Positioned', color: 'var(--great)' },
+        { key: 'building', label: 'Building Resilience', color: 'var(--good)' },
+        { key: 'needs-attention', label: 'Needs Attention', color: 'var(--caution)' },
+        { key: 'vulnerable', label: 'Vulnerable', color: 'var(--warning)' }
+      ];
+      var DIMENSIONS = [
+        { key: 'exposure', label: 'AI Exposure Resilience' },
+        { key: 'cushion', label: 'Financial Cushion' },
+        { key: 'adaptability', label: 'Adaptability' },
+        { key: 'safety', label: 'Safety Net Knowledge' }
+      ];
+      var DEMO_REPORT = {
+        orgName: 'Demo Organization',
+        locked: false,
+        count: 47,
+        avgTotal: 58.4,
+        dimensions: { exposure: 13.2, cushion: 12.6, adaptability: 16.1, safety: 16.5 },
+        categories: { 'well-positioned': 9, 'building': 21, 'needs-attention': 13, 'vulnerable': 4 },
+        updated: null
+      };
+
+      var params = new URLSearchParams(window.location.search);
+      var isDemo = params.get('demo') === '1';
+      var org = (params.get('org') || '').toLowerCase();
+      var key = params.get('key') || '';
+
+      var $ = function (id) { return document.getElementById(id); };
+
+      function profileFor(avg) {
+        if (avg >= 75) return 'Well-Positioned';
+        if (avg >= 50) return 'Building';
+        if (avg >= 25) return 'Needs Attention';
+        return 'Vulnerable';
+      }
+
+      function renderReport(r, orgCode) {
+        $('access-card').style.display = 'none';
+        $('locked').style.display = 'none';
+
+        if (r.locked) {
+          $('locked').style.display = 'block';
+          $('locked-text').textContent = 'This report unlocks at ' + r.minRequired +
+            ' participants to protect individual privacy. So far ' + r.count +
+            (r.count === 1 ? ' person has' : ' people have') + ' completed the assessment — share your team\'s link to unlock it.';
+          return;
+        }
+
+        $('report').style.display = 'block';
+        $('org-name').textContent = r.orgName || orgCode;
+        $('updated').textContent = r.updated ? 'Updated ' + new Date(r.updated).toLocaleDateString() : '';
+        $('stat-count').textContent = r.count;
+        $('stat-avg').textContent = r.avgTotal;
+        $('stat-profile').textContent = profileFor(r.avgTotal);
+
+        var dims = $('dims');
+        dims.innerHTML = '';
+        DIMENSIONS.forEach(function (d) {
+          var v = r.dimensions[d.key];
+          var row = document.createElement('div');
+          row.className = 'dim-row';
+          row.innerHTML = '<div class="name">' + d.label + '</div>' +
+            '<div class="bar"><div data-w="' + (v / 25 * 100) + '"></div></div>' +
+            '<div class="val">' + v + '/25</div>';
+          dims.appendChild(row);
+        });
+        requestAnimationFrame(function () {
+          setTimeout(function () {
+            dims.querySelectorAll('.bar > div').forEach(function (b) {
+              b.style.width = b.getAttribute('data-w') + '%';
+            });
+          }, 80);
+        });
+
+        var bar = $('cat-bar'), legend = $('cat-legend');
+        bar.innerHTML = ''; legend.innerHTML = '';
+        var total = CATEGORIES.reduce(function (s, c) { return s + (r.categories[c.key] || 0); }, 0) || 1;
+        CATEGORIES.forEach(function (c) {
+          var n = r.categories[c.key] || 0;
+          var seg = document.createElement('div');
+          seg.style.width = (n / total * 100) + '%';
+          seg.style.background = c.color;
+          seg.title = c.label + ': ' + n;
+          bar.appendChild(seg);
+          var item = document.createElement('span');
+          item.innerHTML = '<span class="dot" style="background:' + c.color + '"></span>' +
+            c.label + ' (' + n + ')';
+          legend.appendChild(item);
+        });
+
+        var shareUrl = window.location.origin + '/ai-ready/assessment.html?org=' + encodeURIComponent(orgCode || 'your-code');
+        $('share-url').textContent = shareUrl;
+        $('copy-btn').onclick = function () {
+          navigator.clipboard.writeText(shareUrl).then(function () {
+            $('copy-btn').textContent = 'Copied!';
+            setTimeout(function () { $('copy-btn').textContent = 'Copy'; }, 1800);
+          });
+        };
+      }
+
+      function loadReport(orgCode, reportKey) {
+        var err = $('access-error');
+        err.style.display = 'none';
+        fetch('/api/ai-ready?action=report&org=' + encodeURIComponent(orgCode) + '&key=' + encodeURIComponent(reportKey))
+          .then(function (res) { return res.json().then(function (j) { return { status: res.status, body: j }; }); })
+          .then(function (r) {
+            if (r.body && r.body.result === 'success') {
+              renderReport(r.body.report, orgCode);
+            } else {
+              err.textContent = (r.body && r.body.error) || 'Could not load report.';
+              err.style.display = 'block';
+              $('access-card').style.display = 'block';
+            }
+          })
+          .catch(function () {
+            err.textContent = 'Could not reach the server. Please try again.';
+            err.style.display = 'block';
+          });
+      }
+
+      $('view-btn').addEventListener('click', function () {
+        var o = $('org-input').value.trim().toLowerCase();
+        var k = $('key-input').value.trim();
+        if (o && k) loadReport(o, k);
+      });
+
+      if (isDemo) {
+        $('demo-banner').style.display = 'block';
+        renderReport(DEMO_REPORT, 'demo-org');
+      } else if (org && key) {
+        loadReport(org, key);
+      }
+    })();
+  </script>
+</body>
+</html>
