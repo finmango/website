@@ -64,12 +64,16 @@ jobs:
           echo "Updating Student Map Data..."
           node scripts/update-student-map.js || true
 
+          # Keep the homepage's static fallback numbers (no-JS / SEO view)
+          # in sync with the fresh barometer data
+          node scripts/sync-home-fallbacks.js || true
+
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add data/
+          git add data/ index.html
 
           if git diff --staged --quiet; then
             echo "No changes to commit"
