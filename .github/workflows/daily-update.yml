@@ -64,6 +64,23 @@ jobs:
           echo "Updating Student Map Data..."
           node scripts/update-student-map.js || true
 
+      - name: Archive daily snapshot
+        run: |
+          # latest.json is overwritten every run; the dated archive preserves the
+          # time series (the asset behind research + data licensing). Keyed on the
+          # file's own as_of date so same-day re-runs overwrite, not duplicate.
+          if [ -s data/latest.json ]; then
+            mkdir -p data/archive
+            AS_OF=$(node -p "JSON.parse(require('fs').readFileSync('data/latest.json','utf8')).as_of || ''")
+            if [ -n "$AS_OF" ]; then
+              cp data/latest.json "data/archive/${AS_OF}.json"
+              node -e "const fs=require('fs');const days=fs.readdirSync('data/archive').filter(f=>/^\d{4}-\d{2}-\d{2}\.json\$/.test(f)).map(f=>f.slice(0,-5)).sort();fs.writeFileSync('data/archive/manifest.json',JSON.stringify({description:'FinMango Financial Health Barometer — daily snapshot archive',latest:days[days.length-1],earliest:days[0],count:days.length,url_pattern:'/data/archive/{YYYY-MM-DD}.json',dates:days},null,2)+'\n')"
+              echo "Archived snapshot for ${AS_OF}"
+            else
+              echo "::warning::latest.json has no as_of date — snapshot not archived"
+            fi
+          fi
+
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
