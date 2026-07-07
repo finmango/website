@@ -121,10 +121,17 @@ function buildMeta(post, id) {
     imageHeight: hasCover ? 0 : 1260
   });
 
+  // Preload the sized cover the page script will render (same URL, so the
+  // browser reuses this download) — the LCP image starts fetching from the
+  // edge cache before a single line of JS has run.
+  const coverPreload = hasCover
+    ? '<link rel="preload" as="image" href="/post-image?id=' + encodeURIComponent(post.id) + '&amp;w=1600" fetchpriority="high">'
+    : '';
+
   // Inline the post so post.html renders immediately (no fetch, no "Loading…").
   const inlined = '<script>window.__POST__=' + jsonForScript(post) + ';</script>';
 
-  return { title: title + ' — FinMango', description: desc, headHtml: og + inlined };
+  return { title: title + ' — FinMango', description: desc, headHtml: coverPreload + og + inlined };
 }
 
 function ogBlock(o) {
