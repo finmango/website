@@ -42,9 +42,10 @@ The single hardest thing for MVP→beta founders is **getting real users**. Our 
    engineered to exploit them — and, lately, watching AI both supercharge the manipulation and
    quietly take over students' thinking.
 
-> ⚠️ **Number consistency:** the website says "10M+ impacted / 100K+ educated"; the June 2026
-> SFF application says "more than a million people / 75,000+ students." Pick one set of figures
-> and use it everywhere — funders in this ecosystem overlap and cross-read applications.
+> **Impact figures — DECIDED:** this application uses the website's figures (100K+ students
+> taught) because FFWD reviewers will visit finmango.org and consistency with the public site
+> matters most here. Separately, reconcile the site vs. the June 2026 SFF application figures
+> (1M+ people / 75,000+ students) before any FFWD *interview*, in case a reviewer cross-reads.
 
 ---
 
@@ -281,19 +282,36 @@ Loom or Zoom recording; they say thinking > production quality.
 
 ---
 
-## 4. Timeline to deadline (10 days)
+## 4. MVP — BUILT (Jul 7)
+
+The working demo lives in this repo and deploys with the existing Cloudflare Pages site:
+
+- **Landing page:** `/thinkfirst/index.html` → finmango.org/thinkfirst/ (point thinkfirstai.org
+  at it as a custom domain, or use the finmango.org URL in the application if DNS is a hassle).
+- **Sparring demo:** `/thinkfirst/spar.html` — three scenarios (Passive Income Guru, crypto DM
+  from a "friend", the too-confident shopping chatbot), full spar conversation, "End session →
+  scorecard" debrief with tactics caught/missed, score, and next skill.
+- **Backend:** `functions/api/thinkfirst.js` — Cloudflare Pages Function calling the Anthropic
+  API (Claude Opus 4.8). Scenario system prompts live server-side with classroom guardrails:
+  no advice, no product recs, no PII, injection attempts get called out in-character.
+
+**One deploy step required: add `ANTHROPIC_API_KEY` in the Cloudflare Pages project settings
+(Settings → Environment variables → Production).** Until then the demo shows a "backend not
+configured" notice. Handler validation is tested; the live model call needs the key.
+
+## 5. Timeline to deadline
 
 | Date | Milestone |
 |---|---|
-| Jul 7–9 | Name locked: ThinkFirst AI. Build MVP skeleton: one sparring scenario end-to-end (pitch → argument → debrief). |
-| Jul 10–12 | Polish the demo flow. Ship landing page at thinkfirstai.org. Line up Bob + 2–3 named teachers as beta partners. |
+| Jul 7 | ✅ Positioning locked, all answers drafted, MVP + landing page built. |
+| Jul 8–9 | Add API key, dry-run the demo, tweak sparring tone if needed. Point thinkfirstai.org. |
+| Jul 10–12 | Line up Bob + 2–3 named teachers as beta partners (a quote from Bob strengthens the app). |
 | Jul 13–14 | Record + edit video (Loom is fine). Finalize form answers, verify 500-char limits. |
-| Jul 15 | Full review pass; check number consistency (§1 warning). |
+| Jul 15 | Full review pass. |
 | Jul 16 | **Submit** (one day of buffer). |
 
-**Open items for Scott:**
-- [x] Name: ThinkFirst AI (domain owned). TODO: trademark check vs thinkfirst.org (injury-prevention nonprofit, also school programs).
-- [ ] Confirm impact figures to use (site vs. SFF numbers).
+**Remaining items only Scott can do:**
+- [ ] Add `ANTHROPIC_API_KEY` to Cloudflare Pages env vars (unblocks the live demo).
 - [ ] LinkedIn URL; confirm "Ohio" for the state dropdown.
 - [ ] Hours/week currently spent (form asks directly).
 - [ ] Any prior accelerators/courses (form asks directly).
@@ -301,3 +319,5 @@ Loom or Zoom recording; they say thinking > production quality.
 - [ ] Confirm Bob + teachers for named beta commitment.
 - [ ] SF availability Oct 18–23 (mandatory).
 - [ ] Personalize the "relationship with AI" answer.
+- [ ] Record the 3-minute video using the demo.
+- [ ] Later (pre-incorporation, not pre-application): trademark check vs thinkfirst.org.

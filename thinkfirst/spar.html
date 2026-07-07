@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spar — ThinkFirst AI</title>
+<meta name="description" content="Pick a scenario and spar with ThinkFirst AI. It won't give you the answer — it will make you earn one.">
+<link rel="icon" href="/favicon.png">
+<style>
+  :root{
+    --ink:#131417; --paper:#FAF7F2; --accent:#E4572E; --deep:#1D3557;
+    --muted:#6b6f76; --line:#e3ddd2; --good:#2a7d4f; --bad:#b3392b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--paper);color:var(--ink);font-family:Georgia,'Times New Roman',serif;line-height:1.55}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px}
+  header{padding:20px 0;border-bottom:1px solid var(--line)}
+  header .wrap{display:flex;justify-content:space-between;align-items:baseline}
+  .logo{font-weight:700;font-size:1.1rem}
+  .logo a{color:var(--ink);text-decoration:none}
+  .logo span{color:var(--accent)}
+  .tag{font-family:Helvetica,Arial,sans-serif;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  h1{font-size:1.7rem;margin:36px 0 8px;letter-spacing:-0.01em}
+  .sub{color:var(--muted);margin-bottom:26px;font-size:1rem}
+  .scenarios{display:grid;gap:14px;margin-bottom:40px}
+  .scenario{border:1px solid var(--line);background:#fff;padding:20px;cursor:pointer;text-align:left;font-family:inherit;font-size:1rem}
+  .scenario:hover{border-color:var(--accent)}
+  .scenario h3{font-size:1.05rem;margin-bottom:6px}
+  .scenario p{font-size:.9rem;color:var(--muted);font-style:italic}
+  #chat{display:none}
+  .pitchbox{border:1px solid var(--line);border-left:4px solid var(--deep);background:#fff;padding:18px;margin:24px 0;font-style:italic;color:#3a3d42;font-size:.98rem}
+  .pitchbox .lbl{font-family:Helvetica,Arial,sans-serif;font-style:normal;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--deep);display:block;margin-bottom:8px}
+  #log{margin:10px 0 16px}
+  .msg{margin:14px 0;max-width:88%}
+  .msg .who{font-family:Helvetica,Arial,sans-serif;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+  .msg.ai .who{color:var(--accent)}
+  .msg.me{margin-left:auto}
+  .msg.me .who{color:var(--deep);text-align:right}
+  .msg .bubble{padding:12px 16px;border:1px solid var(--line);background:#fff;font-size:.98rem;white-space:pre-wrap}
+  .msg.me .bubble{background:var(--deep);color:#fff;border-color:var(--deep)}
+  .typing{color:var(--muted);font-style:italic;font-size:.9rem;margin:12px 0}
+  form{display:flex;gap:10px;margin:18px 0 10px}
+  textarea{flex:1;resize:none;border:1px solid var(--line);padding:12px;font-family:inherit;font-size:1rem;background:#fff;min-height:52px}
+  textarea:focus{outline:2px solid var(--deep)}
+  .btn{font-family:Helvetica,Arial,sans-serif;background:var(--ink);color:var(--paper);border:2px solid var(--ink);padding:10px 20px;font-size:.9rem;cursor:pointer}
+  .btn:hover{background:var(--accent);border-color:var(--accent)}
+  .btn:disabled{opacity:.4;cursor:default}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{color:var(--accent);border-color:var(--accent)}
+  .endrow{display:flex;justify-content:space-between;margin:6px 0 40px}
+  #debrief{display:none;margin:30px 0 60px}
+  .scorehead{display:flex;align-items:baseline;gap:18px;margin-bottom:14px}
+  .score{font-size:3rem;font-weight:700;color:var(--deep)}
+  .score small{font-size:1.1rem;color:var(--muted);font-weight:400}
+  .dsummary{margin-bottom:22px;max-width:60ch}
+  .tactic{border:1px solid var(--line);background:#fff;padding:14px 16px;margin:10px 0}
+  .tactic .thead{display:flex;justify-content:space-between;gap:12px;font-family:Helvetica,Arial,sans-serif;font-size:.9rem;font-weight:700}
+  .caught{color:var(--good)} .missed{color:var(--bad)}
+  .tactic p{font-size:.92rem;color:#3a3d42;margin-top:6px}
+  .nextskill{border-left:4px solid var(--accent);padding:6px 0 6px 16px;margin:22px 0;font-style:italic}
+  .notice{border:1px solid var(--line);background:#fff;padding:16px;margin:24px 0;font-size:.92rem;color:var(--muted)}
+  footer{padding:30px 0 50px;border-top:1px solid var(--line);font-family:Helvetica,Arial,sans-serif;font-size:.78rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="logo"><a href="/thinkfirst/">Think<span>First</span> AI</a></div>
+    <div class="tag">Sparring demo · beta</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div id="picker">
+    <h1>Pick your opponent.</h1>
+    <p class="sub">ThinkFirst won't tell you what to believe. It will make you earn a conclusion — then score how you got there.</p>
+    <div class="scenarios" id="scenarioList"></div>
+    <div class="notice">Training simulation for classroom use. ThinkFirst gives no real financial advice,
+    recommends no products, and collects no personal information. Sessions vanish when you close the tab.</div>
+  </div>
+
+  <div id="chat">
+    <h1 id="scenarioTitle"></h1>
+    <div class="pitchbox"><span class="lbl">The pitch you're facing</span><span id="scenarioPitch"></span></div>
+    <div id="log"></div>
+    <div class="typing" id="typing" style="display:none">ThinkFirst is thinking of a counter…</div>
+    <form id="composer">
+      <textarea id="input" rows="2" placeholder="Make your case…" maxlength="1900"></textarea>
+      <button class="btn" id="send" type="submit">Send</button>
+    </form>
+    <div class="endrow">
+      <button class="btn ghost" id="restart" type="button">↺ New scenario</button>
+      <button class="btn" id="end" type="button" disabled>End session → get my scorecard</button>
+    </div>
+  </div>
+
+  <div id="debrief">
+    <h1>Your scorecard</h1>
+    <div class="scorehead"><div class="score" id="score"></div><div class="tag">critical-thinking score</div></div>
+    <p class="dsummary" id="dsummary"></p>
+    <div id="tactics"></div>
+    <div class="nextskill" id="nextskill"></div>
+    <button class="btn" id="again" type="button">Spar again</button>
+  </div>
+</div>
+
+<footer><div class="wrap">ThinkFirst AI · incubated by FinMango · no ads, no affiliate anything, no data sold — ever.</div></footer>
+
+<script>
+(function(){
+  var API='/api/thinkfirst';
+  var scenario=null, history=[], busy=false;
+  var $=function(id){return document.getElementById(id)};
+
+  fetch(API).then(function(r){return r.json()}).then(function(d){
+    if(d.result!=='ok') throw 0;
+    d.scenarios.forEach(function(s){
+      var b=document.createElement('button');
+      b.className='scenario';
+      b.innerHTML='<h3>'+esc(s.title)+'</h3><p>'+esc(s.pitch.slice(0,140))+'…</p>';
+      b.onclick=function(){start(s)};
+      $('scenarioList').appendChild(b);
+    });
+  }).catch(function(){
+    $('scenarioList').innerHTML='<div class="notice">The demo backend isn\'t configured yet (missing API key on the server). Check back soon.</div>';
+  });
+
+  function esc(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML}
+
+  function start(s){
+    scenario=s; history=[];
+    $('picker').style.display='none'; $('debrief').style.display='none'; $('chat').style.display='block';
+    $('scenarioTitle').textContent=s.title;
+    $('scenarioPitch').textContent=s.pitch;
+    $('log').innerHTML='';
+    send("Here's the pitch I'm looking at:\n\n"+s.pitch+"\n\nLet's spar.", true);
+  }
+
+  function bubble(role,text){
+    var m=document.createElement('div');
+    m.className='msg '+(role==='assistant'?'ai':'me');
+    m.innerHTML='<div class="who">'+(role==='assistant'?'ThinkFirst':'You')+'</div><div class="bubble"></div>';
+    m.querySelector('.bubble').textContent=text;
+    $('log').appendChild(m);
+    m.scrollIntoView({behavior:'smooth',block:'end'});
+  }
+
+  function send(text,hidden){
+    if(busy) return;
+    busy=true; $('send').disabled=true; $('end').disabled=true; $('typing').style.display='block';
+    history.push({role:'user',content:text});
+    if(!hidden) bubble('user',text);
+    fetch(API,{method:'POST',headers:{'content-type':'application/json'},
+      body:JSON.stringify({action:'chat',scenario:scenario.id,messages:history})})
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if(d.result!=='ok') throw 0;
+      history.push({role:'assistant',content:d.reply});
+      bubble('assistant',d.reply);
+    })
+    .catch(function(){ history.pop(); bubble('assistant','(Connection hiccup — try that again.)'); })
+    .then(function(){
+      busy=false; $('send').disabled=false; $('typing').style.display='none';
+      $('end').disabled = history.length<4; // needs a real exchange before grading
+    });
+  };
+
+  $('composer').addEventListener('submit',function(e){
+    e.preventDefault();
+    var t=$('input').value.trim();
+    if(!t||busy) return;
+    $('input').value='';
+    send(t,false);
+  });
+  $('input').addEventListener('keydown',function(e){
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('composer').dispatchEvent(new Event('submit'))}
+  });
+
+  $('end').addEventListener('click',function(){
+    if(busy||history.length<2) return;
+    busy=true; $('end').disabled=true; $('typing').textContent='Grading your session…'; $('typing').style.display='block';
+    fetch(API,{method:'POST',headers:{'content-type':'application/json'},
+      body:JSON.stringify({action:'debrief',scenario:scenario.id,messages:history})})
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if(d.result!=='ok') throw 0;
+      show(d.debrief);
+    })
+    .catch(function(){ $('typing').textContent='Grading failed — try ending the session again.'; busy=false; $('end').disabled=false; })
+  });
+
+  function show(db){
+    busy=false; $('typing').style.display='none'; $('typing').textContent='ThinkFirst is thinking of a counter…';
+    $('chat').style.display='none'; $('debrief').style.display='block';
+    $('score').innerHTML=esc(String(db.score))+'<small>/100</small>';
+    $('dsummary').textContent=db.summary;
+    $('tactics').innerHTML='';
+    (db.tactics||[]).forEach(function(t){
+      var el=document.createElement('div');
+      el.className='tactic';
+      el.innerHTML='<div class="thead"><span>'+esc(t.name)+'</span><span class="'+(t.caught?'caught':'missed')+'">'+(t.caught?'✓ caught':'✗ got past you')+'</span></div><p>'+esc(t.explanation)+'</p>';
+      $('tactics').appendChild(el);
+    });
+    $('nextskill').textContent='Next skill to train: '+db.next_skill;
+  }
+
+  function reset(){
+    scenario=null; history=[]; busy=false;
+    $('chat').style.display='none'; $('debrief').style.display='none'; $('picker').style.display='block';
+  }
+  $('restart').addEventListener('click',reset);
+  $('again').addEventListener('click',reset);
+})();
+</script>
+</body>
+</html>
