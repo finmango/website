@@ -50,8 +50,12 @@ The single hardest thing for MVP→beta founders is **getting real users**. Our 
 
 ## 2. The product
 
-**Working name:** *Spar* (placeholder — short for sparring partner. Alternatives: Gadfly,
-Pushback, Whetstone, Harder to Fool.)
+**Name:** **ThinkFirst AI** — Scott owns thinkfirstai.org, which also solves the "product
+website" question. The name states the mission plainly and reads instantly to teachers and
+funders.
+> ⚠️ Do a trademark/namespace check before incorporating: "ThinkFirst" is an existing National
+> Injury Prevention Foundation program (thinkfirst.org) that also runs school programs for
+> teens. Fine as the applying name; verify before the spin-out files paperwork.
 
 **One-liner:** The AI that argues with you — a sparring partner that makes teens harder to
 fool and sharper at thinking, in a world where every other AI is built to agree, persuade,
@@ -134,7 +138,7 @@ Loom or Zoom recording; they say thinking > production quality.
    have to be able to see it. AI just raised the stakes on both sides — it supercharged the
    manipulation, and it's quietly doing our students' thinking for them."
 2. **0:25–1:45 — Demo (one tight scenario).** Student pastes a viral "passive income
-   guaranteed" pitch → Spar challenges them: What's the incentive? What would have to be true?
+   guaranteed" pitch → ThinkFirst challenges them: What's the incentive? What would have to be true?
    Student pushes back, AI counters, student lands the kill shot → debrief scorecard of the
    manipulation tactics they caught and missed.
 3. **1:45–2:30 — Why the world needs this NOW.** "Every commercial AI is optimized to agree
@@ -149,13 +153,13 @@ Loom or Zoom recording; they say thinking > production quality.
 ### Your Product
 
 **What's your product called, and what does it do? (one sentence)**
-> Spar is an AI sparring partner that makes teenagers harder to fool — it argues with them,
-> plays the scammer or manipulator in safe simulations, and trains the critical thinking that
-> every other AI is quietly doing for them.
+> ThinkFirst AI is an AI sparring partner that makes teenagers harder to fool — it argues with
+> them, plays the scammer or manipulator in safe simulations, and trains the critical thinking
+> that every other AI is quietly doing for them.
 
 **Link to your product or organization's website**
-> https://finmango.org for now — **recommended: ship a simple product landing page before
-> submitting** (e.g. finmango.org/spar) so the link shows the product, not just the parent org.
+> https://thinkfirstai.org — **ship a simple landing page there before submitting** (Scott owns
+> the domain), with a "built with / incubated by FinMango" line linking back to finmango.org.
 
 **Who is it for, and what problem does it solve for them?**
 > For teens (14–19), delivered through classrooms first. They face two compounding problems:
@@ -281,14 +285,14 @@ Loom or Zoom recording; they say thinking > production quality.
 
 | Date | Milestone |
 |---|---|
-| Jul 7–9 | Lock name. Build MVP skeleton: one sparring scenario end-to-end (pitch → argument → debrief). |
-| Jul 10–12 | Polish the demo flow. Ship product landing page. Line up Bob + 2–3 named teachers as beta partners. |
+| Jul 7–9 | Name locked: ThinkFirst AI. Build MVP skeleton: one sparring scenario end-to-end (pitch → argument → debrief). |
+| Jul 10–12 | Polish the demo flow. Ship landing page at thinkfirstai.org. Line up Bob + 2–3 named teachers as beta partners. |
 | Jul 13–14 | Record + edit video (Loom is fine). Finalize form answers, verify 500-char limits. |
 | Jul 15 | Full review pass; check number consistency (§1 warning). |
 | Jul 16 | **Submit** (one day of buffer). |
 
 **Open items for Scott:**
-- [ ] Confirm working name (Spar? Gadfly? other?).
+- [x] Name: ThinkFirst AI (domain owned). TODO: trademark check vs thinkfirst.org (injury-prevention nonprofit, also school programs).
 - [ ] Confirm impact figures to use (site vs. SFF numbers).
 - [ ] LinkedIn URL; confirm "Ohio" for the state dropdown.
 - [ ] Hours/week currently spent (form asks directly).
