@@ -7,6 +7,13 @@
   <title>Ambassador Notes - FinMango | Notes, briefs & stories</title>
   <meta name="description" content="Notes, briefs, and stories written by FinMango Ambassadors and published after peer review.">
   <link rel="canonical" href="https://www.finmango.org/posts.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="FinMango">
+  <meta property="og:url" content="https://www.finmango.org/posts.html">
+  <meta property="og:title" content="Ambassador Notes — FinMango">
+  <meta property="og:description" content="Notes, briefs, and stories written by FinMango Ambassadors and published after peer review.">
+  <meta property="og:image" content="https://www.finmango.org/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="favicon.png">
   <script>
     // Kick off the posts request immediately — before the browser parses the rest
@@ -144,17 +151,46 @@
     .head p { font-size: clamp(1rem, 1.3vw, 1.15rem); font-weight: 300; color: var(--ink-dim); max-width: 56ch; }
     .head-cta { margin-top: 2rem; }
     .posts { max-width: var(--max-width); margin: 0 auto; padding: 1.5rem var(--gutter) 6rem; }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ink-line); border: 1px solid var(--ink-line); }
+
+    /* category filter chips (hidden until posts load; only shown for 2+ categories) */
+    .filters { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.5rem; }
+    .filter-btn { font-family: var(--font-mono); font-size: .62rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+      padding: .5rem .95rem; border: 1px solid var(--ink-line); background: transparent; color: var(--ink-dim); cursor: pointer;
+      transition: border-color .2s ease, color .2s ease, background .2s ease; }
+    .filter-btn:hover { border-color: var(--ink); color: var(--ink); }
+    .filter-btn.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+    /* hairline grid: borders live on the cells so a partly-filled last row
+       stays clean paper instead of showing a slab of grid background */
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink-line); border-left: 1px solid var(--ink-line); }
+    .grid > * { border-right: 1px solid var(--ink-line); border-bottom: 1px solid var(--ink-line); }
     a.card { background: var(--paper); padding: 1.75rem 1.6rem 2rem; text-decoration: none; color: inherit; display: flex; flex-direction: column;
       min-height: 230px; transition: background .2s; position: relative; }
     a.card:hover { background: #fff; }
     .card-cover { margin: -1.75rem -1.6rem 1.25rem; aspect-ratio: 16/9; overflow: hidden; background: var(--ink-line-soft); }
-    .card-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+    a.card:hover .card-cover img { transform: scale(1.04); }
     .card-cat { font-family: var(--font-mono); font-size: .58rem; font-weight: 500; text-transform: uppercase; letter-spacing: .14em; color: var(--orange); margin-bottom: .65rem; }
     .card-title { font-size: 1.25rem; font-weight: 900; letter-spacing: -.025em; line-height: 1.2; transition: color .2s; }
     a.card:hover .card-title { color: var(--orange); }
     .card-dek { font-size: .9rem; font-weight: 300; line-height: 1.5; color: var(--ink-dim); margin-top: .5rem; }
     .card-meta { font-family: var(--font-mono); font-size: .62rem; letter-spacing: .04em; color: var(--ink-faint); margin-top: auto; padding-top: 1rem; text-transform: uppercase; }
+
+    /* featured lead card — the newest note gets a full-width editorial treatment */
+    a.card.featured { grid-column: 1 / -1; display: grid; grid-template-columns: 7fr 5fr; padding: 0; min-height: 0; }
+    .featured .card-cover { margin: 0; aspect-ratio: auto; height: 100%; min-height: 340px; }
+    .featured-body { padding: 2.4rem 2.4rem 2.2rem; display: flex; flex-direction: column; }
+    .featured .card-title { font-size: clamp(1.7rem, 3.2vw, 2.6rem); line-height: 1.08; letter-spacing: -.035em; max-width: 18ch; }
+    .featured .card-dek { font-size: 1.02rem; margin-top: .8rem; max-width: 46ch; }
+
+    /* skeleton loading state */
+    .skel { background: var(--paper); padding: 1.75rem 1.6rem 2rem; min-height: 230px; }
+    .skel-cover { margin: -1.75rem -1.6rem 1.25rem; aspect-ratio: 16/9; }
+    .skel-line { height: .8rem; margin-bottom: .7rem; }
+    .skel-cover, .skel-line { background: var(--ink-line-soft); animation: skel-pulse 1.5s ease-in-out infinite; }
+    @keyframes skel-pulse { 50% { opacity: .45; } }
+    @media (prefers-reduced-motion: reduce) { .skel-cover, .skel-line { animation: none; } .card-cover img { transition: none; } }
+
     .state { grid-column: 1 / -1; background: var(--paper); padding: 4rem 2rem; text-align: center; color: var(--ink-dim); }
     .state strong { display: block; color: var(--ink); font-size: 1.2rem; font-weight: 800; letter-spacing: -.02em; margin-bottom: .5rem; }
     .state a { color: var(--orange); }
@@ -166,6 +202,9 @@
       .nav-right { display: none; } .mobile-controls { display: flex; } .mobile-menu-btn { display: block; }
       .mobile-get-involved { display: inline-block; padding: .45rem .85rem !important; font-size: .74rem !important; }
       .grid { grid-template-columns: 1fr; }
+      a.card.featured { grid-template-columns: 1fr; }
+      .featured .card-cover { aspect-ratio: 16/9; height: auto; min-height: 0; }
+      .featured-body { padding: 1.75rem 1.6rem 2rem; }
       .footer-container { grid-template-columns: 1fr 1fr; gap: 2.25rem; padding: 3rem var(--gutter) 2.5rem; }
       .footer-brand-col { grid-column: 1 / -1; }
       .footer-bottom { flex-direction: column; text-align: center; }
@@ -320,8 +359,11 @@
   </header>
 
   <section class="posts">
-    <div class="grid" id="grid">
-      <div class="state" id="loading">Loading posts…</div>
+    <div class="filters" id="filters" hidden></div>
+    <div class="grid" id="grid" aria-busy="true">
+      <div class="skel" aria-hidden="true"><div class="skel-cover"></div><div class="skel-line" style="width:34%"></div><div class="skel-line" style="width:88%"></div><div class="skel-line" style="width:62%"></div></div>
+      <div class="skel" aria-hidden="true"><div class="skel-cover"></div><div class="skel-line" style="width:30%"></div><div class="skel-line" style="width:80%"></div><div class="skel-line" style="width:70%"></div></div>
+      <div class="skel" aria-hidden="true"><div class="skel-cover"></div><div class="skel-line" style="width:38%"></div><div class="skel-line" style="width:84%"></div><div class="skel-line" style="width:55%"></div></div>
     </div>
   </section>
 
@@ -366,21 +408,72 @@
 
     function emptyState(strong, msg) {
       document.getElementById('grid').innerHTML = '<div class="state"><strong>' + strong + '</strong>' + msg + '</div>';
+      document.getElementById('grid').removeAttribute('aria-busy');
+    }
+    // Covers are served through the same-origin, edge-cached /post-image proxy
+    // at a width that matches the layout slot — a card never downloads the raw
+    // 2000px Google Drive image (see functions/post-image.js).
+    function coverSrc(p, w) {
+      if (!p.cover) return '';
+      return p.id ? '/post-image?id=' + encodeURIComponent(p.id) + '&w=' + w : p.cover;
+    }
+    function cardMeta(p) {
+      return [escapeHtml(p.authorName || 'FinMango'), escapeHtml(fmtDate(p.publishedAt || p.createdAt))].filter(Boolean).join(' · ');
     }
     function card(p) {
-      const cover = p.cover ? '<div class="card-cover"><img src="' + escapeHtml(p.cover) + '" alt="" loading="lazy"></div>' : '';
-      const meta = [escapeHtml(p.authorName || 'FinMango'), escapeHtml(fmtDate(p.publishedAt || p.createdAt))].filter(Boolean).join(' · ');
+      const cover = p.cover ? '<div class="card-cover"><img src="' + escapeHtml(coverSrc(p, 800)) + '" alt="" loading="lazy" decoding="async"></div>' : '';
       return '<a class="card" href="/post?id=' + encodeURIComponent(p.id) + '">' + cover +
         '<div class="card-cat">' + escapeHtml(p.category || 'Post') + '</div>' +
         '<div class="card-title">' + escapeHtml(p.title) + '</div>' +
         (p.dek ? '<div class="card-dek">' + escapeHtml(p.dek) + '</div>' : '') +
-        '<div class="card-meta">' + meta + '</div></a>';
+        '<div class="card-meta">' + cardMeta(p) + '</div></a>';
+    }
+    // The newest note leads the grid with a full-width cover — it's also the
+    // page's LCP image, so it loads eagerly at high priority.
+    function featuredCard(p) {
+      return '<a class="card featured" href="/post?id=' + encodeURIComponent(p.id) + '">' +
+        '<div class="card-cover"><img src="' + escapeHtml(coverSrc(p, 1200)) + '" alt="" fetchpriority="high" decoding="async"></div>' +
+        '<div class="featured-body">' +
+          '<div class="card-cat">Latest · ' + escapeHtml(p.category || 'Post') + '</div>' +
+          '<div class="card-title">' + escapeHtml(p.title) + '</div>' +
+          (p.dek ? '<div class="card-dek">' + escapeHtml(p.dek) + '</div>' : '') +
+          '<div class="card-meta">' + cardMeta(p) + '</div>' +
+        '</div></a>';
+    }
+    function renderGrid(list) {
+      const grid = document.getElementById('grid');
+      let html = '';
+      let rest = list;
+      if (list.length && list[0].cover) { html += featuredCard(list[0]); rest = list.slice(1); }
+      grid.innerHTML = html + rest.map(card).join('');
+      grid.removeAttribute('aria-busy');
+      enablePrefetch();
+    }
+    function buildFilters(posts) {
+      const cats = [...new Set(posts.map(p => p.category).filter(Boolean))];
+      if (cats.length < 2) return;
+      const groups = ['All', ...cats];
+      const bar = document.getElementById('filters');
+      bar.innerHTML = groups.map((c, i) =>
+        '<button class="filter-btn' + (i === 0 ? ' active' : '') + '" type="button" data-i="' + i + '" aria-pressed="' + (i === 0) + '">' + escapeHtml(c) + '</button>').join('');
+      bar.hidden = false;
+      bar.addEventListener('click', e => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn) return;
+        bar.querySelectorAll('.filter-btn').forEach(b => {
+          const on = b === btn;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-pressed', on);
+        });
+        const i = +btn.dataset.i;
+        renderGrid(i === 0 ? posts : posts.filter(p => p.category === groups[i]));
+      });
     }
 
     // On hover/touch, prefetch the post page so the click feels instant — it
     // warms both the browser cache and the edge cache for that /post?id=… URL.
+    const prefetched = new Set();
     function enablePrefetch() {
-      const prefetched = new Set();
       const warm = href => {
         if (!href || prefetched.has(href)) return;
         prefetched.add(href);
@@ -399,10 +492,10 @@
       try {
         // Reuse the request started in <head>; fall back to a fresh fetch.
         const data = await (window.__postsReq || fetch(API_URL + '?action=published').then(r => r.json()));
-        const posts = (data && data.posts) || [];
+        const posts = ((data && data.posts) || []).filter(p => p && p.id);
         if (!posts.length) return emptyState('No posts yet', 'Be the first — <a href="write.html">write a post →</a>');
-        document.getElementById('grid').innerHTML = posts.map(card).join('');
-        enablePrefetch();
+        buildFilters(posts);
+        renderGrid(posts);
       } catch (e) {
         emptyState('Could not load posts', 'Please try again later, or <a href="write.html">write a post →</a>');
       }

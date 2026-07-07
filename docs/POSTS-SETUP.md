@@ -99,7 +99,7 @@ repo. Three small functions sit between visitors and the Apps Script backend:
 | --- | --- | --- |
 | `/api/posts?action=published` / `…&action=post&id=…` | `functions/api/posts.js` | Same-origin, **edge-cached** read proxy. `posts.html` and `post.html` call this instead of the slow Apps Script URL, so repeat visits (and crawlers) skip the round-trip. Read-only — reviewer/submit actions are refused. |
 | `/post?id=…` | `functions/post.js` | Server-renders the post's `<head>`: real Open Graph / Twitter tags (title, description, **cover image**) so shared links show the cover instead of the bare logo. Also inlines the post as `window.__POST__`, so the page paints **instantly** with no "Loading…". |
-| `/post-image?id=…` | `functions/post-image.js` | Serves the post's cover from our own domain (Google Drive thumbnail URLs are flaky for crawlers). This is the `og:image`. Falls back to `og-image.png` when a post has no cover. |
+| `/post-image?id=…[&w=480\|800\|1200\|1600]` | `functions/post-image.js` | Serves the post's cover from our own domain, **edge-cached** (Google Drive thumbnail URLs are flaky for crawlers and slow for visitors). The optional `w` asks Drive for a right-sized thumbnail, so grid cards load an ~800px image instead of the raw 2000px original. Used by the `og:image`, the `posts.html` cards, and the article cover on `post.html` (which `/post` also preloads for a fast LCP). Falls back to `og-image.png` when a post has no cover. |
 
 Shared helpers (and the one copy of the backend URL) live in
 `functions/_shared.js`. Posts with **no** cover image fall back to the default

@@ -200,6 +200,34 @@
     .state h1 { font-size: 2rem; font-weight: 900; letter-spacing: -.03em; color: var(--ink); margin-bottom: .8rem; }
     .state a { color: var(--orange); }
 
+    /* skeleton shown while a direct post.html?id=… load fetches (the /post
+       Function normally inlines the post, so this rarely appears) */
+    .skel-line, .skel-title { background: var(--ink-line-soft); animation: skel-pulse 1.5s ease-in-out infinite; }
+    .skel-line { height: .85rem; margin-bottom: .8rem; }
+    .skel-title { height: 2.8rem; margin-bottom: .9rem; }
+    @keyframes skel-pulse { 50% { opacity: .45; } }
+    @media (prefers-reduced-motion: reduce) { .skel-line, .skel-title { animation: none; } }
+
+    /* ===== MORE NOTES (lazy-loaded near the end of the article) ===== */
+    .more-notes { padding: 0 var(--gutter) 6rem; }
+    .more-notes-container { max-width: 1040px; margin: 0 auto; border-top: 1px solid var(--ink-line); padding-top: 2.6rem; }
+    .more-notes-head .eyebrow { font-family: var(--font-mono); font-size: .68rem; font-weight: 500; text-transform: uppercase; letter-spacing: .18em;
+      color: var(--ink-faint); display: inline-flex; align-items: center; gap: .75rem; }
+    .more-notes-head .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--orange); }
+    .more-notes-head h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight: 900; letter-spacing: -.03em; line-height: 1.08; margin-top: .7rem; }
+    .more-notes-head h2 em { font-style: normal; color: var(--orange); }
+    .more-notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink-line); border-left: 1px solid var(--ink-line); margin-top: 2rem; }
+    .more-notes-grid > * { border-right: 1px solid var(--ink-line); border-bottom: 1px solid var(--ink-line); }
+    .mn-card { background: var(--paper); padding: 1.4rem 1.4rem 1.6rem; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: .55rem; transition: background .2s; }
+    .mn-card:hover { background: #fff; }
+    .mn-cover { margin: -1.4rem -1.4rem .6rem; aspect-ratio: 16/9; overflow: hidden; background: var(--ink-line-soft); }
+    .mn-cover img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+    .mn-card:hover .mn-cover img { transform: scale(1.04); }
+    .mn-cat { font-family: var(--font-mono); font-size: .58rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); }
+    .mn-title { font-size: 1.08rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.25; transition: color .2s; }
+    .mn-card:hover .mn-title { color: var(--orange); }
+    .mn-meta { margin-top: auto; padding-top: .6rem; font-family: var(--font-mono); font-size: .6rem; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-faint); }
+
     /* ===== RESPONSIVE ===== */
     @media (max-width: 1080px) { .nav-right { gap: 1.5rem; } .dropdown-content { min-width: 540px; } }
     @media (max-width: 968px) {
@@ -213,6 +241,8 @@
       .article-rail { display: none; }     /* the sticky rail hides; sharing lives in the footer row on mobile */
       .article-body { font-size: 1.1rem; }
       .article-body blockquote { font-size: 1.4rem; }
+      .more-notes-grid { grid-template-columns: 1fr; }
+      .more-notes { padding-bottom: 4.5rem; }
       .footer-container { grid-template-columns: 1fr 1fr; gap: 2.25rem; padding: 3rem var(--gutter) 2.5rem; }
       .footer-brand-col { grid-column: 1 / -1; }
       .footer-bottom { flex-direction: column; text-align: center; }
@@ -360,8 +390,29 @@
   <div class="reading-progress" id="readingProgress"></div>
 
   <main id="main">
-    <div class="state" id="loading"><p>Loading…</p></div>
+    <div class="article-wrap" aria-hidden="true">
+      <article class="article">
+        <div class="article-head">
+          <div class="skel-line" style="width:26%"></div>
+          <div class="skel-title" style="margin-top:1.6rem"></div>
+          <div class="skel-title" style="width:68%"></div>
+          <div class="skel-line" style="width:92%; margin-top:1.4rem"></div>
+          <div class="skel-line" style="width:74%"></div>
+        </div>
+      </article>
+    </div>
   </main>
+
+  <!-- Populated lazily (as the reader nears the end) with other published notes. -->
+  <section class="more-notes" id="moreNotes" hidden aria-labelledby="moreNotesHead">
+    <div class="more-notes-container">
+      <div class="more-notes-head">
+        <span class="eyebrow">Keep reading</span>
+        <h2 id="moreNotesHead">More ambassador <em>notes.</em></h2>
+      </div>
+      <div class="more-notes-grid" id="moreNotesGrid"></div>
+    </div>
+  </section>
 
   <!-- chrome:footer -->
   <footer>
@@ -513,9 +564,18 @@
       document.title = title + ' — FinMango';
     }
 
+    // Covers are served through the same-origin, edge-cached /post-image proxy
+    // at a width that fits the slot (see functions/post-image.js). The article
+    // cover URL matches the <link rel="preload"> the /post Function injects,
+    // so the browser reuses the already-started download.
+    function coverSrc(p, w) {
+      if (!p.cover) return '';
+      return p.id ? '/post-image?id=' + encodeURIComponent(p.id) + '&w=' + w : p.cover;
+    }
+
     function render(p) {
       const tagLine = [p.category, (p.tags || []).join(' · ')].filter(Boolean).join('  ·  ');
-      const cover = p.cover ? '<figure class="article-cover"><img src="' + escapeHtml(p.cover) + '" alt=""></figure>' : '';
+      const cover = p.cover ? '<figure class="article-cover"><img src="' + escapeHtml(coverSrc(p, 1600)) + '" alt="" fetchpriority="high" decoding="async"></figure>' : '';
       const affil = p.authorAffiliation ? ' <span>· ' + escapeHtml(p.authorAffiliation) + '</span>' : '';
       const name = p.authorName || 'FinMango contributor';
       // If the author tied this note to their ambassador profile, link the byline to it.
@@ -560,6 +620,42 @@
       if (md && p.dek) md.setAttribute('content', p.dek);
       wireArticleInteractions();
       enrichAmbassador(p, name);
+      loadMoreNotes(p.id);
+    }
+
+    // "More ambassador notes" — deferred until the reader nears the footer so
+    // the article itself stays light. The list request hits the same
+    // edge-cached /api/posts endpoint posts.html uses, so it's cheap.
+    function miniCard(p) {
+      const cover = p.cover ? '<div class="mn-cover"><img src="' + escapeHtml(coverSrc(p, 480)) + '" alt="" loading="lazy" decoding="async"></div>' : '';
+      const meta = [escapeHtml(p.authorName || 'FinMango'), escapeHtml(fmtDate(p.publishedAt || p.createdAt))].filter(Boolean).join(' · ');
+      return '<a class="mn-card" href="/post?id=' + encodeURIComponent(p.id) + '">' + cover +
+        '<span class="mn-cat">' + escapeHtml(p.category || 'Note') + '</span>' +
+        '<span class="mn-title">' + escapeHtml(p.title) + '</span>' +
+        '<span class="mn-meta">' + meta + '</span></a>';
+    }
+    function loadMoreNotes(currentId) {
+      const sec = document.getElementById('moreNotes');
+      if (!sec || sec.dataset.loaded) return;
+      const start = () => {
+        if (sec.dataset.loaded) return;
+        sec.dataset.loaded = '1';
+        fetch(API_URL + '?action=published').then(r => r.json()).then(data => {
+          const posts = ((data && data.posts) || []).filter(p => p && p.id && p.id !== currentId).slice(0, 3);
+          if (!posts.length) return;
+          document.getElementById('moreNotesGrid').innerHTML = posts.map(miniCard).join('');
+          sec.hidden = false;
+        }).catch(() => { /* section simply stays hidden */ });
+      };
+      const sentinel = document.querySelector('.article-foot') || document.querySelector('footer');
+      if ('IntersectionObserver' in window && sentinel) {
+        const io = new IntersectionObserver(entries => {
+          if (entries.some(en => en.isIntersecting)) { io.disconnect(); start(); }
+        }, { rootMargin: '600px 0px' });
+        io.observe(sentinel);
+      } else {
+        start();
+      }
     }
 
     // Copy-link buttons + reading-progress bar (only meaningful once an article is rendered).
