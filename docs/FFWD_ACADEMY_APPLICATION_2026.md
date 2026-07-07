@@ -21,7 +21,9 @@ research org requesting ~$750K).
 
 - A new AI-native product, founded by Scott Glasgow.
 - Fiscally supported/incubated by FinMango (501(c)(3), EIN 81-2543425) during launch only.
-- **Committed to spinning out as an independent tech nonprofit.**
+- **Committed to spinning out as an independent tech nonprofit.** The product is bigger than
+  financial health, so an independent org isn't just allowed — it's obviously necessary, which
+  makes the spin-out story airtight.
 - Founder story: Scott is transitioning away from FinMango day-to-day operations into a board
   role specifically to build this. This is a *strength* — it answers the "is the founder
   committed?" question before it's asked.
@@ -36,9 +38,9 @@ The single hardest thing for MVP→beta founders is **getting real users**. Our 
    program itself*, with evaluation instruments FinMango has used since 2021.
 2. **A global community for user research.** Ambassador network across ~12 countries, plus
    100K+ students taught to date.
-3. **Lived experience.** Nine years in classrooms watching exactly where financial education
-   fails: the lesson lands, the instructor leaves, and nobody is there at the student's first
-   real financial decision.
+3. **Lived experience.** Nine years in classrooms watching students get steamrolled by systems
+   engineered to exploit them — and, lately, watching AI both supercharge the manipulation and
+   quietly take over students' thinking.
 
 > ⚠️ **Number consistency:** the website says "10M+ impacted / 100K+ educated"; the June 2026
 > SFF application says "more than a million people / 75,000+ students." Pick one set of figures
@@ -46,27 +48,64 @@ The single hardest thing for MVP→beta founders is **getting real users**. Our 
 
 ---
 
-## 2. The product (working concept)
+## 2. The product
 
-**Working name:** *Mango Coach* (placeholder — the FinMango lineage helps in this application;
-the spin-out gets its own brand later. Alternatives: Sprout, Compass, Ledger.)
+**Working name:** *Spar* (placeholder — short for sparring partner. Alternatives: Gadfly,
+Pushback, Whetstone, Harder to Fool.)
 
-**One-liner:** An AI financial-health coach for teens that lives beyond the classroom — it
-starts in a FinMango lesson and keeps coaching the student through their first job, first
-paycheck, first credit card, and first investment account.
+**One-liner:** The AI that argues with you — a sparring partner that makes teens harder to
+fool and sharper at thinking, in a world where every other AI is built to agree, persuade,
+or answer for them.
 
-**Why AI is core (not a workflow tool):** the product IS the coach. It holds a persistent,
-personalized conversation with each student, adapts to their actual financial situation,
-and escalates to curriculum moments and local resources (FinMango's NavTech routing) when it
-detects a need. Remove the model and nothing remains.
+**The thesis (this is the "why now"):** Teens are entering an information environment that is
+almost entirely AI-mediated — algorithmic feeds, AI-targeted offers, synthetic content,
+chatbots owned by companies with something to sell. Two things are happening to them at once:
 
-**Safety/trust posture (they will ask):** minors + money = high sensitivity. Commit up front:
-no product recommendations or affiliate anything, no data sale, guardrailed outputs reviewed
-against curriculum, teacher/parent visibility, COPPA/FERPA-aware design. FinMango's decade of
-school relationships is the trust moat.
+1. **They're the softest targets of AI-scale manipulation** — scams, finfluencer schemes,
+   engineered outrage, predatory offers.
+2. **They're outsourcing their thinking to AI** — the #1 complaint teachers have about AI in
+   schools is that it answers instead of teaching, and students let it.
+
+Every commercial AI is optimized to be agreeable, persuasive, or frictionless. **Nobody's
+business model wants a user who is harder to fool.** That is a nonprofit-shaped problem — the
+sharpest possible pitch to a tech-nonprofit accelerator.
+
+**What it does (two core modes):**
+
+- **Spar mode:** a student brings a real claim or decision — a viral video's argument, a
+  "guaranteed returns" pitch, an essay thesis, a chatbot's answer — and the AI *challenges*
+  them instead of answering. It probes their reasoning, makes them find the incentive behind
+  the message, and only concedes when their argument actually holds. Socratic, adversarial,
+  and it never just gives the answer.
+- **Simulator mode:** the AI plays the adversary in a safe sandbox — the scammer, the
+  predatory lender, the manipulative ad, the too-confident chatbot — then debriefs the student
+  on exactly which tactics were used on them, and how they scored.
+
+**Why AI is core (not a workflow tool):** the adversary/sparring partner IS the product. It
+requires a model that can hold an adaptive, personalized argument, role-play manipulation
+tactics safely, evaluate the student's reasoning in real time, and generate a debrief. Remove
+the model and nothing remains — there is no static-content version of an opponent that adapts
+to you.
+
+**Relationship to FinMango (keep this tight):** FinMango's whole thesis is that financial
+health fails because of predatory systems, not ignorant people. Money is where manipulation
+bites hardest, so **financial traps are the beachhead arena** (and the natural content for the
+first classroom betas) — but the skill being trained is general, which is why this spins out
+as its own organization. This framing also keeps clean separation from FinMango's SFF
+application (AI Economic Signal) — zero overlap.
+
+**Classroom adoption hook:** teachers' loudest AI complaint is that it does students' thinking
+for them. This is the counter-product — the AI that refuses to give the answer. That makes it
+the rare AI tool teachers *want* in the room, which is exactly our distribution channel.
+
+**Safety posture (they will ask):** simulated manipulation for minors needs guardrails —
+adversary mode is clearly labeled/sandboxed, tactics are always debriefed, no real personal
+financial data needed, teacher visibility, COPPA/FERPA-aware. FinMango's decade of school
+trust is the moat.
 
 **Critical path:** the application requires a video **demonstrating the product**, and the
-form asks for product stage. A working MVP of one coaching flow must exist before submission.
+form asks the product's stage. A working MVP of one sparring flow must exist before recording
+(~July 13).
 
 ---
 
@@ -89,58 +128,57 @@ form asks for product stage. A working MVP of one coaching flow must exist befor
 
 Loom or Zoom recording; they say thinking > production quality.
 
-1. **0:00–0:25 — Lived experience + the problem.** "I've spent nine years teaching financial
-   health in classrooms — over 100,000 students. Here's what I learned: the lesson works, and
-   then we leave the room. The moment a student actually needs the knowledge — first paycheck,
-   first credit card — there's nobody there."
-2. **0:25–1:45 — Demo (one tight scenario).** Student tells the coach about their first
-   paycheck → coach walks through reading it, flags Roth IRA eligibility, sets a savings nudge,
-   surfaces a local resource.
-3. **1:45–2:30 — Why the world needs this NOW.** Two forces colliding: (a) students are
-   entering the worst affordability environment in generations — the window between "learned
-   it in class" and "needed it for real" is where financial lives get wrecked; (b) AI finally
-   makes 1:1 coaching possible at $0 to the student — and if nonprofits don't build the
-   trusted, non-predatory version, teens will get their money advice from engagement-optimized
-   feeds and affiliate-funded apps. Distribution is ready today: 27 schools, ~8,000
-   students/year through FinMango.
-4. **2:30–3:00 — Commitment.** Classroom beta during the Academy itself; spinning out as an
-   independent tech nonprofit; stepping back from FinMango day-to-day to build this. Confirm
-   SF week.
+1. **0:00–0:25 — Lived experience + the problem.** "I've spent nine years in classrooms —
+   over 100,000 students — with FinMango, the nonprofit I founded. Our core lesson was never
+   really about money. It was: the systems around you are engineered to exploit you, and you
+   have to be able to see it. AI just raised the stakes on both sides — it supercharged the
+   manipulation, and it's quietly doing our students' thinking for them."
+2. **0:25–1:45 — Demo (one tight scenario).** Student pastes a viral "passive income
+   guaranteed" pitch → Spar challenges them: What's the incentive? What would have to be true?
+   Student pushes back, AI counters, student lands the kill shot → debrief scorecard of the
+   manipulation tactics they caught and missed.
+3. **1:45–2:30 — Why the world needs this NOW.** "Every commercial AI is optimized to agree
+   with you, persuade you, or answer for you. Nobody's business model wants a person who's
+   harder to fool. That's why this has to be a nonprofit — and why it has to exist right now,
+   while this generation's relationship with AI is still forming. We're not teaching kids to
+   fear AI. We're using AI to train the one skill it can't replace."
+4. **2:30–3:00 — Why us + commitment.** Beta runs live in FinMango's 27-school network during
+   the Academy itself; spinning out as an independent tech nonprofit; stepping back from
+   FinMango day-to-day to build this. Confirm SF week Oct 18–23.
 
 ### Your Product
 
 **What's your product called, and what does it do? (one sentence)**
-> Mango Coach is an AI financial-health coach that starts in a high-school classroom lesson
-> and keeps coaching teens through their first paycheck, first credit card, and first
-> investment account.
+> Spar is an AI sparring partner that makes teenagers harder to fool — it argues with them,
+> plays the scammer or manipulator in safe simulations, and trains the critical thinking that
+> every other AI is quietly doing for them.
 
 **Link to your product or organization's website**
 > https://finmango.org for now — **recommended: ship a simple product landing page before
-> submitting** (e.g. finmango.org/coach) so the link shows the product, not just the parent org.
+> submitting** (e.g. finmango.org/spar) so the link shows the product, not just the parent org.
 
 **Who is it for, and what problem does it solve for them?**
-> For teens and young adults (14–22), starting with students in our partner high schools.
-> Financial education is a one-shot classroom event, but financial life is a stream of
-> individual moments — first paycheck, first W-4, first credit card, first rent payment — that
-> arrive months or years after the lesson, when no teacher is present. Mango Coach closes that
-> gap with an always-available coach grounded in a proven curriculum. It also gives teachers
-> the individual follow-up capacity they don't have.
+> For teens (14–19), delivered through classrooms first. They face two compounding problems:
+> they're the primary targets of AI-scale manipulation — scams, finfluencer schemes, synthetic
+> content, predatory offers — and they're increasingly outsourcing their reasoning to AI tools
+> built to answer, not to teach. For teachers, it solves the inverse problem: it's the AI that
+> refuses to do the thinking for students, so it's the rare AI tool they actually want in the
+> room.
 
 **How does AI power your product — not just your workflow, but the product itself?**
-> The coach IS the product. An LLM holds a persistent, personalized coaching relationship with
-> each student: it adapts to their actual situation (first job, gig income, family
-> obligations), recognizes financial "moments" from conversation, teaches from our curriculum
-> in the student's own context, and routes to vetted local resources when it detects need.
-> Guardrails constrain outputs to curriculum-reviewed guidance — no product pitches, ever.
-> Remove the model and nothing remains: there is no static-content version of this product.
+> The sparring partner IS the product. The model holds an adaptive, personalized argument with
+> each student, role-plays manipulation tactics safely in simulator mode, evaluates the
+> student's reasoning in real time, and generates a debrief of the tactics they caught and
+> missed. Guardrails keep the adversary sandboxed and always debriefed. Remove the model and
+> nothing remains — a static curriculum can't be an opponent that adapts to you.
 
 **What stage is your product?** → **MVP** *(must be true by submission — see timeline)*
 
 **Tell us more about what that stage means (optional)**
-> The MVP demonstrates one coaching flow end-to-end (first paycheck → understanding it →
-> savings/Roth IRA next steps), built on curriculum refined across nine years and 100K+
-> students. Beta channel is already committed: partner classrooms within FinMango's 27-school
-> network, timed for October — during the Academy itself.
+> The MVP demonstrates one sparring flow end-to-end (viral money-trap pitch → adversarial
+> dialogue → tactic debrief), with scenario content drawn from nine years of classroom work.
+> The beta channel is already committed: partner classrooms in FinMango's 27-school network,
+> timed for October — during the Academy itself.
 
 **How many users does your product currently have?**
 > 0 — pre-beta. Distribution pipeline for beta: ~8,000 students/year across 27 partner schools.
@@ -154,32 +192,36 @@ Loom or Zoom recording; they say thinking > production quality.
 **Work done to understand the problem (select all that apply)**
 > Lived experience with the problem · Worked in the space · Spoken with subject matter experts ·
 > Ran a survey (student/staff evaluations running since 2021) · Built and tested a prototype
-> (once MVP exists) · Conducted user interviews *(only if true)* · Desk research (Barometer /
-> financial-stress research).
+> (once MVP exists) · Conducted user interviews *(only if true)* · Desk research.
 
 **How is your local community supporting this work?**
-> FinMango — the Ohio-founded nonprofit I lead — is incubating this: fiscal support, curriculum,
-> and its classroom network. Our lead instructor (Bob Gillingham, who teaches ~8,000 students a
-> year across 27 Ohio high schools and colleges) and partner teachers have committed classrooms
-> for the fall beta. Kent State University roots; global ambassador community for user research
-> beyond Ohio. *(Confirm Bob + named teachers before submitting.)*
+> FinMango — the Ohio-founded nonprofit I lead — is incubating this: fiscal support and its
+> classroom network. Our lead instructor (Bob Gillingham, who teaches ~8,000 students a year
+> across 27 Ohio high schools and colleges) and partner teachers have committed classrooms for
+> the fall beta. Kent State University roots; a global ambassador community across ~12
+> countries for testing how manipulation patterns differ by context. *(Confirm Bob + named
+> teachers before submitting.)*
 
 **How are you thinking about go-to-market? Who will your first users be, and how will you reach them?**
 > Classroom-first. First users: students in 3–5 committed partner classrooms, live during the
-> Academy (Oct–Nov, mid-semester), with structured evaluation we've run since 2021. Spring:
-> expand across the 27-school network. Then: teacher-led distribution beyond our network —
-> teachers are the trusted channel into this age group, and we've spent nine years earning
-> their trust. Distribution already exists; the work is product.
+> Academy (Oct–Nov, mid-semester), starting with financial-manipulation scenarios — the arena
+> where our content and credibility are deepest — and using evaluation instruments we've run
+> since 2021. Spring: expand across the 27-school network and broaden scenario arenas (media
+> claims, AI-generated content, essays). Then: teacher-led distribution beyond our network —
+> teachers are the trusted channel to this age group, and this is the rare AI product built
+> to make their job easier, not obsolete. Distribution already exists; the work is product.
 
 **How likely is it that you will pursue a nonprofit business model? (0–10)** → **10**
-> Will incorporate as an independent 501(c)(3); incubated by FinMango (my existing 501(c)(3))
-> until then.
+> This product only makes sense as a nonprofit — no commercial model benefits from users who
+> are harder to fool. Will incorporate as an independent 501(c)(3); incubated by FinMango (my
+> existing 501(c)(3)) until then.
 
 **What's the single biggest thing your product needs to go from where it is now to something you'd put in front of 10x more users?**
-> Turning a working demo into a school-safe product: safety guardrails and evaluation for
-> minors (COPPA/FERPA-aware consent, teacher visibility, curriculum-constrained outputs) plus
-> focused build capacity. Our distribution can absorb 10x users tomorrow — trust and safety
-> engineering is the honest bottleneck, and exactly what I want expert pressure-testing on.
+> Making the adversary safe at scale: a simulated manipulator for minors needs rigorous
+> guardrails, evaluation, and consent design (sandboxed adversary mode, mandatory debriefs,
+> teacher visibility, COPPA/FERPA-aware). Our distribution can absorb 10x users tomorrow —
+> safety engineering for the core mechanic is the honest bottleneck, and exactly what I want
+> expert pressure-testing on.
 
 ### Your Story (500-character limit each — drafts below are within limit)
 
@@ -191,11 +233,12 @@ Loom or Zoom recording; they say thinking > production quality.
 > I build with. (~380 chars)
 
 **Why are you the right person to be building this?**
-> I've taught financial health to 100,000+ students over nine years as FinMango's founder, and
-> I've watched the same failure on repeat: the lesson lands, we leave the room, and nobody is
-> there at the student's first paycheck. I have the curriculum, the school relationships, and
-> the classroom instincts to fix it — and I'm stepping back from FinMango's day-to-day into a
-> board seat to build this. (~400 chars)
+> Nine years and 100,000+ students in classrooms as FinMango's founder taught me our real
+> lesson was never money — it was seeing through systems engineered to exploit you. I've
+> watched AI raise the stakes on both sides: sharper manipulation, and students handing their
+> thinking to chatbots. I have the school relationships, classroom instincts, and builder
+> skills to ship the counter-product — and I'm stepping back from FinMango's day-to-day to do
+> it. (~450 chars)
 
 **A moment where something broke — what did you do?**
 > FinMango began as an energy bar company with a charitable foundation. The business failed.
@@ -211,9 +254,9 @@ Loom or Zoom recording; they say thinking > production quality.
 ### Final Thoughts
 
 **What are you most hoping to get out of this program?**
-> Three things: (1) expert pressure-testing on shipping AI safely to minors — guardrails,
-> evals, consent design; (2) GTM discipline from people who've scaled tech nonprofits, so our
-> classroom beta becomes a repeatable motion rather than a one-off; (3) a peer cohort and the
+> Three things: (1) expert pressure-testing on the hard part — making an adversarial AI safe
+> and genuinely educational for minors; (2) GTM discipline from people who've scaled tech
+> nonprofits, so our classroom beta becomes a repeatable motion; (3) a peer cohort and the
 > Fast Forward network as we incorporate and raise our first independent funding.
 
 **What do you hope this program isn't?**
@@ -238,14 +281,14 @@ Loom or Zoom recording; they say thinking > production quality.
 
 | Date | Milestone |
 |---|---|
-| Jul 7–9 | Lock product scope + name. Build MVP skeleton (single coaching scenario end-to-end). |
-| Jul 10–12 | Polish the one demo flow. Ship product landing page. Line up Bob + 2–3 named teachers as beta partners. |
+| Jul 7–9 | Lock name. Build MVP skeleton: one sparring scenario end-to-end (pitch → argument → debrief). |
+| Jul 10–12 | Polish the demo flow. Ship product landing page. Line up Bob + 2–3 named teachers as beta partners. |
 | Jul 13–14 | Record + edit video (Loom is fine). Finalize form answers, verify 500-char limits. |
 | Jul 15 | Full review pass; check number consistency (§1 warning). |
 | Jul 16 | **Submit** (one day of buffer). |
 
 **Open items for Scott:**
-- [ ] Confirm product concept + working name.
+- [ ] Confirm working name (Spar? Gadfly? other?).
 - [ ] Confirm impact figures to use (site vs. SFF numbers).
 - [ ] LinkedIn URL; confirm "Ohio" for the state dropdown.
 - [ ] Hours/week currently spent (form asks directly).
