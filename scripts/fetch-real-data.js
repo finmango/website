@@ -995,12 +995,26 @@ if (typeof module !== 'undefined') module.exports = DASHBOARD_DATA;
  * discontinuity that previously caused a false cliff between the backfilled
  * history and the current data point.
  */
+function loadPreviousTimeseries() {
+    try {
+        const prevPath = path.join(__dirname, '..', 'data', 'latest.json');
+        const prev = JSON.parse(fs.readFileSync(prevPath, 'utf8'));
+        return prev?.timeseries?.national || null;
+    } catch (error) {
+        return null;
+    }
+}
+
 function generateTimeseries(national, nationalTrends) {
     const timeseries = {};
     const indicators = ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability'];
 
     const todayKey = new Date().toISOString().split('T')[0].substring(0, 7) + '-01';
     const MAX_MONTHS = 120;
+
+    // Previously published history, used as a fallback so a failed Trends
+    // fetch doesn't collapse the chart to a single point.
+    const previous = loadPreviousTimeseries();
 
     for (const indicator of indicators) {
         const baseValue = national[indicator].value;
@@ -1041,8 +1055,16 @@ function generateTimeseries(national, nationalTrends) {
 
             timeseries[indicator] = smoothed.slice(-MAX_MONTHS);
         } else {
-            // No trends data available — carry forward a single point
-            timeseries[indicator] = [{ date: todayKey, value: Math.round(baseValue) }];
+            // No trends data available — keep the previously published
+            // history and re-pin today's month to the live composite index.
+            const prevPoints = (previous?.[indicator] || []).filter(p => p.date !== todayKey);
+            if (prevPoints.length > 0) {
+                prevPoints.push({ date: todayKey, value: Math.round(baseValue) });
+                prevPoints.sort((a, b) => a.date.localeCompare(b.date));
+                timeseries[indicator] = prevPoints.slice(-MAX_MONTHS);
+            } else {
+                timeseries[indicator] = [{ date: todayKey, value: Math.round(baseValue) }];
+            }
         }
     }
 
