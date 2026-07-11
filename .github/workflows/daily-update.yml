@@ -68,12 +68,18 @@ jobs:
           # in sync with the fresh barometer data
           node scripts/sync-home-fallbacks.js || true
 
+          # Stamp a fresh ?v= cache-buster on every page that loads
+          # dashboard-data.js. GitHub Pages ignores _headers, so without
+          # this, browsers and the Cloudflare edge serve stale data for
+          # hours after each update.
+          node scripts/stamp-data-version.js
+
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add data/ index.html
+          git add data/ index.html barometer.html research.html housing-policy-lab.html judges/index.html
 
           if git diff --staged --quiet; then
             echo "No changes to commit"
