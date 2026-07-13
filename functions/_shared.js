@@ -10,6 +10,11 @@
 // ============================================================================
 
 export const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyw06JczRZVwdf3vw70xeshZ_shp2J1zzvPvPqhR-2_FSqzSBFaq0Yu-OZ7KjKYfCuthQ/exec';
+
+// Community Wall backend (separate Apps Script — see docs/COMMUNITY-WALL-SETUP.md).
+// Until it's deployed, /api/wall returns "Not configured" and community-wall.html
+// shows its example stories instead.
+export const WALL_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyogpgQ2naRVxs1LK1opqJywYZq0k9JpD7C9dLeKPqMs3BFikOh527QKuOCB6n3q1fHfQ/exec';
 export const SITE_BASE = 'https://www.finmango.org';
 export const DEFAULT_OG_IMAGE = SITE_BASE + '/og-image.png';
 
