@@ -27,9 +27,10 @@ Notes, but lighter — no Drive folder, no images).
 4. Readers can tap the ♥ button on a story ("this resonates"); counts are
    stored in the Sheet. One heart per story per browser (localStorage).
 
-Until the backend is deployed, the page shows clearly-badged **Example**
-stories and the form politely refuses submissions — so it's safe to ship the
-front-end first.
+While the wall has no approved stories (or the backend is unreachable), the
+page shows a set of hard-coded **seed stories** (`SEED_STORIES` in
+`community-wall.html`). They render exactly like live stories and are replaced
+automatically the moment the first real story is approved.
 
 ## One-time setup (≈10 minutes)
 
@@ -111,7 +112,7 @@ production).
 
 - **Form says "isn't accepting stories quite yet"** — the `WALL_SUBMIT_URL`
   placeholder in `community-wall.html` wasn't replaced.
-- **Wall only shows Example stories** — either `WALL_APPS_SCRIPT_URL` in
+- **Wall only shows the seed stories** — either `WALL_APPS_SCRIPT_URL` in
   `functions/_shared.js` wasn't replaced, or no story has been approved yet.
 - **Submit seems to do nothing** — submissions use `no-cors` (the browser
   can't read the response), so confirm a row appeared in the Sheet.
