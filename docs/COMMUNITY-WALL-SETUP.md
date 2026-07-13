@@ -27,10 +27,11 @@ Notes, but lighter — no Drive folder, no images).
 4. Readers can tap the ♥ button on a story ("this resonates"); counts are
    stored in the Sheet. One heart per story per browser (localStorage).
 
-While the wall has no approved stories (or the backend is unreachable), the
-page shows a set of hard-coded **seed stories** (`SEED_STORIES` in
-`community-wall.html`). They render exactly like live stories and are replaced
-automatically the moment the first real story is approved.
+The wall always includes a set of hard-coded **seed stories** (`SEED_STORIES`
+in `community-wall.html`), merged with live approved stories and sorted
+together by date. They render exactly like live stories; their fixed dates
+mean they age naturally and drift down as newer real stories arrive. Edit or
+remove them directly in that file.
 
 ## One-time setup (≈10 minutes)
 
