@@ -33,8 +33,9 @@ front-end first.
 
 ## One-time setup (≈10 minutes)
 
-> The "FinMango Community Wall" Sheet already exists in the team Drive, and
-> `SPREADSHEET_URL` / `MODERATOR_EMAIL` in the script are pre-filled to match.
+> The "Community Wall — Story Submissions (finmango.org)" Sheet already exists
+> in the team Drive, and `SPREADSHEET_URL` / `MODERATOR_EMAIL` in the script
+> are pre-filled to match.
 > Only the `MODERATION_KEY` needs to be set by hand — it's kept out of this
 > (public) repo on purpose.
 
