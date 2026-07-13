@@ -27,9 +27,9 @@
 
 // ============================== CONFIG =====================================
 const CONFIG = {
-  SPREADSHEET_URL: 'PASTE_YOUR_GOOGLE_SHEET_URL_HERE',
-  MODERATOR_EMAIL: 'global@finmango.org',      // who gets "new story" emails (with 1-click approve/reject links)
-  MODERATION_KEY:  'change-this-passphrase',   // protects the moderation endpoints
+  SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/1CknY3G7fcfBpWf-CJZ07jeTXWTRtV2e_X80zZmNlXKA/edit',
+  MODERATOR_EMAIL: 'scott@finmango.org',       // who gets "new story" emails (with 1-click approve/reject links)
+  MODERATION_KEY:  'change-this-passphrase',   // protects the moderation endpoints — set a real passphrase when deploying (keep it out of this repo)
   SITE_BASE:       'https://www.finmango.org', // used in notification links
   MAX_MESSAGE_LEN: 600,
   MAX_HEARTS_PER_CALL: 1,                      // hearts increment one at a time

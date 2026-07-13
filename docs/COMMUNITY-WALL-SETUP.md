@@ -33,14 +33,21 @@ front-end first.
 
 ## One-time setup (≈10 minutes)
 
-1. **Create a Google Sheet** (any name). Copy its URL.
+> The "FinMango Community Wall" Sheet already exists in the team Drive, and
+> `SPREADSHEET_URL` / `MODERATOR_EMAIL` in the script are pre-filled to match.
+> Only the `MODERATION_KEY` needs to be set by hand — it's kept out of this
+> (public) repo on purpose.
+
+1. **Create a Google Sheet** (any name) — or use the existing "FinMango
+   Community Wall" Sheet. Copy its URL.
 2. In the Sheet, go to **Extensions → Apps Script**. Delete the sample code and
    paste all of `tools/community-wall-apps-script.js`.
 3. Edit the **CONFIG** block at the top:
-   - `SPREADSHEET_URL` — your Sheet URL
-   - `MODERATOR_EMAIL` — who gets "new story" emails
+   - `SPREADSHEET_URL` — your Sheet URL (pre-filled)
+   - `MODERATOR_EMAIL` — who gets "new story" emails (pre-filled)
    - `MODERATION_KEY` — invent a passphrase (protects the moderation endpoints;
-     it's embedded in the approve/reject email links)
+     it's embedded in the approve/reject email links). **Never commit the real
+     value to the repo.**
    - `SITE_BASE` — `https://www.finmango.org`
 4. Run the `setup` function once (toolbar ▸ select `setup` ▸ Run) and grant the
    requested permissions.
