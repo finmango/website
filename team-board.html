@@ -187,6 +187,10 @@
     .md pre { background: #14140F; color: #FAFAF7; padding: .9rem 1.1rem; border-radius: 8px; overflow-x: auto; margin: .8rem 0; }
     .md pre code { background: none; padding: 0; color: inherit; font-size: .8rem; line-height: 1.6; }
     .md hr { border: none; border-top: 1px solid var(--ink-line); margin: 1.5rem 0; }
+    .md .tablewrap { overflow-x: auto; margin: .8rem 0; }
+    .md table { border-collapse: collapse; width: 100%; font-size: .88em; }
+    .md th, .md td { border: 1px solid var(--ink-line); padding: .45rem .6rem; text-align: left; vertical-align: top; }
+    .md th { background: var(--ink-line-soft); font-weight: 700; white-space: nowrap; }
     .md a { color: var(--orange-deep); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
     .md a.wikilink { text-decoration-style: dashed; cursor: pointer; }
     .md a.wikilink.missing { color: var(--ink-faint); }
@@ -599,8 +603,12 @@
       var stash = [];
       function keep(html) { stash.push(html); return '' + (stash.length - 1) + ''; }
       s = s.replace(/\[\[([^\]\n]+)\]\]/g, function (_, name) {
-        var p = pageByTitle(name.trim());
-        return keep('<a class="wikilink' + (p ? '' : ' missing') + '" data-wiki="' + esc(name.trim()) + '">' + name.trim() + '</a>');
+        // The line was HTML-escaped before this pass — undo entities so titles
+        // containing &, <, etc. resolve against real page titles.
+        var plain = name.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"').replace(/&#39;/g, "'").trim();
+        var p = pageByTitle(plain);
+        return keep('<a class="wikilink' + (p ? '' : ' missing') + '" data-wiki="' + esc(plain) + '">' + esc(plain) + '</a>');
       });
       s = s.replace(/\[([^\]\n]+)\]\((https?:[^)\s]+)\)/g, function (_, t, u) {
         return keep('<a href="' + u + '" target="_blank" rel="noopener">' + t + '</a>');
@@ -617,11 +625,23 @@
     }
     function mdRender(src) {
       var lines = String(src || '').split('\n');
-      var html = '', para = [], list = null, quote = [], inCode = false, codeBuf = [];
+      var html = '', para = [], list = null, quote = [], table = [], inCode = false, codeBuf = [];
       function flushPara() { if (para.length) { html += '<p>' + mdInline(para.join('<br>')) + '</p>'; para = []; } }
       function flushList() { if (list) { html += '</' + list + '>'; list = null; } }
       function flushQuote() { if (quote.length) { html += '<blockquote>' + mdInline(quote.join('<br>')) + '</blockquote>'; quote = []; } }
-      function flushAll() { flushPara(); flushList(); flushQuote(); }
+      function flushTable() {
+        if (!table.length) return;
+        var hasHead = table.length > 1 && table[1].length > 0 && table[1].every(function (c) { return /^:?-{2,}:?$/.test(c); });
+        var head = hasHead ? table[0] : null;
+        var body = hasHead ? table.slice(2) : table;
+        html += '<div class="tablewrap"><table>'
+          + (head ? '<thead><tr>' + head.map(function (c) { return '<th>' + mdInline(c) + '</th>'; }).join('') + '</tr></thead>' : '')
+          + '<tbody>' + body.map(function (r) {
+              return '<tr>' + r.map(function (c) { return '<td>' + mdInline(c) + '</td>'; }).join('') + '</tr>';
+            }).join('') + '</tbody></table></div>';
+        table = [];
+      }
+      function flushAll() { flushPara(); flushList(); flushQuote(); flushTable(); }
       for (var i = 0; i < lines.length; i++) {
         var raw = lines[i];
         if (/^```/.test(raw)) {
@@ -633,6 +653,14 @@
         var line = esc(raw);
         var m;
         if (!raw.trim()) { flushAll(); continue; }
+        // Tables: consecutive |-prefixed lines; an optional |---|---| second
+        // row promotes the first row to a header.
+        if (/^\s*\|/.test(raw)) {
+          flushPara(); flushList(); flushQuote();
+          table.push(line.trim().replace(/^\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); }));
+          continue;
+        }
+        if (table.length) flushTable();
         if ((m = line.match(/^(#{1,3})\s+(.*)$/))) { flushAll(); var h = m[1].length; html += '<h' + h + '>' + mdInline(m[2]) + '</h' + h + '>'; continue; }
         if (/^---+\s*$/.test(raw)) { flushAll(); html += '<hr>'; continue; }
         if ((m = line.match(/^&gt;\s?(.*)$/))) { flushPara(); flushList(); quote.push(m[1]); continue; }
