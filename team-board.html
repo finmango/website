@@ -195,6 +195,18 @@
     .md table { border-collapse: collapse; width: 100%; font-size: .88em; }
     .md th, .md td { border: 1px solid var(--ink-line); padding: .45rem .6rem; text-align: left; vertical-align: top; }
     .md th { background: var(--ink-line-soft); font-weight: 700; white-space: nowrap; }
+    .md [contenteditable]:hover { background: rgba(255,107,53,.05); cursor: text; }
+    .md [contenteditable]:focus { outline: 2px solid var(--orange); outline-offset: -2px; background: #fff; }
+    .tbl-tools { display: flex; gap: .35rem; margin-top: .3rem; opacity: 0; transition: opacity .15s; }
+    .tablewrap:hover .tbl-tools, .tablewrap:focus-within .tbl-tools { opacity: 1; }
+    .tbl-tools button { font-size: .72rem; font-weight: 600; color: var(--ink-faint); border: 1px dashed var(--ink-line);
+      border-radius: 6px; padding: .2rem .6rem; }
+    .tbl-tools button:hover { color: var(--orange-deep); border-color: var(--orange); }
+    .editor-toolbar { display: flex; flex-wrap: wrap; gap: .25rem; padding: .4rem 0 .7rem; position: sticky; top: 0;
+      background: var(--paper); z-index: 5; border-bottom: 1px solid var(--ink-line-soft); margin-bottom: .7rem; }
+    .editor-toolbar button { font-size: .78rem; font-weight: 600; color: var(--ink-dim); border: 1px solid var(--ink-line-soft);
+      background: #fff; border-radius: 6px; padding: .3rem .6rem; }
+    .editor-toolbar button:hover { border-color: var(--orange); color: var(--orange-deep); }
     .md a { color: var(--orange-deep); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
     .md a.wikilink { text-decoration-style: dashed; cursor: pointer; }
     .md a.wikilink.missing { color: var(--ink-faint); }
@@ -541,10 +553,11 @@
     }
     function wrapSelection(ta, pre, post, onChanged) {
       var s = ta.selectionStart, e = ta.selectionEnd;
-      if (e <= s) return;
+      if (e <= s) return false;
       ta.setRangeText(pre + ta.value.slice(s, e) + post, s, e, 'end');
       if (onChanged) onChanged();
       ta.focus();
+      return true;
     }
     function hideSelToolbar() { if (selTb) selTb.style.display = 'none'; }
     // Pixel position of a character index inside a textarea, via a mirror div.
@@ -643,14 +656,20 @@
       function flushQuote() { if (quote.length) { html += '<blockquote>' + mdInline(quote.join('<br>')) + '</blockquote>'; quote = []; } }
       function flushTable() {
         if (!table.length) return;
-        var hasHead = table.length > 1 && table[1].length > 0 && table[1].every(function (c) { return /^:?-{2,}:?$/.test(c); });
+        var hasHead = table.length > 1 && table[1].c.length > 0 && table[1].c.every(function (x) { return /^:?-{2,}:?$/.test(x); });
         var head = hasHead ? table[0] : null;
         var body = hasHead ? table.slice(2) : table;
-        html += '<div class="tablewrap"><table>'
-          + (head ? '<thead><tr>' + head.map(function (c) { return '<th>' + mdInline(c) + '</th>'; }).join('') + '</tr></thead>' : '')
+        // data-ln / data-cell map every cell back to its source line so the
+        // read view can edit tables in place (see setupTableEditing).
+        html += '<div class="tablewrap" data-first="' + table[0].ln + '" data-last="' + table[table.length - 1].ln + '"><table>'
+          + (head ? '<thead><tr>' + head.c.map(function (x, j) {
+              return '<th data-ln="' + head.ln + '" data-cell="' + j + '">' + mdInline(x) + '</th>'; }).join('') + '</tr></thead>' : '')
           + '<tbody>' + body.map(function (r) {
-              return '<tr>' + r.map(function (c) { return '<td>' + mdInline(c) + '</td>'; }).join('') + '</tr>';
-            }).join('') + '</tbody></table></div>';
+              return '<tr>' + r.c.map(function (x, j) {
+                return '<td data-ln="' + r.ln + '" data-cell="' + j + '">' + mdInline(x) + '</td>'; }).join('') + '</tr>';
+            }).join('') + '</tbody></table>'
+          + '<div class="tbl-tools"><button class="tbl-add-row">＋ Row</button><button class="tbl-add-col">＋ Column</button></div>'
+          + '</div>';
         table = [];
       }
       function flushAll() { flushPara(); flushList(); flushQuote(); flushTable(); }
@@ -669,7 +688,7 @@
         // row promotes the first row to a header.
         if (/^\s*\|/.test(raw)) {
           flushPara(); flushList(); flushQuote();
-          table.push(line.trim().replace(/^\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); }));
+          table.push({ ln: i, c: line.trim().replace(/^\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); }) });
           continue;
         }
         if (table.length) flushTable();
@@ -1176,8 +1195,26 @@
     }
 
     function renderView() {
-      var root = $('viewRoot'); root.innerHTML = '';
-      if (inPageMode()) { renderPage(root, page()); return; }
+      var root = $('viewRoot');
+      // Re-renders of the SAME page (sync updates, structural table edits)
+      // keep the reader's scroll position instead of jumping to the top.
+      var prevScroll = 0;
+      if (inPageMode()) {
+        var sc0 = root.querySelector('.page-scroll');
+        if (sc0 && renderView.lastPage === ui.pageId) prevScroll = sc0.scrollTop;
+        renderView.lastPage = ui.pageId;
+      } else {
+        renderView.lastPage = null;
+      }
+      root.innerHTML = '';
+      if (inPageMode()) {
+        renderPage(root, page());
+        if (prevScroll) {
+          var sc1 = root.querySelector('.page-scroll');
+          if (sc1) sc1.scrollTop = prevScroll;
+        }
+        return;
+      }
       var b = board();
       if (!b) {
         root.innerHTML = '<div class="empty"><div><p style="font-size:2rem;">🗂️</p><p style="margin-top:.5rem;font-weight:600;">No boards yet</p>'
@@ -1185,6 +1222,105 @@
         return;
       }
       if (ui.view === 'table') renderTable(root, b); else renderBoard(root, b);
+    }
+
+    // ------------------ in-place table editing (read view) -----------------
+    // Tables are the "site builder" surface: click any cell to edit it right
+    // there, ＋ Row / ＋ Column below each table. All edits write back to the
+    // markdown source lines, so the wiki format stays the source of truth.
+    function tblParseLine(text) {
+      return text.trim().replace(/^\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); });
+    }
+    function tblBuildLine(cells) { return '| ' + cells.join(' | ') + ' |'; }
+    function setupTableEditing(mdiv, p) {
+      mdiv.querySelectorAll('.tablewrap [data-ln]').forEach(function (cell) {
+        cell.setAttribute('contenteditable', 'plaintext-only');
+        if (cell.contentEditable !== 'plaintext-only') cell.setAttribute('contenteditable', 'true');
+        cell.addEventListener('input', function () { cell._dirty = true; });
+        cell.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); cell.blur(); }
+        });
+        cell.addEventListener('blur', function () {
+          if (!cell._dirty) return; // untouched cells never round-trip (keeps
+          cell._dirty = false;      // bold/links in cells intact)
+          var ln = Number(cell.dataset.ln), j = Number(cell.dataset.cell);
+          var lines = p.body.split('\n');
+          if (ln < 0 || ln >= lines.length) return;
+          var cells = tblParseLine(lines[ln]);
+          while (cells.length <= j) cells.push('');
+          cells[j] = (cell.textContent || '').replace(/[|\n]/g, ' ').trim();
+          lines[ln] = tblBuildLine(cells);
+          p.body = lines.join('\n'); p.updatedAt = now();
+          mutate({ noRender: true });
+        });
+      });
+      mdiv.querySelectorAll('.tablewrap').forEach(function (wrap) {
+        var first = Number(wrap.dataset.first), last = Number(wrap.dataset.last);
+        wrap.querySelector('.tbl-add-row').onclick = function () {
+          var lines = p.body.split('\n');
+          var cols = tblParseLine(lines[first]).length;
+          lines.splice(last + 1, 0, tblBuildLine(new Array(cols).fill('')));
+          p.body = lines.join('\n'); p.updatedAt = now();
+          mutate(); // re-render (scroll is preserved) so the new row is editable
+        };
+        wrap.querySelector('.tbl-add-col').onclick = function () {
+          var lines = p.body.split('\n');
+          for (var ln = first; ln <= last && ln < lines.length; ln++) {
+            var cells = tblParseLine(lines[ln]);
+            var isSep = cells.length > 0 && cells.every(function (x) { return /^:?-{2,}:?$/.test(x); });
+            cells.push(isSep ? '---' : '');
+            lines[ln] = tblBuildLine(cells);
+          }
+          p.body = lines.join('\n'); p.updatedAt = now();
+          mutate();
+        };
+      });
+    }
+
+    // ------------------ editor toolbar (edit view) -------------------------
+    // Nobody should need to know markdown: one click inserts the right thing.
+    function buildEditorToolbar(ta, onChanged) {
+      var bar = document.createElement('div');
+      bar.className = 'editor-toolbar';
+      var TABLE_SNIPPET = '| Column 1 | Column 2 | Column 3 |\n| --- | --- | --- |\n|  |  |  |\n';
+      var items = [
+        ['Heading', function () { prefixLine(ta, '## ', onChanged); }],
+        ['B', function () { wrapSelection(ta, '**', '**', onChanged) || wrapCollapsed(ta, '**bold**', onChanged); }],
+        ['I', function () { wrapSelection(ta, '*', '*', onChanged) || wrapCollapsed(ta, '*italic*', onChanged); }],
+        ['🔗 Link', function () { insertLinkInEditor(ta, onChanged); }],
+        ['• List', function () { prefixLine(ta, '- ', onChanged); }],
+        ['☑ Task', function () { prefixLine(ta, '- [ ] ', onChanged); }],
+        ['⊞ Table', function () { insertBlock(ta, TABLE_SNIPPET, onChanged); }],
+        ['― Divider', function () { insertBlock(ta, '---\n', onChanged); }]
+      ];
+      items.forEach(function (it) {
+        var b = document.createElement('button');
+        b.innerHTML = it[0] === 'B' ? '<strong>B</strong>' : it[0] === 'I' ? '<em>I</em>' : esc(it[0]);
+        b.title = it[0];
+        b.addEventListener('mousedown', function (e) { e.preventDefault(); it[1](); });
+        bar.appendChild(b);
+      });
+      return bar;
+    }
+    function prefixLine(ta, prefix, onChanged) {
+      var s = ta.selectionStart;
+      var lineStart = ta.value.lastIndexOf('\n', s - 1) + 1;
+      ta.setRangeText(prefix, lineStart, lineStart, 'end');
+      if (onChanged) onChanged();
+      ta.focus();
+    }
+    function wrapCollapsed(ta, snippet, onChanged) {
+      ta.setRangeText(snippet, ta.selectionStart, ta.selectionEnd, 'select');
+      if (onChanged) onChanged();
+      ta.focus();
+    }
+    function insertBlock(ta, text, onChanged) {
+      var s = ta.selectionStart;
+      var before = ta.value.slice(0, s);
+      var nl = (!before || before.slice(-1) === '\n') ? '' : '\n';
+      ta.setRangeText(nl + text, s, ta.selectionEnd, 'end');
+      if (onChanged) onChanged();
+      ta.focus();
     }
 
     // --------------------------- page view ---------------------------------
@@ -1206,6 +1342,7 @@
         ta.addEventListener('input', pageChanged);
         attachLinkPaste(ta, pageChanged);
         attachSelectionToolbar(ta, pageChanged);
+        wrap.appendChild(buildEditorToolbar(ta, pageChanged));
         wrap.appendChild(ta);
         setTimeout(function () { ta.focus(); }, 0);
       } else {
@@ -1223,7 +1360,9 @@
           lines[ln] = lines[ln].replace(/^(\s*[-*]\s*)\[[ xX]\]/, '$1' + (cb.checked ? '[x]' : '[ ]'));
           p.body = lines.join('\n');
           p.updatedAt = now();
-          mutate();
+          // noRender: the checkbox and its CSS strikethrough already reflect the
+          // new state natively — a full re-render would yank the scroll position.
+          mutate({ noRender: true });
         });
         // wikilink navigation (and create-on-click for missing targets)
         mdiv.addEventListener('click', function (e) {
@@ -1241,6 +1380,7 @@
           }
         });
         wrap.appendChild(mdiv);
+        setupTableEditing(mdiv, p);
       }
       scroll.appendChild(wrap); root.appendChild(scroll);
     }
