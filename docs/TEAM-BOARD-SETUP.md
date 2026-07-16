@@ -60,12 +60,17 @@ edge-cached ~2 minutes, so public traffic barely touches the backend.
 
 ## One-time setup (≈10 minutes)
 
-1. **Create a Google Sheet** in the team Drive (e.g. "FinMango HQ Workspace").
-   Copy its URL. You never need to edit this Sheet by hand.
+> The "FinMango HQ Workspace" Sheet already exists in the team Drive
+> (owner: scott@finmango.org) and `SPREADSHEET_URL` in the script is
+> pre-filled to match. Only `ACCESS_KEY` needs to be set by hand — it's kept
+> out of this (public) repo on purpose.
+
+1. **Create a Google Sheet** — or use the existing "FinMango HQ Workspace"
+   Sheet. You never need to edit this Sheet by hand.
 2. In the Sheet: **Extensions → Apps Script**. Delete the sample code and
    paste all of `tools/team-board-apps-script.js`.
 3. Edit the **CONFIG** block at the top:
-   - `SPREADSHEET_URL` — the Sheet URL from step 1
+   - `SPREADSHEET_URL` — the Sheet URL from step 1 (pre-filled)
    - `ACCESS_KEY` — invent a passphrase and share it privately with the team
      (password manager / DM — **never commit it to this public repo**)
 4. Run the `setup` function once (toolbar ▸ select `setup` ▸ Run) and grant

@@ -30,7 +30,8 @@
 
 // ============================== CONFIG =====================================
 const CONFIG = {
-  SPREADSHEET_URL: 'REPLACE_WITH_YOUR_GOOGLE_SHEET_URL',
+  // The "FinMango HQ Workspace" Sheet in the team Drive (owner: scott@finmango.org).
+  SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/16qX99ym-7RdxdKtqt2cD6DQKMyZvK0Wu_eZmtjgG9bE/edit',
   // The shared team passphrase. Anyone with this key can read AND write the
   // board, so treat it like a password: invent a real one when deploying and
   // never commit it to the (public) repo.
