@@ -248,9 +248,6 @@
     .color-row button.sel { border-color: var(--ink); }
     .help-note { font-size: .82rem; color: var(--ink-dim); line-height: 1.55; margin: .5rem 0; }
     .help-note code { font-family: var(--font-mono); font-size: .74rem; background: var(--ink-line-soft); padding: .05rem .3rem; border-radius: 4px; }
-    .pick-me { display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; padding: .5rem .6rem;
-      border-radius: 8px; border: 1px solid var(--ink-line-soft); background: #fff; margin-bottom: .4rem; font-weight: 600; }
-    .pick-me:hover { border-color: var(--orange); }
     .gsi-wrap { display: flex; justify-content: center; padding: .4rem 0 .6rem; min-height: 44px; }
     .signed-in-row { display: flex; align-items: center; gap: .6rem; background: #fff; border: 1px solid var(--ink-line-soft);
       border-radius: 8px; padding: .55rem .7rem; }
@@ -542,7 +539,7 @@
       var teamBoard = { id: tb, icon: '🥭', name: 'Team HQ', updatedAt: now(),
         columns: [cTodo, cDoing, cDone],
         cards: [
-          task(cTodo.id, 'Add the rest of the team as members', 'Sidebar → Team members. Everyone picks their own name when they first open the workspace.', 'medium', ['getting started']),
+          task(cTodo.id, 'Have everyone sign in with their @finmango.org account', 'Send the team the link — signing in adds them as members automatically, with their name and photo from Google.', 'medium', ['getting started']),
           task(cTodo.id, 'Review the seeded Roadmap at the next leadership call', 'The 🧭 Roadmap board was imported from our old Notion roadmap and pre-sorted into Now / Next / Later / Someday / Shipped. Drag things where they actually belong, edit details, and flag anything for discussion with the 📞 checkbox.', 'high', ['getting started']),
           task(cDoing.id, 'Set up team sync', 'Follow docs/TEAM-BOARD-SETUP.md in the website repo (~10 min, free) so everyone sees the same workspace.', 'high', ['getting started']),
           task(cDone.id, 'Build the FinMango team workspace', 'Done — you\'re looking at it! 🎉', '', [])
@@ -1440,18 +1437,12 @@
         return '<div class="member-row">' + avatarHtml(m, 'margin:0;')
           + '<span class="name">' + esc(m.name) + (m.email ? ' <span class="you" title="Signed in with Google">✓</span>' : '')
           + (m.id === meId ? ' <span class="you">— you</span>' : '') + '</span>'
-          + (m.id !== meId ? '<button class="btn-sm ghost" data-me="' + esc(m.id) + '">This is me</button>' : '')
           + '<button class="btn-sm danger" data-del="' + esc(m.id) + '">Remove</button></div>';
       }).join('');
-      var html = '<h2>Team members</h2>' + (rows || '<p class="help-note">No members yet.</p>')
-        + '<label class="field-label">Add a member</label>'
-        + '<div class="comment-row" style="margin-top:0;"><input id="newMemberName" placeholder="Name" />'
-        + '<button class="btn-sm primary" id="addMemberBtn">Add</button></div>'
-        + '<p class="help-note" style="margin-top:.9rem;">Members are just names — anyone opening this workspace picks who they are. Assign cards and sign comments with them.</p>';
+      var html = '<h2>Team members</h2>' + (rows || '<p class="help-note">No members yet — everyone appears here automatically when they sign in.</p>')
+        + '<p class="help-note" style="margin-top:.9rem;">Members are added automatically when someone signs in with their @' + esc(ALLOWED_DOMAIN)
+        + ' account — names and photos come straight from Google. Assign cards and sign comments as them.</p>';
       openModal(html, true);
-      document.querySelectorAll('[data-me]').forEach(function (btn) {
-        btn.onclick = function () { meId = btn.dataset.me; localStorage.setItem(LS_ME, meId); openMembersModal(); render(); };
-      });
       document.querySelectorAll('[data-del]').forEach(function (btn) {
         btn.onclick = function () {
           var m = member(btn.dataset.del); if (!m) return;
@@ -1463,44 +1454,6 @@
           mutate(); openMembersModal();
         };
       });
-      function addMember() {
-        var v = $('newMemberName').value.trim(); if (!v) return;
-        var m = { id: uid(), name: v.slice(0, 40), color: AVA_COLORS[doc.members.length % AVA_COLORS.length] };
-        doc.members.push(m);
-        if (!meId) { meId = m.id; localStorage.setItem(LS_ME, meId); }
-        mutate(); openMembersModal();
-      }
-      $('addMemberBtn').onclick = addMember;
-      $('newMemberName').addEventListener('keydown', function (e) { if (e.key === 'Enter') addMember(); });
-    }
-
-    // --------------------------- who-are-you modal --------------------------
-    function openWhoAmI() {
-      var html = '<h2>Who are you? 👋</h2>'
-        + (gsiConfigured()
-          ? '<p class="help-note">Have a @' + esc(ALLOWED_DOMAIN) + ' account? Sign in and your name and photo come along automatically.</p>'
-            + '<div class="gsi-wrap" id="gsiBtnWho"></div>'
-            + '<div class="m-section">Volunteers — pick your name</div>'
-          : '<p class="help-note">Pick yourself so comments and assignments carry your name. (Stored only on this device.)</p>')
-        + doc.members.map(function (m) {
-          return '<button class="pick-me" data-pick="' + esc(m.id) + '">' + avatarHtml(m, 'margin:0;') + esc(m.name) + '</button>';
-        }).join('')
-        + '<label class="field-label">Or add yourself</label>'
-        + '<div class="comment-row" style="margin-top:0;"><input id="whoName" placeholder="Your name" />'
-        + '<button class="btn-sm primary" id="whoAdd">That\'s me</button></div>';
-      openModal(html, true);
-      renderGsiButton('gsiBtnWho');
-      document.querySelectorAll('[data-pick]').forEach(function (btn) {
-        btn.onclick = function () { meId = btn.dataset.pick; localStorage.setItem(LS_ME, meId); closeModal(); render(); };
-      });
-      function add() {
-        var v = $('whoName').value.trim(); if (!v) return;
-        var m = { id: uid(), name: v.slice(0, 40), color: AVA_COLORS[doc.members.length % AVA_COLORS.length] };
-        doc.members.push(m); meId = m.id; localStorage.setItem(LS_ME, meId);
-        closeModal(); mutate();
-      }
-      $('whoAdd').onclick = add;
-      $('whoName').addEventListener('keydown', function (e) { if (e.key === 'Enter') add(); });
     }
 
     // --------------------------- sync modal --------------------------------
@@ -1522,9 +1475,9 @@
             ? '<div class="gsi-wrap" id="gsiBtnSync"></div>'
               + '<p class="help-note">For @' + esc(ALLOWED_DOMAIN) + ' accounts — your name and photo carry over automatically, no key needed.</p>'
             : '<p class="help-note">Not configured yet — see the Google Sign-In section of <code>docs/TEAM-BOARD-SETUP.md</code>.</p>')
-        + '<div class="m-section">Volunteers — team key</div>'
+        + '<div class="m-section">Team key (fallback)</div>'
         + '<input class="text-input" id="syncKey" type="password" placeholder="Shared team passphrase" value="' + esc(sync.key) + '" />'
-        + '<p class="help-note">One shared passphrase for trusted volunteers without a FinMango email — ask Scott for it.</p>'
+        + '<p class="help-note">A shared passphrase for access without a FinMango account — ask Scott. Note: names and photos come from Google sign-in, so key-only edits aren\'t attributed to a person.</p>'
         + '<p class="help-note">Either door syncs every change to a shared Google Sheet (free) and updates everyone\'s workspace within seconds. First-time backend setup: <code>docs/TEAM-BOARD-SETUP.md</code>.</p>'
         + '<div class="modal-foot">'
         + (sync.key ? '<button class="btn-sm danger" id="syncOff">Forget key</button>' : '<span></span>')
@@ -1699,7 +1652,9 @@
     render();
     setSyncStatus('local');
     if (canSync()) pullLoad(true);
-    if (!meId || !me()) setTimeout(openWhoAmI, 400);
+    // First visit, not connected: open the access modal so signing in is the
+    // obvious first step (identity comes from Google — no name-picking).
+    if (!authValid() && !canSync()) setTimeout(openSyncModal, 400);
 
     // Once the GIS script lands: enable One Tap so returning @finmango.org
     // folks are silently re-signed-in when their ~1h token has lapsed.
