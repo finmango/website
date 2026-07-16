@@ -9,7 +9,7 @@ Drive as storage.
 
 | File | Role | Audience |
 | --- | --- | --- |
-| `write.html` | Substack-style editor with a **live finmango.org preview**; submits a draft | Contributors (public) |
+| `write.html` | Substack-style editor with a **live finmango.org preview**; drafts autosave locally; images insert by paste, drag & drop, or file picker; submits a draft | Contributors (public) |
 | `post-review.html` | Peer-review panel: read, comment, vote, publish | Reviewers (passphrase) |
 | `posts.html` | Public index of published posts | Everyone |
 | `post.html` (served at `/post?id=…`) | Renders a single published post in full site chrome | Everyone |
@@ -28,6 +28,10 @@ Drive as storage.
 
 Images are downscaled in the browser, then stored in Drive (not in the Sheet,
 which has a 50k-char-per-cell limit).
+
+Paragraphs are normalized to real `<p>` tags by the shared sanitizer (at write,
+review, and render time), so paragraph spacing is consistent everywhere — older
+notes that stored `<div>`-based paragraphs are fixed automatically at render.
 
 ## One-time setup (≈10 minutes)
 

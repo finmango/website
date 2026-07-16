@@ -218,7 +218,11 @@
       gap: 1rem; margin-bottom: 1rem; }
 
     .editor-pane { position: sticky; top: 90px; }
-    .field { margin-bottom: 1.1rem; }
+    .form-step { font-family: var(--font-mono); font-size: .6rem; font-weight: 500; text-transform: uppercase;
+      letter-spacing: .18em; color: var(--ink-faint); display: flex; align-items: center; gap: .85rem; margin: 2.4rem 0 1.15rem; }
+    .form-step em { font-style: normal; color: var(--orange); }
+    .form-step::after { content: ''; height: 1px; background: var(--ink-line-soft); flex: 1; }
+    .field { margin-bottom: 1.35rem; }
     .field label { display: block; font-family: var(--font-mono); font-size: .62rem; font-weight: 500;
       text-transform: uppercase; letter-spacing: .12em; color: var(--ink-dim); margin-bottom: .45rem; }
     .field label .req { color: var(--orange); }
@@ -240,23 +244,41 @@
       font-family: var(--font-mono); font-size: .62rem; letter-spacing: .1em; padding: .35rem .6rem; cursor: pointer; text-transform: uppercase; }
 
     /* toolbar */
-    .toolbar { display: flex; flex-wrap: wrap; gap: .3rem; padding: .5rem; border: 1px solid var(--ink-line);
+    .toolbar { display: flex; flex-wrap: wrap; gap: .25rem; padding: .45rem; border: 1px solid var(--ink-line);
       border-bottom: none; background: #fff; position: sticky; top: 78px; z-index: 5; }
-    .toolbar button { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; padding: .4rem .6rem;
+    .toolbar button { font-family: var(--font-mono); font-size: .74rem; font-weight: 500; padding: .5rem .65rem;
       background: transparent; border: 1px solid transparent; cursor: pointer; color: var(--ink-dim); border-radius: 2px;
-      transition: background .15s, color .15s; min-width: 2rem; }
+      transition: background .15s, color .15s; min-width: 2.1rem; }
     .toolbar button:hover { background: rgba(255,107,53,.08); color: var(--orange); }
+    .toolbar button.active { background: var(--ink); color: #fff; }
     .toolbar .sep { width: 1px; background: var(--ink-line); margin: .2rem .25rem; }
 
-    .editable { min-height: 320px; padding: 1.2rem; background: #fff; border: 1px solid var(--ink-line);
-      font-size: 1.05rem; line-height: 1.7; color: var(--ink); outline: none; }
+    /* The writing surface mirrors the published article, so what you type is
+       what readers get — real paragraph spacing included. */
+    .editable { min-height: 55vh; padding: 1.6rem 1.5rem 2.4rem; background: #fff; border: 1px solid var(--ink-line);
+      font-size: 1.08rem; line-height: 1.72; color: var(--ink); outline: none; caret-color: var(--orange);
+      transition: border-color .2s, background .2s; }
+    .editable:focus { border-color: rgba(255,107,53,.55); }
+    .editable.drag { border-color: var(--orange); background: rgba(255,107,53,.04); }
     .editable:empty::before { content: attr(data-placeholder); color: var(--ink-faint); }
-    .editable img { max-width: 100%; height: auto; display: block; margin: 1rem 0; }
-    .editable h2 { font-size: 1.5rem; font-weight: 900; letter-spacing: -.02em; margin: 1.2rem 0 .6rem; }
-    .editable h3 { font-size: 1.2rem; font-weight: 700; margin: 1rem 0 .5rem; }
-    .editable blockquote { border-left: 3px solid var(--orange); padding-left: 1rem; margin: 1rem 0; color: var(--ink-dim); }
+    .editable p { margin: 1.1rem 0; }
+    .editable img { max-width: 100%; height: auto; display: block; margin: 1.5rem 0; }
+    .editable figure { margin: 1.5rem 0; }
+    .editable figure img, .editable figure iframe { margin: 0; }
+    .editable iframe { width: 100%; aspect-ratio: 16 / 9; height: auto; border: 0; display: block; margin: 1.5rem 0; pointer-events: none; }
+    .editable h2 { font-size: 1.5rem; font-weight: 900; letter-spacing: -.02em; margin: 1.8rem 0 .7rem; }
+    .editable h3 { font-size: 1.2rem; font-weight: 700; margin: 1.4rem 0 .55rem; }
+    .editable ul, .editable ol { margin: 1.1rem 0; padding-left: 1.4rem; }
+    .editable li { margin: .45rem 0; }
+    .editable blockquote { border-left: 3px solid var(--orange); padding: .3rem 0 .3rem 1.1rem; margin: 1.5rem 0;
+      color: var(--ink-dim); font-size: 1.15rem; font-weight: 300; }
+    .editable hr { border: none; border-top: 1px solid var(--ink-line); margin: 2rem 0; }
     .editable a { color: var(--orange); }
-    .char-line { font-family: var(--font-mono); font-size: .62rem; color: var(--ink-faint); margin-top: .5rem; letter-spacing: .04em; }
+    .editor-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-top: .5rem; flex-wrap: wrap; }
+    .char-line { font-family: var(--font-mono); font-size: .62rem; color: var(--ink-faint); letter-spacing: .04em; }
+    .draft-status { font-family: var(--font-mono); font-size: .62rem; color: var(--ink-faint); letter-spacing: .04em; }
+    .editor-tip { font-size: .8rem; color: var(--ink-dim); font-weight: 300; margin-top: .85rem; line-height: 1.5; }
+    .editor-tip strong { font-weight: 600; color: var(--ink); }
 
     .composer-actions { margin-top: 1.6rem; display: flex; gap: .8rem; flex-wrap: wrap; }
 
@@ -456,7 +478,7 @@
     <header class="composer-head">
       <span class="eyebrow">Write for FinMango</span>
       <h1>Draft your <em>note.</em></h1>
-      <p>Write your report, brief, or story below. The right-hand panel shows exactly how it will look published on finmango.org. When you're ready, submit it for peer review.</p>
+      <p>Write your report, brief, or story below. The right-hand panel shows exactly how it will look published on finmango.org. Your draft autosaves on this device as you type — when you're ready, submit it for peer review.</p>
     </header>
 
     <div class="composer">
@@ -467,6 +489,7 @@
           <button type="button" class="btn-secondary preview-mobile-toggle" id="mobilePreviewBtn" style="padding:.4rem .8rem; font-size:.78rem;">Preview ▾</button>
         </div>
 
+        <div class="form-step" style="margin-top:0;"><em>01</em> Who you are</div>
         <div class="field-row">
           <div class="field">
             <label for="authorName">Your name <span class="req">*</span></label>
@@ -488,6 +511,7 @@
           </select>
         </div>
 
+        <div class="form-step"><em>02</em> The basics</div>
         <div class="field-row">
           <div class="field">
             <label for="category">Category <span class="req">*</span></label>
@@ -527,37 +551,43 @@
           </div>
         </div>
 
-        <div class="field" style="margin-bottom:.5rem;">
-          <label>Body <span class="req">*</span></label>
-        </div>
+        <div class="form-step" style="margin-bottom:.9rem;"><em>03</em> Write your note <span class="req">*</span></div>
         <div class="toolbar" id="toolbar" role="toolbar" aria-label="Formatting">
-          <button type="button" data-cmd="formatBlock" data-val="h2" title="Heading">H2</button>
-          <button type="button" data-cmd="formatBlock" data-val="h3" title="Subheading">H3</button>
+          <button type="button" data-cmd="formatBlock" data-val="h2" title="Heading (click again to undo)">H2</button>
+          <button type="button" data-cmd="formatBlock" data-val="h3" title="Subheading (click again to undo)">H3</button>
           <span class="sep"></span>
-          <button type="button" data-cmd="bold" title="Bold"><strong>B</strong></button>
-          <button type="button" data-cmd="italic" title="Italic"><em>I</em></button>
-          <button type="button" data-cmd="createLink" title="Link">Link</button>
+          <button type="button" data-cmd="bold" title="Bold (Ctrl+B)"><strong>B</strong></button>
+          <button type="button" data-cmd="italic" title="Italic (Ctrl+I)"><em>I</em></button>
+          <button type="button" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+          <button type="button" data-cmd="createLink" title="Link (Ctrl+K)">Link</button>
           <span class="sep"></span>
-          <button type="button" data-cmd="formatBlock" data-val="blockquote" title="Quote">&ldquo;&rdquo;</button>
+          <button type="button" data-cmd="formatBlock" data-val="blockquote" title="Quote (click again to undo)">&ldquo;&rdquo;</button>
           <button type="button" data-cmd="insertUnorderedList" title="Bulleted list">&bull; List</button>
           <button type="button" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
           <span class="sep"></span>
-          <button type="button" id="insertImageBtn" title="Insert image">Image</button>
+          <button type="button" id="insertImageBtn" title="Insert images">Image</button>
           <button type="button" id="insertVideoBtn" title="Embed a YouTube video">Video</button>
           <button type="button" data-cmd="insertHorizontalRule" title="Divider">Divider</button>
           <span class="sep"></span>
           <button type="button" data-cmd="formatBlock" data-val="p" title="Normal text">Body</button>
+          <span class="sep"></span>
+          <button type="button" data-cmd="undo" title="Undo (Ctrl+Z)">&#8630;</button>
+          <button type="button" data-cmd="redo" title="Redo (Ctrl+Shift+Z)">&#8631;</button>
         </div>
-        <div class="editable" id="editor" contenteditable="true" data-placeholder="Start writing your note…"></div>
-        <input type="file" id="inlineImageInput" accept="image/*" hidden>
-        <div class="char-line" id="bodyCount">0 words</div>
+        <div class="editable" id="editor" contenteditable="true" data-placeholder="Start writing your note… select any text to style it."></div>
+        <input type="file" id="inlineImageInput" accept="image/*" multiple hidden>
+        <div class="editor-foot">
+          <div class="char-line" id="bodyCount">0 words</div>
+          <div class="draft-status" id="draftStatus" aria-live="polite"></div>
+        </div>
+        <p class="editor-tip"><strong>Adding pictures is easy:</strong> paste a screenshot straight into your draft, drag image files anywhere into the text, or use the Image button (you can pick several at once).</p>
 
         <div class="composer-actions">
           <button type="button" class="btn-primary" id="submitBtn">
             Submit for review
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
-          <button type="button" class="btn-secondary" id="saveDraftBtn">Save draft locally</button>
+          <button type="button" class="btn-secondary" id="startOverBtn">Clear draft &amp; start over</button>
         </div>
       </div>
 
@@ -646,6 +676,31 @@
     function sanitize(html) {
       const doc = new DOMParser().parseFromString('<div>' + html + '</div>', 'text/html');
       const root = doc.body.firstChild;
+      // contenteditable emits plain lines as <div>, which the article styles give no
+      // margins — convert them to real <p> paragraphs so spacing survives publishing.
+      const BLOCK_TAGS = /^(P|H2|H3|UL|OL|BLOCKQUOTE|HR|FIGURE|DIV|IFRAME|IMG)$/;
+      let stray; while ((stray = root.querySelector('div'))) {
+        if ([...stray.children].some(c => BLOCK_TAGS.test(c.tagName))) {
+          // a div wrapping other blocks is just a wrapper — unwrap it
+          while (stray.firstChild) stray.parentNode.insertBefore(stray.firstChild, stray);
+          stray.remove();
+        } else {
+          const p = doc.createElement('p');
+          while (stray.firstChild) p.appendChild(stray.firstChild);
+          stray.replaceWith(p);
+        }
+      }
+      // A first line typed before any Enter is a bare text node — wrap loose
+      // text/inline runs in <p> so every paragraph keeps its spacing.
+      const INLINE_OK = { '#text': 1, BR: 1, STRONG: 1, B: 1, EM: 1, I: 1, U: 1, A: 1, SPAN: 1 };
+      let run = null;
+      [...root.childNodes].forEach(n => {
+        const name = n.nodeType === 3 ? '#text' : (n.nodeType === 1 ? n.tagName : '');
+        if (!INLINE_OK[name]) { run = null; return; }
+        if (name === '#text' && !n.textContent.trim() && !run) return;
+        if (!run) { run = doc.createElement('p'); root.insertBefore(run, n); }
+        run.appendChild(n);
+      });
       (function walk(node) {
         [...node.childNodes].forEach(child => {
           if (child.nodeType === 1) {
@@ -713,6 +768,8 @@
 
     // ---- live preview ----
     const editor = $('editor');
+    // Make Enter produce real <p> paragraphs (not <div>s) so spacing is right everywhere.
+    try { document.execCommand('defaultParagraphSeparator', false, 'p'); } catch {}
     let coverDataUrl = '';
     function fmtDate(d) { return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
     let ambassadorRoster = []; // filled by loadAmbassadors(); used to preview the selected profile
@@ -735,42 +792,116 @@
       const body = editor.innerHTML.trim();
       $('pvBody').innerHTML = body ? sanitize(body) : '<p style="color:var(--ink-faint)">Your story will appear here as you write.</p>';
       const words = editor.textContent.trim().split(/\s+/).filter(Boolean).length;
-      $('bodyCount').textContent = words + (words === 1 ? ' word' : ' words');
+      $('bodyCount').textContent = words + (words === 1 ? ' word' : ' words')
+        + (words ? ' · ' + Math.max(1, Math.round(words / 200)) + ' min read' : '');
     }
     ['authorName', 'category', 'tags', 'title', 'dek'].forEach(id => $(id).addEventListener('input', refreshPreview));
     $('ambassadorSlug').addEventListener('change', refreshPreview);
     editor.addEventListener('input', refreshPreview);
 
     // ---- toolbar ----
-    document.querySelectorAll('.toolbar button[data-cmd]').forEach(btn => {
+    function addLink() {
+      let url = prompt('Link URL (e.g. finmango.org or https://…)');
+      if (!url || !(url = url.trim())) return;
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+      const sel = window.getSelection();
+      if (!sel.rangeCount || sel.isCollapsed) {
+        // nothing selected — insert the URL itself as a link
+        document.execCommand('insertHTML', false, '<a href="' + escapeHtml(url) + '">' + escapeHtml(url) + '</a>');
+      } else {
+        document.execCommand('createLink', false, url);
+      }
+    }
+    const toolbarBtns = [...document.querySelectorAll('.toolbar button[data-cmd]')];
+    toolbarBtns.forEach(btn => {
       btn.addEventListener('mousedown', e => e.preventDefault()); // keep selection
       btn.addEventListener('click', () => {
         const cmd = btn.dataset.cmd, val = btn.dataset.val;
         editor.focus();
         if (cmd === 'createLink') {
-          const url = prompt('Link URL (https://…)');
-          if (url) document.execCommand('createLink', false, url);
+          addLink();
         } else if (cmd === 'formatBlock') {
-          document.execCommand('formatBlock', false, val);
+          // toggle: clicking H2 on a heading turns it back into a normal paragraph
+          const cur = (document.queryCommandValue('formatBlock') || '').toLowerCase();
+          document.execCommand('formatBlock', false, cur === val ? 'p' : val);
         } else {
           document.execCommand(cmd, false, null);
         }
-        refreshPreview();
+        refreshPreview(); autosave(); syncToolbar();
       });
     });
+    // Highlight the buttons that match the text under the cursor.
+    const STATE_CMDS = ['bold', 'italic', 'underline', 'insertUnorderedList', 'insertOrderedList'];
+    function syncToolbar() {
+      const sel = document.getSelection();
+      const inside = sel && sel.anchorNode && editor.contains(sel.anchorNode);
+      let block = '';
+      if (inside) { try { block = (document.queryCommandValue('formatBlock') || '').toLowerCase(); } catch {} }
+      toolbarBtns.forEach(btn => {
+        const { cmd, val } = btn.dataset;
+        let on = false;
+        if (inside) {
+          if (cmd === 'formatBlock' && val !== 'p') on = block === val;
+          else if (STATE_CMDS.includes(cmd)) { try { on = document.queryCommandState(cmd); } catch {} }
+        }
+        btn.classList.toggle('active', on);
+      });
+    }
+    document.addEventListener('selectionchange', syncToolbar);
+    // Ctrl/Cmd+K → link, matching the toolbar
+    editor.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault(); addLink(); refreshPreview(); autosave();
+      }
+    });
+    // Pasted content gets the same whitelist cleanup as everything else, so
+    // formatting copied from Docs/Word doesn't drag hidden styling along.
+    editor.addEventListener('paste', e => {
+      const items = [...((e.clipboardData && e.clipboardData.items) || [])];
+      const imgItem = items.find(i => i.kind === 'file' && i.type.startsWith('image/'));
+      if (imgItem) { e.preventDefault(); insertImageFile(imgItem.getAsFile()); return; }
+      const html = e.clipboardData && e.clipboardData.getData('text/html');
+      if (html) {
+        e.preventDefault();
+        document.execCommand('insertHTML', false, sanitize(html));
+        refreshPreview(); autosave();
+      }
+    });
 
-    // ---- inline image insert ----
-    $('insertImageBtn').addEventListener('mousedown', e => e.preventDefault());
-    $('insertImageBtn').addEventListener('click', () => $('inlineImageInput').click());
-    $('inlineImageInput').addEventListener('change', async e => {
-      const file = e.target.files[0]; if (!file) return;
+    // ---- inline image insert (button, paste, or drag & drop) ----
+    async function insertImageFile(file, range) {
       try {
         const dataUrl = await processImage(file);
         editor.focus();
+        if (range) { const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range); }
         document.execCommand('insertHTML', false, '<img src="' + dataUrl + '" alt="">');
-        refreshPreview();
+        refreshPreview(); autosave();
       } catch (err) { toast(err.message || 'Image failed', true); }
+    }
+    $('insertImageBtn').addEventListener('mousedown', e => e.preventDefault());
+    $('insertImageBtn').addEventListener('click', () => $('inlineImageInput').click());
+    $('inlineImageInput').addEventListener('change', async e => {
+      for (const file of [...e.target.files]) await insertImageFile(file);
       e.target.value = '';
+    });
+    // Drop image files anywhere in the draft — they land where you drop them.
+    editor.addEventListener('dragover', e => {
+      if ([...(e.dataTransfer.types || [])].includes('Files')) { e.preventDefault(); editor.classList.add('drag'); }
+    });
+    editor.addEventListener('dragleave', () => editor.classList.remove('drag'));
+    editor.addEventListener('drop', async e => {
+      editor.classList.remove('drag');
+      const files = [...e.dataTransfer.files].filter(f => f.type.startsWith('image/'));
+      if (!files.length) return;
+      e.preventDefault();
+      let range = null;
+      if (document.caretRangeFromPoint) {
+        range = document.caretRangeFromPoint(e.clientX, e.clientY);
+      } else if (document.caretPositionFromPoint) {
+        const pos = document.caretPositionFromPoint(e.clientX, e.clientY);
+        if (pos) { range = document.createRange(); range.setStart(pos.offsetNode, pos.offset); range.collapse(true); }
+      }
+      for (const f of files) { await insertImageFile(f, range); range = null; }
     });
 
     // ---- inline YouTube embed ----
@@ -795,7 +926,7 @@
       const embed = '<figure><iframe src="https://www.youtube-nocookie.com/embed/' + id +
         '" title="Embedded video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></figure><p><br></p>';
       document.execCommand('insertHTML', false, embed);
-      refreshPreview();
+      refreshPreview(); autosave();
     });
 
     // ---- cover upload ----
@@ -809,10 +940,10 @@
       try {
         coverDataUrl = await processImage(file, 2000, 0.84);
         $('coverImg').src = coverDataUrl; $('coverThumb').classList.add('show');
-        refreshPreview();
+        refreshPreview(); autosave();
       } catch (err) { toast(err.message || 'Cover failed', true); }
     }
-    $('coverRemove').addEventListener('click', () => { coverDataUrl = ''; $('coverThumb').classList.remove('show'); coverInput.value = ''; refreshPreview(); });
+    $('coverRemove').addEventListener('click', () => { coverDataUrl = ''; $('coverThumb').classList.remove('show'); coverInput.value = ''; refreshPreview(); autosave(); });
 
     // ---- mobile preview toggle ----
     $('mobilePreviewBtn').addEventListener('click', () => {
@@ -821,7 +952,7 @@
       if (open) pane.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // ---- local draft save/restore ----
+    // ---- local draft autosave/restore ----
     const DRAFT_KEY = 'finmango_post_draft_v1';
     function collect() {
       return {
@@ -832,9 +963,27 @@
         cover: coverDataUrl, body: sanitize(editor.innerHTML)
       };
     }
-    $('saveDraftBtn').addEventListener('click', () => {
-      try { localStorage.setItem(DRAFT_KEY, JSON.stringify(collect())); toast('Draft saved on this device.'); }
-      catch { toast('Could not save (storage full?)', true); }
+    let saveTimer;
+    function autosave() {
+      clearTimeout(saveTimer);
+      $('draftStatus').textContent = 'Saving…';
+      saveTimer = setTimeout(() => {
+        try { localStorage.setItem(DRAFT_KEY, JSON.stringify(collect())); $('draftStatus').textContent = 'Draft saved on this device ✓'; }
+        catch { $('draftStatus').textContent = 'Draft too big to autosave — submit soon'; }
+      }, 900);
+    }
+    ['authorName', 'authorEmail', 'authorAffiliation', 'category', 'tags', 'title', 'dek'].forEach(id => $(id).addEventListener('input', autosave));
+    $('ambassadorSlug').addEventListener('change', autosave);
+    editor.addEventListener('input', autosave);
+    $('startOverBtn').addEventListener('click', () => {
+      if (!confirm('Clear this draft and start over? This cannot be undone.')) return;
+      localStorage.removeItem(DRAFT_KEY);
+      ['authorName', 'authorEmail', 'authorAffiliation', 'tags', 'title', 'dek'].forEach(id => $(id).value = '');
+      $('category').value = ''; $('ambassadorSlug').value = '';
+      coverDataUrl = ''; $('coverThumb').classList.remove('show'); coverInput.value = '';
+      editor.innerHTML = '';
+      refreshPreview(); $('draftStatus').textContent = '';
+      toast('Draft cleared — fresh start.');
     });
     (function restore() {
       try {
@@ -845,6 +994,7 @@
         $('tags').value = d.tags || ''; $('title').value = d.title || ''; $('dek').value = d.dek || '';
         if (d.cover) { coverDataUrl = d.cover; $('coverImg').src = d.cover; $('coverThumb').classList.add('show'); }
         if (d.body) editor.innerHTML = d.body;
+        $('draftStatus').textContent = 'Draft restored ✓';
       } catch {}
     })();
     refreshPreview();
