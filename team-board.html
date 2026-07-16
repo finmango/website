@@ -345,6 +345,22 @@
     .gate-card .back { display: inline-block; margin-top: 1.1rem; font-size: .82rem; font-weight: 600; color: var(--ink-faint); text-decoration: none; }
     .gate-card .back:hover { color: var(--ink); }
 
+    /* ===== PAGE COMMENTS (highlight → 💬) ===== */
+    .cmt-pill { position: fixed; display: none; z-index: 300; background: var(--ink); color: var(--paper);
+      font-size: .8rem; font-weight: 700; padding: .35rem .8rem; border-radius: 99px; box-shadow: var(--shadow-pop);
+      animation: toast-in .12s ease; }
+    .cmt-pill:hover { background: var(--orange-deep); }
+    mark.cmt-hl { background: rgba(255, 200, 80, .38); border-bottom: 2px solid #E8A33D; border-radius: 2px;
+      cursor: pointer; padding: 0 1px; transition: background .15s; }
+    mark.cmt-hl:hover { background: rgba(255, 200, 80, .65); }
+    .cmt-quote { border-left: 3px solid #E8A33D; background: rgba(255, 200, 80, .12); padding: .35rem .7rem;
+      margin: 0 0 .4rem; font-size: .84rem; color: var(--ink-dim); border-radius: 0 6px 6px 0; }
+    .cmt-thread { border: 1px solid var(--ink-line-soft); background: #fff; border-radius: 10px;
+      padding: .7rem .85rem; margin-bottom: .7rem; }
+    .cmt-thread.focus { border-color: var(--orange); box-shadow: 0 0 0 2px rgba(255,107,53,.15); }
+    button.page-badge { cursor: pointer; }
+    button.page-badge:hover { background: var(--ink-line); }
+
     /* ===== SELECTION TOOLBAR (highlight text → 🔗/B/I) ===== */
     .sel-toolbar { position: fixed; display: none; z-index: 300; background: var(--ink); border-radius: 8px;
       box-shadow: var(--shadow-pop); padding: .2rem; gap: .1rem; animation: toast-in .12s ease; }
@@ -909,6 +925,7 @@
     function migrate() {
       if (!doc.tombstones) doc.tombstones = {};
       if (!doc.pages) doc.pages = [];
+      if (!doc.comments) doc.comments = []; // page comment threads (doc-level so they union-merge)
     }
 
     // A mutation happened: stamp, persist, queue a sync push, re-render.
@@ -1100,6 +1117,15 @@
         else if ((ap.updatedAt || 0) > (op.updatedAt || 0)) out.pages[out.pages.indexOf(op)] = clone(ap);
       });
       out.pages = out.pages.filter(function (p) { return !(tombs[p.id] && tombs[p.id] > (p.updatedAt || 0)); });
+      // Comment threads: union by id, newest edit wins — two people commenting
+      // on the same page concurrently both survive.
+      out.comments = out.comments || [];
+      (a.comments || []).forEach(function (ac) {
+        var oc = out.comments.find(function (x) { return x.id === ac.id; });
+        if (!oc) out.comments.push(clone(ac));
+        else if ((ac.updatedAt || 0) > (oc.updatedAt || 0)) out.comments[out.comments.indexOf(oc)] = clone(ac);
+      });
+      out.comments = out.comments.filter(function (c) { return !(tombs[c.id] && tombs[c.id] > (c.updatedAt || 0)); });
       (a.boards || []).forEach(function (ab) {
         if (tombs[ab.id] && tombs[ab.id] > (ab.updatedAt || 0)) return;
         var ob = out.boards.find(function (x) { return x.id === ab.id; });
@@ -1375,6 +1401,179 @@
       });
     }
 
+    // ---------------- page comments (highlight → 💬) -----------------------
+    // Threads live at doc level ({id, pageId, quote, resolved, items[]}) and
+    // anchor to the exact highlighted text: on render, the first occurrence of
+    // the quote is wrapped in <mark>. If the text is later edited away, the
+    // thread survives in the comments panel marked "text changed".
+    function pageThreads(p) {
+      return (doc.comments || []).filter(function (c) { return c.pageId === p.id; });
+    }
+    function addThread(p, quote, text) {
+      var m = me();
+      doc.comments.push({
+        id: uid(), pageId: p.id, quote: String(quote || '').slice(0, 300), resolved: false,
+        createdAt: now(), updatedAt: now(),
+        items: [{ id: uid(), author: m ? m.name : 'Someone', color: m ? m.color : '#9A9A93',
+          photo: m && m.photo ? m.photo : '', text: text, ts: now() }]
+      });
+      mutate();
+    }
+    // Wrap the first occurrence of `quote` (searching across inline elements)
+    // in <mark> segments per intersected text node.
+    function wrapQuote(rootEl, quote, cid) {
+      var walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT, null);
+      var nodes = [], full = '';
+      while (walker.nextNode()) {
+        var n = walker.currentNode;
+        if (n.parentNode.closest('mark.cmt-hl, textarea, .tbl-tools, .add-block')) continue;
+        nodes.push({ node: n, start: full.length });
+        full += n.nodeValue;
+      }
+      var idx = full.indexOf(quote), qlen = quote.length;
+      if (idx < 0) {
+        // Quotes are whitespace-normalized at capture; the DOM may render the
+        // same text with newlines/nbsp — retry with flexible whitespace.
+        try {
+          var pattern = quote.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/ /g, '[\\s\\u00a0]+');
+          var mrx = full.match(new RegExp(pattern));
+          if (!mrx) return false;
+          idx = mrx.index; qlen = mrx[0].length;
+        } catch (e) { return false; }
+      }
+      var end = idx + qlen;
+      nodes.forEach(function (rec) {
+        var nStart = rec.start, nEnd = rec.start + rec.node.nodeValue.length;
+        var s = Math.max(idx, nStart), e = Math.min(end, nEnd);
+        if (s >= e) return;
+        var text = rec.node.nodeValue, relS = s - nStart, relE = e - nStart;
+        var frag = document.createDocumentFragment();
+        if (relS > 0) frag.appendChild(document.createTextNode(text.slice(0, relS)));
+        var mark = document.createElement('mark');
+        mark.className = 'cmt-hl'; mark.dataset.cid = cid;
+        mark.textContent = text.slice(relS, relE);
+        frag.appendChild(mark);
+        if (relE < text.length) frag.appendChild(document.createTextNode(text.slice(relE)));
+        rec.node.parentNode.replaceChild(frag, rec.node);
+      });
+      return true;
+    }
+    function applyCommentHighlights(mdiv, p) {
+      pageThreads(p).forEach(function (t) {
+        t._orphan = false;
+        if (t.resolved || !t.quote) return;
+        if (!wrapQuote(mdiv, t.quote, t.id)) t._orphan = true;
+      });
+    }
+    // The 💬 pill that appears over a text selection in reading view.
+    var cmtPill = null;
+    function hideCmtPill() { if (cmtPill) cmtPill.style.display = 'none'; }
+    function setupPageComments(mdiv, p) {
+      if (!cmtPill) {
+        cmtPill = document.createElement('button');
+        cmtPill.className = 'cmt-pill';
+        cmtPill.textContent = '💬 Comment';
+        document.body.appendChild(cmtPill);
+        document.addEventListener('mousedown', function (e) {
+          if (e.target !== cmtPill) hideCmtPill();
+        });
+      }
+      mdiv.addEventListener('mouseup', function () {
+        setTimeout(function () {
+          var sel = window.getSelection();
+          if (!sel || sel.isCollapsed || !sel.rangeCount) { hideCmtPill(); return; }
+          if (!mdiv.contains(sel.anchorNode) || !mdiv.contains(sel.focusNode)) { hideCmtPill(); return; }
+          var quote = sel.toString().replace(/\s+/g, ' ').trim();
+          if (quote.length < 2) { hideCmtPill(); return; }
+          var rect = sel.getRangeAt(0).getBoundingClientRect();
+          cmtPill.style.display = 'block';
+          cmtPill.style.left = Math.max(8, Math.min(window.innerWidth - 120, rect.left + rect.width / 2 - 55)) + 'px';
+          cmtPill.style.top = Math.max(8, rect.top - 38) + 'px';
+          cmtPill.onmousedown = function (e) {
+            e.preventDefault(); e.stopPropagation();
+            hideCmtPill();
+            openCommentComposer(p, quote.slice(0, 300));
+          };
+        }, 10);
+      });
+      // Clicking a highlight opens its thread.
+      mdiv.addEventListener('click', function (e) {
+        var mk = e.target.closest && e.target.closest('mark.cmt-hl');
+        if (mk) { e.stopPropagation(); openCommentsModal(p, mk.dataset.cid); }
+      }, true);
+    }
+    function openCommentComposer(p, quote) {
+      openModal('<h2>💬 New comment</h2>'
+        + (quote ? '<blockquote class="cmt-quote">' + esc(quote) + '</blockquote>'
+          : '<p class="help-note">A comment on the whole page (no text highlighted).</p>')
+        + '<textarea class="m-desc" id="cmtText" placeholder="Write your comment…"></textarea>'
+        + '<div class="modal-foot"><span></span><button class="btn-sm primary" id="cmtSave">Comment</button></div>', true);
+      $('cmtSave').onclick = function () {
+        var t = $('cmtText').value.trim();
+        if (!t) { toast('Write something first'); return; }
+        addThread(p, quote, t);
+        closeModal();
+        toast('Comment added');
+      };
+      setTimeout(function () { $('cmtText').focus(); }, 0);
+    }
+    function openCommentsModal(p, focusId) {
+      var ths = pageThreads(p);
+      var open = ths.filter(function (t) { return !t.resolved; });
+      var resolved = ths.filter(function (t) { return t.resolved; });
+      function threadHtml(t) {
+        return '<div class="cmt-thread' + (t.id === focusId ? ' focus' : '') + '" data-id="' + esc(t.id) + '">'
+          + (t.quote ? '<blockquote class="cmt-quote">' + esc(t.quote)
+              + (t._orphan ? ' <span class="mono" style="color:#C62828;">· text changed</span>' : '') + '</blockquote>'
+            : '<div class="mono" style="margin-bottom:.3rem;">Page comment</div>')
+          + t.items.map(function (cm) {
+              return '<div class="comment">' + avatarHtml({ name: cm.author, color: cm.color, photo: cm.photo })
+                + '<div class="body"><span class="who">' + esc(cm.author) + '</span><span class="when">' + esc(relTime(cm.ts))
+                + '</span><div class="text">' + esc(cm.text) + '</div></div></div>';
+            }).join('')
+          + '<div class="comment-row"><input data-reply placeholder="Reply…" />'
+          + '<button class="btn-sm primary" data-do="reply">Reply</button></div>'
+          + '<div class="pr-actions" style="margin-top:.4rem;">'
+          + '<button class="btn-sm ghost" data-do="' + (t.resolved ? 'reopen' : 'resolve') + '">' + (t.resolved ? '↩ Reopen' : '✓ Resolve') + '</button>'
+          + '<button class="btn-sm danger" data-do="delete">Delete</button></div></div>';
+      }
+      openModal('<h2>💬 Comments — ' + esc(p.title) + '</h2>'
+        + (open.length ? open.map(threadHtml).join('') : '<p class="help-note">No open comments. Highlight any text on the page to start one.</p>')
+        + (resolved.length ? '<div class="m-section">Resolved (' + resolved.length + ')</div>' + resolved.map(threadHtml).join('') : '')
+        + '<div class="modal-foot"><button class="btn-sm ghost" id="cmtPageNew">＋ Page comment</button><span></span></div>');
+      $('cmtPageNew').onclick = function () { openCommentComposer(p, ''); };
+      document.querySelectorAll('.cmt-thread [data-do]').forEach(function (btn) {
+        btn.onclick = function () {
+          var box = btn.closest('.cmt-thread');
+          var t = (doc.comments || []).find(function (x) { return x.id === box.dataset.id; });
+          if (!t) return;
+          var act = btn.dataset.do;
+          if (act === 'reply') {
+            var inp = box.querySelector('[data-reply]');
+            var v = (inp.value || '').trim(); if (!v) return;
+            var m = me();
+            t.items.push({ id: uid(), author: m ? m.name : 'Someone', color: m ? m.color : '#9A9A93',
+              photo: m && m.photo ? m.photo : '', text: v, ts: now() });
+            t.updatedAt = now(); mutate(); openCommentsModal(p, t.id);
+          } else if (act === 'resolve' || act === 'reopen') {
+            t.resolved = act === 'resolve'; t.updatedAt = now(); mutate(); openCommentsModal(p);
+          } else if (act === 'delete') {
+            if (!confirm('Delete this comment thread?')) return;
+            entomb(t.id);
+            doc.comments.splice(doc.comments.indexOf(t), 1);
+            mutate(); openCommentsModal(p);
+          }
+        };
+      });
+      document.querySelectorAll('.cmt-thread [data-reply]').forEach(function (inp) {
+        inp.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') inp.parentNode.querySelector('[data-do=reply]').click();
+        });
+      });
+      var f = document.querySelector('.cmt-thread.focus');
+      if (f) setTimeout(function () { f.scrollIntoView({ block: 'center' }); }, 50);
+    }
+
     // -------------- click-any-block-to-edit (read view) --------------------
     // Clicking a paragraph, heading, list item, or quote swaps it for a small
     // inline editor holding just that block's source lines; commit on blur or
@@ -1417,7 +1616,10 @@
     }
     function setupBlockEditing(mdiv, p) {
       mdiv.addEventListener('click', function (e) {
-        if (e.target.closest('a, input, label, .tablewrap, textarea, button, pre, code')) return;
+        if (e.target.closest('a, input, label, .tablewrap, textarea, button, pre, code, mark.cmt-hl')) return;
+        // A drag-selection (for commenting/copying) is not a click-to-edit.
+        var sel = window.getSelection();
+        if (sel && !sel.isCollapsed) return;
         var el = e.target.closest('[data-src]');
         if (!el || el.classList.contains('task')) return;
         editBlockInPlace(el, p);
@@ -1523,9 +1725,12 @@
       var wrap = document.createElement('div'); wrap.className = 'page-wrap';
 
       var meta = document.createElement('div'); meta.className = 'page-meta';
+      var openCmts = pageThreads(p).filter(function (t) { return !t.resolved; }).length;
       meta.innerHTML = '<span class="page-badge' + (p.public ? ' pub' : '') + '">' + (p.public ? '🌐 public' : '🔒 team only') + '</span>'
+        + '<button class="page-badge" id="pageCmtsBtn" title="Comments">💬' + (openCmts ? ' ' + openCmts : '') + '</button>'
         + '<span class="meta-line">edited ' + esc(relTime(p.updatedAt)) + '</span>';
       wrap.appendChild(meta);
+      meta.querySelector('#pageCmtsBtn').onclick = function () { openCommentsModal(p); };
 
       if (ui.pageEdit) {
         var ta = document.createElement('textarea');
@@ -1574,8 +1779,10 @@
           }
         });
         wrap.appendChild(mdiv);
+        applyCommentHighlights(mdiv, p);
         setupTableEditing(mdiv, p);
         setupBlockEditing(mdiv, p);
+        setupPageComments(mdiv, p);
         appendAddBlock(wrap, p);
       }
       scroll.appendChild(wrap); root.appendChild(scroll);
