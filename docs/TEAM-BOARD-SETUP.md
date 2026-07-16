@@ -9,8 +9,8 @@ more:
   Notion roadmap) and **🥭 Team HQ** (day-to-day tasks).
 - **Pages** — a markdown wiki: Start Here hub, Get Involved, leadership call
   notes, initiative write-ups. Supports `[[wikilinks]]` between pages.
-- **Members** — names with avatar colors; each person picks "who they are" on
-  their own device.
+- **Members** — created automatically on Google sign-in, with names and
+  photos from the person's @finmango.org account.
 
 Plus a public face: cards and pages flagged **🌐 public** render on
 **finmango.org/roadmap** — a live, FinMango-branded public roadmap.
@@ -29,13 +29,14 @@ It works in two modes:
 
 Access has **two doors**:
 
-- **Sign in with FinMango** — Google sign-in restricted to @finmango.org
-  accounts. Real identity: the person's Google name and profile photo flow
-  onto their avatar, comments, and edits automatically. No passwords, no key
-  to share. (Requires the OAuth client ID setup below.)
-- **Team key** — one shared passphrase for trusted volunteers who don't have
-  a FinMango email. They pick their display name by hand (the original honor
-  system).
+- **Sign in with FinMango** (the primary door) — Google sign-in restricted to
+  @finmango.org accounts. Identity is automatic: signing in registers you as
+  a member, and your Google name and profile photo flow onto your avatar,
+  comments, and edits. No passwords, no key to share. (Requires the OAuth
+  client ID setup below.)
+- **Team key** (fallback) — one shared passphrase for access without a
+  FinMango account. Key-only sessions can read and edit but aren't attributed
+  to a person — identity comes exclusively from Google sign-in.
 
 The workspace page is `noindex` and isn't linked from the public site. The
 public roadmap page (`roadmap.html`) IS meant to be found and linked.
