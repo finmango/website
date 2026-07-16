@@ -99,9 +99,18 @@
     .avatar:first-child { margin-left: 0; }
     .avatars button.avatar { cursor: pointer; }
     .avatar.more { background: var(--ink-line); color: var(--ink-dim); }
-    /* page mode hides board-only controls */
+    /* page/notes modes hide board-only controls */
     .topbar.page-mode .board-only { display: none !important; }
     .topbar:not(.page-mode) .page-only { display: none !important; }
+    .topbar.notes-mode .board-only, .topbar.notes-mode .page-only { display: none !important; }
+    .topbar.notes-mode #boardMenuBtn { visibility: hidden; }
+    .notes-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .4rem; }
+    .pr-row.open { border-color: var(--orange); }
+    .note-detail { margin-top: .6rem; border-top: 1px solid var(--ink-line-soft); padding-top: .6rem; }
+    .note-body { font-size: .92rem; }
+    .note-body img { max-width: 100%; border-radius: 8px; }
+    .note-body iframe { width: 100%; aspect-ratio: 16/9; border: 0; border-radius: 8px; }
+    .note-review { font-size: .82rem; padding: .25rem 0; color: var(--ink-dim); }
 
     /* ===== BOARD VIEW ===== */
     .board-scroll { flex: 1; overflow-x: auto; overflow-y: hidden; }
@@ -400,9 +409,10 @@
           <button id="addPageBtn" title="New page" aria-label="New page">＋</button>
         </div>
         <div id="pageList"></div>
+        <div class="side-label"><span class="mono">Review</span></div>
+        <button class="side-item" id="notesNavBtn"><span class="emoji">📝</span><span class="label">Ambassador Notes</span><span class="count" id="notesCount"></span></button>
       </div>
       <div class="side-foot">
-        <button class="side-item" id="postReviewBtn"><span class="emoji">📝</span><span class="label">Post reviews</span></button>
         <button class="side-item" id="membersBtn"><span class="emoji">👥</span><span class="label">Team members</span></button>
         <button class="side-item" id="syncBtn"><span class="sync-dot" id="syncDot"></span><span class="label" id="syncLabel">Local only</span></button>
         <button class="side-item" id="backupBtn"><span class="emoji">💾</span><span class="label">Backup / restore</span></button>
@@ -889,7 +899,7 @@
         var u = JSON.parse(localStorage.getItem(LS_UI) || '{}');
         ui.boardId = u.boardId || null;
         ui.pageId = u.pageId || null;
-        ui.view = (u.view === 'table' || u.view === 'page') ? u.view : 'board';
+        ui.view = (u.view === 'table' || u.view === 'page' || u.view === 'notes') ? u.view : 'board';
         ui.sidebarClosed = !!u.sidebarClosed;
       } catch (e) {}
       if (ui.view === 'page' && !page()) ui.view = 'board';
@@ -1130,7 +1140,7 @@
     // =========================== NAVIGATION ================================
     function openBoard(id) {
       ui.boardId = id; ui.pageId = null;
-      if (ui.view === 'page') ui.view = 'board';
+      if (ui.view === 'page' || ui.view === 'notes') ui.view = 'board';
       quickAddCol = null;
       persistLocal(); render(); closeSidebarOnMobile();
     }
@@ -1162,13 +1172,21 @@
         btn.onclick = function () { openPage(p.id); };
         plist.appendChild(btn);
       });
+      $('notesNavBtn').classList.toggle('active', ui.view === 'notes');
+      updateNotesCount();
       $('app').classList.toggle('sidebar-closed', ui.sidebarClosed);
     }
 
     function renderTopbar() {
       var pageMode = inPageMode();
+      var notesMode = ui.view === 'notes';
       $('topbar').classList.toggle('page-mode', pageMode);
-      if (pageMode) {
+      $('topbar').classList.toggle('notes-mode', notesMode);
+      $('boardNameInput').disabled = notesMode;
+      if (notesMode) {
+        $('boardEmoji').textContent = '📝';
+        $('boardNameInput').value = 'Ambassador Notes';
+      } else if (pageMode) {
         var p = page();
         $('boardEmoji').textContent = p.icon || '📄';
         $('boardNameInput').value = p.title;
@@ -1238,6 +1256,7 @@
         renderView.lastPage = null;
       }
       root.innerHTML = '';
+      if (ui.view === 'notes') { renderNotes(root); return; }
       if (inPageMode()) {
         renderPage(root, page());
         if (prevScroll) {
@@ -2114,100 +2133,198 @@
       };
     }
 
-    // ---------------------- ambassador post reviews -------------------------
-    // The queue from write.html → post-review.html, surfaced inside HQ. The
-    // backend bridges to the posts Apps Script with a server-side review key,
-    // so being signed in here is the only credential needed.
+    // ---------------------- ambassador notes (review tab) -------------------
+    // The full write.html → review → publish pipeline, living inside HQ as a
+    // first-class tab. The backend bridges to the posts Apps Script with a
+    // server-side review key, so being signed in here is the only credential.
     var PR_STATUS = { pending: ['Pending', '#E8A33D'], changes: ['Changes requested', '#E5511B'],
       approved: ['Approved', '#3E9A5F'], rejected: ['Rejected', '#D9534F'], published: ['Published', '#9A9A93'] };
+    var notes = { posts: null, loading: false, error: null, openId: null, detail: {} };
     function postsApi(payload) {
       return fetch('/api/board', {
         method: 'POST', headers: { 'content-type': 'application/json' },
         body: JSON.stringify(Object.assign(payload, creds()))
       }).then(function (r) { return r.json(); });
     }
-    function openPostReviewModal() {
-      openModal('<h2>Ambassador post reviews</h2><div id="prBody"><p class="help-note">Loading the queue…</p></div>');
-      loadReviewQueue();
+    // Whitelist sanitizer ported from post-review.html — submissions come from
+    // the public write form, so only these tags/attrs survive into HQ's DOM.
+    var NOTE_ALLOWED = { H2: [], H3: [], P: [], BR: [], STRONG: [], B: [], EM: [], I: [], U: [], A: ['href'],
+      UL: [], OL: [], LI: [], BLOCKQUOTE: [], HR: [], IMG: ['src', 'alt'], FIGURE: [], FIGCAPTION: [], DIV: [], SPAN: [], IFRAME: [] };
+    function ytEmbedSrc(src) {
+      var m = String(src || '').match(/^https?:\/\/(?:www\.)?(?:youtube\.com|youtube-nocookie\.com)\/embed\/([A-Za-z0-9_-]{11})(?:[?#].*)?$/);
+      return m ? 'https://www.youtube-nocookie.com/embed/' + m[1] : null;
     }
-    function loadReviewQueue() {
-      postsApi({ action: 'posts-list', status: 'all' }).then(function (res) {
-        var box = $('prBody'); if (!box) return;
-        if (res.result !== 'success') {
-          box.innerHTML = '<p class="help-note">' + (String(res.error || '') === 'Post reviews not configured'
-            ? '⚙️ Not wired up yet — add <code>POSTS_REVIEW_KEY</code> to the HQ Apps Script config and redeploy (ask Claude for the file). Until then, reviews live at <a href="post-review.html" target="_blank" rel="noopener">post-review.html</a> (passphrase required).'
-            : '⚠️ Couldn\'t reach the posts backend — try again in a minute.') + '</p>';
-          return;
-        }
-        var posts = res.posts || [];
-        var actionable = posts.filter(function (p) { return p.status !== 'published' && p.status !== 'rejected'; });
-        var done = posts.filter(function (p) { return p.status === 'published'; }).slice(0, 5);
-        function row(p) {
-          var st = PR_STATUS[p.status] || [p.status, '#9A9A93'];
-          var when = p.createdAt ? relTime(Date.parse(p.createdAt)) : '';
-          return '<div class="pr-row" data-id="' + esc(p.id) + '">'
-            + '<div class="pr-head"><span class="pr-title">' + esc(p.title || '(untitled)') + '</span>'
-            + '<span class="status-chip"><span class="col-dot" style="background:' + st[1] + '"></span>' + esc(st[0]) + '</span></div>'
-            + '<div class="pr-meta">' + esc(p.authorName || 'Unknown') + (p.category ? ' · ' + esc(p.category) : '') + (when ? ' · ' + esc(when) : '') + '</div>'
-            + '<div class="pr-preview" style="display:none;"></div>'
-            + '<div class="pr-actions">'
-            + '<button class="btn-sm ghost" data-pr="read">Read</button>'
-            + (p.status !== 'published' ? '<button class="btn-sm ghost" data-pr="approve">✓ Approve</button>'
-              + '<button class="btn-sm ghost" data-pr="changes">✎ Changes</button>'
-              + '<button class="btn-sm danger" data-pr="reject">✗ Reject</button>' : '')
-            + (p.status === 'approved' ? '<button class="btn-sm primary" data-pr="publish">🚀 Publish</button>' : '')
-            + '</div></div>';
-        }
-        box.innerHTML = (actionable.length
-            ? '<div class="m-section">Needs review (' + actionable.length + ')</div>' + actionable.map(row).join('')
-            : '<p class="help-note">🎉 Queue is clear — nothing waiting for review.</p>')
-          + (done.length ? '<div class="m-section">Recently published</div>' + done.map(function (p) {
-              return '<div class="pr-row"><div class="pr-head"><a class="pr-title" href="post.html?id=' + esc(p.id) + '" target="_blank" rel="noopener">'
-                + esc(p.title || '(untitled)') + '</a></div><div class="pr-meta">' + esc(p.authorName || '') + '</div></div>'; }).join('') : '')
-          + '<p class="help-note" style="margin-top:.9rem;">Full panel with formatted preview: <a href="post-review.html" target="_blank" rel="noopener">post-review.html</a>. Votes here are signed as you.</p>';
-        box.querySelectorAll('[data-pr]').forEach(function (btn) {
-          btn.onclick = function () { reviewAction(btn.closest('.pr-row').dataset.id, btn.dataset.pr, btn); };
+    function sanitizeNote(html) {
+      var doc = new DOMParser().parseFromString('<div>' + (html || '') + '</div>', 'text/html');
+      var root = doc.body.firstChild;
+      (function walk(node) {
+        Array.prototype.slice.call(node.childNodes).forEach(function (child) {
+          if (child.nodeType === 1) {
+            var tag = child.tagName;
+            // script/style/etc. are removed OUTRIGHT (never unwrapped, so their
+            // source text can't leak into the post); other unknown tags unwrap,
+            // preserving their text content.
+            if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT' || tag === 'TEMPLATE') { node.removeChild(child); return; }
+            if (!NOTE_ALLOWED[tag]) {
+              while (child.firstChild) node.insertBefore(child.firstChild, child);
+              node.removeChild(child); return walk(node);
+            }
+            if (tag === 'IFRAME') {
+              var yt = ytEmbedSrc(child.getAttribute('src'));
+              if (!yt) { node.removeChild(child); return; }
+              Array.prototype.slice.call(child.attributes).forEach(function (a) { child.removeAttribute(a.name); });
+              child.setAttribute('src', yt);
+              child.setAttribute('title', 'Embedded video');
+              child.setAttribute('loading', 'lazy');
+              child.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+              child.setAttribute('allowfullscreen', '');
+              return;
+            }
+            Array.prototype.slice.call(child.attributes).forEach(function (a) {
+              var ok = NOTE_ALLOWED[tag].indexOf(a.name) > -1;
+              var badHref = a.name === 'href' && /^\s*javascript:/i.test(a.value);
+              var badSrc = a.name === 'src' && !/^(https?:|data:image\/)/i.test(a.value);
+              if (!ok || badHref || badSrc) child.removeAttribute(a.name);
+            });
+            if (tag === 'A' && child.getAttribute('href')) {
+              child.setAttribute('target', '_blank');
+              child.setAttribute('rel', 'noopener noreferrer');
+            }
+            walk(child);
+          } else if (child.nodeType !== 3) { node.removeChild(child); }
         });
+      })(root);
+      return root.innerHTML;
+    }
+    function openNotesView() {
+      ui.view = 'notes'; ui.pageId = null;
+      persistLocal(); render(); closeSidebarOnMobile();
+      if (!notes.posts && !notes.loading) loadNotes();
+    }
+    function loadNotes() {
+      notes.loading = true; notes.error = null;
+      postsApi({ action: 'posts-list', status: 'all' }).then(function (res) {
+        notes.loading = false;
+        if (res.result !== 'success') {
+          notes.error = String(res.error || 'unreachable');
+          notes.posts = null;
+        } else {
+          notes.posts = res.posts || [];
+        }
+        updateNotesCount();
+        if (ui.view === 'notes') render();
       }).catch(function () {
-        var box = $('prBody');
-        if (box) box.innerHTML = '<p class="help-note">⚠️ Couldn\'t reach the backend — try again in a minute.</p>';
+        notes.loading = false; notes.error = 'unreachable'; notes.posts = null;
+        if (ui.view === 'notes') render();
       });
     }
-    function reviewAction(id, act, btn) {
+    function updateNotesCount() {
+      var el = $('notesCount'); if (!el) return;
+      var n = (notes.posts || []).filter(function (p) { return p.status === 'pending' || p.status === 'changes'; }).length;
+      el.textContent = n ? String(n) : '';
+    }
+    function noteAction(id, act, btn) {
       var m = me();
       var reviewer = m ? m.name : 'HQ team';
-      if (act === 'read') {
-        var pv = btn.closest('.pr-row').querySelector('.pr-preview');
-        if (pv.style.display !== 'none') { pv.style.display = 'none'; return; }
-        pv.style.display = 'block'; pv.textContent = 'Loading…';
-        postsApi({ action: 'posts-get', id: id }).then(function (res) {
-          if (res.result !== 'success' || !res.post) { pv.textContent = 'Couldn\'t load this post.'; return; }
-          // Render as PLAIN TEXT on purpose: submissions come from the public
-          // write.html, so no foreign HTML is ever injected into HQ.
-          var tmp = document.createElement('div');
-          tmp.innerHTML = String(res.post.body || res.post.html || '');
-          var text = (tmp.textContent || '').trim().replace(/\n{3,}/g, '\n\n');
-          pv.textContent = text ? (text.length > 4000 ? text.slice(0, 4000) + '\n…' : text) : '(no text content)';
-        });
-        return;
-      }
       var comment = '';
       if (act === 'changes' || act === 'reject') {
         comment = prompt(act === 'changes' ? 'What should the author change?' : 'Reason (sent with the vote):') || '';
       }
-      btn.disabled = true;
+      if (btn) btn.disabled = true;
       var payload = act === 'publish'
         ? { action: 'posts-publish', id: id, reviewer: reviewer }
         : { action: 'posts-review', id: id, reviewer: reviewer, vote: act, comment: comment };
       postsApi(payload).then(function (res) {
         if (res.result === 'success') {
-          toast(act === 'publish' ? 'Published 🚀' : 'Vote recorded — ' + act);
-          loadReviewQueue();
+          toast(act === 'publish' ? 'Published 🚀' : 'Recorded — ' + act);
+          delete notes.detail[id];
+          loadNotes();
         } else {
-          btn.disabled = false;
+          if (btn) btn.disabled = false;
           toast(String(res.error || 'That didn\'t work — try again'));
         }
-      }).catch(function () { btn.disabled = false; toast('Network hiccup — try again'); });
+      }).catch(function () { if (btn) btn.disabled = false; toast('Network hiccup — try again'); });
+    }
+    function renderNotes(root) {
+      var scroll = document.createElement('div'); scroll.className = 'page-scroll';
+      var wrap = document.createElement('div'); wrap.className = 'page-wrap notes-wrap';
+      var head = document.createElement('div'); head.className = 'notes-head';
+      head.innerHTML = '<div><h1 style="font-size:1.5rem;letter-spacing:-.02em;">Ambassador Notes</h1>'
+        + '<p class="help-note" style="margin:.2rem 0 0;">Drafts from <a href="write.html" target="_blank" rel="noopener">finmango.org/write</a>'
+        + ' land here. Approve, request changes, reject, or publish — signed as you.</p></div>'
+        + '<button class="btn-sm ghost" id="notesRefresh">↻ Refresh</button>';
+      wrap.appendChild(head);
+      var body = document.createElement('div');
+      wrap.appendChild(body);
+
+      if (notes.error === 'Post reviews not configured') {
+        body.innerHTML = '<p class="help-note" style="margin-top:1rem;">⚙️ One config step left: add <code>POSTS_REVIEW_KEY</code> to the HQ Apps Script and redeploy a new version (Claude has the ready-to-paste file). Until then, reviews live at <a href="post-review.html" target="_blank" rel="noopener">the standalone panel</a>.</p>';
+      } else if (notes.error) {
+        body.innerHTML = '<p class="help-note" style="margin-top:1rem;">⚠️ Couldn\'t reach the posts backend — <a href="#" id="notesRetry">try again</a>.</p>';
+      } else if (!notes.posts) {
+        body.innerHTML = '<p class="help-note" style="margin-top:1rem;">Loading the queue…</p>';
+        if (!notes.loading) loadNotes();
+      } else {
+        var actionable = notes.posts.filter(function (p) { return p.status !== 'published' && p.status !== 'rejected'; });
+        var done = notes.posts.filter(function (p) { return p.status === 'published'; }).slice(0, 8);
+        function row(p, readonly) {
+          var st = PR_STATUS[p.status] || [p.status, '#9A9A93'];
+          var when = p.createdAt ? relTime(Date.parse(p.createdAt)) : '';
+          var open = notes.openId === p.id;
+          return '<div class="pr-row' + (open ? ' open' : '') + '" data-id="' + esc(p.id) + '">'
+            + '<div class="pr-head" data-pr="toggle" style="cursor:pointer;">'
+            + '<span class="pr-title">' + esc(p.title || '(untitled)') + '</span>'
+            + '<span class="status-chip"><span class="col-dot" style="background:' + st[1] + '"></span>' + esc(st[0]) + '</span></div>'
+            + '<div class="pr-meta">' + esc(p.authorName || 'Unknown') + (p.category ? ' · ' + esc(p.category) : '') + (when ? ' · ' + esc(when) : '') + '</div>'
+            + (open ? '<div class="note-detail"><p class="help-note">Loading the post…</p></div>' : '')
+            + '<div class="pr-actions">'
+            + (!readonly ? '<button class="btn-sm ghost" data-pr="approve">✓ Approve</button>'
+              + '<button class="btn-sm ghost" data-pr="changes">✎ Changes</button>'
+              + '<button class="btn-sm danger" data-pr="reject">✗ Reject</button>' : '')
+            + (p.status === 'approved' ? '<button class="btn-sm primary" data-pr="publish">🚀 Publish</button>' : '')
+            + (p.status === 'published' ? '<a class="btn-sm ghost" href="post.html?id=' + esc(p.id) + '" target="_blank" rel="noopener">View live ↗</a>' : '')
+            + '</div></div>';
+        }
+        body.innerHTML = (actionable.length
+            ? '<div class="m-section">Needs review (' + actionable.length + ')</div>' + actionable.map(function (p) { return row(p, false); }).join('')
+            : '<p class="help-note" style="margin-top:1rem;">🎉 Queue is clear — nothing waiting for review.</p>')
+          + (done.length ? '<div class="m-section">Recently published</div>' + done.map(function (p) { return row(p, true); }).join('') : '');
+        body.querySelectorAll('[data-pr]').forEach(function (el) {
+          var act = el.dataset.pr;
+          var id = el.closest('.pr-row').dataset.id;
+          if (act === 'toggle') {
+            el.onclick = function () {
+              notes.openId = notes.openId === id ? null : id;
+              render();
+            };
+          } else if (el.tagName === 'BUTTON') {
+            el.onclick = function () { noteAction(id, act, el); };
+          }
+        });
+        // Fill in the open post's rendered detail
+        if (notes.openId) fillNoteDetail(body, notes.openId);
+      }
+      scroll.appendChild(wrap); root.appendChild(scroll);
+      var rf = $('notesRefresh'); if (rf) rf.onclick = function () { notes.posts = null; loadNotes(); render(); };
+      var rt = $('notesRetry'); if (rt) rt.onclick = function (e) { e.preventDefault(); notes.error = null; loadNotes(); render(); };
+    }
+    function fillNoteDetail(container, id) {
+      var box = container.querySelector('.pr-row[data-id="' + id + '"] .note-detail');
+      if (!box) return;
+      function paint(post) {
+        var reviews = (post.reviews || []).map(function (rv) {
+          var icon = rv.vote === 'approve' ? '✓' : rv.vote === 'changes' ? '✎' : rv.vote === 'reject' ? '✗' : '💬';
+          return '<div class="note-review"><strong>' + icon + ' ' + esc(rv.reviewer || 'Reviewer') + '</strong>'
+            + (rv.comment ? ' — ' + esc(rv.comment) : '') + '</div>';
+        }).join('');
+        box.innerHTML = '<div class="note-body md">' + sanitizeNote(post.body || post.html || '<p>(no content)</p>') + '</div>'
+          + (reviews ? '<div class="m-section">Votes & comments</div>' + reviews : '');
+      }
+      if (notes.detail[id]) { paint(notes.detail[id]); return; }
+      postsApi({ action: 'posts-get', id: id }).then(function (res) {
+        if (res.result === 'success' && res.post) { notes.detail[id] = res.post; paint(res.post); }
+        else box.innerHTML = '<p class="help-note">Couldn\'t load this post.</p>';
+      }).catch(function () { box.innerHTML = '<p class="help-note">Couldn\'t load this post.</p>'; });
     }
 
     // ------------------------- quick find (⌘K) ------------------------------
@@ -2221,6 +2338,9 @@
       function collect(q) {
         q = q.toLowerCase();
         var out = [];
+        if (!q || 'ambassador notes reviews posts'.indexOf(q) > -1) {
+          out.push({ icon: '📝', label: 'Ambassador Notes', path: 'review', go: function () { closeModal(); openNotesView(); } });
+        }
         (doc.pages || []).forEach(function (p) {
           if (!q || (p.title + ' ' + p.body).toLowerCase().indexOf(q) > -1) {
             out.push({ icon: p.icon || '📄', label: p.title, path: 'page', go: function () { closeModal(); openPage(p.id); } });
@@ -2308,7 +2428,7 @@
     $('filterAssignee').addEventListener('change', function () { ui.fAssignee = this.value; render(); });
     $('filterPriority').addEventListener('change', function () { ui.fPriority = this.value; render(); });
     $('membersBtn').onclick = openMembersModal;
-    $('postReviewBtn').onclick = openPostReviewModal;
+    $('notesNavBtn').onclick = openNotesView;
     $('syncBtn').onclick = openSyncModal;
     $('backupBtn').onclick = openBackupModal;
     $('qfHint').onclick = openQuickFind;
