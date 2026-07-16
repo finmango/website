@@ -197,6 +197,24 @@
     .md th { background: var(--ink-line-soft); font-weight: 700; white-space: nowrap; }
     .md [contenteditable]:hover { background: rgba(255,107,53,.05); cursor: text; }
     .md [contenteditable]:focus { outline: 2px solid var(--orange); outline-offset: -2px; background: #fff; }
+    .md [data-src]:not(.task):hover { background: rgba(255,107,53,.04); border-radius: 4px; cursor: text; }
+    .block-editor { width: 100%; border: 1px solid var(--orange); border-radius: 6px; background: #fff; padding: .45rem .6rem;
+      font-family: var(--font-mono); font-size: .85rem; line-height: 1.6; resize: none; margin: .3rem 0; display: block; }
+    .block-editor:focus { outline: none; }
+    .task-edit { opacity: 0; margin-left: .45rem; color: var(--ink-faint); font-size: .75rem; transition: opacity .12s; }
+    li.task:hover .task-edit { opacity: .7; }
+    .task-edit:hover { color: var(--orange-deep); }
+    .tbl-del { position: absolute; display: none; width: 18px; height: 18px; line-height: 16px; text-align: center; font-size: .68rem;
+      border-radius: 50%; background: #fff; border: 1px solid var(--ink-line); color: var(--ink-faint); z-index: 4; padding: 0; }
+    .tbl-del:hover { color: #C62828; border-color: #C62828; background: #fff; }
+    .add-block { margin-top: 1.4rem; position: relative; padding-bottom: 2rem; }
+    .add-block-btn { color: var(--ink-faint); font-weight: 600; font-size: .84rem; padding: .35rem .8rem;
+      border: 1px dashed var(--ink-line); border-radius: 7px; }
+    .add-block-btn:hover { color: var(--orange-deep); border-color: var(--orange); }
+    .add-block-menu { position: absolute; bottom: calc(100% + 6px); left: 0; background: #fff; border: 1px solid var(--ink-line-soft);
+      border-radius: 8px; box-shadow: var(--shadow-pop); padding: .25rem; display: flex; flex-direction: column; z-index: 20; min-width: 170px; }
+    .add-block-menu button { text-align: left; padding: .45rem .65rem; border-radius: 5px; font-size: .85rem; font-weight: 600; }
+    .add-block-menu button:hover { background: var(--ink-line-soft); }
     .tbl-tools { display: flex; gap: .35rem; margin-top: .3rem; opacity: 0; transition: opacity .15s; }
     .tablewrap:hover .tbl-tools, .tablewrap:focus-within .tbl-tools { opacity: 1; }
     .tbl-tools button { font-size: .72rem; font-weight: 600; color: var(--ink-faint); border: 1px dashed var(--ink-line);
@@ -407,8 +425,8 @@
           <button id="viewTableBtn">Table</button>
         </div>
         <div class="view-switch page-only" role="tablist">
-          <button id="pageReadBtn" class="active">Read</button>
-          <button id="pageEditBtn">Edit</button>
+          <button id="pageReadBtn" class="active">Page</button>
+          <button id="pageEditBtn" title="Raw markdown — for bulk edits and big restructures">Source</button>
         </div>
         <button class="top-filter board-only" id="agendaBtn" title="Show cards flagged for the next leadership call, plus everything in Now">📞 Agenda</button>
         <div class="search-box board-only">
@@ -651,9 +669,22 @@
     function mdRender(src) {
       var lines = String(src || '').split('\n');
       var html = '', para = [], list = null, quote = [], table = [], inCode = false, codeBuf = [];
-      function flushPara() { if (para.length) { html += '<p>' + mdInline(para.join('<br>')) + '</p>'; para = []; } }
+      var paraStart = -1, quoteStart = -1;
+      // data-src="start-end" ties each block to its source lines so the read
+      // view can edit any block in place (see setupBlockEditing).
+      function flushPara() {
+        if (para.length) {
+          html += '<p data-src="' + paraStart + '-' + (paraStart + para.length - 1) + '">' + mdInline(para.join('<br>')) + '</p>';
+          para = [];
+        }
+      }
       function flushList() { if (list) { html += '</' + list + '>'; list = null; } }
-      function flushQuote() { if (quote.length) { html += '<blockquote>' + mdInline(quote.join('<br>')) + '</blockquote>'; quote = []; } }
+      function flushQuote() {
+        if (quote.length) {
+          html += '<blockquote data-src="' + quoteStart + '-' + (quoteStart + quote.length - 1) + '">' + mdInline(quote.join('<br>')) + '</blockquote>';
+          quote = [];
+        }
+      }
       function flushTable() {
         if (!table.length) return;
         var hasHead = table.length > 1 && table[1].c.length > 0 && table[1].c.every(function (x) { return /^:?-{2,}:?$/.test(x); });
@@ -692,9 +723,9 @@
           continue;
         }
         if (table.length) flushTable();
-        if ((m = line.match(/^(#{1,3})\s+(.*)$/))) { flushAll(); var h = m[1].length; html += '<h' + h + '>' + mdInline(m[2]) + '</h' + h + '>'; continue; }
+        if ((m = line.match(/^(#{1,3})\s+(.*)$/))) { flushAll(); var h = m[1].length; html += '<h' + h + ' data-src="' + i + '-' + i + '">' + mdInline(m[2]) + '</h' + h + '>'; continue; }
         if (/^---+\s*$/.test(raw)) { flushAll(); html += '<hr>'; continue; }
-        if ((m = line.match(/^&gt;\s?(.*)$/))) { flushPara(); flushList(); quote.push(m[1]); continue; }
+        if ((m = line.match(/^&gt;\s?(.*)$/))) { flushPara(); flushList(); if (!quote.length) quoteStart = i; quote.push(m[1]); continue; }
         if ((m = line.match(/^[-*]\s+(.*)$/))) {
           flushPara(); flushQuote();
           if (list !== 'ul') { flushList(); html += '<ul>'; list = 'ul'; }
@@ -702,19 +733,19 @@
           // data-ln carries the source line so a click can flip the markdown.
           var task = m[1].match(/^\[([ xX])\]\s+(.*)$/);
           if (task) {
-            html += '<li class="task"><label><input type="checkbox" data-ln="' + i + '"'
+            html += '<li class="task" data-src="' + i + '-' + i + '"><label><input type="checkbox" data-ln="' + i + '"'
               + (task[1] === ' ' ? '' : ' checked') + '><span>' + mdInline(task[2]) + '</span></label></li>';
           } else {
-            html += '<li>' + mdInline(m[1]) + '</li>';
+            html += '<li data-src="' + i + '-' + i + '">' + mdInline(m[1]) + '</li>';
           }
           continue;
         }
         if ((m = line.match(/^\d+\.\s+(.*)$/))) {
           flushPara(); flushQuote();
           if (list !== 'ol') { flushList(); html += '<ol>'; list = 'ol'; }
-          html += '<li>' + mdInline(m[1]) + '</li>'; continue;
+          html += '<li data-src="' + i + '-' + i + '">' + mdInline(m[1]) + '</li>'; continue;
         }
-        flushList(); flushQuote(); para.push(line);
+        flushList(); flushQuote(); if (!para.length) paraStart = i; para.push(line);
       }
       if (inCode) html += '<pre><code>' + codeBuf.join('\n') + '</code></pre>';
       flushAll();
@@ -1274,7 +1305,151 @@
           p.body = lines.join('\n'); p.updatedAt = now();
           mutate();
         };
+
+        // Hover ✕ buttons: delete the row you're on, or the column you're in.
+        var rowDel = document.createElement('button');
+        rowDel.className = 'tbl-del'; rowDel.textContent = '✕'; rowDel.title = 'Delete this row';
+        var colDel = document.createElement('button');
+        colDel.className = 'tbl-del'; colDel.textContent = '✕'; colDel.title = 'Delete this column';
+        wrap.appendChild(rowDel); wrap.appendChild(colDel);
+        var curRowLn = -1, curColIdx = -1;
+        wrap.addEventListener('mouseover', function (e) {
+          var tbl = wrap.querySelector('table');
+          var td = e.target.closest('td[data-ln]');
+          if (td) {
+            var tr = td.parentElement;
+            curRowLn = Number(td.dataset.ln);
+            rowDel.style.display = 'block';
+            rowDel.style.top = (tbl.offsetTop + tr.offsetTop + tr.offsetHeight / 2 - 9) + 'px';
+            rowDel.style.left = (tbl.offsetLeft + tbl.offsetWidth - 22) + 'px';
+          }
+          var cell = e.target.closest('th[data-ln], td[data-ln]');
+          if (cell) {
+            curColIdx = Number(cell.dataset.cell);
+            colDel.style.display = 'block';
+            colDel.style.left = (tbl.offsetLeft + cell.offsetLeft + cell.offsetWidth - 20) + 'px';
+            colDel.style.top = (tbl.offsetTop + 2) + 'px';
+          }
+        });
+        wrap.addEventListener('mouseleave', function () {
+          rowDel.style.display = 'none'; colDel.style.display = 'none';
+        });
+        rowDel.onclick = function () {
+          var lines = p.body.split('\n');
+          if (curRowLn < first || curRowLn > last || curRowLn >= lines.length) return;
+          var hasContent = tblParseLine(lines[curRowLn]).some(function (x) { return x !== ''; });
+          if (hasContent && !confirm('Delete this row?')) return;
+          lines.splice(curRowLn, 1);
+          p.body = lines.join('\n'); p.updatedAt = now(); mutate();
+        };
+        colDel.onclick = function () {
+          var lines = p.body.split('\n');
+          if (tblParseLine(lines[first]).length <= 1) { toast('A table needs at least one column'); return; }
+          if (!confirm('Delete this column and everything in it?')) return;
+          for (var ln = first; ln <= last && ln < lines.length; ln++) {
+            var cells = tblParseLine(lines[ln]);
+            if (curColIdx >= 0 && curColIdx < cells.length) cells.splice(curColIdx, 1);
+            lines[ln] = tblBuildLine(cells);
+          }
+          p.body = lines.join('\n'); p.updatedAt = now(); mutate();
+        };
       });
+    }
+
+    // -------------- click-any-block-to-edit (read view) --------------------
+    // Clicking a paragraph, heading, list item, or quote swaps it for a small
+    // inline editor holding just that block's source lines; commit on blur or
+    // Enter (single-line blocks), Escape cancels, emptying the text deletes
+    // the block. The page never leaves reading view.
+    function editBlockInPlace(el, p, selectAll) {
+      if (document.querySelector('.block-editor')) return; // one at a time
+      var r = (el.dataset.src || '').split('-').map(Number);
+      if (isNaN(r[0]) || isNaN(r[1])) return;
+      var lines = p.body.split('\n');
+      var raw = lines.slice(r[0], r[1] + 1).join('\n');
+      var ta = document.createElement('textarea');
+      ta.className = 'block-editor';
+      ta.value = raw;
+      ta.rows = 1;
+      el.style.display = 'none';
+      el.parentNode.insertBefore(ta, el);
+      function size() { ta.style.height = 'auto'; ta.style.height = (ta.scrollHeight + 2) + 'px'; }
+      ta.addEventListener('input', size);
+      var singleLine = r[0] === r[1];
+      var done = false;
+      function commit() {
+        if (done) return; done = true;
+        var all = p.body.split('\n');
+        var text = ta.value.replace(/\n{3,}/g, '\n\n');
+        var repl = text.trim() === '' ? [] : text.split('\n');
+        Array.prototype.splice.apply(all, [r[0], r[1] - r[0] + 1].concat(repl));
+        p.body = all.join('\n');
+        p.updatedAt = now();
+        mutate(); // re-render; scroll position is preserved for same-page renders
+      }
+      function cancel() { if (done) return; done = true; ta.remove(); el.style.display = ''; }
+      ta.addEventListener('blur', commit);
+      ta.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { e.preventDefault(); ta.removeEventListener('blur', commit); cancel(); }
+        else if (e.key === 'Enter' && singleLine && !e.shiftKey) { e.preventDefault(); ta.blur(); }
+      });
+      attachLinkPaste(ta, function () {});
+      setTimeout(function () { ta.focus(); if (selectAll) ta.select(); size(); }, 0);
+    }
+    function setupBlockEditing(mdiv, p) {
+      mdiv.addEventListener('click', function (e) {
+        if (e.target.closest('a, input, label, .tablewrap, textarea, button, pre, code')) return;
+        var el = e.target.closest('[data-src]');
+        if (!el || el.classList.contains('task')) return;
+        editBlockInPlace(el, p);
+      });
+      // Task items are click-to-toggle, so they get a hover ✎ instead.
+      mdiv.querySelectorAll('li.task').forEach(function (li) {
+        var b = document.createElement('button');
+        b.className = 'task-edit'; b.textContent = '✎'; b.title = 'Edit this item';
+        b.onclick = function (e) { e.preventDefault(); e.stopPropagation(); editBlockInPlace(li, p); };
+        li.appendChild(b);
+      });
+    }
+
+    // ----------------- ＋ Add block (read view) ----------------------------
+    var ADD_SNIPPETS = {
+      text: { md: 'New text', edit: true },
+      heading: { md: '## New heading', edit: true },
+      task: { md: '- [ ] New item', edit: true },
+      bullet: { md: '- New item', edit: true },
+      table: { md: '| Column 1 | Column 2 | Column 3 |\n| --- | --- | --- |\n|  |  |  |', edit: false },
+      divider: { md: '---', edit: false }
+    };
+    function appendAddBlock(container, p) {
+      var wrap = document.createElement('div');
+      wrap.className = 'add-block';
+      wrap.innerHTML = '<button class="add-block-btn">＋ Add</button>'
+        + '<div class="add-block-menu" style="display:none;">'
+        + '<button data-add="text">✏️ Text</button>'
+        + '<button data-add="heading">🔠 Heading</button>'
+        + '<button data-add="task">☑️ Checklist item</button>'
+        + '<button data-add="bullet">• Bullet</button>'
+        + '<button data-add="table">⊞ Table</button>'
+        + '<button data-add="divider">― Divider</button></div>';
+      var menu = wrap.querySelector('.add-block-menu');
+      wrap.querySelector('.add-block-btn').onclick = function () {
+        menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
+      };
+      menu.querySelectorAll('[data-add]').forEach(function (btn) {
+        btn.onclick = function () {
+          var kind = ADD_SNIPPETS[btn.dataset.add];
+          p.body = (p.body.replace(/\s+$/, '') + '\n\n' + kind.md + '\n').replace(/^\n+/, '');
+          p.updatedAt = now();
+          mutate(); // re-render with the new block
+          if (kind.edit) {
+            var els = $('viewRoot').querySelectorAll('.md [data-src]');
+            var target = els[els.length - 1];
+            if (target) editBlockInPlace(target, p, true);
+          }
+        };
+      });
+      container.appendChild(wrap);
     }
 
     // ------------------ editor toolbar (edit view) -------------------------
@@ -1348,7 +1523,7 @@
       } else {
         var mdiv = document.createElement('div'); mdiv.className = 'md';
         mdiv.innerHTML = p.body.trim() ? mdRender(p.body)
-          : '<p class="page-empty-hint">This page is empty — hit <strong>Edit</strong> (top right) to start writing.</p>';
+          : '<p class="page-empty-hint">This page is empty — click <strong>＋ Add</strong> below to start.</p>';
         // Task checkboxes are live: clicking one flips [ ]/[x] on its source
         // line, saves, and syncs like any other edit.
         mdiv.addEventListener('change', function (e) {
@@ -1381,6 +1556,8 @@
         });
         wrap.appendChild(mdiv);
         setupTableEditing(mdiv, p);
+        setupBlockEditing(mdiv, p);
+        appendAddBlock(wrap, p);
       }
       scroll.appendChild(wrap); root.appendChild(scroll);
     }
@@ -2142,7 +2319,7 @@
         // In an editor, Ctrl/Cmd+K means "insert link" (the universal muscle
         // memory); anywhere else it opens quick find.
         var ae = document.activeElement;
-        if (ae && ae.tagName === 'TEXTAREA' && (ae.classList.contains('page-editor') || ae.id === 'cDesc')) {
+        if (ae && ae.tagName === 'TEXTAREA' && (ae.classList.contains('page-editor') || ae.classList.contains('block-editor') || ae.id === 'cDesc')) {
           insertLinkInEditor(ae, function () {
             ae.dispatchEvent(new Event('input', { bubbles: false }));
           });
