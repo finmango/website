@@ -48,6 +48,9 @@ const CONFIG = {
   // "not wired up" note and the standalone post-review.html panel still works.
   POSTS_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyw06JczRZVwdf3vw70xeshZ_shp2J1zzvPvPqhR-2_FSqzSBFaq0Yu-OZ7KjKYfCuthQ/exec',
   POSTS_REVIEW_KEY: 'REPLACE_WITH_POSTS_REVIEW_KEY',
+  // When a reviewer requests changes (with a note), the author is emailed the
+  // note directly. Replies to that email land here.
+  NOTES_REPLY_TO: 'scott@finmango.org',
   // Refuse absurdly large documents (protects the Sheet; ~500 KB of JSON is
   // thousands of cards — far beyond normal use).
   MAX_DOC_BYTES: 500000,
@@ -87,8 +90,15 @@ function doPost(e) {
     if (data.action === 'posts-get') { requireAuth_(data); return json(postsBridge_({ action: 'review-get', id: String(data.id || '') })); }
     if (data.action === 'posts-review') {
       requireAuth_(data);
-      return json(postsBridge_({ action: 'review', id: String(data.id || ''), reviewer: String(data.reviewer || 'HQ team'),
-        vote: String(data.vote || 'comment'), comment: String(data.comment || '').slice(0, 2000) }));
+      const vote = String(data.vote || 'comment');
+      const comment = String(data.comment || '').slice(0, 2000);
+      const reviewer = String(data.reviewer || 'HQ team');
+      const out = postsBridge_({ action: 'review', id: String(data.id || ''), reviewer: reviewer, vote: vote, comment: comment });
+      // "Request changes" with a note also emails the author the note.
+      if (out && out.result === 'success' && vote === 'changes' && comment.trim()) {
+        out.emailed = emailAuthorChanges_(String(data.id || ''), reviewer, comment.trim());
+      }
+      return json(out);
     }
     if (data.action === 'posts-publish') {
       requireAuth_(data);
@@ -277,6 +287,41 @@ function postsBridge_(params) {
   const res = UrlFetchApp.fetch(CONFIG.POSTS_APPS_SCRIPT_URL + '?' + qs, { muteHttpExceptions: true });
   try { return JSON.parse(res.getContentText()); }
   catch (err) { throw new Error('Posts backend unavailable'); }
+}
+
+// Email the author the reviewer's change request. Sent from this (HQ) script
+// so the posts backend needs no modification; the author's address comes from
+// their original submission via the bridge. Returns true if a mail went out.
+function emailAuthorChanges_(id, reviewer, comment) {
+  try {
+    const res = postsBridge_({ action: 'review-get', id: id });
+    const post = res && res.post;
+    if (!post || !post.authorEmail) return false;
+    const title = String(post.title || 'your Ambassador Note');
+    MailApp.sendEmail({
+      to: post.authorEmail,
+      replyTo: CONFIG.NOTES_REPLY_TO,
+      subject: 'FinMango Ambassador Notes — changes requested: ' + title,
+      htmlBody:
+        '<p>Hi ' + escHtml_(String(post.authorName || 'there').split(/\s+/)[0]) + ',</p>' +
+        '<p>Thanks for submitting <strong>' + escHtml_(title) + '</strong>! Our editorial team read it and has some feedback before it goes live:</p>' +
+        '<blockquote style="border-left:3px solid #FF6B35;margin:12px 0;padding:6px 14px;color:#333;">' +
+        escHtml_(comment).replace(/\n/g, '<br>') + '</blockquote>' +
+        '<p style="color:#666;font-size:13px;">— ' + escHtml_(reviewer) + ', FinMango editorial</p>' +
+        '<p>You can submit an updated version at <a href="https://www.finmango.org/write">finmango.org/write</a>, ' +
+        'or just reply to this email if anything is unclear. We\'d love to publish this!</p>' +
+        '<p>— The FinMango team 🥭</p>'
+    });
+    return true;
+  } catch (err) {
+    return false; // email failures never block the vote itself
+  }
+}
+
+function escHtml_(s) {
+  return String(s || '').replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
 }
 
 // ============================== HELPERS ====================================
