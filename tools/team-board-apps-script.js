@@ -104,6 +104,13 @@ function doPost(e) {
       requireAuth_(data);
       return json(postsBridge_({ action: 'publish', id: String(data.id || ''), reviewer: String(data.reviewer || 'HQ team') }));
     }
+    if (data.action === 'posts-update') {
+      requireAuth_(data);
+      const upd = { action: 'update', id: String(data.id || ''), editor: String(data.editor || 'HQ editor') };
+      if (typeof data.title === 'string') upd.title = data.title;
+      if (typeof data.body === 'string') upd.body = data.body;
+      return json(postsBridgePost_(upd));
+    }
     return json({ result: 'error', error: 'Unknown action' });
   } catch (err) {
     return json({ result: 'error', error: errMessage_(err) });
@@ -285,6 +292,21 @@ function postsBridge_(params) {
     return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
   }).join('&');
   const res = UrlFetchApp.fetch(CONFIG.POSTS_APPS_SCRIPT_URL + '?' + qs, { muteHttpExceptions: true });
+  try { return JSON.parse(res.getContentText()); }
+  catch (err) { throw new Error('Posts backend unavailable'); }
+}
+
+// POST variant of the bridge for payloads too large for a query string
+// (draft edits carry the whole post body).
+function postsBridgePost_(payload) {
+  if (CONFIG.POSTS_REVIEW_KEY.indexOf('REPLACE_WITH') === 0) {
+    throw new Error('Post reviews not configured');
+  }
+  payload.key = CONFIG.POSTS_REVIEW_KEY;
+  const res = UrlFetchApp.fetch(CONFIG.POSTS_APPS_SCRIPT_URL, {
+    method: 'post', contentType: 'text/plain', payload: JSON.stringify(payload),
+    muteHttpExceptions: true, followRedirects: true
+  });
   try { return JSON.parse(res.getContentText()); }
   catch (err) { throw new Error('Posts backend unavailable'); }
 }

@@ -55,6 +55,7 @@ function doPost(e) {
     let data = {};
     try { data = JSON.parse(e.postData.contents); } catch (err) { data = e.parameter || {}; }
     if (data.action === 'submit') return json(submitPost_(data));
+    if (data.action === 'update') { requireKey_(data.key); return json(updatePost_(data)); }
     return json({ result: 'error', error: 'Unknown action' });
   } catch (err) {
     return json({ result: 'error', error: String(err) });
@@ -173,6 +174,26 @@ function addReview_(p) {
   }
   saveJson_(r.jsonFileId, post);
   updateRow_(r.rowIndex, { status: post.status, reviewsSummary: summarize_(post.reviews) });
+  return { result: 'success', post: post };
+}
+
+// Reviewer-only: edit a draft's title/body during review (used by the HQ
+// Ambassador Notes tab). Published posts are locked — unpublishing isn't a
+// thing, so live content can't be silently rewritten. Every edit leaves an
+// audit entry in the review trail.
+function updatePost_(p) {
+  const r = findRow_(p.id);
+  if (!r) return { result: 'error', error: 'Not found' };
+  const post = readJson_(r.jsonFileId);
+  if (post.status === 'published') return { result: 'error', error: 'This post is live — edits are locked' };
+  if (typeof p.title === 'string' && p.title.trim()) post.title = p.title.toString().slice(0, 200);
+  if (typeof p.body === 'string' && p.body.trim()) post.body = p.body.toString().slice(0, 200000);
+  if (typeof p.dek === 'string') post.dek = p.dek.toString().slice(0, 300);
+  post.reviews = post.reviews || [];
+  post.reviews.push({ reviewer: (p.editor || 'Editor').toString().slice(0, 120), vote: 'comment',
+    comment: '✏️ Edited the draft during review', at: new Date().toISOString() });
+  saveJson_(r.jsonFileId, post);
+  updateRow_(r.rowIndex, { title: post.title, reviewsSummary: summarize_(post.reviews) });
   return { result: 'success', post: post };
 }
 
