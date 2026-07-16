@@ -19,13 +19,14 @@ No server to run: the shared backend is a Google Apps Script web app with a
 Google Sheet as storage (same pattern as the Community Wall and Ambassador
 Notes).
 
-It works in two modes:
+The page is **gated**: visitors see only a sign-in screen — no workspace UI,
+no content — until they authenticate. Once in, everyone sees and edits the
+*same* shared workspace; changes propagate to other open tabs within ~15
+seconds. (Edits are also cached in the browser's localStorage, so brief
+connectivity blips don't lose work.)
 
-- **Local mode (zero setup)** — open the page and start organizing. Everything
-  is saved in that browser's localStorage. Nothing is shared.
-- **Team sync mode** — after the one-time setup below, everyone with access
-  sees and edits the *same* workspace. Changes propagate to other open tabs
-  within ~15 seconds.
+The gate is a UX/visibility layer — the actual security boundary is the
+backend, which refuses every read and write without valid credentials.
 
 Access has **two doors**:
 
