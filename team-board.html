@@ -272,10 +272,12 @@
     .gate-card .glogo { width: 64px; height: 64px; object-fit: contain; margin-bottom: .6rem; }
     .gate-card h1 { font-size: 1.5rem; letter-spacing: -.02em; margin: .35rem 0 .3rem; }
     .gate-card .sub { font-size: .88rem; color: var(--ink-dim); margin-bottom: 1.4rem; }
-    .gate-divider { display: flex; align-items: center; gap: .8rem; font-family: var(--font-mono); font-size: .62rem;
-      text-transform: uppercase; letter-spacing: .14em; color: var(--ink-faint); margin: 1rem 0 .8rem; }
-    .gate-divider::before, .gate-divider::after { content: ''; height: 1px; background: var(--ink-line-soft); flex: 1; }
-    .gate-key-row { display: flex; gap: .5rem; }
+    /* The key door exists but shouldn't advertise itself: a lone faint dot
+       under the card reveals it. FinMango-account sign-in is the story. */
+    .gate-key-toggle { display: block; margin: .9rem auto 0; color: var(--ink-line); font-size: 1rem; line-height: 1;
+      padding: .2rem .6rem; border-radius: 6px; }
+    .gate-key-toggle:hover { color: var(--ink-faint); }
+    .gate-key-row { display: flex; gap: .5rem; margin-top: 1rem; }
     .gate-key-row input { flex: 1; border: 1px solid var(--ink-line); border-radius: 8px; padding: .55rem .7rem; font-size: .9rem; }
     .gate-key-row input:focus { outline: 2px solid var(--orange); border-color: transparent; }
     .gate-key-row button { background: var(--orange); color: #fff; font-weight: 700; font-size: .85rem; border-radius: 8px; padding: .55rem 1rem; }
@@ -310,13 +312,15 @@
       <h1>FinMango HQ</h1>
       <p class="sub">The team workspace — roadmap, boards &amp; wiki. Sign in with your @finmango.org account.</p>
       <div class="gsi-wrap" id="gsiBtnGate"></div>
-      <div class="gate-divider">or use the team key</div>
-      <div class="gate-key-row">
-        <input id="gateKey" type="password" placeholder="Team key" aria-label="Team key">
-        <button id="gateGo">Enter</button>
+      <div id="gateKeyArea" style="display:none;">
+        <div class="gate-key-row">
+          <input id="gateKey" type="password" placeholder="Team key" aria-label="Team key">
+          <button id="gateGo">Enter</button>
+        </div>
       </div>
       <p class="gate-err" id="gateErr"></p>
       <a class="back" href="index.html">← back to finmango.org</a>
+      <button class="gate-key-toggle" id="gateKeyToggle" aria-label="Enter with a team key">·</button>
     </div>
   </div>
 
@@ -1745,6 +1749,11 @@
       }
       $('gateGo').onclick = submitKey;
       $('gateKey').addEventListener('keydown', function (e) { if (e.key === 'Enter') submitKey(); });
+      $('gateKeyToggle').onclick = function () {
+        this.style.display = 'none';
+        $('gateKeyArea').style.display = 'block';
+        $('gateKey').focus();
+      };
     }
 
     // ============================== INIT ===================================
