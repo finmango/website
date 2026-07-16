@@ -187,6 +187,10 @@
     .md pre { background: #14140F; color: #FAFAF7; padding: .9rem 1.1rem; border-radius: 8px; overflow-x: auto; margin: .8rem 0; }
     .md pre code { background: none; padding: 0; color: inherit; font-size: .8rem; line-height: 1.6; }
     .md hr { border: none; border-top: 1px solid var(--ink-line); margin: 1.5rem 0; }
+    .md li.task { list-style: none; margin-left: -1.25rem; }
+    .md li.task label { display: flex; gap: .55rem; align-items: baseline; cursor: pointer; }
+    .md li.task input { width: 15px; height: 15px; accent-color: var(--orange); cursor: pointer; flex-shrink: 0; transform: translateY(2px); }
+    .md li.task input:checked ~ span { color: var(--ink-faint); text-decoration: line-through; text-decoration-color: var(--ink-line); }
     .md .tablewrap { overflow-x: auto; margin: .8rem 0; }
     .md table { border-collapse: collapse; width: 100%; font-size: .88em; }
     .md th, .md td { border: 1px solid var(--ink-line); padding: .45rem .6rem; text-align: left; vertical-align: top; }
@@ -667,7 +671,16 @@
         if ((m = line.match(/^[-*]\s+(.*)$/))) {
           flushPara(); flushQuote();
           if (list !== 'ul') { flushList(); html += '<ul>'; list = 'ul'; }
-          html += '<li>' + mdInline(m[1]) + '</li>'; continue;
+          // Task items: "- [ ] thing" / "- [x] thing" become real checkboxes.
+          // data-ln carries the source line so a click can flip the markdown.
+          var task = m[1].match(/^\[([ xX])\]\s+(.*)$/);
+          if (task) {
+            html += '<li class="task"><label><input type="checkbox" data-ln="' + i + '"'
+              + (task[1] === ' ' ? '' : ' checked') + '><span>' + mdInline(task[2]) + '</span></label></li>';
+          } else {
+            html += '<li>' + mdInline(m[1]) + '</li>';
+          }
+          continue;
         }
         if ((m = line.match(/^\d+\.\s+(.*)$/))) {
           flushPara(); flushQuote();
@@ -1191,6 +1204,19 @@
         var mdiv = document.createElement('div'); mdiv.className = 'md';
         mdiv.innerHTML = p.body.trim() ? mdRender(p.body)
           : '<p class="page-empty-hint">This page is empty — hit <strong>Edit</strong> (top right) to start writing.</p>';
+        // Task checkboxes are live: clicking one flips [ ]/[x] on its source
+        // line, saves, and syncs like any other edit.
+        mdiv.addEventListener('change', function (e) {
+          var cb = e.target;
+          if (!cb.matches || !cb.matches('input[type=checkbox][data-ln]')) return;
+          var ln = Number(cb.getAttribute('data-ln'));
+          var lines = p.body.split('\n');
+          if (ln < 0 || ln >= lines.length) return;
+          lines[ln] = lines[ln].replace(/^(\s*[-*]\s*)\[[ xX]\]/, '$1' + (cb.checked ? '[x]' : '[ ]'));
+          p.body = lines.join('\n');
+          p.updatedAt = now();
+          mutate();
+        });
         // wikilink navigation (and create-on-click for missing targets)
         mdiv.addEventListener('click', function (e) {
           var a = e.target.closest ? e.target.closest('a.wikilink') : null;

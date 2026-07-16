@@ -94,6 +94,10 @@
     .md pre { background: #14140F; color: #FAFAF7; padding: .8rem 1rem; border-radius: 8px; overflow-x: auto; margin: .7rem 0; }
     .md pre code { background: none; padding: 0; }
     .md hr { border: none; border-top: 1px solid var(--ink-line); margin: 1.1rem 0; }
+    .md li.task { list-style: none; margin-left: -1.25rem; }
+    .md li.task label { display: flex; gap: .5rem; align-items: baseline; }
+    .md li.task input { width: 14px; height: 14px; accent-color: var(--orange); flex-shrink: 0; transform: translateY(2px); }
+    .md li.task input:checked ~ span { color: var(--ink-faint); text-decoration: line-through; text-decoration-color: var(--ink-line); }
     .md .tablewrap { overflow-x: auto; margin: .7rem 0; }
     .md table { border-collapse: collapse; width: 100%; font-size: .88em; }
     .md th, .md td { border: 1px solid var(--ink-line); padding: .4rem .55rem; text-align: left; vertical-align: top; }
@@ -207,7 +211,15 @@
           if ((m = line.match(/^[-*]\s+(.*)$/))) {
             flushPara(); flushQuote();
             if (list !== 'ul') { flushList(); html += '<ul>'; list = 'ul'; }
-            html += '<li>' + mdInline(m[1]) + '</li>'; continue;
+            var task = m[1].match(/^\[([ xX])\]\s+(.*)$/);
+            if (task) {
+              // Read-only on the public page — state comes from the team.
+              html += '<li class="task"><label><input type="checkbox" disabled'
+                + (task[1] === ' ' ? '' : ' checked') + '><span>' + mdInline(task[2]) + '</span></label></li>';
+            } else {
+              html += '<li>' + mdInline(m[1]) + '</li>';
+            }
+            continue;
           }
           if ((m = line.match(/^\d+\.\s+(.*)$/))) {
             flushPara(); flushQuote();
