@@ -492,7 +492,7 @@
     // hidden and the team-key door still works.
     var GOOGLE_CLIENT_ID = '846871931336-o1h3km8mg9qoil186ub74t83jun80b2m.apps.googleusercontent.com';
     var ALLOWED_DOMAIN = 'finmango.org';
-    var LS_DOC = 'fmb_doc_v1', LS_KEY = 'fmb_key', LS_ME = 'fmb_me', LS_UI = 'fmb_ui', LS_AUTH = 'fmb_gauth';
+    var LS_DOC = 'fmb_doc_v1', LS_KEY = 'fmb_key', LS_ME = 'fmb_me', LS_UI = 'fmb_ui', LS_AUTH = 'fmb_gauth', LS_NOTES = 'fmb_notes_cache';
     var COL_COLORS = ['#9A9A93', '#4A7BD0', '#E8A33D', '#3E9A5F', '#FF6B35', '#8B5CF6', '#D9534F', '#2E9E9E'];
     var AVA_COLORS = ['#FF6B35', '#3E9A5F', '#4A7BD0', '#8B5CF6', '#E8A33D', '#2E9E9E', '#D9534F', '#5F6B7A'];
     var TAG_COLORS = [['#FFF0E8', '#C2410C'], ['#EAF3EC', '#1F7A40'], ['#EAF0FA', '#2B5AB8'], ['#F3EDFC', '#6D3FC4'],
@@ -2346,7 +2346,14 @@
     // server-side review key, so being signed in here is the only credential.
     var PR_STATUS = { pending: ['Pending', '#E8A33D'], changes: ['Changes requested', '#E5511B'],
       approved: ['Approved', '#3E9A5F'], rejected: ['Rejected', '#D9534F'], published: ['Published', '#9A9A93'] };
-    var notes = { posts: null, loading: false, error: null, openId: null, detail: {} };
+    // The queue paints instantly from the last-seen copy (localStorage) and
+    // refreshes in the background — the two Apps Script cold starts behind
+    // each live fetch cost ~4-5s, so we never make the user wait on them.
+    var notes = { posts: null, loading: false, refreshing: false, error: null, openId: null, detail: {} };
+    try {
+      var cachedNotes = JSON.parse(localStorage.getItem(LS_NOTES) || 'null');
+      if (cachedNotes && cachedNotes.posts) notes.posts = cachedNotes.posts;
+    } catch (e) {}
     function postsApi(payload) {
       return fetch('/api/board', {
         method: 'POST', headers: { 'content-type': 'application/json' },
@@ -2406,24 +2413,41 @@
     function openNotesView() {
       ui.view = 'notes'; ui.pageId = null;
       persistLocal(); render(); closeSidebarOnMobile();
-      if (!notes.posts && !notes.loading) loadNotes();
+      if (!notes.loading) loadNotes(); // cached copy is already on screen; refresh behind it
     }
     function loadNotes() {
-      notes.loading = true; notes.error = null;
+      notes.loading = true; notes.refreshing = !!notes.posts; notes.error = null;
       postsApi({ action: 'posts-list', status: 'all' }).then(function (res) {
-        notes.loading = false;
+        notes.loading = false; notes.refreshing = false;
         if (res.result !== 'success') {
-          notes.error = String(res.error || 'unreachable');
-          notes.posts = null;
+          // Keep showing the cached queue on a transient failure; only surface
+          // the error when we have nothing at all to show.
+          if (!notes.posts) notes.error = String(res.error || 'unreachable');
         } else {
           notes.posts = res.posts || [];
+          try { localStorage.setItem(LS_NOTES, JSON.stringify({ t: now(), posts: notes.posts })); } catch (e) {}
+          prefetchNoteDetails();
         }
         updateNotesCount();
         if (ui.view === 'notes') render();
       }).catch(function () {
-        notes.loading = false; notes.error = 'unreachable'; notes.posts = null;
+        notes.loading = false; notes.refreshing = false;
+        if (!notes.posts) notes.error = 'unreachable';
         if (ui.view === 'notes') render();
       });
+    }
+    // Warm the bodies of actionable posts so expanding one is instant.
+    function prefetchNoteDetails() {
+      var queue = (notes.posts || [])
+        .filter(function (p) { return p.status !== 'published' && p.status !== 'rejected' && !notes.detail[p.id]; })
+        .slice(0, 4);
+      (function next() {
+        var p = queue.shift(); if (!p) return;
+        postsApi({ action: 'posts-get', id: p.id }).then(function (res) {
+          if (res.result === 'success' && res.post) notes.detail[p.id] = res.post;
+          next();
+        }).catch(next);
+      })();
     }
     function updateNotesCount() {
       var el = $('notesCount'); if (!el) return;
@@ -2464,7 +2488,7 @@
       head.innerHTML = '<div><h1 style="font-size:1.5rem;letter-spacing:-.02em;">Ambassador Notes</h1>'
         + '<p class="help-note" style="margin:.2rem 0 0;">Drafts from <a href="write.html" target="_blank" rel="noopener">finmango.org/write</a>'
         + ' land here. Approve, request changes, reject, or publish — signed as you.</p></div>'
-        + '<button class="btn-sm ghost" id="notesRefresh">↻ Refresh</button>';
+        + '<button class="btn-sm ghost" id="notesRefresh">' + (notes.refreshing ? '⏳ Updating…' : '↻ Refresh') + '</button>';
       wrap.appendChild(head);
       var body = document.createElement('div');
       wrap.appendChild(body);
@@ -2517,7 +2541,7 @@
         if (notes.openId) fillNoteDetail(body, notes.openId);
       }
       scroll.appendChild(wrap); root.appendChild(scroll);
-      var rf = $('notesRefresh'); if (rf) rf.onclick = function () { notes.posts = null; loadNotes(); render(); };
+      var rf = $('notesRefresh'); if (rf) rf.onclick = function () { if (!notes.loading) { loadNotes(); render(); } };
       var rt = $('notesRetry'); if (rt) rt.onclick = function (e) { e.preventDefault(); notes.error = null; loadNotes(); render(); };
     }
     function fillNoteDetail(container, id) {
@@ -2679,7 +2703,13 @@
       if (window.innerWidth <= 760) ui.sidebarClosed = true;
       render();
       setSyncStatus('local');
-      if (canSync()) pullLoad(true);
+      if (canSync()) {
+        pullLoad(true);
+        // Warm the ambassador-notes queue in the background so the tab (and
+        // its badge) are ready before anyone clicks — the live fetch takes
+        // several seconds through two Apps Script cold starts.
+        setTimeout(function () { if (!notes.loading) loadNotes(); }, 2500);
+      }
     }
 
     function showGate() {
