@@ -464,6 +464,31 @@
     function sanitize(html) {
       const doc = new DOMParser().parseFromString('<div>' + (html || '') + '</div>', 'text/html');
       const root = doc.body.firstChild;
+      // Older notes stored paragraphs as <div> (contenteditable's default), which the
+      // article styles give no margins — convert to <p> so paragraph spacing renders.
+      const BLOCK_TAGS = /^(P|H2|H3|UL|OL|BLOCKQUOTE|HR|FIGURE|DIV|IFRAME|IMG)$/;
+      let stray; while ((stray = root.querySelector('div'))) {
+        if ([...stray.children].some(c => BLOCK_TAGS.test(c.tagName))) {
+          // a div wrapping other blocks is just a wrapper — unwrap it
+          while (stray.firstChild) stray.parentNode.insertBefore(stray.firstChild, stray);
+          stray.remove();
+        } else {
+          const p = doc.createElement('p');
+          while (stray.firstChild) p.appendChild(stray.firstChild);
+          stray.replaceWith(p);
+        }
+      }
+      // A first line typed before any Enter is a bare text node — wrap loose
+      // text/inline runs in <p> so every paragraph keeps its spacing.
+      const INLINE_OK = { '#text': 1, BR: 1, STRONG: 1, B: 1, EM: 1, I: 1, U: 1, A: 1, SPAN: 1 };
+      let run = null;
+      [...root.childNodes].forEach(n => {
+        const name = n.nodeType === 3 ? '#text' : (n.nodeType === 1 ? n.tagName : '');
+        if (!INLINE_OK[name]) { run = null; return; }
+        if (name === '#text' && !n.textContent.trim() && !run) return;
+        if (!run) { run = doc.createElement('p'); root.insertBefore(run, n); }
+        run.appendChild(n);
+      });
       (function walk(node) {
         [...node.childNodes].forEach(child => {
           if (child.nodeType === 1) {
