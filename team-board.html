@@ -291,6 +291,13 @@
     .gate-card .back { display: inline-block; margin-top: 1.1rem; font-size: .82rem; font-weight: 600; color: var(--ink-faint); text-decoration: none; }
     .gate-card .back:hover { color: var(--ink); }
 
+    /* ===== SELECTION TOOLBAR (highlight text → 🔗/B/I) ===== */
+    .sel-toolbar { position: fixed; display: none; z-index: 300; background: var(--ink); border-radius: 8px;
+      box-shadow: var(--shadow-pop); padding: .2rem; gap: .1rem; animation: toast-in .12s ease; }
+    .sel-toolbar button { color: var(--paper); font-size: .8rem; font-weight: 600; padding: .3rem .55rem; border-radius: 6px; }
+    .sel-toolbar button:hover { background: rgba(250,250,247,.16); }
+    .sel-toolbar button strong, .sel-toolbar button em { color: inherit; }
+
     /* ===== TOASTS ===== */
     .toasts { position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; flex-direction: column; gap: .5rem; align-items: center; }
     .toast { background: var(--ink); color: var(--paper); font-size: .84rem; font-weight: 600; padding: .55rem 1rem;
@@ -493,6 +500,79 @@
       onChanged();
       ta.focus();
     }
+    // Floating selection toolbar (Notion-style): highlight text in an editor
+    // and a 🔗/B/I pill appears above the selection.
+    var selTb = null, selTbTarget = null, selTbOnChanged = null, selTbHideTimer = null;
+    function ensureSelToolbar() {
+      if (selTb) return selTb;
+      selTb = document.createElement('div');
+      selTb.className = 'sel-toolbar';
+      selTb.innerHTML = '<button data-act="link" title="Add link (Ctrl+K)">🔗 Link</button>'
+        + '<button data-act="bold" title="Bold"><strong>B</strong></button>'
+        + '<button data-act="italic" title="Italic"><em>I</em></button>';
+      // mousedown (not click) + preventDefault keeps the textarea selection alive
+      selTb.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        var btn = e.target.closest('button'); if (!btn || !selTbTarget) return;
+        var ta = selTbTarget, done = selTbOnChanged;
+        if (btn.dataset.act === 'link') insertLinkInEditor(ta, done);
+        else if (btn.dataset.act === 'bold') wrapSelection(ta, '**', '**', done);
+        else if (btn.dataset.act === 'italic') wrapSelection(ta, '*', '*', done);
+        hideSelToolbar();
+      });
+      document.body.appendChild(selTb);
+      return selTb;
+    }
+    function wrapSelection(ta, pre, post, onChanged) {
+      var s = ta.selectionStart, e = ta.selectionEnd;
+      if (e <= s) return;
+      ta.setRangeText(pre + ta.value.slice(s, e) + post, s, e, 'end');
+      if (onChanged) onChanged();
+      ta.focus();
+    }
+    function hideSelToolbar() { if (selTb) selTb.style.display = 'none'; }
+    // Pixel position of a character index inside a textarea, via a mirror div.
+    function taCaretXY(ta, index) {
+      var mirror = document.createElement('div');
+      var cs = getComputedStyle(ta);
+      ['fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing',
+        'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+        'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth',
+        'boxSizing'].forEach(function (prop) { mirror.style[prop] = cs[prop]; });
+      mirror.style.position = 'absolute'; mirror.style.visibility = 'hidden';
+      mirror.style.whiteSpace = 'pre-wrap'; mirror.style.wordWrap = 'break-word';
+      mirror.style.width = ta.clientWidth + 'px';
+      mirror.textContent = ta.value.substring(0, index);
+      var marker = document.createElement('span');
+      marker.textContent = ta.value.substring(index, index + 1) || '.';
+      mirror.appendChild(marker);
+      document.body.appendChild(mirror);
+      var xy = { x: marker.offsetLeft, y: marker.offsetTop };
+      document.body.removeChild(mirror);
+      var r = ta.getBoundingClientRect();
+      return { left: r.left + xy.x - ta.scrollLeft, top: r.top + xy.y - ta.scrollTop };
+    }
+    function attachSelectionToolbar(ta, onChanged) {
+      function maybeShow() {
+        clearTimeout(selTbHideTimer);
+        selTbHideTimer = setTimeout(function () {
+          if (document.activeElement !== ta || ta.selectionEnd <= ta.selectionStart) { hideSelToolbar(); return; }
+          var tb = ensureSelToolbar();
+          selTbTarget = ta; selTbOnChanged = onChanged;
+          var mid = Math.floor((ta.selectionStart + ta.selectionEnd) / 2);
+          var pos = taCaretXY(ta, mid);
+          tb.style.display = 'flex';
+          var w = tb.offsetWidth || 150;
+          tb.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, pos.left - w / 2)) + 'px';
+          tb.style.top = Math.max(8, pos.top - 42) + 'px';
+        }, 120);
+      }
+      ['select', 'mouseup', 'keyup', 'touchend'].forEach(function (ev) { ta.addEventListener(ev, maybeShow); });
+      ta.addEventListener('blur', function () { setTimeout(hideSelToolbar, 150); });
+      ta.addEventListener('input', hideSelToolbar);
+      ta.addEventListener('scroll', hideSelToolbar);
+    }
+
     function extractUrls(text) {
       var seen = {}, out = [];
       (String(text || '').match(/https?:\/\/[^\s<)\]]+/g) || []).forEach(function (u) {
@@ -1076,6 +1156,7 @@
         function pageChanged() { p.body = ta.value; p.updatedAt = now(); mutate({ noRender: true }); }
         ta.addEventListener('input', pageChanged);
         attachLinkPaste(ta, pageChanged);
+        attachSelectionToolbar(ta, pageChanged);
         wrap.appendChild(ta);
         setTimeout(function () { ta.focus(); }, 0);
       } else {
@@ -1415,6 +1496,7 @@
       $('cDesc').oninput = function () { c.desc = this.value; touch(); renderCardLinks(); };
       $('cDesc').onblur = function () { render(); };
       attachLinkPaste($('cDesc'), function () { c.desc = $('cDesc').value; touch(); renderCardLinks(); });
+      attachSelectionToolbar($('cDesc'), function () { c.desc = $('cDesc').value; touch(); renderCardLinks(); });
       function addComment() {
         var v = $('cCommentInput').value.trim(); if (!v) return;
         var m = me();
