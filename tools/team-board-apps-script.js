@@ -32,10 +32,16 @@
 const CONFIG = {
   // The "FinMango HQ Workspace" Sheet in the team Drive (owner: scott@finmango.org).
   SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/16qX99ym-7RdxdKtqt2cD6DQKMyZvK0Wu_eZmtjgG9bE/edit',
-  // The shared team passphrase. Anyone with this key can read AND write the
-  // board, so treat it like a password: invent a real one when deploying and
-  // never commit it to the (public) repo.
+  // The shared team passphrase (the "volunteer door"). Anyone with this key
+  // can read AND write the board, so treat it like a password: invent a real
+  // one when deploying and never commit it to the (public) repo.
   ACCESS_KEY: 'change-this-passphrase',
+  // "Sign in with FinMango" (the "team door"): the OAuth client ID from Google
+  // Cloud Console — must match GOOGLE_CLIENT_ID in team-board.html. Client IDs
+  // are public by design. Until set, only the ACCESS_KEY door works.
+  GOOGLE_CLIENT_ID: 'REPLACE_WITH_GOOGLE_OAUTH_CLIENT_ID',
+  // Only Google accounts on this domain are accepted.
+  ALLOWED_DOMAIN: 'finmango.org',
   // Refuse absurdly large documents (protects the Sheet; ~500 KB of JSON is
   // thousands of cards — far beyond normal use).
   MAX_DOC_BYTES: 500000,
@@ -51,7 +57,6 @@ const CHUNK_SIZE = 45000;
 function doGet(e) {
   const p = (e && e.parameter) || {};
   try {
-    if (p.action === 'load') return json(loadDoc_(p.key));
     if (p.action === 'public') return json(publicDoc_());
     if (p.action === 'ping') return json({ result: 'success', pong: true });
     return json({ result: 'error', error: 'Unknown action' });
@@ -60,24 +65,27 @@ function doGet(e) {
   }
 }
 
+// Authenticated traffic (load AND save) arrives as POST so credentials never
+// sit in a URL. Each request carries either `key` (team passphrase) or
+// `idToken` (Google sign-in, verified server-side).
 function doPost(e) {
   const lock = LockService.getScriptLock();
   lock.tryLock(20000);
   try {
     let data = {};
     try { data = JSON.parse(e.postData.contents); } catch (err) { data = (e && e.parameter) || {}; }
-    if (data.action === 'save') return json(saveDoc_(data));
+    if (data.action === 'load') { requireAuth_(data); return json(loadDoc_()); }
+    if (data.action === 'save') { requireAuth_(data); return json(saveDoc_(data)); }
     return json({ result: 'error', error: 'Unknown action' });
   } catch (err) {
-    return json({ result: 'error', error: String(err) });
+    return json({ result: 'error', error: errMessage_(err) });
   } finally {
     lock.releaseLock();
   }
 }
 
 // ============================== ACTIONS ====================================
-function loadDoc_(key) {
-  requireKey_(key);
+function loadDoc_() {
   const sheet = getSheet_();
   const meta = sheet.getRange(1, 1, 1, 3).getValues()[0];
   const version = Number(meta[0]) || 0;
@@ -95,8 +103,6 @@ function loadDoc_(key) {
 }
 
 function saveDoc_(req) {
-  requireKey_(req.key);
-
   const docString = JSON.stringify(req.data || null);
   if (docString === 'null') throw new Error('Missing document');
   if (docString.length > CONFIG.MAX_DOC_BYTES) throw new Error('Document too large');
@@ -189,12 +195,62 @@ function writeChunks_(sheet, docString) {
   sheet.getRange(3, 1, rows.length, 1).setValues(rows);
 }
 
-// ============================== HELPERS ====================================
+// ============================== AUTH =======================================
+// Two doors: a Google ID token from a @finmango.org account, or the shared
+// team ACCESS_KEY. Either one grants read/write to the whole workspace.
+function requireAuth_(data) {
+  if (data.idToken) { verifyIdToken_(String(data.idToken)); return; }
+  requireKey_(data.key);
+}
+
 function requireKey_(key) {
   if (CONFIG.ACCESS_KEY === 'change-this-passphrase') {
     throw new Error('Backend not configured (set ACCESS_KEY)');
   }
   if (String(key || '') !== CONFIG.ACCESS_KEY) throw new Error('Invalid access key');
+}
+
+// Verify a Google ID token: signature/expiry via Google's tokeninfo endpoint,
+// then audience (our OAuth client) and domain (finmango.org). Verified tokens
+// are cached by hash until they expire, so polling clients cost one outbound
+// verification per user per hour, not one per request.
+function verifyIdToken_(idToken) {
+  if (CONFIG.GOOGLE_CLIENT_ID.indexOf('REPLACE_WITH') === 0) {
+    throw new Error('Google sign-in not configured');
+  }
+  const cache = CacheService.getScriptCache();
+  const hash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, idToken)
+    .map(function (b) { return ('0' + ((b + 256) % 256).toString(16)).slice(-2); }).join('');
+  const cacheKey = 'tok_' + hash;
+  if (cache.get(cacheKey)) return;
+
+  let info;
+  try {
+    const res = UrlFetchApp.fetch(
+      'https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(idToken),
+      { muteHttpExceptions: true });
+    if (res.getResponseCode() !== 200) throw new Error('bad status');
+    info = JSON.parse(res.getContentText());
+  } catch (err) {
+    throw new Error('Invalid token');
+  }
+  const email = String(info.email || '').toLowerCase();
+  const domainOk = info.hd === CONFIG.ALLOWED_DOMAIN
+    || email.slice(-(CONFIG.ALLOWED_DOMAIN.length + 1)) === '@' + CONFIG.ALLOWED_DOMAIN;
+  if (info.aud !== CONFIG.GOOGLE_CLIENT_ID
+      || String(info.email_verified) !== 'true'
+      || !domainOk) {
+    throw new Error('Invalid token');
+  }
+  const ttl = Math.max(60, Math.min(21600, Number(info.exp) - Math.floor(Date.now() / 1000) - 60));
+  cache.put(cacheKey, '1', ttl);
+}
+
+// ============================== HELPERS ====================================
+// Error objects stringify as "Error: msg" — the front-end matches on the bare
+// message ("Invalid token", "Invalid access key"), so strip the prefix.
+function errMessage_(err) {
+  return String(err && err.message ? err.message : err);
 }
 
 function getSheet_() {

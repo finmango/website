@@ -7,13 +7,15 @@
 // is live collaborative state, so NOTHING here is edge-cached — every load hits
 // the backend and every save is forwarded immediately.
 //
-// GET  /api/board?action=load&key=...   → forwards to Apps Script doGet
-// GET  /api/board?action=public         → key-less public roadmap subset,
-//                                         edge-cached (~2 min) for roadmap.html
-// POST /api/board  (JSON body)          → forwards to Apps Script doPost
+// GET  /api/board?action=public  → key-less public roadmap subset,
+//                                  edge-cached (~2 min) for roadmap.html
+// POST /api/board  (JSON body)   → forwards to Apps Script doPost. All
+//                                  authenticated traffic (load AND save) is
+//                                  POST so credentials — the team key or a
+//                                  Google ID token — never sit in a URL.
 //
-// The shared team access key is validated by the Apps Script itself, not here —
-// this proxy is deliberately dumb so it never needs a secret in the repo.
+// Credentials are validated by the Apps Script itself, not here — this proxy
+// is deliberately dumb so it never needs a secret in the repo.
 // ============================================================================
 
 import { BOARD_APPS_SCRIPT_URL, jsonResponse } from '../_shared.js';
@@ -35,43 +37,26 @@ export async function onRequestGet(context) {
 
   const url = new URL(request.url);
   const action = url.searchParams.get('action') || '';
-  const key = url.searchParams.get('key') || '';
 
-  // Public roadmap subset: no key, cached at the edge so the Apps Script only
-  // sees a trickle of traffic no matter how popular /roadmap gets.
-  if (action === 'public') {
-    try {
-      const res = await fetch(BOARD_APPS_SCRIPT_URL + '?action=public', {
-        cf: { cacheTtl: 120, cacheEverything: true },
-        headers: { accept: 'application/json' },
-        redirect: 'follow'
-      });
-      const body = await res.text();
-      return new Response(body, {
-        status: res.ok ? 200 : 502,
-        headers: {
-          'content-type': 'application/json; charset=utf-8',
-          'cache-control': 'public, max-age=120'
-        }
-      });
-    } catch (e) {
-      return jsonResponse({ result: 'error', error: 'Backend unavailable' }, 502);
-    }
-  }
-
-  if (action !== 'load') {
+  // Public roadmap subset: no credentials, cached at the edge so the Apps
+  // Script only sees a trickle of traffic no matter how popular /roadmap gets.
+  if (action !== 'public') {
     return jsonResponse({ result: 'error', error: 'Unsupported action' }, 400);
   }
-
-  const upstream = BOARD_APPS_SCRIPT_URL
-    + '?action=load&key=' + encodeURIComponent(key);
   try {
-    const res = await fetch(upstream, {
+    const res = await fetch(BOARD_APPS_SCRIPT_URL + '?action=public', {
+      cf: { cacheTtl: 120, cacheEverything: true },
       headers: { accept: 'application/json' },
       redirect: 'follow'
     });
     const body = await res.text();
-    return noStore(new Response(body, { status: res.ok ? 200 : 502 }));
+    return new Response(body, {
+      status: res.ok ? 200 : 502,
+      headers: {
+        'content-type': 'application/json; charset=utf-8',
+        'cache-control': 'public, max-age=120'
+      }
+    });
   } catch (e) {
     return jsonResponse({ result: 'error', error: 'Backend unavailable' }, 502);
   }
