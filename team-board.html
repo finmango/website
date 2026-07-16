@@ -1768,19 +1768,9 @@
         + '<div class="modal-foot" style="border:none;margin-top:.8rem;padding:0;">'
         + '<button class="btn-sm ghost" id="importBtn">⬆ Restore from file…</button>'
         + '<button class="btn-sm primary" id="exportBtn">⬇ Download backup</button></div>'
-        + '<div class="m-section" style="margin-top:1.4rem;">Start over</div>'
-        + '<p class="help-note">Replace this workspace with the latest starter content (roadmap, initiative pages, hub pages). Anything you\'ve added is discarded — download a backup first if unsure.</p>'
-        + '<button class="btn-sm danger" id="reseedBtn">↺ Load fresh starter workspace</button>'
+        + '<p class="help-note" style="margin-top:1rem;">🛟 Disaster recovery: every version of the workspace is kept in the storage Sheet — <strong>File → Version history</strong> in Google Sheets restores any earlier state.</p>'
         + '<input type="file" id="importFile" accept="application/json" style="display:none;" />';
       openModal(html, true);
-      $('reseedBtn').onclick = function () {
-        if (!confirm('Replace the current workspace with the fresh starter content? Anything you\'ve added will be lost (a downloaded backup can restore it).')) return;
-        doc = seedDoc(); migrate();
-        if (authValid()) ensureGoogleMember();
-        ui.boardId = doc.boards[0] && doc.boards[0].id;
-        ui.pageId = null; ui.view = 'board';
-        closeModal(); mutate(); toast('Fresh starter workspace loaded');
-      };
       $('exportBtn').onclick = function () {
         var blob = new Blob([JSON.stringify(doc, null, 2)], { type: 'application/json' });
         var a = document.createElement('a');
