@@ -23,9 +23,19 @@ It works in two modes:
 
 - **Local mode (zero setup)** — open the page and start organizing. Everything
   is saved in that browser's localStorage. Nothing is shared.
-- **Team sync mode** — after the one-time setup below, everyone who enters the
-  shared team key sees and edits the *same* workspace. Changes propagate to
-  other open tabs within ~15 seconds.
+- **Team sync mode** — after the one-time setup below, everyone with access
+  sees and edits the *same* workspace. Changes propagate to other open tabs
+  within ~15 seconds.
+
+Access has **two doors**:
+
+- **Sign in with FinMango** — Google sign-in restricted to @finmango.org
+  accounts. Real identity: the person's Google name and profile photo flow
+  onto their avatar, comments, and edits automatically. No passwords, no key
+  to share. (Requires the OAuth client ID setup below.)
+- **Team key** — one shared passphrase for trusted volunteers who don't have
+  a FinMango email. They pick their display name by hand (the original honor
+  system).
 
 The workspace page is `noindex` and isn't linked from the public site. The
 public roadmap page (`roadmap.html`) IS meant to be found and linked.
@@ -82,13 +92,47 @@ edge-cached ~2 minutes, so public traffic barely touches the backend.
 6. Paste that URL into `functions/_shared.js` → `BOARD_APPS_SCRIPT_URL`
    (search for `REPLACE_WITH_BOARD_APPS_SCRIPT_WEB_APP_URL`), commit, push.
    Cloudflare Pages redeploys automatically.
-7. Open finmango.org/team-board, click **Sync** in the sidebar, enter the
-   `ACCESS_KEY`. The first device to connect publishes its local workspace as
-   the shared one; everyone after that receives it.
+7. Open finmango.org/team-board, click **Sync** in the sidebar, and connect —
+   sign in with your @finmango.org account (if Google Sign-In is set up) or
+   enter the `ACCESS_KEY`. The first device to connect publishes its local
+   workspace as the shared one; everyone after that receives it.
 
 > After **any** change to the Apps Script, redeploy a new version:
 > Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy.
 > The /exec URL stays the same.
+
+## Google Sign-In setup (≈5 minutes, optional but recommended)
+
+This enables the "Sign in with FinMango" door — real names and photos, no
+shared key needed for staff. It's one OAuth client ID, free, created once:
+
+1. Go to [console.cloud.google.com](https://console.cloud.google.com/) signed
+   in as scott@finmango.org. Create a project (e.g. "FinMango HQ") or reuse
+   an existing one.
+2. **APIs & Services → OAuth consent screen** → User type: **Internal**
+   (available because finmango.org is a Google Workspace org — it restricts
+   sign-in to org accounts before our code even runs). App name "FinMango HQ",
+   your email for the contacts. Save — no scopes need adding.
+3. **APIs & Services → Credentials → Create credentials → OAuth client ID**
+   → Application type: **Web application** → Name "FinMango HQ".
+   Under **Authorized JavaScript origins** add:
+   - `https://www.finmango.org`
+   - `https://finmango.org`
+   (add a `*.pages.dev` branch-preview origin too if you want sign-in to work
+   on preview deploys — origins must be exact, wildcards aren't allowed.)
+4. Copy the **Client ID** (ends in `.apps.googleusercontent.com`). It's public
+   by design — safe to commit. Paste it in **two** places:
+   - `team-board.html` → `GOOGLE_CLIENT_ID`
+   - the Apps Script → `CONFIG.GOOGLE_CLIENT_ID` (then redeploy a new version)
+5. Commit/push the site change. Done — the Google button appears in the
+   Access & sync modal and the who-are-you dialog.
+
+How it works under the hood: Google sign-in hands the browser a signed ID
+token; every load/save sends it (via POST — credentials never sit in URLs) and
+the Apps Script verifies it against Google (signature, expiry, audience,
+domain) before accepting. Verified tokens are cached by hash until expiry, so
+the verification traffic is ~1 request per user per hour. Tokens last about an
+hour; Google's One Tap silently re-issues them when they lapse.
 
 ## Day-to-day
 
@@ -112,9 +156,10 @@ edge-cached ~2 minutes, so public traffic barely touches the backend.
 
 ## Security notes, honestly stated
 
-- One shared passphrase gates read and write for the whole workspace. That's
-  the right weight for a small team — but it means **don't put secrets,
-  credentials, or sensitive personal data on cards or pages.**
+- Access is Google sign-in (@finmango.org, verified server-side) or one shared
+  passphrase for volunteers. Everyone with either has full read/write — so
+  **don't put secrets, credentials, or sensitive personal data on cards or
+  pages.**
 - Anything flagged 🌐 is on the open internet within ~2 minutes. The flag is
   off by default; flagging is a deliberate act. Review the card's notes before
   ticking it — notes are published along with the title.

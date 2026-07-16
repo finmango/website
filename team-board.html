@@ -11,6 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
+  <!-- Google Identity Services — powers "Sign in with FinMango" (see docs/TEAM-BOARD-SETUP.md) -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <style>
     /* ===== FINMANGO EDITORIAL FOUNDATION ===== */
@@ -91,7 +93,9 @@
     button.top-filter:hover { border-color: var(--ink-faint); }
     .avatars { display: flex; }
     .avatar { width: 26px; height: 26px; border-radius: 50%; color: #fff; display: grid; place-items: center;
-      font-size: .68rem; font-weight: 700; border: 2px solid var(--paper); margin-left: -6px; flex-shrink: 0; }
+      font-size: .68rem; font-weight: 700; border: 2px solid var(--paper); margin-left: -6px; flex-shrink: 0;
+      position: relative; overflow: hidden; }
+    .avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .avatar:first-child { margin-left: 0; }
     .avatars button.avatar { cursor: pointer; }
     .avatar.more { background: var(--ink-line); color: var(--ink-dim); }
@@ -247,6 +251,12 @@
     .pick-me { display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; padding: .5rem .6rem;
       border-radius: 8px; border: 1px solid var(--ink-line-soft); background: #fff; margin-bottom: .4rem; font-weight: 600; }
     .pick-me:hover { border-color: var(--orange); }
+    .gsi-wrap { display: flex; justify-content: center; padding: .4rem 0 .6rem; min-height: 44px; }
+    .signed-in-row { display: flex; align-items: center; gap: .6rem; background: #fff; border: 1px solid var(--ink-line-soft);
+      border-radius: 8px; padding: .55rem .7rem; }
+    .signed-in-row .who { flex: 1; min-width: 0; }
+    .signed-in-row .who .n { font-weight: 700; font-size: .9rem; }
+    .signed-in-row .who .e { font-size: .74rem; color: var(--ink-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     /* ===== QUICK FIND (Ctrl/Cmd+K) ===== */
     .qf-input { width: 100%; border: none; background: transparent; font-size: 1.05rem; font-weight: 600; padding: .2rem .1rem .7rem;
@@ -354,7 +364,13 @@
        ======================================================================== */
 
     // ============================ CONSTANTS ================================
-    var LS_DOC = 'fmb_doc_v1', LS_KEY = 'fmb_key', LS_ME = 'fmb_me', LS_UI = 'fmb_ui';
+    // "Sign in with FinMango": paste the OAuth client ID from Google Cloud
+    // Console here (docs/TEAM-BOARD-SETUP.md → Google Sign-In). Client IDs are
+    // public by design — safe to commit. Until it's set, the Google button is
+    // hidden and the team-key door still works.
+    var GOOGLE_CLIENT_ID = 'REPLACE_WITH_GOOGLE_OAUTH_CLIENT_ID';
+    var ALLOWED_DOMAIN = 'finmango.org';
+    var LS_DOC = 'fmb_doc_v1', LS_KEY = 'fmb_key', LS_ME = 'fmb_me', LS_UI = 'fmb_ui', LS_AUTH = 'fmb_gauth';
     var COL_COLORS = ['#9A9A93', '#4A7BD0', '#E8A33D', '#3E9A5F', '#FF6B35', '#8B5CF6', '#D9534F', '#2E9E9E'];
     var AVA_COLORS = ['#FF6B35', '#3E9A5F', '#4A7BD0', '#8B5CF6', '#E8A33D', '#2E9E9E', '#D9534F', '#5F6B7A'];
     var TAG_COLORS = [['#FFF0E8', '#C2410C'], ['#EAF3EC', '#1F7A40'], ['#EAF0FA', '#2B5AB8'], ['#F3EDFC', '#6D3FC4'],
@@ -396,6 +412,21 @@
       var h = Math.round(m / 60); if (h < 24) return h + 'h ago';
       var d = Math.round(h / 24); if (d < 30) return d + 'd ago';
       return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+    // Avatar for anything with {name, color, photo?} — Google photo when
+    // available, colored initials otherwise (and if the photo fails to load).
+    function avatarHtml(m, extraStyle) {
+      var open = '<span class="avatar" style="background:' + esc(m.color || '#9A9A93') + ';' + (extraStyle || '')
+        + '" title="' + esc(m.name || '') + '">';
+      var body = esc(initials(m.name));
+      if (m.photo) body += '<img src="' + esc(m.photo) + '" alt="" referrerpolicy="no-referrer" onerror="this.remove()">';
+      return open + body + '</span>';
+    }
+    // Decode a JWT's payload (display only — real verification happens server-side).
+    function decodeJwt(t) {
+      var p = t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(decodeURIComponent(atob(p).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2); }).join('')));
     }
 
     // ==================== TINY MARKDOWN RENDERER ===========================
@@ -547,6 +578,8 @@
       search: '', fAssignee: '', fPriority: '', sidebarClosed: false };
     var sync = { key: localStorage.getItem(LS_KEY) || '', serverVersion: 0, status: 'local',
       dirty: false, pushTimer: null, pushing: false, configured: null };
+    var auth = null; // Google sign-in: {token, email, name, given, picture, exp}
+    try { auth = JSON.parse(localStorage.getItem(LS_AUTH) || 'null'); } catch (e) {}
     var meId = localStorage.getItem(LS_ME) || '';
     var quickAddCol = null;         // column id currently showing the quick-add box
     var drag = null;                // { type:'card'|'col', id }
@@ -598,6 +631,82 @@
       if (!opts || !opts.noRender) render();
     }
 
+    // ====================== GOOGLE SIGN-IN (GIS) ===========================
+    function gsiConfigured() { return GOOGLE_CLIENT_ID.indexOf('REPLACE_WITH') !== 0; }
+    function authValid() { return !!(auth && auth.token && auth.exp && auth.exp * 1000 - 60000 > Date.now()); }
+    function canSync() { return !!sync.key || authValid(); }
+    // Credentials attached to every load/save. The signed-in identity wins so
+    // edits are attributed to a real person; the team key is the fallback door.
+    function creds() {
+      if (authValid()) return { idToken: auth.token };
+      if (sync.key) return { key: sync.key };
+      return {};
+    }
+    function initGsi() {
+      if (!gsiConfigured() || !window.google || !google.accounts || !google.accounts.id) return false;
+      if (!initGsi.done) {
+        google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential, auto_select: true });
+        initGsi.done = true;
+      }
+      return true;
+    }
+    function renderGsiButton(elId) {
+      if (!initGsi() || !$(elId)) return;
+      google.accounts.id.renderButton($(elId), { theme: 'outline', size: 'large', shape: 'pill', text: 'signin_with', width: 260 });
+    }
+    function handleGoogleCredential(resp) {
+      var claims;
+      try { claims = decodeJwt(resp.credential); } catch (e) { toast('Sign-in failed — try again'); return; }
+      var email = String(claims.email || '').toLowerCase();
+      if (claims.hd !== ALLOWED_DOMAIN && email.slice(-(ALLOWED_DOMAIN.length + 1)) !== '@' + ALLOWED_DOMAIN) {
+        toast('Please use your @' + ALLOWED_DOMAIN + ' account'); return;
+      }
+      auth = { token: resp.credential, email: email, name: claims.name || email,
+        given: claims.given_name || '', picture: claims.picture || '', exp: claims.exp };
+      try { localStorage.setItem(LS_AUTH, JSON.stringify(auth)); } catch (e) {}
+      ensureGoogleMember();
+      closeModal();
+      render();
+      pullLoad(true);
+      toast('Signed in as ' + auth.name);
+    }
+    // Match the signed-in person to a member record (by email, then by an
+    // unclaimed member with the same first name — covers the seeded "Scott"),
+    // creating one if needed. Their Google name & photo flow onto it.
+    function ensureGoogleMember() {
+      if (!auth) return;
+      var m = doc.members.find(function (x) { return (x.email || '').toLowerCase() === auth.email; });
+      if (!m && auth.given) {
+        m = doc.members.find(function (x) {
+          return !x.email && x.name.split(/\s+/)[0].toLowerCase() === auth.given.toLowerCase(); });
+      }
+      var changed = false;
+      if (!m) {
+        m = { id: uid(), name: auth.name, color: AVA_COLORS[doc.members.length % AVA_COLORS.length],
+          email: auth.email, photo: auth.picture };
+        doc.members.push(m); changed = true;
+      } else if (m.email !== auth.email || m.name !== auth.name || m.photo !== auth.picture) {
+        m.email = auth.email; m.name = auth.name; m.photo = auth.picture; changed = true;
+      }
+      meId = m.id; localStorage.setItem(LS_ME, meId);
+      if (changed) mutate({ noRender: true });
+    }
+    function signOutGoogle() {
+      auth = null; localStorage.removeItem(LS_AUTH);
+      try { if (initGsi.done) google.accounts.id.disableAutoSelect(); } catch (e) {}
+      if (!sync.key) setSyncStatus('local');
+      closeModal(); render();
+      toast('Signed out');
+    }
+    // The backend answers 'Invalid token' when the ~1h Google token lapses:
+    // drop it and let One Tap re-issue silently (auto_select), else re-prompt.
+    function handleAuthExpiry() {
+      auth = null; localStorage.removeItem(LS_AUTH);
+      if (initGsi()) { try { google.accounts.id.prompt(); } catch (e) {} }
+      setSyncStatus(sync.key ? 'busy' : 'error', sync.key ? null : 'Signed out');
+      if (sync.key) { pullLoad(false); } else { toast('Session expired — sign in again from the sidebar'); }
+    }
+
     // ========================== SYNC LAYER =================================
     function setSyncStatus(status, label) {
       sync.status = status;
@@ -606,18 +715,18 @@
       lab.textContent = label || (status === 'synced' ? 'Synced' : status === 'busy' ? 'Syncing…' : status === 'error' ? 'Sync error' : 'Local only');
     }
     function schedulePush() {
-      if (!sync.key) return;
+      if (!canSync()) return;
       clearTimeout(sync.pushTimer);
       sync.pushTimer = setTimeout(pushSave, 1200);
     }
     function pushSave() {
-      if (!sync.key || sync.pushing) { if (sync.pushing) schedulePush(); return; }
+      if (!canSync() || sync.pushing) { if (sync.pushing) schedulePush(); return; }
       sync.pushing = true; sync.dirty = false;
       setSyncStatus('busy');
       fetch('/api/board', {
         method: 'POST', headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ action: 'save', key: sync.key, baseVersion: sync.serverVersion,
-          author: me() ? me().name : '', data: doc })
+        body: JSON.stringify(Object.assign({ action: 'save', baseVersion: sync.serverVersion,
+          author: me() ? me().name : '', data: doc }, creds()))
       }).then(function (r) { return r.json(); }).then(function (res) {
         sync.pushing = false;
         if (res.result === 'success') {
@@ -632,21 +741,27 @@
           persistLocal(); render();
           sync.dirty = true; schedulePush();
           toast('Merged changes from ' + (res.updatedBy || 'a teammate'));
+        } else if (String(res.error || '') === 'Invalid token') {
+          sync.dirty = true; handleAuthExpiry();
         } else {
           setSyncStatus('error', res.error === 'Invalid access key' ? 'Wrong key' : 'Sync error');
         }
       }).catch(function () { sync.pushing = false; setSyncStatus('error'); });
     }
     function pullLoad(first) {
-      if (!sync.key) return;
+      if (!canSync()) return;
       setSyncStatus('busy');
-      fetch('/api/board?action=load&key=' + encodeURIComponent(sync.key))
+      fetch('/api/board', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(Object.assign({ action: 'load' }, creds()))
+      })
         .then(function (r) {
           if (r.status === 503) { sync.configured = false; throw new Error('unconfigured'); }
           sync.configured = true; return r.json();
         })
         .then(function (res) {
           if (res.result !== 'success') {
+            if (String(res.error || '') === 'Invalid token') { handleAuthExpiry(); return; }
             setSyncStatus('error', String(res.error || '').indexOf('key') > -1 ? 'Wrong key' : 'Sync error');
             return;
           }
@@ -659,6 +774,7 @@
             doc = sync.dirty ? mergeDocs(doc, res.data) : res.data;
             migrate();
             sync.serverVersion = res.version;
+            if (authValid()) ensureGoogleMember(); // the shared doc may not know me yet
             if (!board()) ui.boardId = doc.boards[0] && doc.boards[0].id;
             if (ui.view === 'page' && !page()) ui.view = 'board';
             persistLocal(); render();
@@ -682,7 +798,10 @@
         if (!tombs[id] || a.tombstones[id] > tombs[id]) tombs[id] = a.tombstones[id];
       });
       (a.members || []).forEach(function (m) {
-        if (!out.members.some(function (x) { return x.id === m.id; }) && !tombs[m.id]) out.members.push(m);
+        var om = out.members.find(function (x) { return x.id === m.id; });
+        if (!om && !tombs[m.id]) { out.members.push(clone(m)); return; }
+        // A Google sign-in may have enriched this member on one side only.
+        if (om && m.email && !om.email) { om.email = m.email; om.name = m.name; om.photo = m.photo || ''; }
       });
       // Pages: union by id, newest edit wins.
       (a.pages || []).forEach(function (ap) {
@@ -794,7 +913,9 @@
       var tv = $('topAvatars'); tv.innerHTML = '';
       doc.members.slice(0, 5).forEach(function (m) {
         var el = document.createElement('button');
-        el.className = 'avatar'; el.style.background = m.color; el.textContent = initials(m.name);
+        el.className = 'avatar'; el.style.background = m.color;
+        el.innerHTML = esc(initials(m.name)) + (m.photo
+          ? '<img src="' + esc(m.photo) + '" alt="" referrerpolicy="no-referrer" onerror="this.remove()">' : '');
         el.title = m.name + (m.id === meId ? ' (you)' : '');
         el.onclick = openMembersModal;
         tv.appendChild(el);
@@ -972,7 +1093,7 @@
       }
       var foot = '';
       var m = c.assignee ? member(c.assignee) : null;
-      if (m) foot += '<span class="avatar" style="background:' + esc(m.color) + '" title="' + esc(m.name) + '">' + esc(initials(m.name)) + '</span>';
+      if (m) foot += avatarHtml(m);
       var due = fmtDue(c.due);
       if (due) foot += '<span class="due ' + due.cls + '">🗓 ' + esc(due.label) + '</span>';
       if (c.comments.length) foot += '<span class="comments-n">💬 ' + c.comments.length + '</span>';
@@ -1100,8 +1221,8 @@
               + (c.discuss ? ' <span class="mini-badge" title="Flagged for next call">📞</span>' : '')
               + (c.public ? ' <span class="mini-badge" title="Public">🌐</span>' : '') + '</td>'
             + '<td><span class="status-chip"><span class="col-dot" style="background:' + esc(col.color) + '"></span>' + esc(col.name) + '</span></td>'
-            + '<td>' + (m ? '<span class="cell-assignee"><span class="avatar" style="background:' + esc(m.color) + '">'
-              + esc(initials(m.name)) + '</span>' + esc(m.name) + '</span>' : '<span style="color:var(--ink-faint)">—</span>') + '</td>'
+            + '<td>' + (m ? '<span class="cell-assignee">' + avatarHtml(m) + esc(m.name) + '</span>'
+              : '<span style="color:var(--ink-faint)">—</span>') + '</td>'
             + '<td>' + (due ? '<span class="due ' + due.cls + '">' + esc(due.label) + '</span>' : '<span style="color:var(--ink-faint)">—</span>') + '</td>'
             + '<td>' + (c.priority && PRIO[c.priority] ? '<span class="prio" style="color:' + PRIO[c.priority][1] + '">' + PRIO[c.priority][0] + '</span>' : '<span style="color:var(--ink-faint)">—</span>') + '</td>'
             + '<td>' + c.tags.map(function (t) { var tc = tagColor(t);
@@ -1162,8 +1283,8 @@
 
       function renderComments() {
         $('cComments').innerHTML = c.comments.length ? c.comments.map(function (cm) {
-          return '<div class="comment"><span class="avatar" style="background:' + esc(cm.color || '#9A9A93') + '">'
-            + esc(initials(cm.author)) + '</span><div class="body"><span class="who">' + esc(cm.author)
+          return '<div class="comment">' + avatarHtml({ name: cm.author, color: cm.color, photo: cm.photo })
+            + '<div class="body"><span class="who">' + esc(cm.author)
             + '</span><span class="when">' + esc(relTime(cm.ts)) + '</span><div class="text">' + esc(cm.text) + '</div></div></div>';
         }).join('') : '<p style="font-size:.82rem;color:var(--ink-faint);">No comments yet.</p>';
       }
@@ -1186,7 +1307,8 @@
       function addComment() {
         var v = $('cCommentInput').value.trim(); if (!v) return;
         var m = me();
-        c.comments.push({ id: uid(), author: m ? m.name : 'Someone', color: m ? m.color : '#9A9A93', text: v, ts: now() });
+        c.comments.push({ id: uid(), author: m ? m.name : 'Someone', color: m ? m.color : '#9A9A93',
+          photo: m && m.photo ? m.photo : '', text: v, ts: now() });
         $('cCommentInput').value = '';
         touch(); renderComments(); render();
       }
@@ -1315,8 +1437,9 @@
     // --------------------------- members modal -----------------------------
     function openMembersModal() {
       var rows = doc.members.map(function (m) {
-        return '<div class="member-row"><span class="avatar" style="background:' + esc(m.color) + ';margin:0;">' + esc(initials(m.name)) + '</span>'
-          + '<span class="name">' + esc(m.name) + (m.id === meId ? ' <span class="you">— you</span>' : '') + '</span>'
+        return '<div class="member-row">' + avatarHtml(m, 'margin:0;')
+          + '<span class="name">' + esc(m.name) + (m.email ? ' <span class="you" title="Signed in with Google">✓</span>' : '')
+          + (m.id === meId ? ' <span class="you">— you</span>' : '') + '</span>'
           + (m.id !== meId ? '<button class="btn-sm ghost" data-me="' + esc(m.id) + '">This is me</button>' : '')
           + '<button class="btn-sm danger" data-del="' + esc(m.id) + '">Remove</button></div>';
       }).join('');
@@ -1354,15 +1477,19 @@
     // --------------------------- who-are-you modal --------------------------
     function openWhoAmI() {
       var html = '<h2>Who are you? 👋</h2>'
-        + '<p class="help-note">Pick yourself so comments and assignments carry your name. (Stored only on this device.)</p>'
+        + (gsiConfigured()
+          ? '<p class="help-note">Have a @' + esc(ALLOWED_DOMAIN) + ' account? Sign in and your name and photo come along automatically.</p>'
+            + '<div class="gsi-wrap" id="gsiBtnWho"></div>'
+            + '<div class="m-section">Volunteers — pick your name</div>'
+          : '<p class="help-note">Pick yourself so comments and assignments carry your name. (Stored only on this device.)</p>')
         + doc.members.map(function (m) {
-          return '<button class="pick-me" data-pick="' + esc(m.id) + '"><span class="avatar" style="background:' + esc(m.color) + ';margin:0;">'
-            + esc(initials(m.name)) + '</span>' + esc(m.name) + '</button>';
+          return '<button class="pick-me" data-pick="' + esc(m.id) + '">' + avatarHtml(m, 'margin:0;') + esc(m.name) + '</button>';
         }).join('')
         + '<label class="field-label">Or add yourself</label>'
         + '<div class="comment-row" style="margin-top:0;"><input id="whoName" placeholder="Your name" />'
         + '<button class="btn-sm primary" id="whoAdd">That\'s me</button></div>';
       openModal(html, true);
+      renderGsiButton('gsiBtnWho');
       document.querySelectorAll('[data-pick]').forEach(function (btn) {
         btn.onclick = function () { meId = btn.dataset.pick; localStorage.setItem(LS_ME, meId); closeModal(); render(); };
       });
@@ -1379,21 +1506,33 @@
     // --------------------------- sync modal --------------------------------
     function openSyncModal() {
       var status;
-      if (!sync.key) status = 'Not connected — this workspace lives only in this browser.';
+      if (!canSync()) status = 'Not connected — this workspace lives only in this browser.';
       else if (sync.configured === false) status = 'The sync backend isn\'t deployed yet (see below).';
-      else if (sync.status === 'synced') status = '✅ Connected — everyone with the team key sees this workspace.';
-      else if (sync.status === 'error') status = '⚠️ Connection trouble — check the key, or try again.';
+      else if (sync.status === 'synced') status = '✅ Connected — the whole team sees this workspace.';
+      else if (sync.status === 'error') status = '⚠️ Connection trouble — check your access, or try again.';
       else status = 'Connecting…';
-      var html = '<h2>Team sync</h2>'
+      var html = '<h2>Access &amp; sync</h2>'
         + '<p class="help-note">' + esc(status) + '</p>'
-        + '<label class="field-label">Team access key</label>'
+        + '<div class="m-section">Sign in with FinMango</div>'
+        + (authValid()
+          ? '<div class="signed-in-row">' + avatarHtml({ name: auth.name, color: '#FF6B35', photo: auth.picture }, 'margin:0;')
+            + '<span class="who"><span class="n">' + esc(auth.name) + '</span><br><span class="e">' + esc(auth.email) + '</span></span>'
+            + '<button class="btn-sm ghost" id="gsiSignOut">Sign out</button></div>'
+          : gsiConfigured()
+            ? '<div class="gsi-wrap" id="gsiBtnSync"></div>'
+              + '<p class="help-note">For @' + esc(ALLOWED_DOMAIN) + ' accounts — your name and photo carry over automatically, no key needed.</p>'
+            : '<p class="help-note">Not configured yet — see the Google Sign-In section of <code>docs/TEAM-BOARD-SETUP.md</code>.</p>')
+        + '<div class="m-section">Volunteers — team key</div>'
         + '<input class="text-input" id="syncKey" type="password" placeholder="Shared team passphrase" value="' + esc(sync.key) + '" />'
-        + '<p class="help-note">One shared passphrase for the whole team — ask Scott for it. With sync on, every change saves to a shared Google Sheet (free) and updates everyone\'s workspace within seconds.</p>'
-        + '<p class="help-note">Setting it up for the first time? Follow <code>docs/TEAM-BOARD-SETUP.md</code> in the website repo (~10 minutes).</p>'
+        + '<p class="help-note">One shared passphrase for trusted volunteers without a FinMango email — ask Scott for it.</p>'
+        + '<p class="help-note">Either door syncs every change to a shared Google Sheet (free) and updates everyone\'s workspace within seconds. First-time backend setup: <code>docs/TEAM-BOARD-SETUP.md</code>.</p>'
         + '<div class="modal-foot">'
-        + (sync.key ? '<button class="btn-sm danger" id="syncOff">Disconnect</button>' : '<span></span>')
-        + '<button class="btn-sm primary" id="syncOn">' + (sync.key ? 'Update key' : 'Connect') + '</button></div>';
+        + (sync.key ? '<button class="btn-sm danger" id="syncOff">Forget key</button>' : '<span></span>')
+        + '<button class="btn-sm primary" id="syncOn">' + (sync.key ? 'Update key' : 'Connect with key') + '</button></div>';
       openModal(html, true);
+      renderGsiButton('gsiBtnSync');
+      var so = $('gsiSignOut');
+      if (so) so.onclick = signOutGoogle;
       $('syncOn').onclick = function () {
         var k = $('syncKey').value.trim();
         if (!k) { toast('Enter the team key first'); return; }
@@ -1405,8 +1544,9 @@
       if (off) off.onclick = function () {
         sync.key = ''; localStorage.removeItem(LS_KEY);
         sync.serverVersion = 0; sync.configured = null;
-        setSyncStatus('local'); closeModal();
-        toast('Sync off — changes stay on this device');
+        if (!authValid()) setSyncStatus('local');
+        closeModal();
+        toast('Key forgotten' + (authValid() ? ' — still signed in with Google' : ' — changes stay on this device'));
       };
     }
 
@@ -1553,26 +1693,36 @@
 
     // ============================== INIT ===================================
     loadLocal();
+    if (authValid()) { ensureGoogleMember(); }
+    else if (auth) { auth = null; localStorage.removeItem(LS_AUTH); } // expired token from a previous visit
     if (window.innerWidth <= 760) ui.sidebarClosed = true;
     render();
     setSyncStatus('local');
-    if (sync.key) pullLoad(true);
+    if (canSync()) pullLoad(true);
     if (!meId || !me()) setTimeout(openWhoAmI, 400);
+
+    // Once the GIS script lands: enable One Tap so returning @finmango.org
+    // folks are silently re-signed-in when their ~1h token has lapsed.
+    window.addEventListener('load', function () {
+      if (initGsi() && !authValid()) {
+        try { google.accounts.id.prompt(); } catch (e) {}
+      }
+    });
 
     // Poll for teammates' changes; also refresh when the tab regains focus.
     setInterval(function () {
-      if (sync.key && !sync.dirty && !sync.pushing && !document.hidden) pullLoad(false);
+      if (canSync() && !sync.dirty && !sync.pushing && !document.hidden) pullLoad(false);
     }, 15000);
     document.addEventListener('visibilitychange', function () {
-      if (!document.hidden && sync.key && !sync.dirty && !sync.pushing) pullLoad(false);
+      if (!document.hidden && canSync() && !sync.dirty && !sync.pushing) pullLoad(false);
     });
     window.addEventListener('beforeunload', function () {
-      if (sync.dirty && sync.key) {
+      if (sync.dirty && canSync()) {
         // best-effort final save
         try {
-          navigator.sendBeacon && navigator.sendBeacon('/api/board', new Blob([JSON.stringify({
-            action: 'save', key: sync.key, baseVersion: sync.serverVersion,
-            author: me() ? me().name : '', data: doc })], { type: 'text/plain' }));
+          navigator.sendBeacon && navigator.sendBeacon('/api/board', new Blob([JSON.stringify(Object.assign({
+            action: 'save', baseVersion: sync.serverVersion,
+            author: me() ? me().name : '', data: doc }, creds()))], { type: 'text/plain' }));
         } catch (e) {}
       }
     });
