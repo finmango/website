@@ -2227,8 +2227,11 @@
       var m = me();
       var reviewer = m ? m.name : 'HQ team';
       var comment = '';
-      if (act === 'changes' || act === 'reject') {
-        comment = prompt(act === 'changes' ? 'What should the author change?' : 'Reason (sent with the vote):') || '';
+      if (act === 'changes') {
+        comment = (prompt('What should the author change or add?\n\nThis note is emailed straight to them (they can reply).') || '').trim();
+        if (!comment) { toast('Add a note — it\'s what gets emailed to the author'); return; }
+      } else if (act === 'reject') {
+        comment = prompt('Reason (recorded with the vote — not emailed):') || '';
       }
       if (btn) btn.disabled = true;
       var payload = act === 'publish'
@@ -2236,7 +2239,9 @@
         : { action: 'posts-review', id: id, reviewer: reviewer, vote: act, comment: comment };
       postsApi(payload).then(function (res) {
         if (res.result === 'success') {
-          toast(act === 'publish' ? 'Published 🚀' : 'Recorded — ' + act);
+          toast(act === 'publish' ? 'Published 🚀 — author notified'
+            : act === 'changes' ? (res.emailed ? 'Recorded — feedback emailed to the author ✉️' : 'Recorded (no author email on file)')
+            : 'Recorded — ' + act);
           delete notes.detail[id];
           loadNotes();
         } else {
