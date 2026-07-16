@@ -147,12 +147,20 @@
       // Same tiny markdown grammar as the internal workspace (minus wikilinks,
       // which don't resolve publicly — they render as plain text).
       function mdInline(s) {
-        return s
-          .replace(/\[\[([^\]\n]+)\]\]/g, '$1')
-          .replace(/\[([^\]\n]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-          .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+        var stash = [];
+        function keep(html) { stash.push(html); return '' + (stash.length - 1) + ''; }
+        s = s.replace(/\[\[([^\]\n]+)\]\]/g, '$1');
+        s = s.replace(/\[([^\]\n]+)\]\((https?:[^)\s]+)\)/g, function (_, t, u) {
+          return keep('<a href="' + u + '" target="_blank" rel="noopener">' + t + '</a>');
+        });
+        s = s.replace(/(^|[\s(])((?:https?:\/\/|www\.)[^\s<)]*[^\s<).,;:!?])/g, function (_, pre, url) {
+          var href = url.indexOf('http') === 0 ? url : 'https://' + url;
+          return pre + keep('<a href="' + href + '" target="_blank" rel="noopener">' + url + '</a>');
+        });
+        s = s.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
           .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
           .replace(/`([^`\n]+)`/g, '<code>$1</code>');
+        return s.replace(/(\d+)/g, function (_, i) { return stash[Number(i)]; });
       }
       function mdRender(src) {
         var lines = String(src || '').split('\n');

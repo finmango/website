@@ -229,6 +229,11 @@
     .comment .who { font-size: .78rem; font-weight: 700; }
     .comment .when { font-family: var(--font-mono); font-size: .6rem; color: var(--ink-faint); margin-left: .45rem; }
     .comment .text { font-size: .86rem; margin-top: .1rem; white-space: pre-wrap; word-wrap: break-word; }
+    .link-chips { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .45rem; }
+    .link-chip { display: inline-flex; align-items: center; font-size: .74rem; font-weight: 600; color: var(--orange-deep);
+      background: #fff; border: 1px solid var(--ink-line-soft); border-radius: 99px; padding: .18rem .6rem;
+      text-decoration: none; max-width: 100%; overflow: hidden; }
+    .link-chip:hover { border-color: var(--orange); }
     .comment-row { display: flex; gap: .5rem; margin-top: .5rem; }
     .comment-row input { flex: 1; border: 1px solid var(--ink-line); border-radius: 7px; padding: .45rem .65rem; font-size: .86rem; background: #fff; }
     .modal-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 1.3rem; padding-top: .9rem; border-top: 1px solid var(--ink-line-soft); }
@@ -460,6 +465,43 @@
       if (m.photo) body += '<img src="' + esc(m.photo) + '" alt="" referrerpolicy="no-referrer" onerror="this.remove()">';
       return open + body + '</span>';
     }
+    // ------- link-editing conveniences (used by page editor & card notes) --
+    // Pasting a URL while text is selected wraps the selection as [text](url).
+    function attachLinkPaste(ta, onChanged) {
+      ta.addEventListener('paste', function (e) {
+        var txt = '';
+        try { txt = (e.clipboardData || window.clipboardData).getData('text') || ''; } catch (err) { return; }
+        txt = txt.trim();
+        if (!/^https?:\/\/\S+$/.test(txt)) return;
+        var s = ta.selectionStart, en = ta.selectionEnd;
+        if (en <= s) return; // nothing selected → let the paste happen normally
+        e.preventDefault();
+        var sel = ta.value.slice(s, en);
+        ta.setRangeText('[' + sel + '](' + txt + ')', s, en, 'end');
+        onChanged();
+      });
+    }
+    // Ctrl/Cmd+K inside an editor: wrap the selection in a link (prompts for URL).
+    function insertLinkInEditor(ta, onChanged) {
+      var url = prompt('Link URL (https://…)');
+      if (!url || !url.trim()) return;
+      url = url.trim();
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+      var s = ta.selectionStart, en = ta.selectionEnd;
+      var sel = ta.value.slice(s, en) || 'link text';
+      ta.setRangeText('[' + sel + '](' + url + ')', s, en, 'end');
+      onChanged();
+      ta.focus();
+    }
+    function extractUrls(text) {
+      var seen = {}, out = [];
+      (String(text || '').match(/https?:\/\/[^\s<)\]]+/g) || []).forEach(function (u) {
+        u = u.replace(/[.,;:!?'"]+$/, '');
+        if (!seen[u]) { seen[u] = 1; out.push(u); }
+      });
+      return out;
+    }
+
     // Decode a JWT's payload (display only — real verification happens server-side).
     function decodeJwt(t) {
       var p = t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
@@ -472,15 +514,26 @@
     // ``` blocks, --- rules, and [[wikilinks]] between pages. That's the whole
     // grammar — on purpose.
     function mdInline(s) { // s is already HTML-escaped
-      return s
-        .replace(/\[\[([^\]\n]+)\]\]/g, function (_, name) {
-          var p = pageByTitle(name.trim());
-          return '<a class="wikilink' + (p ? '' : ' missing') + '" data-wiki="' + esc(name.trim()) + '">' + name.trim() + '</a>';
-        })
-        .replace(/\[([^\]\n]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-        .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+      // Finished anchors are stashed and restored at the end so later passes
+      // (bold/italic/bare-URL) can't chew on their internals.
+      var stash = [];
+      function keep(html) { stash.push(html); return '' + (stash.length - 1) + ''; }
+      s = s.replace(/\[\[([^\]\n]+)\]\]/g, function (_, name) {
+        var p = pageByTitle(name.trim());
+        return keep('<a class="wikilink' + (p ? '' : ' missing') + '" data-wiki="' + esc(name.trim()) + '">' + name.trim() + '</a>');
+      });
+      s = s.replace(/\[([^\]\n]+)\]\((https?:[^)\s]+)\)/g, function (_, t, u) {
+        return keep('<a href="' + u + '" target="_blank" rel="noopener">' + t + '</a>');
+      });
+      // Bare URLs become links too — no markdown syntax required.
+      s = s.replace(/(^|[\s(])((?:https?:\/\/|www\.)[^\s<)]*[^\s<).,;:!?])/g, function (_, pre, url) {
+        var href = url.indexOf('http') === 0 ? url : 'https://' + url;
+        return pre + keep('<a href="' + href + '" target="_blank" rel="noopener">' + url + '</a>');
+      });
+      s = s.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
         .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
         .replace(/`([^`\n]+)`/g, '<code>$1</code>');
+      return s.replace(/(\d+)/g, function (_, i) { return stash[Number(i)]; });
     }
     function mdRender(src) {
       var lines = String(src || '').split('\n');
@@ -1019,11 +1072,10 @@
         var ta = document.createElement('textarea');
         ta.className = 'page-editor';
         ta.value = p.body;
-        ta.placeholder = '# Start writing…\n\nMarkdown works: # headings, **bold**, - lists, [links](https://…), [[Other Page]] wikilinks, ``` code blocks.';
-        ta.addEventListener('input', function () {
-          p.body = ta.value; p.updatedAt = now();
-          mutate({ noRender: true });
-        });
+        ta.placeholder = '# Start writing…\n\nMarkdown works: # headings, **bold**, - lists, [[Other Page]] wikilinks, ``` code blocks.\nLinks: just paste a URL (it auto-links), paste a URL over selected text, or Ctrl+K.';
+        function pageChanged() { p.body = ta.value; p.updatedAt = now(); mutate({ noRender: true }); }
+        ta.addEventListener('input', pageChanged);
+        attachLinkPaste(ta, pageChanged);
         wrap.appendChild(ta);
         setTimeout(function () { ta.focus(); }, 0);
       } else {
@@ -1320,7 +1372,8 @@
         + '<label>Visibility</label><label class="check-row"><input type="checkbox" id="cPublic"' + (c.public ? ' checked' : '') + '> 🌐 Show on the public roadmap <span class="hint">(title, notes &amp; tags only)</span></label>'
         + '</div>'
         + '<div class="m-section">Notes</div>'
-        + '<textarea class="m-desc" id="cDesc" placeholder="Add details… (everyone on the board can see this)">' + esc(c.desc) + '</textarea>'
+        + '<textarea class="m-desc" id="cDesc" placeholder="Add details… Paste any URL (docs, sheets, sites) and it shows up as a clickable link below.">' + esc(c.desc) + '</textarea>'
+        + '<div class="link-chips" id="cLinks"></div>'
         + '<div class="m-section">Comments</div>'
         + '<div id="cComments"></div>'
         + '<div class="comment-row"><input id="cCommentInput" placeholder="Write a comment… (never shown publicly)" />'
@@ -1350,8 +1403,18 @@
       };
       $('cDiscuss').onchange = function () { c.discuss = this.checked; touch(); render(); };
       $('cPublic').onchange = function () { c.public = this.checked; touch(); render(); };
-      $('cDesc').oninput = function () { c.desc = this.value; touch(); };
+      function renderCardLinks() {
+        var urls = extractUrls(c.desc);
+        $('cLinks').innerHTML = urls.map(function (u) {
+          var label = u.replace(/^https?:\/\/(www\.)?/, '');
+          if (label.length > 42) label = label.slice(0, 40) + '…';
+          return '<a class="link-chip" href="' + esc(u) + '" target="_blank" rel="noopener">🔗 ' + esc(label) + '</a>';
+        }).join('');
+      }
+      renderCardLinks();
+      $('cDesc').oninput = function () { c.desc = this.value; touch(); renderCardLinks(); };
       $('cDesc').onblur = function () { render(); };
+      attachLinkPaste($('cDesc'), function () { c.desc = $('cDesc').value; touch(); renderCardLinks(); });
       function addComment() {
         var v = $('cCommentInput').value.trim(); if (!v) return;
         var m = me();
@@ -1703,7 +1766,19 @@
     $('qfHint').onclick = openQuickFind;
     document.addEventListener('keydown', function (e) {
       if (!booted) return;
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openQuickFind(); return; }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        // In an editor, Ctrl/Cmd+K means "insert link" (the universal muscle
+        // memory); anywhere else it opens quick find.
+        var ae = document.activeElement;
+        if (ae && ae.tagName === 'TEXTAREA' && (ae.classList.contains('page-editor') || ae.id === 'cDesc')) {
+          insertLinkInEditor(ae, function () {
+            ae.dispatchEvent(new Event('input', { bubbles: false }));
+          });
+          return;
+        }
+        openQuickFind(); return;
+      }
       if (e.key === 'Escape') closeModal();
     });
 
