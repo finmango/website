@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Team Board — FinMango HQ</title>
-  <meta name="description" content="FinMango's internal team workspace — boards, tasks, and notes.">
+  <title>FinMango HQ — Team Workspace</title>
+  <meta name="description" content="FinMango's internal team workspace — roadmap, boards, and wiki.">
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,8 +45,10 @@
     .side-head { display: flex; align-items: center; gap: .6rem; padding: 1rem .9rem .8rem; }
     .side-head .ws-logo { width: 26px; height: 26px; border-radius: 6px; background: var(--orange); color: #fff;
       display: grid; place-items: center; font-size: .95rem; flex-shrink: 0; }
-    .side-head .ws-name { font-weight: 700; font-size: .92rem; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .side-section { padding: .35rem .55rem; }
+    .side-head .ws-name { font-weight: 700; font-size: .92rem; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .side-head .kbd-hint { font-family: var(--font-mono); font-size: .58rem; color: var(--ink-faint); border: 1px solid var(--ink-line);
+      border-radius: 4px; padding: .1rem .3rem; cursor: pointer; }
+    .side-scroll { flex: 1; overflow-y: auto; padding: .35rem .55rem; }
     .side-label { padding: .55rem .4rem .3rem; display: flex; justify-content: space-between; align-items: center; }
     .side-label button { color: var(--ink-faint); border-radius: 4px; width: 20px; height: 20px; line-height: 1; font-size: .95rem; }
     .side-label button:hover { background: var(--ink-line); color: var(--ink); }
@@ -70,7 +72,7 @@
     .crumb .board-emoji { font-size: 1.05rem; cursor: pointer; border-radius: 5px; padding: .1rem .2rem; }
     .crumb .board-emoji:hover { background: var(--ink-line-soft); }
     .crumb input { border: none; background: transparent; font-weight: 700; font-size: 1rem; letter-spacing: -.01em;
-      width: 100%; min-width: 60px; max-width: 320px; padding: .1rem .25rem; border-radius: 5px; }
+      width: 100%; min-width: 60px; max-width: 340px; padding: .1rem .25rem; border-radius: 5px; }
     .crumb input:hover { background: var(--ink-line-soft); }
     .crumb input:focus { background: #fff; outline: 2px solid var(--orange); }
     .topbar .spacer { flex: 1; }
@@ -78,18 +80,22 @@
     .view-switch button { padding: .28rem .7rem; border-radius: 5px; font-size: .8rem; font-weight: 600; color: var(--ink-dim); }
     .view-switch button.active { background: #fff; color: var(--ink); box-shadow: var(--shadow-card); }
     .search-box { display: flex; align-items: center; gap: .4rem; background: #fff; border: 1px solid var(--ink-line);
-      border-radius: 7px; padding: .3rem .6rem; width: 180px; }
+      border-radius: 7px; padding: .3rem .6rem; width: 170px; }
     .search-box input { border: none; outline: none; background: transparent; width: 100%; font-size: .85rem; }
     .search-box svg { flex-shrink: 0; opacity: .4; }
     .top-filter { font-size: .8rem; font-weight: 600; color: var(--ink-dim); border: 1px solid var(--ink-line);
       background: #fff; border-radius: 7px; padding: .32rem .55rem; max-width: 130px; }
     .top-filter.on { border-color: var(--orange); color: var(--orange-deep); }
+    button.top-filter:hover { border-color: var(--ink-faint); }
     .avatars { display: flex; }
     .avatar { width: 26px; height: 26px; border-radius: 50%; color: #fff; display: grid; place-items: center;
       font-size: .68rem; font-weight: 700; border: 2px solid var(--paper); margin-left: -6px; flex-shrink: 0; }
     .avatar:first-child { margin-left: 0; }
     .avatars button.avatar { cursor: pointer; }
     .avatar.more { background: var(--ink-line); color: var(--ink-dim); }
+    /* page mode hides board-only controls */
+    .topbar.page-mode .board-only { display: none !important; }
+    .topbar:not(.page-mode) .page-only { display: none !important; }
 
     /* ===== BOARD VIEW ===== */
     .board-scroll { flex: 1; overflow-x: auto; overflow-y: hidden; }
@@ -114,12 +120,13 @@
       -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .card-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .45rem; }
     .tag { font-size: .68rem; font-weight: 600; padding: .08rem .48rem; border-radius: 99px; }
-    .card-foot { display: flex; align-items: center; gap: .45rem; margin-top: .55rem; }
+    .card-foot { display: flex; align-items: center; gap: .45rem; margin-top: .55rem; flex-wrap: wrap; }
     .card-foot .avatar { width: 21px; height: 21px; font-size: .58rem; border-width: 1px; margin: 0; }
     .due { font-family: var(--font-mono); font-size: .64rem; color: var(--ink-dim); display: inline-flex; align-items: center; gap: .25rem; }
     .due.overdue { color: #C62828; font-weight: 500; }
     .due.soon { color: var(--orange-deep); }
     .prio { font-size: .62rem; font-weight: 700; font-family: var(--font-mono); letter-spacing: .06em; margin-left: auto; }
+    .mini-badge { font-size: .68rem; opacity: .75; }
     .comments-n { font-family: var(--font-mono); font-size: .62rem; color: var(--ink-faint); }
     .add-card-btn { display: flex; align-items: center; gap: .45rem; padding: .45rem .55rem; border-radius: 7px;
       color: var(--ink-faint); font-size: .82rem; font-weight: 600; text-align: left; width: 100%; margin-top: .15rem; }
@@ -152,6 +159,33 @@
     .cell-assignee .avatar { width: 20px; height: 20px; font-size: .56rem; margin: 0; border-width: 1px; }
     .table-group { font-weight: 800; font-size: .8rem; padding-top: 1.1rem; }
 
+    /* ===== PAGE (WIKI) VIEW ===== */
+    .page-scroll { flex: 1; overflow-y: auto; }
+    .page-wrap { max-width: 760px; margin: 0 auto; padding: 1.6rem 1.6rem 4rem; }
+    .page-meta { display: flex; align-items: center; gap: .7rem; margin-bottom: 1rem; }
+    .page-badge { font-family: var(--font-mono); font-size: .6rem; text-transform: uppercase; letter-spacing: .12em;
+      padding: .18rem .5rem; border-radius: 99px; background: var(--ink-line-soft); color: var(--ink-dim); }
+    .page-badge.pub { background: #EAF3EC; color: #1F7A40; }
+    .page-editor { width: 100%; min-height: 62vh; border: none; outline: none; background: transparent; resize: none;
+      font-family: var(--font-mono); font-size: .86rem; line-height: 1.7; color: var(--ink); }
+    .md { font-size: 1rem; line-height: 1.7; }
+    .md h1 { font-size: 1.7rem; letter-spacing: -.02em; margin: 1.6rem 0 .6rem; line-height: 1.25; }
+    .md h2 { font-size: 1.3rem; letter-spacing: -.015em; margin: 1.5rem 0 .5rem; }
+    .md h3 { font-size: 1.05rem; margin: 1.2rem 0 .4rem; }
+    .md h1:first-child, .md h2:first-child { margin-top: .3rem; }
+    .md p { margin: .55rem 0; }
+    .md ul, .md ol { margin: .55rem 0 .55rem 1.4rem; }
+    .md li { margin: .25rem 0; }
+    .md blockquote { border-left: 3px solid var(--orange); padding: .2rem 0 .2rem 1rem; margin: .8rem 0; color: var(--ink-dim); }
+    .md code { font-family: var(--font-mono); font-size: .82em; background: var(--ink-line-soft); padding: .08rem .35rem; border-radius: 4px; }
+    .md pre { background: #14140F; color: #FAFAF7; padding: .9rem 1.1rem; border-radius: 8px; overflow-x: auto; margin: .8rem 0; }
+    .md pre code { background: none; padding: 0; color: inherit; font-size: .8rem; line-height: 1.6; }
+    .md hr { border: none; border-top: 1px solid var(--ink-line); margin: 1.5rem 0; }
+    .md a { color: var(--orange-deep); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+    .md a.wikilink { text-decoration-style: dashed; cursor: pointer; }
+    .md a.wikilink.missing { color: var(--ink-faint); }
+    .page-empty-hint { color: var(--ink-faint); font-size: .9rem; padding: 2rem 0; }
+
     /* ===== EMPTY STATE ===== */
     .empty { flex: 1; display: grid; place-items: center; color: var(--ink-faint); text-align: center; padding: 2rem; }
 
@@ -169,10 +203,14 @@
     .m-title:hover { background: var(--ink-line-soft); } .m-title:focus { background: #fff; outline: 2px solid var(--orange); }
     .prop-grid { display: grid; grid-template-columns: 110px 1fr; gap: .5rem 1rem; align-items: center; margin-bottom: 1.1rem; }
     .prop-grid label { font-size: .78rem; font-weight: 600; color: var(--ink-faint); display: flex; align-items: center; gap: .4rem; }
-    .prop-grid select, .prop-grid input { border: 1px solid transparent; background: transparent; border-radius: 6px;
-      padding: .3rem .45rem; font-size: .86rem; font-weight: 500; max-width: 260px; }
+    .prop-grid select, .prop-grid input[type="date"], .prop-grid input[type="text"], .prop-grid input:not([type]) {
+      border: 1px solid transparent; background: transparent; border-radius: 6px;
+      padding: .3rem .45rem; font-size: .86rem; font-weight: 500; max-width: 280px; }
     .prop-grid select:hover, .prop-grid input:hover { background: var(--ink-line-soft); }
     .prop-grid select:focus, .prop-grid input:focus { background: #fff; border-color: var(--ink-line); outline: none; }
+    .check-row { display: flex; align-items: center; gap: .5rem; font-size: .86rem; font-weight: 500; color: var(--ink); cursor: pointer; }
+    .check-row input { width: 15px; height: 15px; accent-color: var(--orange); cursor: pointer; }
+    .check-row .hint { font-size: .72rem; color: var(--ink-faint); }
     .m-section { font-family: var(--font-mono); font-size: .64rem; font-weight: 500; text-transform: uppercase; letter-spacing: .16em;
       color: var(--ink-faint); margin: 1.1rem 0 .45rem; display: flex; align-items: center; gap: .6rem; }
     .m-section::after { content: ''; height: 1px; background: var(--ink-line-soft); flex: 1; }
@@ -197,7 +235,8 @@
     .member-row .you { font-family: var(--font-mono); font-size: .6rem; color: var(--orange-deep); }
     .emoji-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: .25rem; margin-top: .5rem; }
     .emoji-grid button { font-size: 1.25rem; padding: .3rem; border-radius: 7px; }
-    .emoji-grid button:hover { background: var(--ink-line-soft); }
+    .emoji-grid button:hover, .emoji-grid button.sel { background: var(--ink-line-soft); }
+    .emoji-grid button.sel { outline: 2px solid var(--orange); }
     .color-row { display: flex; gap: .4rem; margin-top: .4rem; }
     .color-row button { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; }
     .color-row button.sel { border-color: var(--ink); }
@@ -206,6 +245,16 @@
     .pick-me { display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; padding: .5rem .6rem;
       border-radius: 8px; border: 1px solid var(--ink-line-soft); background: #fff; margin-bottom: .4rem; font-weight: 600; }
     .pick-me:hover { border-color: var(--orange); }
+
+    /* ===== QUICK FIND (Ctrl/Cmd+K) ===== */
+    .qf-input { width: 100%; border: none; background: transparent; font-size: 1.05rem; font-weight: 600; padding: .2rem .1rem .7rem;
+      border-bottom: 1px solid var(--ink-line); outline: none; }
+    .qf-results { max-height: 46vh; overflow-y: auto; margin-top: .5rem; }
+    .qf-item { display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; padding: .5rem .55rem; border-radius: 7px; font-size: .88rem; }
+    .qf-item:hover, .qf-item.hot { background: var(--ink-line-soft); }
+    .qf-item .emoji { width: 1.3em; text-align: center; }
+    .qf-item .path { font-family: var(--font-mono); font-size: .6rem; color: var(--ink-faint); margin-left: auto; white-space: nowrap; }
+    .qf-empty { color: var(--ink-faint); font-size: .85rem; padding: .8rem .3rem; }
 
     /* ===== TOASTS ===== */
     .toasts { position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; flex-direction: column; gap: .5rem; align-items: center; }
@@ -216,9 +265,10 @@
     @media (max-width: 760px) {
       .sidebar { position: fixed; inset: 0 auto 0 0; height: 100%; box-shadow: var(--shadow-pop); }
       .app.sidebar-closed .sidebar { margin-left: -260px; box-shadow: none; }
-      .search-box { width: 120px; }
+      .search-box { width: 110px; }
       .modal { padding: 1.2rem 1.1rem; }
       .prop-grid { grid-template-columns: 92px 1fr; }
+      .page-wrap { padding: 1.1rem 1rem 3rem; }
     }
   </style>
 </head>
@@ -230,13 +280,19 @@
       <div class="side-head">
         <div class="ws-logo">🥭</div>
         <div class="ws-name" id="wsName">FinMango HQ</div>
+        <button class="kbd-hint" id="qfHint" title="Quick find">⌘K</button>
       </div>
-      <div class="side-section" style="flex:1; overflow-y:auto;">
+      <div class="side-scroll">
         <div class="side-label">
           <span class="mono">Boards</span>
           <button id="addBoardBtn" title="New board" aria-label="New board">＋</button>
         </div>
         <div id="boardList"></div>
+        <div class="side-label">
+          <span class="mono">Pages</span>
+          <button id="addPageBtn" title="New page" aria-label="New page">＋</button>
+        </div>
+        <div id="pageList"></div>
       </div>
       <div class="side-foot">
         <button class="side-item" id="membersBtn"><span class="emoji">👥</span><span class="label">Team members</span></button>
@@ -248,24 +304,29 @@
 
     <!-- ============ MAIN ============ -->
     <main class="main">
-      <div class="topbar">
+      <div class="topbar" id="topbar">
         <button class="hamburger" id="hamburger" aria-label="Toggle sidebar">☰</button>
         <div class="crumb">
           <span class="board-emoji" id="boardEmoji" title="Change icon">🥭</span>
-          <input id="boardNameInput" value="" aria-label="Board name" />
+          <input id="boardNameInput" value="" aria-label="Name" />
         </div>
-        <button class="icon-btn" id="boardMenuBtn" title="Board options">⋯</button>
+        <button class="icon-btn" id="boardMenuBtn" title="Options">⋯</button>
         <div class="spacer"></div>
-        <div class="view-switch" role="tablist">
+        <div class="view-switch board-only" role="tablist">
           <button id="viewBoardBtn" class="active">Board</button>
           <button id="viewTableBtn">Table</button>
         </div>
-        <div class="search-box">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-          <input id="searchInput" placeholder="Search…" aria-label="Search cards" />
+        <div class="view-switch page-only" role="tablist">
+          <button id="pageReadBtn" class="active">Read</button>
+          <button id="pageEditBtn">Edit</button>
         </div>
-        <select class="top-filter" id="filterAssignee" aria-label="Filter by assignee"></select>
-        <select class="top-filter" id="filterPriority" aria-label="Filter by priority">
+        <button class="top-filter board-only" id="agendaBtn" title="Show cards flagged for the next leadership call, plus everything in Now">📞 Agenda</button>
+        <div class="search-box board-only">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="searchInput" placeholder="Filter…" aria-label="Filter cards" />
+        </div>
+        <select class="top-filter board-only" id="filterAssignee" aria-label="Filter by assignee"></select>
+        <select class="top-filter board-only" id="filterPriority" aria-label="Filter by priority">
           <option value="">Priority</option>
           <option value="urgent">Urgent</option><option value="high">High</option>
           <option value="medium">Medium</option><option value="low">Low</option>
@@ -282,10 +343,12 @@
   <script>
     'use strict';
     /* ========================================================================
-       FinMango Team Board — a lightweight Notion-style workspace.
+       FinMango HQ — a lightweight Notion-style workspace: roadmap + boards + wiki.
        - Always works locally (localStorage).
        - Optionally syncs the whole team through /api/board (Cloudflare Pages
          Function → Google Apps Script → Google Sheet). See docs/TEAM-BOARD-SETUP.md.
+       - Cards/pages flagged "public" appear on the public roadmap page
+         (roadmap.html) via the backend's key-less `public` action.
        ======================================================================== */
 
     // ============================ CONSTANTS ================================
@@ -295,7 +358,7 @@
     var TAG_COLORS = [['#FFF0E8', '#C2410C'], ['#EAF3EC', '#1F7A40'], ['#EAF0FA', '#2B5AB8'], ['#F3EDFC', '#6D3FC4'],
       ['#FDF3E0', '#9A6A0B'], ['#E8F4F4', '#1D7A7A'], ['#FBEAEA', '#B23030'], ['#F0F0ED', '#55554F']];
     var PRIO = { urgent: ['URGENT', '#C62828'], high: ['HIGH', '#E5511B'], medium: ['MED', '#B8860B'], low: ['LOW', '#5F6B7A'] };
-    var EMOJIS = ['🥭','📋','🚀','📣','🎓','💡','🌱','📊','✅','🗓️','💰','🌍','🤝','✍️','🎯','🔬','🧭','📚','🛠️','🏆','❤️','🔥','⭐','📌'];
+    var EMOJIS = ['🥭','📋','🧭','🚀','📣','🎓','💡','🌱','📊','✅','🗓️','💰','🌍','🤝','✍️','🎯','🔬','📚','🛠️','🏆','❤️','🔥','⭐','📌','🏠','📞','📄','🗂️','🧪','🎤','🖥️','🌾'];
 
     // ============================ UTILITIES ================================
     function $(id) { return document.getElementById(id); }
@@ -333,40 +396,153 @@
       return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     }
 
+    // ==================== TINY MARKDOWN RENDERER ===========================
+    // Deliberately small: headings, bold/italic/code, lists, quotes, links,
+    // ``` blocks, --- rules, and [[wikilinks]] between pages. That's the whole
+    // grammar — on purpose.
+    function mdInline(s) { // s is already HTML-escaped
+      return s
+        .replace(/\[\[([^\]\n]+)\]\]/g, function (_, name) {
+          var p = pageByTitle(name.trim());
+          return '<a class="wikilink' + (p ? '' : ' missing') + '" data-wiki="' + esc(name.trim()) + '">' + name.trim() + '</a>';
+        })
+        .replace(/\[([^\]\n]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+        .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
+        .replace(/`([^`\n]+)`/g, '<code>$1</code>');
+    }
+    function mdRender(src) {
+      var lines = String(src || '').split('\n');
+      var html = '', para = [], list = null, quote = [], inCode = false, codeBuf = [];
+      function flushPara() { if (para.length) { html += '<p>' + mdInline(para.join('<br>')) + '</p>'; para = []; } }
+      function flushList() { if (list) { html += '</' + list + '>'; list = null; } }
+      function flushQuote() { if (quote.length) { html += '<blockquote>' + mdInline(quote.join('<br>')) + '</blockquote>'; quote = []; } }
+      function flushAll() { flushPara(); flushList(); flushQuote(); }
+      for (var i = 0; i < lines.length; i++) {
+        var raw = lines[i];
+        if (/^```/.test(raw)) {
+          if (inCode) { html += '<pre><code>' + codeBuf.join('\n') + '</code></pre>'; codeBuf = []; inCode = false; }
+          else { flushAll(); inCode = true; }
+          continue;
+        }
+        if (inCode) { codeBuf.push(esc(raw)); continue; }
+        var line = esc(raw);
+        var m;
+        if (!raw.trim()) { flushAll(); continue; }
+        if ((m = line.match(/^(#{1,3})\s+(.*)$/))) { flushAll(); var h = m[1].length; html += '<h' + h + '>' + mdInline(m[2]) + '</h' + h + '>'; continue; }
+        if (/^---+\s*$/.test(raw)) { flushAll(); html += '<hr>'; continue; }
+        if ((m = line.match(/^&gt;\s?(.*)$/))) { flushPara(); flushList(); quote.push(m[1]); continue; }
+        if ((m = line.match(/^[-*]\s+(.*)$/))) {
+          flushPara(); flushQuote();
+          if (list !== 'ul') { flushList(); html += '<ul>'; list = 'ul'; }
+          html += '<li>' + mdInline(m[1]) + '</li>'; continue;
+        }
+        if ((m = line.match(/^\d+\.\s+(.*)$/))) {
+          flushPara(); flushQuote();
+          if (list !== 'ol') { flushList(); html += '<ol>'; list = 'ol'; }
+          html += '<li>' + mdInline(m[1]) + '</li>'; continue;
+        }
+        flushList(); flushQuote(); para.push(line);
+      }
+      if (inCode) html += '<pre><code>' + codeBuf.join('\n') + '</code></pre>';
+      flushAll();
+      return html;
+    }
+
     // ============================ SEED DATA ================================
+    // The Roadmap board is seeded from FinMango's old public Notion roadmap
+    // (finmango.notion.site, "FinMango Roadmap 🥭"), re-sorted into horizons.
+    // It's a starting point — reorder it at the next leadership call.
     function seedDoc() {
       var mScott = { id: uid(), name: 'Scott', color: AVA_COLORS[0] };
-      var boardId = uid();
-      var cBacklog = { id: uid(), name: 'Backlog', color: COL_COLORS[0] };
-      var cProgress = { id: uid(), name: 'In Progress', color: COL_COLORS[1] };
-      var cReview = { id: uid(), name: 'Review', color: COL_COLORS[2] };
-      var cDone = { id: uid(), name: 'Done', color: COL_COLORS[3] };
-      function card(colId, title, desc, prio, tags, due) {
-        return { id: uid(), colId: colId, title: title, desc: desc || '', assignee: '', due: due || '',
-          priority: prio || '', tags: tags || [], comments: [], createdAt: now(), updatedAt: now() };
+
+      // ---- Roadmap board -------------------------------------------------
+      var rb = uid();
+      var hNow = { id: uid(), name: 'Now', color: '#FF6B35' };
+      var hNext = { id: uid(), name: 'Next', color: '#E8A33D' };
+      var hLater = { id: uid(), name: 'Later', color: '#4A7BD0' };
+      var hSomeday = { id: uid(), name: 'Someday', color: '#9A9A93' };
+      var hShipped = { id: uid(), name: 'Shipped 🚀', color: '#3E9A5F' };
+      function initiative(colId, title, desc, tags, pub, discuss) {
+        return { id: uid(), colId: colId, title: title, desc: desc || '', assignee: '', due: '',
+          priority: '', tags: tags || [], comments: [], discuss: !!discuss, public: !!pub,
+          createdAt: now(), updatedAt: now() };
       }
+      var roadmapCards = [
+        // ---- Now
+        initiative(hNow.id, 'Financial Health Barometer', 'Real-time, state-level financial stress signals built from search trends and public data (BLS, Census, HUD, FRED). Live on finmango.org — ongoing refinement, validation, and expansion.', ['research', 'data', 'products'], true),
+        initiative(hNow.id, 'Barrier Breakers 2026', 'Our program spotlighting students breaking financial barriers — applications, judging, projects, and the 2026 showcase.', ['programs', 'events'], true),
+        initiative(hNow.id, 'Ambassador Program — 2026 cohort', 'Each year, young adults join FinMango as financial health ambassadors to strengthen a global understanding of what financial health means across communities.', ['programs', 'global'], true),
+        initiative(hNow.id, 'Research with Eren Cifci, PhD (Austin Peay State University)', 'Three research projects: whether mental health-related searches can predict housing distress and eviction trends; AI adoption\'s impact on banking efficiency and employment; and how natural disasters affect community bank resilience.', ['research'], true),
+        initiative(hNow.id, 'Research with Madhavi Venkatesan, PhD (Northeastern University)', 'Two research projects: sustainable investment search behavior as a market predictor, and what motivates Gen Z economic behavior across California, Maryland, and Massachusetts cohorts.', ['research'], true),
+        // ---- Next
+        initiative(hNext.id, 'FinMango Day 2026 (Kent State)', 'Annual event with Kent State University: top financial literacy students from Northeast Ohio network and compete for $10k+ in cash prizes and scholarships. Seeking sponsors and partners for 2026.', ['events'], true),
+        initiative(hNext.id, 'FinMango Pulse', 'Proposed AI-powered community financial health monitoring: detect local economic distress signals early and help connect people to benefits they qualify for. Google.org Impact Challenge application in progress.', ['products', 'data'], false),
+        initiative(hNext.id, 'Team hub rollout (this workspace!)', 'Get the whole team onto this workspace: roadmap, boards, and wiki pages as the one-stop hub for volunteers and everything FinMango.', ['internal'], false, true),
+        // ---- Later
+        initiative(hLater.id, 'Community platform', 'Nothing big has ever been done alone. A directory of industry leaders and community members with calls to action to collaborate.', ['products', 'global'], true),
+        initiative(hLater.id, 'Pilot social hackathons', 'Students, young adults, and professionals rapidly probe innovative ideas for solving economic equity challenges. Less about deliverables, more about discovering solutions and career development — aiming for a scalable, freely-licensed model.', ['events', 'global'], true),
+        // ---- Someday
+        initiative(hSomeday.id, 'Climate Migration Trend Scanner', 'Real-time data and analysis on climate migration trends worldwide: interactive maps, customizable filters, and alerts when significant trends occur.', ['data', 'global'], true),
+        initiative(hSomeday.id, 'Global FinHealth Awards', 'We love our community and want to honor those making a difference in financial health worldwide.', ['events', 'global'], true),
+        // ---- Shipped
+        initiative(hShipped.id, 'COVID-19 Open Data Project (with Google)', 'The world\'s most comprehensive COVID-19 dataset: sub-national cases and vaccine data for 20,000+ locations in 190+ countries. Used by the WHO (Covax), World Bank, IMF, Harvard research, USAID, and more.', ['data', 'global'], true),
+        initiative(hShipped.id, 'FinHealth measurement toolkit', 'An openly shared toolkit of best practices for measuring financial health across geographies and cultures — including a piloted framework for measuring the financial health of refugees.', ['research', 'global'], true),
+        initiative(hShipped.id, 'FinHealth ecosystem mapping', 'Mapped the players shaping the emerging field of financial health.', ['research'], true),
+        initiative(hShipped.id, 'Ambassador Program launch', 'Launched the FinMango Ambassador Program, sharing powerful stories of young adults who have endured and overcome financial shocks.', ['programs'], true),
+        initiative(hShipped.id, 'Open-sourced resources & case studies', 'Published housed resources and external case studies in a searchable format on our website.', ['transparency'], true),
+        initiative(hShipped.id, 'Unified FinMango brand & website', 'Universalized the FinMango brand, voice, and design across the web. 😎', ['design'], true)
+      ];
+      var roadmapBoard = { id: rb, icon: '🧭', name: 'Roadmap', updatedAt: now(),
+        columns: [hNow, hNext, hLater, hSomeday, hShipped], cards: roadmapCards };
+
+      // ---- Team HQ task board ---------------------------------------------
+      var tb = uid();
+      var cTodo = { id: uid(), name: 'To do', color: COL_COLORS[0] };
+      var cDoing = { id: uid(), name: 'In Progress', color: COL_COLORS[1] };
+      var cDone = { id: uid(), name: 'Done', color: COL_COLORS[3] };
+      function task(colId, title, desc, prio, tags) {
+        return { id: uid(), colId: colId, title: title, desc: desc || '', assignee: '', due: '',
+          priority: prio || '', tags: tags || [], comments: [], discuss: false, public: false,
+          createdAt: now(), updatedAt: now() };
+      }
+      var teamBoard = { id: tb, icon: '🥭', name: 'Team HQ', updatedAt: now(),
+        columns: [cTodo, cDoing, cDone],
+        cards: [
+          task(cTodo.id, 'Add the rest of the team as members', 'Sidebar → Team members. Everyone picks their own name when they first open the workspace.', 'medium', ['getting started']),
+          task(cTodo.id, 'Review the seeded Roadmap at the next leadership call', 'The 🧭 Roadmap board was imported from our old Notion roadmap and pre-sorted into Now / Next / Later / Someday / Shipped. Drag things where they actually belong, edit details, and flag anything for discussion with the 📞 checkbox.', 'high', ['getting started']),
+          task(cDoing.id, 'Set up team sync', 'Follow docs/TEAM-BOARD-SETUP.md in the website repo (~10 min, free) so everyone sees the same workspace.', 'high', ['getting started']),
+          task(cDone.id, 'Build the FinMango team workspace', 'Done — you\'re looking at it! 🎉', '', [])
+        ] };
+
+      // ---- Wiki pages ------------------------------------------------------
+      function pg(icon, title, body, pub) {
+        return { id: uid(), icon: icon, title: title, body: body, public: !!pub, createdAt: now(), updatedAt: now() };
+      }
+      var pages = [
+        pg('🏠', 'Start Here',
+'# Welcome to FinMango HQ 👋\n\nThis is our one-stop hub: what we\'re working on, how to get involved, and everything the team needs in one place.\n\n## How this workspace is organized\n\n- **🧭 Roadmap** — the org-level view. What we\'re doing **Now**, what\'s **Next**, what\'s **Later / Someday**, and what we\'ve **Shipped**. This is the agenda for leadership calls.\n- **🥭 Team HQ** — day-to-day tasks. Grab something, drag it along, done.\n- **Pages** (this sidebar section) — our wiki: guides, notes, and how-tos.\n\n## House rules\n\n1. Keep it simple — boards, pages, members. That\'s the whole system.\n2. One card = one thing someone can own.\n3. Flag anything that needs a group decision with the **📞 Discuss at next call** checkbox — flagged cards + everything in Now form the call agenda automatically.\n4. **Never put passwords, keys, or sensitive personal info on cards or pages.**\n\n## Useful links\n\n- [finmango.org](https://www.finmango.org)\n- [Financial Health Barometer](https://www.finmango.org/barometer)\n- [Barrier Breakers](https://www.finmango.org/barrier-breakers)\n- See also: [[Get Involved]] and [[Leadership Call Notes]]', false),
+        pg('🤝', 'Get Involved',
+'# Ways to get involved with FinMango\n\nWe\'re volunteer-powered. Whatever your skills, there\'s a lane:\n\n## 🎓 Become an Ambassador\nJoin a yearly cohort of young adults strengthening the global understanding of financial health. Apply at [finmango.org/ambassador-apply](https://www.finmango.org/ambassador-apply).\n\n## 🔬 Research\nWe collaborate with university partners on financial health research — data analysis, writing, and literature review help is always welcome.\n\n## 🛠️ Engineering & design\nOur website, tools, and data pipelines are open source. Check the [GitHub repo](https://github.com/finmango/website).\n\n## 🎤 Events\nHelp organize FinMango Day, Barrier Breakers, and community events — outreach, logistics, judging, sponsorship.\n\n## ✍️ Content\nWrite for Mango Stories, build lesson content, or share your community\'s story on the [Community Wall](https://www.finmango.org/community-wall).\n\n---\n\nNot sure where you fit? Add yourself in **Team members** and drop a card in the 🥭 Team HQ board saying hi — someone will follow up.', false),
+        pg('📞', 'Leadership Call Notes',
+'# Leadership call notes\n\nOne section per call, newest on top. The agenda builds itself: open the 🧭 Roadmap board and hit **📞 Agenda** — it shows everything in **Now** plus every card flagged for discussion.\n\n---\n\n## Template (copy for each call)\n\n**Date:** \n**On the call:** \n\n### Now check-in\n*Anything stuck? Anything done → drag to Shipped.*\n\n### Flagged for discussion\n*Walk the 📞 flagged cards. Decide: pull into Now, park in Later, or drop. Unflag as you go.*\n\n### Decisions\n- \n\n### New owners\n- ', false),
+        pg('💡', 'Initiative Template',
+'# Initiative: (name)\n\n*Copy this page for any big idea before proposing it. Link it from the roadmap card. A few honest sentences per section beats a long deck.*\n\n## What is it?\n\n## Who does it serve?\n\n## Why now?\n\n## What does success look like?\n*How would we know in 6 months this was worth it?*\n\n## What will it take?\n*People, time, money, partners — rough is fine.*\n\n## Open questions\n- ', false)
+      ];
+
       return {
         v: 1, workspace: 'FinMango HQ', updatedAt: now(),
         members: [mScott],
         tombstones: {},
-        boards: [{
-          id: boardId, icon: '🥭', name: 'Team HQ', updatedAt: now(),
-          columns: [cBacklog, cProgress, cReview, cDone],
-          cards: [
-            card(cBacklog.id, 'Welcome to the FinMango Team Board 👋',
-              'This is our shared workspace — like Notion, but ours.\n\n• Drag cards between columns\n• Click a card to add details, assignees, due dates, tags and comments\n• Make new boards from the sidebar (one per project works well)\n• Hit "Sync" in the sidebar to connect the whole team',
-              '', ['getting started']),
-            card(cBacklog.id, 'Add the rest of the team as members', 'Sidebar → Team members. Everyone picks their own name when they first open the board.', 'medium', ['getting started']),
-            card(cProgress.id, 'Set up team sync', 'Follow docs/TEAM-BOARD-SETUP.md in the website repo (~10 min, free) so everyone sees the same board.', 'high', ['getting started']),
-            card(cDone.id, 'Create the FinMango team board', 'Done — you\'re looking at it! 🎉', '', [])
-          ]
-        }]
+        boards: [roadmapBoard, teamBoard],
+        pages: pages
       };
     }
 
     // ============================ STATE ====================================
     var doc = null;                 // the whole workspace document
-    var ui = { boardId: null, view: 'board', search: '', fAssignee: '', fPriority: '', sidebarClosed: false };
+    var ui = { boardId: null, pageId: null, view: 'board', pageEdit: false, agenda: false,
+      search: '', fAssignee: '', fPriority: '', sidebarClosed: false };
     var sync = { key: localStorage.getItem(LS_KEY) || '', serverVersion: 0, status: 'local',
       dirty: false, pushTimer: null, pushing: false, configured: null };
     var meId = localStorage.getItem(LS_ME) || '';
@@ -375,12 +551,18 @@
 
     function me() { return doc.members.find(function (m) { return m.id === meId; }) || null; }
     function board() { return doc.boards.find(function (b) { return b.id === ui.boardId; }) || doc.boards[0] || null; }
+    function page() { return (doc.pages || []).find(function (p) { return p.id === ui.pageId; }) || null; }
     function member(id) { return doc.members.find(function (m) { return m.id === id; }) || null; }
+    function pageByTitle(t) {
+      t = String(t).toLowerCase();
+      return (doc.pages || []).find(function (p) { return p.title.toLowerCase() === t; }) || null;
+    }
+    function inPageMode() { return ui.view === 'page' && page(); }
 
     // ======================== PERSISTENCE ==================================
     function persistLocal() {
       try { localStorage.setItem(LS_DOC, JSON.stringify(doc)); } catch (e) { /* storage full/blocked */ }
-      try { localStorage.setItem(LS_UI, JSON.stringify({ boardId: ui.boardId, view: ui.view, sidebarClosed: ui.sidebarClosed })); } catch (e) {}
+      try { localStorage.setItem(LS_UI, JSON.stringify({ boardId: ui.boardId, pageId: ui.pageId, view: ui.view, sidebarClosed: ui.sidebarClosed })); } catch (e) {}
     }
     function loadLocal() {
       try {
@@ -388,13 +570,21 @@
         if (raw) doc = JSON.parse(raw);
       } catch (e) { doc = null; }
       if (!doc || !doc.boards) doc = seedDoc();
-      if (!doc.tombstones) doc.tombstones = {};
+      migrate();
       try {
         var u = JSON.parse(localStorage.getItem(LS_UI) || '{}');
-        ui.boardId = u.boardId || null; ui.view = u.view === 'table' ? 'table' : 'board';
+        ui.boardId = u.boardId || null;
+        ui.pageId = u.pageId || null;
+        ui.view = (u.view === 'table' || u.view === 'page') ? u.view : 'board';
         ui.sidebarClosed = !!u.sidebarClosed;
       } catch (e) {}
+      if (ui.view === 'page' && !page()) ui.view = 'board';
       if (!board()) ui.boardId = doc.boards[0] && doc.boards[0].id;
+    }
+    // Older local/server documents may predate pages/flags — fill the gaps.
+    function migrate() {
+      if (!doc.tombstones) doc.tombstones = {};
+      if (!doc.pages) doc.pages = [];
     }
 
     // A mutation happened: stamp, persist, queue a sync push, re-render.
@@ -436,6 +626,7 @@
           // A teammate saved first — merge their document with ours and re-push.
           sync.serverVersion = res.version;
           doc = mergeDocs(doc, res.data || seedDoc());
+          migrate();
           persistLocal(); render();
           sync.dirty = true; schedulePush();
           toast('Merged changes from ' + (res.updatedBy || 'a teammate'));
@@ -464,9 +655,10 @@
           }
           if (res.version !== sync.serverVersion || first) {
             doc = sync.dirty ? mergeDocs(doc, res.data) : res.data;
-            if (!doc.tombstones) doc.tombstones = {};
+            migrate();
             sync.serverVersion = res.version;
             if (!board()) ui.boardId = doc.boards[0] && doc.boards[0].id;
+            if (ui.view === 'page' && !page()) ui.view = 'board';
             persistLocal(); render();
             if (sync.dirty) { schedulePush(); return; }
           }
@@ -477,11 +669,12 @@
           else setSyncStatus('error');
         });
     }
-    // Merge two workspace documents. Card-level: newer updatedAt wins; unions
+    // Merge two workspace documents. Item-level: newer updatedAt wins; unions
     // creations from both sides; tombstones stop deleted things resurrecting.
     function mergeDocs(a, b) {
       var out = clone(b);
       out.tombstones = out.tombstones || {};
+      out.pages = out.pages || [];
       var tombs = out.tombstones;
       Object.keys(a.tombstones || {}).forEach(function (id) {
         if (!tombs[id] || a.tombstones[id] > tombs[id]) tombs[id] = a.tombstones[id];
@@ -489,6 +682,13 @@
       (a.members || []).forEach(function (m) {
         if (!out.members.some(function (x) { return x.id === m.id; }) && !tombs[m.id]) out.members.push(m);
       });
+      // Pages: union by id, newest edit wins.
+      (a.pages || []).forEach(function (ap) {
+        var op = out.pages.find(function (x) { return x.id === ap.id; });
+        if (!op) out.pages.push(clone(ap));
+        else if ((ap.updatedAt || 0) > (op.updatedAt || 0)) out.pages[out.pages.indexOf(op)] = clone(ap);
+      });
+      out.pages = out.pages.filter(function (p) { return !(tombs[p.id] && tombs[p.id] > (p.updatedAt || 0)); });
       (a.boards || []).forEach(function (ab) {
         if (tombs[ab.id] && tombs[ab.id] > (ab.updatedAt || 0)) return;
         var ob = out.boards.find(function (x) { return x.id === ab.id; });
@@ -526,6 +726,18 @@
       Object.keys(doc.tombstones).forEach(function (id) { if (doc.tombstones[id] < cutoff) delete doc.tombstones[id]; });
     }
 
+    // =========================== NAVIGATION ================================
+    function openBoard(id) {
+      ui.boardId = id; ui.pageId = null;
+      if (ui.view === 'page') ui.view = 'board';
+      quickAddCol = null;
+      persistLocal(); render(); closeSidebarOnMobile();
+    }
+    function openPage(id, edit) {
+      ui.pageId = id; ui.view = 'page'; ui.pageEdit = !!edit;
+      persistLocal(); render(); closeSidebarOnMobile();
+    }
+
     // =========================== RENDERING =================================
     function render() { renderSidebar(); renderTopbar(); renderView(); }
 
@@ -534,21 +746,41 @@
       var list = $('boardList'); list.innerHTML = '';
       doc.boards.forEach(function (b) {
         var btn = document.createElement('button');
-        btn.className = 'side-item' + (b.id === ui.boardId ? ' active' : '');
+        btn.className = 'side-item' + (b.id === ui.boardId && !inPageMode() ? ' active' : '');
         btn.innerHTML = '<span class="emoji">' + esc(b.icon || '📋') + '</span><span class="label">' + esc(b.name)
           + '</span><span class="count">' + b.cards.length + '</span>';
-        btn.onclick = function () { ui.boardId = b.id; quickAddCol = null; persistLocal(); render(); closeSidebarOnMobile(); };
+        btn.onclick = function () { openBoard(b.id); };
         list.appendChild(btn);
+      });
+      var plist = $('pageList'); plist.innerHTML = '';
+      (doc.pages || []).forEach(function (p) {
+        var btn = document.createElement('button');
+        btn.className = 'side-item' + (inPageMode() && p.id === ui.pageId ? ' active' : '');
+        btn.innerHTML = '<span class="emoji">' + esc(p.icon || '📄') + '</span><span class="label">' + esc(p.title)
+          + '</span>' + (p.public ? '<span class="count" title="On the public roadmap page">🌐</span>' : '');
+        btn.onclick = function () { openPage(p.id); };
+        plist.appendChild(btn);
       });
       $('app').classList.toggle('sidebar-closed', ui.sidebarClosed);
     }
 
     function renderTopbar() {
-      var b = board();
-      $('boardEmoji').textContent = b ? (b.icon || '📋') : '📋';
-      $('boardNameInput').value = b ? b.name : '';
-      $('viewBoardBtn').classList.toggle('active', ui.view === 'board');
-      $('viewTableBtn').classList.toggle('active', ui.view === 'table');
+      var pageMode = inPageMode();
+      $('topbar').classList.toggle('page-mode', pageMode);
+      if (pageMode) {
+        var p = page();
+        $('boardEmoji').textContent = p.icon || '📄';
+        $('boardNameInput').value = p.title;
+        $('pageReadBtn').classList.toggle('active', !ui.pageEdit);
+        $('pageEditBtn').classList.toggle('active', ui.pageEdit);
+      } else {
+        var b = board();
+        $('boardEmoji').textContent = b ? (b.icon || '📋') : '📋';
+        $('boardNameInput').value = b ? b.name : '';
+        $('viewBoardBtn').classList.toggle('active', ui.view === 'board');
+        $('viewTableBtn').classList.toggle('active', ui.view === 'table');
+        $('agendaBtn').classList.toggle('on', ui.agenda);
+      }
       // Assignee filter options
       var fa = $('filterAssignee');
       var cur = ui.fAssignee;
@@ -573,7 +805,12 @@
 
     function visibleCards(b) {
       var q = ui.search.trim().toLowerCase();
+      var nowColIds = {};
+      if (ui.agenda) {
+        b.columns.forEach(function (c) { if (/^now\b/i.test(c.name.trim())) nowColIds[c.id] = true; });
+      }
       return b.cards.filter(function (c) {
+        if (ui.agenda && !c.discuss && !nowColIds[c.colId]) return false;
         if (ui.fAssignee === '__none' && c.assignee) return false;
         if (ui.fAssignee && ui.fAssignee !== '__none' && c.assignee !== ui.fAssignee) return false;
         if (ui.fPriority && c.priority !== ui.fPriority) return false;
@@ -587,6 +824,7 @@
 
     function renderView() {
       var root = $('viewRoot'); root.innerHTML = '';
+      if (inPageMode()) { renderPage(root, page()); return; }
       var b = board();
       if (!b) {
         root.innerHTML = '<div class="empty"><div><p style="font-size:2rem;">🗂️</p><p style="margin-top:.5rem;font-weight:600;">No boards yet</p>'
@@ -594,6 +832,51 @@
         return;
       }
       if (ui.view === 'table') renderTable(root, b); else renderBoard(root, b);
+    }
+
+    // --------------------------- page view ---------------------------------
+    function renderPage(root, p) {
+      var scroll = document.createElement('div'); scroll.className = 'page-scroll';
+      var wrap = document.createElement('div'); wrap.className = 'page-wrap';
+
+      var meta = document.createElement('div'); meta.className = 'page-meta';
+      meta.innerHTML = '<span class="page-badge' + (p.public ? ' pub' : '') + '">' + (p.public ? '🌐 public' : '🔒 team only') + '</span>'
+        + '<span class="meta-line">edited ' + esc(relTime(p.updatedAt)) + '</span>';
+      wrap.appendChild(meta);
+
+      if (ui.pageEdit) {
+        var ta = document.createElement('textarea');
+        ta.className = 'page-editor';
+        ta.value = p.body;
+        ta.placeholder = '# Start writing…\n\nMarkdown works: # headings, **bold**, - lists, [links](https://…), [[Other Page]] wikilinks, ``` code blocks.';
+        ta.addEventListener('input', function () {
+          p.body = ta.value; p.updatedAt = now();
+          mutate({ noRender: true });
+        });
+        wrap.appendChild(ta);
+        setTimeout(function () { ta.focus(); }, 0);
+      } else {
+        var mdiv = document.createElement('div'); mdiv.className = 'md';
+        mdiv.innerHTML = p.body.trim() ? mdRender(p.body)
+          : '<p class="page-empty-hint">This page is empty — hit <strong>Edit</strong> (top right) to start writing.</p>';
+        // wikilink navigation (and create-on-click for missing targets)
+        mdiv.addEventListener('click', function (e) {
+          var a = e.target.closest ? e.target.closest('a.wikilink') : null;
+          if (!a) return;
+          e.preventDefault();
+          var name = a.getAttribute('data-wiki');
+          var target = pageByTitle(name);
+          if (target) { openPage(target.id); return; }
+          if (confirm('Create the page "' + name + '"?')) {
+            var np = { id: uid(), icon: '📄', title: name, body: '', public: false, createdAt: now(), updatedAt: now() };
+            doc.pages.push(np);
+            mutate({ noRender: true });
+            openPage(np.id, true);
+          }
+        });
+        wrap.appendChild(mdiv);
+      }
+      scroll.appendChild(wrap); root.appendChild(scroll);
     }
 
     // --------------------------- board view --------------------------------
@@ -691,6 +974,8 @@
       var due = fmtDue(c.due);
       if (due) foot += '<span class="due ' + due.cls + '">🗓 ' + esc(due.label) + '</span>';
       if (c.comments.length) foot += '<span class="comments-n">💬 ' + c.comments.length + '</span>';
+      if (c.discuss) foot += '<span class="mini-badge" title="Flagged for the next leadership call">📞</span>';
+      if (c.public) foot += '<span class="mini-badge" title="Shown on the public roadmap page">🌐</span>';
       if (c.priority && PRIO[c.priority]) foot += '<span class="prio" style="color:' + PRIO[c.priority][1] + '">' + PRIO[c.priority][0] + '</span>';
       if (foot) html += '<div class="card-foot">' + foot + '</div>';
       el.innerHTML = html;
@@ -715,7 +1000,7 @@
         var t = ta.value.trim();
         if (t) {
           b.cards.push({ id: uid(), colId: col.id, title: t, desc: '', assignee: '', due: '', priority: '',
-            tags: [], comments: [], createdAt: now(), updatedAt: now() });
+            tags: [], comments: [], discuss: false, public: false, createdAt: now(), updatedAt: now() });
           b.updatedAt = now();
           mutate({ noRender: true });
         }
@@ -772,7 +1057,6 @@
       card.colId = colId; card.updatedAt = now();
       var insertAt;
       if (visIndex >= vis.length) {
-        // after the last visible card in this column (or end of array)
         var last = vis.length ? b.cards.indexOf(vis[vis.length - 1]) : -1;
         insertAt = last >= 0 ? last + 1 : b.cards.length;
       } else {
@@ -810,7 +1094,9 @@
           var m = c.assignee ? member(c.assignee) : null;
           var due = fmtDue(c.due);
           html += '<tr class="rowcard" data-card-id="' + esc(c.id) + '">'
-            + '<td style="font-weight:600;">' + esc(c.title) + '</td>'
+            + '<td style="font-weight:600;">' + esc(c.title)
+              + (c.discuss ? ' <span class="mini-badge" title="Flagged for next call">📞</span>' : '')
+              + (c.public ? ' <span class="mini-badge" title="Public">🌐</span>' : '') + '</td>'
             + '<td><span class="status-chip"><span class="col-dot" style="background:' + esc(col.color) + '"></span>' + esc(col.name) + '</span></td>'
             + '<td>' + (m ? '<span class="cell-assignee"><span class="avatar" style="background:' + esc(m.color) + '">'
               + esc(initials(m.name)) + '</span>' + esc(m.name) + '</span>' : '<span style="color:var(--ink-faint)">—</span>') + '</td>'
@@ -840,7 +1126,6 @@
     }
     function closeModal() { $('overlay').classList.remove('open'); $('modalBox').innerHTML = ''; }
     $('overlay').addEventListener('mousedown', function (e) { if (e.target === $('overlay')) closeModal(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
 
     // --------------------------- card modal --------------------------------
     function openCardModal(cardId) {
@@ -860,12 +1145,14 @@
           + ['low', 'medium', 'high', 'urgent'].map(function (p) {
             return '<option value="' + p + '"' + (p === c.priority ? ' selected' : '') + '>' + p.charAt(0).toUpperCase() + p.slice(1) + '</option>'; }).join('') + '</select>'
         + '<label>Tags</label><input id="cTags" placeholder="comma, separated" value="' + esc(c.tags.join(', ')) + '" />'
+        + '<label>Next call</label><label class="check-row"><input type="checkbox" id="cDiscuss"' + (c.discuss ? ' checked' : '') + '> 📞 Discuss at next leadership call</label>'
+        + '<label>Visibility</label><label class="check-row"><input type="checkbox" id="cPublic"' + (c.public ? ' checked' : '') + '> 🌐 Show on the public roadmap <span class="hint">(title, notes &amp; tags only)</span></label>'
         + '</div>'
         + '<div class="m-section">Notes</div>'
         + '<textarea class="m-desc" id="cDesc" placeholder="Add details… (everyone on the board can see this)">' + esc(c.desc) + '</textarea>'
         + '<div class="m-section">Comments</div>'
         + '<div id="cComments"></div>'
-        + '<div class="comment-row"><input id="cCommentInput" placeholder="Write a comment…" />'
+        + '<div class="comment-row"><input id="cCommentInput" placeholder="Write a comment… (never shown publicly)" />'
         + '<button class="btn-sm primary" id="cCommentAdd">Send</button></div>'
         + '<div class="modal-foot"><span class="meta-line">created ' + esc(relTime(c.createdAt)) + ' · edited ' + esc(relTime(c.updatedAt)) + '</span>'
         + '<button class="btn-sm danger" id="cDelete">Delete card</button></div>';
@@ -890,6 +1177,8 @@
         c.tags = this.value.split(',').map(function (t) { return t.trim(); }).filter(Boolean).slice(0, 8);
         touch(); render();
       };
+      $('cDiscuss').onchange = function () { c.discuss = this.checked; touch(); render(); };
+      $('cPublic').onchange = function () { c.public = this.checked; touch(); render(); };
       $('cDesc').oninput = function () { c.desc = this.value; touch(); };
       $('cDesc').onblur = function () { render(); };
       function addComment() {
@@ -953,19 +1242,24 @@
       };
     }
 
-    // --------------------------- board menu --------------------------------
+    // ----------------------- board / page options --------------------------
     function openBoardMenu() {
+      if (inPageMode()) { openPageMenu(); return; }
       var b = board(); if (!b) return;
       var html = '<h2>Board options</h2>'
         + '<label class="field-label">Name</label><input class="text-input" id="bName" value="' + esc(b.name) + '" />'
-        + '<label class="field-label">Icon</label><div class="emoji-grid">'
-        + EMOJIS.map(function (e) { return '<button data-e="' + e + '">' + e + '</button>'; }).join('') + '</div>'
+        + '<label class="field-label">Icon</label><div class="emoji-grid" id="bEmojis">'
+        + EMOJIS.map(function (e) { return '<button data-e="' + e + '"' + (e === b.icon ? ' class="sel"' : '') + '>' + e + '</button>'; }).join('') + '</div>'
         + '<div class="modal-foot"><button class="btn-sm danger" id="bDelete">Delete board</button>'
         + '<button class="btn-sm primary" id="bSave">Save</button></div>';
       openModal(html, true);
       var icon = b.icon;
-      document.querySelectorAll('.emoji-grid button').forEach(function (btn) {
-        btn.onclick = function () { icon = btn.dataset.e; toast('Icon: ' + icon); };
+      $('bEmojis').querySelectorAll('button').forEach(function (btn) {
+        btn.onclick = function () {
+          icon = btn.dataset.e;
+          $('bEmojis').querySelectorAll('button').forEach(function (x) { x.classList.remove('sel'); });
+          btn.classList.add('sel');
+        };
       });
       $('bSave').onclick = function () {
         var v = $('bName').value.trim();
@@ -982,6 +1276,39 @@
         closeModal(); mutate();
       };
     }
+    function openPageMenu() {
+      var p = page(); if (!p) return;
+      var html = '<h2>Page options</h2>'
+        + '<label class="field-label">Icon</label><div class="emoji-grid" id="pEmojis">'
+        + EMOJIS.map(function (e) { return '<button data-e="' + e + '"' + (e === p.icon ? ' class="sel"' : '') + '>' + e + '</button>'; }).join('') + '</div>'
+        + '<label class="field-label" style="margin-top:1rem;">Visibility</label>'
+        + '<label class="check-row"><input type="checkbox" id="pPublic"' + (p.public ? ' checked' : '') + '> 🌐 Show on the public roadmap page</label>'
+        + '<p class="help-note">Public pages appear (rendered) on finmango.org/roadmap for anyone to read. Everything else stays team-only.</p>'
+        + '<div class="modal-foot"><button class="btn-sm danger" id="pDelete">Delete page</button>'
+        + '<button class="btn-sm primary" id="pSave">Save</button></div>';
+      openModal(html, true);
+      var icon = p.icon;
+      $('pEmojis').querySelectorAll('button').forEach(function (btn) {
+        btn.onclick = function () {
+          icon = btn.dataset.e;
+          $('pEmojis').querySelectorAll('button').forEach(function (x) { x.classList.remove('sel'); });
+          btn.classList.add('sel');
+        };
+      });
+      $('pSave').onclick = function () {
+        p.icon = icon;
+        p.public = $('pPublic').checked;
+        p.updatedAt = now();
+        closeModal(); mutate();
+      };
+      $('pDelete').onclick = function () {
+        if (!confirm('Delete the page "' + p.title + '"?')) return;
+        entomb(p.id);
+        doc.pages.splice(doc.pages.indexOf(p), 1);
+        ui.pageId = null; ui.view = 'board';
+        closeModal(); mutate();
+      };
+    }
 
     // --------------------------- members modal -----------------------------
     function openMembersModal() {
@@ -995,7 +1322,7 @@
         + '<label class="field-label">Add a member</label>'
         + '<div class="comment-row" style="margin-top:0;"><input id="newMemberName" placeholder="Name" />'
         + '<button class="btn-sm primary" id="addMemberBtn">Add</button></div>'
-        + '<p class="help-note" style="margin-top:.9rem;">Members are just names — anyone opening this board picks who they are. Assign cards and sign comments with them.</p>';
+        + '<p class="help-note" style="margin-top:.9rem;">Members are just names — anyone opening this workspace picks who they are. Assign cards and sign comments with them.</p>';
       openModal(html, true);
       document.querySelectorAll('[data-me]').forEach(function (btn) {
         btn.onclick = function () { meId = btn.dataset.me; localStorage.setItem(LS_ME, meId); openMembersModal(); render(); };
@@ -1050,16 +1377,16 @@
     // --------------------------- sync modal --------------------------------
     function openSyncModal() {
       var status;
-      if (!sync.key) status = 'Not connected — this board lives only in this browser.';
+      if (!sync.key) status = 'Not connected — this workspace lives only in this browser.';
       else if (sync.configured === false) status = 'The sync backend isn\'t deployed yet (see below).';
-      else if (sync.status === 'synced') status = '✅ Connected — everyone with the team key sees this board.';
+      else if (sync.status === 'synced') status = '✅ Connected — everyone with the team key sees this workspace.';
       else if (sync.status === 'error') status = '⚠️ Connection trouble — check the key, or try again.';
       else status = 'Connecting…';
       var html = '<h2>Team sync</h2>'
         + '<p class="help-note">' + esc(status) + '</p>'
         + '<label class="field-label">Team access key</label>'
         + '<input class="text-input" id="syncKey" type="password" placeholder="Shared team passphrase" value="' + esc(sync.key) + '" />'
-        + '<p class="help-note">One shared passphrase for the whole team — ask Scott for it. With sync on, every change saves to a shared Google Sheet (free) and updates everyone\'s board within seconds.</p>'
+        + '<p class="help-note">One shared passphrase for the whole team — ask Scott for it. With sync on, every change saves to a shared Google Sheet (free) and updates everyone\'s workspace within seconds.</p>'
         + '<p class="help-note">Setting it up for the first time? Follow <code>docs/TEAM-BOARD-SETUP.md</code> in the website repo (~10 minutes).</p>'
         + '<div class="modal-foot">'
         + (sync.key ? '<button class="btn-sm danger" id="syncOff">Disconnect</button>' : '<span></span>')
@@ -1094,7 +1421,7 @@
         var blob = new Blob([JSON.stringify(doc, null, 2)], { type: 'application/json' });
         var a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'finmango-board-' + new Date().toISOString().slice(0, 10) + '.json';
+        a.download = 'finmango-hq-' + new Date().toISOString().slice(0, 10) + '.json';
         a.click(); URL.revokeObjectURL(a.href);
       };
       $('importBtn').onclick = function () { $('importFile').click(); };
@@ -1106,13 +1433,64 @@
             var d = JSON.parse(reader.result);
             if (!d || !Array.isArray(d.boards)) throw new Error('bad');
             if (!confirm('Replace the current workspace with this backup?')) return;
-            doc = d; if (!doc.tombstones) doc.tombstones = {};
+            doc = d; migrate();
             ui.boardId = doc.boards[0] && doc.boards[0].id;
+            ui.pageId = null; ui.view = 'board';
             closeModal(); mutate(); toast('Workspace restored');
-          } catch (e) { toast('That file doesn\'t look like a board backup'); }
+          } catch (e) { toast('That file doesn\'t look like a workspace backup'); }
         };
         reader.readAsText(f);
       };
+    }
+
+    // ------------------------- quick find (⌘K) ------------------------------
+    function openQuickFind() {
+      var html = '<h2 style="margin-bottom:.6rem;">Quick find</h2>'
+        + '<input class="qf-input" id="qfInput" placeholder="Search boards, cards, and pages…" autocomplete="off" />'
+        + '<div class="qf-results" id="qfResults"></div>';
+      openModal(html, true);
+      var input = $('qfInput'), results = $('qfResults');
+      var items = [];
+      function collect(q) {
+        q = q.toLowerCase();
+        var out = [];
+        (doc.pages || []).forEach(function (p) {
+          if (!q || (p.title + ' ' + p.body).toLowerCase().indexOf(q) > -1) {
+            out.push({ icon: p.icon || '📄', label: p.title, path: 'page', go: function () { closeModal(); openPage(p.id); } });
+          }
+        });
+        doc.boards.forEach(function (b) {
+          if (!q || b.name.toLowerCase().indexOf(q) > -1) {
+            out.push({ icon: b.icon || '📋', label: b.name, path: 'board', go: function () { closeModal(); openBoard(b.id); } });
+          }
+          b.cards.forEach(function (c) {
+            if (!q) return; // cards only appear once you type — keeps the default list short
+            if ((c.title + ' ' + c.desc + ' ' + c.tags.join(' ')).toLowerCase().indexOf(q) > -1) {
+              var col = b.columns.find(function (x) { return x.id === c.colId; });
+              out.push({ icon: '▸', label: c.title, path: b.name + ' › ' + (col ? col.name : ''), go: function () {
+                closeModal(); openBoard(b.id); openCardModal(c.id);
+              } });
+            }
+          });
+        });
+        return out.slice(0, 12);
+      }
+      function draw() {
+        items = collect(input.value.trim());
+        results.innerHTML = items.length ? items.map(function (it, i) {
+          return '<button class="qf-item' + (i === 0 ? ' hot' : '') + '" data-i="' + i + '"><span class="emoji">' + esc(it.icon)
+            + '</span><span>' + esc(it.label) + '</span><span class="path">' + esc(it.path) + '</span></button>';
+        }).join('') : '<div class="qf-empty">No matches.</div>';
+        results.querySelectorAll('.qf-item').forEach(function (btn) {
+          btn.onclick = function () { items[Number(btn.dataset.i)].go(); };
+        });
+      }
+      input.addEventListener('input', draw);
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && items.length) { e.preventDefault(); items[0].go(); }
+      });
+      draw();
+      setTimeout(function () { input.focus(); }, 0);
     }
 
     // ========================= TOP-LEVEL WIRING =============================
@@ -1132,25 +1510,44 @@
         ],
         cards: []
       });
-      ui.boardId = bId;
+      openBoard(bId);
       mutate();
     };
+    $('addPageBtn').onclick = function () {
+      var name = prompt('Page title'); if (!name || !name.trim()) return;
+      var p = { id: uid(), icon: '📄', title: name.trim().slice(0, 80), body: '', public: false, createdAt: now(), updatedAt: now() };
+      doc.pages.push(p);
+      mutate({ noRender: true });
+      openPage(p.id, true);
+    };
     $('boardNameInput').addEventListener('change', function () {
-      var b = board(); if (!b) return;
       var v = this.value.trim();
-      if (v) { b.name = v.slice(0, 60); b.updatedAt = now(); mutate(); }
-      else this.value = b.name;
+      if (inPageMode()) {
+        var p = page();
+        if (v) { p.title = v.slice(0, 80); p.updatedAt = now(); mutate(); } else this.value = p.title;
+      } else {
+        var b = board(); if (!b) return;
+        if (v) { b.name = v.slice(0, 60); b.updatedAt = now(); mutate(); } else this.value = b.name;
+      }
     });
     $('boardEmoji').onclick = openBoardMenu;
     $('boardMenuBtn').onclick = openBoardMenu;
     $('viewBoardBtn').onclick = function () { ui.view = 'board'; persistLocal(); render(); };
     $('viewTableBtn').onclick = function () { ui.view = 'table'; persistLocal(); render(); };
+    $('pageReadBtn').onclick = function () { ui.pageEdit = false; render(); };
+    $('pageEditBtn').onclick = function () { ui.pageEdit = true; render(); };
+    $('agendaBtn').onclick = function () { ui.agenda = !ui.agenda; render(); };
     $('searchInput').addEventListener('input', function () { ui.search = this.value; renderView(); });
     $('filterAssignee').addEventListener('change', function () { ui.fAssignee = this.value; render(); });
     $('filterPriority').addEventListener('change', function () { ui.fPriority = this.value; render(); });
     $('membersBtn').onclick = openMembersModal;
     $('syncBtn').onclick = openSyncModal;
     $('backupBtn').onclick = openBackupModal;
+    $('qfHint').onclick = openQuickFind;
+    document.addEventListener('keydown', function (e) {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openQuickFind(); return; }
+      if (e.key === 'Escape') closeModal();
+    });
 
     // ============================== INIT ===================================
     loadLocal();

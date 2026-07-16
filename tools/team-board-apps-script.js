@@ -51,6 +51,7 @@ function doGet(e) {
   const p = (e && e.parameter) || {};
   try {
     if (p.action === 'load') return json(loadDoc_(p.key));
+    if (p.action === 'public') return json(publicDoc_());
     if (p.action === 'ping') return json({ result: 'success', pong: true });
     return json({ result: 'error', error: 'Unknown action' });
   } catch (err) {
@@ -124,6 +125,46 @@ function saveDoc_(req) {
     String(req.author || '').slice(0, 80)
   ]]);
   return { result: 'success', version: newVersion };
+}
+
+// The one endpoint that needs NO key: the public roadmap subset, consumed by
+// roadmap.html on the website. It returns ONLY items the team explicitly
+// flagged `public`, and ONLY safe fields — never comments, assignees,
+// member names, or anything unflagged.
+function publicDoc_() {
+  const sheet = getSheet_();
+  const doc = readChunks_(sheet);
+  if (!doc) return { result: 'success', updatedAt: null, boards: [], pages: [] };
+
+  const boards = (doc.boards || []).map(function (b) {
+    const columns = (b.columns || []).map(function (col) {
+      const cards = (b.cards || [])
+        .filter(function (c) { return c.public && c.colId === col.id; })
+        .map(function (c) {
+          return {
+            title: String(c.title || ''),
+            desc: String(c.desc || ''),
+            tags: (c.tags || []).map(String).slice(0, 8),
+            updatedAt: c.updatedAt || null
+          };
+        });
+      return { name: String(col.name || ''), color: String(col.color || ''), cards: cards };
+    }).filter(function (col) { return col.cards.length > 0; });
+    return { name: String(b.name || ''), icon: String(b.icon || ''), columns: columns };
+  }).filter(function (b) { return b.columns.length > 0; });
+
+  const pages = (doc.pages || [])
+    .filter(function (p) { return p.public; })
+    .map(function (p) {
+      return {
+        title: String(p.title || ''),
+        icon: String(p.icon || ''),
+        body: String(p.body || ''),
+        updatedAt: p.updatedAt || null
+      };
+    });
+
+  return { result: 'success', updatedAt: doc.updatedAt || null, boards: boards, pages: pages };
 }
 
 // ============================== STORAGE ====================================
