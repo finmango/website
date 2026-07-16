@@ -265,6 +265,25 @@
     .qf-item .path { font-family: var(--font-mono); font-size: .6rem; color: var(--ink-faint); margin-left: auto; white-space: nowrap; }
     .qf-empty { color: var(--ink-faint); font-size: .85rem; padding: .8rem .3rem; }
 
+    /* ===== SIGN-IN GATE ===== */
+    .gate { position: fixed; inset: 0; background: var(--paper); z-index: 500; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    .gate-card { width: 100%; max-width: 380px; text-align: center; background: #fff; border: 1px solid var(--ink-line-soft);
+      border-radius: 16px; box-shadow: var(--shadow-pop); padding: 2.4rem 2rem 2rem; }
+    .gate-card .glogo { width: 64px; height: 64px; object-fit: contain; margin-bottom: .6rem; }
+    .gate-card h1 { font-size: 1.5rem; letter-spacing: -.02em; margin: .35rem 0 .3rem; }
+    .gate-card .sub { font-size: .88rem; color: var(--ink-dim); margin-bottom: 1.4rem; }
+    .gate-divider { display: flex; align-items: center; gap: .8rem; font-family: var(--font-mono); font-size: .62rem;
+      text-transform: uppercase; letter-spacing: .14em; color: var(--ink-faint); margin: 1rem 0 .8rem; }
+    .gate-divider::before, .gate-divider::after { content: ''; height: 1px; background: var(--ink-line-soft); flex: 1; }
+    .gate-key-row { display: flex; gap: .5rem; }
+    .gate-key-row input { flex: 1; border: 1px solid var(--ink-line); border-radius: 8px; padding: .55rem .7rem; font-size: .9rem; }
+    .gate-key-row input:focus { outline: 2px solid var(--orange); border-color: transparent; }
+    .gate-key-row button { background: var(--orange); color: #fff; font-weight: 700; font-size: .85rem; border-radius: 8px; padding: .55rem 1rem; }
+    .gate-key-row button:hover { background: var(--ink); }
+    .gate-err { color: #C62828; font-size: .8rem; min-height: 1.2em; margin-top: .6rem; }
+    .gate-card .back { display: inline-block; margin-top: 1.1rem; font-size: .82rem; font-weight: 600; color: var(--ink-faint); text-decoration: none; }
+    .gate-card .back:hover { color: var(--ink); }
+
     /* ===== TOASTS ===== */
     .toasts { position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; flex-direction: column; gap: .5rem; align-items: center; }
     .toast { background: var(--ink); color: var(--paper); font-size: .84rem; font-weight: 600; padding: .55rem 1rem;
@@ -283,7 +302,25 @@
 </head>
 
 <body>
-  <div class="app" id="app">
+  <!-- Sign-in gate: nothing below renders until you're in -->
+  <div class="gate" id="gate">
+    <div class="gate-card">
+      <img class="glogo" src="favicon.png" alt="FinMango">
+      <div class="mono">FinMango Internal</div>
+      <h1>FinMango HQ</h1>
+      <p class="sub">The team workspace — roadmap, boards &amp; wiki. Sign in with your @finmango.org account.</p>
+      <div class="gsi-wrap" id="gsiBtnGate"></div>
+      <div class="gate-divider">or use the team key</div>
+      <div class="gate-key-row">
+        <input id="gateKey" type="password" placeholder="Team key" aria-label="Team key">
+        <button id="gateGo">Enter</button>
+      </div>
+      <p class="gate-err" id="gateErr"></p>
+      <a class="back" href="index.html">← back to finmango.org</a>
+    </div>
+  </div>
+
+  <div class="app" id="app" style="display:none;">
     <!-- ============ SIDEBAR ============ -->
     <aside class="sidebar">
       <div class="side-head">
@@ -661,6 +698,7 @@
       auth = { token: resp.credential, email: email, name: claims.name || email,
         given: claims.given_name || '', picture: claims.picture || '', exp: claims.exp };
       try { localStorage.setItem(LS_AUTH, JSON.stringify(auth)); } catch (e) {}
+      if (!booted) { bootApp(); toast('Signed in as ' + auth.name); return; }
       ensureGoogleMember();
       closeModal();
       render();
@@ -1640,39 +1678,96 @@
     $('backupBtn').onclick = openBackupModal;
     $('qfHint').onclick = openQuickFind;
     document.addEventListener('keydown', function (e) {
+      if (!booted) return;
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openQuickFind(); return; }
       if (e.key === 'Escape') closeModal();
     });
 
-    // ============================== INIT ===================================
-    loadLocal();
-    if (authValid()) { ensureGoogleMember(); }
-    else if (auth) { auth = null; localStorage.removeItem(LS_AUTH); } // expired token from a previous visit
-    if (window.innerWidth <= 760) ui.sidebarClosed = true;
-    render();
-    setSyncStatus('local');
-    if (canSync()) pullLoad(true);
-    // First visit, not connected: open the access modal so signing in is the
-    // obvious first step (identity comes from Google — no name-picking).
-    if (!authValid() && !canSync()) setTimeout(openSyncModal, 400);
+    // ============================== BOOT / GATE ============================
+    // Nothing renders — not even the seeded starter content — until the
+    // visitor is signed in (Google) or has entered the team key. Data safety
+    // lives server-side; the gate keeps the workspace out of casual view and
+    // stops teammates from unknowingly editing an unsynced local copy.
+    var booted = false;
 
-    // Once the GIS script lands: enable One Tap so returning @finmango.org
-    // folks are silently re-signed-in when their ~1h token has lapsed.
+    function bootApp() {
+      if (booted) return;
+      booted = true;
+      $('gate').style.display = 'none';
+      $('app').style.display = 'flex';
+      loadLocal();
+      if (authValid()) ensureGoogleMember();
+      if (window.innerWidth <= 760) ui.sidebarClosed = true;
+      render();
+      setSyncStatus('local');
+      if (canSync()) pullLoad(true);
+    }
+
+    function showGate() {
+      $('gate').style.display = 'flex';
+      // The GIS script loads async — keep trying briefly, then render the
+      // button and fire One Tap so returning folks re-enter with one click.
+      var tries = 0;
+      var timer = setInterval(function () {
+        if (initGsi()) {
+          clearInterval(timer);
+          renderGsiButton('gsiBtnGate');
+          try { google.accounts.id.prompt(); } catch (e) {}
+        } else if (++tries > 40) { clearInterval(timer); }
+      }, 250);
+      function submitKey() {
+        var k = $('gateKey').value.trim();
+        if (!k) { $('gateErr').textContent = 'Enter the team key first.'; return; }
+        $('gateErr').textContent = '';
+        $('gateGo').disabled = true; $('gateGo').textContent = '…';
+        // Pre-verify against the backend so a wrong key doesn't get past the door.
+        fetch('/api/board', {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ action: 'load', key: k })
+        }).then(function (r) { return r.status === 503 ? { result: 'unconfigured' } : r.json(); })
+          .then(function (res) {
+            $('gateGo').disabled = false; $('gateGo').textContent = 'Enter';
+            if (res.result === 'success' || res.result === 'unconfigured') {
+              // 'unconfigured' = backend not deployed yet; let the key holder in
+              // to work locally rather than locking the team out during setup.
+              sync.key = k; localStorage.setItem(LS_KEY, k);
+              bootApp();
+            } else if (String(res.error || '').indexOf('key') > -1 || String(res.error || '').indexOf('ACCESS_KEY') > -1) {
+              $('gateErr').textContent = 'That key doesn\'t match — check with Scott.';
+            } else {
+              $('gateErr').textContent = 'Couldn\'t reach the backend — try again in a minute.';
+            }
+          })
+          .catch(function () {
+            $('gateGo').disabled = false; $('gateGo').textContent = 'Enter';
+            $('gateErr').textContent = 'Couldn\'t reach the backend — try again in a minute.';
+          });
+      }
+      $('gateGo').onclick = submitKey;
+      $('gateKey').addEventListener('keydown', function (e) { if (e.key === 'Enter') submitKey(); });
+    }
+
+    // ============================== INIT ===================================
+    if (auth && !authValid()) { auth = null; localStorage.removeItem(LS_AUTH); } // expired token from a previous visit
+    if (authValid() || sync.key) bootApp(); else showGate();
+
+    // Once the GIS script lands (post-boot path): enable One Tap so returning
+    // @finmango.org folks are silently re-signed-in when their token lapses.
     window.addEventListener('load', function () {
-      if (initGsi() && !authValid()) {
+      if (booted && initGsi() && !authValid()) {
         try { google.accounts.id.prompt(); } catch (e) {}
       }
     });
 
     // Poll for teammates' changes; also refresh when the tab regains focus.
     setInterval(function () {
-      if (canSync() && !sync.dirty && !sync.pushing && !document.hidden) pullLoad(false);
+      if (booted && canSync() && !sync.dirty && !sync.pushing && !document.hidden) pullLoad(false);
     }, 15000);
     document.addEventListener('visibilitychange', function () {
-      if (!document.hidden && canSync() && !sync.dirty && !sync.pushing) pullLoad(false);
+      if (booted && !document.hidden && canSync() && !sync.dirty && !sync.pushing) pullLoad(false);
     });
     window.addEventListener('beforeunload', function () {
-      if (sync.dirty && canSync()) {
+      if (booted && sync.dirty && canSync()) {
         // best-effort final save
         try {
           navigator.sendBeacon && navigator.sendBeacon('/api/board', new Blob([JSON.stringify(Object.assign({
