@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Board — FinMango HQ</title>
+  <meta name="description" content="FinMango's internal team workspace — boards, tasks, and notes.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
+
+  <style>
+    /* ===== FINMANGO EDITORIAL FOUNDATION ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --paper: #FAFAF7; --ink: #0A0A0A; --orange: #FF6B35; --orange-deep: #E5511B;
+      --ink-dim: rgba(10,10,10,.62); --ink-faint: rgba(10,10,10,.38);
+      --ink-line: rgba(10,10,10,.1); --ink-line-soft: rgba(10,10,10,.06);
+      --sidebar-bg: #F2F1EC; --card-bg: #FFFFFF;
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+      --shadow-card: 0 1px 2px rgba(10,10,10,.05), 0 1px 1px rgba(10,10,10,.03);
+      --shadow-pop: 0 12px 40px rgba(10,10,10,.16), 0 2px 8px rgba(10,10,10,.08);
+      --radius: 8px;
+    }
+    html, body { height: 100%; }
+    body { font-family: var(--font-body); background: var(--paper); color: var(--ink); font-size: 15px;
+      line-height: 1.5; -webkit-font-smoothing: antialiased; font-feature-settings: "ss01" on, "cv11" on; overflow: hidden; }
+    ::selection { background: var(--orange); color: #fff; }
+    :focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+    button { font-family: inherit; font-size: inherit; color: inherit; background: none; border: none; cursor: pointer; }
+    input, textarea, select { font-family: inherit; font-size: inherit; color: inherit; }
+    .mono { font-family: var(--font-mono); font-size: .66rem; font-weight: 500; text-transform: uppercase; letter-spacing: .14em; color: var(--ink-faint); }
+
+    /* ===== APP SHELL ===== */
+    .app { display: flex; height: 100vh; height: 100dvh; }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar { width: 248px; min-width: 248px; background: var(--sidebar-bg); border-right: 1px solid var(--ink-line-soft);
+      display: flex; flex-direction: column; transition: margin-left .25s ease; z-index: 60; }
+    .app.sidebar-closed .sidebar { margin-left: -248px; }
+    .side-head { display: flex; align-items: center; gap: .6rem; padding: 1rem .9rem .8rem; }
+    .side-head .ws-logo { width: 26px; height: 26px; border-radius: 6px; background: var(--orange); color: #fff;
+      display: grid; place-items: center; font-size: .95rem; flex-shrink: 0; }
+    .side-head .ws-name { font-weight: 700; font-size: .92rem; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .side-section { padding: .35rem .55rem; }
+    .side-label { padding: .55rem .4rem .3rem; display: flex; justify-content: space-between; align-items: center; }
+    .side-label button { color: var(--ink-faint); border-radius: 4px; width: 20px; height: 20px; line-height: 1; font-size: .95rem; }
+    .side-label button:hover { background: var(--ink-line); color: var(--ink); }
+    .side-item { display: flex; align-items: center; gap: .55rem; width: 100%; text-align: left; padding: .4rem .5rem;
+      border-radius: 6px; color: var(--ink-dim); font-weight: 500; font-size: .88rem; }
+    .side-item:hover { background: rgba(10,10,10,.055); color: var(--ink); }
+    .side-item.active { background: rgba(10,10,10,.08); color: var(--ink); font-weight: 600; }
+    .side-item .emoji { width: 1.25em; text-align: center; flex-shrink: 0; }
+    .side-item .label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .side-item .count { font-family: var(--font-mono); font-size: .62rem; color: var(--ink-faint); }
+    .side-foot { margin-top: auto; padding: .55rem; border-top: 1px solid var(--ink-line-soft); }
+    .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-faint); flex-shrink: 0; }
+    .sync-dot.on { background: #3E9A5F; } .sync-dot.err { background: #D9534F; } .sync-dot.busy { background: #E8A33D; }
+
+    /* ===== MAIN ===== */
+    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .topbar { display: flex; align-items: center; gap: .75rem; padding: .65rem 1.1rem; border-bottom: 1px solid var(--ink-line-soft); flex-wrap: wrap; }
+    .hamburger { font-size: 1rem; color: var(--ink-dim); padding: .3rem .45rem; border-radius: 6px; }
+    .hamburger:hover { background: var(--ink-line-soft); }
+    .crumb { display: flex; align-items: center; gap: .5rem; font-weight: 700; font-size: 1rem; letter-spacing: -.01em; min-width: 0; }
+    .crumb .board-emoji { font-size: 1.05rem; cursor: pointer; border-radius: 5px; padding: .1rem .2rem; }
+    .crumb .board-emoji:hover { background: var(--ink-line-soft); }
+    .crumb input { border: none; background: transparent; font-weight: 700; font-size: 1rem; letter-spacing: -.01em;
+      width: 100%; min-width: 60px; max-width: 320px; padding: .1rem .25rem; border-radius: 5px; }
+    .crumb input:hover { background: var(--ink-line-soft); }
+    .crumb input:focus { background: #fff; outline: 2px solid var(--orange); }
+    .topbar .spacer { flex: 1; }
+    .view-switch { display: flex; background: var(--ink-line-soft); border-radius: 7px; padding: 2px; }
+    .view-switch button { padding: .28rem .7rem; border-radius: 5px; font-size: .8rem; font-weight: 600; color: var(--ink-dim); }
+    .view-switch button.active { background: #fff; color: var(--ink); box-shadow: var(--shadow-card); }
+    .search-box { display: flex; align-items: center; gap: .4rem; background: #fff; border: 1px solid var(--ink-line);
+      border-radius: 7px; padding: .3rem .6rem; width: 180px; }
+    .search-box input { border: none; outline: none; background: transparent; width: 100%; font-size: .85rem; }
+    .search-box svg { flex-shrink: 0; opacity: .4; }
+    .top-filter { font-size: .8rem; font-weight: 600; color: var(--ink-dim); border: 1px solid var(--ink-line);
+      background: #fff; border-radius: 7px; padding: .32rem .55rem; max-width: 130px; }
+    .top-filter.on { border-color: var(--orange); color: var(--orange-deep); }
+    .avatars { display: flex; }
+    .avatar { width: 26px; height: 26px; border-radius: 50%; color: #fff; display: grid; place-items: center;
+      font-size: .68rem; font-weight: 700; border: 2px solid var(--paper); margin-left: -6px; flex-shrink: 0; }
+    .avatar:first-child { margin-left: 0; }
+    .avatars button.avatar { cursor: pointer; }
+    .avatar.more { background: var(--ink-line); color: var(--ink-dim); }
+
+    /* ===== BOARD VIEW ===== */
+    .board-scroll { flex: 1; overflow-x: auto; overflow-y: hidden; }
+    .board { display: flex; gap: .9rem; padding: 1rem 1.1rem 1.25rem; height: 100%; align-items: flex-start; min-width: min-content; }
+    .col { width: 280px; min-width: 280px; display: flex; flex-direction: column; max-height: 100%; border-radius: 10px; }
+    .col.drag-over-col { outline: 2px dashed var(--orange); outline-offset: 4px; }
+    .col-head { display: flex; align-items: center; gap: .5rem; padding: .25rem .35rem .55rem; cursor: grab; }
+    .col-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .col-name { font-weight: 700; font-size: .86rem; letter-spacing: -.005em; }
+    .col-count { font-family: var(--font-mono); font-size: .62rem; color: var(--ink-faint); }
+    .col-head .spacer { flex: 1; }
+    .icon-btn { width: 24px; height: 24px; border-radius: 5px; display: grid; place-items: center; color: var(--ink-faint); font-size: .95rem; line-height: 1; }
+    .icon-btn:hover { background: var(--ink-line-soft); color: var(--ink); }
+    .col-body { overflow-y: auto; display: flex; flex-direction: column; gap: .5rem; padding: 2px 2px 6px; min-height: 40px; }
+    .drop-hint { height: 3px; border-radius: 2px; background: var(--orange); margin: -1px 4px; }
+    .card { background: var(--card-bg); border: 1px solid var(--ink-line-soft); border-radius: var(--radius);
+      box-shadow: var(--shadow-card); padding: .6rem .7rem; cursor: pointer; transition: box-shadow .15s, transform .15s; }
+    .card:hover { box-shadow: 0 3px 10px rgba(10,10,10,.09); }
+    .card.dragging { opacity: .45; transform: rotate(1.5deg); }
+    .card-title { font-weight: 600; font-size: .88rem; line-height: 1.35; word-wrap: break-word; }
+    .card-desc-hint { color: var(--ink-faint); font-size: .76rem; margin-top: .15rem; display: -webkit-box;
+      -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .45rem; }
+    .tag { font-size: .68rem; font-weight: 600; padding: .08rem .48rem; border-radius: 99px; }
+    .card-foot { display: flex; align-items: center; gap: .45rem; margin-top: .55rem; }
+    .card-foot .avatar { width: 21px; height: 21px; font-size: .58rem; border-width: 1px; margin: 0; }
+    .due { font-family: var(--font-mono); font-size: .64rem; color: var(--ink-dim); display: inline-flex; align-items: center; gap: .25rem; }
+    .due.overdue { color: #C62828; font-weight: 500; }
+    .due.soon { color: var(--orange-deep); }
+    .prio { font-size: .62rem; font-weight: 700; font-family: var(--font-mono); letter-spacing: .06em; margin-left: auto; }
+    .comments-n { font-family: var(--font-mono); font-size: .62rem; color: var(--ink-faint); }
+    .add-card-btn { display: flex; align-items: center; gap: .45rem; padding: .45rem .55rem; border-radius: 7px;
+      color: var(--ink-faint); font-size: .82rem; font-weight: 600; text-align: left; width: 100%; margin-top: .15rem; }
+    .add-card-btn:hover { background: var(--ink-line-soft); color: var(--ink); }
+    .quick-add { background: #fff; border: 1px solid var(--orange); border-radius: var(--radius); padding: .5rem .6rem; }
+    .quick-add textarea { width: 100%; border: none; outline: none; resize: none; font-size: .88rem; font-weight: 600; line-height: 1.35; }
+    .quick-add-row { display: flex; gap: .4rem; margin-top: .35rem; }
+    .btn-sm { padding: .3rem .7rem; border-radius: 6px; font-size: .78rem; font-weight: 700; }
+    .btn-sm.primary { background: var(--orange); color: #fff; }
+    .btn-sm.primary:hover { background: var(--ink); }
+    .btn-sm.ghost { color: var(--ink-dim); } .btn-sm.ghost:hover { background: var(--ink-line-soft); }
+    .btn-sm.danger { color: #C62828; } .btn-sm.danger:hover { background: rgba(198,40,40,.08); }
+    .add-col { min-width: 220px; }
+    .add-col button { width: 100%; text-align: left; padding: .5rem .7rem; border-radius: 8px; border: 1px dashed var(--ink-line);
+      color: var(--ink-faint); font-weight: 600; font-size: .84rem; }
+    .add-col button:hover { border-color: var(--orange); color: var(--orange-deep); background: rgba(255,107,53,.04); }
+
+    /* ===== TABLE VIEW ===== */
+    .table-scroll { flex: 1; overflow: auto; padding: .5rem 1.1rem 1.5rem; }
+    table.props { width: 100%; border-collapse: collapse; min-width: 760px; }
+    table.props th { text-align: left; font-family: var(--font-mono); font-size: .62rem; font-weight: 500; text-transform: uppercase;
+      letter-spacing: .12em; color: var(--ink-faint); padding: .6rem .6rem .45rem; border-bottom: 1px solid var(--ink-line); white-space: nowrap; }
+    table.props td { padding: .55rem .6rem; border-bottom: 1px solid var(--ink-line-soft); font-size: .86rem; vertical-align: middle; }
+    table.props tr.rowcard { cursor: pointer; }
+    table.props tr.rowcard:hover td { background: rgba(10,10,10,.025); }
+    .status-chip { display: inline-flex; align-items: center; gap: .4rem; font-size: .78rem; font-weight: 600; padding: .12rem .55rem;
+      border-radius: 99px; background: var(--ink-line-soft); white-space: nowrap; }
+    .status-chip .col-dot { width: 7px; height: 7px; }
+    .cell-assignee { display: inline-flex; align-items: center; gap: .4rem; white-space: nowrap; }
+    .cell-assignee .avatar { width: 20px; height: 20px; font-size: .56rem; margin: 0; border-width: 1px; }
+    .table-group { font-weight: 800; font-size: .8rem; padding-top: 1.1rem; }
+
+    /* ===== EMPTY STATE ===== */
+    .empty { flex: 1; display: grid; place-items: center; color: var(--ink-faint); text-align: center; padding: 2rem; }
+
+    /* ===== MODALS ===== */
+    .overlay { position: fixed; inset: 0; background: rgba(10,10,10,.32); display: none; align-items: flex-start;
+      justify-content: center; padding: 5vh 1rem; z-index: 100; overflow-y: auto; }
+    .overlay.open { display: flex; }
+    .modal { background: var(--paper); border-radius: 12px; box-shadow: var(--shadow-pop); width: 100%; max-width: 680px;
+      padding: 1.6rem 1.8rem 1.5rem; position: relative; }
+    .modal.narrow { max-width: 460px; }
+    .modal-close { position: absolute; top: .8rem; right: .8rem; }
+    .modal h2 { font-size: 1.15rem; letter-spacing: -.01em; margin-bottom: 1rem; }
+    .m-title { width: 100%; border: none; background: transparent; font-weight: 800; font-size: 1.45rem; letter-spacing: -.02em;
+      line-height: 1.25; padding: .15rem .3rem; border-radius: 6px; margin: 0 0 .9rem -0.3rem; }
+    .m-title:hover { background: var(--ink-line-soft); } .m-title:focus { background: #fff; outline: 2px solid var(--orange); }
+    .prop-grid { display: grid; grid-template-columns: 110px 1fr; gap: .5rem 1rem; align-items: center; margin-bottom: 1.1rem; }
+    .prop-grid label { font-size: .78rem; font-weight: 600; color: var(--ink-faint); display: flex; align-items: center; gap: .4rem; }
+    .prop-grid select, .prop-grid input { border: 1px solid transparent; background: transparent; border-radius: 6px;
+      padding: .3rem .45rem; font-size: .86rem; font-weight: 500; max-width: 260px; }
+    .prop-grid select:hover, .prop-grid input:hover { background: var(--ink-line-soft); }
+    .prop-grid select:focus, .prop-grid input:focus { background: #fff; border-color: var(--ink-line); outline: none; }
+    .m-section { font-family: var(--font-mono); font-size: .64rem; font-weight: 500; text-transform: uppercase; letter-spacing: .16em;
+      color: var(--ink-faint); margin: 1.1rem 0 .45rem; display: flex; align-items: center; gap: .6rem; }
+    .m-section::after { content: ''; height: 1px; background: var(--ink-line-soft); flex: 1; }
+    .m-desc { width: 100%; min-height: 96px; border: 1px solid var(--ink-line-soft); background: #fff; border-radius: 8px;
+      padding: .65rem .75rem; font-size: .88rem; line-height: 1.55; resize: vertical; }
+    .m-desc:focus { outline: 2px solid var(--orange); border-color: transparent; }
+    .comment { display: flex; gap: .6rem; padding: .5rem 0; }
+    .comment .avatar { margin: 0; width: 24px; height: 24px; font-size: .62rem; border-width: 1px; flex-shrink: 0; }
+    .comment .body { flex: 1; }
+    .comment .who { font-size: .78rem; font-weight: 700; }
+    .comment .when { font-family: var(--font-mono); font-size: .6rem; color: var(--ink-faint); margin-left: .45rem; }
+    .comment .text { font-size: .86rem; margin-top: .1rem; white-space: pre-wrap; word-wrap: break-word; }
+    .comment-row { display: flex; gap: .5rem; margin-top: .5rem; }
+    .comment-row input { flex: 1; border: 1px solid var(--ink-line); border-radius: 7px; padding: .45rem .65rem; font-size: .86rem; background: #fff; }
+    .modal-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 1.3rem; padding-top: .9rem; border-top: 1px solid var(--ink-line-soft); }
+    .meta-line { font-family: var(--font-mono); font-size: .62rem; color: var(--ink-faint); }
+    .field-label { font-size: .78rem; font-weight: 700; color: var(--ink-dim); display: block; margin: .8rem 0 .3rem; }
+    .text-input { width: 100%; border: 1px solid var(--ink-line); border-radius: 7px; padding: .5rem .65rem; font-size: .9rem; background: #fff; }
+    .text-input:focus { outline: 2px solid var(--orange); border-color: transparent; }
+    .member-row { display: flex; align-items: center; gap: .6rem; padding: .4rem 0; }
+    .member-row .name { flex: 1; font-weight: 600; font-size: .9rem; }
+    .member-row .you { font-family: var(--font-mono); font-size: .6rem; color: var(--orange-deep); }
+    .emoji-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: .25rem; margin-top: .5rem; }
+    .emoji-grid button { font-size: 1.25rem; padding: .3rem; border-radius: 7px; }
+    .emoji-grid button:hover { background: var(--ink-line-soft); }
+    .color-row { display: flex; gap: .4rem; margin-top: .4rem; }
+    .color-row button { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; }
+    .color-row button.sel { border-color: var(--ink); }
+    .help-note { font-size: .82rem; color: var(--ink-dim); line-height: 1.55; margin: .5rem 0; }
+    .help-note code { font-family: var(--font-mono); font-size: .74rem; background: var(--ink-line-soft); padding: .05rem .3rem; border-radius: 4px; }
+    .pick-me { display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; padding: .5rem .6rem;
+      border-radius: 8px; border: 1px solid var(--ink-line-soft); background: #fff; margin-bottom: .4rem; font-weight: 600; }
+    .pick-me:hover { border-color: var(--orange); }
+
+    /* ===== TOASTS ===== */
+    .toasts { position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; flex-direction: column; gap: .5rem; align-items: center; }
+    .toast { background: var(--ink); color: var(--paper); font-size: .84rem; font-weight: 600; padding: .55rem 1rem;
+      border-radius: 8px; box-shadow: var(--shadow-pop); animation: toast-in .2s ease; max-width: 90vw; }
+    @keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    @media (max-width: 760px) {
+      .sidebar { position: fixed; inset: 0 auto 0 0; height: 100%; box-shadow: var(--shadow-pop); }
+      .app.sidebar-closed .sidebar { margin-left: -260px; box-shadow: none; }
+      .search-box { width: 120px; }
+      .modal { padding: 1.2rem 1.1rem; }
+      .prop-grid { grid-template-columns: 92px 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app" id="app">
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar">
+      <div class="side-head">
+        <div class="ws-logo">🥭</div>
+        <div class="ws-name" id="wsName">FinMango HQ</div>
+      </div>
+      <div class="side-section" style="flex:1; overflow-y:auto;">
+        <div class="side-label">
+          <span class="mono">Boards</span>
+          <button id="addBoardBtn" title="New board" aria-label="New board">＋</button>
+        </div>
+        <div id="boardList"></div>
+      </div>
+      <div class="side-foot">
+        <button class="side-item" id="membersBtn"><span class="emoji">👥</span><span class="label">Team members</span></button>
+        <button class="side-item" id="syncBtn"><span class="sync-dot" id="syncDot"></span><span class="label" id="syncLabel">Local only</span></button>
+        <button class="side-item" id="backupBtn"><span class="emoji">💾</span><span class="label">Backup / restore</span></button>
+        <a class="side-item" href="index.html" style="text-decoration:none;"><span class="emoji">←</span><span class="label">finmango.org</span></a>
+      </div>
+    </aside>
+
+    <!-- ============ MAIN ============ -->
+    <main class="main">
+      <div class="topbar">
+        <button class="hamburger" id="hamburger" aria-label="Toggle sidebar">☰</button>
+        <div class="crumb">
+          <span class="board-emoji" id="boardEmoji" title="Change icon">🥭</span>
+          <input id="boardNameInput" value="" aria-label="Board name" />
+        </div>
+        <button class="icon-btn" id="boardMenuBtn" title="Board options">⋯</button>
+        <div class="spacer"></div>
+        <div class="view-switch" role="tablist">
+          <button id="viewBoardBtn" class="active">Board</button>
+          <button id="viewTableBtn">Table</button>
+        </div>
+        <div class="search-box">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="searchInput" placeholder="Search…" aria-label="Search cards" />
+        </div>
+        <select class="top-filter" id="filterAssignee" aria-label="Filter by assignee"></select>
+        <select class="top-filter" id="filterPriority" aria-label="Filter by priority">
+          <option value="">Priority</option>
+          <option value="urgent">Urgent</option><option value="high">High</option>
+          <option value="medium">Medium</option><option value="low">Low</option>
+        </select>
+        <div class="avatars" id="topAvatars"></div>
+      </div>
+      <div id="viewRoot" style="flex:1; display:flex; flex-direction:column; min-height:0;"></div>
+    </main>
+  </div>
+
+  <div class="overlay" id="overlay"><div class="modal" id="modalBox" role="dialog" aria-modal="true"></div></div>
+  <div class="toasts" id="toasts"></div>
+
+  <script>
+    'use strict';
+    /* ========================================================================
+       FinMango Team Board — a lightweight Notion-style workspace.
+       - Always works locally (localStorage).
+       - Optionally syncs the whole team through /api/board (Cloudflare Pages
+         Function → Google Apps Script → Google Sheet). See docs/TEAM-BOARD-SETUP.md.
+       ======================================================================== */
+
+    // ============================ CONSTANTS ================================
+    var LS_DOC = 'fmb_doc_v1', LS_KEY = 'fmb_key', LS_ME = 'fmb_me', LS_UI = 'fmb_ui';
+    var COL_COLORS = ['#9A9A93', '#4A7BD0', '#E8A33D', '#3E9A5F', '#FF6B35', '#8B5CF6', '#D9534F', '#2E9E9E'];
+    var AVA_COLORS = ['#FF6B35', '#3E9A5F', '#4A7BD0', '#8B5CF6', '#E8A33D', '#2E9E9E', '#D9534F', '#5F6B7A'];
+    var TAG_COLORS = [['#FFF0E8', '#C2410C'], ['#EAF3EC', '#1F7A40'], ['#EAF0FA', '#2B5AB8'], ['#F3EDFC', '#6D3FC4'],
+      ['#FDF3E0', '#9A6A0B'], ['#E8F4F4', '#1D7A7A'], ['#FBEAEA', '#B23030'], ['#F0F0ED', '#55554F']];
+    var PRIO = { urgent: ['URGENT', '#C62828'], high: ['HIGH', '#E5511B'], medium: ['MED', '#B8860B'], low: ['LOW', '#5F6B7A'] };
+    var EMOJIS = ['🥭','📋','🚀','📣','🎓','💡','🌱','📊','✅','🗓️','💰','🌍','🤝','✍️','🎯','🔬','🧭','📚','🛠️','🏆','❤️','🔥','⭐','📌'];
+
+    // ============================ UTILITIES ================================
+    function $(id) { return document.getElementById(id); }
+    function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+    function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+    function now() { return Date.now(); }
+    function clone(o) { return JSON.parse(JSON.stringify(o)); }
+    function toast(msg) {
+      var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+      $('toasts').appendChild(t); setTimeout(function () { t.remove(); }, 3200);
+    }
+    function initials(name) {
+      var parts = String(name || '?').trim().split(/\s+/);
+      return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+    }
+    function tagColor(tag) {
+      var h = 0; for (var i = 0; i < tag.length; i++) h = (h * 31 + tag.charCodeAt(i)) >>> 0;
+      return TAG_COLORS[h % TAG_COLORS.length];
+    }
+    function fmtDue(iso) {
+      if (!iso) return null;
+      var d = new Date(iso + 'T12:00:00'), today = new Date(); today.setHours(12, 0, 0, 0);
+      var days = Math.round((d - today) / 86400000);
+      var label = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      if (days === 0) label = 'Today'; else if (days === 1) label = 'Tomorrow';
+      return { label: label, cls: days < 0 ? 'overdue' : (days <= 2 ? 'soon' : '') };
+    }
+    function relTime(ts) {
+      var s = Math.max(1, Math.round((now() - ts) / 1000));
+      if (s < 60) return 'just now';
+      var m = Math.round(s / 60); if (m < 60) return m + 'm ago';
+      var h = Math.round(m / 60); if (h < 24) return h + 'h ago';
+      var d = Math.round(h / 24); if (d < 30) return d + 'd ago';
+      return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    // ============================ SEED DATA ================================
+    function seedDoc() {
+      var mScott = { id: uid(), name: 'Scott', color: AVA_COLORS[0] };
+      var boardId = uid();
+      var cBacklog = { id: uid(), name: 'Backlog', color: COL_COLORS[0] };
+      var cProgress = { id: uid(), name: 'In Progress', color: COL_COLORS[1] };
+      var cReview = { id: uid(), name: 'Review', color: COL_COLORS[2] };
+      var cDone = { id: uid(), name: 'Done', color: COL_COLORS[3] };
+      function card(colId, title, desc, prio, tags, due) {
+        return { id: uid(), colId: colId, title: title, desc: desc || '', assignee: '', due: due || '',
+          priority: prio || '', tags: tags || [], comments: [], createdAt: now(), updatedAt: now() };
+      }
+      return {
+        v: 1, workspace: 'FinMango HQ', updatedAt: now(),
+        members: [mScott],
+        tombstones: {},
+        boards: [{
+          id: boardId, icon: '🥭', name: 'Team HQ', updatedAt: now(),
+          columns: [cBacklog, cProgress, cReview, cDone],
+          cards: [
+            card(cBacklog.id, 'Welcome to the FinMango Team Board 👋',
+              'This is our shared workspace — like Notion, but ours.\n\n• Drag cards between columns\n• Click a card to add details, assignees, due dates, tags and comments\n• Make new boards from the sidebar (one per project works well)\n• Hit "Sync" in the sidebar to connect the whole team',
+              '', ['getting started']),
+            card(cBacklog.id, 'Add the rest of the team as members', 'Sidebar → Team members. Everyone picks their own name when they first open the board.', 'medium', ['getting started']),
+            card(cProgress.id, 'Set up team sync', 'Follow docs/TEAM-BOARD-SETUP.md in the website repo (~10 min, free) so everyone sees the same board.', 'high', ['getting started']),
+            card(cDone.id, 'Create the FinMango team board', 'Done — you\'re looking at it! 🎉', '', [])
+          ]
+        }]
+      };
+    }
+
+    // ============================ STATE ====================================
+    var doc = null;                 // the whole workspace document
+    var ui = { boardId: null, view: 'board', search: '', fAssignee: '', fPriority: '', sidebarClosed: false };
+    var sync = { key: localStorage.getItem(LS_KEY) || '', serverVersion: 0, status: 'local',
+      dirty: false, pushTimer: null, pushing: false, configured: null };
+    var meId = localStorage.getItem(LS_ME) || '';
+    var quickAddCol = null;         // column id currently showing the quick-add box
+    var drag = null;                // { type:'card'|'col', id }
+
+    function me() { return doc.members.find(function (m) { return m.id === meId; }) || null; }
+    function board() { return doc.boards.find(function (b) { return b.id === ui.boardId; }) || doc.boards[0] || null; }
+    function member(id) { return doc.members.find(function (m) { return m.id === id; }) || null; }
+
+    // ======================== PERSISTENCE ==================================
+    function persistLocal() {
+      try { localStorage.setItem(LS_DOC, JSON.stringify(doc)); } catch (e) { /* storage full/blocked */ }
+      try { localStorage.setItem(LS_UI, JSON.stringify({ boardId: ui.boardId, view: ui.view, sidebarClosed: ui.sidebarClosed })); } catch (e) {}
+    }
+    function loadLocal() {
+      try {
+        var raw = localStorage.getItem(LS_DOC);
+        if (raw) doc = JSON.parse(raw);
+      } catch (e) { doc = null; }
+      if (!doc || !doc.boards) doc = seedDoc();
+      if (!doc.tombstones) doc.tombstones = {};
+      try {
+        var u = JSON.parse(localStorage.getItem(LS_UI) || '{}');
+        ui.boardId = u.boardId || null; ui.view = u.view === 'table' ? 'table' : 'board';
+        ui.sidebarClosed = !!u.sidebarClosed;
+      } catch (e) {}
+      if (!board()) ui.boardId = doc.boards[0] && doc.boards[0].id;
+    }
+
+    // A mutation happened: stamp, persist, queue a sync push, re-render.
+    function mutate(opts) {
+      doc.updatedAt = now();
+      persistLocal();
+      sync.dirty = true;
+      schedulePush();
+      if (!opts || !opts.noRender) render();
+    }
+
+    // ========================== SYNC LAYER =================================
+    function setSyncStatus(status, label) {
+      sync.status = status;
+      var dot = $('syncDot'), lab = $('syncLabel');
+      dot.className = 'sync-dot' + (status === 'synced' ? ' on' : status === 'error' ? ' err' : status === 'busy' ? ' busy' : '');
+      lab.textContent = label || (status === 'synced' ? 'Synced' : status === 'busy' ? 'Syncing…' : status === 'error' ? 'Sync error' : 'Local only');
+    }
+    function schedulePush() {
+      if (!sync.key) return;
+      clearTimeout(sync.pushTimer);
+      sync.pushTimer = setTimeout(pushSave, 1200);
+    }
+    function pushSave() {
+      if (!sync.key || sync.pushing) { if (sync.pushing) schedulePush(); return; }
+      sync.pushing = true; sync.dirty = false;
+      setSyncStatus('busy');
+      fetch('/api/board', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'save', key: sync.key, baseVersion: sync.serverVersion,
+          author: me() ? me().name : '', data: doc })
+      }).then(function (r) { return r.json(); }).then(function (res) {
+        sync.pushing = false;
+        if (res.result === 'success') {
+          sync.serverVersion = res.version;
+          setSyncStatus(sync.dirty ? 'busy' : 'synced');
+          if (sync.dirty) schedulePush();
+        } else if (res.result === 'conflict') {
+          // A teammate saved first — merge their document with ours and re-push.
+          sync.serverVersion = res.version;
+          doc = mergeDocs(doc, res.data || seedDoc());
+          persistLocal(); render();
+          sync.dirty = true; schedulePush();
+          toast('Merged changes from ' + (res.updatedBy || 'a teammate'));
+        } else {
+          setSyncStatus('error', res.error === 'Invalid access key' ? 'Wrong key' : 'Sync error');
+        }
+      }).catch(function () { sync.pushing = false; setSyncStatus('error'); });
+    }
+    function pullLoad(first) {
+      if (!sync.key) return;
+      setSyncStatus('busy');
+      fetch('/api/board?action=load&key=' + encodeURIComponent(sync.key))
+        .then(function (r) {
+          if (r.status === 503) { sync.configured = false; throw new Error('unconfigured'); }
+          sync.configured = true; return r.json();
+        })
+        .then(function (res) {
+          if (res.result !== 'success') {
+            setSyncStatus('error', String(res.error || '').indexOf('key') > -1 ? 'Wrong key' : 'Sync error');
+            return;
+          }
+          if (res.version === 0 || !res.data) {
+            // First device to connect: publish the local workspace.
+            sync.serverVersion = 0; sync.dirty = true; pushSave();
+            return;
+          }
+          if (res.version !== sync.serverVersion || first) {
+            doc = sync.dirty ? mergeDocs(doc, res.data) : res.data;
+            if (!doc.tombstones) doc.tombstones = {};
+            sync.serverVersion = res.version;
+            if (!board()) ui.boardId = doc.boards[0] && doc.boards[0].id;
+            persistLocal(); render();
+            if (sync.dirty) { schedulePush(); return; }
+          }
+          setSyncStatus(sync.dirty ? 'busy' : 'synced');
+        })
+        .catch(function (e) {
+          if (String(e.message) === 'unconfigured') setSyncStatus('local', 'Sync not set up');
+          else setSyncStatus('error');
+        });
+    }
+    // Merge two workspace documents. Card-level: newer updatedAt wins; unions
+    // creations from both sides; tombstones stop deleted things resurrecting.
+    function mergeDocs(a, b) {
+      var out = clone(b);
+      out.tombstones = out.tombstones || {};
+      var tombs = out.tombstones;
+      Object.keys(a.tombstones || {}).forEach(function (id) {
+        if (!tombs[id] || a.tombstones[id] > tombs[id]) tombs[id] = a.tombstones[id];
+      });
+      (a.members || []).forEach(function (m) {
+        if (!out.members.some(function (x) { return x.id === m.id; }) && !tombs[m.id]) out.members.push(m);
+      });
+      (a.boards || []).forEach(function (ab) {
+        if (tombs[ab.id] && tombs[ab.id] > (ab.updatedAt || 0)) return;
+        var ob = out.boards.find(function (x) { return x.id === ab.id; });
+        if (!ob) { out.boards.push(clone(ab)); return; }
+        var aNewer = (ab.updatedAt || 0) > (ob.updatedAt || 0);
+        var structure = aNewer ? ab : ob;      // columns + card ordering
+        // Union cards by id, newest edit wins.
+        var byId = {};
+        ob.cards.forEach(function (c) { byId[c.id] = c; });
+        ab.cards.forEach(function (c) {
+          if (!byId[c.id] || (c.updatedAt || 0) > (byId[c.id].updatedAt || 0)) byId[c.id] = clone(c);
+        });
+        Object.keys(tombs).forEach(function (id) {
+          if (byId[id] && tombs[id] > (byId[id].updatedAt || 0)) delete byId[id];
+        });
+        var ordered = [];
+        structure.cards.forEach(function (c) { if (byId[c.id]) { ordered.push(byId[c.id]); delete byId[c.id]; } });
+        Object.keys(byId).forEach(function (id) { ordered.push(byId[id]); });
+        ob.name = structure.name; ob.icon = structure.icon;
+        ob.columns = clone(structure.columns); ob.updatedAt = structure.updatedAt;
+        // Cards pointing at a column that no longer exists land in the first one.
+        var colIds = {}; ob.columns.forEach(function (c) { colIds[c.id] = true; });
+        ordered.forEach(function (c) { if (!colIds[c.colId] && ob.columns[0]) c.colId = ob.columns[0].id; });
+        ob.cards = ordered;
+      });
+      // Drop tombstoned boards/members that survived the copy from b.
+      out.boards = out.boards.filter(function (bd) { return !(tombs[bd.id] && tombs[bd.id] > (bd.updatedAt || 0)); });
+      out.members = out.members.filter(function (m) { return !tombs[m.id]; });
+      out.updatedAt = Math.max(a.updatedAt || 0, b.updatedAt || 0);
+      return out;
+    }
+    function entomb(id) { doc.tombstones[id] = now(); pruneTombstones(); }
+    function pruneTombstones() {
+      var cutoff = now() - 90 * 86400000;
+      Object.keys(doc.tombstones).forEach(function (id) { if (doc.tombstones[id] < cutoff) delete doc.tombstones[id]; });
+    }
+
+    // =========================== RENDERING =================================
+    function render() { renderSidebar(); renderTopbar(); renderView(); }
+
+    function renderSidebar() {
+      $('wsName').textContent = doc.workspace || 'FinMango HQ';
+      var list = $('boardList'); list.innerHTML = '';
+      doc.boards.forEach(function (b) {
+        var btn = document.createElement('button');
+        btn.className = 'side-item' + (b.id === ui.boardId ? ' active' : '');
+        btn.innerHTML = '<span class="emoji">' + esc(b.icon || '📋') + '</span><span class="label">' + esc(b.name)
+          + '</span><span class="count">' + b.cards.length + '</span>';
+        btn.onclick = function () { ui.boardId = b.id; quickAddCol = null; persistLocal(); render(); closeSidebarOnMobile(); };
+        list.appendChild(btn);
+      });
+      $('app').classList.toggle('sidebar-closed', ui.sidebarClosed);
+    }
+
+    function renderTopbar() {
+      var b = board();
+      $('boardEmoji').textContent = b ? (b.icon || '📋') : '📋';
+      $('boardNameInput').value = b ? b.name : '';
+      $('viewBoardBtn').classList.toggle('active', ui.view === 'board');
+      $('viewTableBtn').classList.toggle('active', ui.view === 'table');
+      // Assignee filter options
+      var fa = $('filterAssignee');
+      var cur = ui.fAssignee;
+      fa.innerHTML = '<option value="">Assignee</option><option value="__none">Unassigned</option>'
+        + doc.members.map(function (m) { return '<option value="' + esc(m.id) + '">' + esc(m.name) + '</option>'; }).join('');
+      fa.value = cur; fa.classList.toggle('on', !!cur);
+      $('filterPriority').classList.toggle('on', !!ui.fPriority);
+      // Member avatars
+      var tv = $('topAvatars'); tv.innerHTML = '';
+      doc.members.slice(0, 5).forEach(function (m) {
+        var el = document.createElement('button');
+        el.className = 'avatar'; el.style.background = m.color; el.textContent = initials(m.name);
+        el.title = m.name + (m.id === meId ? ' (you)' : '');
+        el.onclick = openMembersModal;
+        tv.appendChild(el);
+      });
+      if (doc.members.length > 5) {
+        var more = document.createElement('button'); more.className = 'avatar more';
+        more.textContent = '+' + (doc.members.length - 5); more.onclick = openMembersModal; tv.appendChild(more);
+      }
+    }
+
+    function visibleCards(b) {
+      var q = ui.search.trim().toLowerCase();
+      return b.cards.filter(function (c) {
+        if (ui.fAssignee === '__none' && c.assignee) return false;
+        if (ui.fAssignee && ui.fAssignee !== '__none' && c.assignee !== ui.fAssignee) return false;
+        if (ui.fPriority && c.priority !== ui.fPriority) return false;
+        if (q) {
+          var hay = (c.title + ' ' + c.desc + ' ' + c.tags.join(' ')).toLowerCase();
+          if (hay.indexOf(q) === -1) return false;
+        }
+        return true;
+      });
+    }
+
+    function renderView() {
+      var root = $('viewRoot'); root.innerHTML = '';
+      var b = board();
+      if (!b) {
+        root.innerHTML = '<div class="empty"><div><p style="font-size:2rem;">🗂️</p><p style="margin-top:.5rem;font-weight:600;">No boards yet</p>'
+          + '<p style="font-size:.85rem;margin-top:.25rem;">Create one from the sidebar.</p></div></div>';
+        return;
+      }
+      if (ui.view === 'table') renderTable(root, b); else renderBoard(root, b);
+    }
+
+    // --------------------------- board view --------------------------------
+    function renderBoard(root, b) {
+      var scroll = document.createElement('div'); scroll.className = 'board-scroll';
+      var wrap = document.createElement('div'); wrap.className = 'board';
+      var cards = visibleCards(b);
+
+      b.columns.forEach(function (col) {
+        var colEl = document.createElement('div'); colEl.className = 'col'; colEl.dataset.colId = col.id;
+        var colCards = cards.filter(function (c) { return c.colId === col.id; });
+
+        var head = document.createElement('div'); head.className = 'col-head'; head.draggable = true;
+        head.innerHTML = '<span class="col-dot" style="background:' + esc(col.color) + '"></span>'
+          + '<span class="col-name">' + esc(col.name) + '</span><span class="col-count">' + colCards.length + '</span>'
+          + '<span class="spacer"></span>';
+        var menuBtn = document.createElement('button'); menuBtn.className = 'icon-btn'; menuBtn.textContent = '⋯';
+        menuBtn.title = 'Column options';
+        menuBtn.onclick = function (e) { e.stopPropagation(); openColumnModal(col.id); };
+        var addBtn = document.createElement('button'); addBtn.className = 'icon-btn'; addBtn.textContent = '＋';
+        addBtn.title = 'New card';
+        addBtn.onclick = function (e) { e.stopPropagation(); quickAddCol = col.id; render(); };
+        head.appendChild(menuBtn); head.appendChild(addBtn);
+        head.addEventListener('dragstart', function (e) {
+          drag = { type: 'col', id: col.id }; e.dataTransfer.effectAllowed = 'move';
+          try { e.dataTransfer.setData('text/plain', col.id); } catch (err) {}
+        });
+        head.addEventListener('dragend', function () { drag = null; clearDropHints(); });
+        colEl.appendChild(head);
+
+        var body = document.createElement('div'); body.className = 'col-body'; body.dataset.colId = col.id;
+        colCards.forEach(function (c) { body.appendChild(cardEl(c)); });
+
+        if (quickAddCol === col.id) body.appendChild(quickAddEl(b, col));
+        colEl.appendChild(body);
+
+        if (quickAddCol !== col.id) {
+          var add = document.createElement('button'); add.className = 'add-card-btn';
+          add.innerHTML = '＋ <span>New</span>';
+          add.onclick = function () { quickAddCol = col.id; render(); };
+          colEl.appendChild(add);
+        }
+
+        // Drop targets: cards into this column, or a column dragged over it.
+        body.addEventListener('dragover', function (e) {
+          if (!drag || drag.type !== 'card') return;
+          e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+          showDropHint(body, e.clientY);
+        });
+        body.addEventListener('drop', function (e) {
+          if (!drag || drag.type !== 'card') return;
+          e.preventDefault();
+          dropCard(b, drag.id, col.id, dropIndexFor(body, e.clientY));
+        });
+        colEl.addEventListener('dragover', function (e) {
+          if (drag && drag.type === 'col' && drag.id !== col.id) { e.preventDefault(); colEl.classList.add('drag-over-col'); }
+          if (drag && drag.type === 'card') e.preventDefault();
+        });
+        colEl.addEventListener('dragleave', function () { colEl.classList.remove('drag-over-col'); });
+        colEl.addEventListener('drop', function (e) {
+          colEl.classList.remove('drag-over-col');
+          if (drag && drag.type === 'col' && drag.id !== col.id) { e.preventDefault(); dropColumn(b, drag.id, col.id); }
+          else if (drag && drag.type === 'card') { e.preventDefault(); dropCard(b, drag.id, col.id, dropIndexFor(body, e.clientY)); }
+        });
+
+        wrap.appendChild(colEl);
+      });
+
+      // "+ Add column"
+      var addCol = document.createElement('div'); addCol.className = 'add-col';
+      var acBtn = document.createElement('button'); acBtn.textContent = '＋ Add column';
+      acBtn.onclick = function () {
+        var name = prompt('Column name'); if (!name || !name.trim()) return;
+        b.columns.push({ id: uid(), name: name.trim(), color: COL_COLORS[b.columns.length % COL_COLORS.length] });
+        b.updatedAt = now(); mutate();
+      };
+      addCol.appendChild(acBtn); wrap.appendChild(addCol);
+
+      scroll.appendChild(wrap); root.appendChild(scroll);
+    }
+
+    function cardEl(c) {
+      var el = document.createElement('div'); el.className = 'card'; el.draggable = true; el.dataset.cardId = c.id;
+      var html = '<div class="card-title">' + esc(c.title) + '</div>';
+      if (c.desc) html += '<div class="card-desc-hint">' + esc(c.desc.split('\n')[0]) + '</div>';
+      if (c.tags.length) {
+        html += '<div class="card-tags">' + c.tags.map(function (t) {
+          var tc = tagColor(t);
+          return '<span class="tag" style="background:' + tc[0] + ';color:' + tc[1] + '">' + esc(t) + '</span>';
+        }).join('') + '</div>';
+      }
+      var foot = '';
+      var m = c.assignee ? member(c.assignee) : null;
+      if (m) foot += '<span class="avatar" style="background:' + esc(m.color) + '" title="' + esc(m.name) + '">' + esc(initials(m.name)) + '</span>';
+      var due = fmtDue(c.due);
+      if (due) foot += '<span class="due ' + due.cls + '">🗓 ' + esc(due.label) + '</span>';
+      if (c.comments.length) foot += '<span class="comments-n">💬 ' + c.comments.length + '</span>';
+      if (c.priority && PRIO[c.priority]) foot += '<span class="prio" style="color:' + PRIO[c.priority][1] + '">' + PRIO[c.priority][0] + '</span>';
+      if (foot) html += '<div class="card-foot">' + foot + '</div>';
+      el.innerHTML = html;
+      el.onclick = function () { openCardModal(c.id); };
+      el.addEventListener('dragstart', function (e) {
+        drag = { type: 'card', id: c.id }; el.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        try { e.dataTransfer.setData('text/plain', c.id); } catch (err) {}
+        e.stopPropagation();
+      });
+      el.addEventListener('dragend', function () { el.classList.remove('dragging'); drag = null; clearDropHints(); });
+      return el;
+    }
+
+    function quickAddEl(b, col) {
+      var box = document.createElement('div'); box.className = 'quick-add';
+      var ta = document.createElement('textarea'); ta.rows = 2; ta.placeholder = 'Card title…';
+      var row = document.createElement('div'); row.className = 'quick-add-row';
+      var addB = document.createElement('button'); addB.className = 'btn-sm primary'; addB.textContent = 'Add card';
+      var cancelB = document.createElement('button'); cancelB.className = 'btn-sm ghost'; cancelB.textContent = 'Cancel';
+      function commit() {
+        var t = ta.value.trim();
+        if (t) {
+          b.cards.push({ id: uid(), colId: col.id, title: t, desc: '', assignee: '', due: '', priority: '',
+            tags: [], comments: [], createdAt: now(), updatedAt: now() });
+          b.updatedAt = now();
+          mutate({ noRender: true });
+        }
+        ta.value = '';
+        render();
+        // keep the quick-add open for rapid entry
+        var again = document.querySelector('.col-body[data-col-id="' + col.id + '"] .quick-add textarea');
+        if (again) again.focus();
+      }
+      addB.onclick = commit;
+      cancelB.onclick = function () { quickAddCol = null; render(); };
+      ta.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }
+        if (e.key === 'Escape') { quickAddCol = null; render(); }
+      });
+      row.appendChild(addB); row.appendChild(cancelB);
+      box.appendChild(ta); box.appendChild(row);
+      setTimeout(function () { ta.focus(); }, 0);
+      return box;
+    }
+
+    // Drag-and-drop helpers -------------------------------------------------
+    function cardNodes(body) {
+      return Array.prototype.filter.call(body.children, function (n) {
+        return n.classList.contains('card') && !n.classList.contains('dragging');
+      });
+    }
+    function dropIndexFor(body, y) {
+      var nodes = cardNodes(body);
+      for (var i = 0; i < nodes.length; i++) {
+        var r = nodes[i].getBoundingClientRect();
+        if (y < r.top + r.height / 2) return i;
+      }
+      return nodes.length;
+    }
+    function clearDropHints() {
+      document.querySelectorAll('.drop-hint').forEach(function (n) { n.remove(); });
+    }
+    function showDropHint(body, y) {
+      clearDropHints();
+      var hint = document.createElement('div'); hint.className = 'drop-hint';
+      var nodes = cardNodes(body), idx = dropIndexFor(body, y);
+      if (idx >= nodes.length) body.appendChild(hint);
+      else body.insertBefore(hint, nodes[idx]);
+    }
+    function dropCard(b, cardId, colId, visIndex) {
+      clearDropHints();
+      var card = b.cards.find(function (c) { return c.id === cardId; });
+      if (!card) return;
+      // visIndex counts only *visible* cards in the target column; translate it
+      // into a position in the full cards array.
+      var vis = visibleCards(b).filter(function (c) { return c.colId === colId && c.id !== cardId; });
+      b.cards.splice(b.cards.indexOf(card), 1);
+      card.colId = colId; card.updatedAt = now();
+      var insertAt;
+      if (visIndex >= vis.length) {
+        // after the last visible card in this column (or end of array)
+        var last = vis.length ? b.cards.indexOf(vis[vis.length - 1]) : -1;
+        insertAt = last >= 0 ? last + 1 : b.cards.length;
+      } else {
+        insertAt = b.cards.indexOf(vis[visIndex]);
+      }
+      b.cards.splice(insertAt, 0, card);
+      b.updatedAt = now();
+      drag = null;
+      mutate();
+    }
+    function dropColumn(b, dragId, targetId) {
+      var from = b.columns.findIndex(function (c) { return c.id === dragId; });
+      var to = b.columns.findIndex(function (c) { return c.id === targetId; });
+      if (from < 0 || to < 0 || from === to) return;
+      var col = b.columns.splice(from, 1)[0];
+      b.columns.splice(to, 0, col);
+      b.updatedAt = now();
+      drag = null;
+      mutate();
+    }
+
+    // --------------------------- table view --------------------------------
+    function renderTable(root, b) {
+      var scroll = document.createElement('div'); scroll.className = 'table-scroll';
+      var cards = visibleCards(b);
+      var html = '<table class="props"><thead><tr><th style="width:38%">Name</th><th>Status</th><th>Assignee</th>'
+        + '<th>Due</th><th>Priority</th><th>Tags</th><th>Updated</th></tr></thead><tbody>';
+      b.columns.forEach(function (col) {
+        var rows = cards.filter(function (c) { return c.colId === col.id; });
+        if (!rows.length) return;
+        html += '<tr><td colspan="7" class="table-group"><span class="col-dot" style="display:inline-block;background:'
+          + esc(col.color) + ';margin-right:.45rem;"></span>' + esc(col.name)
+          + ' <span class="col-count">' + rows.length + '</span></td></tr>';
+        rows.forEach(function (c) {
+          var m = c.assignee ? member(c.assignee) : null;
+          var due = fmtDue(c.due);
+          html += '<tr class="rowcard" data-card-id="' + esc(c.id) + '">'
+            + '<td style="font-weight:600;">' + esc(c.title) + '</td>'
+            + '<td><span class="status-chip"><span class="col-dot" style="background:' + esc(col.color) + '"></span>' + esc(col.name) + '</span></td>'
+            + '<td>' + (m ? '<span class="cell-assignee"><span class="avatar" style="background:' + esc(m.color) + '">'
+              + esc(initials(m.name)) + '</span>' + esc(m.name) + '</span>' : '<span style="color:var(--ink-faint)">—</span>') + '</td>'
+            + '<td>' + (due ? '<span class="due ' + due.cls + '">' + esc(due.label) + '</span>' : '<span style="color:var(--ink-faint)">—</span>') + '</td>'
+            + '<td>' + (c.priority && PRIO[c.priority] ? '<span class="prio" style="color:' + PRIO[c.priority][1] + '">' + PRIO[c.priority][0] + '</span>' : '<span style="color:var(--ink-faint)">—</span>') + '</td>'
+            + '<td>' + c.tags.map(function (t) { var tc = tagColor(t);
+                return '<span class="tag" style="background:' + tc[0] + ';color:' + tc[1] + ';margin-right:.25rem;">' + esc(t) + '</span>'; }).join('') + '</td>'
+            + '<td><span class="mono" style="text-transform:none;letter-spacing:0;">' + esc(relTime(c.updatedAt)) + '</span></td></tr>';
+        });
+      });
+      html += '</tbody></table>';
+      if (!cards.length) html = '<div class="empty" style="padding-top:4rem;"><div><p style="font-size:2rem;">🔍</p><p style="margin-top:.5rem;">Nothing matches.</p></div></div>';
+      scroll.innerHTML = html;
+      scroll.querySelectorAll('tr.rowcard').forEach(function (tr) {
+        tr.onclick = function () { openCardModal(tr.dataset.cardId); };
+      });
+      root.appendChild(scroll);
+    }
+
+    // ============================ MODALS ===================================
+    function openModal(html, narrow) {
+      var box = $('modalBox');
+      box.className = 'modal' + (narrow ? ' narrow' : '');
+      box.innerHTML = '<button class="icon-btn modal-close" id="modalClose" aria-label="Close">✕</button>' + html;
+      $('modalClose').onclick = closeModal;
+      $('overlay').classList.add('open');
+    }
+    function closeModal() { $('overlay').classList.remove('open'); $('modalBox').innerHTML = ''; }
+    $('overlay').addEventListener('mousedown', function (e) { if (e.target === $('overlay')) closeModal(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+
+    // --------------------------- card modal --------------------------------
+    function openCardModal(cardId) {
+      var b = board(); if (!b) return;
+      var c = b.cards.find(function (x) { return x.id === cardId; }); if (!c) return;
+
+      function touch() { c.updatedAt = now(); b.updatedAt = now(); mutate({ noRender: true }); }
+
+      var html = '<input class="m-title" id="cTitle" value="' + esc(c.title) + '" aria-label="Card title" />'
+        + '<div class="prop-grid">'
+        + '<label>Status</label><select id="cStatus">' + b.columns.map(function (col) {
+            return '<option value="' + esc(col.id) + '"' + (col.id === c.colId ? ' selected' : '') + '>' + esc(col.name) + '</option>'; }).join('') + '</select>'
+        + '<label>Assignee</label><select id="cAssignee"><option value="">Unassigned</option>' + doc.members.map(function (m) {
+            return '<option value="' + esc(m.id) + '"' + (m.id === c.assignee ? ' selected' : '') + '>' + esc(m.name) + '</option>'; }).join('') + '</select>'
+        + '<label>Due date</label><input type="date" id="cDue" value="' + esc(c.due) + '" />'
+        + '<label>Priority</label><select id="cPrio"><option value="">None</option>'
+          + ['low', 'medium', 'high', 'urgent'].map(function (p) {
+            return '<option value="' + p + '"' + (p === c.priority ? ' selected' : '') + '>' + p.charAt(0).toUpperCase() + p.slice(1) + '</option>'; }).join('') + '</select>'
+        + '<label>Tags</label><input id="cTags" placeholder="comma, separated" value="' + esc(c.tags.join(', ')) + '" />'
+        + '</div>'
+        + '<div class="m-section">Notes</div>'
+        + '<textarea class="m-desc" id="cDesc" placeholder="Add details… (everyone on the board can see this)">' + esc(c.desc) + '</textarea>'
+        + '<div class="m-section">Comments</div>'
+        + '<div id="cComments"></div>'
+        + '<div class="comment-row"><input id="cCommentInput" placeholder="Write a comment…" />'
+        + '<button class="btn-sm primary" id="cCommentAdd">Send</button></div>'
+        + '<div class="modal-foot"><span class="meta-line">created ' + esc(relTime(c.createdAt)) + ' · edited ' + esc(relTime(c.updatedAt)) + '</span>'
+        + '<button class="btn-sm danger" id="cDelete">Delete card</button></div>';
+      openModal(html);
+
+      function renderComments() {
+        $('cComments').innerHTML = c.comments.length ? c.comments.map(function (cm) {
+          return '<div class="comment"><span class="avatar" style="background:' + esc(cm.color || '#9A9A93') + '">'
+            + esc(initials(cm.author)) + '</span><div class="body"><span class="who">' + esc(cm.author)
+            + '</span><span class="when">' + esc(relTime(cm.ts)) + '</span><div class="text">' + esc(cm.text) + '</div></div></div>';
+        }).join('') : '<p style="font-size:.82rem;color:var(--ink-faint);">No comments yet.</p>';
+      }
+      renderComments();
+
+      $('cTitle').oninput = function () { c.title = this.value; touch(); };
+      $('cTitle').onblur = function () { if (!c.title.trim()) { c.title = 'Untitled'; touch(); } render(); };
+      $('cStatus').onchange = function () { c.colId = this.value; touch(); render(); };
+      $('cAssignee').onchange = function () { c.assignee = this.value; touch(); render(); };
+      $('cDue').onchange = function () { c.due = this.value; touch(); render(); };
+      $('cPrio').onchange = function () { c.priority = this.value; touch(); render(); };
+      $('cTags').onchange = function () {
+        c.tags = this.value.split(',').map(function (t) { return t.trim(); }).filter(Boolean).slice(0, 8);
+        touch(); render();
+      };
+      $('cDesc').oninput = function () { c.desc = this.value; touch(); };
+      $('cDesc').onblur = function () { render(); };
+      function addComment() {
+        var v = $('cCommentInput').value.trim(); if (!v) return;
+        var m = me();
+        c.comments.push({ id: uid(), author: m ? m.name : 'Someone', color: m ? m.color : '#9A9A93', text: v, ts: now() });
+        $('cCommentInput').value = '';
+        touch(); renderComments(); render();
+      }
+      $('cCommentAdd').onclick = addComment;
+      $('cCommentInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') addComment(); });
+      $('cDelete').onclick = function () {
+        if (!confirm('Delete "' + c.title + '"?')) return;
+        entomb(c.id);
+        b.cards.splice(b.cards.indexOf(c), 1);
+        b.updatedAt = now();
+        closeModal(); mutate();
+      };
+    }
+
+    // --------------------------- column modal ------------------------------
+    function openColumnModal(colId) {
+      var b = board(); if (!b) return;
+      var col = b.columns.find(function (x) { return x.id === colId; }); if (!col) return;
+      var html = '<h2>Edit column</h2>'
+        + '<label class="field-label">Name</label><input class="text-input" id="colName" value="' + esc(col.name) + '" />'
+        + '<label class="field-label">Color</label><div class="color-row" id="colColors">'
+        + COL_COLORS.map(function (cc) {
+            return '<button data-c="' + cc + '" class="' + (cc === col.color ? 'sel' : '') + '" style="background:' + cc + '" aria-label="color"></button>'; }).join('')
+        + '</div>'
+        + '<div class="modal-foot"><button class="btn-sm danger" id="colDelete">Delete column</button>'
+        + '<button class="btn-sm primary" id="colSave">Save</button></div>';
+      openModal(html, true);
+      var picked = col.color;
+      $('colColors').querySelectorAll('button').forEach(function (btn) {
+        btn.onclick = function () {
+          picked = btn.dataset.c;
+          $('colColors').querySelectorAll('button').forEach(function (x) { x.classList.remove('sel'); });
+          btn.classList.add('sel');
+        };
+      });
+      $('colSave').onclick = function () {
+        var v = $('colName').value.trim();
+        if (v) col.name = v;
+        col.color = picked;
+        b.updatedAt = now();
+        closeModal(); mutate();
+      };
+      $('colDelete').onclick = function () {
+        var cardsIn = b.cards.filter(function (c) { return c.colId === col.id; });
+        if (b.columns.length === 1) { toast('A board needs at least one column'); return; }
+        var msg = cardsIn.length
+          ? 'Delete "' + col.name + '"? Its ' + cardsIn.length + ' card(s) move to the first column.'
+          : 'Delete "' + col.name + '"?';
+        if (!confirm(msg)) return;
+        b.columns.splice(b.columns.indexOf(col), 1);
+        var first = b.columns[0];
+        cardsIn.forEach(function (c) { c.colId = first.id; c.updatedAt = now(); });
+        b.updatedAt = now();
+        closeModal(); mutate();
+      };
+    }
+
+    // --------------------------- board menu --------------------------------
+    function openBoardMenu() {
+      var b = board(); if (!b) return;
+      var html = '<h2>Board options</h2>'
+        + '<label class="field-label">Name</label><input class="text-input" id="bName" value="' + esc(b.name) + '" />'
+        + '<label class="field-label">Icon</label><div class="emoji-grid">'
+        + EMOJIS.map(function (e) { return '<button data-e="' + e + '">' + e + '</button>'; }).join('') + '</div>'
+        + '<div class="modal-foot"><button class="btn-sm danger" id="bDelete">Delete board</button>'
+        + '<button class="btn-sm primary" id="bSave">Save</button></div>';
+      openModal(html, true);
+      var icon = b.icon;
+      document.querySelectorAll('.emoji-grid button').forEach(function (btn) {
+        btn.onclick = function () { icon = btn.dataset.e; toast('Icon: ' + icon); };
+      });
+      $('bSave').onclick = function () {
+        var v = $('bName').value.trim();
+        if (v) b.name = v;
+        b.icon = icon; b.updatedAt = now();
+        closeModal(); mutate();
+      };
+      $('bDelete').onclick = function () {
+        if (doc.boards.length === 1) { toast('Keep at least one board'); return; }
+        if (!confirm('Delete board "' + b.name + '" and all its cards?')) return;
+        entomb(b.id);
+        doc.boards.splice(doc.boards.indexOf(b), 1);
+        ui.boardId = doc.boards[0].id;
+        closeModal(); mutate();
+      };
+    }
+
+    // --------------------------- members modal -----------------------------
+    function openMembersModal() {
+      var rows = doc.members.map(function (m) {
+        return '<div class="member-row"><span class="avatar" style="background:' + esc(m.color) + ';margin:0;">' + esc(initials(m.name)) + '</span>'
+          + '<span class="name">' + esc(m.name) + (m.id === meId ? ' <span class="you">— you</span>' : '') + '</span>'
+          + (m.id !== meId ? '<button class="btn-sm ghost" data-me="' + esc(m.id) + '">This is me</button>' : '')
+          + '<button class="btn-sm danger" data-del="' + esc(m.id) + '">Remove</button></div>';
+      }).join('');
+      var html = '<h2>Team members</h2>' + (rows || '<p class="help-note">No members yet.</p>')
+        + '<label class="field-label">Add a member</label>'
+        + '<div class="comment-row" style="margin-top:0;"><input id="newMemberName" placeholder="Name" />'
+        + '<button class="btn-sm primary" id="addMemberBtn">Add</button></div>'
+        + '<p class="help-note" style="margin-top:.9rem;">Members are just names — anyone opening this board picks who they are. Assign cards and sign comments with them.</p>';
+      openModal(html, true);
+      document.querySelectorAll('[data-me]').forEach(function (btn) {
+        btn.onclick = function () { meId = btn.dataset.me; localStorage.setItem(LS_ME, meId); openMembersModal(); render(); };
+      });
+      document.querySelectorAll('[data-del]').forEach(function (btn) {
+        btn.onclick = function () {
+          var m = member(btn.dataset.del); if (!m) return;
+          if (!confirm('Remove ' + m.name + ' from the team list? (Their cards stay, unassigned.)')) return;
+          entomb(m.id);
+          doc.boards.forEach(function (bd) { bd.cards.forEach(function (c) { if (c.assignee === m.id) { c.assignee = ''; c.updatedAt = now(); } }); });
+          doc.members.splice(doc.members.indexOf(m), 1);
+          if (meId === m.id) { meId = ''; localStorage.removeItem(LS_ME); }
+          mutate(); openMembersModal();
+        };
+      });
+      function addMember() {
+        var v = $('newMemberName').value.trim(); if (!v) return;
+        var m = { id: uid(), name: v.slice(0, 40), color: AVA_COLORS[doc.members.length % AVA_COLORS.length] };
+        doc.members.push(m);
+        if (!meId) { meId = m.id; localStorage.setItem(LS_ME, meId); }
+        mutate(); openMembersModal();
+      }
+      $('addMemberBtn').onclick = addMember;
+      $('newMemberName').addEventListener('keydown', function (e) { if (e.key === 'Enter') addMember(); });
+    }
+
+    // --------------------------- who-are-you modal --------------------------
+    function openWhoAmI() {
+      var html = '<h2>Who are you? 👋</h2>'
+        + '<p class="help-note">Pick yourself so comments and assignments carry your name. (Stored only on this device.)</p>'
+        + doc.members.map(function (m) {
+          return '<button class="pick-me" data-pick="' + esc(m.id) + '"><span class="avatar" style="background:' + esc(m.color) + ';margin:0;">'
+            + esc(initials(m.name)) + '</span>' + esc(m.name) + '</button>';
+        }).join('')
+        + '<label class="field-label">Or add yourself</label>'
+        + '<div class="comment-row" style="margin-top:0;"><input id="whoName" placeholder="Your name" />'
+        + '<button class="btn-sm primary" id="whoAdd">That\'s me</button></div>';
+      openModal(html, true);
+      document.querySelectorAll('[data-pick]').forEach(function (btn) {
+        btn.onclick = function () { meId = btn.dataset.pick; localStorage.setItem(LS_ME, meId); closeModal(); render(); };
+      });
+      function add() {
+        var v = $('whoName').value.trim(); if (!v) return;
+        var m = { id: uid(), name: v.slice(0, 40), color: AVA_COLORS[doc.members.length % AVA_COLORS.length] };
+        doc.members.push(m); meId = m.id; localStorage.setItem(LS_ME, meId);
+        closeModal(); mutate();
+      }
+      $('whoAdd').onclick = add;
+      $('whoName').addEventListener('keydown', function (e) { if (e.key === 'Enter') add(); });
+    }
+
+    // --------------------------- sync modal --------------------------------
+    function openSyncModal() {
+      var status;
+      if (!sync.key) status = 'Not connected — this board lives only in this browser.';
+      else if (sync.configured === false) status = 'The sync backend isn\'t deployed yet (see below).';
+      else if (sync.status === 'synced') status = '✅ Connected — everyone with the team key sees this board.';
+      else if (sync.status === 'error') status = '⚠️ Connection trouble — check the key, or try again.';
+      else status = 'Connecting…';
+      var html = '<h2>Team sync</h2>'
+        + '<p class="help-note">' + esc(status) + '</p>'
+        + '<label class="field-label">Team access key</label>'
+        + '<input class="text-input" id="syncKey" type="password" placeholder="Shared team passphrase" value="' + esc(sync.key) + '" />'
+        + '<p class="help-note">One shared passphrase for the whole team — ask Scott for it. With sync on, every change saves to a shared Google Sheet (free) and updates everyone\'s board within seconds.</p>'
+        + '<p class="help-note">Setting it up for the first time? Follow <code>docs/TEAM-BOARD-SETUP.md</code> in the website repo (~10 minutes).</p>'
+        + '<div class="modal-foot">'
+        + (sync.key ? '<button class="btn-sm danger" id="syncOff">Disconnect</button>' : '<span></span>')
+        + '<button class="btn-sm primary" id="syncOn">' + (sync.key ? 'Update key' : 'Connect') + '</button></div>';
+      openModal(html, true);
+      $('syncOn').onclick = function () {
+        var k = $('syncKey').value.trim();
+        if (!k) { toast('Enter the team key first'); return; }
+        sync.key = k; localStorage.setItem(LS_KEY, k);
+        sync.serverVersion = 0;
+        closeModal(); pullLoad(true);
+      };
+      var off = $('syncOff');
+      if (off) off.onclick = function () {
+        sync.key = ''; localStorage.removeItem(LS_KEY);
+        sync.serverVersion = 0; sync.configured = null;
+        setSyncStatus('local'); closeModal();
+        toast('Sync off — changes stay on this device');
+      };
+    }
+
+    // --------------------------- backup modal ------------------------------
+    function openBackupModal() {
+      var html = '<h2>Backup / restore</h2>'
+        + '<p class="help-note">Download the whole workspace as a JSON file, or restore from one. Handy before big reorganizations.</p>'
+        + '<div class="modal-foot" style="border:none;margin-top:.8rem;padding:0;">'
+        + '<button class="btn-sm ghost" id="importBtn">⬆ Restore from file…</button>'
+        + '<button class="btn-sm primary" id="exportBtn">⬇ Download backup</button></div>'
+        + '<input type="file" id="importFile" accept="application/json" style="display:none;" />';
+      openModal(html, true);
+      $('exportBtn').onclick = function () {
+        var blob = new Blob([JSON.stringify(doc, null, 2)], { type: 'application/json' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'finmango-board-' + new Date().toISOString().slice(0, 10) + '.json';
+        a.click(); URL.revokeObjectURL(a.href);
+      };
+      $('importBtn').onclick = function () { $('importFile').click(); };
+      $('importFile').onchange = function () {
+        var f = this.files[0]; if (!f) return;
+        var reader = new FileReader();
+        reader.onload = function () {
+          try {
+            var d = JSON.parse(reader.result);
+            if (!d || !Array.isArray(d.boards)) throw new Error('bad');
+            if (!confirm('Replace the current workspace with this backup?')) return;
+            doc = d; if (!doc.tombstones) doc.tombstones = {};
+            ui.boardId = doc.boards[0] && doc.boards[0].id;
+            closeModal(); mutate(); toast('Workspace restored');
+          } catch (e) { toast('That file doesn\'t look like a board backup'); }
+        };
+        reader.readAsText(f);
+      };
+    }
+
+    // ========================= TOP-LEVEL WIRING =============================
+    $('hamburger').onclick = function () { ui.sidebarClosed = !ui.sidebarClosed; persistLocal(); renderSidebar(); };
+    function closeSidebarOnMobile() {
+      if (window.innerWidth <= 760) { ui.sidebarClosed = true; persistLocal(); renderSidebar(); }
+    }
+    $('addBoardBtn').onclick = function () {
+      var name = prompt('Board name'); if (!name || !name.trim()) return;
+      var bId = uid();
+      doc.boards.push({
+        id: bId, icon: EMOJIS[doc.boards.length % EMOJIS.length], name: name.trim().slice(0, 60), updatedAt: now(),
+        columns: [
+          { id: uid(), name: 'To do', color: COL_COLORS[0] },
+          { id: uid(), name: 'In Progress', color: COL_COLORS[1] },
+          { id: uid(), name: 'Done', color: COL_COLORS[3] }
+        ],
+        cards: []
+      });
+      ui.boardId = bId;
+      mutate();
+    };
+    $('boardNameInput').addEventListener('change', function () {
+      var b = board(); if (!b) return;
+      var v = this.value.trim();
+      if (v) { b.name = v.slice(0, 60); b.updatedAt = now(); mutate(); }
+      else this.value = b.name;
+    });
+    $('boardEmoji').onclick = openBoardMenu;
+    $('boardMenuBtn').onclick = openBoardMenu;
+    $('viewBoardBtn').onclick = function () { ui.view = 'board'; persistLocal(); render(); };
+    $('viewTableBtn').onclick = function () { ui.view = 'table'; persistLocal(); render(); };
+    $('searchInput').addEventListener('input', function () { ui.search = this.value; renderView(); });
+    $('filterAssignee').addEventListener('change', function () { ui.fAssignee = this.value; render(); });
+    $('filterPriority').addEventListener('change', function () { ui.fPriority = this.value; render(); });
+    $('membersBtn').onclick = openMembersModal;
+    $('syncBtn').onclick = openSyncModal;
+    $('backupBtn').onclick = openBackupModal;
+
+    // ============================== INIT ===================================
+    loadLocal();
+    if (window.innerWidth <= 760) ui.sidebarClosed = true;
+    render();
+    setSyncStatus('local');
+    if (sync.key) pullLoad(true);
+    if (!meId || !me()) setTimeout(openWhoAmI, 400);
+
+    // Poll for teammates' changes; also refresh when the tab regains focus.
+    setInterval(function () {
+      if (sync.key && !sync.dirty && !sync.pushing && !document.hidden) pullLoad(false);
+    }, 15000);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden && sync.key && !sync.dirty && !sync.pushing) pullLoad(false);
+    });
+    window.addEventListener('beforeunload', function () {
+      if (sync.dirty && sync.key) {
+        // best-effort final save
+        try {
+          navigator.sendBeacon && navigator.sendBeacon('/api/board', new Blob([JSON.stringify({
+            action: 'save', key: sync.key, baseVersion: sync.serverVersion,
+            author: me() ? me().name : '', data: doc })], { type: 'text/plain' }));
+        } catch (e) {}
+      }
+    });
+  </script>
+</body>
+
+</html>
