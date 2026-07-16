@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roadmap — FinMango | What we're working on</title>
+  <meta name="description" content="FinMango's public roadmap: what we're working on now, what's next, and what we've shipped — programs, research, and tools for financial health.">
+  <link rel="canonical" href="https://www.finmango.org/roadmap.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="FinMango">
+  <meta property="og:url" content="https://www.finmango.org/roadmap.html">
+  <meta property="og:title" content="Roadmap — FinMango">
+  <meta property="og:description" content="What we're working on now, what's next, and what we've shipped.">
+  <meta property="og:image" content="https://www.finmango.org/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script>
+    // Kick off the request before the page parses, same trick as community-wall.
+    window.__roadmapReq = fetch('/api/board?action=public').then(function (r) { return r.json(); });
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
+
+  <style>
+    /* ===== FINMANGO EDITORIAL FOUNDATION ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --paper: #FAFAF7; --ink: #0A0A0A; --orange: #FF6B35; --orange-deep: #E5511B;
+      --ink-dim: rgba(10,10,10,.62); --ink-faint: rgba(10,10,10,.38);
+      --ink-line: rgba(10,10,10,.1); --ink-line-soft: rgba(10,10,10,.06);
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+      --max-width: 880px; --gutter: 2rem;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--paper); color: var(--ink); line-height: 1.55; font-size: 17px;
+      -webkit-font-smoothing: antialiased; font-feature-settings: "ss01" on, "cv11" on; }
+    ::selection { background: var(--orange); color: #fff; }
+    a { color: var(--orange-deep); }
+    .wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--gutter); }
+
+    /* nav */
+    nav { padding: 1.3rem 0; border-bottom: 1px solid var(--ink-line-soft); }
+    nav .wrap { display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; gap: .55rem; text-decoration: none; color: var(--ink); font-weight: 800; letter-spacing: -.01em; }
+    /* the mark PNG carries built-in transparent padding, so render it larger
+       with negative margins to keep the nav height unchanged */
+    .logo .mark { width: 40px; height: 40px; margin: -6px -8px -6px -7px; display: grid; place-items: center; }
+    .logo .mark img { width: 100%; height: 100%; object-fit: contain; }
+    nav .back { font-size: .9rem; font-weight: 600; text-decoration: none; color: var(--ink-dim); }
+    nav .back:hover { color: var(--ink); }
+
+    /* hero */
+    header.hero { padding: 3.5rem 0 2.2rem; }
+    .eyebrow { font-family: var(--font-mono); font-size: .68rem; font-weight: 500; text-transform: uppercase; letter-spacing: .18em;
+      color: var(--ink-faint); display: inline-flex; align-items: center; gap: .75rem; }
+    .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--orange); }
+    h1 { font-size: clamp(2rem, 5vw, 2.9rem); letter-spacing: -.03em; line-height: 1.08; margin: .8rem 0 .9rem; }
+    .hero p { color: var(--ink-dim); max-width: 560px; }
+    .updated { font-family: var(--font-mono); font-size: .66rem; color: var(--ink-faint); margin-top: 1rem; text-transform: uppercase; letter-spacing: .12em; }
+
+    /* horizons */
+    section.horizon { padding: 1.6rem 0 .6rem; }
+    .h-head { display: flex; align-items: baseline; gap: .7rem; margin-bottom: 1rem; }
+    .h-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; align-self: center; }
+    .h-head h2 { font-size: 1.35rem; letter-spacing: -.02em; }
+    .h-head .count { font-family: var(--font-mono); font-size: .7rem; color: var(--ink-faint); }
+    .h-blurb { font-size: .85rem; color: var(--ink-faint); margin: -0.6rem 0 1rem; }
+    .items { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .8rem; }
+    .item { background: #fff; border: 1px solid var(--ink-line-soft); border-radius: 10px; padding: 1rem 1.1rem;
+      box-shadow: 0 1px 2px rgba(10,10,10,.04); }
+    .item h3 { font-size: .98rem; letter-spacing: -.01em; line-height: 1.35; }
+    .item p { font-size: .84rem; color: var(--ink-dim); margin-top: .4rem; }
+    .item .tags { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .6rem; }
+    .tag { font-size: .66rem; font-weight: 600; padding: .1rem .5rem; border-radius: 99px; background: var(--ink-line-soft); color: var(--ink-dim); }
+
+    /* public pages / field notes */
+    section.notes { padding: 2.2rem 0; }
+    .note { background: #fff; border: 1px solid var(--ink-line-soft); border-radius: 12px; padding: 1.3rem 1.5rem; margin-bottom: 1rem; }
+    .note summary { cursor: pointer; font-weight: 700; font-size: 1.02rem; letter-spacing: -.01em; list-style: none; display: flex; gap: .5rem; align-items: center; }
+    .note summary::-webkit-details-marker { display: none; }
+    .note summary::after { content: '+'; margin-left: auto; color: var(--ink-faint); font-weight: 400; font-size: 1.2rem; }
+    .note[open] summary::after { content: '–'; }
+    .md { font-size: .92rem; line-height: 1.65; margin-top: .8rem; }
+    .md h1 { font-size: 1.25rem; margin: 1rem 0 .4rem; letter-spacing: -.015em; }
+    .md h2 { font-size: 1.05rem; margin: .9rem 0 .35rem; }
+    .md h3 { font-size: .95rem; margin: .8rem 0 .3rem; }
+    .md p { margin: .45rem 0; }
+    .md ul, .md ol { margin: .45rem 0 .45rem 1.3rem; }
+    .md blockquote { border-left: 3px solid var(--orange); padding-left: .9rem; margin: .7rem 0; color: var(--ink-dim); }
+    .md code { font-family: var(--font-mono); font-size: .8em; background: var(--ink-line-soft); padding: .06rem .3rem; border-radius: 4px; }
+    .md pre { background: #14140F; color: #FAFAF7; padding: .8rem 1rem; border-radius: 8px; overflow-x: auto; margin: .7rem 0; }
+    .md pre code { background: none; padding: 0; }
+    .md hr { border: none; border-top: 1px solid var(--ink-line); margin: 1.1rem 0; }
+
+    /* states */
+    .state { padding: 4rem 0; text-align: center; color: var(--ink-faint); }
+    .state .big { font-size: 2.2rem; }
+    .state p { margin-top: .6rem; }
+
+    /* footer */
+    footer { border-top: 1px solid var(--ink-line-soft); margin-top: 3rem; padding: 2rem 0 3rem; }
+    footer .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    footer p { font-size: .82rem; color: var(--ink-faint); }
+    footer a { font-size: .85rem; font-weight: 600; }
+
+    @media (max-width: 560px) { .items { grid-template-columns: 1fr; } }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <div class="wrap">
+      <a class="logo" href="index.html"><span class="mark"><img src="favicon.png" alt=""></span>FinMango</a>
+      <a class="back" href="get-involved.html">Get involved →</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Open by default</span>
+      <h1>What we're working on</h1>
+      <p>FinMango builds in the open. Here's our live roadmap — what the team is doing right now, what's coming next, ideas on the horizon, and what we've already shipped. Want to help with something you see here? <a href="get-involved.html">Jump in.</a></p>
+      <p class="updated" id="updatedLine"></p>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="state" id="loadingState"><span class="big">🥭</span><p>Loading the roadmap…</p></div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>This page is generated live from our internal team workspace — only items the team marks public appear here.</p>
+      <a href="index.html">finmango.org</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      'use strict';
+      function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+      // Same tiny markdown grammar as the internal workspace (minus wikilinks,
+      // which don't resolve publicly — they render as plain text).
+      function mdInline(s) {
+        return s
+          .replace(/\[\[([^\]\n]+)\]\]/g, '$1')
+          .replace(/\[([^\]\n]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+          .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*([^*\n]+)\*/g, '<em>$1</em>')
+          .replace(/`([^`\n]+)`/g, '<code>$1</code>');
+      }
+      function mdRender(src) {
+        var lines = String(src || '').split('\n');
+        var html = '', para = [], list = null, quote = [], inCode = false, codeBuf = [];
+        function flushPara() { if (para.length) { html += '<p>' + mdInline(para.join('<br>')) + '</p>'; para = []; } }
+        function flushList() { if (list) { html += '</' + list + '>'; list = null; } }
+        function flushQuote() { if (quote.length) { html += '<blockquote>' + mdInline(quote.join('<br>')) + '</blockquote>'; quote = []; } }
+        function flushAll() { flushPara(); flushList(); flushQuote(); }
+        for (var i = 0; i < lines.length; i++) {
+          var raw = lines[i];
+          if (/^```/.test(raw)) {
+            if (inCode) { html += '<pre><code>' + codeBuf.join('\n') + '</code></pre>'; codeBuf = []; inCode = false; }
+            else { flushAll(); inCode = true; }
+            continue;
+          }
+          if (inCode) { codeBuf.push(esc(raw)); continue; }
+          var line = esc(raw), m;
+          if (!raw.trim()) { flushAll(); continue; }
+          if ((m = line.match(/^(#{1,3})\s+(.*)$/))) { flushAll(); var h = m[1].length; html += '<h' + h + '>' + mdInline(m[2]) + '</h' + h + '>'; continue; }
+          if (/^---+\s*$/.test(raw)) { flushAll(); html += '<hr>'; continue; }
+          if ((m = line.match(/^&gt;\s?(.*)$/))) { flushPara(); flushList(); quote.push(m[1]); continue; }
+          if ((m = line.match(/^[-*]\s+(.*)$/))) {
+            flushPara(); flushQuote();
+            if (list !== 'ul') { flushList(); html += '<ul>'; list = 'ul'; }
+            html += '<li>' + mdInline(m[1]) + '</li>'; continue;
+          }
+          if ((m = line.match(/^\d+\.\s+(.*)$/))) {
+            flushPara(); flushQuote();
+            if (list !== 'ol') { flushList(); html += '<ol>'; list = 'ol'; }
+            html += '<li>' + mdInline(m[1]) + '</li>'; continue;
+          }
+          flushList(); flushQuote(); para.push(line);
+        }
+        if (inCode) html += '<pre><code>' + codeBuf.join('\n') + '</code></pre>';
+        flushAll();
+        return html;
+      }
+
+      // Horizon copy shown under each section heading.
+      var BLURBS = {
+        'now': 'In motion right now.',
+        'next': 'Queued up — starting soon.',
+        'later': 'On the horizon.',
+        'someday': 'Ideas we might explore. Tell us if one matters to you.',
+        'shipped': 'Done and out in the world.'
+      };
+      function blurbFor(name) {
+        var k = name.toLowerCase().replace(/[^a-z]/g, '');
+        for (var key in BLURBS) if (k.indexOf(key) === 0) return BLURBS[key];
+        return '';
+      }
+
+      function render(data) {
+        var main = document.getElementById('main');
+        var boards = (data && data.boards) || [];
+        var pages = (data && data.pages) || [];
+        var html = '';
+        var totalCards = 0;
+
+        boards.forEach(function (b) {
+          b.columns.forEach(function (col) {
+            if (!col.cards.length) return;
+            totalCards += col.cards.length;
+            html += '<section class="horizon"><div class="wrap">'
+              + '<div class="h-head"><span class="h-dot" style="background:' + esc(col.color || '#9A9A93') + '"></span>'
+              + '<h2>' + esc(col.name) + '</h2><span class="count">' + col.cards.length + '</span></div>'
+              + (blurbFor(col.name) ? '<p class="h-blurb">' + esc(blurbFor(col.name)) + '</p>' : '')
+              + '<div class="items">'
+              + col.cards.map(function (c) {
+                  return '<article class="item"><h3>' + esc(c.title) + '</h3>'
+                    + (c.desc ? '<p>' + esc(c.desc) + '</p>' : '')
+                    + (c.tags && c.tags.length ? '<div class="tags">' + c.tags.map(function (t) {
+                        return '<span class="tag">' + esc(t) + '</span>'; }).join('') + '</div>' : '')
+                    + '</article>';
+                }).join('')
+              + '</div></div></section>';
+          });
+        });
+
+        if (pages.length) {
+          html += '<section class="notes"><div class="wrap">'
+            + '<div class="h-head"><span class="h-dot" style="background:#FF6B35"></span><h2>Field notes</h2></div>'
+            + pages.map(function (p) {
+                return '<details class="note"><summary>' + esc(p.icon || '📄') + ' ' + esc(p.title) + '</summary>'
+                  + '<div class="md">' + mdRender(p.body || '') + '</div></details>';
+              }).join('')
+            + '</div></section>';
+        }
+
+        if (!totalCards && !pages.length) {
+          main.innerHTML = '<div class="state"><span class="big">🌱</span><p>We\'re polishing our public roadmap — check back soon.</p></div>';
+          return;
+        }
+        main.innerHTML = html;
+        if (data.updatedAt) {
+          document.getElementById('updatedLine').textContent = 'Updated ' +
+            new Date(data.updatedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        }
+      }
+
+      window.__roadmapReq
+        .then(function (data) {
+          if (data && data.result === 'success') render(data);
+          else throw new Error('bad response');
+        })
+        .catch(function () {
+          document.getElementById('main').innerHTML =
+            '<div class="state"><span class="big">🌱</span><p>We\'re polishing our public roadmap — check back soon.</p></div>';
+        });
+    })();
+  </script>
+</body>
+
+</html>
