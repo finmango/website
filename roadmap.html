@@ -94,6 +94,10 @@
     .md pre { background: #14140F; color: #FAFAF7; padding: .8rem 1rem; border-radius: 8px; overflow-x: auto; margin: .7rem 0; }
     .md pre code { background: none; padding: 0; }
     .md hr { border: none; border-top: 1px solid var(--ink-line); margin: 1.1rem 0; }
+    .md .tablewrap { overflow-x: auto; margin: .7rem 0; }
+    .md table { border-collapse: collapse; width: 100%; font-size: .88em; }
+    .md th, .md td { border: 1px solid var(--ink-line); padding: .4rem .55rem; text-align: left; vertical-align: top; }
+    .md th { background: var(--ink-line-soft); font-weight: 700; white-space: nowrap; }
 
     /* states */
     .state { padding: 4rem 0; text-align: center; color: var(--ink-faint); }
@@ -164,11 +168,23 @@
       }
       function mdRender(src) {
         var lines = String(src || '').split('\n');
-        var html = '', para = [], list = null, quote = [], inCode = false, codeBuf = [];
+        var html = '', para = [], list = null, quote = [], table = [], inCode = false, codeBuf = [];
         function flushPara() { if (para.length) { html += '<p>' + mdInline(para.join('<br>')) + '</p>'; para = []; } }
         function flushList() { if (list) { html += '</' + list + '>'; list = null; } }
         function flushQuote() { if (quote.length) { html += '<blockquote>' + mdInline(quote.join('<br>')) + '</blockquote>'; quote = []; } }
-        function flushAll() { flushPara(); flushList(); flushQuote(); }
+        function flushTable() {
+          if (!table.length) return;
+          var hasHead = table.length > 1 && table[1].length > 0 && table[1].every(function (c) { return /^:?-{2,}:?$/.test(c); });
+          var head = hasHead ? table[0] : null;
+          var body = hasHead ? table.slice(2) : table;
+          html += '<div class="tablewrap"><table>'
+            + (head ? '<thead><tr>' + head.map(function (c) { return '<th>' + mdInline(c) + '</th>'; }).join('') + '</tr></thead>' : '')
+            + '<tbody>' + body.map(function (r) {
+                return '<tr>' + r.map(function (c) { return '<td>' + mdInline(c) + '</td>'; }).join('') + '</tr>';
+              }).join('') + '</tbody></table></div>';
+          table = [];
+        }
+        function flushAll() { flushPara(); flushList(); flushQuote(); flushTable(); }
         for (var i = 0; i < lines.length; i++) {
           var raw = lines[i];
           if (/^```/.test(raw)) {
@@ -179,6 +195,12 @@
           if (inCode) { codeBuf.push(esc(raw)); continue; }
           var line = esc(raw), m;
           if (!raw.trim()) { flushAll(); continue; }
+          if (/^\s*\|/.test(raw)) {
+            flushPara(); flushList(); flushQuote();
+            table.push(line.trim().replace(/^\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); }));
+            continue;
+          }
+          if (table.length) flushTable();
           if ((m = line.match(/^(#{1,3})\s+(.*)$/))) { flushAll(); var h = m[1].length; html += '<h' + h + '>' + mdInline(m[2]) + '</h' + h + '>'; continue; }
           if (/^---+\s*$/.test(raw)) { flushAll(); html += '<hr>'; continue; }
           if ((m = line.match(/^&gt;\s?(.*)$/))) { flushPara(); flushList(); quote.push(m[1]); continue; }
