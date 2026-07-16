@@ -19,7 +19,7 @@ export const WALL_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyo
 // Team Board backend (separate Apps Script — see docs/TEAM-BOARD-SETUP.md).
 // Until it's deployed, /api/board returns "Not configured" and team-board.html
 // runs in local-only mode (everything still works, just not shared).
-export const BOARD_APPS_SCRIPT_URL = 'REPLACE_WITH_BOARD_APPS_SCRIPT_WEB_APP_URL';
+export const BOARD_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxi0w34MJLnCnHlsBgRiWrMm7o-JxHYbJXEL5X9iLhUC8to0RWshZPkNxNhiyhHU7J3/exec';
 export const SITE_BASE = 'https://www.finmango.org';
 export const DEFAULT_OG_IMAGE = SITE_BASE + '/og-image.png';
 
