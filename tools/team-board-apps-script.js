@@ -42,6 +42,12 @@ const CONFIG = {
   GOOGLE_CLIENT_ID: 'REPLACE_WITH_GOOGLE_OAUTH_CLIENT_ID',
   // Only Google accounts on this domain are accepted.
   ALLOWED_DOMAIN: 'finmango.org',
+  // Ambassador post reviews bridge: lets HQ show the pending-post queue with
+  // approve/reject buttons. The review key stays HERE (server-side) — being
+  // signed in to HQ is the credential. Until the key is set, HQ shows a
+  // "not wired up" note and the standalone post-review.html panel still works.
+  POSTS_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyw06JczRZVwdf3vw70xeshZ_shp2J1zzvPvPqhR-2_FSqzSBFaq0Yu-OZ7KjKYfCuthQ/exec',
+  POSTS_REVIEW_KEY: 'REPLACE_WITH_POSTS_REVIEW_KEY',
   // Refuse absurdly large documents (protects the Sheet; ~500 KB of JSON is
   // thousands of cards — far beyond normal use).
   MAX_DOC_BYTES: 500000,
@@ -76,6 +82,18 @@ function doPost(e) {
     try { data = JSON.parse(e.postData.contents); } catch (err) { data = (e && e.parameter) || {}; }
     if (data.action === 'load') { requireAuth_(data); return json(loadDoc_()); }
     if (data.action === 'save') { requireAuth_(data); return json(saveDoc_(data)); }
+    // --- Ambassador post reviews bridge (HQ-authenticated) ---
+    if (data.action === 'posts-list') { requireAuth_(data); return json(postsBridge_({ action: 'list', status: String(data.status || 'all') })); }
+    if (data.action === 'posts-get') { requireAuth_(data); return json(postsBridge_({ action: 'review-get', id: String(data.id || '') })); }
+    if (data.action === 'posts-review') {
+      requireAuth_(data);
+      return json(postsBridge_({ action: 'review', id: String(data.id || ''), reviewer: String(data.reviewer || 'HQ team'),
+        vote: String(data.vote || 'comment'), comment: String(data.comment || '').slice(0, 2000) }));
+    }
+    if (data.action === 'posts-publish') {
+      requireAuth_(data);
+      return json(postsBridge_({ action: 'publish', id: String(data.id || ''), reviewer: String(data.reviewer || 'HQ team') }));
+    }
     return json({ result: 'error', error: 'Unknown action' });
   } catch (err) {
     return json({ result: 'error', error: errMessage_(err) });
@@ -244,6 +262,21 @@ function verifyIdToken_(idToken) {
   }
   const ttl = Math.max(60, Math.min(21600, Number(info.exp) - Math.floor(Date.now() / 1000) - 60));
   cache.put(cacheKey, '1', ttl);
+}
+
+// Forward a reviewer action to the Ambassador Notes backend, attaching the
+// server-side review key. HQ callers never see or send the key.
+function postsBridge_(params) {
+  if (CONFIG.POSTS_REVIEW_KEY.indexOf('REPLACE_WITH') === 0) {
+    throw new Error('Post reviews not configured');
+  }
+  params.key = CONFIG.POSTS_REVIEW_KEY;
+  const qs = Object.keys(params).map(function (k) {
+    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+  }).join('&');
+  const res = UrlFetchApp.fetch(CONFIG.POSTS_APPS_SCRIPT_URL + '?' + qs, { muteHttpExceptions: true });
+  try { return JSON.parse(res.getContentText()); }
+  catch (err) { throw new Error('Posts backend unavailable'); }
 }
 
 // ============================== HELPERS ====================================

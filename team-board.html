@@ -237,6 +237,13 @@
     .comment .who { font-size: .78rem; font-weight: 700; }
     .comment .when { font-family: var(--font-mono); font-size: .6rem; color: var(--ink-faint); margin-left: .45rem; }
     .comment .text { font-size: .86rem; margin-top: .1rem; white-space: pre-wrap; word-wrap: break-word; }
+    .pr-row { border: 1px solid var(--ink-line-soft); background: #fff; border-radius: 8px; padding: .6rem .75rem; margin-bottom: .5rem; }
+    .pr-head { display: flex; align-items: center; gap: .6rem; justify-content: space-between; }
+    .pr-title { font-weight: 700; font-size: .92rem; color: var(--ink); text-decoration: none; }
+    .pr-meta { font-size: .74rem; color: var(--ink-faint); margin-top: .1rem; }
+    .pr-preview { font-size: .84rem; white-space: pre-wrap; background: var(--paper); border: 1px solid var(--ink-line-soft);
+      border-radius: 6px; padding: .55rem .7rem; margin-top: .5rem; max-height: 300px; overflow-y: auto; }
+    .pr-actions { display: flex; gap: .3rem; margin-top: .5rem; flex-wrap: wrap; }
     .link-chips { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .45rem; }
     .link-chip { display: inline-flex; align-items: center; font-size: .74rem; font-weight: 600; color: var(--orange-deep);
       background: #fff; border: 1px solid var(--ink-line-soft); border-radius: 99px; padding: .18rem .6rem;
@@ -365,6 +372,7 @@
         <div id="pageList"></div>
       </div>
       <div class="side-foot">
+        <button class="side-item" id="postReviewBtn"><span class="emoji">📝</span><span class="label">Post reviews</span></button>
         <button class="side-item" id="membersBtn"><span class="emoji">👥</span><span class="label">Team members</span></button>
         <button class="side-item" id="syncBtn"><span class="sync-dot" id="syncDot"></span><span class="label" id="syncLabel">Local only</span></button>
         <button class="side-item" id="backupBtn"><span class="emoji">💾</span><span class="label">Backup / restore</span></button>
@@ -1799,6 +1807,102 @@
       };
     }
 
+    // ---------------------- ambassador post reviews -------------------------
+    // The queue from write.html → post-review.html, surfaced inside HQ. The
+    // backend bridges to the posts Apps Script with a server-side review key,
+    // so being signed in here is the only credential needed.
+    var PR_STATUS = { pending: ['Pending', '#E8A33D'], changes: ['Changes requested', '#E5511B'],
+      approved: ['Approved', '#3E9A5F'], rejected: ['Rejected', '#D9534F'], published: ['Published', '#9A9A93'] };
+    function postsApi(payload) {
+      return fetch('/api/board', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(Object.assign(payload, creds()))
+      }).then(function (r) { return r.json(); });
+    }
+    function openPostReviewModal() {
+      openModal('<h2>Ambassador post reviews</h2><div id="prBody"><p class="help-note">Loading the queue…</p></div>');
+      loadReviewQueue();
+    }
+    function loadReviewQueue() {
+      postsApi({ action: 'posts-list', status: 'all' }).then(function (res) {
+        var box = $('prBody'); if (!box) return;
+        if (res.result !== 'success') {
+          box.innerHTML = '<p class="help-note">' + (String(res.error || '') === 'Post reviews not configured'
+            ? '⚙️ Not wired up yet — add <code>POSTS_REVIEW_KEY</code> to the HQ Apps Script config and redeploy (ask Claude for the file). Until then, reviews live at <a href="post-review.html" target="_blank" rel="noopener">post-review.html</a> (passphrase required).'
+            : '⚠️ Couldn\'t reach the posts backend — try again in a minute.') + '</p>';
+          return;
+        }
+        var posts = res.posts || [];
+        var actionable = posts.filter(function (p) { return p.status !== 'published' && p.status !== 'rejected'; });
+        var done = posts.filter(function (p) { return p.status === 'published'; }).slice(0, 5);
+        function row(p) {
+          var st = PR_STATUS[p.status] || [p.status, '#9A9A93'];
+          var when = p.createdAt ? relTime(Date.parse(p.createdAt)) : '';
+          return '<div class="pr-row" data-id="' + esc(p.id) + '">'
+            + '<div class="pr-head"><span class="pr-title">' + esc(p.title || '(untitled)') + '</span>'
+            + '<span class="status-chip"><span class="col-dot" style="background:' + st[1] + '"></span>' + esc(st[0]) + '</span></div>'
+            + '<div class="pr-meta">' + esc(p.authorName || 'Unknown') + (p.category ? ' · ' + esc(p.category) : '') + (when ? ' · ' + esc(when) : '') + '</div>'
+            + '<div class="pr-preview" style="display:none;"></div>'
+            + '<div class="pr-actions">'
+            + '<button class="btn-sm ghost" data-pr="read">Read</button>'
+            + (p.status !== 'published' ? '<button class="btn-sm ghost" data-pr="approve">✓ Approve</button>'
+              + '<button class="btn-sm ghost" data-pr="changes">✎ Changes</button>'
+              + '<button class="btn-sm danger" data-pr="reject">✗ Reject</button>' : '')
+            + (p.status === 'approved' ? '<button class="btn-sm primary" data-pr="publish">🚀 Publish</button>' : '')
+            + '</div></div>';
+        }
+        box.innerHTML = (actionable.length
+            ? '<div class="m-section">Needs review (' + actionable.length + ')</div>' + actionable.map(row).join('')
+            : '<p class="help-note">🎉 Queue is clear — nothing waiting for review.</p>')
+          + (done.length ? '<div class="m-section">Recently published</div>' + done.map(function (p) {
+              return '<div class="pr-row"><div class="pr-head"><a class="pr-title" href="post.html?id=' + esc(p.id) + '" target="_blank" rel="noopener">'
+                + esc(p.title || '(untitled)') + '</a></div><div class="pr-meta">' + esc(p.authorName || '') + '</div></div>'; }).join('') : '')
+          + '<p class="help-note" style="margin-top:.9rem;">Full panel with formatted preview: <a href="post-review.html" target="_blank" rel="noopener">post-review.html</a>. Votes here are signed as you.</p>';
+        box.querySelectorAll('[data-pr]').forEach(function (btn) {
+          btn.onclick = function () { reviewAction(btn.closest('.pr-row').dataset.id, btn.dataset.pr, btn); };
+        });
+      }).catch(function () {
+        var box = $('prBody');
+        if (box) box.innerHTML = '<p class="help-note">⚠️ Couldn\'t reach the backend — try again in a minute.</p>';
+      });
+    }
+    function reviewAction(id, act, btn) {
+      var m = me();
+      var reviewer = m ? m.name : 'HQ team';
+      if (act === 'read') {
+        var pv = btn.closest('.pr-row').querySelector('.pr-preview');
+        if (pv.style.display !== 'none') { pv.style.display = 'none'; return; }
+        pv.style.display = 'block'; pv.textContent = 'Loading…';
+        postsApi({ action: 'posts-get', id: id }).then(function (res) {
+          if (res.result !== 'success' || !res.post) { pv.textContent = 'Couldn\'t load this post.'; return; }
+          // Render as PLAIN TEXT on purpose: submissions come from the public
+          // write.html, so no foreign HTML is ever injected into HQ.
+          var tmp = document.createElement('div');
+          tmp.innerHTML = String(res.post.body || res.post.html || '');
+          var text = (tmp.textContent || '').trim().replace(/\n{3,}/g, '\n\n');
+          pv.textContent = text ? (text.length > 4000 ? text.slice(0, 4000) + '\n…' : text) : '(no text content)';
+        });
+        return;
+      }
+      var comment = '';
+      if (act === 'changes' || act === 'reject') {
+        comment = prompt(act === 'changes' ? 'What should the author change?' : 'Reason (sent with the vote):') || '';
+      }
+      btn.disabled = true;
+      var payload = act === 'publish'
+        ? { action: 'posts-publish', id: id, reviewer: reviewer }
+        : { action: 'posts-review', id: id, reviewer: reviewer, vote: act, comment: comment };
+      postsApi(payload).then(function (res) {
+        if (res.result === 'success') {
+          toast(act === 'publish' ? 'Published 🚀' : 'Vote recorded — ' + act);
+          loadReviewQueue();
+        } else {
+          btn.disabled = false;
+          toast(String(res.error || 'That didn\'t work — try again'));
+        }
+      }).catch(function () { btn.disabled = false; toast('Network hiccup — try again'); });
+    }
+
     // ------------------------- quick find (⌘K) ------------------------------
     function openQuickFind() {
       var html = '<h2 style="margin-bottom:.6rem;">Quick find</h2>'
@@ -1897,6 +2001,7 @@
     $('filterAssignee').addEventListener('change', function () { ui.fAssignee = this.value; render(); });
     $('filterPriority').addEventListener('change', function () { ui.fPriority = this.value; render(); });
     $('membersBtn').onclick = openMembersModal;
+    $('postReviewBtn').onclick = openPostReviewModal;
     $('syncBtn').onclick = openSyncModal;
     $('backupBtn').onclick = openBackupModal;
     $('qfHint').onclick = openQuickFind;
