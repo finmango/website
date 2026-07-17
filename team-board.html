@@ -161,6 +161,36 @@
       color: var(--ink-faint); font-weight: 600; font-size: .84rem; }
     .add-col button:hover { border-color: var(--orange); color: var(--orange-deep); background: rgba(255,107,53,.04); }
 
+    /* ===== WHITEBOARD VIEW (canvas boards) ===== */
+    .wb-scroll { flex: 1; overflow: auto; position: relative; }
+    .wb-canvas { position: relative; width: 2400px; height: 1600px; cursor: crosshair;
+      background-image: radial-gradient(var(--ink-line) 1px, transparent 1px); background-size: 24px 24px; }
+    .wb-toolbar { position: sticky; top: 0; left: 0; z-index: 5; display: flex; align-items: center; gap: .6rem;
+      padding: .5rem .9rem; pointer-events: none; width: 100%; }
+    .wb-toolbar > * { pointer-events: auto; }
+    .wb-add { background: var(--orange); color: #fff; font-weight: 700; font-size: .82rem;
+      padding: .42rem .9rem; border-radius: 99px; box-shadow: 0 2px 8px rgba(10,10,10,.18); }
+    .wb-add:hover { background: var(--ink); }
+    .wb-hint { font-size: .74rem; color: var(--ink-faint); background: var(--paper, #fff); border: 1px solid var(--ink-line-soft);
+      padding: .3rem .7rem; border-radius: 99px; }
+    .sticky { position: absolute; width: 190px; min-height: 120px; padding: .8rem .85rem 1.9rem; cursor: grab;
+      box-shadow: 2px 4px 10px rgba(10,10,10,.14); font-size: .86rem; line-height: 1.4; word-wrap: break-word;
+      touch-action: none; user-select: none; transition: box-shadow .15s; }
+    .sticky:hover { box-shadow: 3px 7px 18px rgba(10,10,10,.22); z-index: 3; }
+    .sticky.wb-dragging { cursor: grabbing; z-index: 6; box-shadow: 6px 12px 26px rgba(10,10,10,.3); }
+    .sticky.wb-editing { cursor: text; user-select: text; z-index: 4; outline: 2px solid var(--orange); }
+    .sticky-text { min-height: 3.4em; white-space: pre-wrap; outline: none; font-weight: 500; }
+    .sticky-text:empty::before { content: 'Type your idea…'; color: rgba(10,10,10,.35); }
+    .sticky-author { position: absolute; left: .85rem; bottom: .5rem; font-size: .62rem; font-family: var(--font-mono);
+      color: rgba(10,10,10,.45); max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sticky-tools { position: absolute; right: .4rem; bottom: .35rem; display: none; align-items: center; gap: .25rem; }
+    .sticky:hover .sticky-tools, .sticky.wb-editing .sticky-tools { display: flex; }
+    .sticky-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(10,10,10,.25); }
+    .sticky-dot:hover { transform: scale(1.25); }
+    .sticky-tool { font-size: .72rem; line-height: 1; padding: .15rem .25rem; border-radius: 4px; color: rgba(10,10,10,.55); }
+    .sticky-tool:hover { background: rgba(10,10,10,.1); color: rgba(10,10,10,.85); }
+    @media (max-width: 760px) { .sticky { width: 160px; } }
+
     /* ===== TABLE VIEW ===== */
     .table-scroll { flex: 1; overflow: auto; padding: .5rem 1.1rem 1.5rem; }
     table.props { width: 100%; border-collapse: collapse; min-width: 760px; }
@@ -870,11 +900,25 @@
 '# Initiative: FreshFind\n\n*Living doc — edit freely. Live at [freshfind.org](https://freshfind.org/) · see also [finmango.org/food-navtech](https://www.finmango.org/food-navtech)*\n\n## What is it?\n**An early warning system for food crises. Built for government.** FreshFind uses AI to identify communities facing food insecurity *before* crises materialize, gives officials precise information about where intervention is needed, and equips them with response tools through trusted channels.\n\n**Three stages:**\n1. **Detect** — monitors financial stress signals and policy changes across all 50 states in real time\n2. **Inform** — structured briefings with specific zip codes, affected household counts, demographics, and recommended actions\n3. **Respond** — eligibility screeners, food access routing, and enrollment assistance tools\n\n## Who does it serve?\nGovernment decision-makers responsible for food assistance — state SNAP directors, emergency management officials — and, through them, the families the signal is about.\n\n## What\'s live today?\n[freshfind.org](https://freshfind.org/) itself, with three built-in tools: the [Financial Health Barometer](https://www.finmango.org/barometer), the [Food Desert Analyzer](https://www.finmango.org/food-desert-analyzer), and the [Food Assistance Calculator](https://www.finmango.org/food-assistance-calculator).\n\n## Research foundation\nA two-year field study partnership with the **University of Virginia** across five pilot communities: Chicago, Atlanta, Kansas City, and Wolfe County, Kentucky. Supported through **Google.org\'s Impact Challenge for AI for Government Innovation**.\n\n## What does success look like?\nGovernment partners acting on FreshFind briefings — families connected to assistance they qualify for before the fridge is empty, measured through the UVA study.\n\n## What will it take?\nPilot-community execution, government partner onboarding, and shared infrastructure with [[Housing NavTech]] and [[AI & The Economic Signal]].\n\n## Open questions\n- Which pilot community moves first?\n- What does the state-level onboarding playbook look like?', false)
       ];
 
+      // ---- Idea Lab whiteboard ---------------------------------------------
+      function sticky(x, y, color, text) {
+        return { id: uid(), colId: '', title: text, desc: '', assignee: '', due: '', priority: '',
+          tags: [], comments: [], discuss: false, public: false, x: x, y: y, color: color,
+          author: '', createdAt: now(), updatedAt: now() };
+      }
+      var ideaBoard = { id: uid(), icon: '💡', name: 'Idea Lab', type: 'canvas', updatedAt: now(),
+        columns: [],
+        cards: [
+          sticky(60, 80, STICKY_COLORS[0], 'Welcome to the Idea Lab! 🎉 This is a whiteboard: double-click anywhere to add a sticky note. No bad ideas — dump anything.'),
+          sticky(290, 140, STICKY_COLORS[2], 'Drag notes around to group them. Click a note to edit it. Use 💬 to discuss an idea.'),
+          sticky(520, 90, STICKY_COLORS[3], 'Love an idea? Flag it 📞 (via 💬 → Next call) and pitch it at the leadership call.')
+        ] };
+
       return {
         v: 1, workspace: 'FinMango HQ', updatedAt: now(),
         members: [mScott],
         tombstones: {},
-        boards: [roadmapBoard, teamBoard],
+        boards: [roadmapBoard, teamBoard, ideaBoard],
         pages: pages
       };
     }
@@ -1146,7 +1190,7 @@
         var ordered = [];
         structure.cards.forEach(function (c) { if (byId[c.id]) { ordered.push(byId[c.id]); delete byId[c.id]; } });
         Object.keys(byId).forEach(function (id) { ordered.push(byId[id]); });
-        ob.name = structure.name; ob.icon = structure.icon;
+        ob.name = structure.name; ob.icon = structure.icon; ob.type = structure.type;
         ob.columns = clone(structure.columns); ob.updatedAt = structure.updatedAt;
         // Cards pointing at a column that no longer exists land in the first one.
         var colIds = {}; ob.columns.forEach(function (c) { colIds[c.id] = true; });
@@ -1227,6 +1271,12 @@
         $('viewBoardBtn').classList.toggle('active', ui.view === 'board');
         $('viewTableBtn').classList.toggle('active', ui.view === 'table');
         $('agendaBtn').classList.toggle('on', ui.agenda);
+        // Whiteboards have no columns, so the Board/Table tabs and the call-
+        // agenda filter don't apply there.
+        var wb = !!(b && b.type === 'canvas');
+        $('viewBoardBtn').style.display = wb ? 'none' : '';
+        $('viewTableBtn').style.display = wb ? 'none' : '';
+        $('agendaBtn').style.display = wb ? 'none' : '';
       }
       // Assignee filter options
       var fa = $('filterAssignee');
@@ -1283,6 +1333,9 @@
       } else {
         renderView.lastPage = null;
       }
+      var prevWbL = 0, prevWbT = 0;
+      var wb0 = root.querySelector('.wb-scroll');
+      if (wb0) { prevWbL = wb0.scrollLeft; prevWbT = wb0.scrollTop; }
       root.innerHTML = '';
       if (ui.view === 'notes') { renderNotes(root); return; }
       if (inPageMode()) {
@@ -1299,6 +1352,16 @@
           + '<p style="font-size:.85rem;margin-top:.25rem;">Create one from the sidebar.</p></div></div>';
         return;
       }
+      if (b.type === 'canvas') {
+        renderWhiteboard(root, b);
+        // Same-board re-renders (sync updates, note edits) keep the viewer's
+        // place on the canvas instead of snapping back to the corner.
+        var ws = root.querySelector('.wb-scroll');
+        if (ws && renderView.lastWb === b.id) { ws.scrollLeft = prevWbL; ws.scrollTop = prevWbT; }
+        renderView.lastWb = b.id;
+        return;
+      }
+      renderView.lastWb = null;
       if (ui.view === 'table') renderTable(root, b); else renderBoard(root, b);
     }
 
@@ -1869,6 +1932,147 @@
       scroll.appendChild(wrap); root.appendChild(scroll);
     }
 
+    // ---------------- whiteboard boards (type: 'canvas') -------------------
+    // A board can be a freeform canvas instead of kanban columns: cards carry
+    // x/y/color and render as draggable sticky notes. Same sync engine — a
+    // sticky is just a card, so merge, tombstones, comments and search all
+    // work unchanged. Nothing on a whiteboard is ever exposed publicly (the
+    // public roadmap only reads column-based boards).
+    var STICKY_COLORS = ['#FFF3A3', '#FFC9DE', '#BFE3FF', '#C8F0C8', '#FFD9A3', '#E3D1FF'];
+    function stickyTilt(id) {
+      var h = 0;
+      for (var i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 997;
+      return (h % 50) / 10 - 2.5; // a stable -2.5°…+2.4° tilt per note
+    }
+    function renderWhiteboard(root, b) {
+      var scroll = document.createElement('div'); scroll.className = 'wb-scroll';
+      var bar = document.createElement('div'); bar.className = 'wb-toolbar';
+      var addB = document.createElement('button'); addB.className = 'wb-add'; addB.textContent = '＋ Sticky note';
+      addB.onclick = function () {
+        addSticky(b, scroll.scrollLeft + 60 + Math.random() * 260, scroll.scrollTop + 80 + Math.random() * 200);
+      };
+      var hint = document.createElement('span'); hint.className = 'wb-hint';
+      hint.textContent = 'Double-click anywhere to add a note · drag to move · click a note to type';
+      bar.appendChild(addB); bar.appendChild(hint);
+      var canvas = document.createElement('div'); canvas.className = 'wb-canvas';
+      visibleCards(b).forEach(function (c) { canvas.appendChild(stickyEl(b, c)); });
+      canvas.addEventListener('dblclick', function (e) {
+        if (e.target !== canvas) return;
+        var r = canvas.getBoundingClientRect();
+        addSticky(b, e.clientX - r.left - 95, e.clientY - r.top - 40);
+      });
+      scroll.appendChild(bar); scroll.appendChild(canvas); root.appendChild(scroll);
+    }
+
+    function stickyEl(b, c) {
+      var el = document.createElement('div'); el.className = 'sticky'; el.dataset.cardId = c.id;
+      el.style.left = (c.x || 0) + 'px'; el.style.top = (c.y || 0) + 'px';
+      el.style.background = c.color || STICKY_COLORS[0];
+      el.style.transform = 'rotate(' + stickyTilt(c.id) + 'deg)';
+      var txt = document.createElement('div'); txt.className = 'sticky-text'; txt.textContent = c.title || '';
+      var who = document.createElement('div'); who.className = 'sticky-author'; who.textContent = c.author || '';
+      var tools = document.createElement('div'); tools.className = 'sticky-tools';
+      STICKY_COLORS.forEach(function (sc) {
+        var d = document.createElement('button'); d.className = 'sticky-dot'; d.style.background = sc; d.title = 'Color';
+        d.onclick = function (e) {
+          e.stopPropagation();
+          c.color = sc; c.updatedAt = now();
+          el.style.background = sc;
+          mutate({ noRender: true });
+        };
+        tools.appendChild(d);
+      });
+      var cmt = document.createElement('button'); cmt.className = 'sticky-tool';
+      cmt.textContent = '💬' + (c.comments.length || '');
+      cmt.title = 'Comments & details';
+      cmt.onclick = function (e) { e.stopPropagation(); openCardModal(c.id); };
+      var del = document.createElement('button'); del.className = 'sticky-tool'; del.textContent = '✕'; del.title = 'Delete note';
+      del.onclick = function (e) {
+        e.stopPropagation();
+        if (!confirm('Delete this sticky note?')) return;
+        entomb(c.id);
+        b.cards.splice(b.cards.indexOf(c), 1);
+        b.updatedAt = now();
+        mutate();
+      };
+      tools.appendChild(cmt); tools.appendChild(del);
+      el.appendChild(txt); el.appendChild(who); el.appendChild(tools);
+
+      // One gesture, two meanings: moving past 5px is a drag; a plain click
+      // (or tap) opens the note for typing.
+      el.addEventListener('pointerdown', function (e) {
+        if (el.classList.contains('wb-editing')) return;
+        if (e.target.closest('.sticky-tools')) return;
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        var startX = e.clientX, startY = e.clientY;
+        var baseL = c.x || 0, baseT = c.y || 0, moved = false;
+        var canvas = el.parentNode;
+        function onMove(ev) {
+          var dx = ev.clientX - startX, dy = ev.clientY - startY;
+          if (!moved && Math.abs(dx) + Math.abs(dy) < 5) return;
+          moved = true; el.classList.add('wb-dragging');
+          c.x = Math.max(0, Math.min(canvas.offsetWidth - 110, baseL + dx));
+          c.y = Math.max(0, Math.min(canvas.offsetHeight - 70, baseT + dy));
+          el.style.left = c.x + 'px'; el.style.top = c.y + 'px';
+        }
+        function onUp() {
+          document.removeEventListener('pointermove', onMove);
+          document.removeEventListener('pointerup', onUp);
+          el.classList.remove('wb-dragging');
+          if (moved) { c.updatedAt = now(); b.updatedAt = now(); mutate({ noRender: true }); }
+          else startStickyEdit(b, c, el, txt);
+        }
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('pointerup', onUp);
+        e.preventDefault();
+      });
+      return el;
+    }
+
+    function startStickyEdit(b, c, el, txt) {
+      el.classList.add('wb-editing');
+      txt.setAttribute('contenteditable', 'plaintext-only');
+      if (txt.contentEditable !== 'plaintext-only') txt.setAttribute('contenteditable', 'true');
+      txt.focus();
+      var sel = window.getSelection(), range = document.createRange();
+      range.selectNodeContents(txt); range.collapse(false);
+      sel.removeAllRanges(); sel.addRange(range);
+      function done() {
+        txt.removeEventListener('blur', done);
+        txt.removeAttribute('contenteditable');
+        el.classList.remove('wb-editing');
+        var v = (txt.innerText || '').replace(/\u00a0/g, ' ').trim();
+        if (!v && !c.title) {
+          // A brand-new note left empty evaporates instead of littering.
+          entomb(c.id);
+          var i = b.cards.indexOf(c);
+          if (i >= 0) b.cards.splice(i, 1);
+          b.updatedAt = now();
+          mutate();
+          return;
+        }
+        if (!v) { txt.textContent = c.title; return; } // cleared by accident — keep the old text
+        if (v !== c.title) { c.title = v.slice(0, 500); c.updatedAt = now(); mutate({ noRender: true }); }
+      }
+      txt.addEventListener('blur', done);
+      txt.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { e.preventDefault(); txt.blur(); }
+      });
+    }
+
+    function addSticky(b, x, y) {
+      var m = me();
+      var c = { id: uid(), colId: '', title: '', desc: '', assignee: '', due: '', priority: '',
+        tags: [], comments: [], discuss: false, public: false,
+        x: Math.max(0, Math.round(x)), y: Math.max(0, Math.round(y)),
+        color: STICKY_COLORS[Math.floor(Math.random() * STICKY_COLORS.length)],
+        author: m ? m.name : '', createdAt: now(), updatedAt: now() };
+      b.cards.push(c); b.updatedAt = now();
+      mutate();
+      var el = document.querySelector('.sticky[data-card-id="' + c.id + '"]');
+      if (el) startStickyEdit(b, c, el, el.querySelector('.sticky-text'));
+    }
+
     function cardEl(c) {
       var el = document.createElement('div'); el.className = 'card'; el.draggable = true; el.dataset.cardId = c.id;
       var html = '<div class="card-title">' + esc(c.title) + '</div>';
@@ -2045,10 +2249,13 @@
 
       function touch() { c.updatedAt = now(); b.updatedAt = now(); mutate({ noRender: true }); }
 
+      // Whiteboard stickies are cards too, but Status (no columns) and the
+      // public-roadmap flag (whiteboards are never published) don't apply.
+      var isWb = b.type === 'canvas';
       var html = '<input class="m-title" id="cTitle" value="' + esc(c.title) + '" aria-label="Card title" />'
         + '<div class="prop-grid">'
-        + '<label>Status</label><select id="cStatus">' + b.columns.map(function (col) {
-            return '<option value="' + esc(col.id) + '"' + (col.id === c.colId ? ' selected' : '') + '>' + esc(col.name) + '</option>'; }).join('') + '</select>'
+        + (isWb ? '' : '<label>Status</label><select id="cStatus">' + b.columns.map(function (col) {
+            return '<option value="' + esc(col.id) + '"' + (col.id === c.colId ? ' selected' : '') + '>' + esc(col.name) + '</option>'; }).join('') + '</select>')
         + '<label>Assignee</label><select id="cAssignee"><option value="">Unassigned</option>' + doc.members.map(function (m) {
             return '<option value="' + esc(m.id) + '"' + (m.id === c.assignee ? ' selected' : '') + '>' + esc(m.name) + '</option>'; }).join('') + '</select>'
         + '<label>Due date</label><input type="date" id="cDue" value="' + esc(c.due) + '" />'
@@ -2057,7 +2264,7 @@
             return '<option value="' + p + '"' + (p === c.priority ? ' selected' : '') + '>' + p.charAt(0).toUpperCase() + p.slice(1) + '</option>'; }).join('') + '</select>'
         + '<label>Tags</label><input id="cTags" placeholder="comma, separated" value="' + esc(c.tags.join(', ')) + '" />'
         + '<label>Next call</label><label class="check-row"><input type="checkbox" id="cDiscuss"' + (c.discuss ? ' checked' : '') + '> 📞 Discuss at next leadership call</label>'
-        + '<label>Visibility</label><label class="check-row"><input type="checkbox" id="cPublic"' + (c.public ? ' checked' : '') + '> 🌐 Show on the public roadmap <span class="hint">(title, notes &amp; tags only)</span></label>'
+        + (isWb ? '' : '<label>Visibility</label><label class="check-row"><input type="checkbox" id="cPublic"' + (c.public ? ' checked' : '') + '> 🌐 Show on the public roadmap <span class="hint">(title, notes &amp; tags only)</span></label>')
         + '</div>'
         + '<div class="m-section">Notes</div>'
         + '<textarea class="m-desc" id="cDesc" placeholder="Add details… Paste any URL (docs, sheets, sites) and it shows up as a clickable link below.">' + esc(c.desc) + '</textarea>'
@@ -2081,7 +2288,7 @@
 
       $('cTitle').oninput = function () { c.title = this.value; touch(); };
       $('cTitle').onblur = function () { if (!c.title.trim()) { c.title = 'Untitled'; touch(); } render(); };
-      $('cStatus').onchange = function () { c.colId = this.value; touch(); render(); };
+      if ($('cStatus')) $('cStatus').onchange = function () { c.colId = this.value; touch(); render(); };
       $('cAssignee').onchange = function () { c.assignee = this.value; touch(); render(); };
       $('cDue').onchange = function () { c.due = this.value; touch(); render(); };
       $('cPrio').onchange = function () { c.priority = this.value; touch(); render(); };
@@ -2090,7 +2297,7 @@
         touch(); render();
       };
       $('cDiscuss').onchange = function () { c.discuss = this.checked; touch(); render(); };
-      $('cPublic').onchange = function () { c.public = this.checked; touch(); render(); };
+      if ($('cPublic')) $('cPublic').onchange = function () { c.public = this.checked; touch(); render(); };
       function renderCardLinks() {
         var urls = extractUrls(c.desc);
         $('cLinks').innerHTML = urls.map(function (u) {
@@ -2666,16 +2873,19 @@
     }
     $('addBoardBtn').onclick = function () {
       var name = prompt('Board name'); if (!name || !name.trim()) return;
+      var wb = confirm('Make "' + name.trim() + '" a whiteboard?\n\nOK = whiteboard (freeform sticky notes)\nCancel = kanban board (columns & cards)');
       var bId = uid();
-      doc.boards.push({
-        id: bId, icon: EMOJIS[doc.boards.length % EMOJIS.length], name: name.trim().slice(0, 60), updatedAt: now(),
-        columns: [
-          { id: uid(), name: 'To do', color: COL_COLORS[0] },
-          { id: uid(), name: 'In Progress', color: COL_COLORS[1] },
-          { id: uid(), name: 'Done', color: COL_COLORS[3] }
-        ],
-        cards: []
-      });
+      doc.boards.push(wb
+        ? { id: bId, icon: '💡', name: name.trim().slice(0, 60), type: 'canvas', updatedAt: now(), columns: [], cards: [] }
+        : {
+          id: bId, icon: EMOJIS[doc.boards.length % EMOJIS.length], name: name.trim().slice(0, 60), updatedAt: now(),
+          columns: [
+            { id: uid(), name: 'To do', color: COL_COLORS[0] },
+            { id: uid(), name: 'In Progress', color: COL_COLORS[1] },
+            { id: uid(), name: 'Done', color: COL_COLORS[3] }
+          ],
+          cards: []
+        });
       openBoard(bId);
       mutate();
     };
