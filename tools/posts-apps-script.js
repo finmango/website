@@ -187,7 +187,16 @@ function updatePost_(p) {
   const post = readJson_(r.jsonFileId);
   if (post.status === 'published') return { result: 'error', error: 'This post is live — edits are locked' };
   if (typeof p.title === 'string' && p.title.trim()) post.title = p.title.toString().slice(0, 200);
-  if (typeof p.body === 'string' && p.body.trim()) post.body = p.body.toString().slice(0, 200000);
+  if (typeof p.body === 'string' && p.body.trim()) {
+    // Images added during review arrive as inline data URLs — file them in
+    // the post's Drive folder and swap in hosted URLs, same as submissions.
+    let body = p.body.toString();
+    if (body.indexOf('data:image/') !== -1) {
+      body = rewriteInlineImages_(body, DriveApp.getFolderById(r.folderId));
+    }
+    if (body.length > 200000) return { result: 'error', error: 'Body too large — remove an image or some text' };
+    post.body = body;
+  }
   if (typeof p.dek === 'string') post.dek = p.dek.toString().slice(0, 300);
   post.reviews = post.reviews || [];
   post.reviews.push({ reviewer: (p.editor || 'Editor').toString().slice(0, 120), vote: 'comment',
