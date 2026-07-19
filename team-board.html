@@ -2772,19 +2772,77 @@
       }
       // Edit the draft right here: title input + the body itself made
       // editable (WYSIWYG); saved HTML is re-sanitized before it leaves HQ.
+      // Downscale an image file to a compact JPEG data URL (same approach as
+      // write.html). The backend swaps data URLs for Drive-hosted files on save.
+      function noteImage(file, cb) {
+        if (!file || String(file.type).indexOf('image/') !== 0) { toast('That file isn\'t an image'); return; }
+        if (file.size > 12 * 1024 * 1024) { toast('Image is larger than 12MB'); return; }
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          var img = new Image();
+          img.onload = function () {
+            var w = img.width, h = img.height, maxDim = 1600;
+            if (w > maxDim || h > maxDim) {
+              var r = Math.min(maxDim / w, maxDim / h);
+              w = Math.round(w * r); h = Math.round(h * r);
+            }
+            var canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            cb(canvas.toDataURL('image/jpeg', 0.82));
+          };
+          img.onerror = function () { toast('Couldn\'t read that image'); };
+          img.src = e.target.result;
+        };
+        reader.onerror = function () { toast('Couldn\'t read that file'); };
+        reader.readAsDataURL(file);
+      }
       function startEdit(post) {
         box.innerHTML = '<input class="text-input" data-drafttitle style="font-weight:700;margin-bottom:.5rem;" value="' + esc(post.title || '') + '" />'
           + '<div class="note-body md draft-editing" contenteditable="true">' + sanitizeNote(post.body || post.html || '') + '</div>'
           + '<div class="pr-actions" style="margin-top:.5rem;">'
           + '<button class="btn-sm primary" data-savedraft>Save draft</button>'
-          + '<button class="btn-sm ghost" data-canceldraft>Cancel</button></div>'
-          + '<p class="help-note" style="margin-top:.4rem;">Edits are recorded in the review trail. The author isn\'t emailed — use ✎ Changes for that.</p>';
+          + '<button class="btn-sm ghost" data-addimage>🖼 Image</button>'
+          + '<button class="btn-sm ghost" data-canceldraft>Cancel</button>'
+          + '<input type="file" accept="image/*" data-imagefile style="display:none;"></div>'
+          + '<p class="help-note" style="margin-top:.4rem;">Edits are recorded in the review trail. The author isn\'t emailed — use ✎ Changes for that. '
+          + 'Add photos with 🖼 Image or by pasting them right into the text.</p>';
+        var ed = box.querySelector('.draft-editing');
+        var fileInput = box.querySelector('[data-imagefile]');
+        function insertImage(dataUrl) {
+          ed.focus();
+          var sel = window.getSelection();
+          if (!sel.rangeCount || !ed.contains(sel.anchorNode)) {
+            var range = document.createRange();
+            range.selectNodeContents(ed); range.collapse(false);
+            sel.removeAllRanges(); sel.addRange(range);
+          }
+          document.execCommand('insertHTML', false, '<img src="' + dataUrl + '" alt="">');
+        }
+        box.querySelector('[data-addimage]').onclick = function () { fileInput.click(); };
+        fileInput.onchange = function () {
+          if (fileInput.files && fileInput.files[0]) noteImage(fileInput.files[0], insertImage);
+          fileInput.value = '';
+        };
+        ed.addEventListener('paste', function (e) {
+          var items = (e.clipboardData && e.clipboardData.items) || [];
+          for (var i = 0; i < items.length; i++) {
+            if (items[i].kind === 'file' && items[i].type.indexOf('image/') === 0) {
+              e.preventDefault();
+              noteImage(items[i].getAsFile(), insertImage);
+              return;
+            }
+          }
+        });
         box.querySelector('[data-canceldraft]').onclick = function () { paint(notes.detail[id] || post); };
         box.querySelector('[data-savedraft]').onclick = function () {
           var btn = box.querySelector('[data-savedraft]');
           var title = box.querySelector('[data-drafttitle]').value.trim();
           var bodyHtml = sanitizeNote(box.querySelector('.draft-editing').innerHTML);
           if (!bodyHtml.trim() || !title) { toast('Title and body can\'t be empty'); return; }
+          // New images travel as data URLs until the backend files them in
+          // Drive — keep the request under the proxy's body cap.
+          if (bodyHtml.length > 700000) { toast('Too many new images in one save — save once, then add the rest'); return; }
           btn.disabled = true; btn.textContent = 'Saving…';
           var m = me();
           postsApi({ action: 'posts-update', id: id, title: title, body: bodyHtml, editor: m ? m.name : 'HQ editor' })
