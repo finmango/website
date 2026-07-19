@@ -2759,14 +2759,16 @@
       if (!box) return;
       function paint(post) {
         var listEntry = (notes.posts || []).find(function (x) { return x.id === id; });
-        var editable = listEntry && listEntry.status !== 'published' && listEntry.status !== 'rejected';
+        var editable = !!listEntry;
+        var isLive = listEntry && listEntry.status === 'published';
         var reviews = (post.reviews || []).map(function (rv) {
           var icon = rv.vote === 'approve' ? '✓' : rv.vote === 'changes' ? '✎' : rv.vote === 'reject' ? '✗' : '💬';
           return '<div class="note-review"><strong>' + icon + ' ' + esc(rv.reviewer || 'Reviewer') + '</strong>'
             + (rv.comment ? ' — ' + esc(rv.comment) : '') + '</div>';
         }).join('');
         box.innerHTML = '<div class="note-body md">' + sanitizeNote(post.body || post.html || '<p>(no content)</p>') + '</div>'
-          + (editable ? '<div class="pr-actions" style="margin-top:.5rem;"><button class="btn-sm ghost" data-editdraft>✎ Edit draft</button></div>' : '')
+          + (editable ? '<div class="pr-actions" style="margin-top:.5rem;"><button class="btn-sm ghost" data-editdraft>'
+              + (isLive ? '✎ Edit live post' : '✎ Edit draft') + '</button></div>' : '')
           + (reviews ? '<div class="m-section">Votes & comments</div>' + reviews : '');
         var eb = box.querySelector('[data-editdraft]');
         if (eb) eb.onclick = function () { startEdit(post); };
@@ -2806,7 +2808,9 @@
           + '<button class="btn-sm ghost" data-addimage>🖼 Image</button>'
           + '<button class="btn-sm ghost" data-canceldraft>Cancel</button>'
           + '<input type="file" accept="image/*" data-imagefile style="display:none;"></div>'
-          + '<p class="help-note" style="margin-top:.4rem;">Edits are recorded in the review trail. The author isn\'t emailed — use ✎ Changes for that. '
+          + '<p class="help-note" style="margin-top:.4rem;">'
+          + (post.status === 'published' ? '<strong style="color:var(--orange-deep);">This post is live — saved changes appear on the site right away.</strong> ' : '')
+          + 'Edits are recorded in the review trail. The author isn\'t emailed — use ✎ Changes for that. '
           + 'Add photos with 🖼 Image, by pasting, or by dragging them right into the text.</p>';
         var ed = box.querySelector('.draft-editing');
         var fileInput = box.querySelector('[data-imagefile]');

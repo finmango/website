@@ -90,7 +90,7 @@ function submitPost_(data) {
 
   // Offload images (cover + inline data: URLs) to Drive, swap in public URLs.
   const cover = data.cover ? storeDataUrl_(data.cover, folder, 'cover') : '';
-  const body = rewriteInlineImages_(data.body || '', folder);
+  const body = tidyBody_(rewriteInlineImages_(data.body || '', folder));
 
   const post = {
     id: id,
@@ -149,7 +149,10 @@ function listForReview_(statusFilter) {
 function getPublicPost_(id) {
   const r = findRow_(id);
   if (!r || r.status !== 'published') return { result: 'error', error: 'Not found' };
-  return { result: 'success', post: readJson_(r.jsonFileId) };
+  const post = readJson_(r.jsonFileId);
+  // Posts published before the auto-cover rule still get one on the fly.
+  if (!post.cover) post.cover = firstImg_(post.body);
+  return { result: 'success', post: post };
 }
 
 function getFullPost_(id) {
@@ -177,15 +180,15 @@ function addReview_(p) {
   return { result: 'success', post: post };
 }
 
-// Reviewer-only: edit a draft's title/body during review (used by the HQ
-// Ambassador Notes tab). Published posts are locked — unpublishing isn't a
-// thing, so live content can't be silently rewritten. Every edit leaves an
-// audit entry in the review trail.
+// Reviewer-only: edit a post's title/body (used by the HQ Ambassador Notes
+// tab). Works on drafts AND published posts — edits to a live post go live
+// immediately, and every edit leaves an audit entry in the review trail so
+// there's always a record of who changed what, when.
 function updatePost_(p) {
   const r = findRow_(p.id);
   if (!r) return { result: 'error', error: 'Not found' };
   const post = readJson_(r.jsonFileId);
-  if (post.status === 'published') return { result: 'error', error: 'This post is live — edits are locked' };
+  const wasPublished = post.status === 'published';
   if (typeof p.title === 'string' && p.title.trim()) post.title = p.title.toString().slice(0, 200);
   if (typeof p.body === 'string' && p.body.trim()) {
     // Images added during review arrive as inline data URLs — file them in
@@ -195,12 +198,12 @@ function updatePost_(p) {
       body = rewriteInlineImages_(body, DriveApp.getFolderById(r.folderId));
     }
     if (body.length > 200000) return { result: 'error', error: 'Body too large — remove an image or some text' };
-    post.body = body;
+    post.body = tidyBody_(body);
   }
   if (typeof p.dek === 'string') post.dek = p.dek.toString().slice(0, 300);
   post.reviews = post.reviews || [];
   post.reviews.push({ reviewer: (p.editor || 'Editor').toString().slice(0, 120), vote: 'comment',
-    comment: '✏️ Edited the draft during review', at: new Date().toISOString() });
+    comment: wasPublished ? '✏️ Edited the live post' : '✏️ Edited the draft during review', at: new Date().toISOString() });
   saveJson_(r.jsonFileId, post);
   updateRow_(r.rowIndex, { title: post.title, reviewsSummary: summarize_(post.reviews) });
   return { result: 'success', post: post };
@@ -216,8 +219,10 @@ function publishPost_(p) {
   }
   post.status = 'published';
   post.publishedAt = new Date().toISOString();
+  // No cover uploaded? The first image in the post becomes the cover.
+  if (!post.cover) post.cover = firstImg_(post.body);
   saveJson_(r.jsonFileId, post);
-  updateRow_(r.rowIndex, { status: 'published', publishedAt: post.publishedAt });
+  updateRow_(r.rowIndex, { status: 'published', publishedAt: post.publishedAt, hasCover: post.cover ? 'yes' : '' });
 
   // OPTIONAL upgrade: also commit a pre-rendered static .html to the repo via the
   // GitHub API for SEO. Disabled by default (no token needed). See docs/POSTS-SETUP.md.
@@ -264,7 +269,8 @@ function publicSummary_(r) {
   const post = readJson_(r.jsonFileId);
   return {
     id: post.id, title: post.title, dek: post.dek, category: post.category,
-    tags: post.tags || [], authorName: post.authorName, cover: post.cover,
+    tags: post.tags || [], authorName: post.authorName,
+    cover: post.cover || firstImg_(post.body),
     ambassadorSlug: post.ambassadorSlug || '',
     publishedAt: post.publishedAt, createdAt: post.createdAt
   };
@@ -290,6 +296,20 @@ function storeDataUrl_(dataUrl, folder, baseName) {
   } catch (e) {
     return ''; // an image problem must never lose the whole submission
   }
+}
+
+// First image in a body, if any — used as the automatic cover.
+function firstImg_(html) {
+  const m = /<img[^>]*\bsrc="([^"]+)"/i.exec(String(html || ''));
+  return m ? m[1] : '';
+}
+
+// Rich-text editors write a blank line as <p><br></p> (or a paragraph holding
+// only &nbsp;/empty spans). Stacked on normal paragraph margins that reads as
+// double spacing, so filler paragraphs are dropped at save time.
+function tidyBody_(html) {
+  return String(html || '')
+    .replace(/<p>(?:\s|&nbsp;|\u00a0|<br\s*\/?>|<span>\s*<\/span>)*<\/p>/gi, '');
 }
 
 // Replace every inline data:image in the body with a stored Drive URL.
