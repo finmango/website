@@ -95,6 +95,8 @@
     .avatar { width: 26px; height: 26px; border-radius: 50%; color: #fff; display: grid; place-items: center;
       font-size: .68rem; font-weight: 700; border: 2px solid var(--paper); margin-left: -6px; flex-shrink: 0;
       position: relative; overflow: hidden; }
+    /* clicking a topbar avatar filters the board to that person's cards */
+    .avatars button.avatar.on { outline: 2px solid var(--orange); outline-offset: 1px; }
     .avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .avatar:first-child { margin-left: 0; }
     .avatars button.avatar { cursor: pointer; }
@@ -130,9 +132,13 @@
     .col-body { overflow-y: auto; display: flex; flex-direction: column; gap: .5rem; padding: 2px 2px 6px; min-height: 40px; }
     .drop-hint { height: 3px; border-radius: 2px; background: var(--orange); margin: -1px 4px; }
     .card { background: var(--card-bg); border: 1px solid var(--ink-line-soft); border-radius: var(--radius);
-      box-shadow: var(--shadow-card); padding: .6rem .7rem; cursor: pointer; transition: box-shadow .15s, transform .15s; }
+      box-shadow: var(--shadow-card); padding: .6rem .7rem; cursor: pointer; transition: box-shadow .15s, transform .15s;
+      user-select: none; -webkit-user-select: none; }
     .card:hover { box-shadow: 0 3px 10px rgba(10,10,10,.09); }
-    .card.dragging { opacity: .45; transform: rotate(1.5deg); }
+    .card.dragging { opacity: .4; }
+    /* the lifted copy that follows the finger/pointer during a drag */
+    .card.drag-ghost { position: fixed; z-index: 400; margin: 0; pointer-events: none;
+      transform: rotate(2deg); box-shadow: 0 14px 34px rgba(10,10,10,.28); transition: none; }
     .card-title { font-weight: 600; font-size: .88rem; line-height: 1.35; word-wrap: break-word; }
     .card-desc-hint { color: var(--ink-faint); font-size: .76rem; margin-top: .15rem; display: -webkit-box;
       -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -339,6 +345,13 @@
     .color-row button { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; }
     .color-row button.sel { border-color: var(--ink); }
     .help-note { font-size: .82rem; color: var(--ink-dim); line-height: 1.55; margin: .5rem 0; }
+    /* new-board type picker: two big tappable choices, zero typing */
+    .choice-btn { display: flex; align-items: center; gap: .85rem; width: 100%; text-align: left; padding: .8rem .9rem;
+      border: 1px solid var(--ink-line); border-radius: 10px; background: #fff; margin-top: .55rem; }
+    .choice-btn:hover { border-color: var(--orange); background: rgba(255,107,53,.04); }
+    .choice-btn .big { font-size: 1.5rem; flex-shrink: 0; }
+    .choice-btn .t { font-weight: 700; font-size: .92rem; }
+    .choice-btn .d { font-size: .78rem; color: var(--ink-dim); margin-top: .1rem; }
     .help-note code { font-family: var(--font-mono); font-size: .74rem; background: var(--ink-line-soft); padding: .05rem .3rem; border-radius: 4px; }
     .gsi-wrap { display: flex; justify-content: center; padding: .4rem 0 .6rem; min-height: 44px; }
     .signed-in-row { display: flex; align-items: center; gap: .6rem; background: #fff; border: 1px solid var(--ink-line-soft);
@@ -404,7 +417,10 @@
     /* ===== TOASTS ===== */
     .toasts { position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%); z-index: 200; display: flex; flex-direction: column; gap: .5rem; align-items: center; }
     .toast { background: var(--ink); color: var(--paper); font-size: .84rem; font-weight: 600; padding: .55rem 1rem;
-      border-radius: 8px; box-shadow: var(--shadow-pop); animation: toast-in .2s ease; max-width: 90vw; }
+      border-radius: 8px; box-shadow: var(--shadow-pop); animation: toast-in .2s ease; max-width: 90vw;
+      display: flex; align-items: center; gap: .9rem; }
+    .toast .toast-undo { color: #FFB38A; font-weight: 700; padding: .1rem .2rem; flex-shrink: 0; }
+    .toast .toast-undo:hover { text-decoration: underline; color: #fff; }
     @keyframes toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
     @media (max-width: 760px) {
@@ -464,7 +480,6 @@
       <div class="side-foot">
         <button class="side-item" id="membersBtn"><span class="emoji">👥</span><span class="label">Team members</span></button>
         <button class="side-item" id="syncBtn"><span class="sync-dot" id="syncDot"></span><span class="label" id="syncLabel">Local only</span></button>
-        <button class="side-item" id="backupBtn"><span class="emoji">💾</span><span class="label">Backup / restore</span></button>
         <a class="side-item" href="index.html" style="text-decoration:none;"><span class="emoji">←</span><span class="label">finmango.org</span></a>
       </div>
     </aside>
@@ -483,21 +498,14 @@
           <button id="viewBoardBtn" class="active">Board</button>
           <button id="viewTableBtn">Table</button>
         </div>
-        <div class="view-switch page-only" role="tablist">
-          <button id="pageReadBtn" class="active">Page</button>
-          <button id="pageEditBtn" title="Raw markdown — for bulk edits and big restructures">Source</button>
+        <div class="view-switch page-only">
+          <button id="pageSrcBtn" title="Raw markdown — for bulk edits and big restructures">Source</button>
         </div>
         <button class="top-filter board-only" id="agendaBtn" title="Show cards flagged for the next leadership call, plus everything in Now">📞 Agenda</button>
         <div class="search-box board-only">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
           <input id="searchInput" placeholder="Filter…" aria-label="Filter cards" />
         </div>
-        <select class="top-filter board-only" id="filterAssignee" aria-label="Filter by assignee"></select>
-        <select class="top-filter board-only" id="filterPriority" aria-label="Filter by priority">
-          <option value="">Priority</option>
-          <option value="urgent">Urgent</option><option value="high">High</option>
-          <option value="medium">Medium</option><option value="low">Low</option>
-        </select>
         <div class="avatars" id="topAvatars"></div>
       </div>
       <div id="viewRoot" style="flex:1; display:flex; flex-direction:column; min-height:0;"></div>
@@ -530,7 +538,6 @@
     var AVA_COLORS = ['#FF6B35', '#3E9A5F', '#4A7BD0', '#8B5CF6', '#E8A33D', '#2E9E9E', '#D9534F', '#5F6B7A'];
     var TAG_COLORS = [['#FFF0E8', '#C2410C'], ['#EAF3EC', '#1F7A40'], ['#EAF0FA', '#2B5AB8'], ['#F3EDFC', '#6D3FC4'],
       ['#FDF3E0', '#9A6A0B'], ['#E8F4F4', '#1D7A7A'], ['#FBEAEA', '#B23030'], ['#F0F0ED', '#55554F']];
-    var PRIO = { urgent: ['URGENT', '#C62828'], high: ['HIGH', '#E5511B'], medium: ['MED', '#B8860B'], low: ['LOW', '#5F6B7A'] };
     var EMOJIS = ['🥭','📋','🧭','🚀','📣','🎓','💡','🌱','📊','✅','🗓️','💰','🌍','🤝','✍️','🎯','🔬','📚','🛠️','🏆','❤️','🔥','⭐','📌','🏠','📞','📄','🗂️','🧪','🎤','🖥️','🌾'];
 
     // ============================ UTILITIES ================================
@@ -543,6 +550,22 @@
     function toast(msg) {
       var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
       $('toasts').appendChild(t); setTimeout(function () { t.remove(); }, 3200);
+    }
+    // Deletes don't interrogate ("Are you sure?") — they happen instantly and
+    // offer a 6-second Undo instead. Reversibility beats confirmation dialogs.
+    function toastUndo(msg, onUndo) {
+      var t = document.createElement('div'); t.className = 'toast';
+      var s = document.createElement('span'); s.textContent = msg;
+      var u = document.createElement('button'); u.className = 'toast-undo'; u.textContent = 'Undo';
+      u.onclick = function () { t.remove(); onUndo(); };
+      t.appendChild(s); t.appendChild(u);
+      $('toasts').appendChild(t); setTimeout(function () { t.remove(); }, 6000);
+    }
+    // Undo a delete: clear the tombstone and stamp the item newer than it, so
+    // the restore also wins the merge on devices that already saw the delete.
+    function disentomb(id, item) {
+      delete doc.tombstones[id];
+      if (item) item.updatedAt = now();
     }
     function initials(name) {
       var parts = String(name || '?').trim().split(/\s+/);
@@ -827,7 +850,7 @@
       var hShipped = { id: uid(), name: 'Shipped 🚀', color: '#3E9A5F' };
       function initiative(colId, title, desc, tags, pub, discuss) {
         return { id: uid(), colId: colId, title: title, desc: desc || '', assignee: '', due: '',
-          priority: '', tags: tags || [], comments: [], discuss: !!discuss, public: !!pub,
+          tags: tags || [], comments: [], discuss: !!discuss, public: !!pub,
           createdAt: now(), updatedAt: now() };
       }
       var roadmapCards = [
@@ -866,18 +889,18 @@
       var cTodo = { id: uid(), name: 'To do', color: COL_COLORS[0] };
       var cDoing = { id: uid(), name: 'In Progress', color: COL_COLORS[1] };
       var cDone = { id: uid(), name: 'Done', color: COL_COLORS[3] };
-      function task(colId, title, desc, prio, tags) {
+      function task(colId, title, desc, tags) {
         return { id: uid(), colId: colId, title: title, desc: desc || '', assignee: '', due: '',
-          priority: prio || '', tags: tags || [], comments: [], discuss: false, public: false,
+          tags: tags || [], comments: [], discuss: false, public: false,
           createdAt: now(), updatedAt: now() };
       }
       var teamBoard = { id: tb, icon: '🥭', name: 'Team HQ', updatedAt: now(),
         columns: [cTodo, cDoing, cDone],
         cards: [
-          task(cTodo.id, 'Have everyone sign in with their @finmango.org account', 'Send the team the link — signing in adds them as members automatically, with their name and photo from Google.', 'medium', ['getting started']),
-          task(cTodo.id, 'Review the seeded Roadmap at the next leadership call', 'The 🧭 Roadmap board was imported from our old Notion roadmap and pre-sorted into Now / Next / Later / Someday / Shipped. Drag things where they actually belong, edit details, and flag anything for discussion with the 📞 checkbox.', 'high', ['getting started']),
-          task(cDoing.id, 'Set up team sync', 'Follow docs/TEAM-BOARD-SETUP.md in the website repo (~10 min, free) so everyone sees the same workspace.', 'high', ['getting started']),
-          task(cDone.id, 'Build the FinMango team workspace', 'Done — you\'re looking at it! 🎉', '', [])
+          task(cTodo.id, 'Have everyone sign in with their @finmango.org account', 'Send the team the link — signing in adds them as members automatically, with their name and photo from Google.', ['getting started']),
+          task(cTodo.id, 'Review the seeded Roadmap at the next leadership call', 'The 🧭 Roadmap board was imported from our old Notion roadmap and pre-sorted into Now / Next / Later / Someday / Shipped. Drag things where they actually belong, edit details, and flag anything for discussion with the 📞 checkbox.', ['getting started']),
+          task(cDoing.id, 'Set up team sync', 'Follow docs/TEAM-BOARD-SETUP.md in the website repo (~10 min, free) so everyone sees the same workspace.', ['getting started']),
+          task(cDone.id, 'Build the FinMango team workspace', 'Done — you\'re looking at it! 🎉', [])
         ] };
 
       // ---- Wiki pages ------------------------------------------------------
@@ -903,7 +926,7 @@
 
       // ---- Idea Lab whiteboard ---------------------------------------------
       function sticky(x, y, color, text) {
-        return { id: uid(), colId: '', title: text, desc: '', assignee: '', due: '', priority: '',
+        return { id: uid(), colId: '', title: text, desc: '', assignee: '', due: '',
           tags: [], comments: [], discuss: false, public: false, x: x, y: y, color: color,
           author: '', createdAt: now(), updatedAt: now() };
       }
@@ -927,7 +950,7 @@
     // ============================ STATE ====================================
     var doc = null;                 // the whole workspace document
     var ui = { boardId: null, pageId: null, view: 'board', pageEdit: false, agenda: false,
-      search: '', fAssignee: '', fPriority: '', sidebarClosed: false };
+      search: '', fAssignee: '', sidebarClosed: false };
     var sync = { key: localStorage.getItem(LS_KEY) || '', serverVersion: 0, status: 'local',
       dirty: false, pushTimer: null, pushing: false, configured: null };
     var auth = null; // Google sign-in: {token, email, name, given, picture, exp}
@@ -1263,8 +1286,9 @@
         var p = page();
         $('boardEmoji').textContent = p.icon || '📄';
         $('boardNameInput').value = p.title;
-        $('pageReadBtn').classList.toggle('active', !ui.pageEdit);
-        $('pageEditBtn').classList.toggle('active', ui.pageEdit);
+        // One button, two states: "Source" opens the raw markdown, "Done" returns.
+        $('pageSrcBtn').textContent = ui.pageEdit ? 'Done' : 'Source';
+        $('pageSrcBtn').classList.toggle('active', ui.pageEdit);
       } else {
         var b = board();
         $('boardEmoji').textContent = b ? (b.icon || '📋') : '📋';
@@ -1279,22 +1303,23 @@
         $('viewTableBtn').style.display = wb ? 'none' : '';
         $('agendaBtn').style.display = wb ? 'none' : '';
       }
-      // Assignee filter options
-      var fa = $('filterAssignee');
-      var cur = ui.fAssignee;
-      fa.innerHTML = '<option value="">Assignee</option><option value="__none">Unassigned</option>'
-        + doc.members.map(function (m) { return '<option value="' + esc(m.id) + '">' + esc(m.name) + '</option>'; }).join('');
-      fa.value = cur; fa.classList.toggle('on', !!cur);
-      $('filterPriority').classList.toggle('on', !!ui.fPriority);
-      // Member avatars
+      // Member avatars. On a board, clicking an avatar filters to that
+      // person's cards (click again to clear) — no filter dropdowns needed.
+      if (ui.fAssignee && !member(ui.fAssignee)) ui.fAssignee = '';
+      var canFilter = !pageMode && !notesMode;
       var tv = $('topAvatars'); tv.innerHTML = '';
       doc.members.slice(0, 5).forEach(function (m) {
         var el = document.createElement('button');
-        el.className = 'avatar'; el.style.background = m.color;
+        el.className = 'avatar' + (canFilter && ui.fAssignee === m.id ? ' on' : '');
+        el.style.background = m.color;
         el.innerHTML = esc(initials(m.name)) + (m.photo
           ? '<img src="' + esc(m.photo) + '" alt="" referrerpolicy="no-referrer" onerror="this.remove()">' : '');
-        el.title = m.name + (m.id === meId ? ' (you)' : '');
-        el.onclick = openMembersModal;
+        el.title = !canFilter ? m.name + (m.id === meId ? ' (you)' : '')
+          : ui.fAssignee === m.id ? 'Showing only ' + m.name + ' — click to show everyone'
+          : 'Show only ' + m.name + '’s cards';
+        el.onclick = canFilter
+          ? function () { ui.fAssignee = ui.fAssignee === m.id ? '' : m.id; render(); }
+          : openMembersModal;
         tv.appendChild(el);
       });
       if (doc.members.length > 5) {
@@ -1311,9 +1336,7 @@
       }
       return b.cards.filter(function (c) {
         if (ui.agenda && !c.discuss && !nowColIds[c.colId]) return false;
-        if (ui.fAssignee === '__none' && c.assignee) return false;
-        if (ui.fAssignee && ui.fAssignee !== '__none' && c.assignee !== ui.fAssignee) return false;
-        if (ui.fPriority && c.priority !== ui.fPriority) return false;
+        if (ui.fAssignee && c.assignee !== ui.fAssignee) return false;
         if (q) {
           var hay = (c.title + ' ' + c.desc + ' ' + c.tags.join(' ')).toLowerCase();
           if (hay.indexOf(q) === -1) return false;
@@ -1449,20 +1472,22 @@
           var lines = p.body.split('\n');
           if (curRowLn < first || curRowLn > last || curRowLn >= lines.length) return;
           var hasContent = tblParseLine(lines[curRowLn]).some(function (x) { return x !== ''; });
-          if (hasContent && !confirm('Delete this row?')) return;
+          var before = p.body;
           lines.splice(curRowLn, 1);
           p.body = lines.join('\n'); p.updatedAt = now(); mutate();
+          if (hasContent) toastUndo('Row deleted', function () { p.body = before; p.updatedAt = now(); mutate(); });
         };
         colDel.onclick = function () {
           var lines = p.body.split('\n');
           if (tblParseLine(lines[first]).length <= 1) { toast('A table needs at least one column'); return; }
-          if (!confirm('Delete this column and everything in it?')) return;
+          var before = p.body;
           for (var ln = first; ln <= last && ln < lines.length; ln++) {
             var cells = tblParseLine(lines[ln]);
             if (curColIdx >= 0 && curColIdx < cells.length) cells.splice(curColIdx, 1);
             lines[ln] = tblBuildLine(cells);
           }
           p.body = lines.join('\n'); p.updatedAt = now(); mutate();
+          toastUndo('Column deleted', function () { p.body = before; p.updatedAt = now(); mutate(); });
         };
       });
     }
@@ -1624,10 +1649,16 @@
           } else if (act === 'resolve' || act === 'reopen') {
             t.resolved = act === 'resolve'; t.updatedAt = now(); mutate(); openCommentsModal(p);
           } else if (act === 'delete') {
-            if (!confirm('Delete this comment thread?')) return;
+            var idx = doc.comments.indexOf(t);
             entomb(t.id);
-            doc.comments.splice(doc.comments.indexOf(t), 1);
+            doc.comments.splice(idx, 1);
             mutate(); openCommentsModal(p);
+            toastUndo('Comment thread deleted', function () {
+              disentomb(t.id, t);
+              doc.comments.splice(Math.min(idx, doc.comments.length), 0, t);
+              mutate();
+              if ($('overlay').classList.contains('open')) openCommentsModal(p, t.id);
+            });
           }
         };
       });
@@ -1837,12 +1868,12 @@
           var name = a.getAttribute('data-wiki');
           var target = pageByTitle(name);
           if (target) { openPage(target.id); return; }
-          if (confirm('Create the page "' + name + '"?')) {
-            var np = { id: uid(), icon: '📄', title: name, body: '', public: false, createdAt: now(), updatedAt: now() };
-            doc.pages.push(np);
-            mutate({ noRender: true });
-            openPage(np.id, true);
-          }
+          // Notion-style: clicking a missing wikilink just creates the page.
+          var np = { id: uid(), icon: '📄', title: name, body: '', public: false, createdAt: now(), updatedAt: now() };
+          doc.pages.push(np);
+          mutate({ noRender: true });
+          openPage(np.id, true);
+          toast('Created "' + name + '"');
         });
         wrap.appendChild(mdiv);
         applyCommentHighlights(mdiv, p);
@@ -1895,26 +1926,15 @@
           colEl.appendChild(add);
         }
 
-        // Drop targets: cards into this column, or a column dragged over it.
-        body.addEventListener('dragover', function (e) {
-          if (!drag || drag.type !== 'card') return;
-          e.preventDefault(); e.dataTransfer.dropEffect = 'move';
-          showDropHint(body, e.clientY);
-        });
-        body.addEventListener('drop', function (e) {
-          if (!drag || drag.type !== 'card') return;
-          e.preventDefault();
-          dropCard(b, drag.id, col.id, dropIndexFor(body, e.clientY));
-        });
+        // Drop target for column reordering. (Cards use their own
+        // pointer-based drag — see attachCardDrag — so touch works too.)
         colEl.addEventListener('dragover', function (e) {
           if (drag && drag.type === 'col' && drag.id !== col.id) { e.preventDefault(); colEl.classList.add('drag-over-col'); }
-          if (drag && drag.type === 'card') e.preventDefault();
         });
         colEl.addEventListener('dragleave', function () { colEl.classList.remove('drag-over-col'); });
         colEl.addEventListener('drop', function (e) {
           colEl.classList.remove('drag-over-col');
           if (drag && drag.type === 'col' && drag.id !== col.id) { e.preventDefault(); dropColumn(b, drag.id, col.id); }
-          else if (drag && drag.type === 'card') { e.preventDefault(); dropCard(b, drag.id, col.id, dropIndexFor(body, e.clientY)); }
         });
 
         wrap.appendChild(colEl);
@@ -1924,9 +1944,10 @@
       var addCol = document.createElement('div'); addCol.className = 'add-col';
       var acBtn = document.createElement('button'); acBtn.textContent = '＋ Add column';
       acBtn.onclick = function () {
-        var name = prompt('Column name'); if (!name || !name.trim()) return;
-        b.columns.push({ id: uid(), name: name.trim(), color: COL_COLORS[b.columns.length % COL_COLORS.length] });
+        var col = { id: uid(), name: 'New column', color: COL_COLORS[b.columns.length % COL_COLORS.length] };
+        b.columns.push(col);
         b.updatedAt = now(); mutate();
+        openColumnModal(col.id, true); // straight into rename, name pre-selected
       };
       addCol.appendChild(acBtn); wrap.appendChild(addCol);
 
@@ -1990,11 +2011,17 @@
       var del = document.createElement('button'); del.className = 'sticky-tool'; del.textContent = '✕'; del.title = 'Delete note';
       del.onclick = function (e) {
         e.stopPropagation();
-        if (!confirm('Delete this sticky note?')) return;
+        var idx = b.cards.indexOf(c);
         entomb(c.id);
-        b.cards.splice(b.cards.indexOf(c), 1);
+        b.cards.splice(idx, 1);
         b.updatedAt = now();
         mutate();
+        toastUndo('Note deleted', function () {
+          disentomb(c.id, c);
+          b.cards.splice(Math.min(idx, b.cards.length), 0, c);
+          b.updatedAt = now();
+          mutate();
+        });
       };
       tools.appendChild(cmt); tools.appendChild(del);
       el.appendChild(txt); el.appendChild(who); el.appendChild(tools);
@@ -2063,7 +2090,7 @@
 
     function addSticky(b, x, y) {
       var m = me();
-      var c = { id: uid(), colId: '', title: '', desc: '', assignee: '', due: '', priority: '',
+      var c = { id: uid(), colId: '', title: '', desc: '', assignee: '', due: '',
         tags: [], comments: [], discuss: false, public: false,
         x: Math.max(0, Math.round(x)), y: Math.max(0, Math.round(y)),
         color: STICKY_COLORS[Math.floor(Math.random() * STICKY_COLORS.length)],
@@ -2075,7 +2102,7 @@
     }
 
     function cardEl(c) {
-      var el = document.createElement('div'); el.className = 'card'; el.draggable = true; el.dataset.cardId = c.id;
+      var el = document.createElement('div'); el.className = 'card'; el.dataset.cardId = c.id;
       var html = '<div class="card-title">' + esc(c.title) + '</div>';
       if (c.desc) html += '<div class="card-desc-hint">' + esc(c.desc.split('\n')[0]) + '</div>';
       if (c.tags.length) {
@@ -2092,17 +2119,13 @@
       if (c.comments.length) foot += '<span class="comments-n">💬 ' + c.comments.length + '</span>';
       if (c.discuss) foot += '<span class="mini-badge" title="Flagged for the next leadership call">📞</span>';
       if (c.public) foot += '<span class="mini-badge" title="Shown on the public roadmap page">🌐</span>';
-      if (c.priority && PRIO[c.priority]) foot += '<span class="prio" style="color:' + PRIO[c.priority][1] + '">' + PRIO[c.priority][0] + '</span>';
       if (foot) html += '<div class="card-foot">' + foot + '</div>';
       el.innerHTML = html;
-      el.onclick = function () { openCardModal(c.id); };
-      el.addEventListener('dragstart', function (e) {
-        drag = { type: 'card', id: c.id }; el.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-        try { e.dataTransfer.setData('text/plain', c.id); } catch (err) {}
-        e.stopPropagation();
-      });
-      el.addEventListener('dragend', function () { el.classList.remove('dragging'); drag = null; clearDropHints(); });
+      el.onclick = function () {
+        if (el._dragged) { el._dragged = false; return; } // a drag just ended, not a click
+        openCardModal(c.id);
+      };
+      attachCardDrag(el, c);
       return el;
     }
 
@@ -2115,7 +2138,7 @@
       function commit() {
         var t = ta.value.trim();
         if (t) {
-          b.cards.push({ id: uid(), colId: col.id, title: t, desc: '', assignee: '', due: '', priority: '',
+          b.cards.push({ id: uid(), colId: col.id, title: t, desc: '', assignee: '', due: '',
             tags: [], comments: [], discuss: false, public: false, createdAt: now(), updatedAt: now() });
           b.updatedAt = now();
           mutate({ noRender: true });
@@ -2139,6 +2162,109 @@
     }
 
     // Drag-and-drop helpers -------------------------------------------------
+    // Cards drag via pointer events so phones work too (HTML5 drag-and-drop
+    // never fires from touch). Mouse: press and move ~6px to lift. Touch:
+    // hold a quarter second to lift — a plain swipe still scrolls the board,
+    // and a tap still opens the card.
+    var cardDrag = null; // { cardId, el, ghost, offX, offY, x, y, body, scroller, raf }
+    document.addEventListener('touchmove', function (e) {
+      if (cardDrag) e.preventDefault(); // the finger is moving a card, not the page
+    }, { passive: false });
+
+    function attachCardDrag(el, c) {
+      el.addEventListener('contextmenu', function (e) { if (cardDrag) e.preventDefault(); });
+      el.addEventListener('pointerdown', function (e) {
+        if (cardDrag) return;
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        var startX = e.clientX, startY = e.clientY;
+        var touch = e.pointerType !== 'mouse';
+        var pressTimer = touch ? setTimeout(lift, 250) : null;
+
+        function lift() {
+          pressTimer = null;
+          el._dragged = true; // swallow the click that follows pointerup
+          startCardDrag(el, c, startX, startY);
+        }
+        function onMove(ev) {
+          if (!cardDrag) {
+            var dist = Math.abs(ev.clientX - startX) + Math.abs(ev.clientY - startY);
+            if (touch) { // moved before the hold completed → it's a scroll
+              if (dist > 8 && pressTimer) { clearTimeout(pressTimer); cleanup(); }
+              return;
+            }
+            if (dist < 6) return;
+            lift();
+          }
+          moveCardDrag(ev.clientX, ev.clientY);
+        }
+        function onUp() { var was = !!cardDrag; cleanup(); if (was) finishCardDrag(true); }
+        function onCancel() { var was = !!cardDrag; cleanup(); if (was) finishCardDrag(false); }
+        function cleanup() {
+          if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+          document.removeEventListener('pointermove', onMove);
+          document.removeEventListener('pointerup', onUp);
+          document.removeEventListener('pointercancel', onCancel);
+        }
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('pointerup', onUp);
+        document.addEventListener('pointercancel', onCancel);
+      });
+    }
+    function startCardDrag(el, c, px, py) {
+      var r = el.getBoundingClientRect();
+      var ghost = el.cloneNode(true);
+      ghost.classList.add('drag-ghost');
+      ghost.style.width = r.width + 'px';
+      document.body.appendChild(ghost);
+      el.classList.add('dragging');
+      cardDrag = { cardId: c.id, el: el, ghost: ghost, offX: px - r.left, offY: py - r.top,
+        x: px, y: py, body: null, scroller: document.querySelector('.board-scroll'), raf: 0 };
+      moveCardDrag(px, py);
+      cardDrag.raf = requestAnimationFrame(dragAutoScroll);
+    }
+    function moveCardDrag(px, py) {
+      var cd = cardDrag; if (!cd) return;
+      cd.x = px; cd.y = py;
+      cd.ghost.style.left = (px - cd.offX) + 'px';
+      cd.ghost.style.top = (py - cd.offY) + 'px';
+      var under = document.elementFromPoint(px, py); // the ghost is pointer-events:none
+      var colEl = under && under.closest ? under.closest('.col') : null;
+      // Over a gap (between columns, below a short one)? Keep the last hovered
+      // column as the target — the drop hint stays visible, so the drop always
+      // does exactly what the hint shows.
+      if (colEl) cd.body = colEl.querySelector('.col-body');
+      else if (cd.body && !document.contains(cd.body)) cd.body = null;
+      if (cd.body) showDropHint(cd.body, py); else clearDropHints();
+    }
+    // Nudge the board sideways / the column vertically when the pointer nears
+    // an edge, so every column is reachable even on a phone screen.
+    function dragAutoScroll() {
+      var cd = cardDrag; if (!cd) return;
+      if (cd.scroller) {
+        var r = cd.scroller.getBoundingClientRect();
+        if (cd.x < r.left + 48) cd.scroller.scrollLeft -= 11;
+        else if (cd.x > r.right - 48) cd.scroller.scrollLeft += 11;
+      }
+      if (cd.body) {
+        var br = cd.body.getBoundingClientRect();
+        if (cd.y < br.top + 44) cd.body.scrollTop -= 8;
+        else if (cd.y > br.bottom - 44) cd.body.scrollTop += 8;
+      }
+      cd.raf = requestAnimationFrame(dragAutoScroll);
+    }
+    function finishCardDrag(drop) {
+      var cd = cardDrag; cardDrag = null;
+      cancelAnimationFrame(cd.raf);
+      cd.ghost.remove();
+      var b = board();
+      // Compute the drop while the source card still has .dragging (cardNodes
+      // excludes it), then let the re-render rebuild everything.
+      if (drop && cd.body && b) dropCard(b, cd.cardId, cd.body.dataset.colId, dropIndexFor(cd.body, cd.y));
+      else clearDropHints();
+      cd.el.classList.remove('dragging');
+      setTimeout(function () { cd.el._dragged = false; }, 350); // in case no click follows
+    }
+
     function cardNodes(body) {
       return Array.prototype.filter.call(body.children, function (n) {
         return n.classList.contains('card') && !n.classList.contains('dragging');
@@ -2199,11 +2325,11 @@
       var scroll = document.createElement('div'); scroll.className = 'table-scroll';
       var cards = visibleCards(b);
       var html = '<table class="props"><thead><tr><th style="width:38%">Name</th><th>Status</th><th>Assignee</th>'
-        + '<th>Due</th><th>Priority</th><th>Tags</th><th>Updated</th></tr></thead><tbody>';
+        + '<th>Due</th><th>Tags</th><th>Updated</th></tr></thead><tbody>';
       b.columns.forEach(function (col) {
         var rows = cards.filter(function (c) { return c.colId === col.id; });
         if (!rows.length) return;
-        html += '<tr><td colspan="7" class="table-group"><span class="col-dot" style="display:inline-block;background:'
+        html += '<tr><td colspan="6" class="table-group"><span class="col-dot" style="display:inline-block;background:'
           + esc(col.color) + ';margin-right:.45rem;"></span>' + esc(col.name)
           + ' <span class="col-count">' + rows.length + '</span></td></tr>';
         rows.forEach(function (c) {
@@ -2217,7 +2343,6 @@
             + '<td>' + (m ? '<span class="cell-assignee">' + avatarHtml(m) + esc(m.name) + '</span>'
               : '<span style="color:var(--ink-faint)">—</span>') + '</td>'
             + '<td>' + (due ? '<span class="due ' + due.cls + '">' + esc(due.label) + '</span>' : '<span style="color:var(--ink-faint)">—</span>') + '</td>'
-            + '<td>' + (c.priority && PRIO[c.priority] ? '<span class="prio" style="color:' + PRIO[c.priority][1] + '">' + PRIO[c.priority][0] + '</span>' : '<span style="color:var(--ink-faint)">—</span>') + '</td>'
             + '<td>' + c.tags.map(function (t) { var tc = tagColor(t);
                 return '<span class="tag" style="background:' + tc[0] + ';color:' + tc[1] + ';margin-right:.25rem;">' + esc(t) + '</span>'; }).join('') + '</td>'
             + '<td><span class="mono" style="text-transform:none;letter-spacing:0;">' + esc(relTime(c.updatedAt)) + '</span></td></tr>';
@@ -2260,9 +2385,6 @@
         + '<label>Assignee</label><select id="cAssignee"><option value="">Unassigned</option>' + doc.members.map(function (m) {
             return '<option value="' + esc(m.id) + '"' + (m.id === c.assignee ? ' selected' : '') + '>' + esc(m.name) + '</option>'; }).join('') + '</select>'
         + '<label>Due date</label><input type="date" id="cDue" value="' + esc(c.due) + '" />'
-        + '<label>Priority</label><select id="cPrio"><option value="">None</option>'
-          + ['low', 'medium', 'high', 'urgent'].map(function (p) {
-            return '<option value="' + p + '"' + (p === c.priority ? ' selected' : '') + '>' + p.charAt(0).toUpperCase() + p.slice(1) + '</option>'; }).join('') + '</select>'
         + '<label>Tags</label><input id="cTags" placeholder="comma, separated" value="' + esc(c.tags.join(', ')) + '" />'
         + '<label>Next call</label><label class="check-row"><input type="checkbox" id="cDiscuss"' + (c.discuss ? ' checked' : '') + '> 📞 Discuss at next leadership call</label>'
         + (isWb ? '' : '<label>Visibility</label><label class="check-row"><input type="checkbox" id="cPublic"' + (c.public ? ' checked' : '') + '> 🌐 Show on the public roadmap <span class="hint">(title, notes &amp; tags only)</span></label>')
@@ -2292,7 +2414,6 @@
       if ($('cStatus')) $('cStatus').onchange = function () { c.colId = this.value; touch(); render(); };
       $('cAssignee').onchange = function () { c.assignee = this.value; touch(); render(); };
       $('cDue').onchange = function () { c.due = this.value; touch(); render(); };
-      $('cPrio').onchange = function () { c.priority = this.value; touch(); render(); };
       $('cTags').onchange = function () {
         c.tags = this.value.split(',').map(function (t) { return t.trim(); }).filter(Boolean).slice(0, 8);
         touch(); render();
@@ -2323,19 +2444,25 @@
       $('cCommentAdd').onclick = addComment;
       $('cCommentInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') addComment(); });
       $('cDelete').onclick = function () {
-        if (!confirm('Delete "' + c.title + '"?')) return;
+        var idx = b.cards.indexOf(c);
         entomb(c.id);
-        b.cards.splice(b.cards.indexOf(c), 1);
+        b.cards.splice(idx, 1);
         b.updatedAt = now();
         closeModal(); mutate();
+        toastUndo('Card deleted', function () {
+          disentomb(c.id, c);
+          b.cards.splice(Math.min(idx, b.cards.length), 0, c);
+          b.updatedAt = now();
+          mutate();
+        });
       };
     }
 
     // --------------------------- column modal ------------------------------
-    function openColumnModal(colId) {
+    function openColumnModal(colId, isNew) {
       var b = board(); if (!b) return;
       var col = b.columns.find(function (x) { return x.id === colId; }); if (!col) return;
-      var html = '<h2>Edit column</h2>'
+      var html = '<h2>' + (isNew ? 'New column' : 'Edit column') + '</h2>'
         + '<label class="field-label">Name</label><input class="text-input" id="colName" value="' + esc(col.name) + '" />'
         + '<label class="field-label">Color</label><div class="color-row" id="colColors">'
         + COL_COLORS.map(function (cc) {
@@ -2344,6 +2471,8 @@
         + '<div class="modal-foot"><button class="btn-sm danger" id="colDelete">Delete column</button>'
         + '<button class="btn-sm primary" id="colSave">Save</button></div>';
       openModal(html, true);
+      if (isNew) { $('colName').focus(); $('colName').select(); }
+      $('colName').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('colSave').click(); });
       var picked = col.color;
       $('colColors').querySelectorAll('button').forEach(function (btn) {
         btn.onclick = function () {
@@ -2362,15 +2491,18 @@
       $('colDelete').onclick = function () {
         var cardsIn = b.cards.filter(function (c) { return c.colId === col.id; });
         if (b.columns.length === 1) { toast('A board needs at least one column'); return; }
-        var msg = cardsIn.length
-          ? 'Delete "' + col.name + '"? Its ' + cardsIn.length + ' card(s) move to the first column.'
-          : 'Delete "' + col.name + '"?';
-        if (!confirm(msg)) return;
-        b.columns.splice(b.columns.indexOf(col), 1);
+        var idx = b.columns.indexOf(col);
+        b.columns.splice(idx, 1);
         var first = b.columns[0];
         cardsIn.forEach(function (c) { c.colId = first.id; c.updatedAt = now(); });
         b.updatedAt = now();
         closeModal(); mutate();
+        toastUndo('Column deleted' + (cardsIn.length ? ' — its cards moved to ' + first.name : ''), function () {
+          b.columns.splice(Math.min(idx, b.columns.length), 0, col);
+          cardsIn.forEach(function (c) { c.colId = col.id; c.updatedAt = now(); });
+          b.updatedAt = now();
+          mutate();
+        });
       };
     }
 
@@ -2401,11 +2533,17 @@
       };
       $('bDelete').onclick = function () {
         if (doc.boards.length === 1) { toast('Keep at least one board'); return; }
-        if (!confirm('Delete board "' + b.name + '" and all its cards?')) return;
+        var idx = doc.boards.indexOf(b);
         entomb(b.id);
-        doc.boards.splice(doc.boards.indexOf(b), 1);
+        doc.boards.splice(idx, 1);
         ui.boardId = doc.boards[0].id;
         closeModal(); mutate();
+        toastUndo('Board "' + b.name + '" deleted', function () {
+          disentomb(b.id, b);
+          doc.boards.splice(Math.min(idx, doc.boards.length), 0, b);
+          ui.boardId = b.id;
+          mutate();
+        });
       };
     }
     function openPageMenu() {
@@ -2434,11 +2572,17 @@
         closeModal(); mutate();
       };
       $('pDelete').onclick = function () {
-        if (!confirm('Delete the page "' + p.title + '"?')) return;
+        var idx = doc.pages.indexOf(p);
         entomb(p.id);
-        doc.pages.splice(doc.pages.indexOf(p), 1);
+        doc.pages.splice(idx, 1);
         ui.pageId = null; ui.view = 'board';
         closeModal(); mutate();
+        toastUndo('Page "' + p.title + '" deleted', function () {
+          disentomb(p.id, p);
+          doc.pages.splice(Math.min(idx, doc.pages.length), 0, p);
+          openPage(p.id);
+          mutate();
+        });
       };
     }
 
@@ -2457,12 +2601,21 @@
       document.querySelectorAll('[data-del]').forEach(function (btn) {
         btn.onclick = function () {
           var m = member(btn.dataset.del); if (!m) return;
-          if (!confirm('Remove ' + m.name + ' from the team list? (Their cards stay, unassigned.)')) return;
+          var idx = doc.members.indexOf(m), wasMe = meId === m.id, had = [];
           entomb(m.id);
-          doc.boards.forEach(function (bd) { bd.cards.forEach(function (c) { if (c.assignee === m.id) { c.assignee = ''; c.updatedAt = now(); } }); });
-          doc.members.splice(doc.members.indexOf(m), 1);
-          if (meId === m.id) { meId = ''; localStorage.removeItem(LS_ME); }
+          doc.boards.forEach(function (bd) { bd.cards.forEach(function (c) {
+            if (c.assignee === m.id) { had.push(c); c.assignee = ''; c.updatedAt = now(); } }); });
+          doc.members.splice(idx, 1);
+          if (wasMe) { meId = ''; localStorage.removeItem(LS_ME); }
           mutate(); openMembersModal();
+          toastUndo(m.name + ' removed', function () {
+            disentomb(m.id);
+            doc.members.splice(Math.min(idx, doc.members.length), 0, m);
+            had.forEach(function (c) { c.assignee = m.id; c.updatedAt = now(); });
+            if (wasMe) { meId = m.id; localStorage.setItem(LS_ME, meId); }
+            mutate();
+            if ($('overlay').classList.contains('open')) openMembersModal();
+          });
         };
       });
     }
@@ -2490,39 +2643,15 @@
         + '<input class="text-input" id="syncKey" type="password" placeholder="Shared team passphrase" value="' + esc(sync.key) + '" />'
         + '<p class="help-note">A shared passphrase for access without a FinMango account — ask Scott. Note: names and photos come from Google sign-in, so key-only edits aren\'t attributed to a person.</p>'
         + '<p class="help-note">Either door syncs every change to a shared Google Sheet (free) and updates everyone\'s workspace within seconds. First-time backend setup: <code>docs/TEAM-BOARD-SETUP.md</code>.</p>'
+        + '<div class="m-section">Backup</div>'
+        + '<div style="display:flex;gap:.5rem;flex-wrap:wrap;">'
+        + '<button class="btn-sm ghost" id="exportBtn" style="border:1px dashed var(--ink-line);">⬇ Download backup</button>'
+        + '<button class="btn-sm ghost" id="importBtn" style="border:1px dashed var(--ink-line);">⬆ Restore from file…</button></div>'
+        + '<p class="help-note">The whole workspace as a JSON file — handy before big reorganizations. Every synced version is also kept in the storage Sheet (<strong>File → Version history</strong> in Google Sheets).</p>'
+        + '<input type="file" id="importFile" accept="application/json" style="display:none;" />'
         + '<div class="modal-foot">'
         + (sync.key ? '<button class="btn-sm danger" id="syncOff">Forget key</button>' : '<span></span>')
         + '<button class="btn-sm primary" id="syncOn">' + (sync.key ? 'Update key' : 'Connect with key') + '</button></div>';
-      openModal(html, true);
-      renderGsiButton('gsiBtnSync');
-      var so = $('gsiSignOut');
-      if (so) so.onclick = signOutGoogle;
-      $('syncOn').onclick = function () {
-        var k = $('syncKey').value.trim();
-        if (!k) { toast('Enter the team key first'); return; }
-        sync.key = k; localStorage.setItem(LS_KEY, k);
-        sync.serverVersion = 0;
-        closeModal(); pullLoad(true);
-      };
-      var off = $('syncOff');
-      if (off) off.onclick = function () {
-        sync.key = ''; localStorage.removeItem(LS_KEY);
-        sync.serverVersion = 0; sync.configured = null;
-        if (!authValid()) setSyncStatus('local');
-        closeModal();
-        toast('Key forgotten' + (authValid() ? ' — still signed in with Google' : ' — changes stay on this device'));
-      };
-    }
-
-    // --------------------------- backup modal ------------------------------
-    function openBackupModal() {
-      var html = '<h2>Backup / restore</h2>'
-        + '<p class="help-note">Download the whole workspace as a JSON file, or restore from one. Handy before big reorganizations.</p>'
-        + '<div class="modal-foot" style="border:none;margin-top:.8rem;padding:0;">'
-        + '<button class="btn-sm ghost" id="importBtn">⬆ Restore from file…</button>'
-        + '<button class="btn-sm primary" id="exportBtn">⬇ Download backup</button></div>'
-        + '<p class="help-note" style="margin-top:1rem;">🛟 Disaster recovery: every version of the workspace is kept in the storage Sheet — <strong>File → Version history</strong> in Google Sheets restores any earlier state.</p>'
-        + '<input type="file" id="importFile" accept="application/json" style="display:none;" />';
       openModal(html, true);
       $('exportBtn').onclick = function () {
         var blob = new Blob([JSON.stringify(doc, null, 2)], { type: 'application/json' });
@@ -2548,8 +2677,27 @@
         };
         reader.readAsText(f);
       };
+      renderGsiButton('gsiBtnSync');
+      var so = $('gsiSignOut');
+      if (so) so.onclick = signOutGoogle;
+      $('syncOn').onclick = function () {
+        var k = $('syncKey').value.trim();
+        if (!k) { toast('Enter the team key first'); return; }
+        sync.key = k; localStorage.setItem(LS_KEY, k);
+        sync.serverVersion = 0;
+        closeModal(); pullLoad(true);
+      };
+      var off = $('syncOff');
+      if (off) off.onclick = function () {
+        sync.key = ''; localStorage.removeItem(LS_KEY);
+        sync.serverVersion = 0; sync.configured = null;
+        if (!authValid()) setSyncStatus('local');
+        closeModal();
+        toast('Key forgotten' + (authValid() ? ' — still signed in with Google' : ' — changes stay on this device'));
+      };
     }
 
+    // --------------------------- backup modal ------------------------------
     // ---------------------- ambassador notes (review tab) -------------------
     // The full write.html → review → publish pipeline, living inside HQ as a
     // first-class tab. The backend bridges to the posts Apps Script with a
@@ -2973,14 +3121,20 @@
     function closeSidebarOnMobile() {
       if (window.innerWidth <= 760) { ui.sidebarClosed = true; persistLocal(); renderSidebar(); }
     }
-    $('addBoardBtn').onclick = function () {
-      var name = prompt('Board name'); if (!name || !name.trim()) return;
-      var wb = confirm('Make "' + name.trim() + '" a whiteboard?\n\nOK = whiteboard (freeform sticky notes)\nCancel = kanban board (columns & cards)');
+    // Creating things is instant: no prompt() dialogs anywhere. New items are
+    // born "Untitled" with the cursor already in the name — type, Enter, done.
+    function focusRename() {
+      setTimeout(function () {
+        var inp = $('boardNameInput');
+        inp.focus(); inp.select();
+      }, 60);
+    }
+    function createBoard(wb) {
       var bId = uid();
       doc.boards.push(wb
-        ? { id: bId, icon: '💡', name: name.trim().slice(0, 60), type: 'canvas', updatedAt: now(), columns: [], cards: [] }
+        ? { id: bId, icon: '💡', name: 'Untitled', type: 'canvas', updatedAt: now(), columns: [], cards: [] }
         : {
-          id: bId, icon: EMOJIS[doc.boards.length % EMOJIS.length], name: name.trim().slice(0, 60), updatedAt: now(),
+          id: bId, icon: EMOJIS[doc.boards.length % EMOJIS.length], name: 'Untitled', updatedAt: now(),
           columns: [
             { id: uid(), name: 'To do', color: COL_COLORS[0] },
             { id: uid(), name: 'In Progress', color: COL_COLORS[1] },
@@ -2988,16 +3142,28 @@
           ],
           cards: []
         });
+      closeModal();
       openBoard(bId);
       mutate();
+      focusRename();
+    }
+    $('addBoardBtn').onclick = function () {
+      openModal('<h2>New board</h2>'
+        + '<button class="choice-btn" id="nbKanban"><span class="big">📋</span><span><span class="t">Board</span><br>'
+        + '<span class="d">Columns and cards — tasks, roadmaps, pipelines.</span></span></button>'
+        + '<button class="choice-btn" id="nbCanvas"><span class="big">💡</span><span><span class="t">Whiteboard</span><br>'
+        + '<span class="d">Freeform sticky notes — brainstorms and idea dumps.</span></span></button>', true);
+      $('nbKanban').onclick = function () { createBoard(false); };
+      $('nbCanvas').onclick = function () { createBoard(true); };
     };
     $('addPageBtn').onclick = function () {
-      var name = prompt('Page title'); if (!name || !name.trim()) return;
-      var p = { id: uid(), icon: '📄', title: name.trim().slice(0, 80), body: '', public: false, createdAt: now(), updatedAt: now() };
+      var p = { id: uid(), icon: '📄', title: 'Untitled', body: '', public: false, createdAt: now(), updatedAt: now() };
       doc.pages.push(p);
       mutate({ noRender: true });
       openPage(p.id, true);
+      focusRename();
     };
+    $('boardNameInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') this.blur(); });
     $('boardNameInput').addEventListener('change', function () {
       var v = this.value.trim();
       if (inPageMode()) {
@@ -3012,16 +3178,12 @@
     $('boardMenuBtn').onclick = openBoardMenu;
     $('viewBoardBtn').onclick = function () { ui.view = 'board'; persistLocal(); render(); };
     $('viewTableBtn').onclick = function () { ui.view = 'table'; persistLocal(); render(); };
-    $('pageReadBtn').onclick = function () { ui.pageEdit = false; render(); };
-    $('pageEditBtn').onclick = function () { ui.pageEdit = true; render(); };
+    $('pageSrcBtn').onclick = function () { ui.pageEdit = !ui.pageEdit; render(); };
     $('agendaBtn').onclick = function () { ui.agenda = !ui.agenda; render(); };
     $('searchInput').addEventListener('input', function () { ui.search = this.value; renderView(); });
-    $('filterAssignee').addEventListener('change', function () { ui.fAssignee = this.value; render(); });
-    $('filterPriority').addEventListener('change', function () { ui.fPriority = this.value; render(); });
     $('membersBtn').onclick = openMembersModal;
     $('notesNavBtn').onclick = openNotesView;
     $('syncBtn').onclick = openSyncModal;
-    $('backupBtn').onclick = openBackupModal;
     $('qfHint').onclick = openQuickFind;
     document.addEventListener('keydown', function (e) {
       if (!booted) return;
