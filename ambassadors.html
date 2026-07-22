@@ -536,6 +536,78 @@
       color: var(--paper-faint);
     }
 
+    /* Latest published Ambassador Notes — a quiet strip under the stat lattice */
+    .stats-notes {
+      max-width: var(--max-width);
+      margin: 1.75rem auto 0;
+    }
+    .stats-notes-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: .7rem;
+    }
+    .stats-notes-label {
+      font-family: var(--font-mono);
+      font-size: .58rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: var(--paper-faint);
+    }
+    .stats-notes-all {
+      font-family: var(--font-mono);
+      font-size: .58rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--paper-faint);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color .2s ease;
+    }
+    .stats-notes-all:hover { color: var(--orange); }
+    .stats-notes-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--paper-line);
+      border: 1px solid var(--paper-line);
+    }
+    .stats-note {
+      background: var(--ink);
+      padding: .85rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+      text-decoration: none;
+      min-width: 0;
+      transition: background .2s ease;
+    }
+    .stats-note:hover { background: rgba(250, 250, 247, .05); }
+    .stats-note-title {
+      font-size: .8rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--paper);
+      opacity: .85;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .stats-note:hover .stats-note-title { opacity: 1; }
+    .stats-note-meta {
+      font-family: var(--font-mono);
+      font-size: .56rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--paper-faint);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     /* ----------------------------------------------------------
        COHORTS — the heart of the page, kept as portrait grids
        ---------------------------------------------------------- */
@@ -1175,6 +1247,10 @@
       .stats-bar { padding: 3.5rem var(--gutter); }
       .stats-bar-inner { grid-template-columns: repeat(2, 1fr); }
       .stat-item { padding: 1.4rem 1.25rem; }
+      .stats-notes { margin-top: 1.5rem; }
+      .stats-notes-list { grid-template-columns: 1fr; }
+      .stats-note { padding: .75rem .9rem; }
+      .stats-note-title { -webkit-line-clamp: 1; }
 
       .cohort-section { padding: 4.5rem var(--gutter) 3.5rem; }
       .cohort-section + .cohort-section { padding-top: 3.5rem; }
@@ -1230,7 +1306,9 @@
       .hero-cta, .cta-actions { flex-direction: column; }
       .hero-cta .btn-primary, .hero-cta .btn-secondary,
       .cta-actions .btn-primary, .cta-actions .btn-secondary { width: 100%; justify-content: center; }
-      .stats-bar-inner { grid-template-columns: 1fr; }
+      .stats-bar { padding: 2.75rem var(--gutter); }
+      .stat-item { padding: 1.1rem 1rem; gap: .35rem; }
+      .stat-number { font-size: 1.8rem; }
       .cohort-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 1rem; }
       .ambassador-name { font-size: .84rem; }
     }
@@ -1434,6 +1512,13 @@
       <div class="stat-item"><div class="stat-number">15<em>+</em></div><div class="stat-label">Countries</div></div>
       <div class="stat-item"><div class="stat-number">4</div><div class="stat-label">Cohorts</div></div>
       <div class="stat-item"><div class="stat-number">300<em>+</em></div><div class="stat-label">Annual applicants</div></div>
+    </div>
+    <div class="stats-notes" id="statsNotes" hidden>
+      <div class="stats-notes-head">
+        <span class="stats-notes-label">Latest Ambassador Notes</span>
+        <a class="stats-notes-all" href="posts.html">All notes →</a>
+      </div>
+      <div class="stats-notes-list" id="statsNotesList"></div>
     </div>
   </section>
 
@@ -1767,6 +1852,27 @@
         document.body.style.overflow = '';
       }
     });
+
+    // Latest Ambassador Notes — quiet strip in the stats band. Progressive
+    // enhancement: the strip stays hidden unless published notes load.
+    (async function () {
+      try {
+        const res = await fetch('/api/posts?action=published');
+        const data = await res.json();
+        const posts = ((data && data.posts) || []).filter(p => p && p.id && p.title).slice(0, 3);
+        if (!posts.length) return;
+        const esc = s => (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const fmtDate = iso => { try { return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); } catch { return ''; } };
+        document.getElementById('statsNotesList').innerHTML = posts.map(p => {
+          const meta = [p.authorName, fmtDate(p.publishedAt || p.createdAt)].filter(Boolean).join(' · ');
+          return '<a class="stats-note" href="/post?id=' + encodeURIComponent(p.id) + '">' +
+            '<span class="stats-note-title">' + esc(p.title) + '</span>' +
+            (meta ? '<span class="stats-note-meta">' + esc(meta) + '</span>' : '') +
+          '</a>';
+        }).join('');
+        document.getElementById('statsNotes').hidden = false;
+      } catch (e) { /* leave the strip hidden */ }
+    })();
 
     // FAQ Accordion
     document.querySelectorAll('.faq-question').forEach(btn => {
