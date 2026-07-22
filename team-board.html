@@ -255,11 +255,13 @@
     .tbl-del { position: absolute; display: none; width: 18px; height: 18px; line-height: 16px; text-align: center; font-size: .68rem;
       border-radius: 50%; background: #fff; border: 1px solid var(--ink-line); color: var(--ink-faint); z-index: 4; padding: 0; }
     .tbl-del:hover { color: #C62828; border-color: #C62828; background: #fff; }
-    .add-block { margin-top: 1.4rem; position: relative; padding-bottom: 2rem; }
+    .add-block { margin-top: 1.4rem; position: relative; }
     .add-block-btn { color: var(--ink-faint); font-weight: 600; font-size: .84rem; padding: .35rem .8rem;
       border: 1px dashed var(--ink-line); border-radius: 7px; }
     .add-block-btn:hover { color: var(--orange-deep); border-color: var(--orange); }
-    .add-block-menu { position: absolute; bottom: calc(100% + 6px); left: 0; background: #fff; border: 1px solid var(--ink-line-soft);
+    /* opens downward: upward would clip under the topbar on short pages
+       (a scroll container can never scroll up into its own overflow) */
+    .add-block-menu { position: absolute; top: calc(100% + 6px); left: 0; background: #fff; border: 1px solid var(--ink-line-soft);
       border-radius: 8px; box-shadow: var(--shadow-pop); padding: .25rem; display: flex; flex-direction: column; z-index: 20; min-width: 170px; }
     .add-block-menu button { text-align: left; padding: .45rem .65rem; border-radius: 5px; font-size: .85rem; font-weight: 600; }
     .add-block-menu button:hover { background: var(--ink-line-soft); }
@@ -1259,14 +1261,27 @@
         btn.onclick = function () { openBoard(b.id); };
         list.appendChild(btn);
       });
+      // Pages render as a tree: a page with a parentId sits indented under its
+      // parent. Orphans (parent deleted on another device) surface at the top
+      // level instead of vanishing; the visited set guards against merge cycles.
       var plist = $('pageList'); plist.innerHTML = '';
-      (doc.pages || []).forEach(function (p) {
+      var allPages = doc.pages || [];
+      var pageIds = {}; allPages.forEach(function (x) { pageIds[x.id] = true; });
+      var seen = {};
+      function pageRow(p, depth) {
+        if (seen[p.id]) return;
+        seen[p.id] = true;
         var btn = document.createElement('button');
         btn.className = 'side-item' + (inPageMode() && p.id === ui.pageId ? ' active' : '');
+        if (depth) btn.style.paddingLeft = (0.5 + depth * 1.15) + 'rem';
         btn.innerHTML = '<span class="emoji">' + esc(p.icon || '📄') + '</span><span class="label">' + esc(p.title)
           + '</span>' + (p.public ? '<span class="count" title="On the public roadmap page">🌐</span>' : '');
         btn.onclick = function () { openPage(p.id); };
         plist.appendChild(btn);
+        allPages.forEach(function (ch) { if (ch.parentId === p.id) pageRow(ch, depth + 1); });
+      }
+      allPages.forEach(function (p) {
+        if (!p.parentId || !pageIds[p.parentId]) pageRow(p, 0);
       });
       $('notesNavBtn').classList.toggle('active', ui.view === 'notes');
       updateNotesCount();
@@ -1752,7 +1767,11 @@
         + '<button data-add="divider">― Divider</button></div>';
       var menu = wrap.querySelector('.add-block-menu');
       wrap.querySelector('.add-block-btn').onclick = function () {
-        menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
+        var open = menu.style.display === 'none';
+        menu.style.display = open ? 'flex' : 'none';
+        // Near the bottom of a long page the menu extends past the fold —
+        // nudge the scroller so every option is on screen.
+        if (open) setTimeout(function () { menu.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, 0);
       };
       menu.querySelectorAll('[data-add]').forEach(function (btn) {
         btn.onclick = function () {
@@ -2546,11 +2565,31 @@
         });
       };
     }
+    // Every page that may not become p's parent: itself and its descendants
+    // (nesting under your own child would orphan the whole subtree in a loop).
+    function pageDescendants(p) {
+      var out = {}; out[p.id] = true;
+      var grew = true;
+      while (grew) {
+        grew = false;
+        (doc.pages || []).forEach(function (x) {
+          if (x.parentId && out[x.parentId] && !out[x.id]) { out[x.id] = true; grew = true; }
+        });
+      }
+      return out;
+    }
     function openPageMenu() {
       var p = page(); if (!p) return;
+      var blocked = pageDescendants(p);
       var html = '<h2>Page options</h2>'
         + '<label class="field-label">Icon</label><div class="emoji-grid" id="pEmojis">'
         + EMOJIS.map(function (e) { return '<button data-e="' + e + '"' + (e === p.icon ? ' class="sel"' : '') + '>' + e + '</button>'; }).join('') + '</div>'
+        + '<label class="field-label" style="margin-top:1rem;">Nest under</label>'
+        + '<select class="text-input" id="pParent"><option value="">— Top level —</option>'
+        + (doc.pages || []).filter(function (x) { return !blocked[x.id]; }).map(function (x) {
+            return '<option value="' + esc(x.id) + '"' + (x.id === p.parentId ? ' selected' : '') + '>'
+              + esc((x.icon || '📄') + ' ' + x.title) + '</option>'; }).join('') + '</select>'
+        + '<p class="help-note">Make this a sub-page of another page — it tucks in underneath it in the sidebar.</p>'
         + '<label class="field-label" style="margin-top:1rem;">Visibility</label>'
         + '<label class="check-row"><input type="checkbox" id="pPublic"' + (p.public ? ' checked' : '') + '> 🌐 Show on the public roadmap page</label>'
         + '<p class="help-note">Public pages appear (rendered) on finmango.org/roadmap for anyone to read. Everything else stays team-only.</p>'
@@ -2568,11 +2607,15 @@
       $('pSave').onclick = function () {
         p.icon = icon;
         p.public = $('pPublic').checked;
+        p.parentId = $('pParent').value || '';
         p.updatedAt = now();
         closeModal(); mutate();
       };
       $('pDelete').onclick = function () {
         var idx = doc.pages.indexOf(p);
+        // Sub-pages survive: they move up to the deleted page's own parent.
+        var kids = doc.pages.filter(function (x) { return x.parentId === p.id; });
+        kids.forEach(function (k) { k.parentId = p.parentId || ''; k.updatedAt = now(); });
         entomb(p.id);
         doc.pages.splice(idx, 1);
         ui.pageId = null; ui.view = 'board';
@@ -2580,6 +2623,7 @@
         toastUndo('Page "' + p.title + '" deleted', function () {
           disentomb(p.id, p);
           doc.pages.splice(Math.min(idx, doc.pages.length), 0, p);
+          kids.forEach(function (k) { k.parentId = p.id; k.updatedAt = now(); });
           openPage(p.id);
           mutate();
         });
@@ -3185,6 +3229,12 @@
     $('notesNavBtn').onclick = openNotesView;
     $('syncBtn').onclick = openSyncModal;
     $('qfHint').onclick = openQuickFind;
+    // Clicking anywhere outside an open ＋ Add menu closes it.
+    document.addEventListener('click', function (e) {
+      document.querySelectorAll('.add-block-menu').forEach(function (m) {
+        if (m.style.display !== 'none' && !m.parentNode.contains(e.target)) m.style.display = 'none';
+      });
+    });
     document.addEventListener('keydown', function (e) {
       if (!booted) return;
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
@@ -3200,7 +3250,10 @@
         }
         openQuickFind(); return;
       }
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape') {
+        closeModal();
+        document.querySelectorAll('.add-block-menu').forEach(function (m) { m.style.display = 'none'; });
+      }
     });
 
     // ============================== BOOT / GATE ============================
