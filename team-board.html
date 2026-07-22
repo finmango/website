@@ -255,11 +255,13 @@
     .tbl-del { position: absolute; display: none; width: 18px; height: 18px; line-height: 16px; text-align: center; font-size: .68rem;
       border-radius: 50%; background: #fff; border: 1px solid var(--ink-line); color: var(--ink-faint); z-index: 4; padding: 0; }
     .tbl-del:hover { color: #C62828; border-color: #C62828; background: #fff; }
-    .add-block { margin-top: 1.4rem; position: relative; padding-bottom: 2rem; }
+    .add-block { margin-top: 1.4rem; position: relative; }
     .add-block-btn { color: var(--ink-faint); font-weight: 600; font-size: .84rem; padding: .35rem .8rem;
       border: 1px dashed var(--ink-line); border-radius: 7px; }
     .add-block-btn:hover { color: var(--orange-deep); border-color: var(--orange); }
-    .add-block-menu { position: absolute; bottom: calc(100% + 6px); left: 0; background: #fff; border: 1px solid var(--ink-line-soft);
+    /* opens downward: upward would clip under the topbar on short pages
+       (a scroll container can never scroll up into its own overflow) */
+    .add-block-menu { position: absolute; top: calc(100% + 6px); left: 0; background: #fff; border: 1px solid var(--ink-line-soft);
       border-radius: 8px; box-shadow: var(--shadow-pop); padding: .25rem; display: flex; flex-direction: column; z-index: 20; min-width: 170px; }
     .add-block-menu button { text-align: left; padding: .45rem .65rem; border-radius: 5px; font-size: .85rem; font-weight: 600; }
     .add-block-menu button:hover { background: var(--ink-line-soft); }
@@ -1752,7 +1754,11 @@
         + '<button data-add="divider">― Divider</button></div>';
       var menu = wrap.querySelector('.add-block-menu');
       wrap.querySelector('.add-block-btn').onclick = function () {
-        menu.style.display = menu.style.display === 'none' ? 'flex' : 'none';
+        var open = menu.style.display === 'none';
+        menu.style.display = open ? 'flex' : 'none';
+        // Near the bottom of a long page the menu extends past the fold —
+        // nudge the scroller so every option is on screen.
+        if (open) setTimeout(function () { menu.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, 0);
       };
       menu.querySelectorAll('[data-add]').forEach(function (btn) {
         btn.onclick = function () {
@@ -3185,6 +3191,12 @@
     $('notesNavBtn').onclick = openNotesView;
     $('syncBtn').onclick = openSyncModal;
     $('qfHint').onclick = openQuickFind;
+    // Clicking anywhere outside an open ＋ Add menu closes it.
+    document.addEventListener('click', function (e) {
+      document.querySelectorAll('.add-block-menu').forEach(function (m) {
+        if (m.style.display !== 'none' && !m.parentNode.contains(e.target)) m.style.display = 'none';
+      });
+    });
     document.addEventListener('keydown', function (e) {
       if (!booted) return;
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
@@ -3200,7 +3212,10 @@
         }
         openQuickFind(); return;
       }
-      if (e.key === 'Escape') closeModal();
+      if (e.key === 'Escape') {
+        closeModal();
+        document.querySelectorAll('.add-block-menu').forEach(function (m) { m.style.display = 'none'; });
+      }
     });
 
     // ============================== BOOT / GATE ============================
