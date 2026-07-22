@@ -66,6 +66,10 @@
     /* dragging a page row to re-nest it */
     .side-item.dragging { opacity: .4; }
     .side-item.drop-into, .side-label.drop-into { outline: 2px solid var(--orange); outline-offset: -2px; border-radius: 6px; }
+    /* while dragging a nested page, the "Pages" header advertises itself as
+       the way back out of the tree */
+    .side-label.drop-hint-zone { outline: 1.5px dashed var(--orange); border-radius: 6px; }
+    .side-label.drop-hint-zone .mono { color: var(--orange-deep); }
     .side-item.drag-ghost-row { position: fixed; z-index: 400; pointer-events: none; background: #fff;
       box-shadow: var(--shadow-pop); border-radius: 6px; opacity: .95; margin: 0; }
     .side-foot { margin-top: auto; padding: .55rem; border-top: 1px solid var(--ink-line-soft); }
@@ -1376,7 +1380,14 @@
       document.body.appendChild(ghost);
       btn.classList.add('dragging');
       pageDrag = { page: p, el: btn, ghost: ghost, x: px, y: py, target: null,
-        scroller: document.querySelector('.side-scroll'), raf: 0 };
+        scroller: document.querySelector('.side-scroll'), raf: 0, lblOld: '' };
+      // Dragging a sub-page? Show the way out while the drag lasts.
+      if (p.parentId) {
+        var lbl = $('pagesLabel').querySelector('.mono');
+        pageDrag.lblOld = lbl.textContent;
+        lbl.textContent = 'Drop here → top level';
+        $('pagesLabel').classList.add('drop-hint-zone');
+      }
       movePageDrag(px, py);
       pageDrag.raf = requestAnimationFrame(pageDragAutoScroll);
     }
@@ -1398,9 +1409,11 @@
         pd.target = { row: row };
         return;
       }
-      var label = under.closest('#pagesLabel');
-      if (label) {
-        label.classList.add('drop-into');
+      // "Out of the tree" targets: the Pages header, or any empty stretch of
+      // the sidebar (below the lists) — dragging a sub-page out just works.
+      if (under.closest('#pagesLabel') || under.id === 'pageList'
+        || under.classList.contains('side-scroll')) {
+        $('pagesLabel').classList.add('drop-into');
         pd.target = { top: true };
       }
     }
@@ -1418,25 +1431,34 @@
       cancelAnimationFrame(pd.raf);
       pd.ghost.remove();
       pd.el.classList.remove('dragging');
+      if (pd.lblOld) {
+        $('pagesLabel').querySelector('.mono').textContent = pd.lblOld;
+        $('pagesLabel').classList.remove('drop-hint-zone');
+      }
       var target = pd.target;
       clearPageDropMarks();
       setTimeout(function () { pd.el._dragged = false; }, 350); // in case no click follows
       if (!drop || !target) return;
       var p = pd.page;
-      if (target.top) {
-        if (!p.parentId) return;
-        p.parentId = ''; p.updatedAt = now();
+      var prev = p.parentId || '';
+      function moveTo(parentId, msg) {
+        p.parentId = parentId; p.updatedAt = now();
         mutate();
-        toast('Moved to top level');
+        toastUndo(msg, function () {
+          p.parentId = prev; p.updatedAt = now();
+          mutate();
+        });
+      }
+      if (target.top) {
+        if (!prev) return;
+        moveTo('', 'Moved to top level');
         return;
       }
       var parent = (doc.pages || []).find(function (x) { return x.id === target.row.dataset.pageId; });
       if (!parent || parent.id === p.id) return;
       if (pageDescendants(p)[parent.id]) { toast('Can’t nest a page inside its own sub-pages'); return; }
-      if (p.parentId === parent.id) return;
-      p.parentId = parent.id; p.updatedAt = now();
-      mutate();
-      toast('Moved under “' + parent.title + '”');
+      if (prev === parent.id) return;
+      moveTo(parent.id, 'Moved under “' + parent.title + '”');
     }
 
     function renderTopbar() {
