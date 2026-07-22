@@ -246,9 +246,10 @@
     .md [contenteditable]:hover { background: rgba(255,107,53,.05); cursor: text; }
     .md [contenteditable]:focus { outline: 2px solid var(--orange); outline-offset: -2px; background: #fff; }
     .md [data-src]:not(.task):hover { background: rgba(255,107,53,.04); border-radius: 4px; cursor: text; }
-    .block-editor { width: 100%; border: 1px solid var(--orange); border-radius: 6px; background: #fff; padding: .45rem .6rem;
-      font-family: var(--font-mono); font-size: .85rem; line-height: 1.6; resize: none; margin: .3rem 0; display: block; }
-    .block-editor:focus { outline: none; }
+    /* blocks being edited in place (WYSIWYG) + the fresh "keep typing" line */
+    .md .block-editing { outline: 2px solid var(--orange); outline-offset: -2px; background: #fff; border-radius: 4px; }
+    .md .ghost-block { min-height: 1.5em; }
+    .md .ghost-block:empty::before { content: 'Keep typing — click away when done'; color: var(--ink-faint); }
     .task-edit { opacity: 0; margin-left: .45rem; color: var(--ink-faint); font-size: .75rem; transition: opacity .12s; }
     li.task:hover .task-edit { opacity: .7; }
     .task-edit:hover { color: var(--orange-deep); }
@@ -1586,6 +1587,7 @@
       }
       mdiv.addEventListener('mouseup', function () {
         setTimeout(function () {
+          if (fmtRegion) { hideCmtPill(); return; } // editing: the B/I/🔗 pill owns the selection
           var sel = window.getSelection();
           if (!sel || sel.isCollapsed || !sel.rangeCount) { hideCmtPill(); return; }
           if (!mdiv.contains(sel.anchorNode) || !mdiv.contains(sel.focusNode)) { hideCmtPill(); return; }
@@ -1687,44 +1689,203 @@
     }
 
     // -------------- click-any-block-to-edit (read view) --------------------
-    // Clicking a paragraph, heading, list item, or quote swaps it for a small
-    // inline editor holding just that block's source lines; commit on blur or
-    // Enter (single-line blocks), Escape cancels, emptying the text deletes
-    // the block. The page never leaves reading view.
+    // Clicking a paragraph, heading, list item, or quote makes that block
+    // editable right where it is, fully rendered — bold looks bold while you
+    // type, exactly like the ambassador-notes editor. No markdown on screen:
+    // select text and a B / I / 🔗 pill appears; Ctrl+B / Ctrl+I work too.
+    // Enter commits and keeps you writing in a fresh block below; Shift+Enter
+    // is a line break; Escape cancels; emptying the text deletes the block.
+    // Markdown stays the storage format — the HTML is converted back on save.
+    function htmlToMdInline(node) {
+      var out = '';
+      Array.prototype.forEach.call(node.childNodes, function (n) {
+        if (n.nodeType === 3) { out += n.nodeValue; return; }
+        if (n.nodeType !== 1) return;
+        var tag = n.tagName;
+        if (tag === 'BR') { out += '\n'; return; }
+        if (tag === 'INPUT' || tag === 'BUTTON') return; // task checkbox / ✎
+        var inner = htmlToMdInline(n);
+        if (tag === 'STRONG' || tag === 'B') out += inner.trim() ? '**' + inner + '**' : inner;
+        else if (tag === 'EM' || tag === 'I') out += inner.trim() ? '*' + inner + '*' : inner;
+        else if (tag === 'CODE') out += '`' + n.textContent + '`';
+        else if (tag === 'A') out += n.classList.contains('wikilink')
+          ? '[[' + n.textContent + ']]'
+          : inner.trim() ? '[' + inner + '](' + (n.getAttribute('href') || '') + ')' : '';
+        else if (tag === 'DIV' || tag === 'P' || tag === 'LI') out += (out && out.slice(-1) !== '\n' ? '\n' : '') + inner;
+        else out += inner; // spans etc. — keep the text, drop unknown wrappers
+      });
+      return out.replace(/\u00a0/g, ' ');
+    }
+    // Floating B / I / 🔗 pill over a selection inside the block being edited.
+    var fmtPill = null, fmtRegion = null, fmtPaused = false;
+    function fmtLink() {
+      // prompt() steals focus — pause the blur-commit while it's open.
+      fmtPaused = true;
+      var url = prompt('Link URL (https://…)');
+      fmtPaused = false;
+      if (fmtRegion) fmtRegion.focus();
+      if (!url || !url.trim()) return;
+      url = url.trim();
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+      document.execCommand('createLink', false, url);
+    }
+    function ensureFmtPill() {
+      if (fmtPill) return fmtPill;
+      fmtPill = document.createElement('div');
+      fmtPill.className = 'sel-toolbar';
+      fmtPill.innerHTML = '<button data-cmd="bold" title="Bold (Ctrl+B)"><strong>B</strong></button>'
+        + '<button data-cmd="italic" title="Italic (Ctrl+I)"><em>I</em></button>'
+        + '<button data-cmd="link" title="Add link (Ctrl+K)">🔗 Link</button>';
+      fmtPill.addEventListener('mousedown', function (e) {
+        e.preventDefault(); // keep the selection (and focus) alive
+        var btn = e.target.closest('button'); if (!btn) return;
+        if (btn.dataset.cmd === 'link') fmtLink();
+        else document.execCommand(btn.dataset.cmd);
+        placeFmtPill();
+      });
+      document.body.appendChild(fmtPill);
+      return fmtPill;
+    }
+    function placeFmtPill() {
+      var sel = window.getSelection();
+      var show = fmtRegion && sel && sel.rangeCount && !sel.isCollapsed
+        && fmtRegion.contains(sel.anchorNode) && fmtRegion.contains(sel.focusNode);
+      if (!show) { if (fmtPill) fmtPill.style.display = 'none'; return; }
+      var r = sel.getRangeAt(0).getBoundingClientRect();
+      var tb = ensureFmtPill();
+      tb.style.display = 'flex';
+      var w = tb.offsetWidth || 150;
+      tb.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + 'px';
+      tb.style.top = Math.max(8, r.top - 42) + 'px';
+    }
+    document.addEventListener('selectionchange', function () {
+      if (!fmtRegion) return;
+      clearTimeout(placeFmtPill.t);
+      placeFmtPill.t = setTimeout(placeFmtPill, 80);
+    });
+
     function editBlockInPlace(el, p, selectAll) {
-      if (document.querySelector('.block-editor')) return; // one at a time
+      if (fmtRegion) return; // one block at a time
       var r = (el.dataset.src || '').split('-').map(Number);
       if (isNaN(r[0]) || isNaN(r[1])) return;
-      var lines = p.body.split('\n');
-      var raw = lines.slice(r[0], r[1] + 1).join('\n');
-      var ta = document.createElement('textarea');
-      ta.className = 'block-editor';
-      ta.value = raw;
-      ta.rows = 1;
-      el.style.display = 'none';
-      el.parentNode.insertBefore(ta, el);
-      function size() { ta.style.height = 'auto'; ta.style.height = (ta.scrollHeight + 2) + 'px'; }
-      ta.addEventListener('input', size);
-      var singleLine = r[0] === r[1];
-      var done = false;
-      function commit() {
-        if (done) return; done = true;
-        var all = p.body.split('\n');
-        var text = ta.value.replace(/\n{3,}/g, '\n\n');
-        var repl = text.trim() === '' ? [] : text.split('\n');
-        Array.prototype.splice.apply(all, [r[0], r[1] - r[0] + 1].concat(repl));
-        p.body = all.join('\n');
-        p.updatedAt = now();
-        mutate(); // re-render; scroll position is preserved for same-page renders
-      }
-      function cancel() { if (done) return; done = true; ta.remove(); el.style.display = ''; }
-      ta.addEventListener('blur', commit);
-      ta.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') { e.preventDefault(); ta.removeEventListener('blur', commit); cancel(); }
-        else if (e.key === 'Enter' && singleLine && !e.shiftKey) { e.preventDefault(); ta.blur(); }
+      var first = p.body.split('\n')[r[0]] || '';
+      // The block's markdown prefix ("## ", "- ", "- [x] ", "> ", "1. ") is
+      // set aside and re-attached on commit — only the text gets edited.
+      var pm = first.match(/^(#{1,3}\s+|[-*]\s+\[[ xX]\]\s+|[-*]\s+|\d+\.\s+|>\s?)/);
+      var prefix = pm ? pm[1] : '';
+      var isQuote = prefix.charAt(0) === '>';
+      var isTask = /\[[ xX]\]/.test(prefix);
+      // Tasks: only the text span is editable — the checkbox stays clickable.
+      var region = isTask ? el.querySelector('label > span') : el;
+      if (!region) return;
+      startRegionEdit(region, {
+        selectAll: selectAll,
+        commit: function (text, wantMore) {
+          var all = p.body.split('\n');
+          var repl;
+          text = text.replace(/\n{2,}/g, '\n').replace(/\s+$/, '');
+          if (!text.trim()) repl = [];
+          else if (isQuote) repl = text.split('\n').map(function (l) { return '> ' + l; });
+          else if (prefix) repl = [prefix + text.replace(/\n+/g, ' ').trim()];
+          else repl = text.split('\n');
+          Array.prototype.splice.apply(all, [r[0], r[1] - r[0] + 1].concat(repl));
+          p.body = all.join('\n');
+          p.updatedAt = now();
+          mutate(); // re-render; scroll position is preserved for same-page renders
+          if (wantMore && repl.length) openGhostBlock(p, r[0] + repl.length - 1, prefix, el.tagName === 'LI');
+        }
       });
-      attachLinkPaste(ta, function () {});
-      setTimeout(function () { ta.focus(); if (selectAll) ta.select(); size(); }, 0);
+    }
+    // Enter at the end of a block keeps the flow going: a fresh editable line
+    // ("ghost") appears below and only becomes real markdown once you type.
+    // After a list/checklist item the ghost is another item; otherwise text.
+    function openGhostBlock(p, afterLine, prefix, wasLi) {
+      var mdiv = $('viewRoot').querySelector('.md');
+      if (!mdiv) return;
+      var refEl = null;
+      Array.prototype.some.call(mdiv.querySelectorAll('[data-src]'), function (b) {
+        var rr = b.dataset.src.split('-').map(Number);
+        if (afterLine >= rr[0] && afterLine <= rr[1]) { refEl = b; return true; }
+        return false;
+      });
+      if (!refEl) return;
+      var isLi = wasLi && refEl.tagName === 'LI';
+      var liPrefix = isLi ? (/\[[ xX]\]/.test(prefix) ? '- [ ] ' : /^\d/.test(prefix) ? '1. ' : '- ') : '';
+      var ghost = document.createElement(isLi ? 'li' : 'p');
+      ghost.className = 'ghost-block';
+      refEl.parentNode.insertBefore(ghost, refEl.nextSibling);
+      startRegionEdit(ghost, {
+        commit: function (text, wantMore) {
+          if (!text.trim()) { ghost.remove(); return; }
+          var all = p.body.split('\n');
+          var insert = isLi ? [liPrefix + text.replace(/\n+/g, ' ').trim()]
+            : [''].concat(text.replace(/\n{2,}/g, '\n').split('\n'));
+          Array.prototype.splice.apply(all, [afterLine + 1, 0].concat(insert));
+          p.body = all.join('\n');
+          p.updatedAt = now();
+          mutate();
+          if (wantMore) openGhostBlock(p, afterLine + insert.length, liPrefix || prefix, isLi);
+        }
+      });
+    }
+    // Shared engine for both: make `region` contenteditable, wire the pill,
+    // commit on blur, Enter = commit-and-continue, Shift+Enter = line break,
+    // Escape cancels.
+    function startRegionEdit(region, opts) {
+      var orig = region.innerHTML;
+      region.setAttribute('contenteditable', 'true');
+      region.classList.add('block-editing');
+      fmtRegion = region;
+      var done = false, wantMore = false;
+      function finish(cancelled) {
+        if (done || fmtPaused) return;
+        done = true;
+        fmtRegion = null; if (fmtPill) fmtPill.style.display = 'none';
+        region.removeEventListener('blur', onBlur);
+        region.removeEventListener('keydown', onKey);
+        region.removeEventListener('paste', onPaste);
+        region.removeAttribute('contenteditable');
+        region.classList.remove('block-editing');
+        if (cancelled) {
+          if (region.classList.contains('ghost-block')) region.remove();
+          else region.innerHTML = orig;
+          return;
+        }
+        opts.commit(htmlToMdInline(region), wantMore);
+      }
+      function onBlur() { setTimeout(function () { finish(false); }, 0); }
+      function onKey(e) {
+        if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); finish(true); }
+        else if (e.key === 'Enter' && e.shiftKey) {
+          e.preventDefault();
+          if (!document.execCommand('insertLineBreak')) document.execCommand('insertHTML', false, '<br>');
+        }
+        else if (e.key === 'Enter') { e.preventDefault(); wantMore = true; region.blur(); }
+      }
+      // Paste stays clean: plain text only; a URL pasted over a selection
+      // becomes a link (same trick as everywhere else in HQ).
+      function onPaste(e) {
+        e.preventDefault();
+        var txt = '';
+        try { txt = (e.clipboardData || window.clipboardData).getData('text/plain') || ''; } catch (err) { return; }
+        var sel = window.getSelection();
+        if (/^https?:\/\/\S+$/.test(txt.trim()) && sel && !sel.isCollapsed) {
+          document.execCommand('createLink', false, txt.trim());
+          return;
+        }
+        document.execCommand('insertText', false, txt.replace(/\r/g, ''));
+      }
+      region.addEventListener('blur', onBlur);
+      region.addEventListener('keydown', onKey);
+      region.addEventListener('paste', onPaste);
+      setTimeout(function () {
+        region.focus();
+        var range = document.createRange();
+        range.selectNodeContents(region);
+        if (!opts.selectAll) range.collapse(false);
+        var sel = window.getSelection();
+        sel.removeAllRanges(); sel.addRange(range);
+      }, 0);
     }
     function setupBlockEditing(mdiv, p) {
       mdiv.addEventListener('click', function (e) {
@@ -3242,7 +3403,8 @@
         // In an editor, Ctrl/Cmd+K means "insert link" (the universal muscle
         // memory); anywhere else it opens quick find.
         var ae = document.activeElement;
-        if (ae && ae.tagName === 'TEXTAREA' && (ae.classList.contains('page-editor') || ae.classList.contains('block-editor') || ae.id === 'cDesc')) {
+        if (fmtRegion && ae === fmtRegion) { fmtLink(); return; }
+        if (ae && ae.tagName === 'TEXTAREA' && (ae.classList.contains('page-editor') || ae.id === 'cDesc')) {
           insertLinkInEditor(ae, function () {
             ae.dispatchEvent(new Event('input', { bubbles: false }));
           });
