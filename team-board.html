@@ -63,6 +63,11 @@
     .side-item .emoji { width: 1.25em; text-align: center; flex-shrink: 0; }
     .side-item .label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
     .side-item .count { font-family: var(--font-mono); font-size: .62rem; color: var(--ink-faint); }
+    /* dragging a page row to re-nest it */
+    .side-item.dragging { opacity: .4; }
+    .side-item.drop-into, .side-label.drop-into { outline: 2px solid var(--orange); outline-offset: -2px; border-radius: 6px; }
+    .side-item.drag-ghost-row { position: fixed; z-index: 400; pointer-events: none; background: #fff;
+      box-shadow: var(--shadow-pop); border-radius: 6px; opacity: .95; margin: 0; }
     .side-foot { margin-top: auto; padding: .55rem; border-top: 1px solid var(--ink-line-soft); }
     .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-faint); flex-shrink: 0; }
     .sync-dot.on { background: #3E9A5F; } .sync-dot.err { background: #D9534F; } .sync-dot.busy { background: #E8A33D; }
@@ -472,7 +477,7 @@
           <button id="addBoardBtn" title="New board" aria-label="New board">＋</button>
         </div>
         <div id="boardList"></div>
-        <div class="side-label">
+        <div class="side-label" id="pagesLabel">
           <span class="mono">Pages</span>
           <button id="addPageBtn" title="New page" aria-label="New page">＋</button>
         </div>
@@ -1299,10 +1304,15 @@
         seen[p.id] = true;
         var btn = document.createElement('button');
         btn.className = 'side-item' + (inPageMode() && p.id === ui.pageId ? ' active' : '');
+        btn.dataset.pageId = p.id;
         if (depth) btn.style.paddingLeft = (0.5 + depth * 1.15) + 'rem';
         btn.innerHTML = '<span class="emoji">' + esc(p.icon || '📄') + '</span><span class="label">' + esc(p.title)
           + '</span>' + (p.public ? '<span class="count" title="On the public roadmap page">🌐</span>' : '');
-        btn.onclick = function () { openPage(p.id); };
+        btn.onclick = function () {
+          if (btn._dragged) { btn._dragged = false; return; } // a drag just ended, not a click
+          openPage(p.id);
+        };
+        attachPageDrag(btn, p);
         plist.appendChild(btn);
         allPages.forEach(function (ch) { if (ch.parentId === p.id) pageRow(ch, depth + 1); });
       }
@@ -1312,6 +1322,121 @@
       $('notesNavBtn').classList.toggle('active', ui.view === 'notes');
       updateNotesCount();
       $('app').classList.toggle('sidebar-closed', ui.sidebarClosed);
+    }
+
+    // ---- drag a page row to re-nest it ------------------------------------
+    // Drag a page onto another page → it becomes that page's sub-page. Drag it
+    // onto the "Pages" header → back to the top level. Same feel as dragging
+    // cards: mouse lifts after ~6px, touch after a short hold (tap still opens).
+    var pageDrag = null; // { page, el, ghost, x, y, target, scroller, raf }
+    function attachPageDrag(btn, p) {
+      btn.addEventListener('contextmenu', function (e) { if (pageDrag) e.preventDefault(); });
+      btn.addEventListener('pointerdown', function (e) {
+        if (pageDrag || cardDrag) return;
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        var startX = e.clientX, startY = e.clientY;
+        var touch = e.pointerType !== 'mouse';
+        var pressTimer = touch ? setTimeout(lift, 250) : null;
+        function lift() {
+          pressTimer = null;
+          btn._dragged = true; // swallow the click that follows pointerup
+          startPageDrag(btn, p, startX, startY);
+        }
+        function onMove(ev) {
+          if (!pageDrag) {
+            var dist = Math.abs(ev.clientX - startX) + Math.abs(ev.clientY - startY);
+            if (touch) { // moved before the hold completed → it's a scroll
+              if (dist > 8 && pressTimer) { clearTimeout(pressTimer); cleanup(); }
+              return;
+            }
+            if (dist < 6) return;
+            lift();
+          }
+          movePageDrag(ev.clientX, ev.clientY);
+        }
+        function onUp() { var was = !!pageDrag; cleanup(); if (was) finishPageDrag(true); }
+        function onCancel() { var was = !!pageDrag; cleanup(); if (was) finishPageDrag(false); }
+        function cleanup() {
+          if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+          document.removeEventListener('pointermove', onMove);
+          document.removeEventListener('pointerup', onUp);
+          document.removeEventListener('pointercancel', onCancel);
+        }
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('pointerup', onUp);
+        document.addEventListener('pointercancel', onCancel);
+      });
+    }
+    function startPageDrag(btn, p, px, py) {
+      var r = btn.getBoundingClientRect();
+      var ghost = btn.cloneNode(true);
+      ghost.classList.add('drag-ghost-row');
+      ghost.style.width = r.width + 'px';
+      ghost.style.paddingLeft = ''; // ghost loses its tree indent — reads cleaner
+      document.body.appendChild(ghost);
+      btn.classList.add('dragging');
+      pageDrag = { page: p, el: btn, ghost: ghost, x: px, y: py, target: null,
+        scroller: document.querySelector('.side-scroll'), raf: 0 };
+      movePageDrag(px, py);
+      pageDrag.raf = requestAnimationFrame(pageDragAutoScroll);
+    }
+    function clearPageDropMarks() {
+      document.querySelectorAll('.drop-into').forEach(function (n) { n.classList.remove('drop-into'); });
+    }
+    function movePageDrag(px, py) {
+      var pd = pageDrag; if (!pd) return;
+      pd.x = px; pd.y = py;
+      pd.ghost.style.left = (px - 14) + 'px';
+      pd.ghost.style.top = (py - 16) + 'px';
+      clearPageDropMarks();
+      pd.target = null;
+      var under = document.elementFromPoint(px, py); // the ghost is pointer-events:none
+      if (!under || !under.closest) return;
+      var row = under.closest('#pageList .side-item');
+      if (row && row !== pd.el) {
+        row.classList.add('drop-into');
+        pd.target = { row: row };
+        return;
+      }
+      var label = under.closest('#pagesLabel');
+      if (label) {
+        label.classList.add('drop-into');
+        pd.target = { top: true };
+      }
+    }
+    function pageDragAutoScroll() {
+      var pd = pageDrag; if (!pd) return;
+      if (pd.scroller) {
+        var r = pd.scroller.getBoundingClientRect();
+        if (pd.y < r.top + 40) pd.scroller.scrollTop -= 8;
+        else if (pd.y > r.bottom - 40) pd.scroller.scrollTop += 8;
+      }
+      pd.raf = requestAnimationFrame(pageDragAutoScroll);
+    }
+    function finishPageDrag(drop) {
+      var pd = pageDrag; pageDrag = null;
+      cancelAnimationFrame(pd.raf);
+      pd.ghost.remove();
+      pd.el.classList.remove('dragging');
+      var target = pd.target;
+      clearPageDropMarks();
+      setTimeout(function () { pd.el._dragged = false; }, 350); // in case no click follows
+      if (!drop || !target) return;
+      var p = pd.page;
+      if (target.top) {
+        if (!p.parentId) return;
+        p.parentId = ''; p.updatedAt = now();
+        mutate();
+        toast('Moved to top level');
+        return;
+      }
+      var parent = (doc.pages || []).find(function (x) { return x.id === target.row.dataset.pageId; });
+      if (!parent || parent.id === p.id) return;
+      if (pageDescendants(p)[parent.id]) { toast('Can’t nest a page inside its own sub-pages'); return; }
+      if (p.parentId === parent.id) return;
+      p.parentId = parent.id; p.updatedAt = now();
+      mutate();
+      toast('Moved under “' + parent.title + '”');
     }
 
     function renderTopbar() {
@@ -2373,7 +2498,7 @@
     // and a tap still opens the card.
     var cardDrag = null; // { cardId, el, ghost, offX, offY, x, y, body, scroller, raf }
     document.addEventListener('touchmove', function (e) {
-      if (cardDrag) e.preventDefault(); // the finger is moving a card, not the page
+      if (cardDrag || pageDrag) e.preventDefault(); // the finger is moving a card/page, not scrolling
     }, { passive: false });
 
     function attachCardDrag(el, c) {
