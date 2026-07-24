@@ -118,6 +118,9 @@
     .notes-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .4rem; }
     .pr-row.open { border-color: var(--orange); }
     .note-detail { margin-top: .6rem; border-top: 1px solid var(--ink-line-soft); padding-top: .6rem; }
+    .pr-thumb { width: 56px; height: 38px; object-fit: cover; border-radius: 6px; flex: none; background: var(--ink-line-soft); }
+    .note-cover { margin: 0 0 .7rem; }
+    .note-cover img { width: 100%; max-height: 340px; object-fit: cover; border-radius: 8px; display: block; }
     .note-body { font-size: .92rem; }
     .note-body img { max-width: 100%; border-radius: 8px; }
     .note-body iframe { width: 100%; aspect-ratio: 16/9; border: 0; border-radius: 8px; }
@@ -329,7 +332,7 @@
     .comment .text { font-size: .86rem; margin-top: .1rem; white-space: pre-wrap; word-wrap: break-word; }
     .pr-row { border: 1px solid var(--ink-line-soft); background: #fff; border-radius: 8px; padding: .6rem .75rem; margin-bottom: .5rem; }
     .pr-head { display: flex; align-items: center; gap: .6rem; justify-content: space-between; }
-    .pr-title { font-weight: 700; font-size: .92rem; color: var(--ink); text-decoration: none; }
+    .pr-title { font-weight: 700; font-size: .92rem; color: var(--ink); text-decoration: none; flex: 1; }
     .pr-meta { font-size: .74rem; color: var(--ink-faint); margin-top: .1rem; }
     .pr-preview { font-size: .84rem; white-space: pre-wrap; background: var(--paper); border: 1px solid var(--ink-line-soft);
       border-radius: 6px; padding: .55rem .7rem; margin-top: .5rem; max-height: 300px; overflow-y: auto; }
@@ -3179,10 +3182,30 @@
       (function next() {
         var p = queue.shift(); if (!p) return;
         postsApi({ action: 'posts-get', id: p.id }).then(function (res) {
-          if (res.result === 'success' && res.post) notes.detail[p.id] = res.post;
+          if (res.result === 'success' && res.post) {
+            notes.detail[p.id] = res.post;
+            // The detail carries the cover URL — repaint so row thumbnails pop
+            // in (but never yank the DOM out from under an in-progress edit).
+            if (ui.view === 'notes' && !document.querySelector('.draft-editing')) render();
+          }
           next();
         }).catch(next);
       })();
+    }
+    // Best-known cover URL for a post. Drafts get theirs from the warmed
+    // detail (the list endpoint doesn't carry covers); published posts go
+    // through the same edge-cached /post-image proxy the live site uses.
+    function noteCoverUrl(p, w) {
+      var d = notes.detail[p.id];
+      var c = (d && d.cover) || p.cover || '';
+      if (/^https:\/\//i.test(c)) return sizedNoteCover(c, w);
+      if (p.status === 'published') return '/post-image?id=' + encodeURIComponent(p.id) + '&w=' + w;
+      return '';
+    }
+    // Drive thumbnail URLs embed their size as sz=w… — ask for the width we
+    // actually render instead of the stored w2000. Other hosts pass through.
+    function sizedNoteCover(c, w) {
+      return String(c).replace(/([?&]sz=)w\d+/, '$1w' + w);
     }
     function updateNotesCount() {
       var el = $('notesCount'); if (!el) return;
@@ -3242,8 +3265,10 @@
           var st = PR_STATUS[p.status] || [p.status, '#9A9A93'];
           var when = p.createdAt ? relTime(Date.parse(p.createdAt)) : '';
           var open = notes.openId === p.id;
+          var thumb = noteCoverUrl(p, 480);
           return '<div class="pr-row' + (open ? ' open' : '') + '" data-id="' + esc(p.id) + '">'
             + '<div class="pr-head" data-pr="toggle" style="cursor:pointer;">'
+            + (thumb ? '<img class="pr-thumb" src="' + esc(thumb) + '" alt="" loading="lazy" decoding="async" onerror="this.remove()">' : '')
             + '<span class="pr-title">' + esc(p.title || '(untitled)') + '</span>'
             + '<span class="status-chip"><span class="col-dot" style="background:' + st[1] + '"></span>' + esc(st[0]) + '</span></div>'
             + '<div class="pr-meta">' + esc(p.authorName || 'Unknown') + (p.category ? ' · ' + esc(p.category) : '') + (when ? ' · ' + esc(when) : '') + '</div>'
@@ -3291,7 +3316,10 @@
           return '<div class="note-review"><strong>' + icon + ' ' + esc(rv.reviewer || 'Reviewer') + '</strong>'
             + (rv.comment ? ' — ' + esc(rv.comment) : '') + '</div>';
         }).join('');
-        box.innerHTML = '<div class="note-body md">' + sanitizeNote(post.body || post.html || '<p>(no content)</p>') + '</div>'
+        var coverHtml = post.cover && /^https:\/\//i.test(post.cover)
+          ? '<figure class="note-cover"><img src="' + esc(sizedNoteCover(post.cover, 1200)) + '" alt="" decoding="async" onerror="this.parentNode.remove()"></figure>' : '';
+        box.innerHTML = coverHtml
+          + '<div class="note-body md">' + sanitizeNote(post.body || post.html || '<p>(no content)</p>') + '</div>'
           + (editable ? '<div class="pr-actions" style="margin-top:.5rem;"><button class="btn-sm ghost" data-editdraft>'
               + (isLive ? '✎ Edit live post' : '✎ Edit draft') + '</button></div>' : '')
           + (reviews ? '<div class="m-section">Votes & comments</div>' + reviews : '');
