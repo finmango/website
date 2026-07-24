@@ -130,11 +130,17 @@ shared key needed for staff. It's one OAuth client ID, free, created once:
    Access & sync modal and the who-are-you dialog.
 
 How it works under the hood: Google sign-in hands the browser a signed ID
-token; every load/save sends it (via POST — credentials never sit in URLs) and
-the Apps Script verifies it against Google (signature, expiry, audience,
-domain) before accepting. Verified tokens are cached by hash until expiry, so
-the verification traffic is ~1 request per user per hour. Tokens last about an
-hour; Google's One Tap silently re-issues them when they lapse.
+token, which the Apps Script verifies against Google (signature, expiry,
+audience, domain). Google ID tokens only last about an hour, so right after
+sign-in the front-end trades it for a **session token** minted by the Apps
+Script — HMAC-signed with a secret the script auto-generates into Script
+Properties (`SESSION_SECRET`) — valid **30 days** and renewed on each visit.
+That's what "stay signed in" rests on: sign in once, and as long as you open
+the board at least once a month you never see the gate again. All credentials
+travel via POST (never in URLs). If the deployed script predates session
+tokens, the front-end quietly falls back to the old behavior (1-hour tokens,
+One Tap re-issue) — so redeploy a new version of the Apps Script to turn
+persistent sign-in on.
 
 ## Day-to-day
 
@@ -170,6 +176,12 @@ hour; Google's One Tap silently re-issues them when they lapse.
   plus JSON backups.
 - Rotating the key: change `ACCESS_KEY` in the Apps Script, redeploy a new
   version, share the new key. Old clients just get "Wrong key" until updated.
+- Signing everyone out at once (e.g. a lost laptop): in the Apps Script editor,
+  Project Settings → Script Properties → delete `SESSION_SECRET`. A fresh
+  secret is generated on the next request, which invalidates every outstanding
+  session token; people just sign in with Google again. (Individual sessions
+  can't be revoked — the tokens are stateless — but "sign out" on the device
+  itself always works, and sessions die on their own after 30 days away.)
 
 ## Troubleshooting
 
