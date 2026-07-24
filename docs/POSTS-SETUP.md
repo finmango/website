@@ -23,8 +23,18 @@ Drive as storage.
    the editorial team is emailed. Status = **pending**.
 3. Reviewers open `post-review.html`, enter the passphrase, read the rendered
    post, leave comments, and vote **approve / request changes / reject**.
-4. An editor clicks **Publish to site**. Status = **published**, the author is
-   emailed, and the post appears on `posts.html` and at `post.html?id=…`.
+   (The team can also review from the **Ambassador Notes** tab in
+   `team-board.html`, which talks to this backend through the HQ bridge.)
+4. Approving from the HQ tab also asks **when the post should go live** (or
+   "approve without a time"). The author is emailed the approval — including
+   the scheduled go-live time — right away, so nobody is left wondering.
+5. Scheduled posts publish **themselves**: a time-driven trigger
+   (`publishScheduledPosts`, installed by `setup`, runs every 15 minutes)
+   flips any approved post whose time has arrived to **published** and emails
+   the author the live link. Spreading go-live times out means notes trickle
+   onto the site instead of all landing at once.
+6. An editor can still click **Publish now** at any time (it clears any
+   schedule), and **Reschedule / Clear** changes or removes the go-live time.
 
 Images are downscaled in the browser, then stored in Drive (not in the Sheet,
 which has a 50k-char-per-cell limit).
@@ -48,7 +58,17 @@ notes that stored `<div>`-based paragraphs are fixed automatically at render.
    - `SITE_BASE` — `https://www.finmango.org`
    - `REQUIRE_APPROVAL_TO_PUBLISH` — `true` to require ≥1 approve vote before publishing
 5. Run the `setup` function once (toolbar ▸ select `setup` ▸ Run) and grant the
-   requested permissions.
+   requested permissions. This also installs the every-15-minutes
+   `publishScheduledPosts` trigger that publishes scheduled posts on time
+   (re-running `setup` is safe — it never duplicates the trigger).
+
+   > **Upgrading an existing install to scheduling?** Paste the updated
+   > `tools/posts-apps-script.js`, re-run `setup` once (to install the
+   > trigger), and redeploy a new version. Also paste the updated
+   > `tools/team-board-apps-script.js` into the HQ script and redeploy it —
+   > the HQ tab sends the schedule through that bridge. The new
+   > `scheduledFor` column is appended after the existing headers, so old
+   > Sheet rows keep their alignment.
 6. **Deploy → New deployment → Web app**
    - Execute as: **Me**
    - Who has access: **Anyone**
@@ -73,6 +93,22 @@ notes that stored `<div>`-based paragraphs are fixed automatically at render.
 - **Approve** moves it to *approved*; **Request changes** to *changes*;
   **Reject** to *rejected*. Votes are advisory — an editor finalizes with
   **Publish to site**.
+
+### Scheduling go-live times (HQ Ambassador Notes tab)
+
+- In `team-board.html` → **📝 Ambassador Notes**, clicking **✓ Approve** opens
+  a small picker: choose a go-live date & time (defaults to tomorrow 9:00 in
+  your timezone), or **Approve without a time** for manual publishing.
+- The author is emailed the approval immediately, with the scheduled go-live
+  time when one was picked.
+- Approved rows show a blue **Scheduled** chip and "🕓 goes live …" in the
+  meta line, plus **🕓 Reschedule** (change or clear the time) and
+  **🚀 Publish now** (publishes immediately, clearing the schedule).
+- The trigger runs every 15 minutes, so "9:00" means "live by ~9:15". Times
+  are stored in UTC and shown in each viewer's local timezone; approval
+  emails spell the time out in the script's timezone.
+- Any vote that knocks a post out of *approved* (request changes / reject)
+  clears its schedule, so nothing publishes by surprise.
 
 ## Security notes
 
