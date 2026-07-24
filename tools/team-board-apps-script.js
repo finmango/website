@@ -102,12 +102,21 @@ function doPost(e) {
       const vote = String(data.vote || 'comment');
       const comment = String(data.comment || '').slice(0, 2000);
       const reviewer = String(data.reviewer || 'HQ team');
-      const out = postsBridge_({ action: 'review', id: String(data.id || ''), reviewer: reviewer, vote: vote, comment: comment });
+      const review = { action: 'review', id: String(data.id || ''), reviewer: reviewer, vote: vote, comment: comment };
+      // Approvals may carry a go-live time — the posts backend stores it,
+      // emails the author, and auto-publishes when the time arrives.
+      if (vote === 'approve' && data.scheduledFor) review.scheduledFor = String(data.scheduledFor);
+      const out = postsBridge_(review);
       // "Request changes" with a note also emails the author the note.
       if (out && out.result === 'success' && vote === 'changes' && comment.trim()) {
         out.emailed = emailAuthorChanges_(String(data.id || ''), reviewer, comment.trim());
       }
       return json(out);
+    }
+    if (data.action === 'posts-schedule') {
+      requireAuth_(data);
+      return json(postsBridge_({ action: 'schedule', id: String(data.id || ''),
+        scheduledFor: String(data.scheduledFor || ''), reviewer: String(data.reviewer || 'HQ team') }));
     }
     if (data.action === 'posts-publish') {
       requireAuth_(data);

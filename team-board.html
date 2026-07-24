@@ -3293,7 +3293,13 @@
       var n = (notes.posts || []).filter(function (p) { return p.status === 'pending' || p.status === 'changes'; }).length;
       el.textContent = n ? String(n) : '';
     }
-    function noteAction(id, act, btn) {
+    // Short human form of a go-live time ("Jul 28, 9:00 AM"), viewer's clock.
+    function fmtSched(iso) {
+      var d = new Date(iso);
+      if (isNaN(d)) return '';
+      return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    }
+    function noteAction(id, act, btn, scheduledFor) {
       var m = me();
       var reviewer = m ? m.name : 'HQ team';
       var comment = '';
@@ -3304,12 +3310,23 @@
         comment = prompt('Reason (recorded with the vote — not emailed):') || '';
       }
       if (btn) btn.disabled = true;
-      var payload = act === 'publish'
-        ? { action: 'posts-publish', id: id, reviewer: reviewer }
-        : { action: 'posts-review', id: id, reviewer: reviewer, vote: act, comment: comment };
+      var payload;
+      if (act === 'publish') {
+        payload = { action: 'posts-publish', id: id, reviewer: reviewer };
+      } else if (act === 'schedule') {
+        payload = { action: 'posts-schedule', id: id, reviewer: reviewer, scheduledFor: scheduledFor || '' };
+      } else {
+        payload = { action: 'posts-review', id: id, reviewer: reviewer, vote: act, comment: comment };
+        if (act === 'approve' && scheduledFor) payload.scheduledFor = scheduledFor;
+      }
       postsApi(payload).then(function (res) {
         if (res.result === 'success') {
           toast(act === 'publish' ? 'Published 🚀 — author notified'
+            : act === 'approve' ? ('Approved ✓' + (scheduledFor ? ' — goes live ' + fmtSched(scheduledFor) : '')
+              + (res.emailed ? ' · author emailed ✉️' : ''))
+            : act === 'schedule' ? (scheduledFor
+              ? ('Scheduled 🕓 — goes live ' + fmtSched(scheduledFor) + (res.emailed ? ' · author emailed ✉️' : ''))
+              : 'Schedule cleared — publish manually')
             : act === 'changes' ? (res.emailed ? 'Recorded — feedback emailed to the author ✉️' : 'Recorded (no author email on file)')
             : 'Recorded — ' + act);
           delete notes.detail[id];
@@ -3320,13 +3337,52 @@
         }
       }).catch(function () { if (btn) btn.disabled = false; toast('Network hiccup — try again'); });
     }
+    // Approving is also where the go-live time gets picked, so posts spread out
+    // over the week instead of all landing at once. The author is emailed the
+    // approval + time right away; the posts backend publishes it on schedule
+    // (a 15-minute trigger, so "9:00" means "by ~9:15").
+    function openScheduleModal(id, act) {
+      var p = (notes.posts || []).find(function (x) { return x.id === id; }) || {};
+      var approving = act === 'approve';
+      // Default: the current schedule when rescheduling, else tomorrow 9:00.
+      var d;
+      if (p.scheduledFor) { d = new Date(p.scheduledFor); }
+      else { d = new Date(now() + 86400000); d.setHours(9, 0, 0, 0); }
+      function two(n) { return (n < 10 ? '0' : '') + n; }
+      function dtLocal(x) {
+        return x.getFullYear() + '-' + two(x.getMonth() + 1) + '-' + two(x.getDate())
+          + 'T' + two(x.getHours()) + ':' + two(x.getMinutes());
+      }
+      openModal('<h2 style="margin-bottom:.35rem;">' + (approving ? '✓ Approve &amp; schedule' : '🕓 Schedule go-live') + '</h2>'
+        + '<p class="help-note" style="margin:0 0 .8rem;">' + esc(p.title || '') + '</p>'
+        + '<label>Goes live</label>'
+        + '<input type="datetime-local" class="text-input" id="schedWhen" value="' + dtLocal(d) + '" min="' + dtLocal(new Date()) + '">'
+        + '<p class="help-note" style="margin:.5rem 0 .9rem;">Publishes itself at that time and the author is emailed now — '
+        + (approving ? 'the approval plus the go-live time.' : 'so they know the new time.') + '</p>'
+        + '<div class="pr-actions">'
+        + '<button class="btn-sm primary" id="schedGo">' + (approving ? '✓ Approve — go live then' : 'Save time') + '</button>'
+        + (approving ? '<button class="btn-sm ghost" id="schedSkip">Approve without a time</button>'
+          : (p.scheduledFor ? '<button class="btn-sm ghost" id="schedClear">Clear — publish manually</button>' : ''))
+        + '</div>', true);
+      function submit(whenIso) {
+        closeModal();
+        noteAction(id, approving ? 'approve' : 'schedule', null, whenIso);
+      }
+      $('schedGo').onclick = function () {
+        var v = $('schedWhen').value;
+        if (!v) { toast('Pick a date & time first'); return; }
+        submit(new Date(v).toISOString());
+      };
+      var sk = $('schedSkip'); if (sk) sk.onclick = function () { submit(''); };
+      var cl = $('schedClear'); if (cl) cl.onclick = function () { submit(''); };
+    }
     function renderNotes(root) {
       var scroll = document.createElement('div'); scroll.className = 'page-scroll';
       var wrap = document.createElement('div'); wrap.className = 'page-wrap notes-wrap';
       var head = document.createElement('div'); head.className = 'notes-head';
       head.innerHTML = '<div><h1 style="font-size:1.5rem;letter-spacing:-.02em;">Ambassador Notes</h1>'
         + '<p class="help-note" style="margin:.2rem 0 0;">Drafts from <a href="write.html" target="_blank" rel="noopener">finmango.org/write</a>'
-        + ' land here. Approve, request changes, reject, or publish — signed as you.</p></div>'
+        + ' land here. Approve (and pick when it goes live), request changes, reject, or publish — signed as you.</p></div>'
         + '<button class="btn-sm ghost" id="notesRefresh">' + (notes.refreshing ? '⏳ Updating…' : '↻ Refresh') + '</button>';
       wrap.appendChild(head);
       var body = document.createElement('div');
@@ -3343,7 +3399,8 @@
         var actionable = notes.posts.filter(function (p) { return p.status !== 'published' && p.status !== 'rejected'; });
         var done = notes.posts.filter(function (p) { return p.status === 'published'; }).slice(0, 8);
         function row(p, readonly) {
-          var st = PR_STATUS[p.status] || [p.status, '#9A9A93'];
+          var scheduled = p.status === 'approved' && p.scheduledFor;
+          var st = scheduled ? ['Scheduled', '#4A7BD0'] : (PR_STATUS[p.status] || [p.status, '#9A9A93']);
           var when = p.createdAt ? relTime(Date.parse(p.createdAt)) : '';
           var open = notes.openId === p.id;
           var thumb = noteCoverUrl(p, 480);
@@ -3352,13 +3409,15 @@
             + (thumb ? '<img class="pr-thumb" src="' + esc(thumb) + '" alt="" loading="lazy" decoding="async" onerror="this.remove()">' : '')
             + '<span class="pr-title">' + esc(p.title || '(untitled)') + '</span>'
             + '<span class="status-chip"><span class="col-dot" style="background:' + st[1] + '"></span>' + esc(st[0]) + '</span></div>'
-            + '<div class="pr-meta">' + esc(p.authorName || 'Unknown') + (p.category ? ' · ' + esc(p.category) : '') + (when ? ' · ' + esc(when) : '') + '</div>'
+            + '<div class="pr-meta">' + esc(p.authorName || 'Unknown') + (p.category ? ' · ' + esc(p.category) : '') + (when ? ' · ' + esc(when) : '')
+            + (scheduled ? ' · 🕓 goes live ' + esc(fmtSched(p.scheduledFor)) : '') + '</div>'
             + (open ? '<div class="note-detail"><p class="help-note">Loading the post…</p></div>' : '')
             + '<div class="pr-actions">'
             + (!readonly ? '<button class="btn-sm ghost" data-pr="approve">✓ Approve</button>'
               + '<button class="btn-sm ghost" data-pr="changes">✎ Changes</button>'
               + '<button class="btn-sm danger" data-pr="reject">✗ Reject</button>' : '')
-            + (p.status === 'approved' ? '<button class="btn-sm primary" data-pr="publish">🚀 Publish</button>' : '')
+            + (p.status === 'approved' ? '<button class="btn-sm ghost" data-pr="schedule">🕓 ' + (scheduled ? 'Reschedule' : 'Schedule') + '</button>'
+              + '<button class="btn-sm primary" data-pr="publish">🚀 Publish now</button>' : '')
             + (p.status === 'published' ? '<a class="btn-sm ghost" href="post.html?id=' + esc(p.id) + '" target="_blank" rel="noopener">View live ↗</a>' : '')
             + '</div></div>';
         }
@@ -3375,7 +3434,9 @@
               render();
             };
           } else if (el.tagName === 'BUTTON') {
-            el.onclick = function () { noteAction(id, act, el); };
+            // Approve & schedule share the go-live picker; the rest act directly.
+            if (act === 'approve' || act === 'schedule') el.onclick = function () { openScheduleModal(id, act); };
+            else el.onclick = function () { noteAction(id, act, el); };
           }
         });
         // Fill in the open post's rendered detail

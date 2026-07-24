@@ -44,7 +44,7 @@ const HEADERS = [
   'category', 'tags', 'title', 'dek', 'hasCover', 'folderId', 'jsonFileId',
   'publishedAt', 'reviewsSummary',
   // Appended at the END so existing Sheet rows keep their column alignment.
-  'ambassadorSlug'
+  'ambassadorSlug', 'scheduledFor'
 ];
 
 // ============================== ROUTING ====================================
@@ -74,6 +74,7 @@ function doGet(e) {
       case 'list':       requireKey_(p.key); return json({ result: 'success', posts: listForReview_(p.status || 'all') });
       case 'review-get': requireKey_(p.key); return json(getFullPost_(p.id));
       case 'review':     requireKey_(p.key); return json(addReview_(p));
+      case 'schedule':   requireKey_(p.key); return json(schedulePost_(p));
       case 'publish':    requireKey_(p.key); return json(publishPost_(p));
       default: return json({ result: 'error', error: 'Unknown action' });
     }
@@ -96,6 +97,7 @@ function submitPost_(data) {
     id: id,
     createdAt: new Date().toISOString(),
     publishedAt: '',
+    scheduledFor: '',
     status: 'pending',
     authorName: (data.authorName || '').toString().slice(0, 160),
     authorEmail: (data.authorEmail || '').toString().slice(0, 200),
@@ -142,7 +144,8 @@ function listForReview_(statusFilter) {
     .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
     .map(r => ({
       id: r.id, status: r.status, title: r.title, authorName: r.authorName,
-      category: r.category, createdAt: r.createdAt, publishedAt: r.publishedAt
+      category: r.category, createdAt: r.createdAt, publishedAt: r.publishedAt,
+      scheduledFor: r.scheduledFor || ''
     }));
 }
 
@@ -166,18 +169,55 @@ function addReview_(p) {
   if (!r) return { result: 'error', error: 'Not found' };
   const post = readJson_(r.jsonFileId);
   const vote = ['approve', 'changes', 'reject'].indexOf(p.vote) >= 0 ? p.vote : 'comment';
+
+  // An approval can carry a go-live time; the post then publishes itself when
+  // that time arrives (see publishScheduledPosts) instead of the moment an
+  // editor clicks Publish — so approvals can be spread out over days.
+  const when = vote === 'approve' ? parseWhen_(p.scheduledFor) : '';
+  const entry = { reviewer: (p.reviewer || 'Reviewer').slice(0, 120), vote: vote, comment: (p.comment || '').slice(0, 2000), at: new Date().toISOString() };
+  if (when) entry.comment = (entry.comment ? entry.comment + ' · ' : '') + '🕓 goes live ' + fmtWhen_(when);
   post.reviews = post.reviews || [];
-  post.reviews.push({ reviewer: (p.reviewer || 'Reviewer').slice(0, 120), vote: vote, comment: (p.comment || '').slice(0, 2000), at: new Date().toISOString() });
+  post.reviews.push(entry);
 
   // A vote nudges status (but never demotes a published post).
+  const wasApproved = post.status === 'approved';
   if (post.status !== 'published') {
     if (vote === 'approve') post.status = 'approved';
     else if (vote === 'changes') post.status = 'changes';
     else if (vote === 'reject') post.status = 'rejected';
   }
+  if (when) post.scheduledFor = when;
+  // A post knocked out of "approved" must never auto-publish later.
+  if (post.status !== 'approved' && post.status !== 'published') post.scheduledFor = '';
+
   saveJson_(r.jsonFileId, post);
-  updateRow_(r.rowIndex, { status: post.status, reviewsSummary: summarize_(post.reviews) });
-  return { result: 'success', post: post };
+  updateRow_(r.rowIndex, { status: post.status, scheduledFor: post.scheduledFor || '', reviewsSummary: summarize_(post.reviews) });
+
+  // Tell the author the good news (once per approval, or when a time is set).
+  let emailed = false;
+  if (vote === 'approve' && post.status === 'approved' && (!wasApproved || when)) {
+    emailed = notifyAuthorApproved_(post);
+  }
+  return { result: 'success', post: post, emailed: emailed };
+}
+
+// Set, change, or clear an approved post's go-live time. An empty scheduledFor
+// clears it (back to manual publish); setting one emails the author the date.
+function schedulePost_(p) {
+  const r = findRow_(p.id);
+  if (!r) return { result: 'error', error: 'Not found' };
+  const post = readJson_(r.jsonFileId);
+  if (post.status !== 'approved') return { result: 'error', error: 'Only approved posts can be scheduled' };
+  const when = parseWhen_(p.scheduledFor);
+  if (p.scheduledFor && !when) return { result: 'error', error: 'Bad date' };
+  post.scheduledFor = when;
+  post.reviews = post.reviews || [];
+  post.reviews.push({ reviewer: (p.reviewer || 'Editor').toString().slice(0, 120), vote: 'comment',
+    comment: when ? '🕓 Scheduled to go live ' + fmtWhen_(when) : '🕓 Schedule cleared — will be published manually', at: new Date().toISOString() });
+  saveJson_(r.jsonFileId, post);
+  updateRow_(r.rowIndex, { scheduledFor: post.scheduledFor, reviewsSummary: summarize_(post.reviews) });
+  const emailed = when ? notifyAuthorApproved_(post) : false;
+  return { result: 'success', post: post, emailed: emailed };
 }
 
 // Reviewer-only: edit a post's title/body (used by the HQ Ambassador Notes
@@ -217,19 +257,44 @@ function publishPost_(p) {
     const approvals = (post.reviews || []).filter(x => x.vote === 'approve').length;
     if (approvals < 1) return { result: 'error', error: 'Needs at least one approval before publishing' };
   }
+  goLive_(r, post);
+  return { result: 'success', id: post.id, url: CONFIG.SITE_BASE + '/post?id=' + encodeURIComponent(post.id) };
+}
+
+// Flip a post live — shared by manual Publish and the scheduler below.
+function goLive_(r, post) {
   post.status = 'published';
   post.publishedAt = new Date().toISOString();
+  post.scheduledFor = '';
   // No cover uploaded? The first image in the post becomes the cover.
   if (!post.cover) post.cover = firstImg_(post.body);
   saveJson_(r.jsonFileId, post);
-  updateRow_(r.rowIndex, { status: 'published', publishedAt: post.publishedAt, hasCover: post.cover ? 'yes' : '' });
+  updateRow_(r.rowIndex, { status: 'published', publishedAt: post.publishedAt, scheduledFor: '', hasCover: post.cover ? 'yes' : '' });
 
   // OPTIONAL upgrade: also commit a pre-rendered static .html to the repo via the
   // GitHub API for SEO. Disabled by default (no token needed). See docs/POSTS-SETUP.md.
   // commitStaticPage_(post);
 
   notifyAuthorPublished_(post);
-  return { result: 'success', id: post.id, url: CONFIG.SITE_BASE + '/post?id=' + encodeURIComponent(post.id) };
+}
+
+// ============================== SCHEDULER ==================================
+// Runs on a time-driven trigger (installed by setup, every 15 minutes) and
+// publishes approved posts whose go-live time has arrived — so a scheduled
+// post appears within ~15 minutes of its chosen time, author emailed as usual.
+function publishScheduledPosts() {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(20000)) return;
+  try {
+    rows_()
+      .filter(r => r.status === 'approved' && r.scheduledFor && Date.parse(r.scheduledFor) <= Date.now())
+      .forEach(r => {
+        try { goLive_(r, readJson_(r.jsonFileId)); }
+        catch (err) { /* one bad post must not block the rest of the queue */ }
+      });
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 // ============================== STORAGE HELPERS ============================
@@ -250,6 +315,7 @@ function rows_() {
     row.rowIndex = i + 1;
     row.createdAt = toIso_(row.createdAt);
     row.publishedAt = toIso_(row.publishedAt);
+    row.scheduledFor = toIso_(row.scheduledFor);
     if (row.id) out.push(row);
   }
   return out;
@@ -326,6 +392,16 @@ function rewriteInlineImages_(html, folder) {
 function requireKey_(key) { if (String(key || '') !== String(CONFIG.REVIEW_KEY)) throw new Error('Unauthorized'); }
 function json(obj) { return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON); }
 function toIso_(v) { if (!v) return ''; if (v instanceof Date) return v.toISOString(); return String(v); }
+// Normalize a client-supplied go-live time to ISO; garbage becomes ''. Past
+// times are accepted — they simply publish on the scheduler's next pass.
+function parseWhen_(v) {
+  if (!v) return '';
+  const t = Date.parse(String(v));
+  return isNaN(t) ? '' : new Date(t).toISOString();
+}
+function fmtWhen_(iso) {
+  return Utilities.formatDate(new Date(iso), Session.getScriptTimeZone(), "EEE, MMM d, yyyy 'at' h:mm a (z)");
+}
 function summarize_(reviews) {
   const c = { approve: 0, changes: 0, reject: 0 };
   (reviews || []).forEach(r => { if (c[r.vote] !== undefined) c[r.vote]++; });
@@ -350,6 +426,28 @@ function notifyEditors_(post) {
     });
   } catch (err) { /* email failures shouldn't block submission */ }
 }
+// Approval email — the author learns their note made the cut, and (when
+// scheduled) exactly when it goes live. Also reused when the time changes.
+function notifyAuthorApproved_(post) {
+  if (!post.authorEmail) return false;
+  try {
+    const when = post.scheduledFor ? fmtWhen_(post.scheduledFor) : '';
+    MailApp.sendEmail({
+      to: post.authorEmail,
+      replyTo: CONFIG.EDITOR_EMAIL,
+      subject: 'Approved 🎉 — your FinMango Ambassador Note: ' + (post.title || ''),
+      htmlBody:
+        '<p>Great news — <strong>' + esc_(post.title || 'your Ambassador Note') + '</strong> has been approved by our editorial team. 🎉</p>' +
+        (when
+          ? '<p>It\'s scheduled to go live on <strong>' + esc_(when) + '</strong>. We\'ll email you again with the link the moment it\'s published.</p>'
+          : '<p>An editor will publish it soon — we\'ll email you the link the moment it\'s live.</p>') +
+        '<p>Thank you for contributing. — The FinMango team 🥭</p>'
+    });
+    return true;
+  } catch (err) {
+    return false; // email failures never block the vote itself
+  }
+}
 function notifyAuthorPublished_(post) {
   if (!post.authorEmail) return;
   try {
@@ -371,5 +469,10 @@ function setup() {
   if (CONFIG.DRIVE_FOLDER_ID.indexOf('PASTE_') === 0) throw new Error('Set CONFIG.DRIVE_FOLDER_ID first.');
   getSheet_();            // creates the Posts tab + headers
   getParentFolder_();     // verifies folder access
+  // Install (once) the time-driven trigger that publishes scheduled posts.
+  // Safe to re-run setup — an existing trigger is never duplicated.
+  const hasTrigger = ScriptApp.getProjectTriggers()
+    .some(t => t.getHandlerFunction() === 'publishScheduledPosts');
+  if (!hasTrigger) ScriptApp.newTrigger('publishScheduledPosts').timeBased().everyMinutes(15).create();
   Logger.log('Setup OK. Now Deploy > New deployment > Web app.');
 }
