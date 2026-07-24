@@ -54,6 +54,14 @@ const CONFIG = {
   // Refuse absurdly large documents (protects the Sheet; ~500 KB of JSON is
   // thousands of cards — far beyond normal use).
   MAX_DOC_BYTES: 500000,
+  // Google ID tokens only live ~1 hour, so after a sign-in the front-end
+  // trades one for a session token minted here, and staying signed in stops
+  // depending on Google re-issuing tokens. Each visit inside the window
+  // renews it, so people who check in at least this often never see the
+  // sign-in gate again. The signing secret is auto-generated on first use
+  // (Script Properties → SESSION_SECRET); delete that property to sign
+  // everyone out at once.
+  SESSION_TTL_DAYS: 30,
 };
 
 const SHEET_NAME = 'Board';
@@ -75,14 +83,15 @@ function doGet(e) {
 }
 
 // Authenticated traffic (load AND save) arrives as POST so credentials never
-// sit in a URL. Each request carries either `key` (team passphrase) or
-// `idToken` (Google sign-in, verified server-side).
+// sit in a URL. Each request carries `key` (team passphrase), `idToken`
+// (fresh Google sign-in), or `sessionToken` (long-lived, minted below).
 function doPost(e) {
   const lock = LockService.getScriptLock();
   lock.tryLock(20000);
   try {
     let data = {};
     try { data = JSON.parse(e.postData.contents); } catch (err) { data = (e && e.parameter) || {}; }
+    if (data.action === 'session') return json(sessionMint_(data));
     if (data.action === 'load') { requireAuth_(data); return json(loadDoc_()); }
     if (data.action === 'save') { requireAuth_(data); return json(saveDoc_(data)); }
     // --- Ambassador post reviews bridge (HQ-authenticated) ---
@@ -231,9 +240,11 @@ function writeChunks_(sheet, docString) {
 }
 
 // ============================== AUTH =======================================
-// Two doors: a Google ID token from a @finmango.org account, or the shared
-// team ACCESS_KEY. Either one grants read/write to the whole workspace.
+// Two doors: a Google sign-in from a @finmango.org account (a fresh ID token
+// or the session token it was traded for), or the shared team ACCESS_KEY.
+// Either one grants read/write to the whole workspace.
 function requireAuth_(data) {
+  if (data.sessionToken) { verifySessionToken_(String(data.sessionToken)); return; }
   if (data.idToken) { verifyIdToken_(String(data.idToken)); return; }
   requireKey_(data.key);
 }
@@ -246,9 +257,10 @@ function requireKey_(key) {
 }
 
 // Verify a Google ID token: signature/expiry via Google's tokeninfo endpoint,
-// then audience (our OAuth client) and domain (finmango.org). Verified tokens
-// are cached by hash until they expire, so polling clients cost one outbound
-// verification per user per hour, not one per request.
+// then audience (our OAuth client) and domain (finmango.org). Returns the
+// verified email. Verified tokens are cached by hash until they expire, so
+// polling clients cost one outbound verification per user per hour, not one
+// per request.
 function verifyIdToken_(idToken) {
   if (CONFIG.GOOGLE_CLIENT_ID.indexOf('REPLACE_WITH') === 0) {
     throw new Error('Google sign-in not configured');
@@ -257,7 +269,10 @@ function verifyIdToken_(idToken) {
   const hash = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, idToken)
     .map(function (b) { return ('0' + ((b + 256) % 256).toString(16)).slice(-2); }).join('');
   const cacheKey = 'tok_' + hash;
-  if (cache.get(cacheKey)) return;
+  // Cached value is the verified email ('@' check skips stale pre-email
+  // cache entries that stored a bare '1').
+  const cached = cache.get(cacheKey);
+  if (cached && cached.indexOf('@') > -1) return cached;
 
   let info;
   try {
@@ -278,7 +293,70 @@ function verifyIdToken_(idToken) {
     throw new Error('Invalid token');
   }
   const ttl = Math.max(60, Math.min(21600, Number(info.exp) - Math.floor(Date.now() / 1000) - 60));
-  cache.put(cacheKey, '1', ttl);
+  cache.put(cacheKey, email, ttl);
+  return email;
+}
+
+// ---------------------------- SESSION TOKENS -------------------------------
+// A session token is `base64url(payload).base64url(hmac)` where the payload
+// is {e: email, x: expiry-seconds} and the HMAC-SHA256 key is a secret this
+// script invents and keeps in Script Properties. Verification is pure math —
+// no outbound call, no per-session storage. Trade-off: individual sessions
+// can't be revoked, only all at once (delete SESSION_SECRET); the same is
+// already true of the shared ACCESS_KEY door.
+function sessionSecret_() {
+  const props = PropertiesService.getScriptProperties();
+  let secret = props.getProperty('SESSION_SECRET');
+  if (!secret) {
+    secret = Utilities.getUuid() + Utilities.getUuid();
+    props.setProperty('SESSION_SECRET', secret);
+  }
+  return secret;
+}
+
+// `{action:'session'}` + a fresh idToken (right after sign-in) OR a
+// still-valid sessionToken (sliding renewal) → a new 30-day session token.
+function sessionMint_(data) {
+  let email;
+  if (data.sessionToken) email = verifySessionToken_(String(data.sessionToken));
+  else email = verifyIdToken_(String(data.idToken || ''));
+  const exp = Math.floor(Date.now() / 1000) + CONFIG.SESSION_TTL_DAYS * 86400;
+  const payload = Utilities.base64EncodeWebSafe(JSON.stringify({ e: email, x: exp }));
+  const sig = Utilities.base64EncodeWebSafe(
+    Utilities.computeHmacSha256Signature(payload, sessionSecret_()));
+  return { result: 'success', sessionToken: payload + '.' + sig, exp: exp, email: email };
+}
+
+// Returns the email on success; throws 'Invalid token' (the same message the
+// front-end already handles for lapsed Google tokens) on any failure.
+function verifySessionToken_(token) {
+  const parts = String(token || '').split('.');
+  if (parts.length !== 2) throw new Error('Invalid token');
+  const expect = Utilities.base64EncodeWebSafe(
+    Utilities.computeHmacSha256Signature(parts[0], sessionSecret_()));
+  if (!digestEq_(parts[1], expect)) throw new Error('Invalid token');
+  let payload;
+  try {
+    payload = JSON.parse(Utilities.newBlob(Utilities.base64DecodeWebSafe(parts[0])).getDataAsString());
+  } catch (err) {
+    throw new Error('Invalid token');
+  }
+  const email = String(payload.e || '').toLowerCase();
+  if (!payload.x || Number(payload.x) * 1000 < Date.now()) throw new Error('Invalid token');
+  if (email.slice(-(CONFIG.ALLOWED_DOMAIN.length + 1)) !== '@' + CONFIG.ALLOWED_DOMAIN) {
+    throw new Error('Invalid token');
+  }
+  return email;
+}
+
+// Compare via SHA-256 digests so the comparison time doesn't leak how much
+// of an attacker's forged signature matched.
+function digestEq_(a, b) {
+  const ha = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, String(a));
+  const hb = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, String(b));
+  let diff = 0;
+  for (let i = 0; i < ha.length; i++) diff |= ha[i] ^ hb[i];
+  return diff === 0;
 }
 
 // Forward a reviewer action to the Ambassador Notes backend, attaching the

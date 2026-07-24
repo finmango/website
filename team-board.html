@@ -968,7 +968,7 @@
       search: '', fAssignee: '', sidebarClosed: false };
     var sync = { key: localStorage.getItem(LS_KEY) || '', serverVersion: 0, status: 'local',
       dirty: false, pushTimer: null, pushing: false, configured: null };
-    var auth = null; // Google sign-in: {token, email, name, given, picture, exp}
+    var auth = null; // Google sign-in: {token, email, name, given, picture, exp, sess, sessExp}
     try { auth = JSON.parse(localStorage.getItem(LS_AUTH) || 'null'); } catch (e) {}
     var meId = localStorage.getItem(LS_ME) || '';
     var quickAddCol = null;         // column id currently showing the quick-add box
@@ -1050,13 +1050,48 @@
     // ====================== GOOGLE SIGN-IN (GIS) ===========================
     function gsiConfigured() { return GOOGLE_CLIENT_ID.indexOf('REPLACE_WITH') !== 0; }
     function authValid() { return !!(auth && auth.token && auth.exp && auth.exp * 1000 - 60000 > Date.now()); }
-    function canSync() { return !!sync.key || authValid(); }
+    // Google's ID token only lives ~1 hour, so right after sign-in it's traded
+    // for a 30-day session token minted by our backend — that's what keeps
+    // people signed in between visits. Any visit inside the window slides it
+    // another 30 days (maintainSession), so the gate only ever reappears
+    // after a month away or an explicit sign-out.
+    function sessionValid() { return !!(auth && auth.sess && auth.sessExp && auth.sessExp * 1000 - 60000 > Date.now()); }
+    function signedIn() { return sessionValid() || authValid(); }
+    function canSync() { return !!sync.key || signedIn(); }
     // Credentials attached to every load/save. The signed-in identity wins so
     // edits are attributed to a real person; the team key is the fallback door.
     function creds() {
+      if (sessionValid()) return { sessionToken: auth.sess };
       if (authValid()) return { idToken: auth.token };
       if (sync.key) return { key: sync.key };
       return {};
+    }
+    // Trade a fresh Google ID token — or a still-valid session token, for the
+    // sliding renewal — for a new 30-day session token. Best-effort: a backend
+    // that predates sessions answers 'Unknown action' and we quietly stay on
+    // the 1-hour Google tokens (One Tap re-issues them like before).
+    function exchangeSession(cred) {
+      if (exchangeSession.busy) return;
+      exchangeSession.busy = true;
+      fetch('/api/board', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(Object.assign({ action: 'session' }, cred))
+      }).then(function (r) { return r.json(); }).then(function (res) {
+        exchangeSession.busy = false;
+        if (res.result === 'success' && res.sessionToken && auth) {
+          auth.sess = res.sessionToken; auth.sessExp = res.exp;
+          try { localStorage.setItem(LS_AUTH, JSON.stringify(auth)); } catch (e) {}
+        }
+      }).catch(function () { exchangeSession.busy = false; });
+    }
+    var SESSION_RENEW_MS = 20 * 24 * 3600 * 1000; // renew once < 20 days remain
+    function maintainSession() {
+      if (!auth) return;
+      if (authValid() && (!sessionValid() || auth.sessExp * 1000 - Date.now() < SESSION_RENEW_MS)) {
+        exchangeSession({ idToken: auth.token });
+      } else if (sessionValid() && auth.sessExp * 1000 - Date.now() < SESSION_RENEW_MS) {
+        exchangeSession({ sessionToken: auth.sess });
+      }
     }
     function initGsi() {
       if (!gsiConfigured() || !window.google || !google.accounts || !google.accounts.id) return false;
@@ -1080,6 +1115,7 @@
       auth = { token: resp.credential, email: email, name: claims.name || email,
         given: claims.given_name || '', picture: claims.picture || '', exp: claims.exp };
       try { localStorage.setItem(LS_AUTH, JSON.stringify(auth)); } catch (e) {}
+      exchangeSession({ idToken: resp.credential }); // start the 30-day session
       if (!booted) { bootApp(); toast('Signed in as ' + auth.name); return; }
       ensureGoogleMember();
       closeModal();
@@ -1115,9 +1151,17 @@
       closeModal(); render();
       toast('Signed out');
     }
-    // The backend answers 'Invalid token' when the ~1h Google token lapses:
-    // drop it and let One Tap re-issue silently (auto_select), else re-prompt.
+    // The backend answered 'Invalid token' — either the session token was
+    // revoked/expired or the ~1h Google token lapsed. Fall back one rung at a
+    // time: a still-fresh Google token can mint a new session immediately;
+    // otherwise drop everything and let One Tap re-issue silently
+    // (auto_select), else re-prompt.
     function handleAuthExpiry() {
+      if (auth && auth.sess) {
+        auth.sess = null; auth.sessExp = null;
+        try { localStorage.setItem(LS_AUTH, JSON.stringify(auth)); } catch (e) {}
+        if (authValid()) { exchangeSession({ idToken: auth.token }); pullLoad(false); return; }
+      }
       auth = null; localStorage.removeItem(LS_AUTH);
       if (initGsi()) { try { google.accounts.id.prompt(); } catch (e) {} }
       setSyncStatus(sync.key ? 'busy' : 'error', sync.key ? null : 'Signed out');
@@ -1191,7 +1235,7 @@
             doc = sync.dirty ? mergeDocs(doc, res.data) : res.data;
             migrate();
             sync.serverVersion = res.version;
-            if (authValid()) ensureGoogleMember(); // the shared doc may not know me yet
+            if (signedIn()) ensureGoogleMember(); // the shared doc may not know me yet
             if (!board()) ui.boardId = doc.boards[0] && doc.boards[0].id;
             if (ui.view === 'page' && !page()) ui.view = 'board';
             persistLocal(); render();
@@ -3011,7 +3055,7 @@
       var html = '<h2>Access &amp; sync</h2>'
         + '<p class="help-note">' + esc(status) + '</p>'
         + '<div class="m-section">Sign in with FinMango</div>'
-        + (authValid()
+        + (signedIn()
           ? '<div class="signed-in-row">' + avatarHtml({ name: auth.name, color: '#FF6B35', photo: auth.picture }, 'margin:0;')
             + '<span class="who"><span class="n">' + esc(auth.name) + '</span><br><span class="e">' + esc(auth.email) + '</span></span>'
             + '<button class="btn-sm ghost" id="gsiSignOut">Sign out</button></div>'
@@ -3071,9 +3115,9 @@
       if (off) off.onclick = function () {
         sync.key = ''; localStorage.removeItem(LS_KEY);
         sync.serverVersion = 0; sync.configured = null;
-        if (!authValid()) setSyncStatus('local');
+        if (!signedIn()) setSyncStatus('local');
         closeModal();
-        toast('Key forgotten' + (authValid() ? ' — still signed in with Google' : ' — changes stay on this device'));
+        toast('Key forgotten' + (signedIn() ? ' — still signed in with Google' : ' — changes stay on this device'));
       };
     }
 
@@ -3631,7 +3675,7 @@
       $('gate').style.display = 'none';
       $('app').style.display = 'flex';
       loadLocal();
-      if (authValid()) ensureGoogleMember();
+      if (signedIn()) { ensureGoogleMember(); maintainSession(); }
       if (window.innerWidth <= 760) ui.sidebarClosed = true;
       render();
       setSyncStatus('local');
@@ -3694,13 +3738,15 @@
     }
 
     // ============================== INIT ===================================
-    if (auth && !authValid()) { auth = null; localStorage.removeItem(LS_AUTH); } // expired token from a previous visit
-    if (authValid() || sync.key) bootApp(); else showGate();
+    // Clear leftovers only when BOTH tokens have lapsed — a valid 30-day
+    // session keeps returning folks signed in with no gate at all.
+    if (auth && !signedIn()) { auth = null; localStorage.removeItem(LS_AUTH); }
+    if (signedIn() || sync.key) bootApp(); else showGate();
 
     // Once the GIS script lands (post-boot path): enable One Tap so returning
     // @finmango.org folks are silently re-signed-in when their token lapses.
     window.addEventListener('load', function () {
-      if (booted && initGsi() && !authValid()) {
+      if (booted && initGsi() && !signedIn()) {
         try { google.accounts.id.prompt(); } catch (e) {}
       }
     });
@@ -3710,7 +3756,10 @@
       if (booted && canSync() && !sync.dirty && !sync.pushing && !document.hidden) pullLoad(false);
     }, 15000);
     document.addEventListener('visibilitychange', function () {
-      if (booted && !document.hidden && canSync() && !sync.dirty && !sync.pushing) pullLoad(false);
+      if (booted && !document.hidden) {
+        maintainSession(); // slide the 30-day session in tabs that stay open
+        if (canSync() && !sync.dirty && !sync.pushing) pullLoad(false);
+      }
     });
     window.addEventListener('beforeunload', function () {
       if (booted && sync.dirty && canSync()) {
