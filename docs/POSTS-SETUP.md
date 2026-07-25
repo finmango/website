@@ -108,7 +108,11 @@ notes that stored `<div>`-based paragraphs are fixed automatically at render.
   are stored in UTC and shown in each viewer's local timezone; approval
   emails spell the time out in the script's timezone.
 - Any vote that knocks a post out of *approved* (request changes / reject)
-  clears its schedule, so nothing publishes by surprise.
+  clears its schedule, so nothing publishes by surprise. Because that's easy
+  to do by accident, the HQ tab asks for confirmation before a reject or
+  changes vote on an approved post (the prompt spells out the scheduled
+  go-live it would cancel), and hides the redundant ✓ Approve button once a
+  post is approved.
 
 ### Who author emails come from
 
