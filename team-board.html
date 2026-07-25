@@ -3303,6 +3303,18 @@
       var m = me();
       var reviewer = m ? m.name : 'HQ team';
       var comment = '';
+      // Pulling an approved post out of the pipeline — especially one already
+      // scheduled to go live — shouldn't happen on a stray click. Spell out
+      // exactly what the vote undoes and ask first.
+      if (act === 'reject' || act === 'changes') {
+        var p0 = (notes.posts || []).find(function (x) { return x.id === id; });
+        if (p0 && p0.status === 'approved') {
+          if (!confirm('This post is already approved'
+            + (p0.scheduledFor ? ' and goes live ' + fmtSched(p0.scheduledFor) : '') + '.\n\n'
+            + (act === 'reject' ? 'Reject it anyway?' : 'Request changes anyway?')
+            + (p0.scheduledFor ? ' This cancels the scheduled go-live.' : ''))) return;
+        }
+      }
       if (act === 'changes') {
         comment = (prompt('What should the author change or add?\n\nThis note is emailed straight to them, signed as you'
           + (signedIn() ? ' — replies land in your inbox.' : '.')) || '').trim();
@@ -3415,10 +3427,13 @@
             + (scheduled ? ' · 🕓 goes live ' + esc(fmtSched(p.scheduledFor)) : '') + '</div>'
             + (open ? '<div class="note-detail"><p class="help-note">Loading the post…</p></div>' : '')
             + '<div class="pr-actions">'
-            + (!readonly ? '<button class="btn-sm ghost" data-pr="approve">✓ Approve</button>'
+            // An approved post's real actions are Schedule/Publish — approving
+            // again adds nothing, so that button goes away. Changes/Reject stay
+            // (a scheduled post can still be pulled) but noteAction confirms
+            // first. On rejected posts it's the mirror image: re-rejecting is
+            // the one vote that makes no sense to offer.
+            + (!readonly ? (p.status !== 'approved' ? '<button class="btn-sm ghost" data-pr="approve">✓ Approve</button>' : '')
               + '<button class="btn-sm ghost" data-pr="changes">✎ Changes</button>'
-              // A rejected post can still be approved (a change of heart) —
-              // re-rejecting it is the one vote that makes no sense to offer.
               + (p.status !== 'rejected' ? '<button class="btn-sm danger" data-pr="reject">✗ Reject</button>' : '') : '')
             + (p.status === 'approved' ? '<button class="btn-sm ghost" data-pr="schedule">🕓 ' + (scheduled ? 'Reschedule' : 'Schedule') + '</button>'
               + '<button class="btn-sm primary" data-pr="publish">🚀 Publish now</button>' : '')
