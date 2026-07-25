@@ -110,6 +110,34 @@ notes that stored `<div>`-based paragraphs are fixed automatically at render.
 - Any vote that knocks a post out of *approved* (request changes / reject)
   clears its schedule, so nothing publishes by surprise.
 
+### Who author emails come from
+
+Apps Script can only *send* from the Google account that deployed the script —
+that part can't change. What the author sees and where replies go **does**
+follow the person who clicked, though: when a reviewer is signed in to HQ with
+their `@finmango.org` Google account, approval / change-request / published
+emails are signed with their name ("Mia Fawls · FinMango") and **Reply-To** is
+set to their inbox, so the conversation lands with the person who actually
+reviewed the note. The identity comes from the verified sign-in token
+server-side — the browser can't spoof it. Reviewers using the shared team key
+(or the standalone `post-review.html` panel) have no signed-in identity, so
+those emails fall back to the generic "FinMango" name and the editor inbox
+(`NOTES_REPLY_TO` in the HQ script / `EDITOR_EMAIL` in this one).
+
+> **Upgrading an existing install to reviewer attribution?** Paste the updated
+> `tools/posts-apps-script.js` *and* `tools/team-board-apps-script.js` into
+> their Apps Script projects and redeploy a new version of **both** — the HQ
+> bridge forwards the verified reviewer identity to this backend.
+
+### Rejected posts (HQ Ambassador Notes tab)
+
+Rejecting never deletes anything — the post keeps its Drive folder, Sheet row,
+and full review trail; it's just hidden from the review queue. A quiet
+**"▸ Rejected (n)"** toggle at the bottom of the HQ tab lists them; expanded
+rows keep **✓ Approve** and **✎ Changes**, so a change of heart brings a post
+back into the normal flow with one click (approving also clears nothing it
+shouldn't — the schedule stays empty until you pick one).
+
 ## Security notes
 
 - All reviewer actions require the `REVIEW_KEY`; public endpoints only ever

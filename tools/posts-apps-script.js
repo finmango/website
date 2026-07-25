@@ -194,9 +194,10 @@ function addReview_(p) {
   updateRow_(r.rowIndex, { status: post.status, scheduledFor: post.scheduledFor || '', reviewsSummary: summarize_(post.reviews) });
 
   // Tell the author the good news (once per approval, or when a time is set).
+  // Signed by the reviewer who clicked, with replies routed to their inbox.
   let emailed = false;
   if (vote === 'approve' && post.status === 'approved' && (!wasApproved || when)) {
-    emailed = notifyAuthorApproved_(post);
+    emailed = notifyAuthorApproved_(post, entry.reviewer, cleanEmail_(p.reviewerEmail));
   }
   return { result: 'success', post: post, emailed: emailed };
 }
@@ -216,7 +217,7 @@ function schedulePost_(p) {
     comment: when ? '🕓 Scheduled to go live ' + fmtWhen_(when) : '🕓 Schedule cleared — will be published manually', at: new Date().toISOString() });
   saveJson_(r.jsonFileId, post);
   updateRow_(r.rowIndex, { scheduledFor: post.scheduledFor, reviewsSummary: summarize_(post.reviews) });
-  const emailed = when ? notifyAuthorApproved_(post) : false;
+  const emailed = when ? notifyAuthorApproved_(post, String(p.reviewer || ''), cleanEmail_(p.reviewerEmail)) : false;
   return { result: 'success', post: post, emailed: emailed };
 }
 
@@ -257,12 +258,13 @@ function publishPost_(p) {
     const approvals = (post.reviews || []).filter(x => x.vote === 'approve').length;
     if (approvals < 1) return { result: 'error', error: 'Needs at least one approval before publishing' };
   }
-  goLive_(r, post);
+  goLive_(r, post, String(p.reviewer || ''), cleanEmail_(p.reviewerEmail));
   return { result: 'success', id: post.id, url: CONFIG.SITE_BASE + '/post?id=' + encodeURIComponent(post.id) };
 }
 
-// Flip a post live — shared by manual Publish and the scheduler below.
-function goLive_(r, post) {
+// Flip a post live — shared by manual Publish and the scheduler below (the
+// scheduler passes no reviewer, so its emails fall back to the editor inbox).
+function goLive_(r, post, reviewerName, reviewerEmail) {
   post.status = 'published';
   post.publishedAt = new Date().toISOString();
   post.scheduledFor = '';
@@ -275,7 +277,7 @@ function goLive_(r, post) {
   // GitHub API for SEO. Disabled by default (no token needed). See docs/POSTS-SETUP.md.
   // commitStaticPage_(post);
 
-  notifyAuthorPublished_(post);
+  notifyAuthorPublished_(post, reviewerName, reviewerEmail);
 }
 
 // ============================== SCHEDULER ==================================
@@ -428,13 +430,17 @@ function notifyEditors_(post) {
 }
 // Approval email — the author learns their note made the cut, and (when
 // scheduled) exactly when it goes live. Also reused when the time changes.
-function notifyAuthorApproved_(post) {
+// Signed with the acting reviewer's name and reply-to (Apps Script always
+// sends *from* the deploying account — name + reply-to are what we can set),
+// falling back to the editor inbox when no reviewer identity was passed.
+function notifyAuthorApproved_(post, reviewerName, reviewerEmail) {
   if (!post.authorEmail) return false;
   try {
     const when = post.scheduledFor ? fmtWhen_(post.scheduledFor) : '';
     MailApp.sendEmail({
       to: post.authorEmail,
-      replyTo: CONFIG.EDITOR_EMAIL,
+      name: senderName_(reviewerName),
+      replyTo: reviewerEmail || CONFIG.EDITOR_EMAIL,
       subject: 'Approved 🎉 — your FinMango Ambassador Note: ' + (post.title || ''),
       htmlBody:
         '<p>Great news — <strong>' + esc_(post.title || 'your Ambassador Note') + '</strong> has been approved by our editorial team. 🎉</p>' +
@@ -448,11 +454,13 @@ function notifyAuthorApproved_(post) {
     return false; // email failures never block the vote itself
   }
 }
-function notifyAuthorPublished_(post) {
+function notifyAuthorPublished_(post, reviewerName, reviewerEmail) {
   if (!post.authorEmail) return;
   try {
     MailApp.sendEmail({
       to: post.authorEmail,
+      name: senderName_(reviewerName),
+      replyTo: reviewerEmail || CONFIG.EDITOR_EMAIL,
       subject: 'Your FinMango Ambassador Note is published: ' + (post.title || ''),
       htmlBody:
         '<p>Great news — your Ambassador Note is now live on FinMango.</p>' +
@@ -462,6 +470,17 @@ function notifyAuthorPublished_(post) {
   } catch (err) { /* ignore */ }
 }
 function esc_(s) { return String(s || '').replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
+// A reviewer identity only rides into an email if it looks like an address;
+// anything else (including the generic 'HQ team' door) falls back to defaults.
+function cleanEmail_(v) {
+  const s = String(v || '').trim();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) ? s : '';
+}
+// "Mia Fawls · FinMango" when a real reviewer name is known, else "FinMango".
+function senderName_(reviewerName) {
+  const n = String(reviewerName || '').trim();
+  return n && n !== 'HQ team' && n !== 'Editor' && n !== 'Reviewer' ? n + ' · FinMango' : 'FinMango';
+}
 
 // ============================== ONE-TIME SETUP ============================
 function setup() {

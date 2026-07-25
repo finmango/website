@@ -48,8 +48,9 @@ const CONFIG = {
   // "not wired up" note and the standalone post-review.html panel still works.
   POSTS_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyw06JczRZVwdf3vw70xeshZ_shp2J1zzvPvPqhR-2_FSqzSBFaq0Yu-OZ7KjKYfCuthQ/exec',
   POSTS_REVIEW_KEY: 'REPLACE_WITH_POSTS_REVIEW_KEY',
-  // When a reviewer requests changes (with a note), the author is emailed the
-  // note directly. Replies to that email land here.
+  // Author emails (approvals, change requests) are signed by — and reply to —
+  // whoever is signed in to HQ when they click the button. This address is the
+  // fallback for the shared-key door, where there's no signed-in identity.
   NOTES_REPLY_TO: 'scott@finmango.org',
   // Refuse absurdly large documents (protects the Sheet; ~500 KB of JSON is
   // thousands of cards — far beyond normal use).
@@ -98,29 +99,31 @@ function doPost(e) {
     if (data.action === 'posts-list') { requireAuth_(data); return json(postsBridge_({ action: 'list', status: String(data.status || 'all') })); }
     if (data.action === 'posts-get') { requireAuth_(data); return json(postsBridge_({ action: 'review-get', id: String(data.id || '') })); }
     if (data.action === 'posts-review') {
-      requireAuth_(data);
+      // The verified sign-in email (empty for the shared-key door) rides along
+      // so author emails are signed by — and reply to — the actual reviewer.
+      const reviewerEmail = requireAuth_(data);
       const vote = String(data.vote || 'comment');
       const comment = String(data.comment || '').slice(0, 2000);
       const reviewer = String(data.reviewer || 'HQ team');
-      const review = { action: 'review', id: String(data.id || ''), reviewer: reviewer, vote: vote, comment: comment };
+      const review = { action: 'review', id: String(data.id || ''), reviewer: reviewer, vote: vote, comment: comment, reviewerEmail: reviewerEmail };
       // Approvals may carry a go-live time — the posts backend stores it,
       // emails the author, and auto-publishes when the time arrives.
       if (vote === 'approve' && data.scheduledFor) review.scheduledFor = String(data.scheduledFor);
       const out = postsBridge_(review);
       // "Request changes" with a note also emails the author the note.
       if (out && out.result === 'success' && vote === 'changes' && comment.trim()) {
-        out.emailed = emailAuthorChanges_(String(data.id || ''), reviewer, comment.trim());
+        out.emailed = emailAuthorChanges_(String(data.id || ''), reviewer, comment.trim(), reviewerEmail);
       }
       return json(out);
     }
     if (data.action === 'posts-schedule') {
-      requireAuth_(data);
+      const reviewerEmail = requireAuth_(data);
       return json(postsBridge_({ action: 'schedule', id: String(data.id || ''),
-        scheduledFor: String(data.scheduledFor || ''), reviewer: String(data.reviewer || 'HQ team') }));
+        scheduledFor: String(data.scheduledFor || ''), reviewer: String(data.reviewer || 'HQ team'), reviewerEmail: reviewerEmail }));
     }
     if (data.action === 'posts-publish') {
-      requireAuth_(data);
-      return json(postsBridge_({ action: 'publish', id: String(data.id || ''), reviewer: String(data.reviewer || 'HQ team') }));
+      const reviewerEmail = requireAuth_(data);
+      return json(postsBridge_({ action: 'publish', id: String(data.id || ''), reviewer: String(data.reviewer || 'HQ team'), reviewerEmail: reviewerEmail }));
     }
     if (data.action === 'posts-update') {
       requireAuth_(data);
@@ -251,11 +254,14 @@ function writeChunks_(sheet, docString) {
 // ============================== AUTH =======================================
 // Two doors: a Google sign-in from a @finmango.org account (a fresh ID token
 // or the session token it was traded for), or the shared team ACCESS_KEY.
-// Either one grants read/write to the whole workspace.
+// Either one grants read/write to the whole workspace. Returns the verified
+// sign-in email — '' for the key door, which carries no identity — so callers
+// can attribute actions (e.g. author emails reply to the actual reviewer).
 function requireAuth_(data) {
-  if (data.sessionToken) { verifySessionToken_(String(data.sessionToken)); return; }
-  if (data.idToken) { verifyIdToken_(String(data.idToken)); return; }
+  if (data.sessionToken) return verifySessionToken_(String(data.sessionToken));
+  if (data.idToken) return verifyIdToken_(String(data.idToken));
   requireKey_(data.key);
+  return '';
 }
 
 function requireKey_(key) {
@@ -401,7 +407,10 @@ function postsBridgePost_(payload) {
 // Email the author the reviewer's change request. Sent from this (HQ) script
 // so the posts backend needs no modification; the author's address comes from
 // their original submission via the bridge. Returns true if a mail went out.
-function emailAuthorChanges_(id, reviewer, comment) {
+// The mail is signed with the signed-in reviewer's name and replies go to
+// their inbox (Apps Script can't change the From address — it always sends
+// as the account that deployed the script — but name + reply-to can).
+function emailAuthorChanges_(id, reviewer, comment, reviewerEmail) {
   try {
     const res = postsBridge_({ action: 'review-get', id: id });
     const post = res && res.post;
@@ -409,7 +418,8 @@ function emailAuthorChanges_(id, reviewer, comment) {
     const title = String(post.title || 'your Ambassador Note');
     MailApp.sendEmail({
       to: post.authorEmail,
-      replyTo: CONFIG.NOTES_REPLY_TO,
+      name: reviewer && reviewer !== 'HQ team' ? reviewer + ' · FinMango' : 'FinMango',
+      replyTo: reviewerEmail || CONFIG.NOTES_REPLY_TO,
       subject: 'FinMango Ambassador Notes — changes requested: ' + title,
       htmlBody:
         '<p>Hi ' + escHtml_(String(post.authorName || 'there').split(/\s+/)[0]) + ',</p>' +

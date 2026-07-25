@@ -3168,7 +3168,7 @@
     // The queue paints instantly from the last-seen copy (localStorage) and
     // refreshes in the background — the two Apps Script cold starts behind
     // each live fetch cost ~4-5s, so we never make the user wait on them.
-    var notes = { posts: null, loading: false, refreshing: false, error: null, openId: null, detail: {} };
+    var notes = { posts: null, loading: false, refreshing: false, error: null, openId: null, detail: {}, showRejected: false };
     try {
       var cachedNotes = JSON.parse(localStorage.getItem(LS_NOTES) || 'null');
       if (cachedNotes && cachedNotes.posts) notes.posts = cachedNotes.posts;
@@ -3304,7 +3304,8 @@
       var reviewer = m ? m.name : 'HQ team';
       var comment = '';
       if (act === 'changes') {
-        comment = (prompt('What should the author change or add?\n\nThis note is emailed straight to them (they can reply).') || '').trim();
+        comment = (prompt('What should the author change or add?\n\nThis note is emailed straight to them, signed as you'
+          + (signedIn() ? ' — replies land in your inbox.' : '.')) || '').trim();
         if (!comment) { toast('Add a note — it\'s what gets emailed to the author'); return; }
       } else if (act === 'reject') {
         comment = prompt('Reason (recorded with the vote — not emailed):') || '';
@@ -3398,6 +3399,7 @@
       } else {
         var actionable = notes.posts.filter(function (p) { return p.status !== 'published' && p.status !== 'rejected'; });
         var done = notes.posts.filter(function (p) { return p.status === 'published'; }).slice(0, 8);
+        var rejected = notes.posts.filter(function (p) { return p.status === 'rejected'; });
         function row(p, readonly) {
           var scheduled = p.status === 'approved' && p.scheduledFor;
           var st = scheduled ? ['Scheduled', '#4A7BD0'] : (PR_STATUS[p.status] || [p.status, '#9A9A93']);
@@ -3415,16 +3417,26 @@
             + '<div class="pr-actions">'
             + (!readonly ? '<button class="btn-sm ghost" data-pr="approve">✓ Approve</button>'
               + '<button class="btn-sm ghost" data-pr="changes">✎ Changes</button>'
-              + '<button class="btn-sm danger" data-pr="reject">✗ Reject</button>' : '')
+              // A rejected post can still be approved (a change of heart) —
+              // re-rejecting it is the one vote that makes no sense to offer.
+              + (p.status !== 'rejected' ? '<button class="btn-sm danger" data-pr="reject">✗ Reject</button>' : '') : '')
             + (p.status === 'approved' ? '<button class="btn-sm ghost" data-pr="schedule">🕓 ' + (scheduled ? 'Reschedule' : 'Schedule') + '</button>'
               + '<button class="btn-sm primary" data-pr="publish">🚀 Publish now</button>' : '')
             + (p.status === 'published' ? '<a class="btn-sm ghost" href="post.html?id=' + esc(p.id) + '" target="_blank" rel="noopener">View live ↗</a>' : '')
             + '</div></div>';
         }
+        // Rejected posts never leave the archive — they're just tucked behind a
+        // quiet toggle so the queue stays focused. Expanded rows keep the
+        // Approve/Changes buttons, so a change of heart is one click.
         body.innerHTML = (actionable.length
             ? '<div class="m-section">Needs review (' + actionable.length + ')</div>' + actionable.map(function (p) { return row(p, false); }).join('')
             : '<p class="help-note" style="margin-top:1rem;">🎉 Queue is clear — nothing waiting for review.</p>')
-          + (done.length ? '<div class="m-section">Recently published</div>' + done.map(function (p) { return row(p, true); }).join('') : '');
+          + (done.length ? '<div class="m-section">Recently published</div>' + done.map(function (p) { return row(p, true); }).join('') : '')
+          + (rejected.length
+            ? '<p class="help-note" style="margin-top:1.4rem;"><a href="#" id="notesRejected">'
+              + (notes.showRejected ? '▾ Hide rejected' : '▸ Rejected (' + rejected.length + ')') + '</a></p>'
+              + (notes.showRejected ? rejected.map(function (p) { return row(p, false); }).join('') : '')
+            : '');
         body.querySelectorAll('[data-pr]').forEach(function (el) {
           var act = el.dataset.pr;
           var id = el.closest('.pr-row').dataset.id;
@@ -3439,6 +3451,8 @@
             else el.onclick = function () { noteAction(id, act, el); };
           }
         });
+        var rej = body.querySelector('#notesRejected');
+        if (rej) rej.onclick = function (e) { e.preventDefault(); notes.showRejected = !notes.showRejected; render(); };
         // Fill in the open post's rendered detail
         if (notes.openId) fillNoteDetail(body, notes.openId);
       }
