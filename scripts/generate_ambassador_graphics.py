@@ -46,6 +46,7 @@ AMBASSADORS = [
     {"slug": "aren-inan",           "name": "Aren Inan",            "photo": "41.jpg", "city": "Ridgefield, NJ",   "country": "USA"},
     {"slug": "hayley-foote",        "name": "Hayley Foote",         "photo": "42.jpg", "city": "Columbus, OH",     "country": "USA"},
     {"slug": "sophie-hong",         "name": "Sophie Hong",          "photo": "43.jpg", "city": "Concord, MA",      "country": "USA"},
+    {"slug": "devin-acar",          "name": "Devin Acar",           "photo": "45.jpg", "city": "Montvale, NJ",     "country": "USA"},
 ]
 
 ROLE_LABEL = "2026 FinMango Ambassador"
