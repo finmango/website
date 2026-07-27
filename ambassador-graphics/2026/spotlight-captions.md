@@ -18,10 +18,10 @@ Voice notes: short, concrete, one real detail per person. No
 
 | Week | Date (2026) | Ambassador | Why this slot |
 | --- | --- | --- | --- |
-| 1 | Tue Jul 28 | Devin Acar | Newest addition to the cohort opens the series |
-| 2 | Tue Aug 4 | Harshil Shah |  |
-| 3 | Tue Aug 11 | Caleb Vales |  |
-| 4 | Tue Aug 18 | Aren Inan | Just ahead of the school year his program runs in |
+| 1 | Tue Jul 28 | Harshil Shah | Opens the series |
+| 2 | Tue Aug 4 | Caleb Vales |  |
+| 3 | Tue Aug 11 | Aren Inan | Just ahead of the school year his program runs in |
+| 4 | Tue Aug 18 | Devin Acar | Newest addition to the cohort |
 | 5 | Tue Aug 25 | Hans Patel |  |
 | 6 | Tue Sep 1 | Hayley Foote | Fall semester at Ohio State underway |
 | 7 | Tue Sep 8 | Eduardo Charles Alba | Professional profile lands well post-summer on LinkedIn |
@@ -52,12 +52,6 @@ Every caption ends with the same block:
 > finmango.org/ambassadors
 > #FinMangoAmbassador #FinancialHealth
 
-### Devin Acar — `devin-acar-square.png`
-
-Ambassador spotlight: Devin spent 10 months running regressions across 107,312 responses to FINRA’s national survey and found that how people feel about money predicts their financial well-being about seven times more strongly than what they know about it. He’s a research assistant at Ramapo College, Chief Outreach Officer at FLY to the World, and has built free AI-powered websites for 100+ small businesses.
-
-Meet Devin Acar, 2026 FinMango Ambassador.
-
 ### Harshil Shah — `harshil-shah-square.png`
 
 Ambassador spotlight: Harshil grew up watching his parents, immigrants from India, figure out American money the hard way. At the University of South Carolina he co-founded the Carolina Wealth Initiative, teaching high schoolers and nonprofit members what his family had to learn alone.
@@ -75,6 +69,12 @@ Meet Caleb Vales, 2026 FinMango Ambassador.
 Ambassador spotlight: Aren teaches a 10-week financial literacy program at his own high school. The curriculum he built has reached 10,000 students nationwide. He’s also taken the fight to the state level, presenting on financial illiteracy and proposing new legislation.
 
 Meet Aren Inan, 2026 FinMango Ambassador.
+
+### Devin Acar — `devin-acar-square.png`
+
+Ambassador spotlight: Devin spent 10 months running regressions across 107,312 responses to FINRA’s national survey and found that how people feel about money predicts their financial well-being about seven times more strongly than what they know about it. He’s a research assistant at Ramapo College, Chief Outreach Officer at FLY to the World, and has built free AI-powered websites for 100+ small businesses.
+
+Meet Devin Acar, 2026 FinMango Ambassador.
 
 ### Hans Patel — `hans-patel-square.png`
 
