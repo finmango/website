@@ -4,18 +4,15 @@ Generate 2026 FinMango Ambassador social graphics.
 Outputs a 1080x1080 square and a 1080x1920 vertical for each ambassador
 under /ambassador-graphics/2026/.
 
-V2 design direction:
-- Refined brutalism: cream background, thin black border, generous whitespace.
-- Big quiet ``'26`` in the back corner echoing the cohort header on
-  ambassadors.html (DM Sans Black, apostrophe in FinMango orange, low opacity).
-- The site's orange squiggle motif used as the divider under the name
-  instead of a flat rule.
-- Circle-cropped headshot as the focal point with a soft drop shadow
-  and a 2px black ring.
-- DM Serif Display for the name; DM Sans for all supporting copy.
-- Logo quiet in the bottom corner; mission tagline quiet on the opposite side.
-- Square and vertical share the same system but are laid out
-  independently — vertical has a larger disc and more breathing space.
+V3 design direction (the "poster" refresh):
+- Same family as V2 (cream field, thin black frame, DM Serif name,
+  orange squiggle divider) but bolder: the circle headshot becomes a
+  big square photo with an 8px black border and a hard, solid-orange
+  offset shadow — the site's poster motif.
+- A solid orange band anchors the bottom edge and carries the role
+  label and URL in white, with the script logo top-left.
+- Square and vertical share the system; the vertical gets a taller
+  photo and more air.
 """
 
 from pathlib import Path
@@ -212,83 +209,85 @@ def tint_rgba(im: Image.Image, opacity: float) -> Image.Image:
 
 # ---------- layouts ----------
 
+def square_crop(im: Image.Image, size: int) -> Image.Image:
+    """Center-crop to a square and resize."""
+    im = im.convert("RGB")
+    src = min(im.size)
+    left = (im.width - src) // 2
+    top = (im.height - src) // 2
+    return im.crop((left, top, left + src, top + src)).resize((size, size), Image.LANCZOS)
+
+
+def draw_photo_block(base: Image.Image, photo: Image.Image, size: int, x: int, y: int,
+                     border: int, offset: int):
+    """Square photo with a black border and a hard orange offset shadow."""
+    d = ImageDraw.Draw(base)
+    # Solid orange shadow, offset down-right, behind the framed photo.
+    d.rectangle([x + offset, y + offset,
+                 x + size + 2 * border + offset, y + size + 2 * border + offset], fill=ORANGE)
+    d.rectangle([x, y, x + size + 2 * border, y + size + 2 * border], fill=BLACK)
+    base.paste(square_crop(photo, size), (x + border, y + border))
+
+
+def draw_band(base: Image.Image, top: int, pad_x: int, label_size: int, url_size: int):
+    """Solid orange band along the bottom with the role label and URL."""
+    W, H = base.size
+    d = ImageDraw.Draw(base)
+    d.rectangle([0, top, W, H], fill=ORANGE)
+    d.rectangle([0, top, W, top + 3], fill=BLACK)
+    mid = top + (H - top) // 2
+    label_f = font("bold", label_size)
+    lh = measure(label_f, "AG")[1]
+    draw_tracked(d, (pad_x, mid - lh // 2 - 2), ROLE_LABEL.upper(), label_f, WHITE, tracking=3)
+    url_f = font("medium", url_size)
+    uw = url_f.getbbox(URL)[2] - url_f.getbbox(URL)[0]
+    d.text((W - pad_x - uw, mid), URL, font=url_f, fill=WHITE, anchor="lm")
+
+
 def make_square(ambassador: dict, photo: Image.Image, logo: Image.Image) -> Image.Image:
     W, H = 1080, 1080
     base = Image.new("RGB", (W, H), CREAM).convert("RGBA")
-
-    # ------ background: quiet ``'26`` in bottom-right, low opacity
-    mark = compose_year_mark(size_px=640)
-    mark = tint_rgba(mark, 0.07)
-    # Anchor bottom-right, slightly off the edge for a bleed feel.
-    mx = W - mark.width + 60
-    my = H - mark.height + 30
-    base.alpha_composite(mark, (mx, my))
-
     draw = ImageDraw.Draw(base)
 
-    # Thin outer border
+    band_h = 108
     border = 3
     draw.rectangle([border // 2, border // 2, W - border // 2 - 1, H - border // 2 - 1],
                    outline=BLACK, width=border)
 
-    # ------ top eyebrow: short orange rule + role label (tracked)
-    eyebrow_y = 88
-    rule_x = 72
-    rule_len = 44
-    draw.rectangle([rule_x, eyebrow_y + 11, rule_x + rule_len, eyebrow_y + 14], fill=ORANGE)
-    role_f = font("bold", 22)
-    draw_tracked(draw, (rule_x + rule_len + 20, eyebrow_y - 2),
-                 ROLE_LABEL.upper(), role_f, BLACK, tracking=3)
-
-    # Top-right: country, small caps, tracked (right-aligned)
+    # ------ header: script logo left, country right
+    lg = fit_logo(logo, 46)
+    base.alpha_composite(lg.convert("RGBA"), (72, 58))
+    draw = ImageDraw.Draw(base)
     country_f = font("medium", 20)
     ct = ambassador["country"].upper()
     ctw = sum(country_f.getbbox(c)[2] - country_f.getbbox(c)[0] for c in ct) + \
           3 * max(0, len(ct) - 1)
-    draw_tracked(draw, (W - 72 - ctw, eyebrow_y - 2), ct, country_f, GRAY, tracking=3)
+    draw_tracked(draw, (W - 72 - ctw, 72), ct, country_f, GRAY, tracking=3)
 
-    # ------ headshot disc
-    disc = 620
-    disc_img = circle_crop(photo, disc)
-    disc_x = (W - disc) // 2
-    disc_y = 170
-    shadow = soft_shadow(disc_img, blur=22, offset=(0, 14), alpha=55)
-    base.alpha_composite(shadow, (disc_x - 66, disc_y - 66))
-    base.alpha_composite(disc_img, (disc_x, disc_y))
-    ImageDraw.Draw(base).ellipse(
-        [disc_x, disc_y, disc_x + disc, disc_y + disc], outline=BLACK, width=2
-    )
+    # ------ photo block
+    psize, pborder, poffset = 560, 8, 26
+    block = psize + 2 * pborder
+    px = (W - block - poffset) // 2
+    py = 158
+    draw_photo_block(base, photo, psize, px, py, pborder, poffset)
     draw = ImageDraw.Draw(base)
 
-    # ------ name
-    name_y = disc_y + disc + 54
-    name_f = font("serif", 78)
+    # ------ name / squiggle / city
+    name_y = py + block + poffset + 44
+    name_f = font("serif", 82)
     while measure(name_f, ambassador["name"])[0] > W - 160 and name_f.size > 48:
         name_f = font("serif", name_f.size - 4)
     draw.text((W // 2, name_y), ambassador["name"], font=name_f, fill=BLACK, anchor="ma")
 
-    # ------ squiggle divider
     _, name_h = measure(name_f, "Ag")
-    squiggle_cy = name_y + name_h + 34
+    squiggle_cy = name_y + name_h + 30
     draw_squiggle(base, (W // 2, squiggle_cy), width_px=130, height_px=14, stroke=4)
 
-    # ------ city
     city_f = font("medium", 26)
-    draw.text((W // 2, squiggle_cy + 24), ambassador["city"], font=city_f, fill=GRAY, anchor="ma")
+    draw.text((W // 2, squiggle_cy + 22), ambassador["city"], font=city_f, fill=GRAY, anchor="ma")
 
-    # ------ footer: mission bottom-left, logo + URL bottom-right
-    mission_f = font("regular", 22)
-    draw.text((72, H - 66), MISSION, font=mission_f, fill=INK, anchor="la")
-
-    lg = fit_logo(logo, 40)
-    logo_y = H - 88
-    logo_x = W - lg.width - 72
-    base.alpha_composite(lg.convert("RGBA"), (logo_x, logo_y))
-
-    url_f = font("medium", 20)
-    url_w = url_f.getbbox(URL)[2] - url_f.getbbox(URL)[0]
-    ImageDraw.Draw(base).text((W - 72 - url_w, logo_y + lg.height + 8),
-                              URL, font=url_f, fill=INK, anchor="la")
+    # ------ orange band
+    draw_band(base, H - band_h, pad_x=72, label_size=24, url_size=20)
 
     return base.convert("RGB")
 
@@ -296,78 +295,47 @@ def make_square(ambassador: dict, photo: Image.Image, logo: Image.Image) -> Imag
 def make_vertical(ambassador: dict, photo: Image.Image, logo: Image.Image) -> Image.Image:
     W, H = 1080, 1920
     base = Image.new("RGB", (W, H), CREAM).convert("RGBA")
-
-    # ------ background: quiet ``'26`` top-right
-    mark = compose_year_mark(size_px=760)
-    mark = tint_rgba(mark, 0.06)
-    mx = W - mark.width + 70
-    my = -70
-    base.alpha_composite(mark, (mx, my))
-
     draw = ImageDraw.Draw(base)
 
+    band_h = 140
     border = 3
     draw.rectangle([border // 2, border // 2, W - border // 2 - 1, H - border // 2 - 1],
                    outline=BLACK, width=border)
 
-    # ------ eyebrow (top)
-    eyebrow_y = 150
-    rule_x = 96
-    rule_len = 60
-    draw.rectangle([rule_x, eyebrow_y + 13, rule_x + rule_len, eyebrow_y + 16], fill=ORANGE)
-    role_f = font("bold", 24)
-    draw_tracked(draw, (rule_x + rule_len + 22, eyebrow_y - 2),
-                 ROLE_LABEL.upper(), role_f, BLACK, tracking=3)
-
-    # Country top-right
+    # ------ header
+    lg = fit_logo(logo, 56)
+    base.alpha_composite(lg.convert("RGBA"), (96, 108))
+    draw = ImageDraw.Draw(base)
     country_f = font("medium", 22)
     ct = ambassador["country"].upper()
     ctw = sum(country_f.getbbox(c)[2] - country_f.getbbox(c)[0] for c in ct) + \
           3 * max(0, len(ct) - 1)
-    draw_tracked(draw, (W - 96 - ctw, eyebrow_y - 2), ct, country_f, GRAY, tracking=3)
+    draw_tracked(draw, (W - 96 - ctw, 126), ct, country_f, GRAY, tracking=3)
 
-    # ------ headshot
-    disc = 720
-    disc_img = circle_crop(photo, disc)
-    disc_x = (W - disc) // 2
-    disc_y = 320
-    shadow = soft_shadow(disc_img, blur=28, offset=(0, 18), alpha=55)
-    base.alpha_composite(shadow, (disc_x - 84, disc_y - 84))
-    base.alpha_composite(disc_img, (disc_x, disc_y))
-    ImageDraw.Draw(base).ellipse(
-        [disc_x, disc_y, disc_x + disc, disc_y + disc], outline=BLACK, width=2
-    )
+    # ------ photo block
+    psize, pborder, poffset = 760, 9, 32
+    block = psize + 2 * pborder
+    px = (W - block - poffset) // 2
+    py = 360
+    draw_photo_block(base, photo, psize, px, py, pborder, poffset)
     draw = ImageDraw.Draw(base)
 
-    # ------ name
-    name_y = disc_y + disc + 120
-    name_f = font("serif", 108)
+    # ------ name / squiggle / city — centered in the gap to the band
+    name_y = py + block + poffset + 170
+    name_f = font("serif", 106)
     while measure(name_f, ambassador["name"])[0] > W - 180 and name_f.size > 56:
         name_f = font("serif", name_f.size - 4)
     draw.text((W // 2, name_y), ambassador["name"], font=name_f, fill=BLACK, anchor="ma")
 
-    # ------ squiggle
     _, name_h = measure(name_f, "Ag")
-    squiggle_cy = name_y + name_h + 52
+    squiggle_cy = name_y + name_h + 48
     draw_squiggle(base, (W // 2, squiggle_cy), width_px=170, height_px=18, stroke=5)
 
-    # ------ city
     city_f = font("medium", 32)
-    draw.text((W // 2, squiggle_cy + 36), ambassador["city"], font=city_f, fill=GRAY, anchor="ma")
+    draw.text((W // 2, squiggle_cy + 34), ambassador["city"], font=city_f, fill=GRAY, anchor="ma")
 
-    # ------ footer: mission bottom-left, logo + URL bottom-right
-    mission_f = font("regular", 26)
-    draw.text((96, H - 96), MISSION, font=mission_f, fill=INK, anchor="la")
-
-    lg = fit_logo(logo, 50)
-    logo_y = H - 136
-    logo_x = W - lg.width - 96
-    base.alpha_composite(lg.convert("RGBA"), (logo_x, logo_y))
-
-    url_f = font("medium", 24)
-    url_w = url_f.getbbox(URL)[2] - url_f.getbbox(URL)[0]
-    ImageDraw.Draw(base).text((W - 96 - url_w, logo_y + lg.height + 10),
-                              URL, font=url_f, fill=INK, anchor="la")
+    # ------ orange band
+    draw_band(base, H - band_h, pad_x=96, label_size=28, url_size=24)
 
     return base.convert("RGB")
 
