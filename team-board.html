@@ -1114,13 +1114,29 @@
         if (at > -1) {
           var tail = body.slice(at);
           if (tail.trim() === SPOTLIGHT_BODY.trim()) { doc.socialSpotlightSeeded = true; return; }
-          // Someone has started marking posts as done: that is real work, so
-          // leave the section alone. Deliberately don't set the flag — if the
-          // ticks are later cleared, the next load picks the new version up.
-          if (/\|\s*\[[xX]\]\s*\|/.test(tail)) return;
-          // Otherwise this is a stale copy of generated content. Replace just
-          // the section; anything the team wrote above the marker is kept.
-          target.body = body.slice(0, at) + SPOTLIGHT_BODY;
+          // Refresh the section, carrying posting progress over: remember
+          // which ambassadors are ticked in the old table, then re-tick the
+          // same people in the new one. The name is the join key, so rows can
+          // move, gain columns, or change dates without losing a tick.
+          // (rowName: the first bold cell that isn't the date.)
+          var rowName = function (ln) {
+            var bolds = ln.match(/\*\*([^*]+)\*\*/g) || [];
+            for (var k = 0; k < bolds.length; k++) {
+              var nm = bolds[k].replace(/\*\*/g, '').replace(/ /g, ' ');
+              if (!/^Tue\b/.test(nm)) return nm;
+            }
+            return null;
+          };
+          var done = {};
+          tail.split('\n').forEach(function (ln) {
+            if (!/\|\s*\[[xX]\]\s*\|\s*$/.test(ln)) return;
+            var nm = rowName(ln);
+            if (nm) done[nm] = true;
+          });
+          target.body = body.slice(0, at) + SPOTLIGHT_BODY.split('\n').map(function (ln) {
+            var nm = rowName(ln);
+            return (nm && done[nm]) ? ln.replace(/\|\s*\[ \]\s*\|\s*$/, '| [x] |') : ln;
+          }).join('\n');
         } else {
           target.body = body.replace(/\s+$/, '') + '\n\n---\n\n' + SPOTLIGHT_BODY;
         }
