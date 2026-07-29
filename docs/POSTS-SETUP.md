@@ -178,6 +178,9 @@ Shared helpers (and the one copy of the backend URL) live in
 FinMango card automatically.
 
 Notes:
+- `/api/posts` accepts `&refresh=1`, which skips the caches and re-primes the
+  edge entry with a fresh backend read — the HQ Ambassador Notes tab sends it
+  automatically right after a publish so editors see their post live at once.
 - Old `/post.html?id=…` links still work — the existing clean-URL redirect sends
   them to `/post?id=…`, and crawlers follow it.
 - To preview a new cover in a share, use the platform's debugger to re-scrape
@@ -231,3 +234,21 @@ profile (it sits just before the CTA section), and add the ambassador to
   "anyone with link".
 - **Reviewer "Unauthorized"** — passphrase mismatch with `CONFIG.REVIEW_KEY`
   (redeploy if you changed it).
+- **A scheduled post sailed past its go-live time without publishing** — the
+  `publishScheduledPosts` time-driven trigger isn't installed. A `git push`
+  never touches Apps Script: pasting the updated script and redeploying ships
+  the *code*, but only running `setup` installs the *trigger* — an upgrade
+  that skipped that step schedules posts that never fire. Fix it once: open
+  the posts Apps Script, run `setup` (installs the trigger), then run
+  `publishScheduledPosts` by hand to flush anything overdue. Check under
+  **Triggers** (clock icon) that `publishScheduledPosts` is listed. From this
+  version on the backend also self-heals — every schedule action re-installs
+  a missing trigger — but that only helps after the new code is deployed.
+- **Clicked Publish but the post isn't on `/posts` or the ambassador's
+  profile** — that's caching, not a failed publish. The public list is cached
+  at the Cloudflare edge (~5 min) and briefly in the browser, so a fresh
+  publish can take a few minutes to appear; a hard refresh
+  (Cmd/Ctrl+Shift+R) usually shows it sooner. The HQ tab now re-primes the
+  edge cache automatically right after a publish. To confirm the publish
+  itself worked, check the post's status in the Sheet (or hit the Apps Script
+  `/exec?action=published` URL directly — it's uncached).

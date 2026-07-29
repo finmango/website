@@ -192,6 +192,7 @@ function addReview_(p) {
 
   saveJson_(r.jsonFileId, post);
   updateRow_(r.rowIndex, { status: post.status, scheduledFor: post.scheduledFor || '', reviewsSummary: summarize_(post.reviews) });
+  if (post.scheduledFor) ensureSchedulerTrigger_();
 
   // Tell the author the good news (once per approval, or when a time is set).
   // Signed by the reviewer who clicked, with replies routed to their inbox.
@@ -217,6 +218,7 @@ function schedulePost_(p) {
     comment: when ? '🕓 Scheduled to go live ' + fmtWhen_(when) : '🕓 Schedule cleared — will be published manually', at: new Date().toISOString() });
   saveJson_(r.jsonFileId, post);
   updateRow_(r.rowIndex, { scheduledFor: post.scheduledFor, reviewsSummary: summarize_(post.reviews) });
+  if (when) ensureSchedulerTrigger_();
   const emailed = when ? notifyAuthorApproved_(post, String(p.reviewer || ''), cleanEmail_(p.reviewerEmail)) : false;
   return { result: 'success', post: post, emailed: emailed };
 }
@@ -297,6 +299,20 @@ function publishScheduledPosts() {
   } finally {
     lock.releaseLock();
   }
+}
+
+// The scheduler above only runs if its time-driven trigger exists. setup()
+// installs it, but a script upgraded to the scheduling version whose setup()
+// was never re-run has NO trigger — posts sit "scheduled" forever and nothing
+// says why. So every action that stores a go-live time also (re)installs the
+// trigger on the spot. Never throws: the schedule itself is already saved, and
+// a trigger hiccup must not fail the reviewer's click.
+function ensureSchedulerTrigger_() {
+  try {
+    const exists = ScriptApp.getProjectTriggers()
+      .some(t => t.getHandlerFunction() === 'publishScheduledPosts');
+    if (!exists) ScriptApp.newTrigger('publishScheduledPosts').timeBased().everyMinutes(15).create();
+  } catch (err) { /* the next schedule action retries */ }
 }
 
 // ============================== STORAGE HELPERS ============================
@@ -489,9 +505,8 @@ function setup() {
   getSheet_();            // creates the Posts tab + headers
   getParentFolder_();     // verifies folder access
   // Install (once) the time-driven trigger that publishes scheduled posts.
-  // Safe to re-run setup — an existing trigger is never duplicated.
-  const hasTrigger = ScriptApp.getProjectTriggers()
-    .some(t => t.getHandlerFunction() === 'publishScheduledPosts');
-  if (!hasTrigger) ScriptApp.newTrigger('publishScheduledPosts').timeBased().everyMinutes(15).create();
+  // Safe to re-run setup — an existing trigger is never duplicated. (Scheduling
+  // a post also self-installs this, so a skipped setup no longer strands posts.)
+  ensureSchedulerTrigger_();
   Logger.log('Setup OK. Now Deploy > New deployment > Web app.');
 }

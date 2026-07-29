@@ -19,30 +19,40 @@ export async function onRequestGet(context) {
   const url = new URL(request.url);
   const action = url.searchParams.get('action');
   const id = url.searchParams.get('id') || '';
+  // ?refresh=1 (sent by the HQ board right after a publish) skips every cache
+  // layer and re-primes the edge entry, so the editor who just clicked
+  // Publish sees the post live immediately instead of waiting out the TTLs.
+  const refresh = url.searchParams.get('refresh') === '1';
 
-  let upstream;
+  let upstream, keySearch;
   if (action === 'published') {
-    upstream = APPS_SCRIPT_URL + '?action=published';
+    keySearch = '?action=published';
+    upstream = APPS_SCRIPT_URL + keySearch;
   } else if (action === 'post' && id) {
-    upstream = APPS_SCRIPT_URL + '?action=post&id=' + encodeURIComponent(id);
+    keySearch = '?action=post&id=' + encodeURIComponent(id);
+    upstream = APPS_SCRIPT_URL + keySearch;
   } else {
     return jsonResponse({ result: 'error', error: 'Unsupported action' }, 400);
   }
 
   const cache = caches.default;
-  // Cache key is the normalized same-origin request URL (action + id).
-  const cacheKey = new Request(url.origin + url.pathname + url.search, { method: 'GET' });
+  // Cache key is the normalized same-origin URL (action + id ONLY — a
+  // ?refresh=1 hit re-primes the same entry every ordinary visitor reads).
+  const cacheKey = new Request(url.origin + url.pathname + keySearch, { method: 'GET' });
 
-  // How long the browser may keep serving a stale copy while a fresh one is
-  // fetched in the background. Lets repeat visitors render instantly.
-  const SWR = 86400; // 1 day
+  // How long the edge keeps a copy at all (s-maxage — logical freshness is
+  // tracked separately via x-cached-at), and how long a *browser* may keep
+  // rendering a stale copy while it revalidates in the background. The
+  // browser window is deliberately short: repeat visits still feel instant,
+  // but a freshly published post can't hide behind a day-old browser copy.
+  const EDGE_KEEP = 86400;   // 1 day
+  const BROWSER_SWR = 600;   // 10 minutes
 
   // Fetch from the backend and return a fresh, cacheable Response (or null on
-  // failure). Kept long-lived in the edge cache (s-maxage) so the proxy can
-  // serve it stale-while-revalidate; logical freshness is tracked separately
-  // via the x-cached-at timestamp below.
-  async function fetchFresh() {
-    const upstreamRes = await fetch(upstream, {
+  // failure). `bust` adds a throwaway param so Cloudflare's upstream cache
+  // can't answer — Apps Script ignores params it doesn't know.
+  async function fetchFresh(bust) {
+    const upstreamRes = await fetch(upstream + (bust ? '&_=' + Date.now() : ''), {
       cf: { cacheTtl: EDGE_TTL, cacheEverything: true },
       headers: { accept: 'application/json' }
     });
@@ -52,11 +62,21 @@ export async function onRequestGet(context) {
       status: 200,
       headers: {
         'content-type': 'application/json; charset=utf-8',
-        'cache-control': `public, max-age=${EDGE_TTL}, s-maxage=${SWR}, stale-while-revalidate=${SWR}`,
+        'cache-control': `public, max-age=${EDGE_TTL}, s-maxage=${EDGE_KEEP}, stale-while-revalidate=${BROWSER_SWR}`,
         'access-control-allow-origin': '*',
         'x-cached-at': String(Date.now())
       }
     });
+  }
+
+  if (refresh) {
+    let fresh = null;
+    try { fresh = await fetchFresh(true); } catch (e) { fresh = null; }
+    if (fresh) {
+      waitUntil(cache.put(cacheKey, fresh.clone()));
+      return fresh;
+    }
+    // Backend hiccup — fall through and serve whatever the cache has.
   }
 
   const hit = await cache.match(cacheKey);
