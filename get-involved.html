@@ -735,7 +735,8 @@
     .pledge-line input:checked ~ .pledge-check { background: var(--orange); border-color: var(--orange); color: #fff; }
     .pledge-line input:focus-visible ~ .pledge-check { outline: 2px solid var(--orange); outline-offset: 3px; }
     .pledge-line-text { transition: opacity .2s ease; }
-    .pledge-line input:not(:checked) ~ .pledge-line-text { opacity: .45; }
+    /* once a barrier is picked, the others recede */
+    .pledge-lines:has(input:checked) .pledge-line input:not(:checked) ~ .pledge-line-text { opacity: .45; }
     .pledge-line-title {
       display: block;
       font-size: 1.02rem;
@@ -760,7 +761,8 @@
       display: block;
       margin-bottom: .5rem;
     }
-    .pledge-field input {
+    .pledge-field input,
+    .pledge-field textarea {
       width: 100%;
       padding: .9rem 1rem;
       border: 1px solid var(--ink-line);
@@ -769,8 +771,20 @@
       font-size: .95rem;
       color: var(--ink);
     }
-    .pledge-field input::placeholder { color: var(--ink-faint); }
-    .pledge-field input:focus { outline: none; border-color: var(--orange); }
+    .pledge-field textarea { resize: vertical; min-height: 6.5rem; line-height: 1.5; }
+    .pledge-field input::placeholder,
+    .pledge-field textarea::placeholder { color: var(--ink-faint); }
+    .pledge-field input:focus,
+    .pledge-field textarea:focus { outline: none; border-color: var(--orange); }
+    .pledge-count {
+      display: block;
+      margin-top: .4rem;
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .1em;
+      color: var(--ink-faint);
+      text-align: right;
+    }
     .pledge-form .btn-primary { align-self: flex-start; }
     .pledge-status { font-size: .85rem; font-weight: 500; min-height: 1.2em; }
     .pledge-status.err { color: #B91C1C; }
@@ -1521,7 +1535,7 @@
           <span class="opp-time">30 sec</span>
           <span class="opp-body">
             <span class="opp-title">Take the pledge <span class="opp-tag">New</span></span>
-            <span class="opp-desc">No money, no meetings — three small promises and your first name. The lowest-stakes way to join the movement.</span>
+            <span class="opp-desc">Pick the barrier you're standing against — housing, medical debt, wages — and put your first name on it. No money, no meetings.</span>
           </span>
           <svg class="opp-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
@@ -1589,43 +1603,72 @@
       <div class="section-head">
         <span class="eyebrow">30 seconds · No money, no meetings</span>
         <h2>Take the <em>pledge.</em></h2>
-        <p class="section-sub">Financial stress isn't a personal failing — it's built by systems. The pledge is three small promises that cost nothing but chip at that story: talk openly, blame barriers instead of people, pass help along. Check the ones you'll keep, sign with your first name, done.</p>
+        <p class="section-sub">Financial stress isn't a personal failing — it's built by systems. Pick the barrier that hits closest to home, tell us why if you'd like, and put your first name on it. You're pledging to talk about money openly and to blame systems, not people. Thirty seconds, no money, no meetings.</p>
       </div>
 
       <div class="pledge-body">
         <div class="pledge-left">
-          <span class="collab-col-label">I pledge to…</span>
-          <div class="pledge-lines" id="pledgeLines">
+          <span class="collab-col-label">01 · Pick the barrier you're standing against</span>
+          <div class="pledge-lines" id="pledgeLines" role="radiogroup" aria-label="The barrier you're standing against">
             <label class="pledge-line">
-              <input type="checkbox" checked value="have one honest conversation about money with someone I care about this month">
+              <input type="radio" name="pledgeBarrier" value="Housing">
               <span class="pledge-check" aria-hidden="true"></span>
               <span class="pledge-line-text">
-                <span class="pledge-line-title">Talk about it</span>
-                <span class="pledge-line-desc">Have one honest conversation about money with someone I care about this month. Silence is how shame wins.</span>
+                <span class="pledge-line-title">Housing</span>
+                <span class="pledge-line-desc">Rent outpacing wages, starter homes out of reach, junk fees stacked on top.</span>
               </span>
             </label>
             <label class="pledge-line">
-              <input type="checkbox" checked value="name the systemic barrier — not the person — when someone around me is struggling financially">
+              <input type="radio" name="pledgeBarrier" value="Healthcare costs">
               <span class="pledge-check" aria-hidden="true"></span>
               <span class="pledge-line-text">
-                <span class="pledge-line-title">Name the system, not the person</span>
-                <span class="pledge-line-desc">When someone around me is struggling, point to the barrier — rent, medical debt, predatory fees — not their budgeting. Financial stress is built by systems, not character.</span>
+                <span class="pledge-line-title">Healthcare costs</span>
+                <span class="pledge-line-desc">Medical debt that wrecks credit, care skipped because of the price tag.</span>
               </span>
             </label>
             <label class="pledge-line">
-              <input type="checkbox" checked value="pass one free financial health resource on to someone who could use it">
+              <input type="radio" name="pledgeBarrier" value="Debt & credit">
               <span class="pledge-check" aria-hidden="true"></span>
               <span class="pledge-line-text">
-                <span class="pledge-line-title">Pass one thing on</span>
-                <span class="pledge-line-desc">Share one free resource — a guide, a tool, a local program — with someone who could use it.</span>
+                <span class="pledge-line-title">Debt &amp; credit</span>
+                <span class="pledge-line-desc">Predatory lending, minimum-payment traps, a credit system that punishes being poor.</span>
+              </span>
+            </label>
+            <label class="pledge-line">
+              <input type="radio" name="pledgeBarrier" value="Food access">
+              <span class="pledge-check" aria-hidden="true"></span>
+              <span class="pledge-line-text">
+                <span class="pledge-line-title">Food access</span>
+                <span class="pledge-line-desc">Food deserts, grocery inflation, benefits that don't stretch the month.</span>
+              </span>
+            </label>
+            <label class="pledge-line">
+              <input type="radio" name="pledgeBarrier" value="Work & income">
+              <span class="pledge-check" aria-hidden="true"></span>
+              <span class="pledge-line-text">
+                <span class="pledge-line-title">Work &amp; income</span>
+                <span class="pledge-line-desc">Wages that don't keep up, gig work with no floor, raises that lose to inflation.</span>
+              </span>
+            </label>
+            <label class="pledge-line">
+              <input type="radio" name="pledgeBarrier" value="Education">
+              <span class="pledge-check" aria-hidden="true"></span>
+              <span class="pledge-line-text">
+                <span class="pledge-line-title">Education</span>
+                <span class="pledge-line-desc">Student debt, aid letters that hide the real cost, degrees that don't pencil out.</span>
               </span>
             </label>
           </div>
         </div>
 
         <div class="pledge-right">
-          <span class="collab-col-label">Sign it</span>
+          <span class="collab-col-label">02 · Sign it</span>
           <form id="pledgeForm" class="pledge-form" novalidate>
+            <div class="pledge-field">
+              <label for="pledgeWhy">Why this barrier? (optional)</label>
+              <textarea id="pledgeWhy" maxlength="400" rows="4" placeholder="A sentence or two — why it matters to you, or how you've seen it play out where you live."></textarea>
+              <span class="pledge-count" id="pledgeWhyCount" aria-hidden="true">0 / 400</span>
+            </div>
             <div class="pledge-field">
               <label for="pledgeName">First name (optional)</label>
               <input type="text" id="pledgeName" maxlength="80" placeholder="e.g. Sam" autocomplete="given-name">
@@ -1641,15 +1684,15 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
             <p class="pledge-status" id="pledgeStatus" role="status" aria-live="polite"></p>
-            <p class="pledge-privacy">We record your first name and community only — enough to count the movement and see where it's growing. Nothing is published, and there's no email list attached.</p>
+            <p class="pledge-privacy">We record only what's on this form — your barrier, your note, your first name, and your community — so we can count the movement and see where it's growing. None of it is published, and there's no email list attached.</p>
           </form>
 
           <div class="pledge-done" id="pledgeDone" hidden>
             <span class="pledge-done-kicker">✓ Pledge signed</span>
             <h3>You're in.</h3>
-            <p>That took about 30 seconds — and the first promise is half-kept the moment you tell someone. Pass it on:</p>
+            <p id="pledgeDoneMsg">Your name is on the record — against a barrier, and against the idea that financial stress is a personal failing. Pass it on:</p>
             <div class="pledge-done-actions">
-              <a class="btn-primary" href="https://twitter.com/intent/tweet?text=I%20just%20signed%20the%20FinMango%20pledge%20%E2%80%94%20talk%20about%20money%20openly%2C%20name%20systems%20instead%20of%20blaming%20people%2C%20pass%20one%20resource%20on.%20It%20takes%2030%20seconds%3A&url=https%3A%2F%2Fwww.finmango.org%2Fget-involved.html%23pledge" target="_blank" rel="noopener noreferrer">
+              <a class="btn-primary" href="https://twitter.com/intent/tweet?text=I%20just%20signed%20the%20FinMango%20pledge%20and%20named%20the%20systemic%20barrier%20I%27m%20standing%20against.%20Financial%20stress%20isn%27t%20a%20personal%20failing.%20It%20takes%2030%20seconds%3A&url=https%3A%2F%2Fwww.finmango.org%2Fget-involved.html%23pledge" target="_blank" rel="noopener noreferrer">
                 Share on X
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </a>
@@ -1828,20 +1871,34 @@
       const statusEl = document.getElementById('pledgeStatus');
       const submitBtn = document.getElementById('pledgeSubmit');
 
-      const showDone = () => { form.hidden = true; done.hidden = false; };
+      const showDone = (barrier) => {
+        // name their barrier back to them when we know it
+        if (barrier && barrier !== '1') {
+          document.getElementById('pledgeDoneMsg').textContent =
+            'Your name is on the record against ' + barrier.toLowerCase() + ' barriers — and against the idea that financial stress is a personal failing. Pass it on:';
+        }
+        form.hidden = true;
+        done.hidden = false;
+      };
       const setStatus = (text, cls) => {
         statusEl.textContent = text;
         statusEl.className = 'pledge-status' + (cls ? ' ' + cls : '');
       };
 
       // one signature per browser; the "sign again" link below reopens the form
-      if (localStorage.getItem('fm-pledge-signed')) showDone();
+      const signed = localStorage.getItem('fm-pledge-signed');
+      if (signed) showDone(signed);
+
+      const whyEl = document.getElementById('pledgeWhy');
+      whyEl.addEventListener('input', () => {
+        document.getElementById('pledgeWhyCount').textContent = whyEl.value.length + ' / 400';
+      });
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const chosen = [...document.querySelectorAll('#pledgeLines input:checked')].map(i => i.value);
+        const picked = document.querySelector('#pledgeLines input:checked');
         const location = document.getElementById('pledgeLocation').value.trim();
-        if (!chosen.length) return setStatus('Pick at least one promise — even one is plenty.', 'err');
+        if (!picked) return setStatus('Pick the barrier that hits closest to home — just one.', 'err');
         if (!location) return setStatus('Tell us your community — a city, town, or region is perfect.', 'err');
         if (PLEDGE_SUBMIT_URL.indexOf('REPLACE_WITH') === 0) {
           return setStatus('The pledge isn\'t live quite yet — check back soon!', 'err');
@@ -1852,22 +1909,23 @@
         try {
           // no-cors: the browser can't read the response; the backend confirms
           // by the row appearing in the Sheet (same pattern as the wall).
+          const why = whyEl.value.trim();
           await fetch(PLEDGE_SUBMIT_URL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               action: 'submit',
               name: document.getElementById('pledgeName').value.trim(),
               location: location,
-              topic: 'Pledge', // server coerces unknown topics to 'Other'
-              message: 'PLEDGE — I commit to: ' + chosen.join('; ') + '.',
+              topic: picked.value, // matches the backend's TOPICS list, so the Sheet's topic column = barrier
+              message: 'PLEDGE — Standing against: ' + picked.value + '.' + (why ? ' Why it matters to me: ' + why : ''),
               email: '',
               website: document.getElementById('pledgeWebsite').value // honeypot
             })
           });
-          localStorage.setItem('fm-pledge-signed', '1');
-          if (typeof gtag === 'function') gtag('event', 'pledge_signed');
+          localStorage.setItem('fm-pledge-signed', picked.value);
+          if (typeof gtag === 'function') gtag('event', 'pledge_signed', { barrier: picked.value });
           setStatus('');
-          showDone();
+          showDone(picked.value);
         } catch (err) {
           setStatus('Something went wrong sending your pledge. Please try again in a minute.', 'err');
         } finally {
@@ -1877,7 +1935,8 @@
 
       document.getElementById('pledgeAgain').addEventListener('click', (e) => {
         e.preventDefault();
-        form.reset(); // restores all three promises to checked
+        form.reset();
+        document.getElementById('pledgeWhyCount').textContent = '0 / 400';
         done.hidden = true;
         form.hidden = false;
         document.getElementById('pledgeName').focus();

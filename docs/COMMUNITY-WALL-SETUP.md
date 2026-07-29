@@ -85,13 +85,21 @@ There's also a JSON moderation endpoint if a review UI is ever wanted:
 
 The "Take the pledge" form on `get-involved.html` submits through this same
 backend, so pledge signatures arrive in the moderation queue (and email) just
-like stories. They're easy to spot: the message always starts with `PLEDGE —`
-(topic shows as `Other`). **Leave them `pending` or mark them `rejected`** —
-a pledge is a signature, not wall content, and should never be approved onto
-the public wall. To count pledges, filter the Sheet's `message` column for
-rows starting with `PLEDGE —`. If pledge volume ever makes the notification
-emails noisy, the fix is a dedicated `pledge` action in the Apps Script that
-writes to its own tab and skips the email.
+like stories. They're easy to spot: the message always starts with `PLEDGE —`,
+and the `topic` column holds the barrier the signer chose (Housing, Healthcare
+costs, Debt & credit, Food access, Work & income, Education) — so pledges can
+be counted and broken down per barrier straight from the Sheet.
+
+**Always leave them `pending` or mark them `rejected` — never approve a
+pledge onto the wall.** The pledge form promises signers that nothing they
+write is published, and (unlike the wall form) it collects no public-posting
+consent — so even a "why this barrier matters to me" note that reads like a
+great community story stays in the Sheet. If someone's note deserves the
+wall, they can post it there themselves via community-wall.html.
+
+If pledge volume ever makes the notification emails noisy, the fix is a
+dedicated `pledge` action in the Apps Script that writes to its own tab and
+skips the email.
 
 ## Security & safety notes
 
