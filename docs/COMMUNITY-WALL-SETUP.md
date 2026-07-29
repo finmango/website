@@ -81,6 +81,18 @@ Two equally valid ways:
 There's also a JSON moderation endpoint if a review UI is ever wanted:
 `GET …/exec?action=list&status=pending&key=MODERATION_KEY`.
 
+### Pledges (from get-involved.html)
+
+The "Take the pledge" form on `get-involved.html` submits through this same
+backend, so pledge signatures arrive in the moderation queue (and email) just
+like stories. They're easy to spot: the message always starts with `PLEDGE —`
+(topic shows as `Other`). **Leave them `pending` or mark them `rejected`** —
+a pledge is a signature, not wall content, and should never be approved onto
+the public wall. To count pledges, filter the Sheet's `message` column for
+rows starting with `PLEDGE —`. If pledge volume ever makes the notification
+emails noisy, the fix is a dedicated `pledge` action in the Apps Script that
+writes to its own tab and skips the email.
+
 ## Security & safety notes
 
 - Public endpoints only ever return **approved** stories; emails never leave
