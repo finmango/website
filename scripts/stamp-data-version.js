@@ -18,6 +18,7 @@ const ROOT = path.join(__dirname, '..');
 
 const PAGES = [
     'barometer.html',
+    'barometer-embed.html',
     'index.html',
     'research.html',
     'housing-policy-lab.html',

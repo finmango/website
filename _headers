@@ -9,6 +9,20 @@
   X-Frame-Options: SAMEORIGIN
   X-XSS-Protection: 1; mode=block
 
+# Barometer embed widget — this page exists to be iframed by other sites, so
+# the site-wide X-Frame-Options: SAMEORIGIN above must not apply to it.
+# frame-ancestors is the belt-and-braces: per CSP2 browsers honour it over
+# X-Frame-Options when both are present, so embeds keep working even on hosts
+# that ignore the `!` header removal.
+/barometer-embed
+  ! X-Frame-Options
+  Content-Security-Policy: frame-ancestors *
+  X-Robots-Tag: noindex
+/barometer-embed.html
+  ! X-Frame-Options
+  Content-Security-Policy: frame-ancestors *
+  X-Robots-Tag: noindex
+
 # Root index
 /
   Cache-Control: public, max-age=3600, must-revalidate
