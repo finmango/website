@@ -12,8 +12,11 @@ Notes, but lighter — no Drive folder, no images).
 | File | Role | Audience |
 | --- | --- | --- |
 | `community-wall.html` | The wall + "share your story" form | Everyone |
-| `tools/community-wall-apps-script.js` | The backend (deploy to Apps Script) | One-time setup |
+| `pledge-wall.html` | The Pledge Wall (see "The Pledge Wall" below) | Everyone |
+| `get-involved.html#pledge` | The "take the pledge" form | Everyone |
+| `tools/community-wall-apps-script.js` | The backend for both walls (deploy to Apps Script) | One-time setup |
 | `functions/api/wall.js` | Cloudflare edge layer: same-origin, cached reads | Auto (no setup) |
+| `functions/pledge-photo.js` | Cloudflare edge layer: cached pledge photos | Auto (no setup) |
 
 ## How it flows
 
@@ -80,6 +83,45 @@ Two equally valid ways:
 
 There's also a JSON moderation endpoint if a review UI is ever wanted:
 `GET …/exec?action=list&status=pending&key=MODERATION_KEY`.
+
+## The Pledge Wall
+
+The "Take the pledge" form on `get-involved.html` and the public wall at
+`pledge-wall.html` run on this same Apps Script. Signers pick a systemic
+barrier, optionally add a short "why" note and a photo, and choose whether
+their card may appear on the public Pledge Wall.
+
+> ⚠️ **Redeploy required.** The pledge feature needs the current version of
+> `tools/community-wall-apps-script.js` deployed: paste the file over the old
+> script, run `setup` once more (it creates the "Pledges" tab and the
+> "FinMango Pledge Wall Photos" Drive folder, and asks for the extra Drive
+> permission), then Deploy → Manage deployments → ✏️ Edit → **New version** →
+> Deploy. The /exec URL doesn't change. Until this is done, pledge
+> submissions are silently dropped (`Unknown action`) — redeploy before (or
+> with) shipping the site update.
+
+### How pledges flow
+
+1. A visitor signs on `get-involved.html#pledge`. The pledge lands in the
+   Sheet's **Pledges** tab with status = `pending`; the photo (if any) is
+   saved to the Drive folder and its link stored in the row.
+2. The moderator email shows the barrier, the note, the photo, and whether
+   the signer **opted into the public wall**:
+   - Opted in → the ✓ Approve link publishes the card to `pledge-wall.html`
+     (within ~2 minutes, edge cache). Same content checks as stories: no
+     full names or personal identifiers in the note, and the photo must be
+     appropriate — when in doubt, reject.
+   - Not opted in → nothing to do. The pledge is counted but never shown,
+     regardless of status.
+3. `pledge-wall.html` shows approved, opted-in pledges (plus its permanent
+   seed pledges), filterable by barrier. Photos are served through the
+   edge-cached `/pledge-photo` function, not straight from Drive.
+
+To count pledges (including private ones), just look at the Pledges tab —
+the `barrier` column makes per-barrier counts a one-click filter.
+
+Never move pledge rows onto the Wall tab or vice versa: ids are prefixed
+(`p-` pledges, `w-` stories) and the moderation links route on that prefix.
 
 ## Security & safety notes
 
