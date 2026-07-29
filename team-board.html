@@ -3448,7 +3448,10 @@
       }
       postsApi(payload).then(function (res) {
         if (res.result === 'success') {
-          toast(act === 'publish' ? 'Published 🚀 — author notified'
+          // The public list is edge-cached — re-prime it now so checking
+          // /posts (or the ambassador's profile) right away shows the post.
+          if (act === 'publish') { try { fetch('/api/posts?action=published&refresh=1'); } catch (e) { /* cache catches up on its own */ } }
+          toast(act === 'publish' ? 'Published 🚀 — author notified · on finmango.org/posts within a few minutes'
             : act === 'approve' ? ('Approved ✓' + (scheduledFor ? ' — goes live ' + fmtSched(scheduledFor) : '')
               + (res.emailed ? ' · author emailed ✉️' : ''))
             : act === 'schedule' ? (scheduledFor
