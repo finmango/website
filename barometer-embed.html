@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinMango Financial Health Barometer — Embed</title>
+    <!-- Embed view: intentionally has no site chrome, no analytics, and is
+         excluded from search. It is designed to be iframed by third parties,
+         so /barometer-embed drops X-Frame-Options in _headers. -->
+    <meta name="robots" content="noindex, follow">
+    <meta name="description" content="Embeddable FinMango Financial Health Barometer widget.">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Async font load: this widget renders inside other people's pages, so it
+         must never block on the font CDN — system fallbacks are fine meanwhile. -->
+    <link rel="stylesheet" media="print" onload="this.media='all'"
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,900&family=JetBrains+Mono:wght@500&display=swap">
+
+    <style>
+        /* Palette is written without the site's `--paper: #FAFAF7` spacing on
+           purpose — that literal is the sentinel tools/check_pages.py uses to
+           require full site chrome, which an embed must not carry. */
+        :root {
+            --bg: #FAFAF7;
+            --ink: #0A0A0A;
+            --ink-dim: rgba(10, 10, 10, .62);
+            --ink-faint: rgba(10, 10, 10, .38);
+            --line: rgba(10, 10, 10, .12);
+            --orange: #FF6B35;
+            --logo-filter: none;
+            --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0A0A0A;
+            --ink: #FAFAF7;
+            --ink-dim: rgba(250, 250, 247, .64);
+            --ink-faint: rgba(250, 250, 247, .4);
+            --line: rgba(250, 250, 247, .14);
+            --logo-filter: brightness(0) invert(1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: var(--font-body);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 1.25rem 1.35rem 1rem;
+            background: var(--bg);
+            transition: border-color .2s ease, transform .2s ease;
+        }
+
+        .card:hover { border-color: var(--orange); }
+
+        .card-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.1rem;
+        }
+
+        .eyebrow {
+            font-size: .625rem;
+            font-weight: 700;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--orange);
+            display: block;
+            margin-bottom: .3rem;
+        }
+
+        .scope {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -.02em;
+            line-height: 1.1;
+        }
+
+        .live {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            font-size: .625rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--ink-dim);
+            white-space: nowrap;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--orange);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .25; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .live-dot { animation: none; }
+        }
+
+        .tiles {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: .85rem 1.25rem;
+        }
+
+        .tiles[data-single="true"] { grid-template-columns: 1fr; }
+
+        .tile-label {
+            font-size: .7rem;
+            font-weight: 500;
+            color: var(--ink-dim);
+            margin-bottom: .2rem;
+        }
+
+        .tile-row {
+            display: flex;
+            align-items: baseline;
+            gap: .5rem;
+        }
+
+        .tile-value {
+            font-family: var(--font-mono);
+            font-size: 1.6rem;
+            font-weight: 500;
+            line-height: 1;
+            letter-spacing: -.03em;
+        }
+
+        .tiles[data-single="true"] .tile-value { font-size: 2.6rem; }
+
+        .tile-change {
+            font-size: .7rem;
+            font-weight: 700;
+            color: var(--ink-faint);
+            white-space: nowrap;
+        }
+
+        .tile-change.up { color: #EF4444; }
+        .tile-change.down { color: #10B981; }
+
+        .tile-bar {
+            height: 3px;
+            border-radius: 2px;
+            background: var(--line);
+            margin-top: .45rem;
+            overflow: hidden;
+        }
+
+        .tile-bar span {
+            display: block;
+            height: 100%;
+            border-radius: 2px;
+        }
+
+        .card-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 1.15rem;
+            padding-top: .8rem;
+            border-top: 1px solid var(--line);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            min-width: 0;
+        }
+
+        .brand img {
+            height: 20px;
+            width: auto;
+            display: block;
+            filter: var(--logo-filter);
+        }
+
+        .brand-note {
+            font-size: .625rem;
+            color: var(--ink-faint);
+            font-weight: 500;
+            letter-spacing: .04em;
+            white-space: nowrap;
+        }
+
+        .updated {
+            font-size: .625rem;
+            color: var(--ink-faint);
+            font-weight: 500;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .error {
+            font-size: .8rem;
+            color: var(--ink-dim);
+            padding: 1rem 0;
+        }
+
+        @media (max-width: 380px) {
+            .tiles { grid-template-columns: 1fr; }
+            .scope { font-size: 1.25rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <a class="card" id="card" href="https://finmango.org/barometer" target="_blank" rel="noopener noreferrer">
+        <div class="card-head">
+            <div>
+                <span class="eyebrow">Financial Health Barometer</span>
+                <div class="scope" id="scope">United States</div>
+            </div>
+            <span class="live"><span class="live-dot"></span> Live</span>
+        </div>
+
+        <div class="tiles" id="tiles"></div>
+
+        <div class="card-foot">
+            <span class="brand">
+                <img src="finmango.png" alt="FinMango">
+                <span class="brand-note">Research</span>
+            </span>
+            <span class="updated" id="updated"></span>
+        </div>
+    </a>
+
+    <script src="data/dashboard-data.js?v=20260729"></script>
+    <script>
+        (function () {
+            var INDICATORS = [
+                { key: 'financial_anxiety', label: 'Financial Anxiety' },
+                { key: 'food_insecurity', label: 'Food Insecurity' },
+                { key: 'housing_stress', label: 'Housing Stress' },
+                { key: 'affordability', label: 'Affordability' }
+            ];
+
+            var params = new URLSearchParams(window.location.search);
+
+            // Theme
+            if ((params.get('theme') || '').toLowerCase() === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+
+            function colorFor(value) {
+                if (value < 90) return '#10B981';
+                if (value < 120) return '#F59E0B';
+                if (value < 150) return '#F97316';
+                return '#EF4444';
+            }
+
+            function normalizeState(raw) {
+                if (!raw) return null;
+                var code = String(raw).trim().toUpperCase();
+                if (!code || code === 'US' || code === 'NATIONAL') return null;
+                if (code.indexOf('US-') !== 0) code = 'US-' + code;
+                return code;
+            }
+
+            function formatDate(iso) {
+                if (!iso) return '';
+                var parts = String(iso).slice(0, 10).split('-');
+                if (parts.length !== 3) return iso;
+                var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                var m = months[parseInt(parts[1], 10) - 1] || '';
+                return m + ' ' + parseInt(parts[2], 10) + ', ' + parts[0];
+            }
+
+            function postHeight() {
+                try {
+                    var h = Math.ceil(document.body.getBoundingClientRect().height);
+                    window.parent.postMessage(
+                        { type: 'finmango:barometer-embed', height: h }, '*');
+                } catch (e) { /* cross-origin parent that blocks postMessage */ }
+            }
+
+            function render() {
+                var tiles = document.getElementById('tiles');
+
+                if (typeof DASHBOARD_DATA === 'undefined') {
+                    tiles.innerHTML =
+                        '<div class="error">Barometer data is unavailable right now. ' +
+                        'View the live dashboard at finmango.org/barometer.</div>';
+                    return;
+                }
+
+                var stateCode = normalizeState(params.get('state'));
+                var source = DASHBOARD_DATA.national;
+                var scopeName = 'United States';
+                var linkQuery = '';
+
+                if (stateCode && DASHBOARD_DATA.states && DASHBOARD_DATA.states[stateCode]) {
+                    source = DASHBOARD_DATA.states[stateCode];
+                    scopeName = source.name;
+                    linkQuery = '?state=' + stateCode.replace('US-', '');
+                }
+
+                document.getElementById('scope').textContent = scopeName;
+
+                var card = document.getElementById('card');
+                card.href = 'https://finmango.org/barometer' + linkQuery +
+                    (linkQuery ? '&' : '?') + 'utm_source=embed';
+                card.title = 'FinMango Financial Health Barometer — ' + scopeName +
+                    ' (opens finmango.org)';
+
+                // Indicator selection: one key, or all four.
+                var requested = (params.get('indicator') || 'all').toLowerCase();
+                var shown = INDICATORS.filter(function (ind) { return ind.key === requested; });
+                if (!shown.length) shown = INDICATORS;
+                tiles.setAttribute('data-single', shown.length === 1 ? 'true' : 'false');
+
+                tiles.innerHTML = shown.map(function (ind) {
+                    var d = source[ind.key];
+                    if (!d) return '';
+                    var color = colorFor(d.value);
+                    var change = typeof d.change === 'number' ? d.change : 0;
+                    // A 0.0% move is flat, not a rise — don't paint it red.
+                    var flat = Math.abs(change) < 0.05;
+                    var dir = flat ? 'flat' : (change > 0 ? 'up' : 'down');
+                    var arrow = flat ? '—' : (change > 0 ? '▲' : '▼');
+                    var width = Math.max(2, Math.min(100, (d.value / 200) * 100));
+                    var rank = d.rank ? ' · #' + d.rank + ' of 51' : '';
+                    return '<div class="tile">' +
+                        '<div class="tile-label">' + ind.label + rank + '</div>' +
+                        '<div class="tile-row">' +
+                        '<span class="tile-value" style="color:' + color + '">' +
+                        d.value.toFixed(1) + '</span>' +
+                        '<span class="tile-change ' + dir + '">' + arrow + ' ' +
+                        Math.abs(change).toFixed(1) + '%</span>' +
+                        '</div>' +
+                        '<div class="tile-bar"><span style="width:' + width +
+                        '%;background:' + color + '"></span></div>' +
+                        '</div>';
+                }).join('');
+
+                document.getElementById('updated').textContent =
+                    'Updated ' + formatDate(DASHBOARD_DATA.as_of);
+            }
+
+            render();
+            postHeight();
+            window.addEventListener('load', postHeight);
+            window.addEventListener('resize', postHeight);
+        })();
+    </script>
+</body>
+
+</html>

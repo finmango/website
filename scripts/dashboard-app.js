@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         currentIndicator: 'financial_anxiety',
         currentPeriod: '12m',
         chartInstance: null,
-        mapData: null
+        mapData: null,
+        currentState: null   // US-XX while the state panel is open, else null
     };
 
     // --- DOM Elements ---
@@ -44,8 +45,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         pageEnd: document.getElementById('page-end'),
         downloadCsv: document.getElementById('download-csv'),
         downloadJson: document.getElementById('download-json'),
-        copyCitation: document.getElementById('copy-citation')
+        copyCitation: document.getElementById('copy-citation'),
+        // Share / embed (all optional — guarded at every use site)
+        shareCopyLink: document.getElementById('share-copy-link'),
+        shareDownloadCard: document.getElementById('share-download-card'),
+        shareX: document.getElementById('share-x'),
+        shareLinkedin: document.getElementById('share-linkedin'),
+        embedBtn: document.getElementById('embed-widget'),
+        embedModal: document.getElementById('embed-modal'),
+        embedClose: document.getElementById('embed-close'),
+        embedScope: document.getElementById('embed-scope'),
+        embedIndicator: document.getElementById('embed-indicator'),
+        embedTheme: document.getElementById('embed-theme'),
+        embedPreview: document.getElementById('embed-preview'),
+        embedCode: document.getElementById('embed-code'),
+        embedCopy: document.getElementById('embed-copy'),
+        embedOpen: document.getElementById('embed-open')
     };
+
+    const INDICATOR_META = [
+        { key: 'financial_anxiety', label: 'Financial Anxiety' },
+        { key: 'food_insecurity', label: 'Food Insecurity' },
+        { key: 'housing_stress', label: 'Housing Stress' },
+        { key: 'affordability', label: 'Affordability' }
+    ];
 
     // --- Initialization ---
     async function init() {
@@ -68,7 +91,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             ['initRankings', initRankings],
             ['setupEventListeners', setupEventListeners],
             ['updateMapView', () => updateMapView(APP_STATE.currentIndicator)],
-            ['updateRankingsTable', updateRankingsTable]
+            ['updateRankingsTable', updateRankingsTable],
+            ['initEmbedBuilder', initEmbedBuilder],
+            ['openStateFromUrl', openStateFromUrl]
         ];
 
         for (const [name, fn] of steps) {
@@ -409,11 +434,342 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         els.statePanel.classList.add('open');
         els.panelOverlay.classList.add('visible');
+
+        APP_STATE.currentState = stateCode;
+        syncStateUrl(stateCode);
+        updateShareLinks(stateCode);
     }
 
     function closePanel() {
         els.statePanel.classList.remove('open');
         els.panelOverlay.classList.remove('visible');
+        APP_STATE.currentState = null;
+        syncStateUrl(null);
+    }
+
+    // --- Shareable State Permalinks ---------------------------------------
+    // The panel is reflected in the URL as ?state=OH so a state view can be
+    // linked, bookmarked and cited. replaceState (not pushState) keeps the
+    // back button behaving exactly as it did before this existed.
+
+    function shortStateCode(stateCode) {
+        return String(stateCode || '').replace(/^US-/, '');
+    }
+
+    function syncStateUrl(stateCode) {
+        if (!window.history || !window.history.replaceState) return;
+        const url = new URL(window.location.href);
+        if (stateCode) {
+            url.searchParams.set('state', shortStateCode(stateCode));
+        } else {
+            url.searchParams.delete('state');
+        }
+        window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+    }
+
+    function normalizeStateCode(raw) {
+        if (!raw) return null;
+        let code = String(raw).trim().toUpperCase();
+        if (!code) return null;
+        if (code.indexOf('US-') !== 0) code = 'US-' + code;
+        return DASHBOARD_DATA.states && DASHBOARD_DATA.states[code] ? code : null;
+    }
+
+    function stateShareUrl(stateCode) {
+        const url = new URL(window.location.href);
+        url.hash = '';
+        url.search = '';
+        url.searchParams.set('state', shortStateCode(stateCode));
+        return url.toString();
+    }
+
+    function openStateFromUrl() {
+        const requested = new URLSearchParams(window.location.search).get('state');
+        const code = normalizeStateCode(requested);
+        if (code) openStatePanel(code);
+    }
+
+    function updateShareLinks(stateCode) {
+        const data = DASHBOARD_DATA.states[stateCode];
+        if (!data) return;
+
+        const url = stateShareUrl(stateCode);
+        const indicator = APP_STATE.currentIndicator;
+        const label = (INDICATOR_META.find(i => i.key === indicator) || {}).label || 'Financial stress';
+        const value = data[indicator] ? data[indicator].value.toFixed(1) : '';
+        const text = `${data.name}: ${label} index ${value} on the FinMango Financial Health Barometer.`;
+
+        if (els.shareX) {
+            els.shareX.href = 'https://x.com/intent/post?text=' +
+                encodeURIComponent(text) + '&url=' + encodeURIComponent(url);
+        }
+        if (els.shareLinkedin) {
+            els.shareLinkedin.href = 'https://www.linkedin.com/sharing/share-offsite/?url=' +
+                encodeURIComponent(url);
+        }
+    }
+
+    // --- Branded Share Card ------------------------------------------------
+    // Renders a 1200x630 PNG of a state's four indicators, with the FinMango
+    // wordmark and the source URL burned in, so the numbers stay attributed
+    // wherever the image ends up.
+
+    const SHARE_CARD = { w: 1200, h: 630, pad: 72 };
+
+    function formatAsOfDate(iso) {
+        const parts = String(iso || '').slice(0, 10).split('-');
+        if (parts.length !== 3) return iso || '';
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        return `${months[parseInt(parts[1], 10) - 1] || ''} ${parseInt(parts[2], 10)}, ${parts[0]}`;
+    }
+
+    function drawTrackedText(ctx, text, x, y, tracking) {
+        // Canvas letterSpacing is not supported everywhere — space manually.
+        let cursor = x;
+        for (const char of text) {
+            ctx.fillText(char, cursor, y);
+            cursor += ctx.measureText(char).width + tracking;
+        }
+    }
+
+    function loadLogo() {
+        return new Promise(resolve => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);   // fall back to a text wordmark
+            img.src = 'finmango.png';
+        });
+    }
+
+    async function renderShareCard(stateCode) {
+        const data = DASHBOARD_DATA.states[stateCode];
+        if (!data) return null;
+
+        const { w, h, pad } = SHARE_CARD;
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+
+        // Web fonts must be resolved before the first fillText or the canvas
+        // silently falls back to a system face.
+        if (document.fonts && document.fonts.ready) {
+            try { await document.fonts.ready; } catch (e) { /* non-fatal */ }
+        }
+        const body = "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
+        const mono = "'JetBrains Mono', 'SF Mono', Menlo, monospace";
+
+        // Paper
+        ctx.fillStyle = '#FAFAF7';
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#FF6B35';
+        ctx.fillRect(0, 0, w, 10);
+
+        // Eyebrow
+        ctx.fillStyle = '#FF6B35';
+        ctx.font = `700 20px ${body}`;
+        ctx.textBaseline = 'alphabetic';
+        drawTrackedText(ctx, 'FINANCIAL HEALTH BAROMETER', pad, pad + 34, 3.4);
+
+        // State name — shrink to fit rather than overflow (e.g. District of Columbia)
+        ctx.fillStyle = '#0A0A0A';
+        let nameSize = 82;
+        ctx.font = `900 ${nameSize}px ${body}`;
+        while (ctx.measureText(data.name).width > w - pad * 2 && nameSize > 40) {
+            nameSize -= 4;
+            ctx.font = `900 ${nameSize}px ${body}`;
+        }
+        ctx.fillText(data.name, pad, pad + 130);
+
+        // 2x2 indicator grid
+        const colW = (w - pad * 2) / 2;
+        const rowTop = pad + 190;
+        const rowH = 128;
+
+        INDICATOR_META.forEach((ind, i) => {
+            const d = data[ind.key];
+            if (!d) return;
+            const x = pad + (i % 2) * colW;
+            const y = rowTop + Math.floor(i / 2) * rowH;
+            const color = getColorForValue(d.value, ind.key);
+
+            ctx.fillStyle = 'rgba(10,10,10,.62)';
+            ctx.font = `500 20px ${body}`;
+            ctx.fillText(ind.label, x, y);
+
+            ctx.fillStyle = color;
+            ctx.font = `500 58px ${mono}`;
+            ctx.fillText(d.value.toFixed(1), x, y + 62);
+
+            const valueWidth = ctx.measureText(d.value.toFixed(1)).width;
+            ctx.fillStyle = 'rgba(10,10,10,.38)';
+            ctx.font = `500 18px ${body}`;
+            const change = typeof d.change === 'number' ? d.change : 0;
+            const flat = Math.abs(change) < 0.05;   // 0.0% is flat, not a rise
+            const arrow = flat ? '—' : (change > 0 ? '▲' : '▼');
+            const meta = (d.rank ? `#${d.rank} of 51` : '') +
+                (d.rank ? '  ·  ' : '') +
+                `${arrow} ${Math.abs(change).toFixed(1)}%`;
+            ctx.fillText(meta, x + valueWidth + 16, y + 62);
+
+            // Severity bar (0-200 scale, same as the dashboard)
+            const barW = colW - 60;
+            ctx.fillStyle = 'rgba(10,10,10,.1)';
+            ctx.fillRect(x, y + 82, barW, 5);
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y + 82, barW * Math.max(0.02, Math.min(1, d.value / 200)), 5);
+        });
+
+        // Footer rule
+        const footY = h - pad - 42;
+        ctx.fillStyle = 'rgba(10,10,10,.1)';
+        ctx.fillRect(pad, footY - 26, w - pad * 2, 1);
+
+        // Wordmark
+        const logo = await loadLogo();
+        if (logo && logo.width) {
+            const logoH = 42;
+            const logoW = (logo.width / logo.height) * logoH;
+            ctx.drawImage(logo, pad, footY - 6, logoW, logoH);
+        } else {
+            ctx.fillStyle = '#0A0A0A';
+            ctx.font = `900 34px ${body}`;
+            ctx.fillText('FinMango', pad, footY + 26);
+        }
+
+        // Source line
+        ctx.fillStyle = 'rgba(10,10,10,.38)';
+        ctx.font = `500 18px ${body}`;
+        ctx.textAlign = 'right';
+        ctx.fillText(`finmango.org/barometer  ·  Updated ${formatAsOfDate(DASHBOARD_DATA.as_of)}`,
+            w - pad, footY + 26);
+        ctx.textAlign = 'left';
+
+        return canvas;
+    }
+
+    async function downloadShareCard(stateCode) {
+        const canvas = await renderShareCard(stateCode);
+        if (!canvas) return;
+        const name = DASHBOARD_DATA.states[stateCode].name
+            .toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        await new Promise(resolve => {
+            canvas.toBlob(blob => {
+                if (!blob) return resolve();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `finmango-barometer-${name}-${DASHBOARD_DATA.as_of}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                resolve();
+            }, 'image/png');
+        });
+    }
+
+    // --- Embed Snippet Builder ---------------------------------------------
+
+    function initEmbedBuilder() {
+        if (!els.embedModal || !els.embedScope) return;
+
+        const states = Object.entries(DASHBOARD_DATA.states || {})
+            .map(([code, s]) => ({ code, name: s.name }))
+            .sort((a, b) => a.name.localeCompare(b.name));
+
+        els.embedScope.innerHTML = '<option value="">United States (national)</option>' +
+            states.map(s => `<option value="${shortStateCode(s.code)}">${s.name}</option>`).join('');
+
+        [els.embedScope, els.embedIndicator, els.embedTheme].forEach(sel => {
+            if (sel) sel.addEventListener('change', updateEmbedSnippet);
+        });
+    }
+
+    function embedSrc() {
+        const params = new URLSearchParams();
+        const scope = els.embedScope ? els.embedScope.value : '';
+        const indicator = els.embedIndicator ? els.embedIndicator.value : 'all';
+        const theme = els.embedTheme ? els.embedTheme.value : 'light';
+        if (scope) params.set('state', scope);
+        if (indicator && indicator !== 'all') params.set('indicator', indicator);
+        if (theme === 'dark') params.set('theme', 'dark');
+        const query = params.toString();
+        return 'https://finmango.org/barometer-embed' + (query ? '?' + query : '');
+    }
+
+    function updateEmbedSnippet() {
+        if (!els.embedCode) return;
+        const src = embedSrc();
+        const single = els.embedIndicator && els.embedIndicator.value !== 'all';
+        const height = single ? 250 : 320;
+        const scopeSelect = els.embedScope;
+        const scopeName = scopeSelect && scopeSelect.value
+            ? scopeSelect.options[scopeSelect.selectedIndex].text
+            : 'United States';
+
+        els.embedCode.value =
+            `<iframe src="${src}"\n` +
+            `        title="FinMango Financial Health Barometer — ${scopeName}"\n` +
+            `        width="100%" height="${height}" loading="lazy"\n` +
+            `        style="border:0;max-width:560px"></iframe>`;
+
+        if (els.embedPreview) {
+            // Preview from the local copy so it works before deploy too.
+            els.embedPreview.src = src.replace('https://finmango.org/barometer-embed',
+                'barometer-embed.html');
+            els.embedPreview.height = height;
+        }
+        if (els.embedOpen) {
+            els.embedOpen.href = src.replace('https://finmango.org/barometer-embed',
+                'barometer-embed.html');
+        }
+    }
+
+    function openEmbedModal() {
+        if (!els.embedModal) return;
+        // Show first, then point the preview at its src — the iframe has to be
+        // laid out before it will load.
+        els.embedModal.classList.add('open');
+        updateEmbedSnippet();
+    }
+
+    function closeEmbedModal() {
+        if (!els.embedModal) return;
+        els.embedModal.classList.remove('open');
+        if (els.embedPreview) els.embedPreview.src = 'about:blank';
+    }
+
+    // --- Small feedback helper for copy actions ---
+    function flashButtonLabel(btn, message) {
+        if (!btn) return;
+        const target = btn.querySelector('.tool-label') || btn;
+        const original = target.textContent;
+        target.textContent = message;
+        setTimeout(() => { target.textContent = original; }, 1600);
+    }
+
+    function copyText(text, btn, message) {
+        const done = () => flashButtonLabel(btn, message);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+        } else {
+            fallbackCopy(text, done);
+        }
+    }
+
+    function fallbackCopy(text, done) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) { /* clipboard unavailable */ }
+        document.body.removeChild(ta);
+        done();
     }
 
     // --- Tooltip ---
@@ -618,6 +974,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Update Chart Select to match
                 els.chartIndicatorSelect.value = APP_STATE.currentIndicator;
                 updateChart();
+
+                // Keep the open state panel's share text on the live indicator
+                if (APP_STATE.currentState) updateShareLinks(APP_STATE.currentState);
             });
         });
 
@@ -704,6 +1063,56 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert('Citation copied to clipboard!');
             });
         }
+
+        // --- Share: state permalink + branded image ---
+        if (els.shareCopyLink) {
+            els.shareCopyLink.addEventListener('click', () => {
+                if (!APP_STATE.currentState) return;
+                copyText(stateShareUrl(APP_STATE.currentState), els.shareCopyLink, 'Link copied');
+            });
+        }
+
+        if (els.shareDownloadCard) {
+            els.shareDownloadCard.addEventListener('click', async () => {
+                if (!APP_STATE.currentState) return;
+                const btn = els.shareDownloadCard;
+                const original = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = 'Rendering…';
+                try {
+                    await downloadShareCard(APP_STATE.currentState);
+                } catch (err) {
+                    console.error('[share] card render failed:', err);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = original;
+                }
+            });
+        }
+
+        // --- Embed builder ---
+        if (els.embedBtn) els.embedBtn.addEventListener('click', openEmbedModal);
+        if (els.embedClose) els.embedClose.addEventListener('click', closeEmbedModal);
+        if (els.embedModal) {
+            els.embedModal.addEventListener('click', (e) => {
+                if (e.target === els.embedModal) closeEmbedModal();
+            });
+        }
+        if (els.embedCopy) {
+            els.embedCopy.addEventListener('click', () => {
+                copyText(els.embedCode.value, els.embedCopy, 'Copied');
+            });
+        }
+
+        // Escape closes whichever layer is open
+        document.addEventListener('keydown', (e) => {
+            if (e.key !== 'Escape') return;
+            if (els.embedModal && els.embedModal.classList.contains('open')) {
+                closeEmbedModal();
+            } else if (els.statePanel && els.statePanel.classList.contains('open')) {
+                closePanel();
+            }
+        });
     }
 
     // Run
