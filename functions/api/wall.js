@@ -1,13 +1,14 @@
 // ============================================================================
 // /api/wall — same-origin, edge-cached read proxy for the Community Wall API
 // ----------------------------------------------------------------------------
-// community-wall.html calls this instead of hitting the Google Apps Script web
-// app directly — same pattern (and same reasons) as functions/api/posts.js:
-// edge caching hides Apps Script cold starts, and same-origin avoids CORS.
+// community-wall.html and pledge-wall.html call this instead of hitting the
+// Google Apps Script web app directly — same pattern (and same reasons) as
+// functions/api/posts.js: edge caching hides Apps Script cold starts, and
+// same-origin avoids CORS.
 //
-// Read-only: only the public "approved" action is proxied. Submissions and
-// hearts POST straight to the Apps Script (no-cors), and moderation actions
-// never pass through here.
+// Read-only: only the public "approved" (wall stories) and "pledges" (Pledge
+// Wall) actions are proxied. Submissions and hearts POST straight to the Apps
+// Script (no-cors), and moderation actions never pass through here.
 // ============================================================================
 
 import { WALL_APPS_SCRIPT_URL, jsonResponse } from '../_shared.js';
@@ -17,20 +18,23 @@ import { WALL_APPS_SCRIPT_URL, jsonResponse } from '../_shared.js';
 const WALL_TTL = 120; // seconds
 const SWR = 86400;    // how long the edge may serve stale while revalidating
 
+const PUBLIC_ACTIONS = new Set(['approved', 'pledges']);
+
 export async function onRequestGet(context) {
   const { request, waitUntil } = context;
   const url = new URL(request.url);
 
-  if (url.searchParams.get('action') !== 'approved') {
+  const action = url.searchParams.get('action') || '';
+  if (!PUBLIC_ACTIONS.has(action)) {
     return jsonResponse({ result: 'error', error: 'Unsupported action' }, 400);
   }
   if (WALL_APPS_SCRIPT_URL.indexOf('REPLACE_WITH') === 0) {
     return jsonResponse({ result: 'error', error: 'Not configured' }, 503);
   }
 
-  const upstream = WALL_APPS_SCRIPT_URL + '?action=approved';
+  const upstream = WALL_APPS_SCRIPT_URL + '?action=' + action;
   const cache = caches.default;
-  const cacheKey = new Request(url.origin + url.pathname + '?action=approved', { method: 'GET' });
+  const cacheKey = new Request(url.origin + url.pathname + '?action=' + action, { method: 'GET' });
 
   async function fetchFresh() {
     const upstreamRes = await fetch(upstream, {

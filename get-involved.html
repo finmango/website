@@ -598,6 +598,8 @@
       max-width: 52ch;
       letter-spacing: -.01em;
     }
+    .section-sub a { color: var(--ink); text-decoration-color: var(--orange); text-underline-offset: 2px; }
+    .section-sub a:hover { color: var(--orange); }
 
     .opps-list { border-top: 1px solid var(--ink-line); }
 
@@ -789,6 +791,66 @@
     .pledge-status { font-size: .85rem; font-weight: 500; min-height: 1.2em; }
     .pledge-status.err { color: #B91C1C; }
     .pledge-privacy { font-size: .78rem; font-weight: 300; line-height: 1.55; color: var(--ink-faint); max-width: 44ch; }
+
+    /* optional photo */
+    .pledge-photo-row { display: flex; align-items: center; gap: 1rem; }
+    .pledge-photo-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: .7rem 1.1rem;
+      border: 1px solid var(--ink-line);
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color .2s ease, color .2s ease;
+    }
+    .pledge-photo-btn:hover { border-color: var(--ink); }
+    .pledge-photo-hint { font-size: .78rem; font-weight: 300; color: var(--ink-faint); line-height: 1.4; }
+    .pledge-photo-preview {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: .85rem;
+    }
+    .pledge-photo-preview img {
+      width: 84px; height: 63px;
+      object-fit: cover;
+      border: 1px solid var(--ink-line);
+      display: block;
+    }
+    .pledge-photo-remove {
+      background: none;
+      border: none;
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--ink-dim);
+      cursor: pointer;
+      border-bottom: 1px solid var(--ink-line);
+      padding: 0 0 .1rem;
+    }
+    .pledge-photo-remove:hover { color: #B91C1C; border-color: #B91C1C; }
+
+    /* wall consent */
+    .pledge-consent {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .8rem;
+      align-items: start;
+      cursor: pointer;
+      position: relative;
+    }
+    .pledge-consent input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .pledge-consent .pledge-check { width: 1.4rem; height: 1.4rem; font-size: .68rem; margin-top: .1rem; }
+    .pledge-consent-text { font-size: .82rem; font-weight: 300; line-height: 1.5; color: var(--ink-dim); }
+    .pledge-consent-text a { color: var(--ink); text-decoration-color: var(--orange); text-underline-offset: 2px; }
+    .pledge-consent-text a:hover { color: var(--orange); }
+    .pledge-consent input:checked ~ .pledge-check { background: var(--orange); border-color: var(--orange); color: #fff; }
+    .pledge-consent input:focus-visible ~ .pledge-check { outline: 2px solid var(--orange); outline-offset: 3px; }
 
     /* signed state */
     .pledge-done {
@@ -1535,7 +1597,7 @@
           <span class="opp-time">30 sec</span>
           <span class="opp-body">
             <span class="opp-title">Take the pledge <span class="opp-tag">New</span></span>
-            <span class="opp-desc">Pick the barrier you're standing against — housing, medical debt, wages — and put your first name on it. No money, no meetings.</span>
+            <span class="opp-desc">Pick the barrier you're standing against — housing, medical debt, wages — and put your name (and photo, if you like) on the public Pledge Wall. No money, no meetings.</span>
           </span>
           <svg class="opp-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
@@ -1603,7 +1665,7 @@
       <div class="section-head">
         <span class="eyebrow">30 seconds · No money, no meetings</span>
         <h2>Take the <em>pledge.</em></h2>
-        <p class="section-sub">Financial stress isn't a personal failing — it's built by systems. Pick the barrier that hits closest to home, tell us why if you'd like, and put your first name on it. You're pledging to talk about money openly and to blame systems, not people. Thirty seconds, no money, no meetings.</p>
+        <p class="section-sub">Financial stress isn't a personal failing — it's built by systems. Pick the barrier that hits closest to home, tell us why if you'd like, add a photo if you want, and put your first name on it. Your card joins the <a href="pledge-wall.html">Pledge Wall</a> alongside everyone else standing with you. Thirty seconds, no money, no meetings.</p>
       </div>
 
       <div class="pledge-body">
@@ -1677,6 +1739,23 @@
               <label for="pledgeLocation">Your community</label>
               <input type="text" id="pledgeLocation" maxlength="120" placeholder="City, State — e.g. Akron, Ohio" required>
             </div>
+            <div class="pledge-field">
+              <label for="pledgePhoto">Add a photo (optional)</label>
+              <div class="pledge-photo-row">
+                <label class="pledge-photo-btn" for="pledgePhoto">Choose a photo</label>
+                <input type="file" id="pledgePhoto" accept="image/*" style="position:absolute;opacity:0;width:1px;height:1px;">
+                <span class="pledge-photo-hint">You, your crew, your block — it goes on your wall card.</span>
+              </div>
+              <div class="pledge-photo-preview" id="pledgePhotoPreview" hidden>
+                <img id="pledgePhotoImg" alt="Your photo, ready to go">
+                <button type="button" class="pledge-photo-remove" id="pledgePhotoRemove">Remove</button>
+              </div>
+            </div>
+            <label class="pledge-consent">
+              <input type="checkbox" id="pledgeShowOnWall" checked>
+              <span class="pledge-check" aria-hidden="true"></span>
+              <span class="pledge-consent-text">Show my pledge on the public <a href="pledge-wall.html" target="_blank" rel="noopener">Pledge Wall</a> — first name, community, barrier, note &amp; photo. Uncheck to be counted quietly instead.</span>
+            </label>
             <!-- honeypot: humans never see or fill this -->
             <input type="text" id="pledgeWebsite" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;height:1px;width:1px;" aria-hidden="true">
             <button type="submit" class="btn-primary" id="pledgeSubmit">
@@ -1684,7 +1763,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </button>
             <p class="pledge-status" id="pledgeStatus" role="status" aria-live="polite"></p>
-            <p class="pledge-privacy">We record only what's on this form — your barrier, your note, your first name, and your community — so we can count the movement and see where it's growing. None of it is published, and there's no email list attached.</p>
+            <p class="pledge-privacy">We record only what's on this form. Opted into the wall? A human reviews your card before it appears — first names and communities only. Opted out? We just count you. Either way, there's no email list attached.</p>
           </form>
 
           <div class="pledge-done" id="pledgeDone" hidden>
@@ -1698,7 +1777,8 @@
               </a>
               <a class="btn-secondary" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fwww.finmango.org%2Fget-involved.html" target="_blank" rel="noopener noreferrer">Share on LinkedIn</a>
             </div>
-            <p class="pledge-done-more">Got three more minutes? <a href="community-wall.html">Share your community's story on the wall</a>.</p>
+            <p class="pledge-done-more" id="pledgeDoneWall">Opted into the wall? Your card appears on <a href="pledge-wall.html">the Pledge Wall</a> once a human reviews it — usually within a couple of days.</p>
+            <p class="pledge-done-more">Got three more minutes? <a href="community-wall.html">Share your community's story</a>.</p>
             <p class="pledge-again"><a href="#pledge" id="pledgeAgain">Signing for someone else on this device? Sign again</a></p>
           </div>
         </div>
@@ -1859,9 +1939,9 @@
 
   <script>
     // Pledge — signatures ride the Community Wall backend (no-cors POST to the
-    // Apps Script, same pattern as community-wall.html). They land in the same
-    // moderation Sheet with a "PLEDGE —" message prefix and are never approved
-    // onto the public wall. See docs/COMMUNITY-WALL-SETUP.md → "Pledges".
+    // Apps Script, same pattern as community-wall.html). They land in the
+    // Sheet's "Pledges" tab; signers who opt in appear on pledge-wall.html
+    // after human review. See docs/COMMUNITY-WALL-SETUP.md → "Pledge Wall".
     (function () {
       const PLEDGE_SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbyogpgQ2naRVxs1LK1opqJywYZq0k9JpD7C9dLeKPqMs3BFikOh527QKuOCB6n3q1fHfQ/exec';
 
@@ -1894,6 +1974,61 @@
         document.getElementById('pledgeWhyCount').textContent = whyEl.value.length + ' / 400';
       });
 
+      // ---- optional photo (downscaled client-side, same as write.html) ----
+      let photoData = ''; // JPEG data URL, ready to send
+      const photoInput = document.getElementById('pledgePhoto');
+      const photoPreview = document.getElementById('pledgePhotoPreview');
+
+      function processImage(file, maxDim = 1200, quality = 0.8) {
+        return new Promise((resolve, reject) => {
+          if (!file || !file.type.startsWith('image/')) return reject(new Error('Not an image'));
+          if (file.size > 12 * 1024 * 1024) return reject(new Error('Image is larger than 12MB'));
+          const reader = new FileReader();
+          reader.onload = e => {
+            const img = new Image();
+            img.onload = () => {
+              let { width, height } = img;
+              if (width > maxDim || height > maxDim) {
+                const r = Math.min(maxDim / width, maxDim / height);
+                width = Math.round(width * r); height = Math.round(height * r);
+              }
+              const canvas = document.createElement('canvas');
+              canvas.width = width; canvas.height = height;
+              canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+              resolve(canvas.toDataURL('image/jpeg', quality));
+            };
+            img.onerror = () => reject(new Error('Could not read image'));
+            img.src = e.target.result;
+          };
+          reader.onerror = () => reject(new Error('Could not read file'));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function clearPhoto() {
+        photoData = '';
+        photoInput.value = '';
+        photoPreview.hidden = true;
+      }
+
+      photoInput.addEventListener('change', async () => {
+        const file = photoInput.files && photoInput.files[0];
+        if (!file) return;
+        try {
+          photoData = await processImage(file);
+          document.getElementById('pledgePhotoImg').src = photoData;
+          photoPreview.hidden = false;
+          setStatus('');
+        } catch (err) {
+          clearPhoto();
+          setStatus(err.message === 'Image is larger than 12MB'
+            ? 'That photo is over 12MB — try a smaller one.'
+            : 'We couldn\'t read that file — try a JPG or PNG.', 'err');
+        }
+      });
+
+      document.getElementById('pledgePhotoRemove').addEventListener('click', clearPhoto);
+
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const picked = document.querySelector('#pledgeLines input:checked');
@@ -1913,12 +2048,13 @@
           await fetch(PLEDGE_SUBMIT_URL, {
             method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              action: 'submit',
+              action: 'pledge',
               name: document.getElementById('pledgeName').value.trim(),
               location: location,
-              topic: picked.value, // matches the backend's TOPICS list, so the Sheet's topic column = barrier
-              message: 'PLEDGE — Standing against: ' + picked.value + '.' + (why ? ' Why it matters to me: ' + why : ''),
-              email: '',
+              barrier: picked.value, // must match the backend's BARRIERS list
+              why: why,
+              photo: photoData, // '' when no photo chosen
+              showOnWall: document.getElementById('pledgeShowOnWall').checked,
               website: document.getElementById('pledgeWebsite').value // honeypot
             })
           });
@@ -1936,6 +2072,7 @@
       document.getElementById('pledgeAgain').addEventListener('click', (e) => {
         e.preventDefault();
         form.reset();
+        clearPhoto();
         document.getElementById('pledgeWhyCount').textContent = '0 / 400';
         done.hidden = true;
         form.hidden = false;
