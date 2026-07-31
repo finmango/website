@@ -17,14 +17,17 @@ Notes, but lighter — no Drive folder, no images).
 | `tools/community-wall-apps-script.js` | The backend for both walls (deploy to Apps Script) | One-time setup |
 | `functions/api/wall.js` | Cloudflare edge layer: same-origin, cached reads | Auto (no setup) |
 | `functions/pledge-photo.js` | Cloudflare edge layer: cached pledge photos | Auto (no setup) |
+| `team-board.html` → Review → 🧡 Pledges & Stories | The team review queue (approve/reject) | Team |
 
 ## How it flows
 
 1. A visitor writes a short story (≤600 chars) on `community-wall.html` and
    submits. Stored in the Sheet with status = **pending**.
-2. The moderator gets an email with the story and **one-click ✓ Approve /
-   ✗ Reject links** (they can also just edit the `status` cell in the Sheet:
-   `pending` → `approved` / `rejected`).
+2. It shows up in the team review queue (**HQ → Review → 🧡 Pledges &
+   Stories**) for anyone on the team to approve or reject. The moderator also
+   gets an email with the story and **one-click ✓ Approve / ✗ Reject links**
+   (or just edit the `status` cell in the Sheet: `pending` → `approved` /
+   `rejected`).
 3. Approved stories appear on the wall (newest first) within a couple of
    minutes — the edge cache refreshes every ~2 minutes.
 4. Readers can tap the ♥ button on a story ("this resonates"); counts are
@@ -73,16 +76,55 @@ remove them directly in that file.
 
 ## Moderating
 
-Two equally valid ways:
+Three equally valid ways. The first is the one to reach for — it's the only
+one that isn't tied to a single person's inbox:
 
+- **In FinMango HQ** — `team-board.html` → sidebar → **Review → 🧡 Pledges &
+  Stories**. Both queues in one place, with a pending-count badge. Anyone on
+  the team who can get into HQ can approve or reject, and the decision is
+  signed with their name (it lands in the row's `moderatedBy` column as
+  `Name <email>`). See "Reviewing from HQ" below for the one config step.
 - **From the email** — every submission emails `MODERATOR_EMAIL` with the full
-  story and ✓ Approve / ✗ Reject links. One click, done.
+  story and ✓ Approve / ✗ Reject links. One click, done. Still works; it's
+  just no longer the only door.
 - **In the Sheet** — change a row's `status` cell to `approved` or `rejected`.
   (Set `publishedAt` to now if you want it sorted correctly; the email links do
   this automatically.)
 
-There's also a JSON moderation endpoint if a review UI is ever wanted:
-`GET …/exec?action=list&status=pending&key=MODERATION_KEY`.
+Moderation endpoints (all require `key=MODERATION_KEY`):
+
+| Endpoint | Returns |
+| --- | --- |
+| `GET …/exec?action=list&status=pending` | wall stories only |
+| `GET …/exec?action=queue&status=pending` | stories **and** pledges — what HQ reads |
+| `GET …/exec?action=moderate&id=…&decision=approve\|reject&by=…` | records the decision |
+
+`status` accepts `pending`, `approved`, `rejected`, or `all`.
+
+### Reviewing from HQ
+
+HQ never sees the moderation key. `team-board.html` posts to `/api/board`,
+and the HQ Apps Script attaches the key server-side before calling this
+script — the same bridge pattern already used for Ambassador Notes. Being
+signed in to HQ is the credential.
+
+One config step, in **`tools/team-board-apps-script.js`** (the HQ script, not
+this one):
+
+1. Set `WALL_MODERATION_KEY` to this script's `MODERATION_KEY`.
+2. Confirm `WALL_APPS_SCRIPT_URL` matches this script's `/exec` URL
+   (pre-filled).
+3. Redeploy the HQ script: Deploy → Manage deployments → ✏️ Edit → Version:
+   **New version** → Deploy.
+
+Until that's done the HQ tab says exactly which key is missing and moderation
+keeps running off the email links. **Never commit the real key** — this repo
+is public.
+
+What a reviewer sees per pledge: name, location, barrier, the "why" note, the
+photo, and whether the signer **opted into the public wall**. Pledges that
+didn't opt in are labelled **🔒 Private** — approving one publishes nothing,
+it just clears it from the queue.
 
 ## The Pledge Wall
 
@@ -105,8 +147,8 @@ their card may appear on the public Pledge Wall.
 1. A visitor signs on `get-involved.html#pledge`. The pledge lands in the
    Sheet's **Pledges** tab with status = `pending`; the photo (if any) is
    saved to the Drive folder and its link stored in the row.
-2. The moderator email shows the barrier, the note, the photo, and whether
-   the signer **opted into the public wall**:
+2. The HQ review tab — and the moderator email — show the barrier, the note,
+   the photo, and whether the signer **opted into the public wall**:
    - Opted in → the ✓ Approve link publishes the card to `pledge-wall.html`
      (within ~2 minutes, edge cache). Same content checks as stories: no
      full names or personal identifiers in the note, and the photo must be

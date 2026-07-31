@@ -93,6 +93,13 @@ function doGet(e) {
       case 'pledges':  return json({ result: 'success', pledges: listApprovedPledges_() });
       // --- moderator-only (key required) ---
       case 'list':     requireKey_(p.key); return json({ result: 'success', stories: listForModeration_(p.status || 'pending') });
+      // Both queues in one call — what the HQ review tab reads (one round trip
+      // instead of two Apps Script cold starts).
+      case 'queue':    requireKey_(p.key); return json({
+        result: 'success',
+        stories: listForModeration_(p.status || 'pending'),
+        pledges: listPledgesForModeration_(p.status || 'pending')
+      });
       case 'moderate': requireKey_(p.key); return moderate_(p); // returns HTML when ui=1 (email links)
       default: return json({ result: 'error', error: 'Unknown action' });
     }
@@ -146,8 +153,9 @@ function listForModeration_(status) {
     .filter(r => status === 'all' ? true : r.status === status)
     .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
     .map(r => ({
-      id: r.id, createdAt: r.createdAt, status: r.status, name: r.name,
-      location: r.location, topic: r.topic, message: r.message, hearts: r.hearts
+      id: r.id, createdAt: iso_(r.createdAt), status: String(r.status || ''), name: r.name,
+      location: r.location, topic: r.topic, message: r.message, hearts: Number(r.hearts) || 0,
+      moderatedBy: String(r.moderatedBy || '')
     }));
 }
 
@@ -240,6 +248,35 @@ function publicPledge_(r) {
     name: r.name, location: r.location, barrier: r.barrier,
     why: r.why, photoId: idMatch ? idMatch[1] : ''
   };
+}
+
+// Moderation list: every field a reviewer needs to make the call, including
+// the ones the public list deliberately drops — status, whether the signer
+// opted into the public wall, and who moderated it last. Never includes
+// anything the signer didn't intend to publish beyond that.
+function listPledgesForModeration_(status) {
+  return readRowsFrom_(getPledgeSheet_())
+    .filter(r => status === 'all' ? true : r.status === status)
+    .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)))
+    .map(r => {
+      const idMatch = /[?&]id=([\w-]+)/.exec(String(r.photoUrl || ''));
+      return {
+        id: r.id,
+        createdAt: iso_(r.createdAt),
+        publishedAt: iso_(r.publishedAt),
+        status: String(r.status || ''),
+        name: r.name, location: r.location, barrier: r.barrier, why: r.why,
+        photoId: idMatch ? idMatch[1] : '',
+        // Signers who didn't opt in are counted but never shown, whatever the
+        // status — the review UI says so rather than implying approval publishes.
+        showOnWall: r.showOnWall === 'yes' || r.showOnWall === true,
+        moderatedBy: String(r.moderatedBy || '')
+      };
+    });
+}
+
+function iso_(v) {
+  return v instanceof Date ? v.toISOString() : String(v || '');
 }
 
 // Save a pledge photo (base64 data URL) into the shared Drive folder.

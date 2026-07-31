@@ -162,6 +162,39 @@ persistent sign-in on.
 - **Backups** — sidebar → Backup / restore downloads the whole workspace as
   JSON. Do this before big reorganizations.
 
+### The Review tabs
+
+Two moderation queues live in the sidebar under **Review**, so approvals
+aren't stuck in one person's inbox. Anyone signed in to HQ can clear them,
+and every decision is recorded with the reviewer's name.
+
+- **📝 Ambassador Notes** — drafts from `write.html`. Approve (and schedule
+  the go-live), request changes, reject, publish. See `docs/POSTS-SETUP.md`.
+- **🧡 Pledges & Stories** — everything submitted to the Pledge Wall
+  (`pledge-wall.html`) and the Community Wall (`community-wall.html`).
+  Approve or reject; approved items appear publicly within a couple of
+  minutes. Pledges whose signer didn't opt into the public wall are labelled
+  **🔒 Private** — they're counted but never displayed, whatever you decide.
+  See `docs/COMMUNITY-WALL-SETUP.md`.
+
+Both tabs show a badge with the pending count and warm themselves in the
+background at load, so the queue is on screen the moment you click.
+
+Each queue reaches its own backend through this Apps Script, which holds the
+review key server-side — **being signed in to HQ is the only credential a
+browser ever carries.** They need one config value each, and until it's set
+the tab explains which one is missing:
+
+| Tab | CONFIG key in `tools/team-board-apps-script.js` | Value |
+| --- | --- | --- |
+| Ambassador Notes | `POSTS_REVIEW_KEY` | the posts script's `REVIEW_KEY` |
+| Pledges & Stories | `WALL_MODERATION_KEY` | the Community Wall script's `MODERATION_KEY` |
+
+Set them in the CONFIG block, redeploy a new version (Deploy → Manage
+deployments → ✏️ Edit → Version: New version), and the tabs light up. The
+`/exec` URL doesn't change. Never commit the real values — this repo is
+public.
+
 ## Security notes, honestly stated
 
 - Access is Google sign-in (@finmango.org, verified server-side) or one shared

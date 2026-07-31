@@ -48,6 +48,12 @@ const CONFIG = {
   // "not wired up" note and the standalone post-review.html panel still works.
   POSTS_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyw06JczRZVwdf3vw70xeshZ_shp2J1zzvPvPqhR-2_FSqzSBFaq0Yu-OZ7KjKYfCuthQ/exec',
   POSTS_REVIEW_KEY: 'REPLACE_WITH_POSTS_REVIEW_KEY',
+  // Community Wall + Pledge Wall reviews bridge: same idea as the posts bridge
+  // above. Anyone signed in to HQ can clear the queue, so approving a pledge
+  // stops being one person's inbox chore. The moderation key stays HERE —
+  // it's the Community Wall script's MODERATION_KEY, never sent to a browser.
+  WALL_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyogpgQ2naRVxs1LK1opqJywYZq0k9JpD7C9dLeKPqMs3BFikOh527QKuOCB6n3q1fHfQ/exec',
+  WALL_MODERATION_KEY: 'REPLACE_WITH_WALL_MODERATION_KEY',
   // Author emails (approvals, change requests) are signed by — and reply to —
   // whoever is signed in to HQ when they click the button. This address is the
   // fallback for the shared-key door, where there's no signed-in identity.
@@ -124,6 +130,24 @@ function doPost(e) {
     if (data.action === 'posts-publish') {
       const reviewerEmail = requireAuth_(data);
       return json(postsBridge_({ action: 'publish', id: String(data.id || ''), reviewer: String(data.reviewer || 'HQ team'), reviewerEmail: reviewerEmail }));
+    }
+    // --- Community Wall + Pledge Wall reviews bridge (HQ-authenticated) ---
+    if (data.action === 'wall-list') {
+      requireAuth_(data);
+      return json(wallBridge_({ action: 'queue', status: String(data.status || 'pending') }));
+    }
+    if (data.action === 'wall-moderate') {
+      // Every decision is signed: the reviewer's name, plus their verified
+      // email when they came through the Google door. The Sheet's moderatedBy
+      // column becomes an audit trail instead of a row of "email-link".
+      const reviewerEmail = requireAuth_(data);
+      const decision = String(data.decision || '');
+      if (decision !== 'approve' && decision !== 'reject') {
+        return json({ result: 'error', error: 'decision must be approve or reject' });
+      }
+      const name = String(data.reviewer || 'HQ team');
+      const by = reviewerEmail ? name + ' <' + reviewerEmail + '>' : name;
+      return json(wallBridge_({ action: 'moderate', id: String(data.id || ''), decision: decision, by: by }));
     }
     if (data.action === 'posts-update') {
       requireAuth_(data);
@@ -387,6 +411,22 @@ function postsBridge_(params) {
   const res = UrlFetchApp.fetch(CONFIG.POSTS_APPS_SCRIPT_URL + '?' + qs, { muteHttpExceptions: true });
   try { return JSON.parse(res.getContentText()); }
   catch (err) { throw new Error('Posts backend unavailable'); }
+}
+
+// Forward a moderation call to the Community Wall backend (which serves both
+// the story wall and the Pledge Wall), attaching the server-side moderation
+// key. Same shape as postsBridge_ — HQ callers never see or send the key.
+function wallBridge_(params) {
+  if (CONFIG.WALL_MODERATION_KEY.indexOf('REPLACE_WITH') === 0) {
+    throw new Error('Wall reviews not configured');
+  }
+  params.key = CONFIG.WALL_MODERATION_KEY;
+  const qs = Object.keys(params).map(function (k) {
+    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+  }).join('&');
+  const res = UrlFetchApp.fetch(CONFIG.WALL_APPS_SCRIPT_URL + '?' + qs, { muteHttpExceptions: true });
+  try { return JSON.parse(res.getContentText()); }
+  catch (err) { throw new Error('Wall backend unavailable'); }
 }
 
 // POST variant of the bridge for payloads too large for a query string
