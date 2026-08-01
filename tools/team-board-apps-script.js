@@ -48,6 +48,13 @@ const CONFIG = {
   // "not wired up" note and the standalone post-review.html panel still works.
   POSTS_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyw06JczRZVwdf3vw70xeshZ_shp2J1zzvPvPqhR-2_FSqzSBFaq0Yu-OZ7KjKYfCuthQ/exec',
   POSTS_REVIEW_KEY: 'REPLACE_WITH_POSTS_REVIEW_KEY',
+  // Pledge Wall reviews bridge: same idea for pledge-wall.html submissions —
+  // HQ shows the pending-pledge queue with approve/reject buttons, and the
+  // Community Wall script's MODERATION_KEY stays HERE (server-side). Until
+  // the key is set, HQ shows a "not wired up" note and the ✓/✗ links in the
+  // moderator emails keep working.
+  WALL_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyogpgQ2naRVxs1LK1opqJywYZq0k9JpD7C9dLeKPqMs3BFikOh527QKuOCB6n3q1fHfQ/exec',
+  WALL_MODERATION_KEY: 'REPLACE_WITH_WALL_MODERATION_KEY',
   // Author emails (approvals, change requests) are signed by — and reply to —
   // whoever is signed in to HQ when they click the button. This address is the
   // fallback for the shared-key door, where there's no signed-in identity.
@@ -131,6 +138,14 @@ function doPost(e) {
       if (typeof data.title === 'string') upd.title = data.title;
       if (typeof data.body === 'string') upd.body = data.body;
       return json(postsBridgePost_(upd));
+    }
+    // --- Pledge Wall moderation bridge (HQ-authenticated) ---
+    if (data.action === 'pledges-list') { requireAuth_(data); return json(wallBridge_({ action: 'listPledges', status: String(data.status || 'all') })); }
+    if (data.action === 'pledges-moderate') {
+      requireAuth_(data);
+      const decision = data.decision === 'approve' ? 'approve' : data.decision === 'reject' ? 'reject' : '';
+      if (!decision) return json({ result: 'error', error: 'decision must be approve or reject' });
+      return json(wallBridge_({ action: 'moderate', id: String(data.id || ''), decision: decision, by: String(data.by || 'HQ team') }));
     }
     return json({ result: 'error', error: 'Unknown action' });
   } catch (err) {
@@ -402,6 +417,21 @@ function postsBridgePost_(payload) {
   });
   try { return JSON.parse(res.getContentText()); }
   catch (err) { throw new Error('Posts backend unavailable'); }
+}
+
+// Forward a pledge moderation action to the Community Wall backend, attaching
+// the server-side moderation key — same shape as postsBridge_ above.
+function wallBridge_(params) {
+  if (CONFIG.WALL_MODERATION_KEY.indexOf('REPLACE_WITH') === 0) {
+    throw new Error('Pledge reviews not configured');
+  }
+  params.key = CONFIG.WALL_MODERATION_KEY;
+  const qs = Object.keys(params).map(function (k) {
+    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+  }).join('&');
+  const res = UrlFetchApp.fetch(CONFIG.WALL_APPS_SCRIPT_URL + '?' + qs, { muteHttpExceptions: true });
+  try { return JSON.parse(res.getContentText()); }
+  catch (err) { throw new Error('Wall backend unavailable'); }
 }
 
 // Email the author the reviewer's change request. Sent from this (HQ) script

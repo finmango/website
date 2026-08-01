@@ -117,6 +117,26 @@ their card may appear on the public Pledge Wall.
    seed pledges), filterable by barrier. Photos are served through the
    edge-cached `/pledge-photo` function, not straight from Drive.
 
+### Reviewing pledges from HQ
+
+The team workspace (`team-board.html`) has a **🤝 Pledge Wall** tab in its
+"Review" sidebar section — the whole pending queue with one-click
+✓ Approve / ✗ Reject, sitting next to Ambassador Notes. Being signed in to
+HQ is the only credential: the HQ Apps Script holds this script's
+`MODERATION_KEY` server-side and forwards decisions, so the key never
+reaches the browser.
+
+One-time wiring (see also `docs/TEAM-BOARD-SETUP.md`):
+
+1. This script needs the `listPledges` action — paste the current version of
+   `tools/community-wall-apps-script.js` and redeploy a **new version**.
+2. In the **HQ** Apps Script (`tools/team-board-apps-script.js`), set
+   `WALL_MODERATION_KEY` to this script's `MODERATION_KEY` and redeploy a
+   new version there too.
+
+Until both steps are done, the HQ tab shows a "one config step left" note
+and the email links remain the way to moderate.
+
 To count pledges (including private ones), just look at the Pledges tab —
 the `barrier` column makes per-barrier counts a one-click filter.
 

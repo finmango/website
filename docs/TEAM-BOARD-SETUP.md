@@ -142,6 +142,30 @@ tokens, the front-end quietly falls back to the old behavior (1-hour tokens,
 One Tap re-issue) — so redeploy a new version of the Apps Script to turn
 persistent sign-in on.
 
+## The Review tabs (Ambassador Notes & Pledge Wall)
+
+The sidebar's **Review** section brings two moderation queues into HQ, so
+being signed in here is the only credential either needs:
+
+- **📝 Ambassador Notes** — the write.html → review → publish pipeline
+  (see `docs/POSTS-SETUP.md`).
+- **🤝 Pledge Wall** — pending pledge submissions with one-click
+  ✓ Approve / ✗ Reject (see `docs/COMMUNITY-WALL-SETUP.md`).
+
+Both work the same way: the HQ Apps Script holds the other backend's secret
+key server-side and forwards decisions, so the key never reaches the browser.
+Each is one config line in the HQ script's CONFIG block (then redeploy a new
+version):
+
+- `POSTS_REVIEW_KEY` — the `REVIEW_KEY` from `tools/posts-apps-script.js`
+- `WALL_MODERATION_KEY` — the `MODERATION_KEY` from
+  `tools/community-wall-apps-script.js` (that script must also be current
+  enough to have the `listPledges` action — redeploy it too if the tab says
+  it can't list pledges)
+
+Until a key is set, its tab shows a "one config step left" note and the
+existing flow (standalone panel / email links) keeps working.
+
 ## Day-to-day
 
 - **The Roadmap board** is the org's strategy view. Rules that keep it honest:

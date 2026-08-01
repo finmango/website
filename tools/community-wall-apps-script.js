@@ -93,6 +93,7 @@ function doGet(e) {
       case 'pledges':  return json({ result: 'success', pledges: listApprovedPledges_() });
       // --- moderator-only (key required) ---
       case 'list':     requireKey_(p.key); return json({ result: 'success', stories: listForModeration_(p.status || 'pending') });
+      case 'listPledges': requireKey_(p.key); return json({ result: 'success', pledges: listPledgesForModeration_(p.status || 'pending') });
       case 'moderate': requireKey_(p.key); return moderate_(p); // returns HTML when ui=1 (email links)
       default: return json({ result: 'error', error: 'Unknown action' });
     }
@@ -149,6 +150,28 @@ function listForModeration_(status) {
       id: r.id, createdAt: r.createdAt, status: r.status, name: r.name,
       location: r.location, topic: r.topic, message: r.message, hearts: r.hearts
     }));
+}
+
+// Moderator list: pledges by status ('pending' / 'approved' / 'rejected' /
+// 'all'), newest first — what the HQ Pledge Wall review tab renders. Photos
+// travel as the Drive file id (photoId) so the front-end can show them through
+// the edge-cached /pledge-photo proxy, same as the public wall.
+function listPledgesForModeration_(status) {
+  return readRowsFrom_(getPledgeSheet_())
+    .filter(r => status === 'all' ? true : r.status === status)
+    .map(r => {
+      const idMatch = /[?&]id=([\w-]+)/.exec(String(r.photoUrl || ''));
+      return {
+        id: r.id,
+        createdAt: r.createdAt instanceof Date ? r.createdAt.toISOString() : String(r.createdAt),
+        status: r.status, name: r.name, location: r.location, barrier: r.barrier,
+        why: r.why,
+        showOnWall: (r.showOnWall === 'yes' || r.showOnWall === true) ? 'yes' : '',
+        photoId: idMatch ? idMatch[1] : '',
+        moderatedBy: r.moderatedBy || ''
+      };
+    })
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
 // Works for both wall stories ('w-…' ids, Wall tab) and pledges ('p-…' ids,
