@@ -504,8 +504,16 @@
         }
         .hb-sub strong { color: var(--ink); font-weight: 500; }
 
-        .hb-stats { display: flex; gap: 2.5rem; align-items: flex-end; }
-        .hb-stat { display: flex; flex-direction: column; gap: .4rem; }
+        .hb-stats { display: flex; align-items: stretch; }
+        .hb-stat {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: .45rem;
+            padding: .4rem 2.5rem .15rem 1.5rem;
+            border-left: 1px solid var(--ink-line);
+        }
+        .hb-stat:last-child { padding-right: .25rem; }
         .hb-stat-num {
             font-size: clamp(1.8rem, 2.8vw, 2.4rem);
             font-weight: 900;
@@ -543,6 +551,13 @@
             text-wrap: balance;
         }
         .section-head h2 em { font-style: normal; color: var(--orange); }
+        /* Rail variant — sticky left column inside a split section */
+        .section-head.rail {
+            margin-bottom: 0;
+            position: sticky;
+            top: 108px;
+            align-self: start;
+        }
         .section-sub {
             font-size: clamp(1rem, 1.3vw, 1.15rem);
             font-weight: 300;
@@ -663,19 +678,31 @@
            ---------------------------------------------------------- */
         .tracks { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
         .tracks-container { max-width: var(--max-width); margin: 0 auto; }
+        .tracks-layout {
+            display: grid;
+            grid-template-columns: minmax(260px, 340px) 1fr;
+            gap: 4.5rem;
+            align-items: start;
+        }
         .tracks-list {
-            max-width: 760px;
             border-top: 1px solid var(--ink-line);
             border-bottom: 1px solid var(--ink-line);
         }
         .track-row {
             display: grid;
-            grid-template-columns: 40px 1fr 24px;
+            grid-template-columns: 2.5rem 40px 1fr 24px;
             gap: 1.25rem;
             align-items: center;
-            padding: 1.4rem .85rem 1.4rem .5rem;
+            padding: 1.6rem 1rem 1.6rem .25rem;
             transition: background .2s ease;
             position: relative;
+        }
+        .track-row-num {
+            font-family: var(--font-mono);
+            font-size: .62rem;
+            font-weight: 500;
+            letter-spacing: .12em;
+            color: var(--ink-faint);
         }
         .track-row + .track-row { border-top: 1px solid var(--ink-line-soft); }
         .track-row:hover { background: rgba(255, 107, 53, .05); }
@@ -881,6 +908,28 @@
         }
         .prizes-divisions > .prize-division:first-child { grid-column: 1 / -1; }
         .prize-division { border: 1px solid var(--ink-line); padding: 2.25rem 2.25rem 2rem; }
+        /* Featured division (Demo Day) — info rail left, ledger of places right */
+        .prize-division--featured {
+            display: grid;
+            grid-template-columns: minmax(240px, 340px) 1fr;
+            gap: 1rem 4.5rem;
+            padding: 2.75rem 2.5rem 2.5rem;
+            align-items: start;
+        }
+        .prize-division--featured .prize-division-desc { margin-bottom: 0; }
+        .prize-division--featured .prize-rows { grid-column: 2; grid-row: 1 / 4; }
+        .prize-division--featured .prize-note { grid-column: 1; margin-top: 1.25rem; }
+        .prize-division--featured .prize-row {
+            display: grid;
+            grid-template-columns: 6rem auto 1fr;
+            align-items: baseline;
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+        .prize-division--featured .prize-row:first-child { border-top: none; padding-top: .25rem; }
+        .prize-division--featured .prize-row-amount { font-size: 1.15rem; }
+        .prize-division--featured .prize-row:first-child .prize-row-amount { font-size: 1.6rem; }
+        .prize-division--featured .prize-row-breakdown { margin-left: 0; text-align: right; }
         .prize-division h3 { font-size: 1.15rem; font-weight: 900; letter-spacing: -.02em; margin-bottom: .35rem; display: flex; align-items: center; gap: .6rem; }
         .prize-division-desc { font-size: .88rem; font-weight: 300; color: var(--ink-dim); margin-bottom: 1.5rem; }
         .prize-row {
@@ -954,9 +1003,18 @@
            ---------------------------------------------------------- */
         .resources { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
         .resources-container { max-width: var(--max-width); margin: 0 auto; }
-        .resources-links { display: flex; gap: .9rem; flex-wrap: wrap; margin-bottom: 3rem; }
+        .resources-layout {
+            display: grid;
+            grid-template-columns: minmax(280px, 420px) 1fr;
+            gap: 4.5rem;
+            align-items: start;
+        }
+        .resources-rail { display: flex; flex-direction: column; gap: 2.25rem; }
+        .resources-rail .section-head { margin-bottom: 0; }
+        .resources-links { display: flex; flex-direction: column; gap: .7rem; }
+        .resources-links .btn-secondary { width: 100%; justify-content: space-between; }
 
-        .scoring-card { border: 1px solid var(--ink-line); padding: 2rem 2.25rem; max-width: 760px; }
+        .scoring-card { border: 1px solid var(--ink-line); padding: 2.25rem 2.5rem 2.5rem; }
         .scoring-header {
             display: flex;
             justify-content: space-between;
@@ -976,16 +1034,16 @@
         }
         .scoring-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 1px;
             background: var(--ink-line);
             border: 1px solid var(--ink-line);
         }
-        .scoring-item { background: var(--paper); padding: 1.1rem .75rem; text-align: center; }
-        .scoring-item-name { font-weight: 700; font-size: .88rem; letter-spacing: -.01em; margin-bottom: .25rem; }
+        .scoring-item { background: var(--paper); padding: 2.4rem 1.75rem 2.25rem; }
+        .scoring-item-name { font-weight: 700; font-size: 1.05rem; letter-spacing: -.015em; margin-bottom: .35rem; }
         .scoring-item-pts {
             font-family: var(--font-mono);
-            font-size: .6rem;
+            font-size: .62rem;
             font-weight: 500;
             letter-spacing: .12em;
             text-transform: uppercase;
@@ -1018,11 +1076,19 @@
         }
         .judges-grid-bb {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-            gap: 2.25rem 1.75rem;
-            margin-top: 2rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2.5rem 2rem;
+            margin-top: 1.75rem;
         }
-        .judge-card-bb { display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; }
+        .judges-grid-bb.cols-5 { grid-template-columns: repeat(5, 1fr); }
+        .judge-card-bb {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: .2rem;
+            border-top: 1px solid var(--ink-line-soft);
+            padding-top: 1.5rem;
+        }
         .judge-card-bb img {
             width: 96px;
             height: 96px;
@@ -1052,8 +1118,17 @@
            ---------------------------------------------------------- */
         .winners { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
         .winners-container { max-width: var(--max-width); margin: 0 auto; }
-        .winner-year-block-bb { max-width: 900px; margin: 0 0 5rem; }
+        .winner-year-block-bb { margin: 0 0 5.5rem; }
         .winner-year-block-bb:last-child { margin-bottom: 0; }
+        .winner-year-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.25fr) minmax(320px, 1fr);
+            gap: 3.5rem;
+            align-items: stretch;
+        }
+        .winner-year-grid.flip { grid-template-columns: minmax(320px, 1fr) minmax(0, 1.25fr); }
+        .winner-year-grid.flip .winner-photo-bb { order: 2; }
+        .winner-year-side { display: flex; flex-direction: column; min-width: 0; }
         .winner-year-label-bb {
             font-size: clamp(2rem, 3.6vw, 2.8rem);
             font-weight: 900;
@@ -1064,26 +1139,34 @@
             border-bottom: 1px solid var(--ink-line);
         }
         .winner-year-label-bb em { font-style: normal; color: var(--orange); }
-        .winner-photo-bb { margin-bottom: 1.5rem; }
+        .winner-photo-bb { min-width: 0; }
         .winner-photo-bb img {
             width: 100%;
             height: auto;
             display: block;
             border: 1px solid var(--ink-line);
         }
+        /* Podium ledger — three ruled rows that stretch to match the photo */
         .winners-grid-bb {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--ink-line);
-            border: 1px solid var(--ink-line);
+            display: flex;
+            flex-direction: column;
+            flex: 1;
         }
-        .winner-card-bb { background: var(--paper); padding: 1.4rem 1.5rem; }
+        .winner-card-bb {
+            background: var(--paper);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--ink-line);
+        }
+        .winner-card-bb:first-child { padding-top: .5rem; }
         .winner-card-bb-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
-            gap: .5rem;
+            gap: .6rem;
             font-family: var(--font-mono);
             font-size: .6rem;
             font-weight: 500;
@@ -1093,8 +1176,9 @@
             margin-bottom: .8rem;
         }
         .winner-card-bb.gold .winner-card-bb-header { color: var(--orange); }
-        .winner-card-bb-name { font-size: 1.02rem; font-weight: 700; letter-spacing: -.015em; margin-bottom: .2rem; }
-        .winner-card-bb-school { font-size: .84rem; font-weight: 300; color: var(--ink-dim); }
+        .winner-card-bb-name { font-size: clamp(1.15rem, 1.7vw, 1.5rem); font-weight: 900; letter-spacing: -.025em; margin-bottom: .25rem; }
+        .winner-card-bb.gold .winner-card-bb-name { font-size: clamp(1.35rem, 2vw, 1.8rem); }
+        .winner-card-bb-school { font-size: .88rem; font-weight: 300; color: var(--ink-dim); }
 
         /* ----------------------------------------------------------
            PARTNERSHIP + SPONSORS
@@ -1105,12 +1189,13 @@
             margin: 0 auto;
             border-top: 1px solid var(--ink-line-soft);
             padding-top: 4.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1.25rem;
+            display: grid;
+            grid-template-columns: minmax(280px, auto) 1fr;
+            align-items: center;
+            column-gap: 5.5rem;
+            row-gap: .9rem;
         }
-        .partnership-logos { display: flex; align-items: center; gap: 1.5rem; }
+        .partnership-logos { display: flex; align-items: center; gap: 1.5rem; grid-row: 1 / 3; }
         .partnership-logos img { height: 44px; object-fit: contain; display: block; }
         .partnership-x { font-size: 1.2rem; font-weight: 400; color: var(--ink-faint); }
         .partnership h2 { font-size: clamp(1.4rem, 2.2vw, 1.8rem); font-weight: 900; letter-spacing: -.025em; }
@@ -1124,15 +1209,20 @@
 
         .sponsors { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
         .sponsors-container { max-width: var(--max-width); margin: 0 auto; }
-        .sponsors-stack { display: flex; flex-direction: column; gap: 1.5rem; max-width: 860px; }
+        .sponsors-stack { display: flex; flex-direction: column; gap: 1.5rem; }
+        /* Platinum — full-width band: label + amount left, logo showcased right */
         .sponsor-tier {
             border: 1px solid var(--ink-line);
-            padding: 2.5rem 2.25rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1.1rem;
+            padding: 3rem 3.5rem;
+            display: grid;
+            grid-template-columns: 1fr minmax(240px, 380px);
+            grid-template-rows: auto auto;
+            align-items: center;
+            column-gap: 4rem;
+            row-gap: .9rem;
         }
+        .sponsor-tier > .sponsor-tier-label { grid-column: 1; align-self: end; }
+        .sponsor-tier > .sponsor-tier-amount { grid-column: 1; grid-row: 2; align-self: start; }
         .sponsor-tier-label {
             font-family: var(--font-mono);
             font-size: .6rem;
@@ -1144,7 +1234,7 @@
             align-items: center;
             gap: .5rem;
         }
-        .sponsor-tier img { max-width: 280px; width: 60%; height: auto; display: block; }
+        .sponsor-tier > img { grid-column: 2; grid-row: 1 / 3; width: 100%; max-width: 380px; height: auto; display: block; justify-self: end; }
         .sponsor-tier-amount {
             font-family: var(--font-mono);
             font-size: .64rem;
@@ -1153,16 +1243,17 @@
             text-transform: uppercase;
             color: var(--orange);
         }
-        .sponsor-silver-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .sponsor-silver-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: stretch; }
         .sponsor-silver-item {
             border: 1px solid var(--ink-line);
-            padding: 2rem 1.85rem;
+            padding: 2.25rem 2.25rem 2rem;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             gap: .8rem;
         }
-        .sponsor-silver-item img.sponsor-silver-img { max-width: 170px; width: 55%; height: auto; display: block; }
+        .sponsor-silver-item .sponsor-tier-amount { margin-top: auto; padding-top: 1rem; }
+        .sponsor-silver-item img.sponsor-silver-img { max-width: 200px; width: 60%; height: auto; display: block; margin: auto 0; }
         .sponsor-portrait { border-radius: 50%; width: 88px; height: 88px; object-fit: cover; border: 1px solid var(--ink-line); }
         .sponsor-silver-name { font-size: 1rem; font-weight: 700; letter-spacing: -.015em; }
         .sponsor-silver-sub { font-size: .8rem; font-weight: 300; color: var(--ink-dim); margin-top: -.5rem; }
@@ -1468,7 +1559,9 @@
             .hero-container { gap: 2rem; padding-top: 0; }
             .hero h1 { font-size: clamp(2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
             .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
-            .hb-stats { gap: 2rem; flex-wrap: wrap; }
+            .hb-stats { flex-wrap: wrap; row-gap: 1.25rem; }
+            .hb-stat { padding: .2rem 1.75rem .1rem 1rem; }
+            .hb-stat:first-child { padding-left: 1rem; }
             .hb-cta-row { justify-content: flex-start; width: 100%; gap: .75rem; }
             .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
 
@@ -1486,6 +1579,8 @@
             .step-item:hover::before, .step-item + .step-item:hover::before { width: 100%; left: 0; }
 
             .tracks { padding: 0 var(--gutter) 5rem; }
+            .tracks-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+            .section-head.rail { position: static; }
 
             .gallery-section { padding: 4.5rem 0 5rem; }
             .gallery-masonry { columns: 2; }
@@ -1493,21 +1588,39 @@
             .prizes { padding: 5rem var(--gutter); }
             .prizes-divisions { grid-template-columns: 1fr; }
             .prize-division { padding: 1.6rem 1.5rem; }
+            .prize-division--featured { grid-template-columns: 1fr; gap: .75rem; padding: 1.75rem 1.5rem; }
+            .prize-division--featured .prize-rows { grid-column: 1; grid-row: auto; margin-top: 1rem; }
+            .prize-division--featured .prize-note { grid-column: 1; margin-top: 1rem; }
+            .prize-division--featured .prize-row { grid-template-columns: 5.25rem 1fr; gap: .35rem 1rem; padding: .85rem 0; }
+            .prize-division--featured .prize-row:first-child { border-top: 1px solid var(--paper-line); padding-top: .85rem; }
+            .prize-division--featured .prize-row-breakdown { grid-column: 2; text-align: left; }
+            .prize-division--featured .prize-row:first-child .prize-row-amount { font-size: 1.3rem; }
 
             .resources { padding: 0 var(--gutter) 5rem; }
+            .resources-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+            .scoring-card { padding: 1.75rem 1.5rem; }
             .scoring-grid { grid-template-columns: repeat(2, 1fr); }
+            .scoring-item { padding: 1.25rem 1.1rem; }
 
             .judges { padding: 0 var(--gutter) 5rem; }
-            .judges-grid-bb { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1.75rem 1.25rem; }
+            .judges-grid-bb, .judges-grid-bb.cols-5 { grid-template-columns: repeat(3, 1fr); gap: 2rem 1.25rem; }
+            .judge-card-bb { padding-top: 1.25rem; }
+            .judge-card-bb img { width: 84px; height: 84px; }
 
             .winners { padding: 0 var(--gutter) 5rem; }
-            .winners-grid-bb { grid-template-columns: 1fr; }
+            .winner-year-block-bb { margin-bottom: 3.5rem; }
+            .winner-year-grid, .winner-year-grid.flip { grid-template-columns: 1fr; gap: 1.75rem; }
+            .winner-year-grid.flip .winner-photo-bb { order: 0; }
+            .winner-card-bb { padding: 1.15rem 0; }
 
             .partnership { padding: 0 var(--gutter) 5rem; }
-            .partnership-container { padding-top: 3.5rem; }
+            .partnership-container { display: flex; flex-direction: column; align-items: flex-start; gap: 1.25rem; padding-top: 3.5rem; }
             .partnership-logos img { height: 36px; }
 
             .sponsors { padding: 0 var(--gutter) 5rem; }
+            .sponsor-tier { grid-template-columns: 1fr; padding: 2rem 1.75rem; row-gap: 1.1rem; }
+            .sponsor-tier > img { grid-column: 1; grid-row: auto; justify-self: start; max-width: 280px; width: 70%; }
+            .sponsor-tier > .sponsor-tier-amount { grid-row: auto; }
             .sponsor-silver-row { grid-template-columns: 1fr; }
 
             .final-cta { padding: 5rem var(--gutter); }
@@ -1523,12 +1636,18 @@
         }
 
         @media (max-width: 560px) {
+            .hero-top { flex-direction: column; align-items: flex-start; gap: .75rem; }
             .hb-cta-row, .final-cta-buttons, .resources-links { flex-direction: column; }
             .hb-cta-row .btn-primary, .hb-cta-row .btn-secondary,
             .final-cta-buttons .btn-primary, .final-cta-buttons .btn-secondary,
             .resources-links .btn-secondary { width: 100%; justify-content: center; }
             .problem-stats { grid-template-columns: 1fr; }
             .scoring-grid { grid-template-columns: 1fr 1fr; }
+            .track-row { grid-template-columns: 40px 1fr 24px; padding: 1.3rem .5rem 1.3rem .25rem; }
+            .track-row-num { display: none; }
+            .judges-grid-bb, .judges-grid-bb.cols-5 { grid-template-columns: repeat(2, 1fr); }
+            .hb-stat { padding: .2rem 1.25rem .1rem .85rem; }
+            .hb-stat:first-child { padding-left: .85rem; }
             .lightbox-prev { left: .5rem; }
             .lightbox-next { right: .5rem; }
         }
@@ -1838,13 +1957,15 @@
         <!-- ======================= TRACKS ======================= -->
         <section class="tracks">
             <div class="tracks-container">
-                <div class="section-head">
+                <div class="tracks-layout">
+                <div class="section-head rail">
                     <span class="eyebrow">Innovation tracks</span>
                     <h2>Pick your fight.</h2>
                     <p class="section-sub">Choose one challenge. Research it. Solve it.</p>
                 </div>
                 <div class="tracks-list">
                     <div class="track-row">
+                        <div class="track-row-num">01</div>
                         <div class="track-row-icon" aria-hidden="true">
                             <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M4 22 V18.5 L7 12.5 C7.4 11.6 8 11.2 9 11.2 H21.5 C22.4 11.2 23.1 11.6 23.6 12.4 L27 18 L28 18.6 V22" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1861,6 +1982,7 @@
                         <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
                     </div>
                     <div class="track-row">
+                        <div class="track-row-num">02</div>
                         <div class="track-row-icon" aria-hidden="true">
                             <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5 15 L16 6 L27 15" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1875,6 +1997,7 @@
                         <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
                     </div>
                     <div class="track-row">
+                        <div class="track-row-num">03</div>
                         <div class="track-row-icon" aria-hidden="true">
                             <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M16 25.5 C16 25.5 5.5 19 5.5 12 C5.5 8.7 8 6.5 10.8 6.5 C13.1 6.5 15 8 16 10 C17 8 18.9 6.5 21.2 6.5 C24 6.5 26.5 8.7 26.5 12 C26.5 19 16 25.5 16 25.5 Z" stroke="#0A0A0A" stroke-width="1.5" stroke-linejoin="round"/>
@@ -1888,6 +2011,7 @@
                         <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
                     </div>
                     <div class="track-row">
+                        <div class="track-row-num">04</div>
                         <div class="track-row-icon" aria-hidden="true">
                             <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M16 9.5 C13 7.5 8.5 7.5 5.5 8.5 V24 C8.5 23 13 23 16 25 C19 23 23.5 23 26.5 24 V8.5 C24.5 7.7 21 7.7 18.5 9" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1903,6 +2027,7 @@
                         <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
                     </div>
                     <div class="track-row">
+                        <div class="track-row-num">05</div>
                         <div class="track-row-icon" aria-hidden="true">
                             <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M15 5 C16 13 17.5 14.5 25.5 15.5 C17.5 16.5 16 18 15 26 C14 18 12.5 16.5 4.5 15.5 C12.5 14.5 14 13 15 5 Z" stroke="#FF6B35" stroke-width="1.5" stroke-linejoin="round"/>
@@ -1915,6 +2040,7 @@
                         </div>
                         <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
                     </div>
+                </div>
                 </div>
             </div>
         </section>
@@ -2042,6 +2168,8 @@
         <!-- ======================= RESOURCES & SCORING ======================= -->
         <section class="resources">
             <div class="resources-container">
+                <div class="resources-layout">
+                <div class="resources-rail">
                 <div class="section-head">
                     <span class="eyebrow">Prepare to win</span>
                     <h2>Resources &amp; scoring.</h2>
@@ -2064,6 +2192,7 @@
                         Judging rubric
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
+                </div>
                 </div>
 
                 <div class="scoring-card">
@@ -2090,6 +2219,7 @@
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
         </section>
 
@@ -2105,14 +2235,16 @@
 
                 <div class="prizes-divisions">
                     <!-- Demo Day -->
-                    <div class="prize-division">
+                    <div class="prize-division prize-division--featured">
                         <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.5 C14.8 5.3 16 9 16 12.5 L8 12.5 C8 9 9.2 5.3 12 2.5 Z" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="1.7" stroke="#FF6B35" stroke-width="1.4"/><path d="M8 12.5 L5 15.5 L8.2 14.6 M16 12.5 L19 15.5 L15.8 14.6" stroke="#0A0A0A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 16 C10.6 18 11 19.2 12 21 C13 19.2 13.4 18 14 16" stroke="#FF6B35" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Demo Day</h3>
                         <div class="prize-division-desc">Top team per track. 5-min pitch + 2-min Q&amp;A. Cash + scholarships + school grants.</div>
-                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span><span class="prize-row-amount">$7,500</span><span class="prize-row-breakdown">($4k cash + $2.5k scholarship + $1k school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span><span class="prize-row-amount">$4,650</span><span class="prize-row-breakdown">($2.5k cash + $1.5k scholarship + $650 school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span><span class="prize-row-amount">$2,750</span><span class="prize-row-breakdown">($1.25k cash + $1k scholarship + $500 school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">4th Place</span><span><span class="prize-row-amount">$1,850</span><span class="prize-row-breakdown">($750 cash + $750 scholarship + $350 school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">5th Place</span><span><span class="prize-row-amount">$1,250</span><span class="prize-row-breakdown">($500 cash + $500 scholarship + $250 school)</span></span></div>
+                        <div class="prize-rows">
+                            <div class="prize-row"><span class="prize-row-place">1st Place</span><span class="prize-row-amount">$7,500</span><span class="prize-row-breakdown">($4k cash + $2.5k scholarship + $1k school)</span></div>
+                            <div class="prize-row"><span class="prize-row-place">2nd Place</span><span class="prize-row-amount">$4,650</span><span class="prize-row-breakdown">($2.5k cash + $1.5k scholarship + $650 school)</span></div>
+                            <div class="prize-row"><span class="prize-row-place">3rd Place</span><span class="prize-row-amount">$2,750</span><span class="prize-row-breakdown">($1.25k cash + $1k scholarship + $500 school)</span></div>
+                            <div class="prize-row"><span class="prize-row-place">4th Place</span><span class="prize-row-amount">$1,850</span><span class="prize-row-breakdown">($750 cash + $750 scholarship + $350 school)</span></div>
+                            <div class="prize-row"><span class="prize-row-place">5th Place</span><span class="prize-row-amount">$1,250</span><span class="prize-row-breakdown">($500 cash + $500 scholarship + $250 school)</span></div>
+                        </div>
                         <p class="prize-note">Cash &amp; scholarships split among team members. Scholarships require attending KSU &amp; selecting ACCBE major/minor. School grants go directly to the school.</p>
                     </div>
 
@@ -2192,7 +2324,7 @@
                 </div>
 
                 <div class="judges-subsection-label">Poster Presentation Judges</div>
-                <div class="judges-grid-bb">
+                <div class="judges-grid-bb cols-5">
                     <div class="judge-card-bb">
                         <img src="Davonta.jpg" alt="Davonta Milbry" loading="lazy" style="object-position: top;">
                         <div class="judge-card-bb-name">Davonta Milbry</div>
@@ -2236,8 +2368,10 @@
                 </div>
 
                 <div class="winner-year-block-bb">
-                    <div class="winner-year-label-bb"><em>'</em>25</div>
+                    <div class="winner-year-grid">
                     <div class="winner-photo-bb"><img src="2025-winner.jpg" alt="2025 Barrier Breakers Winners" loading="lazy"></div>
+                    <div class="winner-year-side">
+                    <div class="winner-year-label-bb"><em>'</em>25</div>
                     <div class="winners-grid-bb">
                         <div class="winner-card-bb gold">
                             <div class="winner-card-bb-header"><span>1st Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
@@ -2261,11 +2395,15 @@
                             </div>
                         </div>
                     </div>
+                    </div>
+                    </div>
                 </div>
 
                 <div class="winner-year-block-bb">
-                    <div class="winner-year-label-bb"><em>'</em>24</div>
+                    <div class="winner-year-grid flip">
                     <div class="winner-photo-bb"><img src="2024-winner.jpg" alt="2024 Barrier Breakers Winners" loading="lazy"></div>
+                    <div class="winner-year-side">
+                    <div class="winner-year-label-bb"><em>'</em>24</div>
                     <div class="winners-grid-bb">
                         <div class="winner-card-bb gold">
                             <div class="winner-card-bb-header"><span>1st Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
@@ -2288,6 +2426,8 @@
                                 <div class="winner-card-bb-school">Normandy High School</div>
                             </div>
                         </div>
+                    </div>
+                    </div>
                     </div>
                 </div>
             </div>
