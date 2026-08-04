@@ -3502,6 +3502,21 @@
       if (p.status === 'rejected') return whoChip('✗', 'Rejected by', a.by, a.at);
       return '';
     }
+    // Fold a just-changed post back into the queue row on the spot. The vote
+    // itself has already landed server-side; waiting for the refresh behind it
+    // (two Apps Script cold starts, ~5s) before showing the new status and who
+    // -tag makes a finished action feel unfinished. The refresh still runs and
+    // reconciles — this only moves the same truth forward in time.
+    function patchNoteRow(id, fields) {
+      var p = (notes.posts || []).find(function (x) { return x.id === id; });
+      if (!p) return;
+      Object.keys(fields).forEach(function (k) { if (fields[k] !== undefined) p[k] = fields[k]; });
+      // Persist too, so reopening the tab paints the tags instantly instead of
+      // showing a pre-vote cache until the background fetch lands.
+      try { localStorage.setItem(LS_NOTES, JSON.stringify({ t: now(), posts: notes.posts })); } catch (e) {}
+      updateNotesCount();
+      if (ui.view === 'notes') render();
+    }
     function noteAction(id, act, btn, scheduledFor) {
       var m = me();
       var reviewer = m ? m.name : 'HQ team';
@@ -3540,6 +3555,17 @@
           // The public list is edge-cached — re-prime it now so checking
           // /posts (or the ambassador's profile) right away shows the post.
           if (act === 'publish') { try { fetch('/api/posts?action=published&refresh=1'); } catch (e) { /* cache catches up on its own */ } }
+          // Votes and schedule changes come back with the backend's own copy of
+          // the post — status and attribution included — so the row can update
+          // now. Publishing answers with just an id, so that one row is built
+          // from what we know: it's live, and this is who pushed the button.
+          if (act === 'publish') {
+            patchNoteRow(id, { status: 'published', scheduledFor: '',
+              statusBy: reviewer, statusAt: new Date(now()).toISOString() });
+          } else if (res.post) {
+            patchNoteRow(id, { status: res.post.status, scheduledFor: res.post.scheduledFor || '',
+              statusBy: res.post.statusBy, statusAt: res.post.statusAt, approvedBy: res.post.approvedBy });
+          }
           toast(act === 'publish' ? 'Published 🚀 — author notified · on finmango.org/posts within a few minutes'
             : act === 'approve' ? ('Approved ✓' + (scheduledFor ? ' — goes live ' + fmtSched(scheduledFor) : '')
               + (res.emailed ? ' · author emailed ✉️' : ''))
