@@ -65,8 +65,9 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      /* Palette — the whole page runs on these five */
+      /* Palette — the whole page runs on these; card is paper, one shade up */
       --paper: #FAFAF7;
+      --card: #FFFFFF;
       --ink: #0A0A0A;
       --orange: #FF6B35;
       --orange-deep: #E5511B;
@@ -78,6 +79,10 @@
       --ink-faint: rgba(10, 10, 10, .38);
       --ink-line: rgba(10, 10, 10, .1);
       --ink-line-soft: rgba(10, 10, 10, .06);
+
+      /* Card lift — the wall's plates sit above the paper */
+      --shadow-card: 0 1px 2px rgba(10, 10, 10, .04), 0 10px 28px -14px rgba(10, 10, 10, .15);
+      --shadow-card-hover: 0 2px 4px rgba(10, 10, 10, .05), 0 22px 46px -18px rgba(10, 10, 10, .24);
 
       /* Derived paper opacities (for ink sections) */
       --paper-dim: rgba(250, 250, 247, .64);
@@ -477,7 +482,7 @@
     /* ----------------------------------------------------------
        THE WALL — masonry of signed pledges
        ---------------------------------------------------------- */
-    .wall { padding: 1.5rem var(--gutter) 7rem; background: var(--paper); }
+    .wall { padding: 2.5rem var(--gutter) 7rem; background: var(--paper); }
     .wall-container { max-width: var(--max-width); margin: 0 auto; }
 
     .wall-tools {
@@ -506,27 +511,35 @@
     .filter-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
     .wall-count {
       font-family: var(--font-mono);
-      font-size: .68rem;
+      font-size: .7rem;
       font-weight: 500;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: var(--ink-faint);
+      color: var(--ink-dim);
       white-space: nowrap;
     }
 
     .wall-grid {
       columns: 3;
-      column-gap: 1.5rem;
+      column-gap: 1.6rem;
     }
+    /* Cards are plates on the paper: white surface, hairline, soft lift.
+       The written pledge is the loudest thing inside one. */
     .pledge-card {
       break-inside: avoid;
-      margin: 0 0 1.5rem;
+      -webkit-column-break-inside: avoid;
+      margin: 0 0 1.6rem;
       border: 1px solid var(--ink-line);
-      background: var(--paper);
-      padding: 1.35rem 1.35rem 1.25rem;
-      transition: transform .3s cubic-bezier(.16, 1, .3, 1), border-color .25s ease;
+      background: var(--card);
+      box-shadow: var(--shadow-card);
+      padding: 1.5rem 1.45rem 1.2rem;
+      transition: transform .3s cubic-bezier(.16, 1, .3, 1), border-color .25s ease, box-shadow .3s ease;
     }
-    .pledge-card:hover { transform: translateY(-4px); border-color: var(--orange); }
+    .pledge-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--orange);
+      box-shadow: var(--shadow-card-hover);
+    }
     /* photo cards get the .moment-style plate frame */
     .pledge-card.has-photo { padding: .6rem; }
     .pc-photo {
@@ -538,37 +551,41 @@
     }
     .pledge-card.has-photo .pc-inner { padding: 0 .75rem .65rem; }
 
+    /* barrier reads as a tag, not floating micro-type */
     .pc-barrier {
       font-family: var(--font-mono);
       font-size: .58rem;
       font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: .14em;
-      color: var(--orange);
-      display: block;
-      margin-bottom: .7rem;
+      letter-spacing: .13em;
+      color: var(--orange-deep);
+      background: rgba(255, 107, 53, .1);
+      display: inline-block;
+      padding: .34rem .6rem;
+      margin-bottom: .95rem;
     }
     .pc-why {
-      font-size: .95rem;
-      font-weight: 300;
-      line-height: 1.55;
+      font-size: 1.06rem;
+      font-weight: 400;
+      line-height: 1.6;
       color: var(--ink);
-      letter-spacing: -.005em;
+      letter-spacing: -.01em;
       white-space: pre-line;
     }
+    .pc-why::before { content: '\201C'; color: var(--orange); font-weight: 900; }
+    .pc-why::after { content: '\201D'; color: var(--orange); font-weight: 900; }
     .pc-foot {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       gap: 1rem;
-      margin-top: 1rem;
-      padding-top: .8rem;
+      margin-top: 1.15rem;
+      padding-top: .85rem;
       border-top: 1px solid var(--ink-line-soft);
-      font-size: .78rem;
+      font-size: .8rem;
       color: var(--ink-dim);
     }
-    .pledge-card.no-why .pc-foot { margin-top: 0; padding-top: 0; border-top: none; }
-    .pc-foot strong { color: var(--ink); font-weight: 600; }
+    .pc-foot strong { color: var(--ink); font-weight: 700; font-size: .88rem; letter-spacing: -.01em; }
     .pc-date {
       font-family: var(--font-mono);
       font-size: .6rem;
@@ -577,8 +594,21 @@
       white-space: nowrap;
     }
 
+    /* Signature-only cards stay quiet — flat on the paper — so the
+       written pledges lead the wall instead of competing with them. */
+    .pledge-card.no-why:not(.has-photo) {
+      background: transparent;
+      box-shadow: none;
+      padding: 1.1rem 1.2rem;
+    }
+    .pledge-card.no-why:not(.has-photo):hover { box-shadow: none; background: var(--card); }
+    .pledge-card.no-why .pc-barrier { margin-bottom: .8rem; }
+    .pledge-card.no-why .pc-foot { margin-top: 0; padding-top: 0; border-top: none; }
+
     .wall-empty {
       border: 1px solid var(--ink-line);
+      background: var(--card);
+      box-shadow: var(--shadow-card);
       padding: 3rem 2rem;
       text-align: center;
       color: var(--ink-dim);
@@ -592,11 +622,11 @@
       border-top: 1px solid var(--ink-line);
       font-size: .82rem;
       font-weight: 300;
-      color: var(--ink-faint);
+      color: var(--ink-dim);
       max-width: 72ch;
       line-height: 1.6;
     }
-    .wall-note a { color: var(--ink-dim); text-decoration-color: var(--orange); text-underline-offset: 2px; }
+    .wall-note a { color: var(--ink); text-decoration-color: var(--orange); text-underline-offset: 2px; }
     .wall-note a:hover { color: var(--orange); }
 
     /* ----------------------------------------------------------
