@@ -124,7 +124,16 @@
     .note-body { font-size: .92rem; }
     .note-body img { max-width: 100%; border-radius: 8px; }
     .note-body iframe { width: 100%; aspect-ratio: 16/9; border: 0; border-radius: 8px; }
-    .note-review { font-size: .82rem; padding: .25rem 0; color: var(--ink-dim); }
+    .note-review { font-size: .82rem; padding: .25rem 0; color: var(--ink-dim); display: flex; align-items: baseline; gap: .4rem; }
+    .note-review .avatar { width: 18px; height: 18px; font-size: .5rem; margin: 0; border-width: 1px; align-self: center; }
+    .note-review .when { font-family: var(--font-mono); font-size: .6rem; color: var(--ink-faint); margin-left: .4rem; }
+    /* who-did-what tags on a queue row: approver, publisher, whoever asked for changes */
+    .pr-tags { display: flex; align-items: center; gap: .3rem; flex-wrap: wrap; justify-content: flex-end; }
+    .who-chip { display: inline-flex; align-items: center; gap: .28rem; font-size: .72rem; font-weight: 600; color: var(--ink-dim);
+      background: var(--paper); border: 1px solid var(--ink-line-soft); border-radius: 99px;
+      padding: .1rem .5rem .1rem .14rem; white-space: nowrap; }
+    .who-chip.plain { padding-left: .5rem; }
+    .who-chip .avatar { width: 18px; height: 18px; font-size: .5rem; margin: 0; border-width: 1px; }
     .draft-editing { outline: 2px solid var(--orange); border-radius: 8px; padding: .6rem .8rem; background: #fff; min-height: 120px; }
     .draft-editing:focus { outline: 2px solid var(--orange-deep); }
     .draft-editing.drag-over { outline: 2px dashed var(--orange-deep); background: rgba(255,107,53,.05); }
@@ -449,6 +458,11 @@
       .modal { padding: 1.2rem 1.1rem; }
       .prop-grid { grid-template-columns: 92px 1fr; }
       .page-wrap { padding: 1.1rem 1rem 3rem; }
+      /* status + who-tags drop below the title rather than squeezing it to
+         one word per line */
+      .pr-head { flex-wrap: wrap; }
+      .pr-title { flex: 1 1 60%; }
+      .pr-tags { justify-content: flex-start; margin-top: .3rem; }
     }
   </style>
 </head>
@@ -3413,6 +3427,69 @@
       if (isNaN(d)) return '';
       return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
     }
+    // ---- who-did-what tags -------------------------------------------------
+    // A reviewer name is matched to an HQ member so their Google photo rides
+    // along; names we don't recognize (shared-key sessions, the standalone
+    // review panel) get colored initials, stable per name.
+    function noteWho(name) {
+      var n = String(name || '').trim();
+      if (!n) return null;
+      var m = doc.members.find(function (x) { return String(x.name || '').trim().toLowerCase() === n.toLowerCase(); });
+      if (m) return m;
+      var h = 0;
+      for (var i = 0; i < n.length; i++) h = (h + n.charCodeAt(i)) % AVA_COLORS.length;
+      return { name: n, color: AVA_COLORS[h] };
+    }
+    function firstNameOf(n) { return String(n || '').trim().split(/\s+/)[0] || ''; }
+    // Face + first name, with the full "Approved by Mia Fawls · 3d ago" on hover.
+    function whoChip(icon, label, name, at) {
+      if (!name) return '';
+      // The scheduler isn't a person — a face would be a lie. Neither is
+      // "HQ team", the name a shared-key session acts under: no individual
+      // signed in, so there's nobody to put a face to.
+      if (name === 'Scheduler') {
+        return '<span class="who-chip plain" title="Published automatically at its scheduled go-live time">🕓 auto-published</span>';
+      }
+      if (name === 'HQ team' || name === 'Reviewer' || name === 'Editor') {
+        return '<span class="who-chip plain" title="' + esc(label + ' someone using the shared team key — sign in with Google to be named')
+          + '">' + esc(icon) + ' team key</span>';
+      }
+      var m = noteWho(name);
+      var t = Date.parse(at || '');
+      var title = label + ' ' + m.name + (isNaN(t) ? '' : ' · ' + relTime(t));
+      return '<span class="who-chip" title="' + esc(title) + '">' + avatarHtml(m) + esc(icon + ' ' + firstNameOf(m.name)) + '</span>';
+    }
+    // Who owns a post's current state. The list payload carries it (statusBy /
+    // approvedBy); for posts decided before the posts backend recorded those,
+    // it's recovered from the review trail of any detail we've already warmed.
+    function noteAttribution(p) {
+      var a = { by: p.statusBy || '', at: p.statusAt || '', approvedBy: p.approvedBy || '' };
+      var d = notes.detail[p.id];
+      if ((!a.by || !a.approvedBy) && d && d.reviews) {
+        var last = null, approval = null;
+        d.reviews.forEach(function (rv) {
+          if (rv.vote !== 'approve' && rv.vote !== 'changes' && rv.vote !== 'reject') return;
+          last = rv;
+          if (rv.vote === 'approve') approval = rv;
+        });
+        if (!a.approvedBy && approval && (p.status === 'approved' || p.status === 'published')) a.approvedBy = approval.reviewer;
+        // The trail has no "published" entry, so a publisher is never guessed.
+        if (!a.by && last && p.status !== 'published') { a.by = last.reviewer; a.at = last.at || ''; }
+      }
+      return a;
+    }
+    function noteTags(p) {
+      var a = noteAttribution(p);
+      if (p.status === 'published') {
+        // One person usually does both — say it once instead of twice.
+        if (a.approvedBy && a.approvedBy === a.by) return whoChip('✓🚀', 'Approved & published by', a.by, a.at);
+        return whoChip('✓', 'Approved by', a.approvedBy, '') + whoChip('🚀', 'Published by', a.by, a.at);
+      }
+      if (p.status === 'approved') return whoChip('✓', 'Approved by', a.approvedBy || a.by, a.at);
+      if (p.status === 'changes') return whoChip('✎', 'Changes requested by', a.by, a.at);
+      if (p.status === 'rejected') return whoChip('✗', 'Rejected by', a.by, a.at);
+      return '';
+    }
     function noteAction(id, act, btn, scheduledFor) {
       var m = me();
       var reviewer = m ? m.name : 'HQ team';
@@ -3512,7 +3589,8 @@
       var head = document.createElement('div'); head.className = 'notes-head';
       head.innerHTML = '<div><h1 style="font-size:1.5rem;letter-spacing:-.02em;">Ambassador Notes</h1>'
         + '<p class="help-note" style="margin:.2rem 0 0;">Drafts from <a href="write.html" target="_blank" rel="noopener">finmango.org/write</a>'
-        + ' land here. Approve (and pick when it goes live), request changes, reject, or publish — signed as you.</p></div>'
+        + ' land here. Approve (and pick when it goes live), request changes, reject, or publish — signed as you,'
+        + ' and every row is tagged with who decided it.</p></div>'
         + '<button class="btn-sm ghost" id="notesRefresh">' + (notes.refreshing ? '⏳ Updating…' : '↻ Refresh') + '</button>';
       wrap.appendChild(head);
       var body = document.createElement('div');
@@ -3539,7 +3617,8 @@
             + '<div class="pr-head" data-pr="toggle" style="cursor:pointer;">'
             + (thumb ? '<img class="pr-thumb" src="' + esc(thumb) + '" alt="" loading="lazy" decoding="async" onerror="this.remove()">' : '')
             + '<span class="pr-title">' + esc(p.title || '(untitled)') + '</span>'
-            + '<span class="status-chip"><span class="col-dot" style="background:' + st[1] + '"></span>' + esc(st[0]) + '</span></div>'
+            + '<span class="pr-tags"><span class="status-chip"><span class="col-dot" style="background:' + st[1] + '"></span>' + esc(st[0]) + '</span>'
+            + noteTags(p) + '</span></div>'
             + '<div class="pr-meta">' + esc(p.authorName || 'Unknown') + (p.category ? ' · ' + esc(p.category) : '') + (when ? ' · ' + esc(when) : '')
             + (scheduled ? ' · 🕓 goes live ' + esc(fmtSched(p.scheduledFor)) : '') + '</div>'
             + (open ? '<div class="note-detail"><p class="help-note">Loading the post…</p></div>' : '')
@@ -3601,8 +3680,12 @@
         var isLive = listEntry && listEntry.status === 'published';
         var reviews = (post.reviews || []).map(function (rv) {
           var icon = rv.vote === 'approve' ? '✓' : rv.vote === 'changes' ? '✎' : rv.vote === 'reject' ? '✗' : '💬';
-          return '<div class="note-review"><strong>' + icon + ' ' + esc(rv.reviewer || 'Reviewer') + '</strong>'
-            + (rv.comment ? ' — ' + esc(rv.comment) : '') + '</div>';
+          var m = noteWho(rv.reviewer);
+          var t = Date.parse(rv.at || '');
+          return '<div class="note-review">' + (m ? avatarHtml(m) : '')
+            + '<span><strong>' + icon + ' ' + esc(rv.reviewer || 'Reviewer') + '</strong>'
+            + (isNaN(t) ? '' : '<span class="when">' + esc(relTime(t)) + '</span>')
+            + (rv.comment ? ' — ' + esc(rv.comment) : '') + '</span></div>';
         }).join('');
         var coverHtml = post.cover && /^https:\/\//i.test(post.cover)
           ? '<figure class="note-cover"><img src="' + esc(sizedNoteCover(post.cover, 1200)) + '" alt="" decoding="async" onerror="this.parentNode.remove()"></figure>' : '';

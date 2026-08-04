@@ -44,7 +44,11 @@ const HEADERS = [
   'category', 'tags', 'title', 'dek', 'hasCover', 'folderId', 'jsonFileId',
   'publishedAt', 'reviewsSummary',
   // Appended at the END so existing Sheet rows keep their column alignment.
-  'ambassadorSlug', 'scheduledFor'
+  'ambassadorSlug', 'scheduledFor',
+  // Attribution: who put the post in its current status (and when), plus the
+  // approver — kept separately because it outlives approval, so a published
+  // row can show "approved by Mia · published by Scott".
+  'statusBy', 'statusAt', 'approvedBy'
 ];
 
 // ============================== ROUTING ====================================
@@ -145,7 +149,10 @@ function listForReview_(statusFilter) {
     .map(r => ({
       id: r.id, status: r.status, title: r.title, authorName: r.authorName,
       category: r.category, createdAt: r.createdAt, publishedAt: r.publishedAt,
-      scheduledFor: r.scheduledFor || ''
+      scheduledFor: r.scheduledFor || '',
+      // Reviewer attribution — read straight off the index so the whole queue
+      // can be tagged with faces without opening one post.json per row.
+      statusBy: r.statusBy || '', statusAt: toIso_(r.statusAt), approvedBy: r.approvedBy || ''
     }));
 }
 
@@ -190,8 +197,24 @@ function addReview_(p) {
   // A post knocked out of "approved" must never auto-publish later.
   if (post.status !== 'approved' && post.status !== 'published') post.scheduledFor = '';
 
+  const patch = { status: post.status, scheduledFor: post.scheduledFor || '', reviewsSummary: summarize_(post.reviews) };
+  // Record who owns the post's current status, so HQ can tag the row with a
+  // name and face. A vote on an already-published post doesn't move it, so it
+  // must not overwrite "published by" either. `approvedBy` is cleared the
+  // moment a post is knocked back out of "approved" — a stale approver tag
+  // would be worse than none.
+  if (vote !== 'comment' && post.status !== 'published') {
+    post.statusBy = entry.reviewer;
+    post.statusAt = entry.at;
+    patch.statusBy = post.statusBy;
+    patch.statusAt = post.statusAt;
+    if (post.status === 'approved') { post.approvedBy = entry.reviewer; }
+    else if (post.status === 'changes' || post.status === 'rejected') { post.approvedBy = ''; }
+    patch.approvedBy = post.approvedBy || '';
+  }
+
   saveJson_(r.jsonFileId, post);
-  updateRow_(r.rowIndex, { status: post.status, scheduledFor: post.scheduledFor || '', reviewsSummary: summarize_(post.reviews) });
+  updateRow_(r.rowIndex, patch);
   if (post.scheduledFor) ensureSchedulerTrigger_();
 
   // Tell the author the good news (once per approval, or when a time is set).
@@ -270,10 +293,16 @@ function goLive_(r, post, reviewerName, reviewerEmail) {
   post.status = 'published';
   post.publishedAt = new Date().toISOString();
   post.scheduledFor = '';
+  // Who pushed the button. 'Scheduler' when nobody did — the timed trigger
+  // published it — which HQ shows as "auto-published on schedule".
+  post.publishedBy = String(reviewerName || '').trim() || 'Scheduler';
+  post.statusBy = post.publishedBy;
+  post.statusAt = post.publishedAt;
   // No cover uploaded? The first image in the post becomes the cover.
   if (!post.cover) post.cover = firstImg_(post.body);
   saveJson_(r.jsonFileId, post);
-  updateRow_(r.rowIndex, { status: 'published', publishedAt: post.publishedAt, scheduledFor: '', hasCover: post.cover ? 'yes' : '' });
+  updateRow_(r.rowIndex, { status: 'published', publishedAt: post.publishedAt, scheduledFor: '', hasCover: post.cover ? 'yes' : '',
+    statusBy: post.statusBy, statusAt: post.statusAt });
 
   // OPTIONAL upgrade: also commit a pre-rendered static .html to the repo via the
   // GitHub API for SEO. Disabled by default (no token needed). See docs/POSTS-SETUP.md.
@@ -320,7 +349,22 @@ function getSheet_() {
   const ss = SpreadsheetApp.openByUrl(CONFIG.SPREADSHEET_URL);
   let sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) { sheet = ss.insertSheet(SHEET_NAME); sheet.appendRow(HEADERS); sheet.setFrozenRows(1); sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold'); }
+  // Columns are only ever appended to HEADERS, so an older Sheet can be a few
+  // columns short of the current code. Grow it rather than throwing on write.
+  const max = sheet.getMaxColumns();
+  if (max < HEADERS.length) sheet.insertColumnsAfter(max, HEADERS.length - max);
   return sheet;
+}
+
+// Label any columns added since this Sheet was created. Data already works by
+// index — this is purely so the Sheet reads sensibly to a human. Called by
+// setup(); safe to run repeatedly.
+function ensureHeaders_() {
+  const sheet = getSheet_();
+  const row = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
+  if (HEADERS.some((h, i) => String(row[i] || '') !== h)) {
+    sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]).setFontWeight('bold');
+  }
 }
 function getParentFolder_() { return DriveApp.getFolderById(CONFIG.DRIVE_FOLDER_ID); }
 
@@ -503,10 +547,47 @@ function setup() {
   if (CONFIG.SPREADSHEET_URL.indexOf('PASTE_') === 0) throw new Error('Set CONFIG.SPREADSHEET_URL first.');
   if (CONFIG.DRIVE_FOLDER_ID.indexOf('PASTE_') === 0) throw new Error('Set CONFIG.DRIVE_FOLDER_ID first.');
   getSheet_();            // creates the Posts tab + headers
+  ensureHeaders_();       // labels columns added by later versions of this file
   getParentFolder_();     // verifies folder access
+  backfillAttribution();  // fills reviewer attribution for pre-existing rows
   // Install (once) the time-driven trigger that publishes scheduled posts.
   // Safe to re-run setup — an existing trigger is never duplicated. (Scheduling
   // a post also self-installs this, so a skipped setup no longer strands posts.)
   ensureSchedulerTrigger_();
   Logger.log('Setup OK. Now Deploy > New deployment > Web app.');
+}
+
+// Posts reviewed before the attribution columns existed still know who did
+// what — it's in their review trail. Replay it into the index so the HQ queue
+// can tag old rows too. Only fills what it can prove: an unknown publisher
+// stays blank rather than being guessed. Idempotent; run from setup() or by
+// hand (toolbar ▸ backfillAttribution ▸ Run).
+function backfillAttribution() {
+  const MAX = 250;          // each row costs a Drive read; stay inside the 6-minute limit
+  let filled = 0, looked = 0, more = false;
+  rows_().forEach(r => {
+    try {
+      if (r.statusBy && r.approvedBy) return;
+      if (looked >= MAX) { more = true; return; }
+      looked++;
+      const post = readJson_(r.jsonFileId);
+      const votes = (post.reviews || []).filter(x => ['approve', 'changes', 'reject'].indexOf(x.vote) >= 0);
+      const last = votes[votes.length - 1];
+      const approval = votes.filter(x => x.vote === 'approve').pop();
+      const patch = {};
+      if (!r.statusBy) {
+        if (r.status === 'published') {
+          // Only post.json can say who published it; older posts don't record it.
+          if (post.publishedBy) { patch.statusBy = post.publishedBy; patch.statusAt = post.publishedAt || ''; }
+        } else if (last) {
+          patch.statusBy = last.reviewer; patch.statusAt = last.at || '';
+        }
+      }
+      if (!r.approvedBy && approval && (r.status === 'approved' || r.status === 'published')) patch.approvedBy = approval.reviewer;
+      if (Object.keys(patch).length) { updateRow_(r.rowIndex, patch); filled++; }
+    } catch (err) { /* one unreadable post must not stop the sweep */ }
+  });
+  Logger.log('Attribution backfilled for ' + filled + ' post(s).'
+    + (more ? ' Stopped at ' + MAX + ' — run backfillAttribution again to continue.' : ''));
+  return filled;
 }

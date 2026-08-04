@@ -114,6 +114,45 @@ notes that stored `<div>`-based paragraphs are fixed automatically at render.
   go-live it would cancel), and hides the redundant ✓ Approve button once a
   post is approved.
 
+### Who approved what (attribution tags)
+
+Every row in the HQ **📝 Ambassador Notes** queue carries a tag next to its
+status chip showing **who** put it there — face, first name, and the full
+"Approved by Mia Fawls · 3d ago" on hover:
+
+| Status | Tag |
+| --- | --- |
+| Approved / Scheduled | ✓ the approver |
+| Changes requested | ✎ whoever asked |
+| Rejected | ✗ whoever rejected |
+| Published | ✓ the approver **and** 🚀 the publisher |
+
+A post published by the scheduler shows **🕓 auto-published** instead of a
+person, and a decision made from a shared-key session (or the standalone
+`post-review.html` panel) shows **team key** — there's no individual identity
+behind those, and a face would imply one. Signing in with Google is what puts
+your name on a decision.
+
+Faces come from HQ members, so a reviewer who has signed in with their
+`@finmango.org` account shows their Google photo; anyone else gets colored
+initials. Expanding a post shows the full trail underneath it — every vote,
+comment, schedule change, and edit, each with its author and when it happened.
+
+The backend keeps this on the Sheet in three appended columns — `statusBy`,
+`statusAt`, `approvedBy` — so the whole queue can be tagged without opening one
+`post.json` per row. The columns never feed the public API: reviewer names stay
+inside HQ.
+
+> **Upgrading an existing install to attribution tags?** Paste the updated
+> `tools/posts-apps-script.js`, run `setup` once (it labels the new columns and
+> runs `backfillAttribution`, which replays each post's own review trail into
+> them so old rows are tagged too), then redeploy a new version. No change is
+> needed to the HQ script — it forwards the list verbatim. Until the redeploy,
+> HQ falls back to deriving the tags from the review trails it has already
+> loaded, so nothing breaks in the meantime. `backfillAttribution` only fills
+> what the trail can prove: posts published before the backend recorded a
+> publisher stay untagged for 🚀 rather than being guessed at.
+
 ### Who author emails come from
 
 Apps Script can only *send* from the Google account that deployed the script —
