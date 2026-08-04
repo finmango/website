@@ -48,7 +48,7 @@ public roadmap page (`roadmap.html`) IS meant to be found and linked.
 | --- | --- | --- |
 | `team-board.html` | The whole workspace app (boards, wiki, modals, sync client) | Team |
 | `roadmap.html` | Public roadmap — renders only 🌐-flagged items | Everyone |
-| `tools/team-board-apps-script.js` | The backend (deploy to Apps Script) | One-time setup |
+| `tools/team-board-apps-script.js` | The backend (deploy to Apps Script) + the bridges to the Ambassador Notes and Pledge Wall backends | One-time setup |
 | `functions/api/board.js` | Cloudflare edge layer: load/save proxy (never cached) + public subset (cached ~2 min) | Auto (no setup) |
 
 ## How sync works
@@ -102,6 +102,36 @@ edge-cached ~2 minutes, so public traffic barely touches the backend.
 > After **any** change to the Apps Script, redeploy a new version:
 > Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy.
 > The /exec URL stays the same.
+
+## Review queues (Ambassador Notes + Pledge Wall)
+
+The sidebar's **Review** section holds two moderation queues that live in HQ
+instead of in someone's inbox:
+
+| Tab | What lands there | Backend it bridges to |
+| --- | --- | --- |
+| 📝 **Ambassador Notes** | Drafts submitted at `finmango.org/write` | Posts Apps Script (`docs/POSTS-SETUP.md`) |
+| 🤝 **Pledge Wall** | Pledges signed at `get-involved.html#pledge` | Community Wall Apps Script (`docs/COMMUNITY-WALL-SETUP.md`) |
+
+Both work the same way: the *other* backend's moderation passphrase is stored
+in **this** script's CONFIG, server-side, and HQ forwards a reviewer's click to
+it. That's why being signed in to HQ is the only credential a reviewer needs —
+the passphrases never reach a browser.
+
+Two CONFIG values to fill in (each one unlocks its tab; leave one blank and
+that tab shows a "not wired up" note instead):
+
+- `POSTS_REVIEW_KEY` — the `REVIEW_KEY` from the posts Apps Script
+- `WALL_MODERATION_KEY` — the `MODERATION_KEY` from the Community Wall Apps
+  Script (`WALL_APPS_SCRIPT_URL` above it is pre-filled and rarely changes)
+
+Redeploy a new version after setting them. Neither key belongs in this public
+repo — set them in the deployed script only.
+
+Anyone who can reach HQ can approve or reject in both queues, and every
+decision is stamped with the name of whoever made it (visible on the row and
+in the backing Sheet). Key-door sessions have no identity, so their decisions
+read "team key" — one more reason to sign in with Google.
 
 ## Google Sign-In setup (≈5 minutes, optional but recommended)
 
