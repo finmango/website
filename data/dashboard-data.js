@@ -1,11 +1,11 @@
 // Financial Health Barometer Data
-// Auto-generated: 2026-08-03T06:08:28.297Z
+// Auto-generated: 2026-08-04T06:04:16.194Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
-  "as_of": "2026-08-03",
+  "as_of": "2026-08-04",
   "meta": {
-    "generated": "2026-08-03T06:08:28.257Z",
+    "generated": "2026-08-04T06:04:16.157Z",
     "version": "2.4",
     "source": "BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs",
     "update_frequency": "daily",
@@ -19,7 +19,7 @@ const DASHBOARD_DATA = {
       "jchs_calibration": "Harvard JCHS State of the Nation's Housing 2025",
       "trends": "Google Trends"
     },
-    "augmented_at": "2026-08-03T06:08:28.297Z"
+    "augmented_at": "2026-08-04T06:04:16.194Z"
   },
   "national": {
     "financial_anxiety": {
