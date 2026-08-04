@@ -53,6 +53,8 @@ From 2020, FinMango collaborated with Google Health on COVID-19 Open-Data, an op
 
 The resulting dataset covered 22,579 locations across 232 countries and territories. Its authors described it as the largest COVID-19 meta-dataset in terms of the number of locations, variables and timespan covered.<ref name="scidata" />
 
+In August 2020, [[Google.org]] featured the collaboration in a series highlighting nonprofit organizations using Google tools in their responses to the pandemic.<ref name="research" /><ref name="googleorg" />
+
 The partnership was later documented in the ''American Journal of Health Education'' in a 2023 article co-authored by Google and FinMango personnel, which set out the governance decisions behind the project and presented it as a model for nonprofit–industry collaboration on public-health data.<ref name="mangomodel" />
 
 == Education and programmes ==
@@ -69,6 +71,7 @@ Through an annual ambassador programme, the organization selects roughly ten you
 <ref name="research">{{cite web |title=Research |url=https://www.finmango.org/research |publisher=FinMango |access-date=4 August 2026}}</ref>
 <ref name="barometer">{{cite web |title=Financial Health Barometer: 2025 Methodology & Data Architecture |url=https://www.finmango.org/barometer |publisher=FinMango |access-date=4 August 2026}}</ref>
 <ref name="ambassadors">{{cite web |title=Ambassador Program |url=https://www.finmango.org/ambassadors |publisher=FinMango |access-date=4 August 2026}}</ref>
+<ref name="googleorg">{{cite tweet |author=Google.org |user=Googleorg |number=1299104929743765505 |date=27 August 2020 |title=Meet the nonprofits using Google tools to support their communities during COVID-19. Watch their stories:}}</ref>
 }}
 
 <!-- Categories are commented out until the draft is accepted into mainspace.
@@ -92,6 +95,19 @@ What each citation can and cannot do, under
 | *AJHE* "The Mango Model", 2023 | No — Glasgow is a co-author | Yes | No |
 | ProPublica Nonprofit Explorer | Yes, but a database mirror of IRS filings | Yes | No |
 | finmango.org (about, research, barometer, ambassadors) | No — self-published | Limited, per [WP:ABOUTSELF](https://en.wikipedia.org/wiki/Wikipedia:Verifiability#Self-published_or_questionable_sources_as_sources_on_themselves) | No |
+| [@Googleorg tweet](https://x.com/Googleorg/status/1299104929743765505), Aug 2020 | No — Google.org funded the project | Weakly; the tweet does not name FinMango | No |
+
+**On the Google.org tweet** (included at the organization's request): it is
+kept to a single attributed sentence describing what Google.org did, rather
+than a claim about FinMango, because the tweet's text names nonprofits
+generically and not FinMango. The FinMango-specific part of the sentence
+rests on the research-page citation beside it. Three known weaknesses, any of
+which a reviewer may act on: tweets are self-published ([WP:SPS](https://en.wikipedia.org/wiki/Wikipedia:Verifiability#Self-published_sources));
+Google.org was the project's funder and so is not independent under
+[WP:ORGIND](https://en.wikipedia.org/wiki/Wikipedia:Notability_(organizations_and_companies)#Independent_sources);
+and the link may rot. If the underlying Google-published video or page can be
+located and names FinMango, swap this citation for it — same standing on
+independence, but far more durable and it verifies the actual claim.
 
 **Gap:** no independent journalism *about* FinMango was located. That is the
 one thing that would move this from "declined" to "accepted".
