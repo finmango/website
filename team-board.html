@@ -3308,7 +3308,10 @@
     // The queue paints instantly from the last-seen copy (localStorage) and
     // refreshes in the background — the two Apps Script cold starts behind
     // each live fetch cost ~4-5s, so we never make the user wait on them.
-    var notes = { posts: null, loading: false, refreshing: false, error: null, openId: null, detail: {}, showRejected: false };
+    var notes = { posts: null, loading: false, refreshing: false, error: null, openId: null, detail: {}, showRejected: false,
+      // ids of rows whose vote is in flight — painted as their outcome already,
+      // marked ⏳ until the backend confirms.
+      pending: {} };
     try {
       var cachedNotes = JSON.parse(localStorage.getItem(LS_NOTES) || 'null');
       if (cachedNotes && cachedNotes.posts) notes.posts = cachedNotes.posts;
@@ -3384,6 +3387,13 @@
           if (!notes.posts) notes.error = String(res.error || 'unreachable');
         } else {
           notes.posts = res.posts || [];
+          // A vote still in flight has already been painted on its row. This
+          // list predates it, so re-apply it rather than flickering back to the
+          // old status until that vote's own response arrives.
+          Object.keys(notes.pending).forEach(function (pid) {
+            var p = notes.posts.find(function (x) { return x.id === pid; });
+            if (p) Object.keys(notes.pending[pid]).forEach(function (k) { p[k] = notes.pending[pid][k]; });
+          });
           try { localStorage.setItem(LS_NOTES, JSON.stringify({ t: now(), posts: notes.posts })); } catch (e) {}
           prefetchNoteDetails();
         }
@@ -3502,11 +3512,10 @@
       if (p.status === 'rejected') return whoChip('✗', 'Rejected by', a.by, a.at);
       return '';
     }
-    // Fold a just-changed post back into the queue row on the spot. The vote
-    // itself has already landed server-side; waiting for the refresh behind it
-    // (two Apps Script cold starts, ~5s) before showing the new status and who
-    // -tag makes a finished action feel unfinished. The refresh still runs and
-    // reconciles — this only moves the same truth forward in time.
+    // Fold a just-changed post back into the queue row on the spot. Fields left
+    // undefined are untouched — the backend's reply doesn't always carry every
+    // column (a schedule change says nothing about who approved), and blanking
+    // one out on the way past would drop a tag the Sheet still holds.
     function patchNoteRow(id, fields) {
       var p = (notes.posts || []).find(function (x) { return x.id === id; });
       if (!p) return;
@@ -3517,7 +3526,43 @@
       updateNotesCount();
       if (ui.view === 'notes') render();
     }
+    // The fields a vote can move, captured before one goes out so a failed
+    // request can put the row back exactly as it was — including keys that
+    // weren't set at all, which patchNoteRow deliberately won't clear.
+    var NOTE_ROW_KEYS = ['status', 'scheduledFor', 'statusBy', 'statusAt', 'approvedBy'];
+    function snapshotNoteRow(id) {
+      var p = (notes.posts || []).find(function (x) { return x.id === id; });
+      if (!p) return null;
+      var snap = {};
+      NOTE_ROW_KEYS.forEach(function (k) { snap[k] = p[k]; });
+      return snap;
+    }
+    function restoreNoteRow(id, snap) {
+      var p = snap && (notes.posts || []).find(function (x) { return x.id === id; });
+      if (!p) return;
+      NOTE_ROW_KEYS.forEach(function (k) {
+        if (snap[k] === undefined) delete p[k]; else p[k] = snap[k];
+      });
+      try { localStorage.setItem(LS_NOTES, JSON.stringify({ t: now(), posts: notes.posts })); } catch (e) {}
+      updateNotesCount();
+      if (ui.view === 'notes') render();
+    }
+    // What the row will say once the backend agrees. Clicking Approve is a
+    // decision, not a request for one — but the round trip behind it (verify,
+    // Drive read/write, the author's email) runs long enough that an unchanged
+    // row reads as "did that work?". So paint the outcome now, mark it ⏳ while
+    // it's in flight, and roll it back if the server disagrees.
+    function noteOptimistic(act, reviewer, scheduledFor) {
+      var at = new Date(now()).toISOString();
+      if (act === 'approve') return { status: 'approved', statusBy: reviewer, statusAt: at, approvedBy: reviewer, scheduledFor: scheduledFor || '' };
+      if (act === 'changes') return { status: 'changes', statusBy: reviewer, statusAt: at, approvedBy: '', scheduledFor: '' };
+      if (act === 'reject') return { status: 'rejected', statusBy: reviewer, statusAt: at, approvedBy: '', scheduledFor: '' };
+      if (act === 'publish') return { status: 'published', statusBy: reviewer, statusAt: at, scheduledFor: '' };
+      if (act === 'schedule') return { scheduledFor: scheduledFor || '' };
+      return {};
+    }
     function noteAction(id, act, btn, scheduledFor) {
+      if (notes.pending[id]) { toast('Still saving that one — one moment'); return; }
       var m = me();
       var reviewer = m ? m.name : 'HQ team';
       var comment = '';
@@ -3550,22 +3595,26 @@
         payload = { action: 'posts-review', id: id, reviewer: reviewer, vote: act, comment: comment };
         if (act === 'approve' && scheduledFor) payload.scheduledFor = scheduledFor;
       }
+      // Show the outcome before asking for it — see noteOptimistic. The fields
+      // are kept on `pending` so a refresh that lands mid-flight can't undo the
+      // row before its own response does.
+      var undo = snapshotNoteRow(id);
+      notes.pending[id] = noteOptimistic(act, reviewer, scheduledFor);
+      patchNoteRow(id, notes.pending[id]);
       postsApi(payload).then(function (res) {
+        delete notes.pending[id];
         if (res.result === 'success') {
           // The public list is edge-cached — re-prime it now so checking
           // /posts (or the ambassador's profile) right away shows the post.
           if (act === 'publish') { try { fetch('/api/posts?action=published&refresh=1'); } catch (e) { /* cache catches up on its own */ } }
           // Votes and schedule changes come back with the backend's own copy of
-          // the post — status and attribution included — so the row can update
-          // now. Publishing answers with just an id, so that one row is built
-          // from what we know: it's live, and this is who pushed the button.
-          if (act === 'publish') {
-            patchNoteRow(id, { status: 'published', scheduledFor: '',
-              statusBy: reviewer, statusAt: new Date(now()).toISOString() });
-          } else if (res.post) {
+          // the post — status and attribution included — so replace the guess
+          // with it. Publishing answers with just an id; the optimistic row is
+          // already right there (live, published by whoever clicked).
+          if (res.post) {
             patchNoteRow(id, { status: res.post.status, scheduledFor: res.post.scheduledFor || '',
               statusBy: res.post.statusBy, statusAt: res.post.statusAt, approvedBy: res.post.approvedBy });
-          }
+          } else if (ui.view === 'notes') { render(); } // drop the ⏳ marker
           toast(act === 'publish' ? 'Published 🚀 — author notified · on finmango.org/posts within a few minutes'
             : act === 'approve' ? ('Approved ✓' + (scheduledFor ? ' — goes live ' + fmtSched(scheduledFor) : '')
               + (res.emailed ? ' · author emailed ✉️' : ''))
@@ -3577,10 +3626,15 @@
           delete notes.detail[id];
           loadNotes();
         } else {
-          if (btn) btn.disabled = false;
+          // The optimistic row was wrong — put it back the way it was.
+          restoreNoteRow(id, undo);
           toast(String(res.error || 'That didn\'t work — try again'));
         }
-      }).catch(function () { if (btn) btn.disabled = false; toast('Network hiccup — try again'); });
+      }).catch(function () {
+        delete notes.pending[id];
+        restoreNoteRow(id, undo);
+        toast('Network hiccup — try again');
+      });
     }
     // Approving is also where the go-live time gets picked, so posts spread out
     // over the week instead of all landing at once. The author is emailed the
@@ -3651,12 +3705,18 @@
           var when = p.createdAt ? relTime(Date.parse(p.createdAt)) : '';
           var open = notes.openId === p.id;
           var thumb = noteCoverUrl(p, 480);
+          var saving = !!notes.pending[p.id];
+          var dis = saving ? ' disabled' : '';   // one vote at a time per row
           return '<div class="pr-row' + (open ? ' open' : '') + '" data-id="' + esc(p.id) + '">'
             + '<div class="pr-head" data-pr="toggle" style="cursor:pointer;">'
             + (thumb ? '<img class="pr-thumb" src="' + esc(thumb) + '" alt="" loading="lazy" decoding="async" onerror="this.remove()">' : '')
             + '<span class="pr-title">' + esc(p.title || '(untitled)') + '</span>'
             + '<span class="pr-tags"><span class="status-chip"><span class="col-dot" style="background:' + st[1] + '"></span>' + esc(st[0]) + '</span>'
-            + noteTags(p) + '</span></div>'
+            + noteTags(p)
+            // The row already shows where the vote lands; this says it isn't
+            // confirmed yet, so a failure that rolls it back isn't a surprise.
+            + (saving ? '<span class="who-chip plain" title="Recording the vote and emailing the author — a few seconds">⏳ saving</span>' : '')
+            + '</span></div>'
             + '<div class="pr-meta">' + esc(p.authorName || 'Unknown') + (p.category ? ' · ' + esc(p.category) : '') + (when ? ' · ' + esc(when) : '')
             + (scheduled ? ' · 🕓 goes live ' + esc(fmtSched(p.scheduledFor)) : '') + '</div>'
             + (open ? '<div class="note-detail"><p class="help-note">Loading the post…</p></div>' : '')
@@ -3666,11 +3726,11 @@
             // (a scheduled post can still be pulled) but noteAction confirms
             // first. On rejected posts it's the mirror image: re-rejecting is
             // the one vote that makes no sense to offer.
-            + (!readonly ? (p.status !== 'approved' ? '<button class="btn-sm ghost" data-pr="approve">✓ Approve</button>' : '')
-              + '<button class="btn-sm ghost" data-pr="changes">✎ Changes</button>'
-              + (p.status !== 'rejected' ? '<button class="btn-sm danger" data-pr="reject">✗ Reject</button>' : '') : '')
-            + (p.status === 'approved' ? '<button class="btn-sm ghost" data-pr="schedule">🕓 ' + (scheduled ? 'Reschedule' : 'Schedule') + '</button>'
-              + '<button class="btn-sm primary" data-pr="publish">🚀 Publish now</button>' : '')
+            + (!readonly ? (p.status !== 'approved' ? '<button class="btn-sm ghost" data-pr="approve"' + dis + '>✓ Approve</button>' : '')
+              + '<button class="btn-sm ghost" data-pr="changes"' + dis + '>✎ Changes</button>'
+              + (p.status !== 'rejected' ? '<button class="btn-sm danger" data-pr="reject"' + dis + '>✗ Reject</button>' : '') : '')
+            + (p.status === 'approved' ? '<button class="btn-sm ghost" data-pr="schedule"' + dis + '>🕓 ' + (scheduled ? 'Reschedule' : 'Schedule') + '</button>'
+              + '<button class="btn-sm primary" data-pr="publish"' + dis + '>🚀 Publish now</button>' : '')
             + (p.status === 'published' ? '<a class="btn-sm ghost" href="post.html?id=' + esc(p.id) + '" target="_blank" rel="noopener">View live ↗</a>' : '')
             + '</div></div>';
         }
