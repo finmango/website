@@ -33,10 +33,23 @@ And on **`Draft talk:FinMango`**:
 
 ## 2. Draft wikitext
 
-Paste everything in the block below into the `Draft:FinMango` edit box.
+Two-step, because the Article Wizard preload already contains a submission
+banner in *unsubmitted* state:
+
+1. Paste the block below into the `Draft:FinMango` edit box and **Publish**.
+   Keep the two preload templates and the HTML comment on the first two lines
+   — they are the AfC scaffolding. Replace the wizard's `$1` placeholder with
+   `FinMango`.
+2. Confirm the page renders (no red `cite` errors, references list populated),
+   then **Edit** again and add `{{subst:submit}}` as a new first line. That is
+   what places it in the review queue.
+
+Doing it in that order avoids two competing AfC banners and gives you a look
+at the rendered draft before it enters the queue.
 
 ```wikitext
-{{subst:submit}}
+{{subst:AfC submission/draftnew}}{{subst:AfC submission/coi|FinMango}}
+<!-- Important, do not remove anything above this line before article has been created. -->
 {{Short description|American nonprofit organization focused on financial health}}
 '''FinMango''' is an American [[501(c)(3) organization|501(c)(3)]] [[nonprofit organization]] headquartered in [[North Canton, Ohio]]. It works on the financial health of young adults, combining research on the economic pressures affecting household financial stability — among them housing costs, medical debt and access to credit — with financial education programming, free online planning tools and a youth advocacy programme.<ref name="about" /> The organization was recognised as tax-exempt by the [[Internal Revenue Service]] in June 2017.<ref name="propublica" />
 
