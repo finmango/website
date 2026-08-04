@@ -571,7 +571,7 @@
     /* ----------------------------------------------------------
        OPPORTUNITIES — the ladder: ruled rows, ascending commitment
        ---------------------------------------------------------- */
-    .opps { padding: 7rem var(--gutter) 7.5rem; background: var(--paper); }
+    .opps { padding: 5.5rem var(--gutter) 6.5rem; background: var(--paper); }
     .opps-container { max-width: var(--max-width); margin: 0 auto; }
 
     .section-head {
@@ -694,7 +694,7 @@
        docs/COMMUNITY-WALL-SETUP.md) with a "PLEDGE —" prefix.
        ---------------------------------------------------------- */
     .pledge {
-      padding: 7rem var(--gutter) 7.5rem;
+      padding: 6rem var(--gutter) 6.5rem;
       background: linear-gradient(180deg, rgba(255, 107, 53, .045), transparent 26rem);
       border-top: 2px solid var(--orange);
       position: relative;
@@ -744,27 +744,93 @@
     }
     .pledge-body {
       display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      gap: 4.5rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
       align-items: start;
     }
 
-    /* the three promises — ruled rows with step-style check circles */
-    .pledge-lines { border-top: 1px solid var(--ink-line); }
-    .pledge-line {
+    /* the barriers — a compact plate grid, two across, so the pledge
+       stays one screen instead of two */
+    .pledge-grid {
       display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 1.2rem;
-      padding: 1.35rem 0;
-      border-bottom: 1px solid var(--ink-line-soft);
-      cursor: pointer;
+      grid-template-columns: 1fr 1fr;
+      gap: .6rem;
+    }
+    .pledge-chip {
       position: relative;
+      display: block;
+      padding: .9rem 1rem 1rem;
+      border: 1px solid var(--ink-line);
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease;
     }
-    .pledge-line input {
-      position: absolute;
-      opacity: 0;
-      width: 1px; height: 1px;
+    .pledge-chip:hover { border-color: var(--ink); }
+    .pledge-chip:has(input:checked) { border-color: var(--orange); background: rgba(255, 107, 53, .05); }
+    .pledge-chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .pledge-chip-title {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .95rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      transition: color .2s ease;
     }
+    .pledge-chip:hover .pledge-chip-title { color: var(--orange); }
+    .pledge-chip-title::before {
+      content: '';
+      width: .9rem; height: .9rem;
+      border: 1px solid var(--ink-line);
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .pledge-chip input:checked ~ .pledge-chip-title::before {
+      background: var(--orange);
+      border-color: var(--orange);
+      box-shadow: inset 0 0 0 2.5px var(--paper);
+    }
+    .pledge-chip input:focus-visible ~ .pledge-chip-title::before { outline: 2px solid var(--orange); outline-offset: 3px; }
+    .pledge-chip-desc {
+      display: block;
+      font-size: .78rem;
+      font-weight: 300;
+      line-height: 1.45;
+      color: var(--ink-dim);
+      margin-top: .3rem;
+    }
+    /* once a barrier is picked, the others recede */
+    .pledge-grid:has(input:checked) .pledge-chip:not(:has(input:checked)) .pledge-chip-desc { opacity: .5; }
+
+    /* placeholder standing in for the form until a barrier is picked */
+    .pledge-prompt {
+      display: flex;
+      gap: .9rem;
+      align-items: flex-start;
+      border: 1px dashed var(--ink-line);
+      padding: 1.35rem 1.4rem;
+      background: rgba(255, 107, 53, .02);
+    }
+    .pledge-prompt-mark {
+      font-family: var(--font-mono);
+      font-size: .95rem;
+      color: var(--orange);
+      line-height: 1.35;
+      flex-shrink: 0;
+    }
+    .pledge-prompt p { font-size: .95rem; font-weight: 400; line-height: 1.5; color: var(--ink); letter-spacing: -.01em; }
+    .pledge-prompt ul { list-style: none; margin-top: .9rem; display: flex; flex-direction: column; gap: .45rem; }
+    .pledge-prompt li {
+      display: flex;
+      gap: .6rem;
+      font-size: .86rem;
+      font-weight: 300;
+      line-height: 1.5;
+      color: var(--ink-dim);
+    }
+    .pledge-prompt li::before { content: '·'; color: var(--orange); font-weight: 700; }
+    .pledge-prompt li strong { font-weight: 600; color: var(--ink); }
+
     .pledge-check {
       width: 2rem; height: 2rem;
       border: 1px solid var(--ink-line);
@@ -777,25 +843,11 @@
       transition: background .2s ease, border-color .2s ease, color .2s ease;
     }
     .pledge-check::after { content: '✓'; }
-    .pledge-line input:checked ~ .pledge-check { background: var(--orange); border-color: var(--orange); color: #fff; }
-    .pledge-line input:focus-visible ~ .pledge-check { outline: 2px solid var(--orange); outline-offset: 3px; }
-    .pledge-line-text { transition: opacity .2s ease; }
-    /* once a barrier is picked, the others recede */
-    .pledge-lines:has(input:checked) .pledge-line input:not(:checked) ~ .pledge-line-text { opacity: .45; }
-    .pledge-line-title {
-      display: block;
-      font-size: 1.02rem;
-      font-weight: 700;
-      letter-spacing: -.02em;
-      margin-bottom: .25rem;
-      transition: color .2s ease;
-    }
-    .pledge-line:hover .pledge-line-title { color: var(--orange); }
-    .pledge-line-desc { display: block; font-size: .88rem; font-weight: 300; line-height: 1.5; color: var(--ink-dim); }
 
     /* the signature form */
-    .pledge-form { display: flex; flex-direction: column; gap: 1.35rem; }
-    .pledge-form[hidden], .pledge-done[hidden] { display: none !important; }
+    .pledge-form { display: flex; flex-direction: column; gap: 1.1rem; }
+    .pledge-form[hidden], .pledge-done[hidden], .pledge-prompt[hidden] { display: none !important; }
+    .pledge-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .pledge-field label {
       font-family: var(--font-mono);
       font-size: .62rem;
@@ -816,7 +868,7 @@
       font-size: .95rem;
       color: var(--ink);
     }
-    .pledge-field textarea { resize: vertical; min-height: 6.5rem; line-height: 1.5; }
+    .pledge-field textarea { resize: vertical; min-height: 4.75rem; line-height: 1.5; }
     .pledge-field input::placeholder,
     .pledge-field textarea::placeholder { color: var(--ink-faint); }
     .pledge-field input:focus,
@@ -922,6 +974,44 @@
     }
     .pledge-again a { color: var(--ink-faint); }
     .pledge-again a:hover { color: var(--orange); }
+
+    /* the next rung up — keeps deeper commitments in view from inside
+       the pledge, for anyone who wants more than 30 seconds */
+    .pledge-next {
+      display: flex;
+      align-items: center;
+      gap: 1rem 2rem;
+      flex-wrap: wrap;
+      margin-top: 3.25rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--ink-line);
+    }
+    .pledge-next-label {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--ink-faint);
+      white-space: nowrap;
+    }
+    .pledge-next-links { display: flex; gap: 1.75rem; flex-wrap: wrap; }
+    .pledge-next-links a {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .92rem;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--ink-line);
+      padding-bottom: .15rem;
+      transition: color .2s ease, border-color .2s ease;
+    }
+    .pledge-next-links a:hover { color: var(--orange); border-color: var(--orange); }
+    .pledge-next-links .ext { font-size: .78rem; color: var(--ink-faint); }
+    .pledge-next-links a:hover .ext { color: var(--orange); }
 
     /* ----------------------------------------------------------
        CTA — the page's one ink moment, runs into the footer
@@ -1234,8 +1324,9 @@
       .opp-arrow { grid-area: arrow; align-self: center; }
 
       .pledge { padding: 5rem var(--gutter); }
-      .pledge-body { grid-template-columns: 1fr; gap: 3rem; }
+      .pledge-body { grid-template-columns: 1fr; gap: 2.5rem; }
       .pledge-head-row { flex-direction: column; align-items: flex-start; gap: .75rem; }
+      .pledge-next { margin-top: 2.5rem; }
 
       a.opp-row.opp-featured { margin: 0; width: 100%; padding-left: 1rem; padding-right: 1rem; }
 
@@ -1258,6 +1349,10 @@
       .cta-actions .btn-primary, .cta-actions .btn-secondary,
       .pledge-done-actions .btn-primary, .pledge-done-actions .btn-secondary { width: 100%; justify-content: center; }
       .pledge-form .btn-primary { align-self: stretch; justify-content: center; }
+      /* one barrier per row on phones — two columns squeezes the copy */
+      .pledge-grid { grid-template-columns: 1fr; }
+      .pledge-field-row { grid-template-columns: 1fr; }
+      .pledge-next-links { flex-direction: column; gap: .85rem; align-items: flex-start; }
     }
 
     /* Tablet tier (iPads in portrait, small landscape) — scale the hero up
@@ -1431,7 +1526,7 @@
 
       <div class="hero-top">
         <div class="eyebrow">Join the movement</div>
-        <div class="hb-status"><span class="hb-pulse"></span>5 ways to start</div>
+        <div class="hb-status"><span class="hb-pulse"></span>6 ways to start</div>
       </div>
 
       <h1>The affordability crisis won't <em>fix&nbsp;itself.<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em></h1>
@@ -1452,169 +1547,13 @@
     </div>
   </section>
 
-  <!-- ======================= PLEDGE ======================= -->
-  <section class="pledge" id="pledge">
-    <div class="pledge-container">
-      <div class="section-head">
-        <div class="pledge-head-row">
-          <span class="eyebrow">30 seconds · No money, no meetings</span>
-          <span class="pledge-live"><span class="hb-pulse"></span><span id="pledgeLive">Join the wall</span></span>
-        </div>
-        <h2>Take the <em>pledge.</em></h2>
-        <p class="section-sub">Financial stress isn't a personal failing — it's built by systems. Pick the barrier that hits closest to home, tell us why if you'd like, add a photo if you want, and put your first name on it. Your card joins the <a href="pledge-wall.html">Pledge Wall</a> alongside everyone else standing with you. Thirty seconds, no money, no meetings.</p>
-      </div>
-
-      <div class="pledge-body">
-        <div class="pledge-left">
-          <span class="pledge-col-label">01 · Pick the barrier you're standing against</span>
-          <div class="pledge-lines" id="pledgeLines" role="radiogroup" aria-label="The barrier you're standing against">
-            <label class="pledge-line">
-              <input type="radio" name="pledgeBarrier" value="Housing">
-              <span class="pledge-check" aria-hidden="true"></span>
-              <span class="pledge-line-text">
-                <span class="pledge-line-title">Housing</span>
-                <span class="pledge-line-desc">Rent outpacing wages, starter homes out of reach, junk fees stacked on top.</span>
-              </span>
-            </label>
-            <label class="pledge-line">
-              <input type="radio" name="pledgeBarrier" value="Healthcare costs">
-              <span class="pledge-check" aria-hidden="true"></span>
-              <span class="pledge-line-text">
-                <span class="pledge-line-title">Healthcare costs</span>
-                <span class="pledge-line-desc">Medical debt that wrecks credit, care skipped because of the price tag.</span>
-              </span>
-            </label>
-            <label class="pledge-line">
-              <input type="radio" name="pledgeBarrier" value="Debt & credit">
-              <span class="pledge-check" aria-hidden="true"></span>
-              <span class="pledge-line-text">
-                <span class="pledge-line-title">Debt &amp; credit</span>
-                <span class="pledge-line-desc">Predatory lending, minimum-payment traps, a credit system that punishes being poor.</span>
-              </span>
-            </label>
-            <label class="pledge-line">
-              <input type="radio" name="pledgeBarrier" value="Food access">
-              <span class="pledge-check" aria-hidden="true"></span>
-              <span class="pledge-line-text">
-                <span class="pledge-line-title">Food access</span>
-                <span class="pledge-line-desc">Food deserts, grocery inflation, benefits that don't stretch the month.</span>
-              </span>
-            </label>
-            <label class="pledge-line">
-              <input type="radio" name="pledgeBarrier" value="Work & income">
-              <span class="pledge-check" aria-hidden="true"></span>
-              <span class="pledge-line-text">
-                <span class="pledge-line-title">Work &amp; income</span>
-                <span class="pledge-line-desc">Wages that don't keep up, gig work with no floor, raises that lose to inflation.</span>
-              </span>
-            </label>
-            <label class="pledge-line">
-              <input type="radio" name="pledgeBarrier" value="Education">
-              <span class="pledge-check" aria-hidden="true"></span>
-              <span class="pledge-line-text">
-                <span class="pledge-line-title">Education</span>
-                <span class="pledge-line-desc">Student debt, aid letters that hide the real cost, degrees that don't pencil out.</span>
-              </span>
-            </label>
-          </div>
-        </div>
-
-        <div class="pledge-right">
-          <span class="pledge-col-label">02 · Sign it</span>
-          <form id="pledgeForm" class="pledge-form" novalidate>
-            <div class="pledge-field">
-              <label for="pledgeWhy">Why this barrier? (optional)</label>
-              <textarea id="pledgeWhy" maxlength="400" rows="4" placeholder="A sentence or two — why it matters to you, or how you've seen it play out where you live."></textarea>
-              <span class="pledge-count" id="pledgeWhyCount" aria-hidden="true">0 / 400</span>
-            </div>
-            <div class="pledge-field">
-              <label for="pledgeName">First name (optional)</label>
-              <input type="text" id="pledgeName" maxlength="80" placeholder="e.g. Sam" autocomplete="given-name">
-            </div>
-            <div class="pledge-field">
-              <label for="pledgeLocation">Your community</label>
-              <input type="text" id="pledgeLocation" maxlength="120" placeholder="City, State — e.g. Akron, Ohio" required>
-            </div>
-            <div class="pledge-field">
-              <label for="pledgePhoto">Add a photo (optional)</label>
-              <div class="pledge-photo-row">
-                <label class="pledge-photo-btn" for="pledgePhoto">Choose a photo</label>
-                <input type="file" id="pledgePhoto" accept="image/*" style="position:absolute;opacity:0;width:1px;height:1px;">
-                <span class="pledge-photo-hint">You, your crew, your block — it goes on your wall card.</span>
-              </div>
-              <div class="pledge-photo-preview" id="pledgePhotoPreview" hidden>
-                <img id="pledgePhotoImg" alt="Your photo, ready to go">
-                <button type="button" class="pledge-photo-remove" id="pledgePhotoRemove">Remove</button>
-              </div>
-            </div>
-            <label class="pledge-consent">
-              <input type="checkbox" id="pledgeShowOnWall" checked>
-              <span class="pledge-check" aria-hidden="true"></span>
-              <span class="pledge-consent-text">Show my pledge on the public <a href="pledge-wall.html" target="_blank" rel="noopener">Pledge Wall</a> — first name, community, barrier, note &amp; photo. Uncheck to be counted quietly instead.</span>
-            </label>
-            <!-- honeypot: humans never see or fill this -->
-            <input type="text" id="pledgeWebsite" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;height:1px;width:1px;" aria-hidden="true">
-            <button type="submit" class="btn-primary" id="pledgeSubmit">
-              Sign the pledge
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </button>
-            <p class="pledge-status" id="pledgeStatus" role="status" aria-live="polite"></p>
-            <p class="pledge-privacy">We record only what's on this form. Opted into the wall? A human reviews your card before it appears — first names and communities only. Opted out? We just count you. Either way, there's no email list attached.</p>
-          </form>
-
-          <div class="pledge-done" id="pledgeDone" hidden>
-            <span class="pledge-done-kicker">✓ Pledge signed</span>
-            <h3>You're in.</h3>
-            <p id="pledgeDoneMsg">Your name is on the record — against a barrier, and against the idea that financial stress is a personal failing. Pass it on:</p>
-            <div class="pledge-done-actions">
-              <a class="btn-primary" href="https://twitter.com/intent/tweet?text=I%20just%20signed%20the%20FinMango%20pledge%20and%20named%20the%20systemic%20barrier%20I%27m%20standing%20against.%20Financial%20stress%20isn%27t%20a%20personal%20failing.%20It%20takes%2030%20seconds%3A&url=https%3A%2F%2Fwww.finmango.org%2Fget-involved.html%23pledge" target="_blank" rel="noopener noreferrer">
-                Share on X
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-              <a class="btn-secondary" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fwww.finmango.org%2Fget-involved.html" target="_blank" rel="noopener noreferrer">Share on LinkedIn</a>
-            </div>
-            <p class="pledge-done-more" id="pledgeDoneWall">Opted into the wall? Your card appears on <a href="pledge-wall.html">the Pledge Wall</a> once a human reviews it — usually within a couple of days.</p>
-            <p class="pledge-again"><a href="#pledge" id="pledgeAgain">Signing for someone else on this device? Sign again</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================= IN PERSON ======================= -->
-  <section class="moments" aria-label="Photos from FinMango events and programs">
-    <div class="moments-container">
-      <div class="moments-head">
-        <span class="eyebrow">The movement, in person</span>
-        <a href="ambassadors.html" class="moments-link">
-          Meet the ambassadors
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-      <div class="moments-grid">
-        <figure class="moment moment-1">
-          <img src="kent2024.jpg" alt="A large group of students with FinMango flags and certificates at Kent State University" width="2304" height="1536" loading="lazy" decoding="async">
-          <figcaption><span>Financial Health Day · Kent State</span><em>01</em></figcaption>
-        </figure>
-        <figure class="moment moment-2">
-          <img src="education2.jpg" alt="Two volunteers holding the FinMango flag at a program session" width="1080" height="1080" loading="lazy" decoding="async">
-          <figcaption><span>Volunteers in the field</span><em>02</em></figcaption>
-        </figure>
-        <figure class="moment moment-3">
-          <img src="Barrier%20Breakers%202026%20Pics/IMG_9143.jpg" alt="A student presenting her project poster at Barrier Breakers" width="2048" height="1536" loading="lazy" decoding="async">
-          <figcaption><span>Student presentations · Barrier Breakers</span><em>03</em></figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
   <!-- ======================= OPPORTUNITIES ======================= -->
   <section class="opps" id="opportunities">
     <div class="opps-container">
       <div class="section-head">
         <span class="eyebrow">Every action counts</span>
         <h2>Find your <em>level.</em></h2>
-        <p class="section-sub">Start with the 30-second pledge — or go deeper: volunteer your skills, become an ambassador, partner with us. Scale up when you're ready.</p>
+        <p class="section-sub">Every rung is real work. Start with the 30-second pledge just below — or go deeper: volunteer your skills, become an ambassador, partner with us. Scale up when you're ready.</p>
       </div>
 
       <div class="opps-list">
@@ -1654,6 +1593,15 @@
           <svg class="opp-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
 
+        <a href="ambassadors.html" class="opp-row">
+          <span class="opp-time">A semester</span>
+          <span class="opp-body">
+            <span class="opp-title">Become an ambassador</span>
+            <span class="opp-desc">Lead financial health work on your campus or in your community, backed by training, a global cohort, and our research.</span>
+          </span>
+          <svg class="opp-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
         <a href="mailto:global@finmango.org?subject=Partnership%20Inquiry" class="opp-row">
           <span class="opp-time">Custom</span>
           <span class="opp-body">
@@ -1662,6 +1610,168 @@
           </span>
           <svg class="opp-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= PLEDGE ======================= -->
+  <section class="pledge" id="pledge">
+    <div class="pledge-container">
+      <div class="section-head">
+        <div class="pledge-head-row">
+          <span class="eyebrow">30 seconds · No money, no meetings</span>
+          <span class="pledge-live"><span class="hb-pulse"></span><span id="pledgeLive">Join the wall</span></span>
+        </div>
+        <h2>Take the <em>pledge.</em></h2>
+        <p class="section-sub">Financial stress isn't a personal failing — it's built by systems. Pick the barrier that hits closest to home and put your first name on it. Your card joins the <a href="pledge-wall.html">Pledge Wall</a> alongside everyone else standing with you. Thirty seconds, no money, no meetings.</p>
+      </div>
+
+      <div class="pledge-body">
+        <div class="pledge-left">
+          <span class="pledge-col-label">01 · Pick the barrier you're standing against</span>
+          <div class="pledge-grid" id="pledgeLines" role="radiogroup" aria-label="The barrier you're standing against">
+            <label class="pledge-chip">
+              <input type="radio" name="pledgeBarrier" value="Housing">
+              <span class="pledge-chip-title">Housing</span>
+              <span class="pledge-chip-desc">Rent outpacing wages. Starter homes out of reach.</span>
+            </label>
+            <label class="pledge-chip">
+              <input type="radio" name="pledgeBarrier" value="Healthcare costs">
+              <span class="pledge-chip-title">Healthcare costs</span>
+              <span class="pledge-chip-desc">Medical debt that wrecks credit. Care skipped over price.</span>
+            </label>
+            <label class="pledge-chip">
+              <input type="radio" name="pledgeBarrier" value="Debt & credit">
+              <span class="pledge-chip-title">Debt &amp; credit</span>
+              <span class="pledge-chip-desc">Predatory lending. Minimum-payment traps.</span>
+            </label>
+            <label class="pledge-chip">
+              <input type="radio" name="pledgeBarrier" value="Food access">
+              <span class="pledge-chip-title">Food access</span>
+              <span class="pledge-chip-desc">Food deserts, grocery inflation, benefits that don't stretch.</span>
+            </label>
+            <label class="pledge-chip">
+              <input type="radio" name="pledgeBarrier" value="Work & income">
+              <span class="pledge-chip-title">Work &amp; income</span>
+              <span class="pledge-chip-desc">Wages that don't keep up. Gig work with no floor.</span>
+            </label>
+            <label class="pledge-chip">
+              <input type="radio" name="pledgeBarrier" value="Education">
+              <span class="pledge-chip-title">Education</span>
+              <span class="pledge-chip-desc">Student debt. Aid letters that hide the real cost.</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="pledge-right">
+          <span class="pledge-col-label">02 · Sign it</span>
+
+          <div class="pledge-prompt" id="pledgePrompt">
+            <span class="pledge-prompt-mark" aria-hidden="true">01 →</span>
+            <div>
+              <p>Pick a barrier and the signature form opens right here.</p>
+              <ul>
+                <li><strong>One required field</strong> — the community you're standing up for.</li>
+                <li>A first name, a note, and a photo if you want them on your card.</li>
+                <li>No money, no meetings, no email list.</li>
+              </ul>
+            </div>
+          </div>
+
+          <form id="pledgeForm" class="pledge-form" novalidate hidden>
+            <div class="pledge-field-row">
+              <div class="pledge-field">
+                <label for="pledgeName">First name (optional)</label>
+                <input type="text" id="pledgeName" maxlength="80" placeholder="e.g. Sam" autocomplete="given-name">
+              </div>
+              <div class="pledge-field">
+                <label for="pledgeLocation">Your community</label>
+                <input type="text" id="pledgeLocation" maxlength="120" placeholder="e.g. Akron, Ohio" required>
+              </div>
+            </div>
+            <div class="pledge-field">
+              <label for="pledgeWhy">Why this barrier? (optional)</label>
+              <textarea id="pledgeWhy" maxlength="400" rows="3" placeholder="A sentence or two — why it matters to you, or how you've seen it play out where you live."></textarea>
+              <span class="pledge-count" id="pledgeWhyCount" aria-hidden="true">0 / 400</span>
+            </div>
+            <div class="pledge-field">
+              <label for="pledgePhoto">Add a photo (optional)</label>
+              <div class="pledge-photo-row">
+                <label class="pledge-photo-btn" for="pledgePhoto">Choose a photo</label>
+                <input type="file" id="pledgePhoto" accept="image/*" style="position:absolute;opacity:0;width:1px;height:1px;">
+                <span class="pledge-photo-hint">You, your crew, your block — it goes on your wall card.</span>
+              </div>
+              <div class="pledge-photo-preview" id="pledgePhotoPreview" hidden>
+                <img id="pledgePhotoImg" alt="Your photo, ready to go">
+                <button type="button" class="pledge-photo-remove" id="pledgePhotoRemove">Remove</button>
+              </div>
+            </div>
+            <label class="pledge-consent">
+              <input type="checkbox" id="pledgeShowOnWall" checked>
+              <span class="pledge-check" aria-hidden="true"></span>
+              <span class="pledge-consent-text">Show my pledge on the public <a href="pledge-wall.html" target="_blank" rel="noopener">Pledge Wall</a> — first name, community, barrier, note &amp; photo. Uncheck to be counted quietly instead.</span>
+            </label>
+            <!-- honeypot: humans never see or fill this -->
+            <input type="text" id="pledgeWebsite" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;height:1px;width:1px;" aria-hidden="true">
+            <button type="submit" class="btn-primary" id="pledgeSubmit">
+              Sign the pledge
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+            <p class="pledge-status" id="pledgeStatus" role="status" aria-live="polite"></p>
+            <p class="pledge-privacy">We record only what's on this form — no email list attached. Opted into the wall? A human reviews your card first. Opted out? We just count you.</p>
+          </form>
+
+          <div class="pledge-done" id="pledgeDone" hidden>
+            <span class="pledge-done-kicker">✓ Pledge signed</span>
+            <h3>You're in.</h3>
+            <p id="pledgeDoneMsg">Your name is on the record — against a barrier, and against the idea that financial stress is a personal failing. Pass it on:</p>
+            <div class="pledge-done-actions">
+              <a class="btn-primary" href="https://twitter.com/intent/tweet?text=I%20just%20signed%20the%20FinMango%20pledge%20and%20named%20the%20systemic%20barrier%20I%27m%20standing%20against.%20Financial%20stress%20isn%27t%20a%20personal%20failing.%20It%20takes%2030%20seconds%3A&url=https%3A%2F%2Fwww.finmango.org%2Fget-involved.html%23pledge" target="_blank" rel="noopener noreferrer">
+                Share on X
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a class="btn-secondary" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fwww.finmango.org%2Fget-involved.html" target="_blank" rel="noopener noreferrer">Share on LinkedIn</a>
+            </div>
+            <p class="pledge-done-more" id="pledgeDoneWall">Opted into the wall? Your card appears on <a href="pledge-wall.html">the Pledge Wall</a> once a human reviews it — usually within a couple of days.</p>
+            <p class="pledge-again"><a href="#pledge" id="pledgeAgain">Signing for someone else on this device? Sign again</a></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pledge-next">
+        <span class="pledge-next-label">Got more than 30 seconds?</span>
+        <span class="pledge-next-links">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer your skills <span class="ext">↗</span></a>
+          <a href="ambassadors.html">Become an ambassador</a>
+          <a href="mailto:global@finmango.org?subject=Partnership%20Inquiry">Partner with us</a>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= IN PERSON ======================= -->
+  <section class="moments" aria-label="Photos from FinMango events and programs">
+    <div class="moments-container">
+      <div class="moments-head">
+        <span class="eyebrow">The movement, in person</span>
+        <a href="ambassadors.html" class="moments-link">
+          Meet the ambassadors
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="moments-grid">
+        <figure class="moment moment-1">
+          <img src="kent2024.jpg" alt="A large group of students with FinMango flags and certificates at Kent State University" width="2304" height="1536" loading="lazy" decoding="async">
+          <figcaption><span>Financial Health Day · Kent State</span><em>01</em></figcaption>
+        </figure>
+        <figure class="moment moment-2">
+          <img src="education2.jpg" alt="Two volunteers holding the FinMango flag at a program session" width="1080" height="1080" loading="lazy" decoding="async">
+          <figcaption><span>Volunteers in the field</span><em>02</em></figcaption>
+        </figure>
+        <figure class="moment moment-3">
+          <img src="Barrier%20Breakers%202026%20Pics/IMG_9143.jpg" alt="A student presenting her project poster at Barrier Breakers" width="2048" height="1536" loading="lazy" decoding="async">
+          <figcaption><span>Student presentations · Barrier Breakers</span><em>03</em></figcaption>
+        </figure>
       </div>
     </div>
   </section>
@@ -1731,6 +1841,19 @@
       if (!form || !done) return;
       const statusEl = document.getElementById('pledgeStatus');
       const submitBtn = document.getElementById('pledgeSubmit');
+      const prompt = document.getElementById('pledgePrompt');
+      const lines = document.getElementById('pledgeLines');
+
+      // the form stays folded away until a barrier is picked — keeps the
+      // pledge to one screen so the deeper rungs stay in view
+      const openForm = () => {
+        if (!done.hidden) return; // already signed on this device
+        prompt.hidden = true;
+        form.hidden = false;
+      };
+      lines.addEventListener('change', openForm);
+      // browsers restore radio state on soft reload
+      if (lines.querySelector('input:checked')) openForm();
 
       const showDone = (barrier) => {
         // name their barrier back to them when we know it
@@ -1738,6 +1861,7 @@
           document.getElementById('pledgeDoneMsg').textContent =
             'Your name is on the record against ' + barrier.toLowerCase() + ' barriers — and against the idea that financial stress is a personal failing. Pass it on:';
         }
+        prompt.hidden = true;
         form.hidden = true;
         done.hidden = false;
       };
@@ -1865,9 +1989,15 @@
         form.reset();
         clearPhoto();
         document.getElementById('pledgeWhyCount').textContent = '0 / 400';
+        setStatus('');
         done.hidden = true;
-        form.hidden = false;
-        document.getElementById('pledgeName').focus();
+        // the radios live outside the form, so a barrier is still picked
+        if (lines.querySelector('input:checked')) {
+          form.hidden = false;
+          document.getElementById('pledgeName').focus();
+        } else {
+          prompt.hidden = false;
+        }
       });
     })();
   </script>
