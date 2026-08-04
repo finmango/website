@@ -28,6 +28,10 @@ export async function onRequestGet(context) {
   if (!PUBLIC_ACTIONS.has(action)) {
     return jsonResponse({ result: 'error', error: 'Unsupported action' }, 400);
   }
+  // ?refresh=1 (sent by the HQ Pledge Wall tab right after a decision) skips
+  // the cache and re-primes the entry every visitor reads, so a reviewer who
+  // just approved a card sees it on the wall instead of waiting out the TTL.
+  const refresh = url.searchParams.get('refresh') === '1';
   if (WALL_APPS_SCRIPT_URL.indexOf('REPLACE_WITH') === 0) {
     return jsonResponse({ result: 'error', error: 'Not configured' }, 503);
   }
@@ -36,8 +40,10 @@ export async function onRequestGet(context) {
   const cache = caches.default;
   const cacheKey = new Request(url.origin + url.pathname + '?action=' + action, { method: 'GET' });
 
-  async function fetchFresh() {
-    const upstreamRes = await fetch(upstream, {
+  // `bust` adds a throwaway param so Cloudflare's own upstream cache can't
+  // answer — Apps Script ignores params it doesn't know.
+  async function fetchFresh(bust) {
+    const upstreamRes = await fetch(upstream + (bust ? '&_=' + Date.now() : ''), {
       cf: { cacheTtl: WALL_TTL, cacheEverything: true },
       headers: { accept: 'application/json' }
     });
@@ -52,6 +58,16 @@ export async function onRequestGet(context) {
         'x-cached-at': String(Date.now())
       }
     });
+  }
+
+  if (refresh) {
+    let fresh = null;
+    try { fresh = await fetchFresh(true); } catch (e) { fresh = null; }
+    if (fresh) {
+      waitUntil(cache.put(cacheKey, fresh.clone()));
+      return fresh;
+    }
+    // Backend hiccup — fall through and serve whatever the cache has.
   }
 
   const hit = await cache.match(cacheKey);

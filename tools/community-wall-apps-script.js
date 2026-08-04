@@ -10,6 +10,10 @@
  * signers pick a systemic barrier, optionally say why it matters and add a
  * photo, and opt in (or not) to appearing on the public wall. Pledges live in
  * their own "Pledges" tab; photos go to a Drive folder the script creates.
+ * Pledges are reviewed by the team in FinMango HQ (team-board.html → 🤝 Pledge
+ * Wall), which reaches the `pledge-list` / `moderate` actions below through the
+ * Team Board backend — that script holds MODERATION_KEY, so a reviewer only
+ * needs to be signed in to HQ. See docs/COMMUNITY-WALL-SETUP.md.
  *
  * Storage is a Google Sheet ("Wall" + "Pledges" tabs) plus one Drive folder
  * for pledge photos.
@@ -40,6 +44,12 @@ const CONFIG = {
   MAX_HEARTS_PER_CALL: 1,                      // hearts increment one at a time
   MAX_WHY_LEN: 400,                            // pledge "why this barrier" note
   MAX_PHOTO_DATAURL: 4500000,                  // ~3.3MB image after base64 — client downscales well below this
+  // Pledges are reviewed by the whole team in FinMango HQ
+  // (team-board.html → 🤝 Pledge Wall), so the per-pledge moderator email is
+  // off: the queue is the notification. Flip to true to get the one-click
+  // approve/reject emails back as well (the links keep working either way).
+  // Story emails are unaffected — those still land in MODERATOR_EMAIL.
+  PLEDGE_EMAIL_NOTIFY: false,
 };
 
 const SHEET_NAME = 'Wall';
@@ -93,6 +103,10 @@ function doGet(e) {
       case 'pledges':  return json({ result: 'success', pledges: listApprovedPledges_() });
       // --- moderator-only (key required) ---
       case 'list':     requireKey_(p.key); return json({ result: 'success', stories: listForModeration_(p.status || 'pending') });
+      // The pledge review queue behind FinMango HQ (team-board.html). HQ calls
+      // it through its own backend, which holds MODERATION_KEY server-side —
+      // the key never reaches a reviewer's browser.
+      case 'pledge-list': requireKey_(p.key); return json({ result: 'success', pledges: listPledgesForModeration_(p.status || 'all') });
       case 'moderate': requireKey_(p.key); return moderate_(p); // returns HTML when ui=1 (email links)
       default: return json({ result: 'error', error: 'Unknown action' });
     }
@@ -154,8 +168,13 @@ function listForModeration_(status) {
 // Works for both wall stories ('w-…' ids, Wall tab) and pledges ('p-…' ids,
 // Pledges tab) — the id prefix decides which tab the row lives in.
 function moderate_(p) {
-  const decision = p.decision === 'approve' ? 'approved' : p.decision === 'reject' ? 'rejected' : '';
-  if (!decision) return json({ result: 'error', error: 'decision must be approve or reject' });
+  // 'pending' is the undo: it pulls an approved card back off the wall (or
+  // un-rejects one) and returns it to the HQ queue. Only HQ sends it — the
+  // email links are approve/reject only.
+  const decision = p.decision === 'approve' ? 'approved'
+    : p.decision === 'reject' ? 'rejected'
+    : p.decision === 'pending' ? 'pending' : '';
+  if (!decision) return json({ result: 'error', error: 'decision must be approve, reject, or pending' });
 
   const isPledge = String(p.id || '').indexOf('p-') === 0;
   const sheet = isPledge ? getPledgeSheet_() : getSheet_();
@@ -165,6 +184,9 @@ function moderate_(p) {
   setCell_(sheet, rowIndex, 'status', decision);
   setCell_(sheet, rowIndex, 'moderatedBy', clean_(p.by, 80) || 'email-link');
   if (decision === 'approved') setCell_(sheet, rowIndex, 'publishedAt', new Date().toISOString());
+  // Back in the queue means it was never published — clear the stamp so the
+  // row sorts by submission date again if it's approved a second time.
+  if (decision === 'pending') setCell_(sheet, rowIndex, 'publishedAt', '');
 
   if (p.ui) {
     // Friendly confirmation page for clicks from the notification email.
@@ -173,7 +195,8 @@ function moderate_(p) {
     const wallPath = isPledge ? '/pledge-wall' : '/community-wall';
     return HtmlService.createHtmlOutput(
       '<body style="font-family:sans-serif;padding:3rem;text-align:center">' +
-      '<h1 style="color:' + (ok ? '#1a7f37' : '#c93c37') + '">' + (ok ? '✓ Approved' : '✗ Rejected') + '</h1>' +
+      '<h1 style="color:' + (ok ? '#1a7f37' : decision === 'pending' ? '#8a6d1f' : '#c93c37') + '">' +
+      (ok ? '✓ Approved' : decision === 'pending' ? '↩ Back to pending' : '✗ Rejected') + '</h1>' +
       '<p>' + noun + ' <code>' + esc_(p.id) + '</code> is now <strong>' + decision + '</strong>.' +
       (ok ? ' It appears on the wall within a few minutes (edge cache).' : '') + '</p>' +
       '<p><a href="' + CONFIG.SITE_BASE + wallPath + '">View the wall →</a></p></body>'
@@ -217,8 +240,30 @@ function submitPledge_(data) {
   };
 
   getPledgeSheet_().appendRow(PLEDGE_HEADERS.map(h => pledge[h]));
-  notifyModeratorPledge_(pledge);
+  // The pledge is already saved — HQ's queue picks it up on its next refresh.
+  // The email is opt-in (CONFIG.PLEDGE_EMAIL_NOTIFY) precisely so a busy inbox
+  // isn't the review tool.
+  if (CONFIG.PLEDGE_EMAIL_NOTIFY) notifyModeratorPledge_(pledge);
   return { result: 'success', id: id };
+}
+
+// Moderator list: EVERY pledge, newest first — the queue FinMango HQ paints.
+// Same shape as the public list plus the fields a reviewer needs (status,
+// whether the signer opted into the wall, who decided it). Photos travel as
+// Drive file ids so HQ renders them through /pledge-photo like the wall does.
+function listPledgesForModeration_(status) {
+  return readRowsFrom_(getPledgeSheet_())
+    .filter(r => status === 'all' ? true : String(r.status || 'pending') === status)
+    .map(r => {
+      const p = publicPledge_(r);
+      p.status = String(r.status || 'pending');
+      p.showOnWall = (r.showOnWall === 'yes' || r.showOnWall === true);
+      p.moderatedBy = String(r.moderatedBy || '');
+      return p;
+    })
+    // Sorted after mapping, where createdAt is always an ISO string (Sheets
+    // hands back Dates for some rows, whose String() form doesn't sort).
+    .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
 }
 
 // Public list: approved pledges whose signer opted into the wall, newest first.

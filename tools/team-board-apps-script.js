@@ -48,6 +48,13 @@ const CONFIG = {
   // "not wired up" note and the standalone post-review.html panel still works.
   POSTS_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyw06JczRZVwdf3vw70xeshZ_shp2J1zzvPvPqhR-2_FSqzSBFaq0Yu-OZ7KjKYfCuthQ/exec',
   POSTS_REVIEW_KEY: 'REPLACE_WITH_POSTS_REVIEW_KEY',
+  // Pledge Wall bridge: same idea for get-involved.html#pledge submissions, so
+  // the whole team reviews them in HQ instead of one inbox. The Community
+  // Wall's MODERATION_KEY stays HERE (server-side) — being signed in to HQ is
+  // the credential. Until the key is set, HQ's 🤝 Pledge Wall tab shows a
+  // "not wired up" note and the email approve/reject links still work.
+  WALL_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyogpgQ2naRVxs1LK1opqJywYZq0k9JpD7C9dLeKPqMs3BFikOh527QKuOCB6n3q1fHfQ/exec',
+  WALL_MODERATION_KEY: 'REPLACE_WITH_WALL_MODERATION_KEY',
   // Author emails (approvals, change requests) are signed by — and reply to —
   // whoever is signed in to HQ when they click the button. This address is the
   // fallback for the shared-key door, where there's no signed-in identity.
@@ -131,6 +138,18 @@ function doPost(e) {
       if (typeof data.title === 'string') upd.title = data.title;
       if (typeof data.body === 'string') upd.body = data.body;
       return json(postsBridgePost_(upd));
+    }
+    // --- Pledge Wall reviews bridge (HQ-authenticated) ---
+    if (data.action === 'pledges-list') {
+      requireAuth_(data);
+      return json(wallBridge_({ action: 'pledge-list', status: String(data.status || 'all') }));
+    }
+    if (data.action === 'pledges-moderate') {
+      requireAuth_(data);
+      // `by` is stamped into the row's moderatedBy cell, so the Sheet and HQ
+      // both show who decided each pledge.
+      return json(wallBridge_({ action: 'moderate', id: String(data.id || ''),
+        decision: String(data.decision || ''), by: String(data.reviewer || 'HQ team') }));
     }
     return json({ result: 'error', error: 'Unknown action' });
   } catch (err) {
@@ -402,6 +421,24 @@ function postsBridgePost_(payload) {
   });
   try { return JSON.parse(res.getContentText()); }
   catch (err) { throw new Error('Posts backend unavailable'); }
+}
+
+// Same bridge, pointed at the Community Wall backend: HQ's Pledge Wall tab
+// lists and moderates pledges without ever holding that script's moderation
+// key. Everything the wall script exposes here is GET-shaped and small, so
+// there's no POST variant to mirror.
+function wallBridge_(params) {
+  if (CONFIG.WALL_MODERATION_KEY.indexOf('REPLACE_WITH') === 0) {
+    throw new Error('Pledge reviews not configured');
+  }
+  params.key = CONFIG.WALL_MODERATION_KEY;
+  const qs = Object.keys(params).map(function (k) {
+    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+  }).join('&');
+  const res = UrlFetchApp.fetch(CONFIG.WALL_APPS_SCRIPT_URL + '?' + qs,
+    { muteHttpExceptions: true, followRedirects: true });
+  try { return JSON.parse(res.getContentText()); }
+  catch (err) { throw new Error('Community Wall backend unavailable'); }
 }
 
 // Email the author the reviewer's change request. Sent from this (HQ) script

@@ -15,6 +15,7 @@ Notes, but lighter — no Drive folder, no images).
 | `pledge-wall.html` | The Pledge Wall (see "The Pledge Wall" below) | Everyone |
 | `get-involved.html#pledge` | The "take the pledge" form | Everyone |
 | `tools/community-wall-apps-script.js` | The backend for both walls (deploy to Apps Script) | One-time setup |
+| `team-board.html` → 🤝 **Pledge Wall** | The team's pledge review queue (see "Reviewing pledges in HQ") | Team |
 | `functions/api/wall.js` | Cloudflare edge layer: same-origin, cached reads | Auto (no setup) |
 | `functions/pledge-photo.js` | Cloudflare edge layer: cached pledge photos | Auto (no setup) |
 
@@ -82,7 +83,10 @@ Two equally valid ways:
   this automatically.)
 
 There's also a JSON moderation endpoint if a review UI is ever wanted:
-`GET …/exec?action=list&status=pending&key=MODERATION_KEY`.
+`GET …/exec?action=list&status=pending&key=MODERATION_KEY`. Its pledge
+equivalent — `action=pledge-list` — is what FinMango HQ's review tab reads.
+
+(That's for **stories**. Pledges are reviewed in HQ — see below.)
 
 ## The Pledge Wall
 
@@ -98,27 +102,59 @@ their card may appear on the public Pledge Wall.
 > permission), then Deploy → Manage deployments → ✏️ Edit → **New version** →
 > Deploy. The /exec URL doesn't change. Until this is done, pledge
 > submissions are silently dropped (`Unknown action`) — redeploy before (or
-> with) shipping the site update.
+> with) shipping the site update. The same applies to the HQ review queue: it
+> reads the `pledge-list` action, which only exists in the current version, and
+> the deployed copy is also what decides whether pledge emails still go out
+> (`CONFIG.PLEDGE_EMAIL_NOTIFY`, now `false`).
 
 ### How pledges flow
 
 1. A visitor signs on `get-involved.html#pledge`. The pledge lands in the
    Sheet's **Pledges** tab with status = `pending`; the photo (if any) is
    saved to the Drive folder and its link stored in the row.
-2. The moderator email shows the barrier, the note, the photo, and whether
-   the signer **opted into the public wall**:
-   - Opted in → the ✓ Approve link publishes the card to `pledge-wall.html`
-     (within ~2 minutes, edge cache). Same content checks as stories: no
-     full names or personal identifiers in the note, and the photo must be
-     appropriate — when in doubt, reject.
-   - Not opted in → nothing to do. The pledge is counted but never shown,
-     regardless of status.
+2. It shows up in the **🤝 Pledge Wall** queue in FinMango HQ, where anyone on
+   the team can approve or reject it (next section). No email is sent — the
+   queue *is* the notification.
 3. `pledge-wall.html` shows approved, opted-in pledges (plus its permanent
    seed pledges), filterable by barrier. Photos are served through the
    edge-cached `/pledge-photo` function, not straight from Drive.
 
-To count pledges (including private ones), just look at the Pledges tab —
-the `barrier` column makes per-barrier counts a one-click filter.
+### Reviewing pledges in HQ
+
+Open **finmango.org/team-board** → sidebar **Review** → **🤝 Pledge Wall**. The
+badge counts pledges waiting on a decision. Each row shows the signer's first
+name, location, barrier, their "why" note, and their photo (tap it for full
+size), plus whether they opted into the public wall:
+
+- **🌐 public** — ✓ Approve publishes the card to `pledge-wall.html` within a
+  minute. Same content checks as stories: no full names or personal
+  identifiers in the note, and the photo must be appropriate — when in doubt,
+  reject. ✗ Reject keeps it counted but unseen.
+- **🔒 private** — nothing to review. These are listed under a collapsed
+  "Private pledges" toggle purely so the count is visible; they can never
+  appear on the wall whatever their status.
+
+Approved cards can be pulled back down (**✗ Take down**) or returned to the
+queue (**↩ Back to pending**), and a rejected pledge can be approved later —
+nothing is destructive, and every decision is tagged with who made it, in HQ
+and in the Sheet's `moderatedBy` column. The header line ("N pledges signed ·
+N on the wall · N kept private") is the running total, private ones included.
+
+**Setup:** this needs `WALL_MODERATION_KEY` set in the *Team Board* Apps Script
+(see the "Review queues" section of `docs/TEAM-BOARD-SETUP.md`) — HQ holds the
+key server-side so reviewers never see it. Until it's set, the tab shows a
+config note and the two fallbacks below still work.
+
+**Fallbacks.** The Sheet is always editable by hand (`status`: `pending` →
+`approved` / `rejected`), and the email approve/reject links can be turned
+back on by flipping `CONFIG.PLEDGE_EMAIL_NOTIFY` to `true` in the Community
+Wall script — worth doing temporarily if HQ is down or the pledge queue needs
+watching from a phone. Community Wall *stories* are unaffected either way:
+they still email `MODERATOR_EMAIL` with one-click links.
+
+To count pledges (including private ones), the HQ header line has the totals,
+or look at the Pledges tab — the `barrier` column makes per-barrier counts a
+one-click filter.
 
 Never move pledge rows onto the Wall tab or vice versa: ids are prefixed
 (`p-` pledges, `w-` stories) and the moderation links route on that prefix.
@@ -133,6 +169,10 @@ Never move pledge rows onto the Wall tab or vice versa: ids are prefixed
   submitters not to include them, but check before approving).
 - A hidden **honeypot** field silently drops naive bots; the moderation queue
   catches the rest.
+- **Anyone who can reach FinMango HQ can approve a pledge onto the public
+  wall** — that's the point (review shouldn't wait on one person), but it does
+  mean the HQ team key is as sensitive as the moderation key. Decisions are
+  attributed, so sign in with Google rather than the shared key.
 - Hearts are unauthenticated by design (one per browser via localStorage) —
   they're a warmth signal, not a metric. The count lags up to ~2 minutes
   behind reality because of the edge cache.
@@ -161,3 +201,12 @@ production).
   can't read the response), so confirm a row appeared in the Sheet.
 - **Approve link says "Unauthorized"** — the key in the email link no longer
   matches `CONFIG.MODERATION_KEY` (redeploy after changing it).
+- **HQ's Pledge Wall tab says "one config step left"** — `WALL_MODERATION_KEY`
+  in the *Team Board* Apps Script is still the placeholder, or that script
+  wasn't redeployed after it was set.
+- **HQ's Pledge Wall tab can't reach the backend** — usually this script wasn't
+  redeployed since `pledge-list` was added (it answers `Unknown action`), or
+  `WALL_MODERATION_KEY` doesn't match this script's `MODERATION_KEY`.
+- **No more pledge emails** — that's the default now
+  (`CONFIG.PLEDGE_EMAIL_NOTIFY: false`); pledges are reviewed in HQ. Flip it to
+  `true` and redeploy to get the email links back alongside the queue.
