@@ -4004,7 +4004,9 @@
     // straight from localStorage while a live fetch refreshes behind it (two
     // Apps Script cold starts per call, so nobody should wait on it).
     var pledges = { rows: null, loading: false, refreshing: false, error: null,
-      showRejected: false, showPrivate: false, showAllLive: false };
+      showRejected: false, showPrivate: false, showAllLive: false,
+      // decisions painted on screen but not yet confirmed by the backend
+      pending: {} };
     try {
       var cachedPledges = JSON.parse(localStorage.getItem(LS_PLEDGES) || 'null');
       if (cachedPledges && cachedPledges.rows) pledges.rows = cachedPledges.rows;
@@ -4024,6 +4026,13 @@
           if (!pledges.rows) pledges.error = String(res.error || 'unreachable');
         } else {
           pledges.rows = res.pledges || [];
+          // A decision still in flight has already been painted on its row. This
+          // list predates it, so re-apply it rather than flickering back to the
+          // old status until that decision's own response arrives.
+          Object.keys(pledges.pending).forEach(function (pid) {
+            var p = pledges.rows.find(function (x) { return x.id === pid; });
+            if (p) Object.keys(pledges.pending[pid]).forEach(function (k) { p[k] = pledges.pending[pid][k]; });
+          });
           try { localStorage.setItem(LS_PLEDGES, JSON.stringify({ t: now(), rows: pledges.rows })); } catch (e) {}
         }
         updatePledgeCount();
@@ -4040,6 +4049,35 @@
     // to be handled: a bare fetch() rejects outside try/catch when offline.
     function primeWallCache() {
       try { fetch('/api/wall?action=pledges&refresh=1').catch(function () {}); } catch (e) {}
+    }
+    // ----- optimistic decisions (mirrors the Ambassador Notes queue) -----
+    // Approving is a decision, not a request for one, but the round trip behind
+    // it runs long enough that an unchanged row reads as "did that work?". So
+    // paint the outcome now, mark it ⏳ while it's in flight, and roll it back if
+    // the server disagrees.
+    var PLEDGE_ROW_KEYS = ['status', 'moderatedBy', 'publishedAt'];
+    function snapshotPledgeRow(id) {
+      var p = (pledges.rows || []).find(function (x) { return x.id === id; });
+      if (!p) return null;
+      var snap = {};
+      PLEDGE_ROW_KEYS.forEach(function (k) { snap[k] = p[k]; });
+      return snap;
+    }
+    function patchPledgeRow(id, patch) {
+      var p = (pledges.rows || []).find(function (x) { return x.id === id; });
+      if (!p) return;
+      Object.keys(patch).forEach(function (k) {
+        if (patch[k] === undefined) delete p[k]; else p[k] = patch[k];
+      });
+      try { localStorage.setItem(LS_PLEDGES, JSON.stringify({ t: now(), rows: pledges.rows })); } catch (e) {}
+      updatePledgeCount();
+      if (ui.view === 'pledges') render();
+    }
+    function pledgeOptimistic(decision, reviewer) {
+      var at = new Date(now()).toISOString();
+      if (decision === 'approve') return { status: 'approved', moderatedBy: reviewer, publishedAt: at };
+      if (decision === 'reject') return { status: 'rejected', moderatedBy: reviewer, publishedAt: '' };
+      return { status: 'pending', moderatedBy: '', publishedAt: '' }; // back to the queue
     }
     // Only pledges that can actually reach the wall need a decision: a signer
     // who didn't opt in is counted but never shown, whatever the status says.
@@ -4067,6 +4105,8 @@
       return chips;
     }
     function pledgeRow(p, readonly) {
+      var saving = !!pledges.pending[p.id];
+      var dis = saving ? ' disabled' : '';
       var st = PL_STATUS[p.status] || [String(p.status || 'pending'), '#9A9A93'];
       // "On the wall" would be a lie for a private pledge that happens to be
       // marked approved (e.g. decided from an old email link).
@@ -4077,7 +4117,9 @@
         + '<div class="pr-head">'
         + '<span class="pr-title">' + esc(p.name || 'Anonymous') + '</span>'
         + '<span class="pr-tags"><span class="status-chip"><span class="col-dot" style="background:' + st[1] + '"></span>'
-        + esc(st[0]) + '</span>' + pledgeTags(p) + '</span></div>'
+        + esc(st[0]) + '</span>'
+        + (saving ? '<span class="who-chip plain" title="Recording the decision — a few seconds">⏳ saving</span>' : '')
+        + pledgeTags(p) + '</span></div>'
         + '<div class="pr-meta">' + esc(p.location || 'Location unknown')
         + ' · standing against <strong>' + esc(p.barrier || '—') + '</strong>'
         + (when ? ' · ' + esc(when) : '') + '</div>'
@@ -4110,14 +4152,17 @@
         + (readonly
           ? '<p class="help-note" style="margin:.45rem 0 0;">Nothing to review — this signer kept their pledge private, so it never appears on the wall.</p>'
           : '<div class="pr-actions">'
-            + (p.status !== 'approved' ? '<button class="btn-sm primary" data-pl="approve">✓ Approve — show on the wall</button>' : '')
-            + (p.status !== 'rejected' ? '<button class="btn-sm danger" data-pl="reject">✗ ' + (p.status === 'approved' ? 'Take down' : 'Reject') + '</button>' : '')
-            + (p.status !== 'pending' ? '<button class="btn-sm ghost" data-pl="pending">↩ Back to pending</button>' : '')
+            // disabled while a decision is in flight, so a double-click can't
+            // queue a second, contradictory vote on the same row
+            + (p.status !== 'approved' ? '<button class="btn-sm primary" data-pl="approve"' + dis + '>✓ Approve — show on the wall</button>' : '')
+            + (p.status !== 'rejected' ? '<button class="btn-sm danger" data-pl="reject"' + dis + '>✗ ' + (p.status === 'approved' ? 'Take down' : 'Reject') + '</button>' : '')
+            + (p.status !== 'pending' ? '<button class="btn-sm ghost" data-pl="pending"' + dis + '>↩ Back to pending</button>' : '')
             + (p.status === 'approved' ? '<a class="btn-sm ghost" href="pledge-wall.html" target="_blank" rel="noopener">View the wall ↗</a>' : '')
             + '</div>')
         + '</div>';
     }
     function pledgeAction(id, decision, btn) {
+      if (pledges.pending[id]) { toast('Still saving that one — one moment'); return; }
       var m = me();
       var p0 = (pledges.rows || []).find(function (x) { return x.id === id; });
       // Pulling a card off a public wall is visible to anyone looking at it —
@@ -4126,20 +4171,37 @@
         if (!confirm('This pledge is on the public Pledge Wall right now.\n\n'
           + (decision === 'reject' ? 'Take it down?' : 'Move it back to pending? That takes it off the wall too.'))) return;
       }
-      if (btn) btn.disabled = true;
-      postsApi({ action: 'pledges-moderate', id: id, decision: decision, reviewer: m ? m.name : 'HQ team' })
+      // Paint the decision, then send it. The row moves to its new section
+      // immediately instead of after two sequential Apps Script round trips
+      // (the vote, then a full re-list) with a dead button in between.
+      var reviewer = m ? m.name : 'HQ team';
+      var undo = snapshotPledgeRow(id);
+      pledges.pending[id] = pledgeOptimistic(decision, reviewer);
+      patchPledgeRow(id, pledges.pending[id]);
+      postsApi({ action: 'pledges-moderate', id: id, decision: decision, reviewer: reviewer })
         .then(function (res) {
+          delete pledges.pending[id];
           if (res.result === 'success') {
             primeWallCache();
             toast(decision === 'approve' ? 'Approved ✓ — on finmango.org/pledge-wall within a minute'
               : decision === 'reject' ? 'Rejected — this card never appears on the wall'
               : 'Back in the queue ↩');
-            loadPledges();
+            if (ui.view === 'pledges') render(); // drop the ⏳ marker
+            loadPledges();                       // reconcile in the background
           } else {
-            if (btn) btn.disabled = false;
+            // The optimistic row was wrong — put it back the way it was.
+            restorePledgeRow(id, undo);
             toast(String(res.error || 'That didn\'t work — try again'));
           }
-        }).catch(function () { if (btn) btn.disabled = false; toast('Network hiccup — try again'); });
+        }).catch(function () {
+          delete pledges.pending[id];
+          restorePledgeRow(id, undo);
+          toast('Network hiccup — try again');
+        });
+    }
+    function restorePledgeRow(id, snap) {
+      if (!snap) { if (ui.view === 'pledges') render(); return; }
+      patchPledgeRow(id, snap);
     }
     // ===== PHOTO CROPPER =====
     // Crop and rotate a signer's photo in the browser, then hand the re-encoded
