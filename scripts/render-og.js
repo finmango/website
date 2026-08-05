@@ -1,9 +1,13 @@
-// Renders the OG image template to og-image.png at 1200x630.
+// Renders an OG image template to a PNG at 1200x630.
 // Renders at 2x for crisp text, then downscales to 1200x630 with palette
 // compression (needs sharp: npm i --no-save sharp) so the file stays small —
-// this image loads on every social share of every page.
+// these images load on every social share.
 // Fonts are bundled in scripts/fonts/, so no network access is needed.
-// Usage: node scripts/render-og.js
+//
+// Usage: node scripts/render-og.js [template] [output]
+//   node scripts/render-og.js                       → site-wide og-image.png
+//   node scripts/render-og.js pledge-wall           → og-pledge-wall.png
+//   node scripts/render-og.js <path.html> <out.png> → anything else
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -12,8 +16,25 @@ let puppeteer;
 try { puppeteer = require('puppeteer'); }
 catch { puppeteer = require('puppeteer-core'); }
 
-const TEMPLATE = path.resolve(__dirname, 'og-image-template.html');
-const OUTPUT = path.resolve(__dirname, '..', 'og-image.png');
+// Shorthand names keep the common renders memorable; a bare path still works.
+const TARGETS = {
+  default: { template: 'og-image-template.html', output: 'og-image.png' },
+  'pledge-wall': { template: 'og-pledge-wall-template.html', output: 'og-pledge-wall.png' },
+};
+
+const [nameArg, outArg] = process.argv.slice(2);
+const target = TARGETS[nameArg || 'default'];
+if (!target && !nameArg.endsWith('.html')) {
+  console.error(`Unknown target "${nameArg}". Known: ${Object.keys(TARGETS).join(', ')}, or a path to a template .html.`);
+  process.exit(1);
+}
+
+const TEMPLATE = target
+  ? path.resolve(__dirname, target.template)
+  : path.resolve(process.cwd(), nameArg);
+const OUTPUT = outArg
+  ? path.resolve(process.cwd(), outArg)
+  : path.resolve(__dirname, '..', target ? target.output : path.basename(TEMPLATE, '.html') + '.png');
 
 function findChrome() {
   const candidates = [

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>FinMango — Pledge Wall OG Image</title>
+<style>
+  /* Local fonts so renders are hermetic (no network needed in CI/sandboxes).
+     dm-sans-var.woff2 is the variable latin subset (wght 100–1000). */
+  @font-face {
+    font-family: 'DM Sans';
+    src: url('fonts/dm-sans-var.woff2') format('woff2');
+    font-weight: 100 1000;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'JetBrains Mono';
+    src: url('fonts/jetbrains-mono-500.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  /* Editorial system — same tokens as pledge-wall.html */
+  :root {
+    --paper: #FAFAF7;
+    --card: #FFFFFF;
+    --ink: #0A0A0A;
+    --orange: #FF6B35;
+    --orange-deep: #E5511B;
+    --ink-dim: rgba(10, 10, 10, .62);
+    --ink-faint: rgba(10, 10, 10, .38);
+    --ink-line: rgba(10, 10, 10, .1);
+    --ink-line-soft: rgba(10, 10, 10, .07);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1200px; height: 630px;
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  #capture {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    background: var(--paper);
+    overflow: hidden;
+    padding: 46px 64px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Soft orange glow, as on the hero */
+  .glow {
+    position: absolute;
+    right: -14%;
+    top: -34%;
+    width: 760px;
+    height: 760px;
+    background: radial-gradient(circle, rgba(255, 107, 53, .12) 0%, transparent 62%);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+
+  .top-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand-logo { height: 46px; width: auto; display: block; }
+  .status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 11px;
+  }
+  /* The wall is live — same pulse dot the page header carries */
+  .status .dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 0 5px rgba(255, 107, 53, .16);
+  }
+
+  /* ---- middle: headline left, a fan of real pledge cards right ---- */
+  .mid {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex: 1;
+    padding: 18px 0 8px;
+  }
+
+  .copy { width: 610px; flex: none; }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--orange-deep);
+    margin-bottom: 18px;
+  }
+  .headline {
+    font-size: 92px;
+    font-weight: 900;
+    line-height: .93;
+    letter-spacing: -.05em;
+    margin-bottom: 22px;
+  }
+  .headline em {
+    font-style: normal;
+    color: var(--orange);
+    position: relative;
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .headline em svg.hand-stroke {
+    position: absolute;
+    left: -1%;
+    bottom: -.07em;
+    width: 102%;
+    height: .14em;
+  }
+  .headline em svg.hand-stroke path {
+    stroke: var(--orange);
+    stroke-width: 5;
+    stroke-linecap: round;
+    fill: none;
+    opacity: .5;
+  }
+  .sub {
+    font-size: 25px;
+    font-weight: 300;
+    line-height: 1.42;
+    letter-spacing: -.015em;
+    color: var(--ink-dim);
+    max-width: 25ch;
+  }
+  .sub strong { color: var(--ink); font-weight: 500; }
+
+  /* Cards read as the wall itself: white plates, hairline, soft lift. */
+  .fan {
+    position: relative;
+    flex: 1;
+    height: 100%;
+  }
+  .mini {
+    position: absolute;
+    width: 356px;
+    border: 1px solid var(--ink-line);
+    background: var(--card);
+    box-shadow: 0 14px 34px rgba(10, 10, 10, .09);
+    padding: 17px 19px 14px;
+  }
+  .mini.a { top: 0;     left: 38px; transform: rotate(-2.1deg); }
+  .mini.b { top: 166px; left: 8px;  transform: rotate(1.4deg); z-index: 2; }
+  .mini.c { top: 314px; left: 48px; transform: rotate(-.9deg); }
+
+  .m-barrier {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .13em;
+    color: var(--orange-deep);
+    background: rgba(255, 107, 53, .1);
+    display: inline-block;
+    padding: 5px 9px;
+    margin-bottom: 13px;
+  }
+  .m-why {
+    font-size: 16px;
+    line-height: 1.45;
+    letter-spacing: -.01em;
+    color: var(--ink);
+    /* even line lengths — a one-word orphan reads as a layout bug at
+       thumbnail size, where most people see this image */
+    text-wrap: balance;
+  }
+  .m-why::before { content: '\201C'; color: var(--orange); font-weight: 900; }
+  .m-why::after  { content: '\201D'; color: var(--orange); font-weight: 900; }
+  .m-foot {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-top: 13px;
+    padding-top: 11px;
+    border-top: 1px solid var(--ink-line-soft);
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+  .m-foot strong { color: var(--ink); font-weight: 700; font-size: 14px; letter-spacing: -.01em; }
+
+  /* Card three is a signature-only pledge — flat on the paper, like the page */
+  .mini.quiet {
+    background: transparent;
+    box-shadow: none;
+    padding: 16px 18px;
+  }
+  .mini.quiet .m-barrier { margin-bottom: 11px; }
+  .mini.quiet .m-foot { margin-top: 0; padding-top: 0; border-top: none; }
+
+  /* Paper edge behind the fan so the cards read as a wall that continues */
+  .fade {
+    position: absolute;
+    right: -64px; top: -8px; bottom: -40px;
+    width: 120px;
+    background: linear-gradient(90deg, transparent, var(--paper) 62%);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .bottom-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    border-top: 1px solid var(--ink-line);
+    padding-top: 22px;
+  }
+  .barriers {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+  .chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--ink-dim);
+    border: 1px solid var(--ink-line);
+    padding: 7px 9px;
+    white-space: nowrap;
+  }
+  .chip.on { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .url {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+  }
+  .url .tick {
+    width: 26px; height: 2px;
+    background: var(--orange);
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+<div id="capture">
+  <div class="glow"></div>
+
+  <div class="top-row">
+    <img class="brand-logo" src="../finmango.png" alt="FinMango" />
+    <span class="status"><span class="dot"></span>The Pledge Wall · Live</span>
+  </div>
+
+  <div class="mid">
+    <div class="copy">
+      <div class="eyebrow">The movement, signed</div>
+      <h1 class="headline">
+        Add your <em>name.<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em>
+      </h1>
+      <p class="sub">
+        Real people standing against the <strong>systemic barriers</strong> to financial health. Signing takes 30 seconds.
+      </p>
+    </div>
+
+    <div class="fan">
+      <div class="mini a">
+        <span class="m-barrier">Housing</span>
+        <p class="m-why">Our rent went up $180 with thirty days' notice.</p>
+        <div class="m-foot"><strong>Maya</strong> · Cleveland, Ohio</div>
+      </div>
+      <div class="mini b">
+        <span class="m-barrier">Work &amp; income</span>
+        <p class="m-why">My raise was 3%. My rent's was 11%.</p>
+        <div class="m-foot"><strong>Nia</strong> · Atlanta, Georgia</div>
+      </div>
+      <div class="mini c quiet">
+        <span class="m-barrier">Healthcare costs</span>
+        <div class="m-foot"><strong>Devon</strong> · Phoenix, Arizona</div>
+      </div>
+      <div class="fade"></div>
+    </div>
+  </div>
+
+  <div class="bottom-row">
+    <div class="barriers">
+      <span class="chip on">All barriers</span>
+      <span class="chip">Housing</span>
+      <span class="chip">Healthcare</span>
+      <span class="chip">Debt &amp; credit</span>
+      <span class="chip">Food access</span>
+      <span class="chip">Work</span>
+      <span class="chip">Education</span>
+    </div>
+    <div class="url"><span class="tick"></span>finmango.org/pledge-wall</div>
+  </div>
+</div>
+</body>
+</html>
