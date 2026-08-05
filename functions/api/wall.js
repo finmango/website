@@ -15,8 +15,17 @@ import { WALL_APPS_SCRIPT_URL, jsonResponse } from '../_shared.js';
 
 // Hearts and new approvals should show up reasonably fast, so the wall uses a
 // shorter logical TTL than the posts proxy.
-const WALL_TTL = 120; // seconds
-const SWR = 86400;    // how long the edge may serve stale while revalidating
+const WALL_TTL = 120; // seconds a cached copy counts as fresh
+// Past the TTL a stale copy may still answer *once* while a refresh runs behind
+// it — that's what hides an Apps Script cold start. But only within this grace
+// window: beyond it, staleness is the worse problem and the request waits for
+// real data. Without a bound, a low-traffic colo could sit on an old list for
+// hours, because the visitor who triggers the refresh never sees its result and
+// `caches.default` is per-datacentre, so HQ re-priming after a decision only
+// fixes the one colo the reviewer's browser happened to hit. An approved pledge
+// really was ~26 minutes late to the wall this way.
+const WALL_GRACE = 120; // seconds past the TTL that stale may still answer
+const SWR = WALL_TTL + WALL_GRACE; // what downstream caches are told
 
 const PUBLIC_ACTIONS = new Set(['approved', 'pledges']);
 
@@ -53,7 +62,11 @@ export async function onRequestGet(context) {
       status: 200,
       headers: {
         'content-type': 'application/json; charset=utf-8',
-        'cache-control': `public, max-age=${WALL_TTL}, s-maxage=${SWR}, stale-while-revalidate=${SWR}`,
+        // Short browser max-age so a reviewer checking whether their approval
+        // landed isn't answered by their own cache, and s-maxage bounded to the
+        // same window this function serves stale for — it used to be 24h, which
+        // let caches in front of us hold a decision back for a day.
+        'cache-control': `public, max-age=30, s-maxage=${WALL_TTL}, stale-while-revalidate=${WALL_GRACE}`,
         'access-control-allow-origin': '*',
         'x-cached-at': String(Date.now())
       }
@@ -72,19 +85,26 @@ export async function onRequestGet(context) {
 
   const hit = await cache.match(cacheKey);
   if (hit) {
-    // Serve the cached copy immediately; refresh in the background once it's
-    // older than WALL_TTL so the next visitor gets fresh data.
-    const cachedAt = Number(hit.headers.get('x-cached-at')) || 0;
-    const isStale = (Date.now() - cachedAt) > WALL_TTL * 1000;
-    if (isStale) {
+    const age = Date.now() - (Number(hit.headers.get('x-cached-at')) || 0);
+    if (age <= WALL_TTL * 1000) return hit; // still fresh
+    if (age <= (WALL_TTL + WALL_GRACE) * 1000) {
+      // Just past it: answer now, refresh behind this response so the next
+      // visitor to this colo gets the new list.
       waitUntil((async () => {
         try {
           const fresh = await fetchFresh();
           if (fresh) await cache.put(cacheKey, fresh.clone());
         } catch (e) { /* keep serving the stale copy */ }
       })());
+      return hit;
     }
-    return hit;
+    // Too old to pass off as current — wait for real data, and fall back to the
+    // stale copy only if the backend is actually down.
+    let fresh = null;
+    try { fresh = await fetchFresh(); } catch (e) { fresh = null; }
+    if (!fresh) return hit;
+    waitUntil(cache.put(cacheKey, fresh.clone()));
+    return fresh;
   }
 
   let res;
