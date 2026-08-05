@@ -548,6 +548,39 @@
       border-color: var(--orange);
       box-shadow: var(--shadow-card-hover);
     }
+    /* ===== SHARE A CARD =====
+       Every card can be passed on. On a phone the generated image goes straight
+       into the native share sheet (which is the only route to Instagram
+       Stories); on desktop the popover offers the networks plus a download,
+       because X/LinkedIn/Threads links cannot carry an image. */
+    .pc-share {
+      flex-shrink: 0; margin-left: auto; display: inline-flex; align-items: center; gap: .28rem;
+      font-family: var(--font-body); font-size: .68rem; font-weight: 600; letter-spacing: .02em;
+      color: var(--ink-dim); background: none; border: 1px solid var(--ink-line); border-radius: 99px;
+      padding: .16rem .5rem; cursor: pointer; transition: color .15s, border-color .15s;
+    }
+    .pc-share:hover { color: var(--orange); border-color: var(--orange); }
+    .pc-share svg { width: 11px; height: 11px; }
+    .share-back {
+      position: fixed; inset: 0; z-index: 120; background: rgba(10,10,10,.5);
+      display: flex; align-items: center; justify-content: center; padding: 1.2rem;
+    }
+    .share-pop {
+      background: var(--card); border-radius: 12px; width: 100%; max-width: 360px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.28); overflow: hidden; text-align: left;
+    }
+    .share-pop h3 { font-size: .95rem; font-weight: 800; letter-spacing: -.02em; padding: .9rem 1rem .1rem; }
+    .share-pop p { font-size: .78rem; font-weight: 300; color: var(--ink-dim); line-height: 1.5; padding: 0 1rem .7rem; }
+    .share-list { display: flex; flex-direction: column; border-top: 1px solid var(--ink-line); }
+    .share-list a, .share-list button {
+      font-family: var(--font-body); font-size: .85rem; font-weight: 500; color: var(--ink);
+      text-align: left; background: none; border: 0; border-bottom: 1px solid var(--ink-line);
+      padding: .7rem 1rem; cursor: pointer; text-decoration: none; display: flex; gap: .5rem; align-items: center;
+    }
+    .share-list a:hover, .share-list button:hover { background: rgba(255,107,53,.06); color: var(--orange); }
+    .share-list .share-close { border-bottom: 0; justify-content: center; color: var(--ink-faint); font-size: .78rem; }
+    .share-note { font-size: .7rem; color: var(--ink-faint); padding: .55rem 1rem; line-height: 1.45; }
+
     /* photo cards get the .moment-style plate frame */
     .pledge-card.has-photo { padding: .6rem; }
     .pc-photo {
@@ -1234,16 +1267,231 @@
           '<div class="pc-foot">' +
             '<span><strong>' + escapeHtml(p.name || 'Anonymous') + '</strong> · ' + escapeHtml(p.location) + '</span>' +
             (date ? '<span class="pc-date">' + escapeHtml(date) + '</span>' : '') +
+            '<button class="pc-share" data-share="' + escapeHtml(p.id) + '" type="button"'
+              + ' aria-label="Share ' + escapeHtml(p.name || 'this') + '’s pledge">'
+              + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"'
+              + ' stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7"/>'
+              + '<path d="M12 3v13M7 8l5-5 5 5"/></svg>Share</button>' +
           '</div>' +
         '</div></article>';
     }
 
+    // ===== SHARING A CARD =====
+    // The card is redrawn on a canvas rather than screenshotted, so the shared
+    // image can be properly sized for a feed (and for Stories) and carry the
+    // call to action. Photos come through same-origin /pledge-photo, so the
+    // canvas stays untainted and toBlob works — reading pixels straight from
+    // drive.google.com would throw.
+    const WALL_INDEX = new Map();
+    const SHARE_URL = 'https://www.finmango.org/pledge-wall';
+    const SHARE_SHAPES = { post: [1080, 1350], story: [1080, 1920] };
+
+    // Third person on purpose: most people sharing a card didn't sign it, and a
+    // first-person caption would put words in a stranger's mouth.
+    function shareCaption(p) {
+      const who = (p.name || 'Someone').trim();
+      const where = (p.location || '').trim();
+      const lead = who + (where ? ' in ' + where : '') + ' is standing against ' + p.barrier
+        + ' as a barrier to financial health.';
+      return lead + ' Financial stress isn’t a personal failing. Add your name:';
+    }
+
+    function wrapLines(ctx, text, maxWidth, maxLines) {
+      const words = String(text).split(/\s+/).filter(Boolean);
+      const lines = [];
+      let line = '';
+      for (const w of words) {
+        const next = line ? line + ' ' + w : w;
+        if (ctx.measureText(next).width <= maxWidth || !line) { line = next; continue; }
+        lines.push(line); line = w;
+        if (lines.length === maxLines) break;
+      }
+      if (lines.length < maxLines && line) lines.push(line);
+      // If it didn't all fit, mark the truncation rather than cutting mid-thought.
+      if (lines.length === maxLines) {
+        const used = lines.join(' ').split(/\s+/).length;
+        if (used < words.length) {
+          let last = lines[maxLines - 1];
+          while (last && ctx.measureText(last + '…').width > maxWidth) {
+            last = last.replace(/\s*\S+$/, '');
+          }
+          lines[maxLines - 1] = (last || '') + '…';
+        }
+      }
+      return lines;
+    }
+
+    function loadShareImage(src) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => resolve(null); // a missing photo just means a text card
+        img.src = src;
+      });
+    }
+
+    async function drawShareCard(p, shape) {
+      const [W, H] = SHARE_SHAPES[shape] || SHARE_SHAPES.post;
+      const c = document.createElement('canvas');
+      c.width = W; c.height = H;
+      const ctx = c.getContext('2d');
+      const F = "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+      try { if (document.fonts && document.fonts.ready) await document.fonts.ready; } catch (e) {}
+
+      ctx.fillStyle = '#FAFAF7'; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = '#FF6B35'; ctx.fillRect(0, 0, W, 14);
+
+      const pad = 84;
+      const inner = W - pad * 2;
+      const QUOTE_LH = 76;
+      // The footer is pinned first and everything above is sized from what's
+      // left, so a long quote can never run over the call to action — it just
+      // gets fewer lines. Deriving positions the other way round is what let the
+      // quote print straight through "Take the pledge".
+      const ruleY = H - 270;   // hairline above the signer's name
+      const nameY = ruleY + 58;
+      const takeY = H - 124;   // clear of the name, not crowding it
+      const linkY = H - 68;
+      const why = String(p.why || '').trim();
+      let y = shape === 'story' ? 300 : 140;
+
+      const photo = p.photoId
+        ? await loadShareImage('/pledge-photo?id=' + encodeURIComponent(p.photoId) + '&w=1200')
+        : null;
+      if (photo) {
+        // Cover-crop, ideally the 4:3 plate the wall uses — but never more than
+        // roughly half the space when there's a quote to fit underneath.
+        // A smaller share than it looks like it wants: at 0.5 the quote got
+        // truncated with visible empty space underneath, which reads as a bug.
+        const share = why ? 0.42 : 0.85;
+        const boxH = Math.max(200, Math.min(Math.round(inner * 3 / 4), Math.round((ruleY - y) * share)));
+        const scale = Math.max(inner / photo.naturalWidth, boxH / photo.naturalHeight);
+        const dw = photo.naturalWidth * scale, dh = photo.naturalHeight * scale;
+        ctx.save();
+        ctx.beginPath(); ctx.rect(pad, y, inner, boxH); ctx.clip();
+        ctx.drawImage(photo, pad + (inner - dw) / 2, y + (boxH - dh) / 2, dw, dh);
+        ctx.restore();
+        y += boxH + 56;
+      }
+
+      ctx.fillStyle = '#FF6B35';
+      ctx.font = '500 30px ' + F;
+      ctx.fillText('STANDING AGAINST · ' + String(p.barrier || '').toUpperCase(), pad, y);
+      y += 58;
+
+      if (why) {
+        ctx.fillStyle = '#0A0A0A';
+        ctx.font = '300 58px ' + F;
+        // However many lines fit above the hairline, and no more — with a 44px
+        // gutter so descenders never touch the rule.
+        const maxLines = Math.max(1, Math.floor(((ruleY - 44) - y) / QUOTE_LH));
+        const lines = wrapLines(ctx, '“' + why + '”', inner, maxLines);
+        for (const line of lines) { ctx.fillText(line, pad, y); y += QUOTE_LH; }
+      }
+
+      ctx.strokeStyle = 'rgba(10,10,10,.12)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(pad, ruleY); ctx.lineTo(W - pad, ruleY); ctx.stroke();
+      ctx.fillStyle = '#0A0A0A'; ctx.font = '700 50px ' + F;
+      const name = p.name || 'Anonymous';
+      ctx.fillText(name, pad, nameY);
+      const nameW = ctx.measureText(name).width;
+      ctx.fillStyle = 'rgba(10,10,10,.62)'; ctx.font = '400 44px ' + F;
+      ctx.fillText(' · ' + (p.location || ''), pad + nameW, nameY);
+
+      ctx.fillStyle = '#0A0A0A'; ctx.font = '900 46px ' + F;
+      ctx.fillText('Take the pledge', pad, takeY);
+      ctx.fillStyle = '#FF6B35'; ctx.font = '500 38px ' + F;
+      ctx.fillText('finmango.org/pledge-wall', pad, linkY);
+      return c;
+    }
+
+    function canvasBlob(canvas) {
+      return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+    }
+
+    async function sharePledge(p) {
+      const caption = shareCaption(p);
+      // Web Share with a file is the only path that puts the actual image into
+      // Instagram Stories, X or Threads. Everything else can carry text + link
+      // only, so desktop falls through to the popover below.
+      try {
+        const blob = await canvasBlob(await drawShareCard(p, 'post'));
+        if (blob && navigator.canShare) {
+          const file = new File([blob], 'finmango-pledge.png', { type: 'image/png' });
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], text: caption + ' ' + SHARE_URL });
+            return;
+          }
+        }
+      } catch (e) {
+        // AbortError just means they closed the sheet — don't reopen anything.
+        if (e && e.name === 'AbortError') return;
+      }
+      openSharePopover(p, caption);
+    }
+
+    async function downloadShareCard(p, shape) {
+      const blob = await canvasBlob(await drawShareCard(p, shape));
+      if (!blob) return;
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'finmango-pledge-' + (shape === 'story' ? 'story' : 'post') + '.png';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+    }
+
+    function openSharePopover(p, caption) {
+      const text = caption + ' ' + SHARE_URL;
+      const back = document.createElement('div');
+      back.className = 'share-back';
+      back.innerHTML =
+        '<div class="share-pop" role="dialog" aria-modal="true" aria-label="Share this pledge">'
+        + '<h3>Share this pledge</h3>'
+        + '<p>The caption is written for you. Download the card to attach it to your post — '
+        + 'X, LinkedIn and Threads can’t take an image from a link.</p>'
+        + '<div class="share-list">'
+        + '<a href="https://twitter.com/intent/tweet?text=' + encodeURIComponent(caption)
+          + '&url=' + encodeURIComponent(SHARE_URL) + '" target="_blank" rel="noopener noreferrer">Share on X</a>'
+        + '<a href="https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(SHARE_URL)
+          + '" target="_blank" rel="noopener noreferrer">Share on LinkedIn</a>'
+        + '<a href="https://www.threads.net/intent/post?text=' + encodeURIComponent(text)
+          + '" target="_blank" rel="noopener noreferrer">Share on Threads</a>'
+        + '<button type="button" data-dl="post">⬇ Download card (feed)</button>'
+        + '<button type="button" data-dl="story">⬇ Download card (Stories)</button>'
+        + '<button type="button" class="share-close">Close</button>'
+        + '</div>'
+        + '<p class="share-note">On a phone, Share opens your usual apps with the image already '
+        + 'attached — including Instagram Stories.</p>'
+        + '</div>';
+      document.body.appendChild(back);
+      const close = () => { document.removeEventListener('keydown', onKey); back.remove(); };
+      function onKey(e) { if (e.key === 'Escape') { e.preventDefault(); close(); } }
+      document.addEventListener('keydown', onKey);
+      back.addEventListener('click', (e) => { if (e.target === back) close(); });
+      back.querySelector('.share-close').addEventListener('click', close);
+      back.querySelectorAll('button[data-dl]').forEach((b) => {
+        b.addEventListener('click', () => { downloadShareCard(p, b.dataset.dl); });
+      });
+      back.querySelectorAll('.share-list a').forEach((a) => a.addEventListener('click', close));
+    }
+
     function renderWall(list) {
       const grid = document.getElementById('wallGrid');
+      list.forEach((p) => { if (p && p.id) WALL_INDEX.set(String(p.id), p); });
       grid.innerHTML = list.length
         ? list.map(pledgeCard).join('')
         : '<div class="wall-empty">No pledges here yet — be the first to stand against this barrier.</div>';
       grid.removeAttribute('aria-busy');
+      // Delegated once, so re-rendering on a filter change doesn't need rebinding.
+      if (!grid.dataset.shareBound) {
+        grid.dataset.shareBound = '1';
+        grid.addEventListener('click', (e) => {
+          const btn = e.target.closest && e.target.closest('button[data-share]');
+          if (!btn) return;
+          const p = WALL_INDEX.get(btn.dataset.share);
+          if (p) sharePledge(p);
+        });
+      }
     }
 
     function buildFilters(pledges) {
