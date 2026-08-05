@@ -151,7 +151,7 @@
     .crop-back { position: fixed; inset: 0; z-index: 90; background: rgba(20,20,18,.62);
       display: flex; align-items: center; justify-content: center; padding: 1.2rem; }
     .crop-modal { background: var(--card); border-radius: 12px; border: 1px solid var(--ink-line-soft);
-      box-shadow: 0 24px 60px rgba(0,0,0,.28); width: 100%; max-width: 640px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.28); width: 100%; max-width: 860px;
       max-height: 100%; display: flex; flex-direction: column; overflow: hidden; }
     .crop-head { padding: .85rem 1rem .6rem; border-bottom: 1px solid var(--ink-line-soft); }
     .crop-head h3 { font-size: .98rem; font-weight: 800; letter-spacing: -.02em; }
@@ -160,15 +160,26 @@
     .crop-stage { flex: 1; min-height: 0; overflow: auto; padding: 1rem; display: flex;
       align-items: center; justify-content: center; background:
         repeating-conic-gradient(var(--ink-line-soft) 0% 25%, transparent 0% 50%) 50%/16px 16px; }
-    .crop-wrap { position: relative; line-height: 0; touch-action: none; user-select: none; }
+    /* crosshair signals "drag anywhere to draw a new selection" */
+    .crop-wrap { position: relative; line-height: 0; touch-action: none; user-select: none; cursor: crosshair; }
     .crop-wrap img { display: block; max-width: 100%; height: auto; }
     /* everything outside the selection is dimmed by four panels, so the kept
        area is the only part shown at full brightness */
     .crop-shade { position: absolute; background: rgba(20,20,18,.55); pointer-events: none; }
     .crop-box { position: absolute; outline: 1px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.45);
       cursor: move; }
+    /* thirds guides — framing help, never a click target */
+    .crop-box::before { content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,.35) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.35) 1px, transparent 1px);
+      background-size: 100% 33.333%, 33.333% 100%;
+      background-position: 0 33.333%, 33.333% 0; background-repeat: repeat; }
     .crop-h { position: absolute; width: 14px; height: 14px; background: #fff; border: 1px solid rgba(0,0,0,.45);
       border-radius: 2px; }
+    /* invisible 34px grab area around each handle — the visible square stays
+       small so it doesn't hide the photo, but fingers and fast mice still catch
+       it. Pseudo-elements extend hit-testing to the handle itself. */
+    .crop-h::before { content: ''; position: absolute; inset: -10px; }
     .crop-h.nw { left: -7px; top: -7px; cursor: nwse-resize; }
     .crop-h.ne { right: -7px; top: -7px; cursor: nesw-resize; }
     .crop-h.sw { left: -7px; bottom: -7px; cursor: nesw-resize; }
@@ -181,6 +192,9 @@
       display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
     .crop-foot .spacer { flex: 1; }
     .crop-dims { font-size: .72rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
+    .crop-foot .btn-sm.on { background: var(--orange); color: #fff; border-color: var(--orange); }
+    .crop-ratios { display: inline-flex; gap: .25rem; align-items: center; }
+    .crop-ratios span { font-size: .72rem; color: var(--ink-faint); margin-right: .1rem; }
     .draft-editing { outline: 2px solid var(--orange); border-radius: 8px; padding: .6rem .8rem; background: #fff; min-height: 120px; }
     .draft-editing:focus { outline: 2px solid var(--orange-deep); }
     .draft-editing.drag-over { outline: 2px dashed var(--orange-deep); background: rgba(255,107,53,.05); }
@@ -4134,14 +4148,21 @@
     // toDataURL works — reading pixels straight from drive.google.com wouldn't.
     var CROP_MAX_OUT = 1200;  // longest edge of the saved image
     var CROP_MIN_BOX = 24;    // smallest selection, in displayed px
+    // Free-form is the default; the locks are there because eyeballing a square
+    // by hand is the fiddly part, and wall cards read better when photos share
+    // a shape. `ar` is width/height, null for free.
+    var CROP_RATIOS = [
+      { label: 'Free', ar: null }, { label: '1:1', ar: 1 },
+      { label: '4:3', ar: 4 / 3 }, { label: '3:4', ar: 3 / 4 }, { label: '16:9', ar: 16 / 9 }
+    ];
     function openCropper(p) {
       var back = document.createElement('div');
       back.className = 'crop-back';
       back.innerHTML =
         '<div class="crop-modal" role="dialog" aria-modal="true" aria-label="Crop photo">'
         + '<div class="crop-head"><h3>Crop / rotate — ' + esc(p.name || 'Anonymous') + '</h3>'
-        + '<p>Drag inside the photo to choose what to keep. The signer’s original is kept, '
-        + 'so you can undo this later.</p></div>'
+        + '<p>Drag anywhere on the photo to draw the part you want to keep, then drag the box or '
+        + 'its edges to fine-tune. The signer’s original is kept, so you can undo this later.</p></div>'
         + '<div class="crop-stage"><div class="crop-wrap" id="cropWrap">'
         + '<img id="cropImg" alt="">'
         + '<div class="crop-shade" id="shTop"></div><div class="crop-shade" id="shBottom"></div>'
@@ -4154,6 +4175,11 @@
         + '<div class="crop-foot">'
         + '<button class="btn-sm ghost" id="cropRotL" title="Rotate left">⟲</button>'
         + '<button class="btn-sm ghost" id="cropRotR" title="Rotate right">⟳</button>'
+        + '<span class="crop-ratios"><span>Shape</span>'
+        + CROP_RATIOS.map(function (r, i) {
+            return '<button class="btn-sm ghost' + (i === 0 ? ' on' : '') + '" data-ratio="' + i + '">' + r.label + '</button>';
+          }).join('')
+        + '</span>'
         + '<button class="btn-sm ghost" id="cropReset">Reset</button>'
         + '<span class="crop-dims" id="cropDims"></span>'
         + '<span class="spacer"></span>'
@@ -4171,7 +4197,8 @@
       // any rotation. Re-rendering a rotated bitmap (rather than CSS-rotating)
       // keeps the crop maths axis-aligned and honest.
       var source = null, bitmap = null, rot = 0;
-      var box = null; // {x,y,w,h} in displayed px
+      var box = null;        // {x,y,w,h} in displayed px
+      var aspect = null;     // locked width/height, null = free-form
 
       function close() {
         document.removeEventListener('keydown', onKey);
@@ -4196,9 +4223,21 @@
         ctx.drawImage(source, -source.naturalWidth / 2, -source.naturalHeight / 2);
         bitmap = c;
         img.src = c.toDataURL('image/jpeg', 0.92);
+        // Reset with no rotation re-assigns an identical src, which need not fire
+        // `load` at all — so reset the selection here too. When the src really
+        // did change, onload runs again once the new size has laid out and wins.
+        resetBox();
       }
+      // Biggest box of the current shape, centred. With no lock that's the whole
+      // frame, so an untouched Save re-encodes the photo as-is.
       function resetBox() {
-        box = { x: 0, y: 0, w: img.clientWidth, h: img.clientHeight };
+        var W = img.clientWidth, H = img.clientHeight;
+        if (!aspect) { box = { x: 0, y: 0, w: W, h: H }; }
+        else {
+          var w = W, h = W / aspect;
+          if (h > H) { h = H; w = H * aspect; }
+          box = { x: (W - w) / 2, y: (H - h) / 2, w: w, h: h };
+        }
         paint();
       }
       function paint() {
@@ -4218,14 +4257,43 @@
         dims.textContent = Math.round(ow * cap) + ' × ' + Math.round(oh * cap) + ' px';
       }
 
-      // One pointer handler for moving and for all eight handles.
+      // Force a box to the locked shape, holding still whichever corner the drag
+      // isn't moving, then shrink to fit rather than spilling off the image.
+      function lockShape(bx, handle) {
+        if (!aspect) return bx;
+        var W = img.clientWidth, H = img.clientHeight;
+        var h = String(handle || '');
+        var westward = h.indexOf('w') >= 0, northward = h.indexOf('n') >= 0;
+        var fixX = westward ? bx.x + bx.w : bx.x;
+        var fixY = northward ? bx.y + bx.h : bx.y;
+        var w = bx.w, ht = bx.h;
+        if (h === 'w' || h === 'e') ht = w / aspect;
+        else if (h === 'n' || h === 's') w = ht * aspect;
+        else if (w / ht > aspect) ht = w / aspect;
+        else w = ht * aspect;
+        var room = Math.min(1,
+          (westward ? fixX : W - fixX) / (w || 1),
+          (northward ? fixY : H - fixY) / (ht || 1));
+        w *= room; ht *= room;
+        return { x: westward ? fixX - w : fixX, y: northward ? fixY - ht : fixY, w: w, h: ht };
+      }
+
+      // One pointer handler for three gestures: drawing a fresh selection
+      // anywhere on the photo, moving the box, and the eight resize handles.
       var drag = null;
       wrap.addEventListener('pointerdown', function (e) {
         if (!box) return;
         var handle = e.target.dataset ? e.target.dataset.h : null;
-        if (!handle && e.target !== boxEl) return; // clicks outside the box do nothing
+        var rect = img.getBoundingClientRect();
         e.preventDefault();
-        drag = { handle: handle || null, sx: e.clientX, sy: e.clientY, start: Object.assign({}, box) };
+        if (!handle && e.target !== boxEl) {
+          // Anywhere else on the photo starts a new selection from that point —
+          // dragging the corners inward from a full-frame box was the fiddly bit.
+          drag = { draw: true, ox: e.clientX - rect.left, oy: e.clientY - rect.top,
+            sx: e.clientX, sy: e.clientY };
+        } else {
+          drag = { handle: handle || null, sx: e.clientX, sy: e.clientY, start: Object.assign({}, box) };
+        }
         // Capture keeps the drag alive if the pointer leaves the image, but it's
         // an optimisation — a browser that refuses it must not lose the drag.
         try { wrap.setPointerCapture(e.pointerId); } catch (err) { /* drag still works */ }
@@ -4233,18 +4301,31 @@
       wrap.addEventListener('pointermove', function (e) {
         if (!drag) return;
         var W = img.clientWidth, H = img.clientHeight;
-        var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy, s = drag.start;
         var clamp = function (v, lo, hi) { return Math.max(lo, Math.min(hi, v)); };
-        if (!drag.handle) {
-          box.x = clamp(s.x + dx, 0, W - s.w); box.y = clamp(s.y + dy, 0, H - s.h);
-          box.w = s.w; box.h = s.h;
+        if (drag.draw) {
+          var rect = img.getBoundingClientRect();
+          var cx = clamp(e.clientX - rect.left, 0, W), cy = clamp(e.clientY - rect.top, 0, H);
+          var nx = Math.min(drag.ox, cx), ny = Math.min(drag.oy, cy);
+          var nw = Math.abs(cx - drag.ox), nh = Math.abs(cy - drag.oy);
+          // Ignore a stray click until it's an actual drag, so tapping the photo
+          // doesn't collapse the selection to nothing.
+          if (nw < CROP_MIN_BOX && nh < CROP_MIN_BOX) return;
+          // Anchor at the point the drag started, whichever way it went.
+          var dirH = (cy < drag.oy ? 'n' : 's') + (cx < drag.ox ? 'w' : 'e');
+          box = lockShape({ x: nx, y: ny, w: Math.max(nw, CROP_MIN_BOX), h: Math.max(nh, CROP_MIN_BOX) }, dirH);
         } else {
-          var l = s.x, t = s.y, r = s.x + s.w, b = s.y + s.h;
-          if (drag.handle.indexOf('w') >= 0) l = clamp(s.x + dx, 0, r - CROP_MIN_BOX);
-          if (drag.handle.indexOf('e') >= 0) r = clamp(r + dx, l + CROP_MIN_BOX, W);
-          if (drag.handle.indexOf('n') >= 0) t = clamp(s.y + dy, 0, b - CROP_MIN_BOX);
-          if (drag.handle.indexOf('s') >= 0) b = clamp(b + dy, t + CROP_MIN_BOX, H);
-          box = { x: l, y: t, w: r - l, h: b - t };
+          var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy, s = drag.start;
+          if (!drag.handle) {
+            box.x = clamp(s.x + dx, 0, W - s.w); box.y = clamp(s.y + dy, 0, H - s.h);
+            box.w = s.w; box.h = s.h;
+          } else {
+            var l = s.x, t = s.y, r = s.x + s.w, b = s.y + s.h;
+            if (drag.handle.indexOf('w') >= 0) l = clamp(s.x + dx, 0, r - CROP_MIN_BOX);
+            if (drag.handle.indexOf('e') >= 0) r = clamp(r + dx, l + CROP_MIN_BOX, W);
+            if (drag.handle.indexOf('n') >= 0) t = clamp(s.y + dy, 0, b - CROP_MIN_BOX);
+            if (drag.handle.indexOf('s') >= 0) b = clamp(b + dy, t + CROP_MIN_BOX, H);
+            box = lockShape({ x: l, y: t, w: r - l, h: b - t }, drag.handle);
+          }
         }
         paint();
       });
@@ -4254,7 +4335,25 @@
 
       back.querySelector('#cropRotL').onclick = function () { rot = (rot + 270) % 360; applyRotation(); };
       back.querySelector('#cropRotR').onclick = function () { rot = (rot + 90) % 360; applyRotation(); };
-      back.querySelector('#cropReset').onclick = function () { rot = 0; applyRotation(); };
+      back.querySelector('#cropReset').onclick = function () {
+        rot = 0; aspect = null; markRatio(0); applyRotation();
+      };
+      function markRatio(i) {
+        back.querySelectorAll('button[data-ratio]').forEach(function (el) {
+          el.classList.toggle('on', Number(el.dataset.ratio) === i);
+        });
+      }
+      back.querySelectorAll('button[data-ratio]').forEach(function (el) {
+        el.onclick = function () {
+          var i = Number(el.dataset.ratio);
+          aspect = CROP_RATIOS[i].ar;
+          markRatio(i);
+          // Snap what's already selected to the new shape instead of starting
+          // over — keeps the framing the reviewer had chosen.
+          if (box && aspect) { box = lockShape(box, 'se'); paint(); }
+          else if (box) paint();
+        };
+      });
 
       // A rotated bitmap is a new image; the box resets once it has laid out.
       img.onload = function () { resetBox(); };
@@ -4276,9 +4375,22 @@
         postsApi({ action: 'pledges-photo', id: p.id, photo: dataUrl, reviewer: m ? m.name : 'HQ team' })
           .then(function (res) {
             if (res.result === 'success') {
+              // Paint the new photo from the response rather than waiting on a
+              // refetch. loadPledges() keeps the previous rows when a refresh
+              // hiccups, which used to leave the OLD photo on screen behind a
+              // "saved" toast — the save had worked, the queue just never
+              // repainted. The refetch still runs, to pick up anything else.
+              var row = (pledges.rows || []).find(function (x) { return x.id === p.id; });
+              if (row && res.photoId) {
+                row.photoId = res.photoId;
+                row.photoOriginalId = res.photoOriginalId || row.photoOriginalId || '';
+                row.photoError = res.photoError || '';
+                try { localStorage.setItem(LS_PLEDGES, JSON.stringify({ t: now(), rows: pledges.rows })); } catch (e) {}
+              }
               primeWallCache();
               toast('Photo updated ✓');
               close();
+              if (ui.view === 'pledges') render();
               loadPledges();
             } else {
               saveBtn.disabled = false; saveBtn.textContent = 'Save photo';
@@ -4302,8 +4414,16 @@
       if (btn) btn.disabled = true;
       postsApi({ action: 'pledges-photo-revert', id: p.id }).then(function (res) {
         if (res.result === 'success') {
+          // Same as saving a crop: repaint from the response so a flaky refetch
+          // can't leave the edited photo on screen after a successful undo.
+          var row = (pledges.rows || []).find(function (x) { return x.id === p.id; });
+          if (row && res.photoId) {
+            row.photoId = res.photoId; row.photoOriginalId = ''; row.photoError = '';
+            try { localStorage.setItem(LS_PLEDGES, JSON.stringify({ t: now(), rows: pledges.rows })); } catch (e) {}
+          }
           primeWallCache();
           toast('Original photo restored ↩');
+          if (ui.view === 'pledges') render();
           loadPledges();
         } else {
           if (btn) btn.disabled = false;
