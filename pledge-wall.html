@@ -1224,6 +1224,11 @@
   </footer>
   <!-- /chrome:footer -->
 
+  <!-- Approved pledges as of the last build (scripts/snapshot-pledges.js): a
+       ~2KB static file so the real wall is in the first paint instead of waiting
+       on Apps Script. The live list still upgrades it a moment later. -->
+  <script src="data/pledges.js"></script>
+
   <script>
     // ---------------- Pledge Wall rendering ----------------
     // Reads go through the same-origin, edge-cached proxy at /api/wall
@@ -1494,38 +1499,83 @@
       }
     }
 
+    // The wall is painted twice — seeds/cache first, then the live list — so the
+    // filter bar has to survive being rebuilt: the click handler binds once and
+    // reads the current list, and whichever barrier was selected stays selected.
+    let WALL_LIST = [], WALL_GROUPS = ['All'], WALL_ACTIVE = 'All';
     function buildFilters(pledges) {
+      WALL_LIST = pledges;
       const present = BARRIERS.filter(b => pledges.some(p => p.barrier === b));
-      const groups = ['All'].concat(present);
+      WALL_GROUPS = ['All'].concat(present);
+      if (WALL_GROUPS.indexOf(WALL_ACTIVE) < 0) WALL_ACTIVE = 'All';
       const bar = document.getElementById('filters');
-      bar.innerHTML = groups.map((b, i) =>
-        '<button class="filter-btn' + (i === 0 ? ' active' : '') + '" type="button" data-i="' + i + '" aria-pressed="' + (i === 0) + '">' + escapeHtml(b) + '</button>').join('');
-      bar.addEventListener('click', e => {
-        const btn = e.target.closest('.filter-btn');
-        if (!btn) return;
-        bar.querySelectorAll('.filter-btn').forEach(x => {
-          const on = x === btn;
-          x.classList.toggle('active', on);
-          x.setAttribute('aria-pressed', on);
+      bar.innerHTML = WALL_GROUPS.map((b, i) => {
+        const on = b === WALL_ACTIVE;
+        return '<button class="filter-btn' + (on ? ' active' : '') + '" type="button" data-i="' + i
+          + '" aria-pressed="' + on + '">' + escapeHtml(b) + '</button>';
+      }).join('');
+      if (!bar.dataset.wallBound) {
+        bar.dataset.wallBound = '1';
+        bar.addEventListener('click', e => {
+          const btn = e.target.closest('.filter-btn');
+          if (!btn) return;
+          WALL_ACTIVE = WALL_GROUPS[+btn.dataset.i] || 'All';
+          bar.querySelectorAll('.filter-btn').forEach(x => {
+            const on = x === btn;
+            x.classList.toggle('active', on);
+            x.setAttribute('aria-pressed', on);
+          });
+          applyWallFilter();
         });
-        const i = +btn.dataset.i;
-        renderWall(i === 0 ? pledges : pledges.filter(p => p.barrier === groups[i]));
-      });
+      }
+    }
+    function applyWallFilter() {
+      renderWall(WALL_ACTIVE === 'All'
+        ? WALL_LIST
+        : WALL_LIST.filter(p => p.barrier === WALL_ACTIVE));
     }
 
-    (async function loadWall() {
-      let pledges = null;
-      try {
-        const data = await (window.__pledgeReq || fetch('/api/wall?action=pledges').then(r => r.json()));
-        if (data && data.result === 'success') pledges = (data.pledges || []).filter(p => p && p.id && p.barrier);
-      } catch (e) { /* seed pledges still render below */ }
+    // Paint the wall immediately, then upgrade it when the live list arrives.
+    // Waiting on the fetch before the first paint meant a cold Apps Script (a
+    // few seconds, sometimes more) left nothing but "Loading" on screen, which
+    // reads as a broken page. The last good list is kept locally so a returning
+    // visitor sees the real wall instantly rather than the seeds.
+    const WALL_CACHE_KEY = 'fm-wall-pledges';
+    (function loadWall() {
+      const paint = (rows) => {
+        const all = (rows || []).concat(SEED_PLEDGES)
+          .sort((a, b) => String(b.publishedAt || b.createdAt).localeCompare(String(a.publishedAt || a.createdAt)));
+        document.getElementById('wallCount').textContent = all.length + (all.length === 1 ? ' name on the wall' : ' names on the wall');
+        document.getElementById('wallStatus').textContent = all.length + ' standing';
+        buildFilters(all);
+        applyWallFilter();
+      };
 
-      const all = (pledges || []).concat(SEED_PLEDGES)
-        .sort((a, b) => String(b.publishedAt || b.createdAt).localeCompare(String(a.publishedAt || a.createdAt)));
-      document.getElementById('wallCount').textContent = all.length + (all.length === 1 ? ' name on the wall' : ' names on the wall');
-      document.getElementById('wallStatus').textContent = all.length + ' standing';
-      buildFilters(all);
-      renderWall(all);
+      // Two head starts are available: the build-time snapshot shipped with the
+      // page, and whatever this browser last saw. Take the newer of the two
+      // rather than merging them — a union would resurrect a card that has since
+      // been taken off the wall.
+      const candidates = [];
+      try {
+        const snap = window.__PLEDGE_SNAPSHOT;
+        if (snap && Array.isArray(snap.rows) && snap.rows.length) candidates.push(snap);
+      } catch (e) {}
+      try {
+        const raw = JSON.parse(localStorage.getItem(WALL_CACHE_KEY) || 'null');
+        if (raw && Array.isArray(raw.rows) && raw.rows.length) candidates.push(raw);
+      } catch (e) { /* an unreadable cache is just a cold start */ }
+      const freshest = candidates.sort((a, b) =>
+        new Date(b.t || 0) - new Date(a.t || 0))[0];
+      paint(freshest ? freshest.rows : null);
+
+      Promise.resolve(window.__pledgeReq || fetch('/api/wall?action=pledges').then(r => r.json()))
+        .then((data) => {
+          if (!data || data.result !== 'success') return; // keep what's on screen
+          const rows = (data.pledges || []).filter(p => p && p.id && p.barrier);
+          try { localStorage.setItem(WALL_CACHE_KEY, JSON.stringify({ t: Date.now(), rows: rows })); } catch (e) {}
+          paint(rows);
+        })
+        .catch(() => { /* the wall already has something on it */ });
     })();
   </script>
 

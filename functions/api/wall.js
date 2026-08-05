@@ -26,6 +26,11 @@ const WALL_TTL = 120; // seconds a cached copy counts as fresh
 // really was ~26 minutes late to the wall this way.
 const WALL_GRACE = 120; // seconds past the TTL that stale may still answer
 const SWR = WALL_TTL + WALL_GRACE; // what downstream caches are told
+// Waiting for real data is right, but not without a limit: Apps Script cold
+// starts run into seconds and the wall shows nothing until this resolves. Past
+// this, a stale list beats an empty page — the refresh still finishes in the
+// background and the next visitor gets it.
+const UPSTREAM_BUDGET = 2500; // ms
 
 const PUBLIC_ACTIONS = new Set(['approved', 'pledges']);
 
@@ -73,6 +78,15 @@ export async function onRequestGet(context) {
     });
   }
 
+  // Resolves null if the upstream hasn't answered within the budget. The
+  // underlying request is left to finish on its own.
+  function withBudget(promise) {
+    return Promise.race([
+      promise,
+      new Promise((resolve) => setTimeout(() => resolve(null), UPSTREAM_BUDGET))
+    ]);
+  }
+
   if (refresh) {
     let fresh = null;
     try { fresh = await fetchFresh(true); } catch (e) { fresh = null; }
@@ -98,22 +112,33 @@ export async function onRequestGet(context) {
       })());
       return hit;
     }
-    // Too old to pass off as current — wait for real data, and fall back to the
-    // stale copy only if the backend is actually down.
+    // Too old to pass off as current — wait for real data, but only as long as
+    // UPSTREAM_BUDGET. One in-flight request either way: if the budget runs out
+    // the same promise finishes in the background and primes the cache.
+    const pending = fetchFresh();
     let fresh = null;
-    try { fresh = await fetchFresh(); } catch (e) { fresh = null; }
-    if (!fresh) return hit;
-    waitUntil(cache.put(cacheKey, fresh.clone()));
-    return fresh;
+    try { fresh = await withBudget(pending); } catch (e) { fresh = null; }
+    if (fresh) {
+      waitUntil(cache.put(cacheKey, fresh.clone()));
+      return fresh;
+    }
+    waitUntil(pending.then((f) => (f ? cache.put(cacheKey, f.clone()) : null)).catch(() => {}));
+    return hit;
   }
 
+  // Nothing cached at all. Still bounded: the page falls back to its own copy
+  // on an error, which beats holding the request open.
+  const cold = fetchFresh();
   let res;
   try {
-    res = await fetchFresh();
+    res = await withBudget(cold);
   } catch (e) {
     res = null;
   }
-  if (!res) return jsonResponse({ result: 'error', error: 'Backend unavailable' }, 502);
+  if (!res) {
+    waitUntil(cold.then((f) => (f ? cache.put(cacheKey, f.clone()) : null)).catch(() => {}));
+    return jsonResponse({ result: 'error', error: 'Backend unavailable' }, 502);
+  }
 
   waitUntil(cache.put(cacheKey, res.clone()));
   return res;
