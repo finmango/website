@@ -139,6 +139,11 @@
       border-left: 3px solid var(--orange); padding: .05rem 0 .05rem .6rem; margin: .5rem 0 0; }
     .pl-photo { display: block; width: 100%; max-width: 300px; margin: .55rem 0 0; border-radius: 8px;
       border: 1px solid var(--ink-line-soft); background: var(--ink-line-soft); }
+    /* the signer attached a photo and it never reached Drive — say so, because a
+       blank card is indistinguishable from "no photo attached" */
+    .pl-photo-err { font-size: .78rem; line-height: 1.45; color: #8a4b1f; background: rgba(255,107,53,.08);
+      border: 1px solid rgba(255,107,53,.35); border-radius: 6px; padding: .35rem .5rem; margin: .55rem 0 0; }
+    .pl-photo-err code { font-size: .72rem; word-break: break-word; }
     .draft-editing { outline: 2px solid var(--orange); border-radius: 8px; padding: .6rem .8rem; background: #fff; min-height: 120px; }
     .draft-editing:focus { outline: 2px solid var(--orange-deep); }
     .draft-editing.drag-over { outline: 2px dashed var(--orange-deep); background: rgba(255,107,53,.05); }
@@ -4026,6 +4031,14 @@
           ? '<a href="' + photoSrc + '&w=1200" target="_blank" rel="noopener">'
             + '<img class="pl-photo" src="' + photoSrc + '&w=480" alt="Photo shared by ' + esc(p.name || 'a signer')
             + '" loading="lazy" decoding="async" onerror="this.parentNode.remove()"></a>'
+          : '')
+        // A photo that failed on the way in. Without this the card looks exactly
+        // like one where nobody attached anything, which is how a broken Drive
+        // write went unnoticed through a week of submissions.
+        + (p.photoError
+          ? '<p class="pl-photo-err">⚠ This signer attached a photo and it didn’t save: <code>'
+            + esc(p.photoError) + '</code><br>Ask them to re-send it, or drop the file in the '
+            + 'Pledge Wall Photos Drive folder and paste its link into the row’s <code>photoUrl</code> cell.</p>'
           : '')
         + (readonly
           ? '<p class="help-note" style="margin:.45rem 0 0;">Nothing to review — this signer kept their pledge private, so it never appears on the wall.</p>'

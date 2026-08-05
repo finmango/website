@@ -159,6 +159,46 @@ one-click filter.
 Never move pledge rows onto the Wall tab or vice versa: ids are prefixed
 (`p-` pledges, `w-` stories) and the moderation links route on that prefix.
 
+### Pledge photos
+
+A photo takes this path: the browser downscales it to ≤1200px JPEG → it posts as
+a base64 data URL → the script writes it to the **FinMango Pledge Wall Photos**
+Drive folder and link-shares it → the row's `photoUrl` cell holds
+`https://drive.google.com/thumbnail?id=FILEID&sz=w1600` → HQ and the public wall
+render it through `/pledge-photo?id=FILEID`, which only passes through files
+Drive serves publicly.
+
+**Check the whole path in one call.** With the script deployed:
+
+```
+https://script.google.com/macros/s/…/exec?action=photo-selftest&key=YOUR_MODERATION_KEY
+```
+
+It stores a 1×1 JPEG, link-shares it, fetches it back through the public
+thumbnail URL, trashes it, and reports each step. `Run > photoSelfTest` in the
+editor does the same and logs the result. Every step `ok` means a real signer's
+photo will reach the wall.
+
+**If a step fails with "Authorization is required to perform that action":** the
+web app is still running on the scopes its owner granted before `DriveApp` was
+added to the script, so *every* photo write throws and is dropped. Fix: open the
+script → **Run > setup** → grant Drive access → **Deploy > Manage deployments >
+✏️ Edit > New version**. Then re-run the self-test. (Symptom to recognise: the
+Drive folder doesn't exist at all and every `photoUrl` cell is blank, including
+for signers who definitely attached a photo.)
+
+**Recovering a photo that was dropped.** The bytes are gone — the browser
+discarded them after submit, so the signer has to re-send the file. Once you have
+it: drop it in the Pledge Wall Photos folder, share it "anyone with the link",
+copy its link, and paste that into the row's `photoUrl` cell. Any Drive link
+shape works (`…/thumbnail?id=…`, `…/file/d/FILEID/view`, or a bare file id). The
+wall picks it up within ~2 minutes.
+
+When a photo fails on the way in, the reason is written to the row's
+`photoError` column and shown on the card in HQ ("⚠ This signer attached a photo
+and it didn't save"). A card with no photo and no warning means the signer simply
+didn't attach one.
+
 ## Security & safety notes
 
 - Public endpoints only ever return **approved** stories; emails never leave
@@ -207,6 +247,10 @@ production).
 - **HQ's Pledge Wall tab can't reach the backend** — usually this script wasn't
   redeployed since `pledge-list` was added (it answers `Unknown action`), or
   `WALL_MODERATION_KEY` doesn't match this script's `MODERATION_KEY`.
+- **A pledge photo never appears** (not in HQ, not on the wall) — check the row's
+  `photoUrl` and `photoError` cells, then run the photo self-test above. Blank
+  `photoUrl` on every row plus a missing Drive folder means the script never got
+  Drive permission: `Run > setup`, grant it, redeploy.
 - **No more pledge emails** — that's the default now
   (`CONFIG.PLEDGE_EMAIL_NOTIFY: false`); pledges are reviewed in HQ. Flip it to
   `true` and redeploy to get the email links back alongside the queue.
