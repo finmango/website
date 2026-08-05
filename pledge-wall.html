@@ -1210,8 +1210,12 @@
     function pledgeCard(p) {
       const hasPhoto = !!p.photoId;
       const hasWhy = !!(p.why && String(p.why).trim());
+      // If Drive won't serve the photo the card has to fall back to a plain
+      // no-photo card, frame padding and all — dropping just the <img> leaves
+      // the plate framing wrapped around nothing.
       const photo = hasPhoto
-        ? '<img class="pc-photo" src="/pledge-photo?id=' + encodeURIComponent(p.photoId) + '&w=800" alt="" loading="lazy" decoding="async" onerror="this.remove()">'
+        ? '<img class="pc-photo" src="/pledge-photo?id=' + encodeURIComponent(p.photoId) + '&w=800" alt="" loading="lazy" decoding="async"'
+          + ' onerror="var c=this.closest(\'.pledge-card\');if(c)c.classList.remove(\'has-photo\');this.remove()">'
         : '';
       const date = fmtDate(p.publishedAt || p.createdAt);
       return '<article class="pledge-card' + (hasPhoto ? ' has-photo' : '') + (hasWhy ? '' : ' no-why') + '">' +
