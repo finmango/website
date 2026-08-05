@@ -75,6 +75,12 @@ jobs:
           node scripts/snapshot-pledges.js
           echo "::endgroup::"
 
+          # Same for published Ambassador Notes → data/posts.js. This backend is
+          # the slow one, so the snapshot is what keeps /posts instant.
+          echo "::group::Ambassador Notes snapshot"
+          node scripts/snapshot-posts.js
+          echo "::endgroup::"
+
           # Stamp a fresh ?v= cache-buster on every page that loads
           # dashboard-data.js. GitHub Pages ignores _headers, so without
           # this, browsers and the Cloudflare edge serve stale data for
@@ -86,7 +92,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add data/ index.html barometer.html barometer-embed.html research.html housing-policy-lab.html judges/index.html pledge-wall.html
+          git add data/ index.html barometer.html barometer-embed.html research.html housing-policy-lab.html judges/index.html pledge-wall.html posts.html
 
           if git diff --staged --quiet; then
             echo "No changes to commit"

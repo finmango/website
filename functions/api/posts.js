@@ -47,6 +47,21 @@ export async function onRequestGet(context) {
   // but a freshly published post can't hide behind a day-old browser copy.
   const EDGE_KEEP = 86400;   // 1 day
   const BROWSER_SWR = 600;   // 10 minutes
+  // A cold Apps Script on this backend has been measured past 30s. Waiting that
+  // long doesn't just feel slow — the function gets killed mid-wait and
+  // Cloudflare answers its own 502, which is what took /posts down: no cached
+  // copy, so every visitor waited, and none of them got anything. Past this
+  // budget we answer with whatever we have instead.
+  const UPSTREAM_BUDGET = 2500; // ms
+
+  // Resolves null if the backend hasn't answered in time. The request itself is
+  // left to finish, so its result can still prime the cache.
+  function withBudget(promise) {
+    return Promise.race([
+      promise,
+      new Promise((resolve) => setTimeout(() => resolve(null), UPSTREAM_BUDGET))
+    ]);
+  }
 
   // Fetch from the backend and return a fresh, cacheable Response (or null on
   // failure). `bust` adds a throwaway param so Cloudflare's upstream cache
@@ -97,15 +112,21 @@ export async function onRequestGet(context) {
     return hit;
   }
 
-  // Cold cache: nothing to serve, so this request does wait on the backend.
+  // Cold cache: this request does go to the backend, but only for as long as the
+  // budget allows. The page carries its own snapshot, so a quick, honest error
+  // beats a request that hangs until it's killed.
+  const cold = fetchFresh();
   let res;
   try {
-    res = await fetchFresh();
+    res = await withBudget(cold);
   } catch (e) {
     res = null;
   }
-  // Don't cache failures — let the next request retry the backend.
-  if (!res) return jsonResponse({ result: 'error', error: 'Backend unavailable' }, 502);
+  if (!res) {
+    // Let the slow request finish anyway — the next visitor gets a warm cache.
+    waitUntil(cold.then((f) => (f ? cache.put(cacheKey, f.clone()) : null)).catch(() => {}));
+    return jsonResponse({ result: 'error', error: 'Backend unavailable' }, 502);
+  }
 
   waitUntil(cache.put(cacheKey, res.clone()));
   return res;

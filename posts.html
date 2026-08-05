@@ -405,6 +405,11 @@
   </footer>
   <!-- /chrome:footer -->
 
+  <!-- Published notes as of the last build (scripts/snapshot-posts.js): a ~2KB
+       static file, so the page paints real notes without waiting on Apps Script.
+       The live list still upgrades it a moment later. -->
+  <script src="data/posts.js"></script>
+
   <script>
     // Reads go through the same-origin, edge-cached proxy (functions/api/posts.js)
     // so the list loads fast and survives Apps Script cold starts — see docs/POSTS-SETUP.md.
@@ -456,25 +461,42 @@
       grid.removeAttribute('aria-busy');
       enablePrefetch();
     }
+    // The page paints twice — snapshot first, then the live list — so the filter
+    // bar has to survive a rebuild: bind the handler once, read the current
+    // list, and keep whichever category was selected.
+    let POSTS_LIST = [], POSTS_GROUPS = ['All'], POSTS_ACTIVE = 'All';
     function buildFilters(posts) {
+      POSTS_LIST = posts;
       const cats = [...new Set(posts.map(p => p.category).filter(Boolean))];
-      if (cats.length < 2) return;
-      const groups = ['All', ...cats];
       const bar = document.getElementById('filters');
-      bar.innerHTML = groups.map((c, i) =>
-        '<button class="filter-btn' + (i === 0 ? ' active' : '') + '" type="button" data-i="' + i + '" aria-pressed="' + (i === 0) + '">' + escapeHtml(c) + '</button>').join('');
+      if (cats.length < 2) { bar.hidden = true; return; }
+      POSTS_GROUPS = ['All', ...cats];
+      if (POSTS_GROUPS.indexOf(POSTS_ACTIVE) < 0) POSTS_ACTIVE = 'All';
+      bar.innerHTML = POSTS_GROUPS.map((c, i) => {
+        const on = c === POSTS_ACTIVE;
+        return '<button class="filter-btn' + (on ? ' active' : '') + '" type="button" data-i="' + i
+          + '" aria-pressed="' + on + '">' + escapeHtml(c) + '</button>';
+      }).join('');
       bar.hidden = false;
-      bar.addEventListener('click', e => {
-        const btn = e.target.closest('.filter-btn');
-        if (!btn) return;
-        bar.querySelectorAll('.filter-btn').forEach(b => {
-          const on = b === btn;
-          b.classList.toggle('active', on);
-          b.setAttribute('aria-pressed', on);
+      if (!bar.dataset.postsBound) {
+        bar.dataset.postsBound = '1';
+        bar.addEventListener('click', e => {
+          const btn = e.target.closest('.filter-btn');
+          if (!btn) return;
+          POSTS_ACTIVE = POSTS_GROUPS[+btn.dataset.i] || 'All';
+          bar.querySelectorAll('.filter-btn').forEach(b => {
+            const on = b === btn;
+            b.classList.toggle('active', on);
+            b.setAttribute('aria-pressed', on);
+          });
+          applyPostsFilter();
         });
-        const i = +btn.dataset.i;
-        renderGrid(i === 0 ? posts : posts.filter(p => p.category === groups[i]));
-      });
+      }
+    }
+    function applyPostsFilter() {
+      renderGrid(POSTS_ACTIVE === 'All'
+        ? POSTS_LIST
+        : POSTS_LIST.filter(p => p.category === POSTS_ACTIVE));
     }
 
     // On hover/touch, prefetch the post page so the click feels instant — it
@@ -495,17 +517,55 @@
       });
     }
 
-    (async function () {
+    // Paint what we already have, then upgrade from the backend. Waiting on the
+    // fetch before the first paint meant a cold Apps Script — measured well past
+    // 30s on this backend — left the page empty and then said "Could not load
+    // posts", even though the notes were fine.
+    const POSTS_CACHE_KEY = 'fm-posts-published';
+    (function () {
+      const paint = (rows) => {
+        buildFilters(rows);
+        applyPostsFilter();
+      };
+
+      // Two head starts: the snapshot shipped with the page, and whatever this
+      // browser last saw. Take the newer — a union could resurrect a note that
+      // has since been unpublished.
+      const candidates = [];
       try {
-        // Reuse the request started in <head>; fall back to a fresh fetch.
-        const data = await (window.__postsReq || fetch(API_URL + '?action=published').then(r => r.json()));
-        const posts = ((data && data.posts) || []).filter(p => p && p.id);
-        if (!posts.length) return emptyState('No posts yet', 'Be the first — <a href="write.html">write a post →</a>');
-        buildFilters(posts);
-        renderGrid(posts);
-      } catch (e) {
-        emptyState('Could not load posts', 'Please try again later, or <a href="write.html">write a post →</a>');
-      }
+        const snap = window.__POSTS_SNAPSHOT;
+        if (snap && Array.isArray(snap.rows) && snap.rows.length) candidates.push(snap);
+      } catch (e) {}
+      try {
+        const raw = JSON.parse(localStorage.getItem(POSTS_CACHE_KEY) || 'null');
+        if (raw && Array.isArray(raw.rows) && raw.rows.length) candidates.push(raw);
+      } catch (e) { /* an unreadable cache is just a cold start */ }
+      const freshest = candidates.sort((a, b) => new Date(b.t || 0) - new Date(a.t || 0))[0];
+      if (freshest) paint(freshest.rows);
+
+      Promise.resolve(window.__postsReq || fetch(API_URL + '?action=published').then(r => r.json()))
+        .then((data) => {
+          // An error response still parses as JSON, so "no posts" and "couldn't
+          // fetch the posts" have to be told apart — otherwise a backend 502
+          // announces that nobody has written anything.
+          const ok = data && data.result === 'success' && Array.isArray(data.posts);
+          if (!ok) {
+            if (!freshest) emptyState('Could not load posts', 'Please try again later, or <a href="write.html">write a post →</a>');
+            return;
+          }
+          const posts = data.posts.filter(p => p && p.id);
+          if (!posts.length) {
+            // Only claim there's nothing here if we had nothing to begin with.
+            if (!freshest) emptyState('No posts yet', 'Be the first — <a href="write.html">write a post →</a>');
+            return;
+          }
+          try { localStorage.setItem(POSTS_CACHE_KEY, JSON.stringify({ t: Date.now(), rows: posts })); } catch (e) {}
+          paint(posts);
+        })
+        .catch(() => {
+          // The snapshot is already on screen; only an empty page needs an excuse.
+          if (!freshest) emptyState('Could not load posts', 'Please try again later, or <a href="write.html">write a post →</a>');
+        });
     })();
   </script>
 
