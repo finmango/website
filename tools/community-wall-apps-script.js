@@ -72,9 +72,13 @@ const PLEDGE_SHEET_NAME = 'Pledges';
 // a blank photoUrl on its own looks exactly like "no photo was attached", which
 // is how a broken Drive write once went unnoticed through both the HQ queue and
 // the public wall.
+// `photoOriginalUrl` holds the signer's untouched photo once HQ has cropped or
+// rotated it, so an edit is never destructive — the original file stays in
+// Drive and "revert" is one click. Empty means the photo has never been edited.
 const PLEDGE_HEADERS = [
   'id', 'createdAt', 'status', 'name', 'location', 'barrier',
-  'why', 'photoUrl', 'showOnWall', 'publishedAt', 'moderatedBy', 'photoError'
+  'why', 'photoUrl', 'showOnWall', 'publishedAt', 'moderatedBy', 'photoError',
+  'photoOriginalUrl'
 ];
 // Must match the options on get-involved.html#pledge exactly.
 const BARRIERS = [
@@ -92,9 +96,18 @@ function doPost(e) {
     if (data.action === 'submit') return json(submitStory_(data));
     if (data.action === 'heart')  return json(addHeart_(data.id));
     if (data.action === 'pledge') return json(submitPledge_(data));
+    // HQ photo edits (crop/rotate), reached through the Team Board bridge.
+    // POST rather than GET because a re-encoded image is far too big for a
+    // query string — same reasoning as the Ambassador Notes draft editor.
+    if (data.action === 'pledge-photo-set') {
+      requireKey_(data.key); return json(setPledgePhoto_(data));
+    }
+    if (data.action === 'pledge-photo-revert') {
+      requireKey_(data.key); return json(revertPledgePhoto_(data));
+    }
     return json({ result: 'error', error: 'Unknown action' });
   } catch (err) {
-    return json({ result: 'error', error: String(err) });
+    return json({ result: 'error', error: String(err.message || err) });
   } finally {
     lock.releaseLock();
   }
@@ -261,6 +274,60 @@ function submitPledge_(data) {
   return { result: 'success', id: id };
 }
 
+// Replace a pledge's photo with one HQ re-encoded (cropped, rotated, or both).
+// The edited image arrives as a data URL and becomes a NEW Drive file: the site
+// serves photos through /pledge-photo, which edge-caches by file id for a day,
+// so rewriting the old file's bytes would keep the uncropped version on screen
+// until that cache expired. A new id shows up immediately.
+function setPledgePhoto_(data) {
+  const id = String(data.id || '');
+  if (id.indexOf('p-') !== 0) return { result: 'error', error: 'Not a pledge id' };
+  const photo = String(data.photo || '');
+  if (!photo) return { result: 'error', error: 'No photo supplied' };
+  if (photo.length > CONFIG.MAX_PHOTO_DATAURL) return { result: 'error', error: 'Photo too large' };
+
+  const sheet = getPledgeSheet_();
+  const rowIndex = findRowIndex_(sheet, id);
+  if (rowIndex < 0) return { result: 'error', error: 'Pledge not found' };
+
+  const stored = storePledgePhoto_(photo);
+  // Unlike a signer's submission, an edit that can't be saved must fail loudly:
+  // the reviewer is standing right there and needs to know it didn't take.
+  if (!stored.url) return { result: 'error', error: stored.error || 'Could not save the photo' };
+
+  const row = readRowsFrom_(sheet).filter(r => String(r.id) === id)[0] || {};
+  // Remember the signer's original the first time only, so repeated crops still
+  // revert all the way back to what they actually sent.
+  if (!String(row.photoOriginalUrl || '') && String(row.photoUrl || '')) {
+    setCell_(sheet, rowIndex, 'photoOriginalUrl', String(row.photoUrl));
+  }
+  setCell_(sheet, rowIndex, 'photoUrl', stored.url);
+  setCell_(sheet, rowIndex, 'photoError', stored.error); // '' unless sharing failed
+  return {
+    result: 'success', id: id,
+    photoId: driveFileId_(stored.url),
+    photoOriginalId: driveFileId_(String(row.photoOriginalUrl || row.photoUrl || '')),
+    photoError: stored.error
+  };
+}
+
+// Put the signer's original photo back. The edited file stays in Drive (nothing
+// is deleted here) but stops being referenced.
+function revertPledgePhoto_(data) {
+  const id = String(data.id || '');
+  if (id.indexOf('p-') !== 0) return { result: 'error', error: 'Not a pledge id' };
+  const sheet = getPledgeSheet_();
+  const rowIndex = findRowIndex_(sheet, id);
+  if (rowIndex < 0) return { result: 'error', error: 'Pledge not found' };
+  const row = readRowsFrom_(sheet).filter(r => String(r.id) === id)[0] || {};
+  const original = String(row.photoOriginalUrl || '');
+  if (!original) return { result: 'error', error: 'This photo has not been edited' };
+  setCell_(sheet, rowIndex, 'photoUrl', original);
+  setCell_(sheet, rowIndex, 'photoOriginalUrl', '');
+  setCell_(sheet, rowIndex, 'photoError', '');
+  return { result: 'success', id: id, photoId: driveFileId_(original) };
+}
+
 // Moderator list: EVERY pledge, newest first — the queue FinMango HQ paints.
 // Same shape as the public list plus the fields a reviewer needs (status,
 // whether the signer opted into the wall, who decided it). Photos travel as
@@ -276,6 +343,9 @@ function listPledgesForModeration_(status) {
       // Reviewer-only: a photo the signer attached that never made it to Drive.
       // HQ says so on the card instead of quietly showing no photo at all.
       p.photoError = String(r.photoError || '');
+      // Set only when HQ has cropped/rotated this photo — HQ offers "revert to
+      // the original" off the back of it.
+      p.photoOriginalId = driveFileId_(r.photoOriginalUrl);
       return p;
     })
     // Sorted after mapping, where createdAt is always an ISO string (Sheets

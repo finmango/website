@@ -151,6 +151,17 @@ function doPost(e) {
       return json(wallBridge_({ action: 'moderate', id: String(data.id || ''),
         decision: String(data.decision || ''), by: String(data.reviewer || 'HQ team') }));
     }
+    // Photo edits from the queue (crop/rotate). The re-encoded image goes by
+    // POST — a data URL doesn't fit in a query string.
+    if (data.action === 'pledges-photo') {
+      requireAuth_(data);
+      return json(wallBridgePost_({ action: 'pledge-photo-set',
+        id: String(data.id || ''), photo: String(data.photo || '') }));
+    }
+    if (data.action === 'pledges-photo-revert') {
+      requireAuth_(data);
+      return json(wallBridgePost_({ action: 'pledge-photo-revert', id: String(data.id || '') }));
+    }
     return json({ result: 'error', error: 'Unknown action' });
   } catch (err) {
     return json({ result: 'error', error: errMessage_(err) });
@@ -425,8 +436,8 @@ function postsBridgePost_(payload) {
 
 // Same bridge, pointed at the Community Wall backend: HQ's Pledge Wall tab
 // lists and moderates pledges without ever holding that script's moderation
-// key. Everything the wall script exposes here is GET-shaped and small, so
-// there's no POST variant to mirror.
+// key. Listing and moderating are GET-shaped and small; photo edits go through
+// wallBridgePost_ below.
 function wallBridge_(params) {
   if (CONFIG.WALL_MODERATION_KEY.indexOf('REPLACE_WITH') === 0) {
     throw new Error('Pledge reviews not configured');
@@ -437,6 +448,21 @@ function wallBridge_(params) {
   }).join('&');
   const res = UrlFetchApp.fetch(CONFIG.WALL_APPS_SCRIPT_URL + '?' + qs,
     { muteHttpExceptions: true, followRedirects: true });
+  try { return JSON.parse(res.getContentText()); }
+  catch (err) { throw new Error('Community Wall backend unavailable'); }
+}
+
+// POST variant, for payloads too large for a query string — a cropped photo
+// travels as a base64 data URL. Mirrors postsBridgePost_.
+function wallBridgePost_(payload) {
+  if (CONFIG.WALL_MODERATION_KEY.indexOf('REPLACE_WITH') === 0) {
+    throw new Error('Pledge reviews not configured');
+  }
+  payload.key = CONFIG.WALL_MODERATION_KEY;
+  const res = UrlFetchApp.fetch(CONFIG.WALL_APPS_SCRIPT_URL, {
+    method: 'post', contentType: 'text/plain', payload: JSON.stringify(payload),
+    muteHttpExceptions: true, followRedirects: true
+  });
   try { return JSON.parse(res.getContentText()); }
   catch (err) { throw new Error('Community Wall backend unavailable'); }
 }

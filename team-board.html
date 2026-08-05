@@ -144,6 +144,43 @@
     .pl-photo-err { font-size: .78rem; line-height: 1.45; color: #8a4b1f; background: rgba(255,107,53,.08);
       border: 1px solid rgba(255,107,53,.35); border-radius: 6px; padding: .35rem .5rem; margin: .55rem 0 0; }
     .pl-photo-err code { font-size: .72rem; word-break: break-word; }
+    .pl-photo-row { display: flex; align-items: center; gap: .4rem; margin: .4rem 0 0; flex-wrap: wrap; }
+    .pl-edited { font-size: .72rem; font-weight: 600; color: var(--ink-dim); }
+
+    /* ===== PHOTO CROPPER (pledge queue) ===== */
+    .crop-back { position: fixed; inset: 0; z-index: 90; background: rgba(20,20,18,.62);
+      display: flex; align-items: center; justify-content: center; padding: 1.2rem; }
+    .crop-modal { background: var(--card); border-radius: 12px; border: 1px solid var(--ink-line-soft);
+      box-shadow: 0 24px 60px rgba(0,0,0,.28); width: 100%; max-width: 640px;
+      max-height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+    .crop-head { padding: .85rem 1rem .6rem; border-bottom: 1px solid var(--ink-line-soft); }
+    .crop-head h3 { font-size: .98rem; font-weight: 800; letter-spacing: -.02em; }
+    .crop-head p { font-size: .78rem; color: var(--ink-dim); margin-top: .15rem; }
+    /* the checkerboard makes it obvious where the image ends */
+    .crop-stage { flex: 1; min-height: 0; overflow: auto; padding: 1rem; display: flex;
+      align-items: center; justify-content: center; background:
+        repeating-conic-gradient(var(--ink-line-soft) 0% 25%, transparent 0% 50%) 50%/16px 16px; }
+    .crop-wrap { position: relative; line-height: 0; touch-action: none; user-select: none; }
+    .crop-wrap img { display: block; max-width: 100%; height: auto; }
+    /* everything outside the selection is dimmed by four panels, so the kept
+       area is the only part shown at full brightness */
+    .crop-shade { position: absolute; background: rgba(20,20,18,.55); pointer-events: none; }
+    .crop-box { position: absolute; outline: 1px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.45);
+      cursor: move; }
+    .crop-h { position: absolute; width: 14px; height: 14px; background: #fff; border: 1px solid rgba(0,0,0,.45);
+      border-radius: 2px; }
+    .crop-h.nw { left: -7px; top: -7px; cursor: nwse-resize; }
+    .crop-h.ne { right: -7px; top: -7px; cursor: nesw-resize; }
+    .crop-h.sw { left: -7px; bottom: -7px; cursor: nesw-resize; }
+    .crop-h.se { right: -7px; bottom: -7px; cursor: nwse-resize; }
+    .crop-h.n { left: 50%; top: -7px; margin-left: -7px; cursor: ns-resize; }
+    .crop-h.s { left: 50%; bottom: -7px; margin-left: -7px; cursor: ns-resize; }
+    .crop-h.w { left: -7px; top: 50%; margin-top: -7px; cursor: ew-resize; }
+    .crop-h.e { right: -7px; top: 50%; margin-top: -7px; cursor: ew-resize; }
+    .crop-foot { padding: .7rem 1rem .85rem; border-top: 1px solid var(--ink-line-soft);
+      display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+    .crop-foot .spacer { flex: 1; }
+    .crop-dims { font-size: .72rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
     .draft-editing { outline: 2px solid var(--orange); border-radius: 8px; padding: .6rem .8rem; background: #fff; min-height: 120px; }
     .draft-editing:focus { outline: 2px solid var(--orange-deep); }
     .draft-editing.drag-over { outline: 2px dashed var(--orange-deep); background: rgba(255,107,53,.05); }
@@ -3983,6 +4020,13 @@
         if (ui.view === 'pledges') render();
       });
     }
+    // The public pledge list is edge-cached, so anything that changes a card
+    // re-primes it — otherwise the wall lags a decision by the cache TTL.
+    // Failure is fine (the cache catches up on its own), but the rejection has
+    // to be handled: a bare fetch() rejects outside try/catch when offline.
+    function primeWallCache() {
+      try { fetch('/api/wall?action=pledges&refresh=1').catch(function () {}); } catch (e) {}
+    }
     // Only pledges that can actually reach the wall need a decision: a signer
     // who didn't opt in is counted but never shown, whatever the status says.
     function pledgeActionable(p) { return !!p.showOnWall && p.status === 'pending'; }
@@ -4031,6 +4075,15 @@
           ? '<a href="' + photoSrc + '&w=1200" target="_blank" rel="noopener">'
             + '<img class="pl-photo" src="' + photoSrc + '&w=480" alt="Photo shared by ' + esc(p.name || 'a signer')
             + '" loading="lazy" decoding="async" onerror="this.parentNode.remove()"></a>'
+            // Crop/rotate before publishing — a photo that's merely framed
+            // badly shouldn't have to be rejected outright.
+            + '<div class="pl-photo-row">'
+              + '<button class="btn-sm ghost" data-plphoto="edit">✂ Crop / rotate</button>'
+              + (p.photoOriginalId
+                ? '<button class="btn-sm ghost" data-plphoto="revert">↩ Undo edit</button>'
+                  + '<span class="pl-edited">· edited by HQ</span>'
+                : '')
+            + '</div>'
           : '')
         // A photo that failed on the way in. Without this the card looks exactly
         // like one where nobody attached anything, which is how a broken Drive
@@ -4063,9 +4116,7 @@
       postsApi({ action: 'pledges-moderate', id: id, decision: decision, reviewer: m ? m.name : 'HQ team' })
         .then(function (res) {
           if (res.result === 'success') {
-            // The public list is edge-cached — re-prime it now so the wall
-            // reflects the decision immediately instead of in a few minutes.
-            try { fetch('/api/wall?action=pledges&refresh=1'); } catch (e) { /* cache catches up on its own */ }
+            primeWallCache();
             toast(decision === 'approve' ? 'Approved ✓ — on finmango.org/pledge-wall within a minute'
               : decision === 'reject' ? 'Rejected — this card never appears on the wall'
               : 'Back in the queue ↩');
@@ -4076,6 +4127,191 @@
           }
         }).catch(function () { if (btn) btn.disabled = false; toast('Network hiccup — try again'); });
     }
+    // ===== PHOTO CROPPER =====
+    // Crop and rotate a signer's photo in the browser, then hand the re-encoded
+    // JPEG to the backend, which stores it as a NEW Drive file. Photos come in
+    // through same-origin /pledge-photo, so the canvas stays untainted and
+    // toDataURL works — reading pixels straight from drive.google.com wouldn't.
+    var CROP_MAX_OUT = 1200;  // longest edge of the saved image
+    var CROP_MIN_BOX = 24;    // smallest selection, in displayed px
+    function openCropper(p) {
+      var back = document.createElement('div');
+      back.className = 'crop-back';
+      back.innerHTML =
+        '<div class="crop-modal" role="dialog" aria-modal="true" aria-label="Crop photo">'
+        + '<div class="crop-head"><h3>Crop / rotate — ' + esc(p.name || 'Anonymous') + '</h3>'
+        + '<p>Drag inside the photo to choose what to keep. The signer’s original is kept, '
+        + 'so you can undo this later.</p></div>'
+        + '<div class="crop-stage"><div class="crop-wrap" id="cropWrap">'
+        + '<img id="cropImg" alt="">'
+        + '<div class="crop-shade" id="shTop"></div><div class="crop-shade" id="shBottom"></div>'
+        + '<div class="crop-shade" id="shLeft"></div><div class="crop-shade" id="shRight"></div>'
+        + '<div class="crop-box" id="cropBox">'
+        + ['nw', 'ne', 'sw', 'se', 'n', 's', 'w', 'e'].map(function (h) {
+            return '<div class="crop-h ' + h + '" data-h="' + h + '"></div>';
+          }).join('')
+        + '</div></div></div>'
+        + '<div class="crop-foot">'
+        + '<button class="btn-sm ghost" id="cropRotL" title="Rotate left">⟲</button>'
+        + '<button class="btn-sm ghost" id="cropRotR" title="Rotate right">⟳</button>'
+        + '<button class="btn-sm ghost" id="cropReset">Reset</button>'
+        + '<span class="crop-dims" id="cropDims"></span>'
+        + '<span class="spacer"></span>'
+        + '<button class="btn-sm ghost" id="cropCancel">Cancel</button>'
+        + '<button class="btn-sm primary" id="cropSave">Save photo</button>'
+        + '</div></div>';
+      document.body.appendChild(back);
+
+      var img = back.querySelector('#cropImg');
+      var wrap = back.querySelector('#cropWrap');
+      var boxEl = back.querySelector('#cropBox');
+      var dims = back.querySelector('#cropDims');
+      var saveBtn = back.querySelector('#cropSave');
+      // `source` is the unrotated original; `bitmap` is what's on screen after
+      // any rotation. Re-rendering a rotated bitmap (rather than CSS-rotating)
+      // keeps the crop maths axis-aligned and honest.
+      var source = null, bitmap = null, rot = 0;
+      var box = null; // {x,y,w,h} in displayed px
+
+      function close() {
+        document.removeEventListener('keydown', onKey);
+        back.remove();
+      }
+      function onKey(e) {
+        if (e.key === 'Escape') { e.preventDefault(); close(); }
+      }
+      document.addEventListener('keydown', onKey);
+      back.onclick = function (e) { if (e.target === back) close(); };
+      back.querySelector('#cropCancel').onclick = close;
+
+      // Draw the source at the current rotation and show the result.
+      function applyRotation() {
+        var c = document.createElement('canvas');
+        var swap = rot === 90 || rot === 270;
+        c.width = swap ? source.naturalHeight : source.naturalWidth;
+        c.height = swap ? source.naturalWidth : source.naturalHeight;
+        var ctx = c.getContext('2d');
+        ctx.translate(c.width / 2, c.height / 2);
+        ctx.rotate(rot * Math.PI / 180);
+        ctx.drawImage(source, -source.naturalWidth / 2, -source.naturalHeight / 2);
+        bitmap = c;
+        img.src = c.toDataURL('image/jpeg', 0.92);
+      }
+      function resetBox() {
+        box = { x: 0, y: 0, w: img.clientWidth, h: img.clientHeight };
+        paint();
+      }
+      function paint() {
+        if (!box) return;
+        var W = img.clientWidth, H = img.clientHeight;
+        boxEl.style.left = box.x + 'px'; boxEl.style.top = box.y + 'px';
+        boxEl.style.width = box.w + 'px'; boxEl.style.height = box.h + 'px';
+        var set = function (id, css) { Object.assign(back.querySelector(id).style, css); };
+        set('#shTop', { left: '0px', top: '0px', width: W + 'px', height: box.y + 'px' });
+        set('#shBottom', { left: '0px', top: (box.y + box.h) + 'px', width: W + 'px', height: Math.max(H - box.y - box.h, 0) + 'px' });
+        set('#shLeft', { left: '0px', top: box.y + 'px', width: box.x + 'px', height: box.h + 'px' });
+        set('#shRight', { left: (box.x + box.w) + 'px', top: box.y + 'px', width: Math.max(W - box.x - box.w, 0) + 'px', height: box.h + 'px' });
+        // Output size, in real pixels, after the display→bitmap scale.
+        var s = bitmap.width / (W || 1);
+        var ow = Math.round(box.w * s), oh = Math.round(box.h * s);
+        var cap = Math.min(1, CROP_MAX_OUT / Math.max(ow, oh));
+        dims.textContent = Math.round(ow * cap) + ' × ' + Math.round(oh * cap) + ' px';
+      }
+
+      // One pointer handler for moving and for all eight handles.
+      var drag = null;
+      wrap.addEventListener('pointerdown', function (e) {
+        if (!box) return;
+        var handle = e.target.dataset ? e.target.dataset.h : null;
+        if (!handle && e.target !== boxEl) return; // clicks outside the box do nothing
+        e.preventDefault();
+        drag = { handle: handle || null, sx: e.clientX, sy: e.clientY, start: Object.assign({}, box) };
+        // Capture keeps the drag alive if the pointer leaves the image, but it's
+        // an optimisation — a browser that refuses it must not lose the drag.
+        try { wrap.setPointerCapture(e.pointerId); } catch (err) { /* drag still works */ }
+      });
+      wrap.addEventListener('pointermove', function (e) {
+        if (!drag) return;
+        var W = img.clientWidth, H = img.clientHeight;
+        var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy, s = drag.start;
+        var clamp = function (v, lo, hi) { return Math.max(lo, Math.min(hi, v)); };
+        if (!drag.handle) {
+          box.x = clamp(s.x + dx, 0, W - s.w); box.y = clamp(s.y + dy, 0, H - s.h);
+          box.w = s.w; box.h = s.h;
+        } else {
+          var l = s.x, t = s.y, r = s.x + s.w, b = s.y + s.h;
+          if (drag.handle.indexOf('w') >= 0) l = clamp(s.x + dx, 0, r - CROP_MIN_BOX);
+          if (drag.handle.indexOf('e') >= 0) r = clamp(r + dx, l + CROP_MIN_BOX, W);
+          if (drag.handle.indexOf('n') >= 0) t = clamp(s.y + dy, 0, b - CROP_MIN_BOX);
+          if (drag.handle.indexOf('s') >= 0) b = clamp(b + dy, t + CROP_MIN_BOX, H);
+          box = { x: l, y: t, w: r - l, h: b - t };
+        }
+        paint();
+      });
+      var endDrag = function () { drag = null; };
+      wrap.addEventListener('pointerup', endDrag);
+      wrap.addEventListener('pointercancel', endDrag);
+
+      back.querySelector('#cropRotL').onclick = function () { rot = (rot + 270) % 360; applyRotation(); };
+      back.querySelector('#cropRotR').onclick = function () { rot = (rot + 90) % 360; applyRotation(); };
+      back.querySelector('#cropReset').onclick = function () { rot = 0; applyRotation(); };
+
+      // A rotated bitmap is a new image; the box resets once it has laid out.
+      img.onload = function () { resetBox(); };
+
+      saveBtn.onclick = function () {
+        if (!box || !bitmap) return;
+        var W = img.clientWidth, s = bitmap.width / (W || 1);
+        var sx = Math.round(box.x * s), sy = Math.round(box.y * s);
+        var sw = Math.max(1, Math.round(box.w * s)), sh = Math.max(1, Math.round(box.h * s));
+        var cap = Math.min(1, CROP_MAX_OUT / Math.max(sw, sh));
+        var out = document.createElement('canvas');
+        out.width = Math.max(1, Math.round(sw * cap));
+        out.height = Math.max(1, Math.round(sh * cap));
+        out.getContext('2d').drawImage(bitmap, sx, sy, sw, sh, 0, 0, out.width, out.height);
+        var dataUrl = out.toDataURL('image/jpeg', 0.85);
+
+        saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
+        var m = me();
+        postsApi({ action: 'pledges-photo', id: p.id, photo: dataUrl, reviewer: m ? m.name : 'HQ team' })
+          .then(function (res) {
+            if (res.result === 'success') {
+              primeWallCache();
+              toast('Photo updated ✓');
+              close();
+              loadPledges();
+            } else {
+              saveBtn.disabled = false; saveBtn.textContent = 'Save photo';
+              toast(String(res.error || 'That didn\'t save — try again'));
+            }
+          }).catch(function () {
+            saveBtn.disabled = false; saveBtn.textContent = 'Save photo';
+            toast('Network hiccup — try again');
+          });
+      };
+
+      // Load the biggest version we serve, so a crop of a crop still looks fine.
+      source = new Image();
+      source.onload = function () { applyRotation(); };
+      source.onerror = function () { toast('Couldn\'t load that photo'); close(); };
+      source.src = '/pledge-photo?id=' + encodeURIComponent(p.photoId) + '&w=1200';
+    }
+
+    function pledgePhotoRevert(p, btn) {
+      if (!confirm('Put the signer’s original photo back?')) return;
+      if (btn) btn.disabled = true;
+      postsApi({ action: 'pledges-photo-revert', id: p.id }).then(function (res) {
+        if (res.result === 'success') {
+          primeWallCache();
+          toast('Original photo restored ↩');
+          loadPledges();
+        } else {
+          if (btn) btn.disabled = false;
+          toast(String(res.error || 'That didn\'t work — try again'));
+        }
+      }).catch(function () { if (btn) btn.disabled = false; toast('Network hiccup — try again'); });
+    }
+
     function renderPledges(root) {
       var scroll = document.createElement('div'); scroll.className = 'page-scroll';
       var wrap = document.createElement('div'); wrap.className = 'page-wrap notes-wrap';
@@ -4132,6 +4368,15 @@
         body.querySelectorAll('button[data-pl]').forEach(function (el) {
           var id = el.closest('.pr-row').dataset.id;
           el.onclick = function () { pledgeAction(id, el.dataset.pl, el); };
+        });
+        body.querySelectorAll('button[data-plphoto]').forEach(function (el) {
+          var id = el.closest('.pr-row').dataset.id;
+          el.onclick = function () {
+            var p = (pledges.rows || []).find(function (x) { return x.id === id; });
+            if (!p) return;
+            if (el.dataset.plphoto === 'edit') openCropper(p);
+            else pledgePhotoRevert(p, el);
+          };
         });
         var toggle = function (elId, prop) {
           var a = body.querySelector('#' + elId);

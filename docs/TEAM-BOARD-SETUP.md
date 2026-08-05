@@ -133,6 +133,13 @@ decision is stamped with the name of whoever made it (visible on the row and
 in the backing Sheet). Key-door sessions have no identity, so their decisions
 read "team key" — one more reason to sign in with Google.
 
+Pledge cards with a photo also get **✂ Crop / rotate**, so a badly framed photo
+can be fixed instead of rejected. The re-encoded image travels by POST
+(`wallBridgePost_`) because a data URL won't fit in a query string — which means
+photo edits need *both* this script and the Community Wall script redeployed. The
+signer's original is kept, so **↩ Undo edit** restores it. Details in
+`docs/COMMUNITY-WALL-SETUP.md` under "Cropping and rotating a photo in HQ".
+
 ## Google Sign-In setup (≈5 minutes, optional but recommended)
 
 This enables the "Sign in with FinMango" door — real names and photos, no

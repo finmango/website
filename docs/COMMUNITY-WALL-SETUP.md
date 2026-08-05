@@ -199,6 +199,34 @@ When a photo fails on the way in, the reason is written to the row's
 and it didn't save"). A card with no photo and no warning means the signer simply
 didn't attach one.
 
+### Cropping and rotating a photo in HQ
+
+A photo that's just framed badly shouldn't have to be rejected, so the queue has
+**✂ Crop / rotate** on every card that has one. It opens the photo, you drag a
+selection (or rotate in 90° steps), and **Save photo** replaces it.
+
+The edit happens in the browser and the re-encoded JPEG (longest edge 1200px) is
+sent to the backend, which writes it as a **new** Drive file. That matters:
+`/pledge-photo` edge-caches by file id for 24 hours, so rewriting the old file's
+bytes would keep serving the uncropped version for a day.
+
+Nothing is destructive. The first time a photo is edited, the signer's original
+URL is copied into the row's `photoOriginalUrl` column and the original file
+stays in Drive, so the card shows **↩ Undo edit** — which restores it and clears
+that column. Crop repeatedly and "undo" still goes back to what the signer
+actually sent, not the previous crop. (Superseded crops stay in the Drive folder;
+it accumulates a file per edit, same as the Ambassador Notes image folders.)
+
+Two things worth knowing:
+
+- Photo edits need **both** Apps Scripts redeployed — the Community Wall script
+  gains the `pledge-photo-set` / `pledge-photo-revert` POST actions, and the Team
+  Board script gains the `wallBridgePost_` bridge that reaches them. HQ's queue
+  says "Unknown action" if only one side is updated.
+- Edits are *not* attributed in the Sheet — `moderatedBy` still refers to the
+  approve/reject decision. If you need to know who cropped a photo, that would
+  be a new column.
+
 ## Security & safety notes
 
 - Public endpoints only ever return **approved** stories; emails never leave
