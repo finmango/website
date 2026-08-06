@@ -76,6 +76,7 @@ function doGet(e) {
       case 'post':      return json(getPublicPost_(p.id));
       // --- reviewer-only (key required) ---
       case 'list':       requireKey_(p.key); return json({ result: 'success', posts: listForReview_(p.status || 'all') });
+      case 'attr':       requireKey_(p.key); return json({ result: 'success', attr: attrForIds_(p.ids) });
       case 'review-get': requireKey_(p.key); return json(getFullPost_(p.id));
       case 'review':     requireKey_(p.key); return json(addReview_(p));
       case 'schedule':   requireKey_(p.key); return json(schedulePost_(p));
@@ -570,24 +571,62 @@ function backfillAttribution() {
       if (r.statusBy && r.approvedBy) return;
       if (looked >= MAX) { more = true; return; }
       looked++;
-      const post = readJson_(r.jsonFileId);
-      const votes = (post.reviews || []).filter(x => ['approve', 'changes', 'reject'].indexOf(x.vote) >= 0);
-      const last = votes[votes.length - 1];
-      const approval = votes.filter(x => x.vote === 'approve').pop();
-      const patch = {};
-      if (!r.statusBy) {
-        if (r.status === 'published') {
-          // Only post.json can say who published it; older posts don't record it.
-          if (post.publishedBy) { patch.statusBy = post.publishedBy; patch.statusAt = post.publishedAt || ''; }
-        } else if (last) {
-          patch.statusBy = last.reviewer; patch.statusAt = last.at || '';
-        }
-      }
-      if (!r.approvedBy && approval && (r.status === 'approved' || r.status === 'published')) patch.approvedBy = approval.reviewer;
-      if (Object.keys(patch).length) { updateRow_(r.rowIndex, patch); filled++; }
+      if (attrPatchFor_(r)) filled++;
     } catch (err) { /* one unreadable post must not stop the sweep */ }
   });
   Logger.log('Attribution backfilled for ' + filled + ' post(s).'
     + (more ? ' Stopped at ' + MAX + ' — run backfillAttribution again to continue.' : ''));
   return filled;
+}
+
+// Recover one row's attribution from the post's own record and write it into
+// the index. Returns the recovered names, or null when the post can't prove
+// anything the index doesn't already hold.
+function attrPatchFor_(r) {
+  const post = readJson_(r.jsonFileId);
+  const votes = (post.reviews || []).filter(x => ['approve', 'changes', 'reject'].indexOf(x.vote) >= 0);
+  const last = votes[votes.length - 1];
+  const approval = votes.filter(x => x.vote === 'approve').pop();
+  const patch = {};
+  if (!r.statusBy) {
+    if (r.status === 'published') {
+      // Only post.json can say who published it; older posts don't record it.
+      if (post.publishedBy) { patch.statusBy = post.publishedBy; patch.statusAt = post.publishedAt || ''; }
+    } else if (last) {
+      patch.statusBy = last.reviewer; patch.statusAt = last.at || '';
+    }
+  }
+  if (!r.approvedBy && approval && (r.status === 'approved' || r.status === 'published')) patch.approvedBy = approval.reviewer;
+  if (!Object.keys(patch).length) return null;
+  updateRow_(r.rowIndex, patch);
+  return patch;
+}
+
+// Attribution for a batch of ids, in one request. HQ asks for exactly the rows
+// the index couldn't tag, so a queue full of pre-attribution posts costs one
+// round trip instead of one per row — and because each recovery is written back
+// to the index on the way past, the next `list` carries it and nobody asks
+// again. Same work backfillAttribution does, spread over the rows people
+// actually look at.
+function attrForIds_(idsCsv) {
+  const MAX = 25;           // each id costs a Drive read — keep well inside the execution limit
+  const want = String(idsCsv || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, MAX);
+  if (!want.length) return {};
+  const byId = {};
+  rows_().forEach(r => { byId[String(r.id)] = r; });
+  const out = {};
+  want.forEach(id => {
+    const r = byId[id];
+    if (!r) return;
+    let patch = null;
+    // One unreadable post must neither fail the batch nor go unanswered — an
+    // id with no answer is one HQ asks about again on every single load.
+    try { patch = attrPatchFor_(r); } catch (err) { patch = null; }
+    // Answer for every id we were asked about, recovered or not — "nothing to
+    // find here" is an answer too, and it's what stops the asking.
+    out[id] = { by: (patch && patch.statusBy) || r.statusBy || '',
+                at: toIso_((patch && patch.statusAt) || r.statusAt),
+                approvedBy: (patch && patch.approvedBy) || r.approvedBy || '' };
+  });
+  return out;
 }
