@@ -83,7 +83,7 @@ const PLEDGE_HEADERS = [
 // Must match the options on get-involved.html#pledge exactly.
 const BARRIERS = [
   'Housing', 'Healthcare costs', 'Debt & credit', 'Food access',
-  'Work & income', 'Education'
+  'Work & income', 'Education', 'Banking access'
 ];
 
 // ============================== ROUTING ====================================
