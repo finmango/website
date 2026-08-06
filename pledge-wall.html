@@ -1505,8 +1505,10 @@
     let WALL_LIST = [], WALL_GROUPS = ['All'], WALL_ACTIVE = 'All';
     function buildFilters(pledges) {
       WALL_LIST = pledges;
-      const present = BARRIERS.filter(b => pledges.some(p => p.barrier === b));
-      WALL_GROUPS = ['All'].concat(present);
+      // Every barrier gets a button, including ones nobody has signed yet —
+      // renderWall answers an empty filter with "be the first to stand against
+      // this barrier", which is a better invitation than a missing category.
+      WALL_GROUPS = ['All'].concat(BARRIERS);
       if (WALL_GROUPS.indexOf(WALL_ACTIVE) < 0) WALL_ACTIVE = 'All';
       const bar = document.getElementById('filters');
       bar.innerHTML = WALL_GROUPS.map((b, i) => {
