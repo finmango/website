@@ -20,7 +20,10 @@ Drive as storage.
 
 1. A contributor writes in `write.html`, sees the live preview, and submits.
 2. The draft (text + images) is saved to a Drive folder + indexed in a Sheet;
-   the editorial team is emailed. Status = **pending**.
+   everyone in `NOTIFY_EMAILS` is emailed the submission — title, dek, author,
+   cover, and an excerpt — with a button straight to that note's row in the HQ
+   queue. Replies to that email go to the ambassador, not the robot.
+   Status = **pending**.
 3. Reviewers open `post-review.html`, enter the passphrase, read the rendered
    post, leave comments, and vote **approve / request changes / reject**.
    (The team can also review from the **Ambassador Notes** tab in
@@ -53,7 +56,12 @@ notes that stored `<div>`-based paragraphs are fixed automatically at render.
 4. Edit the **CONFIG** block at the top:
    - `SPREADSHEET_URL` — your Sheet URL
    - `DRIVE_FOLDER_ID` — the folder ID from step 2
-   - `EDITOR_EMAIL` — who gets "new submission" emails
+   - `NOTIFY_EMAILS` — comma-separated list of everyone who gets "new
+     submission" emails (defaults to Scott, Soham and Sarah). Each email has a
+     **Review, approve & schedule** button that opens that note in the HQ queue
+     (`team-board.html?view=notes&post=<id>`). Falls back to `EDITOR_EMAIL` if
+     left blank.
+   - `EDITOR_EMAIL` — reply-to fallback on emails sent to authors
    - `REVIEW_KEY` — invent a passphrase; share only with reviewers
    - `SITE_BASE` — `https://www.finmango.org`
    - `REQUIRE_APPROVAL_TO_PUBLISH` — `true` to require ≥1 approve vote before publishing

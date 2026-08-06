@@ -15,8 +15,9 @@
  * 2. Create a Drive folder to hold submissions (e.g. "FinMango Post Submissions").
  *    Open it and copy the folder ID from the URL (the part after /folders/).
  * 3. In the Sheet: Extensions > Apps Script. Delete the sample code, paste THIS file.
- * 4. Fill in the CONFIG block below (Sheet URL, Drive folder ID, editor email,
- *    and a REVIEW_KEY passphrase you invent — share it only with reviewers).
+ * 4. Fill in the CONFIG block below (Sheet URL, Drive folder ID, the reviewer
+ *    emails that get "new submission" alerts, and a REVIEW_KEY passphrase you
+ *    invent — share it only with reviewers).
  * 5. Run `setup` once (top toolbar) and grant the permissions it requests.
  * 6. Deploy > New deployment > Web app:
  *       Execute as: Me        Who has access: Anyone
@@ -32,7 +33,11 @@
 const CONFIG = {
   SPREADSHEET_URL: 'PASTE_YOUR_GOOGLE_SHEET_URL_HERE',
   DRIVE_FOLDER_ID: 'PASTE_YOUR_DRIVE_FOLDER_ID_HERE',
-  EDITOR_EMAIL:    'research@finmango.org',   // who gets notified of new submissions
+  EDITOR_EMAIL:    'research@finmango.org',   // reply-to fallback on author emails
+  // Everyone who should hear about a new submission. Comma-separated; the
+  // whole review team can be listed here, and each name gets the same email
+  // with a one-click link into the HQ queue.
+  NOTIFY_EMAILS:   'scott@finmango.org, spatel@finmango.org, sarah@finmango.org',
   REVIEW_KEY:      'change-this-passphrase',   // reviewers enter this in post-review.html
   SITE_BASE:       'https://www.finmango.org', // used in notification links
   REQUIRE_APPROVAL_TO_PUBLISH: false,          // if true, publish() needs >=1 "approve" vote
@@ -476,18 +481,59 @@ function makeId_(title) {
   return slug + '-' + stamp;
 }
 
+// New-submission alert to the review team. One email, every reviewer on it,
+// with a button that opens the note's own row in the HQ queue — approve,
+// schedule, or publish happens there, so nobody has to go hunting for it.
 function notifyEditors_(post) {
-  if (!CONFIG.EDITOR_EMAIL) return;
+  const to = notifyList_();
+  if (!to) return;
   try {
+    const reviewUrl = CONFIG.SITE_BASE + '/team-board.html?view=notes&post=' + encodeURIComponent(post.id);
+    const author = esc_(post.authorName || 'An ambassador');
+    const authorEmail = cleanEmail_(post.authorEmail);
+    const meta = [post.category, (post.tags || []).join(', ')].filter(Boolean).map(esc_).join(' · ');
+    const cover = /^https:\/\//.test(String(post.cover || '')) ? post.cover : '';
     MailApp.sendEmail({
-      to: CONFIG.EDITOR_EMAIL,
-      subject: 'New Ambassador Note submitted: ' + (post.title || '(untitled)'),
+      to: to,
+      name: 'FinMango Ambassador Notes',
+      // Replies land with the ambassador, not the robot — the most common
+      // follow-up to a submission is a question for its author.
+      replyTo: authorEmail || CONFIG.EDITOR_EMAIL,
+      subject: '📝 New Ambassador Note: ' + (post.title || '(untitled)') + ' — ' + (post.authorName || 'unknown author'),
       htmlBody:
-        '<p><strong>' + esc_(post.authorName) + '</strong> (' + esc_(post.authorEmail) + ') submitted a ' + esc_(post.category || 'post') + '.</p>' +
-        '<p><strong>' + esc_(post.title) + '</strong><br>' + esc_(post.dek || '') + '</p>' +
-        '<p>Review it in the panel: <a href="' + CONFIG.SITE_BASE + '/post-review.html">' + CONFIG.SITE_BASE + '/post-review.html</a></p>'
+        '<div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.55;color:#1b1b18;max-width:560px;">' +
+        '<p style="margin:0 0 4px;color:#6b6b63;font-size:13px;">New submission · waiting for review</p>' +
+        '<h2 style="margin:0 0 6px;font-size:20px;line-height:1.3;">' + esc_(post.title || '(untitled)') + '</h2>' +
+        (post.dek ? '<p style="margin:0 0 12px;color:#4a4a44;">' + esc_(post.dek) + '</p>' : '') +
+        (cover ? '<p style="margin:0 0 14px;"><img src="' + esc_(cover) + '" alt="" style="max-width:100%;border-radius:10px;"></p>' : '') +
+        '<p style="margin:0 0 14px;color:#4a4a44;">By <strong>' + author + '</strong>' +
+        (authorEmail ? ' &lt;' + esc_(authorEmail) + '&gt;' : '') +
+        (post.authorAffiliation ? ' · ' + esc_(post.authorAffiliation) : '') +
+        (meta ? '<br>' + meta : '') + '</p>' +
+        (excerpt_(post.body) ? '<blockquote style="margin:0 0 18px;padding:2px 0 2px 14px;border-left:3px solid #e2e2dc;color:#4a4a44;">' + esc_(excerpt_(post.body)) + '</blockquote>' : '') +
+        '<p style="margin:0 0 16px;"><a href="' + reviewUrl + '" style="display:inline-block;background:#F2A03D;color:#1b1b18;text-decoration:none;font-weight:600;padding:11px 20px;border-radius:8px;">Review, approve &amp; schedule →</a></p>' +
+        '<p style="margin:0;color:#8a8a82;font-size:12px;">Opens the note in the team portal. Standalone panel: ' +
+        '<a href="' + CONFIG.SITE_BASE + '/post-review.html" style="color:#8a8a82;">post-review.html</a>' +
+        (authorEmail ? ' · Replying to this email goes straight to ' + author + '.' : '') + '</p>' +
+        '</div>'
     });
   } catch (err) { /* email failures shouldn't block submission */ }
+}
+// The reviewer list, cleaned up — blank entries dropped, editor inbox as the
+// fallback so a half-filled CONFIG still tells somebody.
+function notifyList_() {
+  const list = String(CONFIG.NOTIFY_EMAILS || '').split(',').map(s => s.trim()).filter(cleanEmail_);
+  return list.length ? list.join(',') : String(CONFIG.EDITOR_EMAIL || '');
+}
+// First ~280 characters of the note as plain text, for the email preview.
+function excerpt_(html) {
+  const text = String(html || '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;|\u00a0/g, ' ')
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return text.length > 280 ? text.slice(0, 280).replace(/\s\S*$/, '') + '…' : text;
 }
 // Approval email — the author learns their note made the cut, and (when
 // scheduled) exactly when it goes live. Also reused when the time changes.
