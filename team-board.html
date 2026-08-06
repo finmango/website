@@ -3365,6 +3365,8 @@
     // refreshes in the background — the two Apps Script cold starts behind
     // each live fetch cost ~4-5s, so we never make the user wait on them.
     var notes = { posts: null, loading: false, refreshing: false, error: null, openId: null, detail: {}, showRejected: false,
+      // Set by an email deep link: the row to bring into view once the queue paints.
+      scrollTo: null,
       // When the list we're showing was fetched — a click on the tab moments
       // after the background warm shouldn't buy a second cold start.
       fetchedAt: 0,
@@ -3929,6 +3931,14 @@
         if (rej) rej.onclick = function (e) { e.preventDefault(); notes.showRejected = !notes.showRejected; render(); };
         // Fill in the open post's rendered detail
         if (notes.openId) fillNoteDetail(body, notes.openId);
+        // Arrived from a "new submission" email — put its row on screen. Only
+        // once the queue has actually painted, hence in this branch.
+        if (notes.scrollTo) {
+          var target = null;
+          body.querySelectorAll('.pr-row').forEach(function (el) { if (el.dataset.id === notes.scrollTo) target = el; });
+          notes.scrollTo = null;
+          if (target) setTimeout(function () { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 0);
+        }
       }
       scroll.appendChild(wrap); root.appendChild(scroll);
       var rf = $('notesRefresh'); if (rf) rf.onclick = function () { if (!notes.loading) { loadNotes(); render(); } };
@@ -4850,6 +4860,29 @@
     // stops teammates from unknowingly editing an unsynced local copy.
     var booted = false;
 
+    // ------------------------- deep links from email ------------------------
+    // "New Ambassador Note" emails link to ?view=notes&post=<id> so a reviewer
+    // lands on that note's row instead of the last board they had open. Read
+    // once at load and applied after the door, so signing in doesn't lose it.
+    var deepLink = (function () {
+      try {
+        var q = new URLSearchParams(location.search);
+        var v = q.get('view');
+        if (v !== 'notes' && v !== 'pledges') return null;
+        return { view: v, id: String(q.get('post') || '').slice(0, 120) };
+      } catch (e) { return null; }
+    })();
+    function applyDeepLink() {
+      if (!deepLink) return;
+      var d = deepLink; deepLink = null;
+      // Drop the params so a refresh — or a bookmark of this URL — doesn't keep
+      // dragging the reviewer back to one note forever.
+      try { history.replaceState(null, '', location.pathname); } catch (e) {}
+      if (d.view === 'pledges') { openPledgeView(); return; }
+      if (d.id) { notes.openId = d.id; notes.scrollTo = d.id; }
+      openNotesView();
+    }
+
     function bootApp() {
       if (booted) return;
       booted = true;
@@ -4869,6 +4902,7 @@
         setTimeout(refreshNotesIfStale, 2500);
         setTimeout(function () { if (!pledges.loading) loadPledges(); }, 5000);
       }
+      applyDeepLink(); // last, so it renders over the restored view
     }
 
     function showGate() {
