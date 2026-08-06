@@ -41,7 +41,7 @@ const path = require('path');
 
     // Names for files
     const names = [
-        'Aaliyah_Marie_Kissick',
+        'Aaliyah_de_Toeni_Zhu',
         'Jose_Ismael_Batista',
         'Dami_Mike_Adeogun',
         'Anvitha_Marlapati',
