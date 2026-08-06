@@ -105,6 +105,9 @@ function doPost(e) {
     // --- Ambassador post reviews bridge (HQ-authenticated) ---
     if (data.action === 'posts-list') { requireAuth_(data); return json(postsBridge_({ action: 'list', status: String(data.status || 'all') })); }
     if (data.action === 'posts-get') { requireAuth_(data); return json(postsBridge_({ action: 'review-get', id: String(data.id || '') })); }
+    // Who-decided-it for a batch of rows the index couldn't tag — one call for
+    // the whole queue instead of opening one post per row.
+    if (data.action === 'posts-attr') { requireAuth_(data); return json(postsBridge_({ action: 'attr', ids: String(data.ids || '') })); }
     if (data.action === 'posts-review') {
       // The verified sign-in email (empty for the shared-key door) rides along
       // so author emails are signed by — and reply to — the actual reviewer.

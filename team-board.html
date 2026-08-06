@@ -3365,13 +3365,28 @@
     // refreshes in the background — the two Apps Script cold starts behind
     // each live fetch cost ~4-5s, so we never make the user wait on them.
     var notes = { posts: null, loading: false, refreshing: false, error: null, openId: null, detail: {}, showRejected: false,
+      // When the list we're showing was fetched — a click on the tab moments
+      // after the background warm shouldn't buy a second cold start.
+      fetchedAt: 0,
+      // id → { by, at, approvedBy } for rows the index can't tag on its own
+      // (decided before it recorded attribution), recovered from the posts'
+      // own records. Cached across reloads: recovering costs a round trip, and
+      // a decided row's answer never changes.
+      attr: {},
       // ids of rows whose vote is in flight — painted as their outcome already,
       // marked ⏳ until the backend confirms.
       pending: {} };
     try {
       var cachedNotes = JSON.parse(localStorage.getItem(LS_NOTES) || 'null');
-      if (cachedNotes && cachedNotes.posts) notes.posts = cachedNotes.posts;
+      if (cachedNotes && cachedNotes.posts) { notes.posts = cachedNotes.posts; notes.fetchedAt = cachedNotes.t || 0; }
+      if (cachedNotes && cachedNotes.attr) notes.attr = cachedNotes.attr;
     } catch (e) {}
+    // One writer for the cache, so every path persists the recovered
+    // attribution too — reopening the tab then paints the tags with the rows
+    // instead of after a round trip per row.
+    function saveNotesCache() {
+      try { localStorage.setItem(LS_NOTES, JSON.stringify({ t: notes.fetchedAt || now(), posts: notes.posts, attr: notes.attr })); } catch (e) {}
+    }
     function postsApi(payload) {
       return fetch('/api/board', {
         method: 'POST', headers: { 'content-type': 'application/json' },
@@ -3431,7 +3446,18 @@
     function openNotesView() {
       ui.view = 'notes'; ui.pageId = null;
       persistLocal(); render(); closeSidebarOnMobile();
-      if (!notes.loading) loadNotes(); // cached copy is already on screen; refresh behind it
+      refreshNotesIfStale(); // cached copy is already on screen; refresh behind it
+    }
+    // A live fetch costs two Apps Script cold starts, so don't spend one on a
+    // list we only just pulled. The ↻ button still forces a real refresh.
+    var NOTES_FRESH_MS = 30000;
+    function refreshNotesIfStale() {
+      if (notes.loading) return;
+      if (notes.posts && notes.fetchedAt && now() - notes.fetchedAt < NOTES_FRESH_MS) {
+        prefetchNoteDetails(); // still finish warming what the rows are missing
+        return;
+      }
+      loadNotes();
     }
     function loadNotes() {
       notes.loading = true; notes.refreshing = !!notes.posts; notes.error = null;
@@ -3443,6 +3469,7 @@
           if (!notes.posts) notes.error = String(res.error || 'unreachable');
         } else {
           notes.posts = res.posts || [];
+          notes.fetchedAt = now();
           // A vote still in flight has already been painted on its row. This
           // list predates it, so re-apply it rather than flickering back to the
           // old status until that vote's own response arrives.
@@ -3450,7 +3477,8 @@
             var p = notes.posts.find(function (x) { return x.id === pid; });
             if (p) Object.keys(notes.pending[pid]).forEach(function (k) { p[k] = notes.pending[pid][k]; });
           });
-          try { localStorage.setItem(LS_NOTES, JSON.stringify({ t: now(), posts: notes.posts })); } catch (e) {}
+          pruneNoteAttr();
+          saveNotesCache();
           prefetchNoteDetails();
         }
         updateNotesCount();
@@ -3461,23 +3489,104 @@
         if (ui.view === 'notes') render();
       });
     }
-    // Warm the bodies of actionable posts so expanding one is instant.
+    // Repaint the queue after background data lands — but never yank the DOM
+    // out from under an in-progress edit.
+    function repaintNotes() {
+      if (ui.view === 'notes' && !document.querySelector('.draft-editing')) render();
+    }
+    // Warm the bodies of actionable posts so expanding one is instant, and
+    // recover the who-decided-it names for rows the index can't tag.
+    //
+    // Both stay one-at-a-time on purpose: the HQ Apps Script takes a
+    // script-wide lock for the whole of each request, so firing these in
+    // parallel wouldn't overlap — it would just queue them, and queue the
+    // user's own board saves behind them.
+    var notePrefetching = false;
     function prefetchNoteDetails() {
+      recoverNoteAttr();
+      if (notePrefetching) return;   // a pass is already working through the list
       var queue = (notes.posts || [])
         .filter(function (p) { return p.status !== 'published' && p.status !== 'rejected' && !notes.detail[p.id]; })
         .slice(0, 4);
+      if (!queue.length) return;
+      notePrefetching = true;
+      var dirty = false;
       (function next() {
-        var p = queue.shift(); if (!p) return;
+        var p = queue.shift();
+        if (!p) {
+          notePrefetching = false;
+          if (dirty) saveNotesCache();
+          return;
+        }
         postsApi({ action: 'posts-get', id: p.id }).then(function (res) {
           if (res.result === 'success' && res.post) {
             notes.detail[p.id] = res.post;
-            // The detail carries the cover URL — repaint so row thumbnails pop
-            // in (but never yank the DOM out from under an in-progress edit).
-            if (ui.view === 'notes' && !document.querySelector('.draft-editing')) render();
+            // The detail carries the cover URL (row thumbnails) and the review
+            // trail. Keep the names from it even after the body is dropped —
+            // they're a few bytes, and they're what the row's tag needs.
+            notes.attr[p.id] = noteAttrFromDetail(res.post);
+            dirty = true;
+            repaintNotes();
           }
           next();
         }).catch(next);
       })();
+    }
+    // Rows the index couldn't tag are answered in one batch — asking per row
+    // costs a serialized round trip each, which is what made a queue full of
+    // older posts fill in its tags one slow row at a time. The backend writes
+    // each answer back into the index as it goes, so this shrinks to nothing.
+    var NOTE_ATTR_BATCH = 20;      // ids per request; the backend caps at 25
+    var noteAttrInFlight = false;
+    var noteAttrUnsupported = false;   // backend predates posts-attr
+    function recoverNoteAttr() {
+      if (noteAttrInFlight || noteAttrUnsupported) return;
+      var ids = (notes.posts || []).filter(noteNeedsAttr).map(function (p) { return p.id; }).slice(0, NOTE_ATTR_BATCH);
+      if (!ids.length) return;
+      noteAttrInFlight = true;
+      postsApi({ action: 'posts-attr', ids: ids.join(',') }).then(function (res) {
+        noteAttrInFlight = false;
+        if (res.result !== 'success' || !res.attr) {
+          // Only an HQ (or posts) deployment that predates the action is a
+          // permanent no — anything else is a hiccup worth retrying on the next
+          // refresh. Either way the body warm-up still recovers what it touches.
+          if (/unknown action|not configured/i.test(String(res.error || ''))) noteAttrUnsupported = true;
+          return;
+        }
+        Object.keys(res.attr).forEach(function (id) { notes.attr[id] = res.attr[id]; });
+        saveNotesCache();
+        repaintNotes();
+      }).catch(function () { noteAttrInFlight = false; });
+    }
+    // Does this row still need asking about before it can be tagged? Pending
+    // posts have nothing to attribute; anything already recovered is done for
+    // good — a decided row's answer doesn't change.
+    function noteNeedsAttr(p) {
+      if (!p.status || p.status === 'pending') return false;
+      if (notes.attr[p.id]) return false;
+      var needApproval = (p.status === 'approved' || p.status === 'published') && !p.approvedBy;
+      return !p.statusBy || needApproval;
+    }
+    // Pull the names out of a post's own record: the review trail for votes,
+    // publishedBy for who pushed it live (the trail has no publish entry).
+    function noteAttrFromDetail(d) {
+      var last = null, approval = null;
+      (d.reviews || []).forEach(function (rv) {
+        if (rv.vote !== 'approve' && rv.vote !== 'changes' && rv.vote !== 'reject') return;
+        last = rv;
+        if (rv.vote === 'approve') approval = rv;
+      });
+      var a = { by: '', at: '', approvedBy: approval ? (approval.reviewer || '') : '' };
+      if (d.status === 'published') { a.by = d.publishedBy || ''; a.at = d.publishedAt || ''; }
+      else if (last) { a.by = last.reviewer || ''; a.at = last.at || ''; }
+      return a;
+    }
+    // Drop recovered names for posts that are no longer in the queue, so the
+    // cache can't grow without bound.
+    function pruneNoteAttr() {
+      var live = {};
+      (notes.posts || []).forEach(function (p) { live[p.id] = 1; });
+      Object.keys(notes.attr).forEach(function (id) { if (!live[id]) delete notes.attr[id]; });
     }
     // Best-known cover URL for a post. Drafts get theirs from the warmed
     // detail (the list endpoint doesn't carry covers); published posts go
@@ -3539,20 +3648,17 @@
     }
     // Who owns a post's current state. The list payload carries it (statusBy /
     // approvedBy); for posts decided before the posts backend recorded those,
-    // it's recovered from the review trail of any detail we've already warmed.
+    // it comes from the recovered names — see recoverNoteAttr.
     function noteAttribution(p) {
       var a = { by: p.statusBy || '', at: p.statusAt || '', approvedBy: p.approvedBy || '' };
-      var d = notes.detail[p.id];
-      if ((!a.by || !a.approvedBy) && d && d.reviews) {
-        var last = null, approval = null;
-        d.reviews.forEach(function (rv) {
-          if (rv.vote !== 'approve' && rv.vote !== 'changes' && rv.vote !== 'reject') return;
-          last = rv;
-          if (rv.vote === 'approve') approval = rv;
-        });
-        if (!a.approvedBy && approval && (p.status === 'approved' || p.status === 'published')) a.approvedBy = approval.reviewer;
-        // The trail has no "published" entry, so a publisher is never guessed.
-        if (!a.by && last && p.status !== 'published') { a.by = last.reviewer; a.at = last.at || ''; }
+      if (a.by && a.approvedBy) return a;
+      // Recovered from the post's own record — from the warmed detail if it's
+      // in memory, otherwise from the cached names, which survive a reload and
+      // so paint with the rows instead of a round trip later.
+      var r = notes.detail[p.id] ? noteAttrFromDetail(notes.detail[p.id]) : notes.attr[p.id];
+      if (r) {
+        if (!a.approvedBy && r.approvedBy && (p.status === 'approved' || p.status === 'published')) a.approvedBy = r.approvedBy;
+        if (!a.by && r.by) { a.by = r.by; a.at = r.at || ''; }
       }
       return a;
     }
@@ -3578,7 +3684,7 @@
       Object.keys(fields).forEach(function (k) { if (fields[k] !== undefined) p[k] = fields[k]; });
       // Persist too, so reopening the tab paints the tags instantly instead of
       // showing a pre-vote cache until the background fetch lands.
-      try { localStorage.setItem(LS_NOTES, JSON.stringify({ t: now(), posts: notes.posts })); } catch (e) {}
+      saveNotesCache();
       updateNotesCount();
       if (ui.view === 'notes') render();
     }
@@ -3599,7 +3705,7 @@
       NOTE_ROW_KEYS.forEach(function (k) {
         if (snap[k] === undefined) delete p[k]; else p[k] = snap[k];
       });
-      try { localStorage.setItem(LS_NOTES, JSON.stringify({ t: now(), posts: notes.posts })); } catch (e) {}
+      saveNotesCache();
       updateNotesCount();
       if (ui.view === 'notes') render();
     }
@@ -3680,6 +3786,9 @@
             : act === 'changes' ? (res.emailed ? 'Recorded — feedback emailed to the author ✉️' : 'Recorded (no author email on file)')
             : 'Recorded — ' + act);
           delete notes.detail[id];
+          // The list now carries this row's attribution, so drop the recovered
+          // copy rather than let it outlive what it was standing in for.
+          delete notes.attr[id];
           loadNotes();
         } else {
           // The optimistic row was wrong — put it back the way it was.
@@ -3974,7 +4083,7 @@
                 if (res.post) notes.detail[id] = res.post; else delete notes.detail[id];
                 var le = (notes.posts || []).find(function (x) { return x.id === id; });
                 if (le) le.title = title;
-                try { localStorage.setItem(LS_NOTES, JSON.stringify({ t: now(), posts: notes.posts })); } catch (e) {}
+                saveNotesCache();
                 render();
               } else {
                 btn.disabled = false; btn.textContent = 'Save draft';
@@ -3988,8 +4097,14 @@
       }
       if (notes.detail[id]) { paint(notes.detail[id]); return; }
       postsApi({ action: 'posts-get', id: id }).then(function (res) {
-        if (res.result === 'success' && res.post) { notes.detail[id] = res.post; paint(res.post); }
-        else box.innerHTML = '<p class="help-note">Couldn\'t load this post.</p>';
+        if (res.result === 'success' && res.post) {
+          notes.detail[id] = res.post;
+          // Opening a row is also a chance to learn who decided it — keep the
+          // names so the tag is there next time without asking again.
+          notes.attr[id] = noteAttrFromDetail(res.post);
+          saveNotesCache();
+          paint(res.post);
+        } else box.innerHTML = '<p class="help-note">Couldn\'t load this post.</p>';
       }).catch(function () { box.innerHTML = '<p class="help-note">Couldn\'t load this post.</p>'; });
     }
 
@@ -4751,7 +4866,7 @@
         // badges) are ready before anyone clicks — each live fetch takes
         // several seconds through two Apps Script cold starts. Staggered so
         // they don't contend for the same cold start.
-        setTimeout(function () { if (!notes.loading) loadNotes(); }, 2500);
+        setTimeout(refreshNotesIfStale, 2500);
         setTimeout(function () { if (!pledges.loading) loadPledges(); }, 5000);
       }
     }
