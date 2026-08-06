@@ -14,6 +14,7 @@ const AMBASSADORS_2026 = [
   { slug: 'hayley-foote',        name: 'Hayley Foote',         photo: '../42.jpg', flag: '🇺🇸', country: 'United States',      tagline: 'Building a campus Financial Health System at Ohio State.' },
   { slug: 'sophie-hong',         name: 'Sophie Hong',          photo: '../43.jpg', flag: '🇺🇸', country: 'United States',      tagline: 'Financial literacy for vulnerable communities.' },
   { slug: 'devin-acar',           name: 'Devin Acar',           photo: '../45.jpg', flag: '🇺🇸', country: 'United States',      tagline: 'Researching why financial confidence — not knowledge — makes money work.' },
+  { slug: 'kristina-schilt',     name: 'Kristina Schilt',      photo: '../46.jpg', flag: '🇺🇸', country: 'United States',      tagline: 'Passing on the savings, credit, and investing habits she was taught.' },
 ];
 
 (async () => {
