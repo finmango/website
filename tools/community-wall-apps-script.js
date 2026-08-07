@@ -497,7 +497,7 @@ function notifyModeratorPledge_(pledge) {
       subject: '[Pledge Wall] New pledge from ' + pledge.name + ' — ' + pledge.barrier,
       htmlBody:
         '<p><strong>' + esc_(pledge.name) + '</strong> · ' + esc_(pledge.location) +
-        ' · standing against <strong>' + esc_(pledge.barrier) + '</strong></p>' +
+        ' · barrier: <strong>' + esc_(pledge.barrier) + '</strong></p>' +
         (pledge.why
           ? '<blockquote style="border-left:3px solid #FF6B35;padding-left:12px;margin:12px 0">' +
             esc_(pledge.why).replace(/\n/g, '<br>') + '</blockquote>'
