@@ -4,34 +4,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ambassadors - FinMango | Global Ambassadors Program</title>
-  <meta name="description"
-    content="Join FinMango's Global Ambassadors program. A free initiative where young adults champion financial health as a fundamental right across communities worldwide.">
-  <meta name="keywords"
-    content="global ambassadors, financial advocacy, youth leadership, financial health, changemakers">
+  <title>Publications - FinMango Research</title>
+  <meta name="description" content="FinMango's peer-reviewed publications in Nature (Scientific Data) and the American Journal of Health Education, the Financial Health Barometer whitepaper, and working papers with university partners.">
+  <meta name="keywords" content="financial health publications, peer reviewed research, nature scientific data, working papers, google health trends research">
   <meta name="author" content="FinMango">
   <link rel="icon" type="image/png" href="favicon.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" as="style"
     onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
   </noscript>
 
-  <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.finmango.org/ambassadors.html">
-  <meta property="og:title" content="Ambassadors - FinMango | Global Ambassadors Program">
-  <meta property="og:description" content="Join FinMango's Global Ambassadors program. A free initiative where young adults champion financial health as a fundamental right.">
+  <meta property="og:url" content="https://www.finmango.org/research-publications.html">
+  <meta property="og:title" content="Publications - FinMango Research">
+  <meta property="og:description" content="Peer-reviewed papers, whitepapers, and working papers from the FinMango research team.">
   <meta property="og:image" content="https://www.finmango.org/og-image.png">
   <meta property="og:site_name" content="FinMango">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="canonical" href="https://www.finmango.org/ambassadors.html">
+  <link rel="canonical" href="https://www.finmango.org/research-publications.html">
   <meta name="robots" content="index, follow">
 
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -55,6 +52,9 @@
       --orange-deep: #E5511B;
       --signal-good: #34D399;   /* used only on ink */
       --signal-bad: #F87171;    /* used only on ink */
+
+      /* Legacy alias — scripts/research-map.js writes var(--black) inline */
+      --black: #0A0A0A;
 
       /* Derived ink opacities */
       --ink-dim: rgba(10, 10, 10, .62);
@@ -186,6 +186,21 @@
     .on-ink .btn-secondary { color: var(--paper); border-color: var(--paper-line); }
     .on-ink .btn-secondary:hover { border-color: var(--paper); }
 
+    /* Quiet inline link with arrow */
+    .quiet-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: .92rem;
+      transition: color .2s ease;
+    }
+    .quiet-link svg { width: 13px; height: 13px; transition: transform .3s cubic-bezier(.16,1,.3,1); }
+    .quiet-link:hover { color: var(--orange); }
+    .quiet-link:hover svg { transform: translateX(3px); }
+
     /* ----------------------------------------------------------
        NAVIGATION
        ---------------------------------------------------------- */
@@ -247,6 +262,8 @@
     .nav-right > a:not(.btn-donate):not(.btn-get-involved):hover::after,
     .dropdown:hover .dropdown-trigger::after,
     .dropdown:focus-within .dropdown-trigger::after { width: 100%; }
+    /* active page marker */
+    .nav-right > a[aria-current="page"]:not(.btn-donate):not(.btn-get-involved)::after { width: 100%; }
 
     .btn-get-involved {
       display: inline-flex;
@@ -367,11 +384,13 @@
     .mobile-controls { display: none; gap: 1rem; align-items: center; }
 
     /* ----------------------------------------------------------
-       HERO — text + photo collage (kept, re-framed in hairlines)
+       HERO — top-anchored billboard
        ---------------------------------------------------------- */
     .hero {
       background: var(--paper);
-      padding: 8rem 2rem 6rem;
+      padding: 6.5rem 2rem 0;
+      display: flex;
+      flex-direction: column;
       position: relative;
       overflow: hidden;
     }
@@ -383,34 +402,38 @@
     .hero-bg::before {
       content: '';
       position: absolute;
-      top: 18%;
-      right: -12%;
-      width: 55vw;
-      height: 55vw;
+      top: 28%;
+      left: -12%;
+      width: 60vw;
+      height: 60vw;
       background: radial-gradient(circle, rgba(255, 107, 53, .09) 0%, transparent 60%);
       filter: blur(40px);
     }
 
-    .hero-content {
-      max-width: var(--hero-max);
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 4rem;
-      align-items: center;
-      margin: 0 auto;
+    .hero-container {
       position: relative;
       z-index: 1;
+      width: 100%;
+      max-width: var(--hero-max);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      padding-top: 1.5rem;
     }
 
-    .hero-text { display: flex; flex-direction: column; align-items: flex-start; gap: 1.75rem; }
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
     .hero h1 {
-      font-size: clamp(2.6rem, 4.6vw, 4.4rem);
+      font-size: clamp(3rem, 8.5vw, 8.5rem);
       font-weight: 900;
-      line-height: 1;
-      letter-spacing: -.045em;
-      max-width: 14ch;
+      line-height: .96;
+      letter-spacing: -.05em;
+      max-width: 17ch;
     }
     .hero h1 em {
       font-style: normal;
@@ -419,7 +442,7 @@
       display: inline-block;
       white-space: nowrap;
     }
-    /* hand-drawn accent 1 of 2 */
+    /* the page's one hand-drawn annotation */
     .hero h1 em svg.hand-stroke {
       position: absolute;
       left: -1%;
@@ -440,272 +463,153 @@
     }
     @keyframes draw-stroke { to { stroke-dashoffset: 0; } }
 
-    .hero-subtitle {
-      font-size: clamp(1.02rem, 1.4vw, 1.2rem);
+    .hb-bottom {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 3rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--ink-line-soft);
+    }
+    .hb-sub {
+      font-size: clamp(1.05rem, 1.5vw, 1.35rem);
       font-weight: 300;
-      max-width: 46ch;
-      line-height: 1.6;
+      line-height: 1.5;
       color: var(--ink-dim);
-      letter-spacing: -.01em;
+      max-width: 46ch;
+      letter-spacing: -.015em;
     }
-    .hero-subtitle strong { color: var(--ink); font-weight: 500; }
+    .hb-sub strong { color: var(--ink); font-weight: 500; }
 
-    .hero-cta { display: flex; gap: .9rem; flex-wrap: wrap; align-items: center; }
+    .hb-cta-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; justify-content: flex-end; }
 
-    /* Photo collage — rotations kept, chrome traded for hairlines */
-    .hero-visual { position: relative; height: 520px; }
-    .hero-photo {
-      position: absolute;
-      overflow: hidden;
-      border: 1px solid var(--ink-line);
-      background: var(--paper);
-      transition: transform .35s cubic-bezier(.16, 1, .3, 1), border-color .25s ease;
-    }
-    .hero-photo:hover {
-      transform: translateY(-6px) rotate(0deg) !important;
-      border-color: var(--orange);
-      z-index: 5;
-    }
-    .hero-photo img {
+    /* Live-signals strip — quiet apparatus folded into the hero's bottom edge */
+    .hero-signals {
+      position: relative;
+      z-index: 1;
+      max-width: var(--hero-max);
+      margin: 1.6rem auto 0;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .hero-photo-1 { width: 200px; height: 255px; top: 2%; left: 0%; transform: rotate(-3deg); z-index: 3; }
-    .hero-photo-2 { width: 175px; height: 220px; top: 0%; right: 5%; transform: rotate(2.5deg); z-index: 2; }
-    .hero-photo-3 { width: 165px; height: 210px; bottom: 2%; left: 18%; transform: rotate(2deg); z-index: 2; }
-    .hero-photo-4 { width: 150px; height: 190px; top: 18%; left: 38%; transform: rotate(-1.5deg); z-index: 4; }
-    .hero-photo-5 { width: 160px; height: 200px; bottom: 0%; right: 12%; transform: rotate(-2deg); z-index: 1; }
-
-    .hero-flag-badge {
-      position: absolute;
-      bottom: 8px;
-      left: 8px;
-      background: var(--paper);
-      border: 1px solid var(--ink-line);
-      padding: .25rem .5rem;
-      font-family: var(--font-mono);
-      font-size: .58rem;
-      font-weight: 500;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--ink);
+      padding: 1.4rem 0 1.7rem;
+      border-top: 1px solid var(--ink-line-soft);
       display: flex;
       align-items: center;
-      gap: .35rem;
-    }
-
-    /* ----------------------------------------------------------
-       STATS — ink band, ruled lattice readouts
-       ---------------------------------------------------------- */
-    .stats-bar {
-      padding: 4.5rem var(--gutter);
-      background: var(--ink);
-      color: var(--paper);
-    }
-    .stats-bar-inner {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--paper-line);
-      border: 1px solid var(--paper-line);
-    }
-    .stat-item {
-      background: var(--ink);
-      padding: 1.9rem 1.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: .5rem;
-    }
-    .stat-number {
-      font-size: clamp(2.2rem, 3.4vw, 3rem);
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: -.04em;
-    }
-    .stat-number em { font-style: normal; color: var(--orange); font-size: .55em; vertical-align: .35em; }
-    .stat-label {
-      font-family: var(--font-mono);
-      font-size: .6rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .15em;
-      color: var(--paper-faint);
-    }
-
-    /* Latest published Ambassador Notes — a quiet strip under the stat lattice */
-    .stats-notes {
-      max-width: var(--max-width);
-      margin: 1.75rem auto 0;
-    }
-    .stats-notes-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-bottom: .7rem;
-    }
-    .stats-notes-label {
-      font-family: var(--font-mono);
-      font-size: .58rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .15em;
-      color: var(--paper-faint);
-    }
-    .stats-notes-all {
-      font-family: var(--font-mono);
-      font-size: .58rem;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: var(--paper-faint);
-      text-decoration: none;
-      white-space: nowrap;
-      transition: color .2s ease;
-    }
-    .stats-notes-all:hover { color: var(--orange); }
-    .stats-notes-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1px;
-      background: var(--paper-line);
-      border: 1px solid var(--paper-line);
-    }
-    .stats-note {
-      background: var(--ink);
-      padding: .85rem 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: .3rem;
-      text-decoration: none;
-      min-width: 0;
-      transition: background .2s ease;
-    }
-    .stats-note:hover { background: rgba(250, 250, 247, .05); }
-    .stats-note-title {
-      font-size: .8rem;
-      font-weight: 600;
-      line-height: 1.35;
-      color: var(--paper);
-      opacity: .85;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .stats-note:hover .stats-note-title { opacity: 1; }
-    .stats-note-meta {
-      font-family: var(--font-mono);
-      font-size: .56rem;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--paper-faint);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* ----------------------------------------------------------
-       COHORTS — the heart of the page, kept as portrait grids
-       ---------------------------------------------------------- */
-    .cohort-section { padding: 6rem var(--gutter) 4.5rem; background: var(--paper); }
-    .cohort-section + .cohort-section { padding-top: 4.5rem; }
-    .cohort-inner { max-width: var(--max-width); margin: 0 auto; }
-
-    .cohort-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 2rem;
+      gap: 1.1rem;
       flex-wrap: wrap;
-      padding-bottom: 1.5rem;
-      margin-bottom: 2.75rem;
-      border-bottom: 1px solid var(--ink-line);
-    }
-    .cohort-year {
-      font-size: clamp(3rem, 6vw, 5rem);
-      font-weight: 900;
-      line-height: .9;
-      letter-spacing: -.04em;
-    }
-    .cohort-year span { color: var(--orange); }
-    .cohort-subtitle {
       font-family: var(--font-mono);
       font-size: .64rem;
       font-weight: 500;
       letter-spacing: .15em;
       text-transform: uppercase;
       color: var(--ink-faint);
-      text-align: right;
-      line-height: 1.8;
-      padding-bottom: .5rem;
     }
+    .hero-signals .signal { display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap; }
+    .hero-signals .sep { color: var(--ink-line); }
 
-    .cohort-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
-      gap: 2.25rem 1.75rem;
-    }
-
-    .ambassador-card {
+    /* In-page index — same mono register, right-aligned in the signals strip */
+    .hero-index { margin-left: auto; display: inline-flex; align-items: center; gap: 1.5rem; }
+    .hero-index-label { color: var(--ink-faint); }
+    .hero-index a {
+      color: var(--ink-dim);
       text-decoration: none;
-      color: var(--ink);
-      display: flex;
-      flex-direction: column;
-      gap: .8rem;
-    }
-    .ambassador-img-wrap {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 4 / 5;
-      overflow: hidden;
-      background: var(--paper);
-      border: 1px solid var(--ink-line);
-      transition: border-color .25s ease;
-    }
-    .ambassador-card:hover .ambassador-img-wrap { border-color: var(--orange); }
-    .ambassador-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform .4s cubic-bezier(.16, 1, .3, 1);
-    }
-    .ambassador-card:hover .ambassador-img-wrap img { transform: scale(1.03); }
-
-    .ambassador-flag {
-      position: absolute;
-      bottom: 8px;
-      right: 8px;
-      width: 28px;
-      height: 28px;
-      background: var(--paper);
-      border-radius: 50%;
-      border: 1px solid var(--ink-line);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: .85rem;
-      z-index: 2;
-    }
-
-    .ambassador-name {
-      font-weight: 600;
-      font-size: .9rem;
-      line-height: 1.3;
-      letter-spacing: -.01em;
+      white-space: nowrap;
       transition: color .2s ease;
     }
-    .ambassador-card:hover .ambassador-name { color: var(--orange); }
+    .hero-index a:hover { color: var(--orange); }
+    .signal-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 0 rgba(255, 107, 53, .5);
+      animation: signal-pulse 2.4s ease-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes signal-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, .5); }
+      70% { box-shadow: 0 0 0 9px rgba(255, 107, 53, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
+    }
 
     /* ----------------------------------------------------------
-       BENEFITS — ruled columns
+       PREMISE — the page's ink moment. Lede + ruled stats.
        ---------------------------------------------------------- */
-    .benefits-section { padding: 3rem var(--gutter) 7.5rem; background: var(--paper); }
-    .benefits-container { max-width: var(--max-width); margin: 0 auto; }
+    .premise {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 7rem var(--gutter) 7.5rem;
+    }
+    .premise-container { max-width: var(--max-width); margin: 0 auto; }
+    .premise-lede {
+      font-size: clamp(1.3rem, 2.3vw, 1.85rem);
+      font-weight: 300;
+      line-height: 1.5;
+      letter-spacing: -.015em;
+      color: var(--paper-dim);
+      max-width: 56ch;
+      margin-top: 1.5rem;
+    }
+    .premise-lede em { font-style: normal; color: var(--orange); font-weight: 400; }
+
+    .premise-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 4.5rem;
+      border-top: 1px solid var(--paper-line);
+    }
+    .premise-stat {
+      padding: 2.25rem 2rem 2.25rem 0;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+    }
+    .premise-stat + .premise-stat { padding-left: 2rem; border-left: 1px solid var(--paper-line); }
+    a.premise-stat::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--orange);
+      transition: width .35s cubic-bezier(.16, 1, .3, 1);
+    }
+    a.premise-stat:hover::before { width: calc(100% - 2rem); }
+    .premise-stat-number {
+      font-size: clamp(2.5rem, 4vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -.04em;
+      margin-bottom: .85rem;
+    }
+    .premise-stat-number em { font-style: normal; color: var(--orange); font-size: .55em; vertical-align: .35em; }
+    .premise-stat-label {
+      font-family: var(--font-mono);
+      font-size: .66rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--paper-dim);
+      line-height: 1.6;
+    }
+    .premise-stat-source {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--paper-faint);
+      margin-top: .9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      transition: color .2s ease;
+    }
+    a.premise-stat:hover .premise-stat-source { color: var(--orange); }
+
+    /* ----------------------------------------------------------
+       SECTION HEADS — shared editorial head
+       ---------------------------------------------------------- */
     .section-head {
       display: flex;
       flex-direction: column;
@@ -719,18 +623,257 @@
       line-height: 1;
       letter-spacing: -.045em;
       max-width: 20ch;
-      text-wrap: balance;
     }
     .section-head h2 em { font-style: normal; color: var(--orange); }
+    .section-head h3 {
+      font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -.035em;
+    }
+    .section-head h3 em { font-style: normal; color: var(--orange); }
+    .section-sub {
+      font-size: clamp(1rem, 1.3vw, 1.15rem);
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--ink-dim);
+      max-width: 62ch;
+      letter-spacing: -.01em;
+    }
 
-    .benefits-grid {
+    /* ----------------------------------------------------------
+       RECOGNITION — Google.org clipping as a hairline plate
+       ---------------------------------------------------------- */
+    .recognition { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+    .recognition-container { max-width: var(--max-width); margin: 0 auto; }
+    .recognition-card {
+      border: 1px solid var(--ink-line);
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+    }
+    .recognition-lead {
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+    .recognition-headline {
+      font-size: clamp(1.4rem, 2.3vw, 2rem);
+      font-weight: 900;
+      line-height: 1.2;
+      letter-spacing: -.03em;
+      max-width: 24ch;
+    }
+    .recognition-headline em { font-style: normal; color: var(--orange); }
+    .recognition-meta {
+      font-family: var(--font-mono);
+      font-size: .66rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+    .recognition-tweet {
+      border-left: 1px solid var(--ink-line);
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      min-width: 0;
+    }
+    .recognition-tweet-header { display: flex; align-items: center; gap: .75rem; }
+    .recognition-tweet-icon { width: 20px; height: 20px; fill: var(--ink-faint); flex-shrink: 0; }
+    .recognition-tweet-name { font-weight: 600; font-size: .92rem; letter-spacing: -.01em; }
+    .recognition-tweet-handle {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .recognition-tweet .twitter-tweet { margin: 0 !important; }
+    .recognition-tweet-caption {
+      font-size: .85rem;
+      font-weight: 300;
+      color: var(--ink-faint);
+      letter-spacing: -.005em;
+    }
+    /* Resulting research — fills the lead column, anchored to its base */
+    .recognition-outcomes {
+      margin-top: auto;
+      align-self: stretch;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--ink-line);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .recognition-outcomes-label {
+      font-family: var(--font-mono);
+      font-size: .64rem;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .recognition-outcome {
+      position: relative;
+      padding-left: 2rem;
+      text-decoration: none;
+      display: block;
+    }
+    .recognition-outcome::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: .6em;
+      width: 18px;
+      height: 1px;
+      background: var(--orange);
+      transition: width .25s cubic-bezier(.16, 1, .3, 1);
+    }
+    .recognition-outcome:hover::before { width: 24px; }
+    .recognition-outcome-title {
+      display: block;
+      font-size: .9rem;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      line-height: 1.35;
+      color: var(--ink);
+      transition: color .2s ease;
+    }
+    .recognition-outcome:hover .recognition-outcome-title { color: var(--orange); }
+    .recognition-outcome-venue {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-top: .25rem;
+    }
+
+    /* ----------------------------------------------------------
+       BAROMETER PREVIEW — instrument plate on paper.
+       JS hooks preserved: #barometer-map-container, #barometer-preview-map,
+       #preview-tooltip, #tooltip-state, #tooltip-value, #indicator-tabs,
+       .indicator-tab[data-indicator]. research-map.js sets inline styles
+       (orange/white fills) on tab clicks — CSS below matches those states.
+       ---------------------------------------------------------- */
+    .map-section { padding: 7.5rem var(--gutter); background: var(--paper); }
+    .map-container { max-width: var(--max-width); margin: 0 auto; }
+    .map-plate { border: 1px solid var(--ink-line); }
+    #barometer-map-container {
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+      padding: 2.5rem 2.5rem 1.5rem;
+    }
+    #barometer-preview-map { width: 100%; height: auto; max-height: 60vh; }
+
+    #preview-tooltip {
+      position: fixed;
+      background: var(--ink);
+      color: var(--paper);
+      padding: .7rem .9rem;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .04em;
+      pointer-events: none;
+      z-index: 1050;
+      opacity: 0;
+      transition: opacity .15s ease;
+      white-space: nowrap;
+      box-shadow: 0 24px 48px -24px rgba(10, 10, 10, .35);
+    }
+    #tooltip-state { font-weight: 500; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .3rem; }
+    #tooltip-value { color: var(--orange); font-weight: 500; }
+
+    #indicator-tabs {
+      display: flex;
+      justify-content: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+      padding: 0 2rem 1.75rem;
+    }
+    .indicator-tab {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: .65rem 1.1rem;
+      border: 1px solid var(--ink-line);
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease, color .2s ease;
+    }
+    .indicator-tab:hover { border-color: var(--ink); }
+    .indicator-tab.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+
+    .map-legend {
+      display: flex;
+      justify-content: center;
+      gap: 1.75rem;
+      flex-wrap: wrap;
+      padding: 0 2rem 2rem;
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .map-legend-item { display: flex; align-items: center; gap: .45rem; white-space: nowrap; }
+    .map-legend-color { width: 14px; height: 6px; flex-shrink: 0; }
+    .map-legend-color.low { background: #10B981; }
+    .map-legend-color.moderate { background: #F59E0B; }
+    .map-legend-color.elevated { background: #F97316; }
+    .map-legend-color.high { background: #EF4444; }
+
+    .figure-caption {
+      max-width: 72ch;
+      margin: 1.25rem auto 0;
+      text-align: center;
+      font-size: .82rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--ink-faint);
+      padding: 0 1rem;
+    }
+    .figure-caption .fig-num {
+      font-family: var(--font-mono);
+      font-size: .6rem;
+      font-weight: 500;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-right: .6rem;
+    }
+    .map-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.75rem;
+      margin-top: 2.25rem;
+      flex-wrap: wrap;
+    }
+
+    /* ----------------------------------------------------------
+       APPROACH — four ruled columns
+       ---------------------------------------------------------- */
+    .approach-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+    .approach-container { max-width: var(--max-width); margin: 0 auto; }
+    .approach-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       border-top: 1px solid var(--ink-line-soft);
     }
-    .benefit-card { padding: 2.5rem 1.75rem 2.5rem 0; position: relative; }
-    .benefit-card + .benefit-card { padding-left: 1.75rem; border-left: 1px solid var(--ink-line-soft); }
-    .benefit-card::before {
+    .approach-card { padding: 2.5rem 1.75rem 2.5rem 0; position: relative; }
+    .approach-card + .approach-card { padding-left: 1.75rem; border-left: 1px solid var(--ink-line-soft); }
+    .approach-card::before {
       content: '';
       position: absolute;
       top: -1px;
@@ -740,214 +883,411 @@
       background: var(--orange);
       transition: width .4s cubic-bezier(.16, 1, .3, 1);
     }
-    .benefit-card:hover::before { width: calc(100% - 1.75rem); }
-    .benefit-card + .benefit-card:hover::before { left: 1.75rem; }
-    .benefit-icon { font-size: 1.5rem; line-height: 1; margin-bottom: 1.1rem; }
-    .benefit-title { font-size: 1.12rem; font-weight: 900; letter-spacing: -.02em; margin-bottom: .6rem; }
-    .benefit-desc { color: var(--ink-dim); line-height: 1.6; font-size: .9rem; font-weight: 300; }
-
-    /* Ambassador deliverable — hairline plate */
-    .deliverable-plate {
-      margin-top: 4rem;
-      border: 1px solid var(--ink-line);
-      padding: 2rem 2.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-    .deliverable-text { flex: 1; min-width: 260px; }
-    .deliverable-label {
+    .approach-card:hover::before { width: calc(100% - 1.75rem); }
+    .approach-card + .approach-card:hover::before { left: 1.75rem; }
+    .approach-num {
       font-family: var(--font-mono);
       font-size: .62rem;
       font-weight: 500;
       letter-spacing: .16em;
       text-transform: uppercase;
-      color: var(--orange);
-      margin-bottom: .65rem;
-      display: inline-flex;
-      align-items: center;
-      gap: .6rem;
+      color: var(--ink-faint);
+      margin-bottom: 1rem;
     }
-    .deliverable-title {
-      font-weight: 900;
-      font-size: 1.2rem;
-      line-height: 1.3;
-      letter-spacing: -.02em;
-      margin-bottom: .5rem;
-      max-width: 40ch;
-    }
-    .deliverable-desc {
-      font-size: .92rem;
-      font-weight: 300;
-      color: var(--ink-dim);
-      line-height: 1.6;
-      max-width: 66ch;
-    }
-    .deliverable-desc a { color: var(--orange); font-weight: 600; text-decoration: none; }
-    .deliverable-desc a:hover { text-decoration: underline; }
+    .approach-title { font-size: 1.18rem; font-weight: 900; letter-spacing: -.02em; margin-bottom: .7rem; }
+    .approach-text { color: var(--ink-dim); line-height: 1.6; font-size: .92rem; font-weight: 300; }
+    .approach-cta { margin-top: 3rem; }
 
     /* ----------------------------------------------------------
-       FAQ — ruled accordion (hooks preserved for the JS)
+       PARTNERSHIPS — hairline plates
        ---------------------------------------------------------- */
-    .faq-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-    .faq-container { max-width: var(--max-width); margin: 0 auto; }
-    .faq-list { max-width: 860px; border-top: 1px solid var(--ink-line); }
+    .partnerships-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+    .partnerships-container { max-width: var(--max-width); margin: 0 auto; }
+    .collab-list { display: flex; flex-direction: column; gap: 2rem; }
+    .collab-card {
+      border: 1px solid var(--ink-line);
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 2.5rem;
+      padding: 2.5rem;
+      align-items: start;
+      transition: border-color .25s ease;
+    }
+    .collab-card:hover { border-color: var(--ink-faint); }
+    .collab-logo { width: 100%; height: auto; display: block; border: 1px solid var(--ink-line); }
+    .collab-title {
+      font-size: clamp(1.25rem, 1.8vw, 1.6rem);
+      font-weight: 900;
+      letter-spacing: -.025em;
+      line-height: 1.25;
+      margin-bottom: .85rem;
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      flex-wrap: wrap;
+    }
+    .status-tag {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: .3rem .65rem;
+      border: 1px solid var(--ink-line);
+      color: var(--ink-faint);
+      white-space: nowrap;
+    }
+    .status-tag.active { color: var(--orange); border-color: rgba(255, 107, 53, .4); }
+    .collab-description {
+      font-size: .98rem;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--ink-dim);
+      max-width: 64ch;
+      letter-spacing: -.005em;
+    }
+    .collab-card .quiet-link { margin-top: 1.25rem; }
 
-    .faq-item { border-bottom: 1px solid var(--ink-line); position: relative; }
-    .faq-item::before {
+    /* ----------------------------------------------------------
+       OPEN QUESTIONS — hairline lattice
+       ---------------------------------------------------------- */
+    .focus-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+    .focus-container { max-width: var(--max-width); margin: 0 auto; }
+    .questions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--ink-line);
+      border-top: 1px solid var(--ink-line);
+      border-bottom: 1px solid var(--ink-line);
+    }
+    .question-cell {
+      background: var(--paper);
+      padding: 2.25rem 2rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: .75rem;
+    }
+    .question-cell::before {
       content: '';
       position: absolute;
-      left: 0;
       top: -1px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--orange);
+      transition: width .35s cubic-bezier(.16, 1, .3, 1);
+      z-index: 1;
+    }
+    .question-cell:hover::before { width: 100%; }
+    .question-num {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .question-title { font-size: 1.15rem; font-weight: 900; letter-spacing: -.02em; }
+    .question-text {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--ink-dim);
+      letter-spacing: -.01em;
+      max-width: 32ch;
+    }
+
+    /* ----------------------------------------------------------
+       REFERENCED BY — quiet apparatus strip
+       ---------------------------------------------------------- */
+    .referenced-by {
+      padding: 2.5rem var(--gutter);
+      border-top: 1px solid var(--ink-line-soft);
+      border-bottom: 1px solid var(--ink-line-soft);
+      background: var(--paper);
+    }
+    .referenced-by-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+    }
+    .referenced-by-label {
+      font-family: var(--font-mono);
+      font-size: .6rem;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      flex-shrink: 0;
+    }
+    .referenced-by-orgs {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem 2.5rem;
+    }
+    .referenced-by-orgs span {
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      transition: color .25s ease;
+      white-space: nowrap;
+    }
+    .referenced-by-orgs span:hover { color: var(--ink); }
+
+    /* ----------------------------------------------------------
+       PUBLICATIONS — ruled list, mono apparatus
+       ---------------------------------------------------------- */
+    .publications-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+    .publications-container { max-width: var(--max-width); margin: 0 auto; }
+    .pub-list { border-top: 1px solid var(--ink-line); }
+    .pub-row {
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--ink-line);
+      position: relative;
+    }
+    .pub-row::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--orange);
+      transition: width .4s cubic-bezier(.16, 1, .3, 1);
+    }
+    .pub-row:hover::before { width: 100%; }
+    .pub-meta {
+      font-family: var(--font-mono);
+      font-size: .66rem;
+      font-weight: 500;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: .35rem .6rem;
+      margin-bottom: 1.1rem;
+    }
+    .pub-meta > span + span::before { content: '·'; margin-right: .6rem; color: var(--ink-line); }
+    .pub-meta .pub-tag-featured, .pub-meta .pub-tag-progress { color: var(--orange); }
+    .pub-title {
+      font-size: clamp(1.2rem, 1.9vw, 1.6rem);
+      font-weight: 900;
+      letter-spacing: -.025em;
+      line-height: 1.25;
+      max-width: 62ch;
+      margin-bottom: .85rem;
+    }
+    .pub-authors {
+      font-size: .92rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--ink-dim);
+      max-width: 78ch;
+      margin-bottom: .35rem;
+    }
+    .pub-journal { font-size: .92rem; font-weight: 500; color: var(--ink); margin-bottom: 1.1rem; }
+    .pub-links { display: flex; align-items: center; gap: 1.75rem; flex-wrap: wrap; }
+
+    /* Expandable abstracts — JS hooks preserved (.paper-toggle, .paper-abstract-wrap) */
+    .paper-toggle {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-weight: 600;
+      color: var(--ink-dim);
+      font-size: .88rem;
+      letter-spacing: -.005em;
+      cursor: pointer;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      transition: color .2s ease;
+    }
+    .paper-toggle:hover { color: var(--orange); }
+    .paper-toggle .toggle-arrow { transition: transform .3s cubic-bezier(.16,1,.3,1); display: inline-block; font-size: .8rem; }
+    .paper-toggle[aria-expanded="true"] .toggle-arrow { transform: rotate(180deg); }
+    .paper-abstract-wrap { max-height: 0; overflow: hidden; transition: max-height .45s cubic-bezier(.16,1,.3,1); }
+    .paper-abstract-wrap.open { max-height: 600px; }
+    .paper-abstract {
+      font-size: .95rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--ink-dim);
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--ink-line-soft);
+      max-width: 78ch;
+    }
+
+    .working-head { margin-top: 5rem; }
+
+    /* ----------------------------------------------------------
+       REPORTS & BRIEFS — house publications, data-driven.
+       Renders from the REPORTS array near the foot of the page.
+       Featured working papers get a two-column treatment; shorter
+       briefs sit in a 2-up grid. Each card surfaces its source
+       documents and links down to the data/tools it informed.
+       ---------------------------------------------------------- */
+    .reports-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+    .reports-container { max-width: var(--max-width); margin: 0 auto; }
+    .reports-legend { display: flex; flex-wrap: wrap; gap: 1rem 2.5rem; margin-bottom: 3.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--ink-line-soft); }
+    .reports-legend-item { display: flex; align-items: baseline; gap: .7rem; font-size: .82rem; font-weight: 300; line-height: 1.5; color: var(--ink-dim); max-width: 34ch; letter-spacing: -.005em; }
+    .reports-legend-item .report-type { flex-shrink: 0; }
+    .report-type { font-family: var(--font-mono); font-size: .62rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; padding: .3rem .65rem; border: 1px solid rgba(255,107,53,.4); color: var(--orange); align-self: flex-start; white-space: nowrap; }
+    .report-title { font-weight: 900; letter-spacing: -.025em; line-height: 1.22; }
+    .report-authors { font-size: .9rem; font-weight: 300; line-height: 1.55; color: var(--ink-dim); }
+    .report-authors .aff { color: var(--ink-faint); }
+    .report-meta { font-family: var(--font-mono); font-size: .64rem; font-weight: 500; letter-spacing: .13em; text-transform: uppercase; color: var(--ink-dim); display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .6rem; }
+    .report-meta > span + span::before { content: '·'; margin-right: .6rem; color: var(--ink-line); }
+    .report-summary { font-size: .98rem; font-weight: 300; line-height: 1.6; color: var(--ink-dim); letter-spacing: -.005em; }
+    .report-tags { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
+    .report-tag { font-family: var(--font-mono); font-size: .6rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-dim); }
+    .report-tag::before { content: '#'; color: var(--orange); margin-right: .05rem; }
+    .report-docs { display: flex; flex-direction: column; gap: .55rem; }
+    .report-doc, .report-link { display: inline-flex; align-items: baseline; gap: .55rem; font-family: var(--font-mono); font-size: .7rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--ink); transition: color .2s ease; }
+    .report-doc:hover, .report-link:hover { color: var(--orange); }
+    .report-doc .kind, .report-link .dir { color: var(--orange); flex-shrink: 0; font-size: .6rem; letter-spacing: .1em; }
+    .report-link .dir { font-size: .85rem; line-height: 1; transition: transform .25s cubic-bezier(.16,1,.3,1); }
+    .report-link:hover .dir.down { transform: translateY(2px); }
+    .report-link:hover .dir.up { transform: translateY(-2px); }
+    .reports-featured { display: flex; flex-direction: column; gap: 1.5rem; }
+    .report-featured { border: 1px solid var(--ink-line); display: grid; grid-template-columns: 1.5fr 1fr; position: relative; }
+    .report-featured::before { content: ''; position: absolute; top: -1px; left: -1px; width: 0; height: 2px; background: var(--orange); transition: width .45s cubic-bezier(.16,1,.3,1); }
+    .report-featured:hover::before { width: calc(100% + 2px); }
+    .rf-main { padding: 2.75rem; display: flex; flex-direction: column; gap: 1.15rem; }
+    .rf-main .report-title { font-size: clamp(1.45rem, 2.2vw, 1.95rem); max-width: 26ch; }
+    .rf-side { padding: 2.75rem; border-left: 1px solid var(--ink-line); display: flex; flex-direction: column; gap: 1.75rem; }
+    .rf-block-label { font-family: var(--font-mono); font-size: .64rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: .9rem; }
+    .findings-list { list-style: none; }
+    .findings-list li { font-size: .9rem; font-weight: 300; line-height: 1.5; color: var(--ink-dim); padding-left: 1.6rem; position: relative; margin-bottom: .8rem; letter-spacing: -.005em; }
+    .findings-list li:last-child { margin-bottom: 0; }
+    .findings-list li::before { content: ''; position: absolute; left: 0; top: .65em; width: 16px; height: 1px; background: var(--orange); }
+    .rf-links { display: flex; flex-direction: column; gap: .55rem; }
+    .reports-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .report-card { border: 1px solid var(--ink-line); padding: 2.25rem; display: flex; flex-direction: column; gap: 1rem; position: relative; transition: border-color .25s ease; }
+    .report-card:hover { border-color: var(--ink-faint); }
+    .report-card::before { content: ''; position: absolute; top: -1px; left: -1px; width: 0; height: 2px; background: var(--orange); transition: width .4s cubic-bezier(.16,1,.3,1); }
+    .report-card:hover::before { width: calc(100% + 2px); }
+    .report-card .report-title { font-size: 1.18rem; max-width: 34ch; }
+    .report-card .report-summary { font-size: .94rem; }
+    .report-card .report-docs { margin-top: auto; padding-top: 1.1rem; border-top: 1px solid var(--ink-line-soft); }
+    .reports-sub-head { margin-top: 5.5rem; }
+    @media (max-width: 968px) {
+      .reports-section { padding: 0 var(--gutter) 5rem; }
+      .report-featured { grid-template-columns: 1fr; }
+      .rf-main, .rf-side { padding: 1.75rem; }
+      .rf-side { border-left: none; border-top: 1px solid var(--ink-line); }
+      .reports-grid { grid-template-columns: 1fr; }
+      .report-card { padding: 1.75rem; }
+      .reports-legend { gap: .85rem 1.75rem; margin-bottom: 2.5rem; }
+      .reports-sub-head { margin-top: 4rem; }
+    }
+
+    /* ----------------------------------------------------------
+       TEAM — leadership lattice + ruled collaborators
+       ---------------------------------------------------------- */
+    .team-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+    .team-container { max-width: var(--max-width); margin: 0 auto; }
+    .leads-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1px;
+      background: var(--ink-line);
+      border-top: 1px solid var(--ink-line);
+      border-bottom: 1px solid var(--ink-line);
+    }
+    .lead-cell {
+      background: var(--paper);
+      padding: 1.75rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+    .lead-mark {
+      font-family: var(--font-mono);
+      font-size: .6rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--orange);
+    }
+    .lead-name { font-size: .95rem; font-weight: 600; letter-spacing: -.01em; }
+
+    .collaborators-head { margin-top: 5rem; }
+    .collaborators-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-top: 1px solid var(--ink-line-soft);
+    }
+    .collaborator { padding: 2rem 1.5rem 2rem 0; position: relative; }
+    .collaborator + .collaborator { padding-left: 1.5rem; border-left: 1px solid var(--ink-line-soft); }
+    .collaborator::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
       width: 0;
       height: 1px;
       background: var(--orange);
       transition: width .35s cubic-bezier(.16, 1, .3, 1);
     }
-    .faq-item.active::before { width: 100%; }
-
-    .faq-question {
-      font-size: 1.05rem;
-      font-weight: 600;
-      letter-spacing: -.015em;
-      padding: 1.4rem 0;
-      color: var(--ink);
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1.5rem;
-      user-select: none;
-      background: none;
-      border: none;
-      width: 100%;
-      text-align: left;
-      font-family: var(--font-body);
-      transition: color .2s ease;
-    }
-    .faq-question:hover { color: var(--orange); }
-    .faq-question::after {
-      content: '+';
-      font-size: 1.4rem;
-      font-weight: 400;
+    .collaborator:hover::before { width: calc(100% - 1.5rem); }
+    .collaborator + .collaborator:hover::before { left: 1.5rem; }
+    .collaborator-name { font-size: 1rem; font-weight: 600; letter-spacing: -.015em; margin-bottom: .5rem; }
+    .collaborator-org {
       font-family: var(--font-mono);
-      color: var(--orange);
-      transition: transform .3s ease;
-      line-height: 1;
-      flex-shrink: 0;
+      font-size: .62rem;
+      font-weight: 500;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      line-height: 1.6;
     }
-    .faq-item.active .faq-question::after { transform: rotate(45deg); }
-
-    .faq-answer {
-      font-size: .98rem;
-      font-weight: 300;
-      line-height: 1.7;
-      color: var(--ink-dim);
-      max-width: 70ch;
-      max-height: 0;
-      overflow: hidden;
-      transition: all .3s ease;
-      padding: 0;
-    }
-    .faq-item.active .faq-answer { max-height: 500px; padding: 0 0 1.4rem; }
-    .faq-answer a { color: var(--orange); font-weight: 600; text-decoration: none; }
-    .faq-answer a:hover { text-decoration: underline; }
 
     /* ----------------------------------------------------------
-       APPLICATION MODAL — hooks preserved, chrome rebuilt
+       METHODOLOGY — hairline plate
        ---------------------------------------------------------- */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 2000;
-      background: rgba(10, 10, 10, .6);
-      -webkit-backdrop-filter: blur(4px);
-      backdrop-filter: blur(4px);
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-      opacity: 0;
-      transition: opacity .3s ease;
+    .methodology-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+    .methodology-container { max-width: var(--max-width); margin: 0 auto; }
+    .data-box { border: 1px solid var(--ink-line); padding: 3rem; }
+    .data-title { font-size: 1.35rem; font-weight: 900; letter-spacing: -.025em; margin-bottom: 1.75rem; }
+    .data-list { list-style: none; padding: 0; max-width: 72ch; }
+    .data-list li {
+      font-size: .98rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--ink-dim);
+      padding-left: 2.4rem;
+      position: relative;
+      margin-bottom: 1rem;
+      letter-spacing: -.005em;
     }
-    .modal-overlay.active { display: flex; opacity: 1; }
-
-    .modal {
-      background: var(--paper);
-      border: 1px solid var(--ink-line);
-      box-shadow: 0 32px 80px -24px rgba(10, 10, 10, .35);
-      width: 100%;
-      max-width: 720px;
-      max-height: 90vh;
-      display: flex;
-      flex-direction: column;
-      transform: translateY(20px) scale(.97);
-      transition: transform .3s cubic-bezier(.16, 1, .3, 1);
-    }
-    .modal-overlay.active .modal { transform: translateY(0) scale(1); }
-
-    .modal-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      padding: 1.75rem 2rem 1.25rem;
-      border-bottom: 1px solid var(--ink-line);
-      gap: 1rem;
-    }
-    .apply-badge {
-      font-family: var(--font-mono);
-      font-size: .6rem;
-      font-weight: 500;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: var(--orange);
-      display: inline-flex;
-      align-items: center;
-      gap: .6rem;
-      margin-bottom: .5rem;
-    }
-    .apply-badge::before {
+    .data-list li::before {
       content: '';
+      position: absolute;
+      left: 0;
+      top: .75em;
       width: 24px;
       height: 1px;
       background: var(--orange);
-      flex-shrink: 0;
     }
-    .modal-title { font-size: 1.3rem; font-weight: 900; letter-spacing: -.025em; }
-
-    .modal-close {
-      background: none;
-      border: 1px solid var(--ink-line);
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 1.25rem;
-      font-weight: 400;
-      cursor: pointer;
-      color: var(--ink);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: border-color .2s ease, color .2s ease;
-      flex-shrink: 0;
-      line-height: 1;
-      font-family: var(--font-body);
-    }
-    .modal-close:hover { border-color: var(--orange); color: var(--orange); }
-
-    .modal-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    .modal-body iframe {
-      display: block;
-      width: 100%;
-      border: none;
-      height: 200px;
-      transition: height .2s ease;
-    }
+    .data-box .btn-secondary { margin-top: 1.25rem; }
 
     /* ----------------------------------------------------------
-       CTA — ink coda (hand-drawn accent 2 of 2)
+       CTA — ink coda
        ---------------------------------------------------------- */
     .cta {
       padding: 7.5rem var(--gutter) 7rem;
@@ -986,10 +1326,12 @@
       font-weight: 300;
       line-height: 1.5;
       color: var(--paper-dim);
-      max-width: 44ch;
+      max-width: 42ch;
       letter-spacing: -.01em;
     }
     .cta-actions { display: flex; gap: .9rem; flex-wrap: wrap; }
+
+    /* the one hand-drawn flourish kept beyond the hero stroke */
     .cta-squiggle { width: 110px; height: 12px; opacity: .35; }
 
     /* ----------------------------------------------------------
@@ -1121,6 +1463,7 @@
       transform: translateY(12px);
       animation: mobileSlideIn .35s cubic-bezier(.16, 1, .3, 1) forwards;
     }
+    .mobile-menu-nav > a[aria-current="page"] { color: var(--orange); }
     .mobile-menu.active .mobile-menu-nav > a:nth-child(1) { animation-delay: .04s; }
     .mobile-menu.active .mobile-menu-nav > a:nth-child(2) { animation-delay: .08s; }
     .mobile-menu.active .mobile-menu-nav > a:nth-child(3) { animation-delay: .12s; }
@@ -1217,11 +1560,7 @@
     @media (max-width: 1080px) {
       .nav-right { gap: 1.5rem; }
       .dropdown-content { min-width: 720px; }
-      .benefits-grid { grid-template-columns: repeat(2, 1fr); }
-      .benefit-card { border-bottom: 1px solid var(--ink-line-soft); }
-      .benefit-card + .benefit-card { border-left: none; padding-left: 0; }
-      .benefit-card:nth-child(even) { border-left: 1px solid var(--ink-line-soft); padding-left: 1.75rem; }
-      .benefit-card:hover::before, .benefit-card + .benefit-card:hover::before { width: 100%; left: 0; }
+      .leads-grid { grid-template-columns: repeat(3, 1fr); }
     }
 
     @media (max-width: 968px) {
@@ -1237,36 +1576,69 @@
         font-size: .74rem !important;
       }
 
-      .hero { padding: 6.5rem var(--gutter) 4rem; }
-      .hero-content { grid-template-columns: 1fr; gap: 2.5rem; }
-      .hero-visual { display: none; }
-      .hero h1 { font-size: clamp(2.1rem, 8.5vw, 3.1rem); max-width: none; }
-      .hero-cta { width: 100%; gap: .75rem; }
+      .hero { padding: 6rem var(--gutter) 0; min-height: auto; }
+      .hero-container { gap: 2rem; padding-top: 0; }
+      .hero h1 { font-size: clamp(2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
+      .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
+      .hb-cta-row { justify-content: flex-start; width: 100%; gap: .75rem; }
       .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
+      .hero-signals { margin-top: 1rem; padding: 1rem 0 1.5rem; gap: .75rem; }
+      .hero-signals .sep { display: none; }
+      .hero-signals .signal { padding-right: .5rem; }
+      .hero-index { margin-left: 0; flex-basis: 100%; gap: 1.25rem; margin-top: .35rem; flex-wrap: wrap; }
 
-      .stats-bar { padding: 3.5rem var(--gutter); }
-      .stats-bar-inner { grid-template-columns: repeat(2, 1fr); }
-      .stat-item { padding: 1.4rem 1.25rem; }
-      .stats-notes { margin-top: 1.5rem; }
-      .stats-notes-list { grid-template-columns: 1fr; }
-      .stats-note { padding: .75rem .9rem; }
-      .stats-note-title { -webkit-line-clamp: 1; }
-
-      .cohort-section { padding: 4.5rem var(--gutter) 3.5rem; }
-      .cohort-section + .cohort-section { padding-top: 3.5rem; }
-      .cohort-header { flex-direction: column; align-items: flex-start; gap: .75rem; }
-      .cohort-subtitle { text-align: left; padding-bottom: 0; }
-      .cohort-grid { grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 1.75rem 1.25rem; }
+      .premise { padding: 4.5rem var(--gutter) 5rem; }
+      .premise-grid { grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 3rem; }
+      .premise-stat { padding: 1.75rem 1.5rem 1.75rem 0; border-bottom: 1px solid var(--paper-line); }
+      .premise-stat + .premise-stat { padding-left: 0; border-left: none; }
+      .premise-stat:nth-child(even) { border-left: 1px solid var(--paper-line); padding-left: 1.5rem; }
+      .premise-stat:nth-last-child(-n+2) { border-bottom: none; }
+      a.premise-stat:hover::before { width: 100%; }
 
       .section-head { margin-bottom: 2.5rem; }
-      .benefits-section { padding: 2rem var(--gutter) 5rem; }
-      .benefits-grid { grid-template-columns: 1fr; }
-      .benefit-card { padding: 1.9rem 0 !important; border-left: none !important; }
-      .benefit-card:last-child { border-bottom: none; }
 
-      .deliverable-plate { padding: 1.6rem 1.5rem; margin-top: 3rem; }
+      .recognition { padding: 0 var(--gutter) 5rem; }
+      .recognition-card { grid-template-columns: 1fr; }
+      .recognition-lead { padding: 1.75rem; }
+      .recognition-tweet { border-left: none; border-top: 1px solid var(--ink-line); padding: 1.75rem; }
 
-      .faq-section { padding: 0 var(--gutter) 5rem; }
+      .map-section { padding: 5rem var(--gutter); }
+      #barometer-map-container { padding: 1.5rem 1.25rem 1rem; }
+      #indicator-tabs { padding: 0 1.25rem 1.25rem; gap: .4rem; }
+      .indicator-tab { padding: .55rem .8rem; font-size: .58rem; }
+      .map-legend { gap: 1rem 1.5rem; padding: 0 1.25rem 1.5rem; }
+
+      .approach-section, .partnerships-section, .focus-section,
+      .team-section, .methodology-section { padding: 0 var(--gutter) 5rem; }
+      .publications-section { padding: 0 var(--gutter) 5rem; }
+
+      .approach-grid { grid-template-columns: 1fr; }
+      .approach-card { padding: 1.9rem 0; border-bottom: 1px solid var(--ink-line-soft); }
+      .approach-card + .approach-card { padding-left: 0; border-left: none; }
+      .approach-card:last-child { border-bottom: none; }
+      .approach-card:hover::before, .approach-card + .approach-card:hover::before { width: 100%; left: 0; }
+
+      .collab-card { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.75rem; }
+      .collab-logo { max-width: 200px; }
+
+      .questions-grid { grid-template-columns: 1fr; }
+      .question-cell { padding: 1.75rem 1.5rem; }
+
+      .referenced-by-container { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .referenced-by-orgs { justify-content: flex-start; gap: .85rem 1.75rem; }
+
+      .working-head, .collaborators-head { margin-top: 3.5rem; }
+
+      .leads-grid { grid-template-columns: repeat(2, 1fr); }
+      .lead-cell { padding: 1.4rem 1.1rem; }
+
+      .collaborators-grid { grid-template-columns: 1fr; }
+      .collaborator { padding: 1.5rem 0; border-bottom: 1px solid var(--ink-line-soft); }
+      .collaborator + .collaborator { padding-left: 0; border-left: none; }
+      .collaborator:last-child { border-bottom: none; }
+      .collaborator:hover::before, .collaborator + .collaborator:hover::before { width: 100%; left: 0; }
+
+      .data-box { padding: 1.75rem; }
 
       .cta { padding: 5rem var(--gutter); }
       .cta h2 { font-size: clamp(2.2rem, 8vw, 3.2rem); }
@@ -1280,55 +1652,188 @@
       .footer-bottom a { margin: 0 .6rem; }
     }
 
-    @media (max-width: 768px) {
-      .modal-overlay { padding: 0; align-items: flex-end; }
-      .modal {
-        max-width: 100%;
-        max-height: 100dvh;
-        height: 100dvh;
-        border: none;
-        box-shadow: none;
-        transform: translateY(100%);
-      }
-      .modal-overlay.active .modal { transform: translateY(0); }
-      .modal-header {
-        padding: 1rem 1.25rem;
-        position: sticky;
-        top: 0;
-        background: var(--paper);
-        z-index: 2;
-        border-bottom: 1px solid var(--ink-line);
-      }
-      .modal-title { font-size: 1.05rem; }
-    }
-
     @media (max-width: 560px) {
-      .hero-cta, .cta-actions { flex-direction: column; }
-      .hero-cta .btn-primary, .hero-cta .btn-secondary,
+      /* CTAs: full-width stack instead of ragged wrap */
+      .hb-cta-row, .cta-actions { flex-direction: column; }
+      .hb-cta-row .btn-primary, .hb-cta-row .btn-secondary,
       .cta-actions .btn-primary, .cta-actions .btn-secondary { width: 100%; justify-content: center; }
-      .stats-bar { padding: 2.75rem var(--gutter); }
-      .stat-item { padding: 1.1rem 1rem; gap: .35rem; }
-      .stat-number { font-size: 1.8rem; }
-      .cohort-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 1rem; }
-      .ambassador-name { font-size: .84rem; }
+      .map-links { flex-direction: column; gap: 1rem; }
+      .map-links .btn-secondary { width: 100%; justify-content: center; }
+      .leads-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     /* Tablet tier (iPads in portrait, small landscape) — scale the hero up
        from phone sizing so it uses the wider canvas */
     @media (min-width: 600px) and (max-width: 968px) {
-      .hero h1 { font-size: clamp(2.8rem, 7vw, 4rem); }
-      .hero-cta { justify-content: flex-start; }
+      .hero h1 { font-size: clamp(3.2rem, 8.6vw, 4.8rem); }
+      .hb-bottom {
+        grid-template-columns: 1.2fr 1fr;
+        gap: 2rem 3rem;
+        align-items: start;
+      }
+      .hb-cta-row { grid-column: 1 / -1; justify-content: flex-start; }
       .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
-      .stats-bar-inner { grid-template-columns: repeat(4, 1fr); }
-      .stat-item { padding: 1.5rem 1.25rem; }
-      .cohort-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+      .questions-grid { grid-template-columns: repeat(2, 1fr); }
+      .leads-grid { grid-template-columns: repeat(3, 1fr); }
     }
-  </style>
+  
+    /* ----------------------------------------------------------
+       RESEARCH SUBNAV — section bar under the fixed nav.
+       Static (scrolls away), so it carries a top margin equal to the
+       unscrolled nav height: 1.4rem x 2 padding + 40px logo + 1px border.
+       Pages with this bar drop their hero top padding to match.
+       ---------------------------------------------------------- */
+    .research-subnav {
+      margin-top: 86px;
+      background: var(--paper);
+      border-bottom: 1px solid var(--ink-line-soft);
+    }
+    .research-subnav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: .8rem var(--gutter);
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      font-family: var(--font-mono);
+      font-size: .64rem;
+      font-weight: 500;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .research-subnav-label { color: var(--ink-faint); flex-shrink: 0; }
+    .research-subnav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.6rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .research-subnav-links::-webkit-scrollbar { display: none; }
+    .research-subnav-links a {
+      color: var(--ink-dim);
+      text-decoration: none;
+      white-space: nowrap;
+      padding-bottom: 3px;
+      border-bottom: 1.5px solid transparent;
+      transition: color .2s ease, border-color .2s ease;
+    }
+    .research-subnav-links a:hover { color: var(--ink); }
+    .research-subnav-links a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--orange); }
+    @media (max-width: 968px) {
+      .research-subnav-inner { padding: .7rem var(--gutter); gap: 1rem; }
+      .research-subnav-links { gap: 1.15rem; }
+      .research-subnav-label { display: none; }
+    }
+
+    /* ----------------------------------------------------------
+       LIBRARY PAGES — compact masthead + filter apparatus
+       ---------------------------------------------------------- */
+    .lib-hero { background: var(--paper); padding: 3.5rem var(--gutter) 4.5rem; }
+    .lib-hero-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5rem;
+    }
+    .lib-hero h1 {
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: .98;
+      letter-spacing: -.045em;
+      max-width: 22ch;
+    }
+    .lib-hero h1 em { font-style: normal; color: var(--orange); }
+    .lib-sub {
+      font-size: clamp(1rem, 1.4vw, 1.22rem);
+      font-weight: 300;
+      line-height: 1.55;
+      color: var(--ink-dim);
+      max-width: 64ch;
+      letter-spacing: -.012em;
+    }
+    .lib-signals {
+      width: 100%;
+      margin-top: .5rem;
+      padding: 1.3rem 0 0;
+      border-top: 1px solid var(--ink-line-soft);
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: .64rem;
+      font-weight: 500;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .lib-signals .signal { display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap; }
+    .lib-signals .sep { color: var(--ink-line); }
+    .lib-signals .lib-signal-link { margin-left: auto; color: var(--ink-dim); text-decoration: none; transition: color .2s ease; white-space: nowrap; }
+    .lib-signals .lib-signal-link:hover { color: var(--orange); }
+
+    .lib-filters {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--ink-line-soft);
+    }
+    .lib-filter-row { display: flex; align-items: baseline; gap: 1.25rem; flex-wrap: wrap; }
+    .lib-filter-label {
+      font-family: var(--font-mono);
+      font-size: .6rem;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      flex-shrink: 0;
+      min-width: 4.5ch;
+    }
+    .lib-filter-group { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .lib-result-count {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 2.5rem;
+    }
+    .lib-empty {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--ink-dim);
+      padding: 3rem 0;
+      border-top: 1px solid var(--ink-line-soft);
+    }
+    .lib-reset {
+      background: none;
+      border: none;
+      border-bottom: 1px solid var(--orange);
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      padding: 0;
+    }
+    .lib-reset:hover { color: var(--orange); }
+    @media (max-width: 968px) {
+      .lib-hero { padding: 2.25rem var(--gutter) 3rem; }
+      .lib-signals .lib-signal-link { margin-left: 0; flex-basis: 100%; }
+    }
+</style>
 </head>
 
 <body>
 
-  <!-- chrome:nav active="ambassadors.html" -->
+  <!-- chrome:nav -->
   <nav id="nav">
     <div class="nav-container">
       <a href="index.html" class="logo">
@@ -1339,7 +1844,7 @@
         <a href="about.html">About</a>
         <a href="research.html">Research</a>
         <a href="education.html">Education</a>
-        <a href="ambassadors.html" aria-current="page">Ambassadors</a>
+        <a href="ambassadors.html">Ambassadors</a>
 
         <div class="dropdown">
           <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">Our Work <span class="chev">▾</span></button>
@@ -1456,7 +1961,7 @@
       <a href="about.html">About</a>
       <a href="research.html">Research</a>
       <a href="education.html">Education</a>
-      <a href="ambassadors.html" aria-current="page">Ambassadors</a>
+      <a href="ambassadors.html">Ambassadors</a>
       <div class="mobile-dropdown">
         <button class="mobile-dropdown-toggle" aria-expanded="false">Our Work <span class="arrow">▾</span></button>
         <div class="mobile-dropdown-content">
@@ -1496,267 +2001,96 @@
   </div>
   <!-- /chrome:nav -->
 
-  <!-- ======================= HERO ======================= -->
-  <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-content">
-      <div class="hero-text">
-        <div class="eyebrow">Global Ambassadors</div>
-        <h1>Young leaders <em>fighting<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em> for financial&nbsp;health.</h1>
-        <p class="hero-subtitle">
-          Each year, ~10 young adults are selected as ambassadors to help strengthen a <strong>global understanding</strong> of what financial health means across communities.
-        </p>
-        <div class="hero-cta">
-          <button class="btn-primary open-apply-modal">
-            Apply now
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
-          <a href="#cohort-2026" class="btn-secondary">Meet the 2026 cohort</a>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="hero-photo hero-photo-1">
-          <img src="32.jpg" alt="Aaliyah de Toeni Zhu" loading="eager">
-          <div class="hero-flag-badge">🇺🇸 Aaliyah</div>
-        </div>
-        <div class="hero-photo hero-photo-2">
-          <img src="30.jpg" alt="Dami Mike-Adeogun" loading="eager">
-          <div class="hero-flag-badge">🇳🇬 Dami</div>
-        </div>
-        <div class="hero-photo hero-photo-3">
-          <img src="14.jpg" alt="Lizbeth Sinaí Rodríguez Rodríguez" loading="eager">
-          <div class="hero-flag-badge">🇲🇽 Lizbeth</div>
-        </div>
-        <div class="hero-photo hero-photo-4">
-          <img src="18.jpg" alt="Sylvester Renatus Kikoti" loading="eager">
-          <div class="hero-flag-badge">🇹🇿 Sylvester</div>
-        </div>
-        <div class="hero-photo hero-photo-5">
-          <img src="24.jpg" alt="Ananya Mallick" loading="eager">
-          <div class="hero-flag-badge">🇲🇾 Ananya</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================= STATS (ink) ======================= -->
-  <section class="stats-bar on-ink">
-    <div class="stats-bar-inner">
-      <div class="stat-item"><div class="stat-number">43</div><div class="stat-label">Ambassadors</div></div>
-      <div class="stat-item"><div class="stat-number">15<em>+</em></div><div class="stat-label">Countries</div></div>
-      <div class="stat-item"><div class="stat-number">4</div><div class="stat-label">Cohorts</div></div>
-      <div class="stat-item"><div class="stat-number">300<em>+</em></div><div class="stat-label">Annual applicants</div></div>
-    </div>
-    <div class="stats-notes" id="statsNotes" hidden>
-      <div class="stats-notes-head">
-        <span class="stats-notes-label">Latest Ambassador Notes</span>
-        <a class="stats-notes-all" href="posts.html">All notes →</a>
-      </div>
-      <div class="stats-notes-list" id="statsNotesList"></div>
-    </div>
-  </section>
-
-  <!-- ======================= 2026 COHORT ======================= -->
-  <section class="cohort-section" id="cohort-2026">
-    <div class="cohort-inner">
-      <div class="cohort-header">
-        <div class="cohort-year"><span>'</span>26</div>
-        <div class="cohort-subtitle">13 ambassadors · 4 countries</div>
-      </div>
-      <div class="cohort-grid">
-        <a href="david-johnson.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="33.jpg" alt="David Johnson" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">David Johnson</div></a>
-        <a href="dylan-forman.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="34.jpg" alt="Dylan Forman" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Dylan Forman</div></a>
-        <a href="pranita-jadhav.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="35.jpg" alt="Pranita Jadhav" loading="lazy"><div class="ambassador-flag">🇮🇳</div></div><div class="ambassador-name">Pranita Jadhav</div></a>
-        <a href="hans-patel.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="36.jpg" alt="Hans Patel" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Hans Patel</div></a>
-        <a href="onyemeri-ihegazie.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="37.jpg" alt="Onyemeri Ihegazie" loading="lazy"><div class="ambassador-flag">🇳🇬</div></div><div class="ambassador-name">Onyemeri Ihegazie</div></a>
-        <a href="harshil-shah.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="38_Updated.jpg" alt="Harshil Shah" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Harshil Shah</div></a>
-        <a href="eduardo-charles-alba.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="39.jpg" alt="Eduardo Charles Alba" loading="lazy"><div class="ambassador-flag">🇩🇴</div></div><div class="ambassador-name">Eduardo Charles Alba</div></a>
-        <a href="caleb-vales.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="40.jpg" alt="Caleb Vales" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Caleb Vales</div></a>
-        <a href="aren-inan.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="41.jpg" alt="Aren Inan" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Aren Inan</div></a>
-        <a href="hayley-foote.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="42.jpg" alt="Hayley Foote" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Hayley Foote</div></a>
-        <a href="sophie-hong.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="43.jpg" alt="Sophie Hong" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Sophie Hong</div></a>
-        <a href="devin-acar.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="45.jpg" alt="Devin Acar" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Devin Acar</div></a>
-        <a href="kristina-schilt.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="46.jpg" alt="Kristina Schilt" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Kristina Schilt</div></a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================= 2025 COHORT ======================= -->
-  <section class="cohort-section" id="cohort-2025">
-    <div class="cohort-inner">
-      <div class="cohort-header">
-        <div class="cohort-year"><span>'</span>25</div>
-        <div class="cohort-subtitle">12 ambassadors · 5 countries</div>
-      </div>
-      <div class="cohort-grid">
-        <a href="aaliyah-de-toeni-zhu.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="32.jpg" alt="Aaliyah de Toeni Zhu" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Aaliyah de Toeni Zhu</div></a>
-        <a href="jose-ismael-batista.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="31.jpg" alt="Jose Ismael Batista" loading="lazy"><div class="ambassador-flag">🇵🇦</div></div><div class="ambassador-name">Jose Ismael Batista</div></a>
-        <a href="dami-mike-adeogun.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="30.jpg" alt="Dami Mike-Adeogun" loading="lazy"><div class="ambassador-flag">🇳🇬</div></div><div class="ambassador-name">Dami Mike-Adeogun</div></a>
-        <a href="anvitha-marlapati.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="29.jpg" alt="Anvitha Marlapati" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Anvitha Marlapati</div></a>
-        <a href="bradley-smith.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="28.jpg" alt="Bradley Smith" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Bradley Smith</div></a>
-        <a href="mansi-rupesh-more.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="27.jpg" alt="Mansi Rupesh More" loading="lazy"><div class="ambassador-flag">🇮🇳</div></div><div class="ambassador-name">Mansi Rupesh More</div></a>
-        <a href="valentina-villa.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="26.jpg" alt="Valentina Villa" loading="lazy"><div class="ambassador-flag">🇫🇷</div></div><div class="ambassador-name">Valentina Villa</div></a>
-        <a href="danny-jang.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="25.jpg" alt="Danny Jang" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Danny Jang</div></a>
-        <a href="ananya-mallick.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="24.jpg" alt="Ananya Mallick" loading="lazy"><div class="ambassador-flag">🇲🇾</div></div><div class="ambassador-name">Ananya Mallick</div></a>
-        <a href="alexander-keller.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="23.jpg" alt="Alexander Keller" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Alexander Keller</div></a>
-        <a href="priyanka-anantha.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="22.jpg" alt="Priyanka Anantha" loading="lazy"><div class="ambassador-flag">🇮🇳</div></div><div class="ambassador-name">Priyanka Anantha</div></a>
-        <a href="varsha-tulsani.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="21.jpg" alt="Varsha Tulsani" loading="lazy"><div class="ambassador-flag">🇮🇳</div></div><div class="ambassador-name">Varsha Tulsani</div></a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================= 2024 COHORT ======================= -->
-  <section class="cohort-section" id="cohort-2024">
-    <div class="cohort-inner">
-      <div class="cohort-header">
-        <div class="cohort-year"><span>'</span>24</div>
-        <div class="cohort-subtitle">10 ambassadors · 7 countries · 4 continents</div>
-      </div>
-      <div class="cohort-grid">
-        <a href="mariana-nunes-santos-gomes.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="20.jpg" alt="Mariana Nunes Santos Gomes" loading="lazy"><div class="ambassador-flag">🇧🇷</div></div><div class="ambassador-name">Mariana Nunes Santos Gomes</div></a>
-        <a href="nathalie-rios.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="19.jpg" alt="Nathalie Ríos" loading="lazy"><div class="ambassador-flag">🇵🇦</div></div><div class="ambassador-name">Nathalie Ríos</div></a>
-        <a href="sylvester-renatus-kikoti.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="18.jpg" alt="Sylvester Renatus Kikoti" loading="lazy"><div class="ambassador-flag">🇹🇿</div></div><div class="ambassador-name">Sylvester Renatus Kikoti</div></a>
-        <a href="meaza-haregewoin-fiseha.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="17.jpg" alt="Meaza Haregewoin Fiseha" loading="lazy"><div class="ambassador-flag">🇪🇹</div></div><div class="ambassador-name">Meaza Haregewoin Fiseha</div></a>
-        <a href="maria-manuela-cordoba-aguirre.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="16.jpg" alt="María Manuela Córdoba Aguirre" loading="lazy"><div class="ambassador-flag">🇨🇴</div></div><div class="ambassador-name">María Manuela Córdoba Aguirre</div></a>
-        <a href="beverly-jazmine-delgado-corrales.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="15.jpg" alt="Beverly Jazmine Delgado Corrales" loading="lazy"><div class="ambassador-flag">🇲🇽</div></div><div class="ambassador-name">Beverly Jazmine Delgado Corrales</div></a>
-        <a href="lizbeth-sinai-rodriguez-rodriguez.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="14.jpg" alt="Lizbeth Sinaí Rodríguez Rodríguez" loading="lazy"><div class="ambassador-flag">🇲🇽</div></div><div class="ambassador-name">Lizbeth Sinaí Rodríguez Rodríguez</div></a>
-        <a href="phanindra-nagapuri.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="13.png" alt="Phanindra Nagapuri" loading="lazy"><div class="ambassador-flag">🇮🇳</div></div><div class="ambassador-name">Phanindra Nagapuri</div></a>
-        <a href="hilya-magano-indongo.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="12.jpg" alt="Hilya Magano Indongo" loading="lazy"><div class="ambassador-flag">🇳🇦</div></div><div class="ambassador-name">Hilya Magano Indongo</div></a>
-        <a href="shanice-akoth.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="11.jpg" alt="Shanice Akoth" loading="lazy"><div class="ambassador-flag">🇰🇪</div></div><div class="ambassador-name">Shanice Akoth</div></a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================= 2023 COHORT ======================= -->
-  <section class="cohort-section" id="cohort-2023">
-    <div class="cohort-inner">
-      <div class="cohort-header">
-        <div class="cohort-year"><span>'</span>23</div>
-        <div class="cohort-subtitle">Founding cohort · 10 ambassadors · 6 countries</div>
-      </div>
-      <div class="cohort-grid">
-        <a href="ankita-kureel.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="10.png" alt="Ankita Kureel" loading="lazy"><div class="ambassador-flag">🇮🇳</div></div><div class="ambassador-name">Ankita Kureel</div></a>
-        <a href="christian-giadolor.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="9.png" alt="Christian Giadolor" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Christian Giadolor</div></a>
-        <a href="poulet-padilla-ruvalcaba.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="8.png" alt="Poulet Padilla Ruvalcaba" loading="lazy"><div class="ambassador-flag">🇲🇽</div></div><div class="ambassador-name">Poulet Padilla Ruvalcaba</div></a>
-        <a href="thomas-lee.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="7.png" alt="Thomas Lee" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Thomas Lee</div></a>
-        <a href="mary-wangechi-maina.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="6.png" alt="Mary Wangechi" loading="lazy"><div class="ambassador-flag">🇰🇪</div></div><div class="ambassador-name">Mary Wangechi</div></a>
-        <a href="angelica-carlos.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="5.png" alt="Angelica Carlos" loading="lazy"><div class="ambassador-flag">🇵🇭</div></div><div class="ambassador-name">Angelica Carlos</div></a>
-        <a href="keylie-muthoni-ogola.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="4.png" alt="Keylie Muthoni Ogola" loading="lazy"><div class="ambassador-flag">🇰🇪</div></div><div class="ambassador-name">Keylie Muthoni Ogola</div></a>
-        <a href="fredrick-binamungu-simon.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="3.png" alt="Fedrick Binamungu Simon" loading="lazy"><div class="ambassador-flag">🇹🇿</div></div><div class="ambassador-name">Fedrick Binamungu Simon</div></a>
-        <a href="sophia-moffa.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="2.png" alt="Sophia Moffa" loading="lazy"><div class="ambassador-flag">🇺🇸</div></div><div class="ambassador-name">Sophia Moffa</div></a>
-        <a href="niveen-younis.html" class="ambassador-card"><div class="ambassador-img-wrap"><img src="1.png" alt="Niveen Younis" loading="lazy"><div class="ambassador-flag">🇱🇧</div></div><div class="ambassador-name">Niveen Younis</div></a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================= BENEFITS ======================= -->
-  <section class="benefits-section">
-    <div class="benefits-container">
-      <div class="section-head">
-        <span class="eyebrow">Why join</span>
-        <h2><em>More than a title</em> on your résumé.</h2>
-      </div>
-      <div class="benefits-grid">
-        <div class="benefit-card">
-          <div class="benefit-icon" aria-hidden="true">🌍</div>
-          <div class="benefit-title">Global Network</div>
-          <div class="benefit-desc">Join a community of young leaders from 15+ countries who share your commitment to financial health equity.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon" aria-hidden="true">🎓</div>
-          <div class="benefit-title">Training &amp; Mentorship</div>
-          <div class="benefit-desc">Receive guidance in financial health advocacy, public engagement, and leadership from experienced practitioners.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon" aria-hidden="true">🛠️</div>
-          <div class="benefit-title">Real-World Impact</div>
-          <div class="benefit-desc">Design and lead projects in your own community — locally or digitally — with FinMango's support and resources.</div>
-        </div>
-        <div class="benefit-card">
-          <div class="benefit-icon" aria-hidden="true">🤝</div>
-          <div class="benefit-title">Completely Free</div>
-          <div class="benefit-desc">No cost, ever. We believe financial barriers shouldn't stand between passionate young adults and leadership opportunities.</div>
-        </div>
-      </div>
-
-      <!-- Active deliverable: submit a cascade -->
-      <div class="deliverable-plate">
-        <div class="deliverable-text">
-          <div class="deliverable-label">🥭 Ambassador deliverable</div>
-          <div class="deliverable-title">Submit a Money Mango cascade from your country.</div>
-          <div class="deliverable-desc">Share a real-world money chain reaction — payday lenders, healthcare debt, gig work, evictions, benefit cliffs — from where you live. FinMango Research reviews every submission. Accepted cascades go live in <a href="money-mango-daily.html">today's daily puzzle</a> with credit to you.</div>
-        </div>
-        <a href="submit-a-cascade.html" class="btn-secondary">
-          Submit a cascade
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================= FAQ ======================= -->
-  <section class="faq-section">
-    <div class="faq-container">
-      <div class="section-head">
-        <span class="eyebrow">FAQs</span>
-        <h2>Frequently asked questions.</h2>
-      </div>
-
-      <div class="faq-list">
-        <div class="faq-item">
-          <button class="faq-question">Who is eligible to apply?</button>
-          <div class="faq-answer">Young adults aged 18–34 with a global perspective are eligible. The program welcomes applicants worldwide — the 2024 cohort represented seven countries with an average age of 24. The program is competitive with 300+ applicants annually.</div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">How much time does it require?</button>
-          <div class="faq-answer">The program runs annually with flexible scheduling. Most ambassadors contribute 10–30 hours during their term, with optional check-ins for ongoing support. You choose when and how to implement projects.</div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">Can projects be online?</button>
-          <div class="faq-answer">Absolutely. Ambassadors work within their own communities and connect globally. Projects can be conducted locally or digitally — you have complete flexibility in how you make a difference.</div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">Is there a cost to participate?</button>
-          <div class="faq-answer">The program is completely FREE. We believe in removing financial barriers to leadership opportunities and want this accessible to passionate young adults worldwide.</div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-question">Have more questions?</button>
-          <div class="faq-answer">Reach out to <a href="mailto:global@finmango.org?subject=Ambassador%20Question">global@finmango.org</a> — we're happy to help.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Application Modal -->
-  <div class="modal-overlay" id="applyModal">
-    <div class="modal">
-      <div class="modal-header">
-        <div>
-          <div class="apply-badge">Still Accepting Applications</div>
-          <h3 class="modal-title">Rolling Basis Ambassador Form</h3>
-        </div>
-        <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
-      </div>
-      <div class="modal-body">
-        <iframe id="rollingApplyFrame" src="ambassador-apply.html?embed=true&rolling=true" title="Rolling Basis Ambassador Application" scrolling="no"></iframe>
+  <!-- chrome:research-subnav -->
+  <!-- Links wrapper is a <div role="navigation">, NOT a <nav>: the system CSS
+       styles the bare `nav` element (position: fixed), so a nested <nav>
+       here would be pulled out of flow. -->
+  <div class="research-subnav" role="navigation" aria-label="Research sections">
+    <div class="research-subnav-inner">
+      <span class="research-subnav-label" aria-hidden="true">Research /</span>
+      <div class="research-subnav-links">
+        <a href="research.html">Overview</a>
+        <a href="research-reports.html">Reports &amp; Briefs</a>
+        <a href="research-publications.html" aria-current="page">Publications</a>
+        <a href="barometer.html">Barometer</a>
+        <a href="approach.html">Approach &amp; Methodology</a>
       </div>
     </div>
   </div>
+  <!-- /chrome:research-subnav -->
+
+  <!-- ======================= MASTHEAD ======================= -->
+  <section class="lib-hero">
+    <div class="lib-hero-container">
+      <div class="eyebrow">FinMango Research</div>
+      <h1>Published <em>research.</em></h1>
+      <p class="lib-sub">
+        Peer-reviewed papers, technical whitepapers, and the working papers now in progress with our academic collaborators. Where a paper is open access, it is linked in full.
+      </p>
+      <div class="lib-signals">
+        <span class="signal"><span id="pub-count">&mdash;</span> published</span>
+        <span class="sep">&middot;</span>
+        <span class="signal"><span id="work-count">&mdash;</span> in progress</span>
+        <span class="sep">&middot;</span>
+        <span class="signal">Methods open on GitHub</span>
+        <a href="research-reports.html" class="lib-signal-link">Reports &amp; briefs &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= PUBLISHED ======================= -->
+  <section class="publications-section" id="published">
+    <div class="publications-container">
+      <div class="section-head">
+        <span class="eyebrow">01 &middot; Published</span>
+        <h2>Peer-reviewed &amp; <em>published.</em></h2>
+      </div>
+
+      <div class="pub-list" id="pub-list"></div>
+
+      <div class="section-head working-head" id="working">
+        <span class="eyebrow">02 &middot; In progress</span>
+        <h2>Working papers.</h2>
+        <p class="section-sub">Papers under active development with university partners. Titles and framings can still change &mdash; we list them anyway, because a research agenda you can't see isn't much of an agenda.</p>
+      </div>
+
+      <div class="pub-list" id="work-list"></div>
+    </div>
+  </section>
+
+  <!-- ======================= TEAM & COLLABORATORS ======================= -->
+  <section class="team-section" id="team">
+    <div class="team-container">
+      <div class="section-head">
+        <span class="eyebrow">03 &middot; Our team</span>
+        <h2>Research leadership.</h2>
+        <p class="section-sub">Our team brings experience from Google, Microsoft, Bloomberg News, and Wall Street. We combine technical expertise with academic rigor to tackle complex financial challenges.</p>
+      </div>
+
+      <div class="leads-grid" id="leads-grid"></div>
+
+      <div class="section-head collaborators-head">
+        <span class="eyebrow">03.1 &middot; Academic partners</span>
+        <h2>Collaborators.</h2>
+        <p class="section-sub">The co-authors on the working papers above.</p>
+      </div>
+
+      <div class="collaborators-grid" id="collaborators-grid"></div>
+    </div>
+  </section>
 
   <!-- ======================= CTA ======================= -->
   <section class="cta on-ink">
     <div class="cta-container">
-      <svg class="cta-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/>
-      </svg>
-      <h2>Believe you <em>belong&nbsp;here?</em></h2>
+      <h2>Work with <em>us.</em></h2>
       <div class="cta-bottom">
-        <p class="cta-subtitle">Our 2026 cohort is set — but exceptional achievers can still apply on a rolling basis. The door is never fully closed.</p>
+        <p class="cta-subtitle">We co-author with academic partners and publish everything openly. If a question here overlaps your own, we would like to hear from you.</p>
         <div class="cta-actions">
-          <button class="btn-primary open-apply-modal">
-            Apply on a rolling basis
+          <a href="/cdn-cgi/l/email-protection#d9b1bcb5b5b699bfb0b7b4b8b7beb6f7b6abbe" class="btn-primary">
+            Partner with us
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
+          </a>
+          <a href="research-reports.html" class="btn-secondary">Reports &amp; briefs</a>
         </div>
       </div>
     </div>
@@ -1856,98 +2190,35 @@
   </script>
   <!-- /chrome:script -->
 
+  <script src="data/publications.js"></script>
+  <script src="scripts/research-cards.js"></script>
   <script>
-    // Application Modal
-    const applyModal = document.getElementById('applyModal');
-    const modalClose = document.getElementById('modalClose');
+    /* ============================================================
+       PUBLICATIONS — the full bibliography from
+       data/publications.js. Row markup comes from
+       scripts/research-cards.js, shared with research.html.
+       ============================================================ */
+    (function () {
+      var DATA = window.FINMANGO_PUBLICATIONS;
+      var CARDS = window.FinMangoResearchCards;
+      if (!DATA || !CARDS) return;
 
-    document.querySelectorAll('.open-apply-modal').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        applyModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      });
-    });
-
-    modalClose.addEventListener('click', () => {
-      applyModal.classList.remove('active');
-      document.body.style.overflow = '';
-    });
-
-    applyModal.addEventListener('click', (e) => {
-      if (e.target === applyModal) {
-        applyModal.classList.remove('active');
-        document.body.style.overflow = '';
+      function fill(id, html) {
+        var el = document.getElementById(id);
+        if (el) el.innerHTML = html;
       }
-    });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && applyModal.classList.contains('active')) {
-        applyModal.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-    });
+      fill('pub-list', DATA.PUBLISHED.map(CARDS.publicationHtml).join(''));
+      fill('work-list', DATA.WORKING.map(CARDS.workingPaperHtml).join(''));
+      fill('leads-grid', DATA.LEADS.map(CARDS.leadHtml).join(''));
+      fill('collaborators-grid', DATA.COLLABORATORS.map(CARDS.collaboratorHtml).join(''));
 
-    // Latest Ambassador Notes — quiet strip in the stats band. Progressive
-    // enhancement: the strip stays hidden unless published notes load.
-    (async function () {
-      try {
-        const res = await fetch('/api/posts?action=published');
-        const data = await res.json();
-        const posts = ((data && data.posts) || []).filter(p => p && p.id && p.title).slice(0, 3);
-        if (!posts.length) return;
-        const esc = s => (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-        const fmtDate = iso => { try { return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); } catch { return ''; } };
-        document.getElementById('statsNotesList').innerHTML = posts.map(p => {
-          const meta = [p.authorName, fmtDate(p.publishedAt || p.createdAt)].filter(Boolean).join(' · ');
-          return '<a class="stats-note" href="/post?id=' + encodeURIComponent(p.id) + '">' +
-            '<span class="stats-note-title">' + esc(p.title) + '</span>' +
-            (meta ? '<span class="stats-note-meta">' + esc(meta) + '</span>' : '') +
-          '</a>';
-        }).join('');
-        document.getElementById('statsNotes').hidden = false;
-      } catch (e) { /* leave the strip hidden */ }
+      document.getElementById('pub-count').textContent = DATA.PUBLISHED.length;
+      document.getElementById('work-count').textContent = DATA.WORKING.length;
+
+      // Abstracts are rendered by the loop above, so bind after insertion.
+      CARDS.bindAbstractToggles();
     })();
-
-    // FAQ Accordion
-    document.querySelectorAll('.faq-question').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const item = btn.parentElement;
-        const isActive = item.classList.contains('active');
-
-        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-
-        if (!isActive) item.classList.add('active');
-      });
-    });
-
-    // Iframe auto-resize
-    const applyFrame = document.getElementById('rollingApplyFrame');
-
-    // Resize via postMessage from embedded form
-    window.addEventListener('message', (e) => {
-      if (e.data && e.data.type === 'rbIframeHeight' && applyFrame) {
-        applyFrame.style.height = Math.max(e.data.height + 20, 200) + 'px';
-      }
-    });
-
-    // Fallback: try to measure iframe content on load (same-origin only)
-    if (applyFrame) {
-      applyFrame.addEventListener('load', () => {
-        try {
-          const h = applyFrame.contentDocument.body.scrollHeight;
-          if (h > 100) applyFrame.style.height = (h + 20) + 'px';
-        } catch (e) { /* cross-origin, rely on postMessage */ }
-      });
-    }
-
-    // Smooth anchor scroll (offset under fixed nav handled by scroll-margin)
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-      });
-    });
   </script>
 
 </body>

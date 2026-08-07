@@ -325,7 +325,7 @@
       top: calc(100% + 14px);
       right: -1rem;
       background: var(--paper);
-      min-width: 600px;
+      min-width: 880px;
       border: 1px solid var(--ink-line);
       box-shadow: 0 24px 60px -24px rgba(10, 10, 10, .18);
       z-index: 1001;
@@ -347,9 +347,9 @@
       transform: translateY(0);
     }
 
-    .dropdown-mega-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    .dropdown-mega-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
     .dropdown-mega-col { padding: .85rem 0; }
-    .dropdown-mega-col:first-child { border-right: 1px solid var(--ink-line-soft); }
+    .dropdown-mega-col:not(:last-child) { border-right: 1px solid var(--ink-line-soft); }
     .dropdown-mega-col-label {
       font-family: var(--font-mono);
       font-size: .58rem;
@@ -385,11 +385,61 @@
     .mobile-controls { display: none; gap: 1rem; align-items: center; }
 
     /* ----------------------------------------------------------
+       RESEARCH SUBNAV — section bar under the fixed nav.
+       Static (scrolls away), so it carries a top margin equal to the
+       unscrolled nav height: 1.4rem x 2 padding + 40px logo + 1px border.
+       The hero's top padding drops to match.
+       ---------------------------------------------------------- */
+    .research-subnav {
+      margin-top: 86px;
+      background: var(--paper);
+      border-bottom: 1px solid var(--ink-line-soft);
+    }
+    .research-subnav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: .8rem var(--gutter);
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+      font-family: var(--font-mono);
+      font-size: .64rem;
+      font-weight: 500;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .research-subnav-label { color: var(--ink-faint); flex-shrink: 0; }
+    .research-subnav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.6rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .research-subnav-links::-webkit-scrollbar { display: none; }
+    .research-subnav-links a {
+      color: var(--ink-dim);
+      text-decoration: none;
+      white-space: nowrap;
+      padding-bottom: 3px;
+      border-bottom: 1.5px solid transparent;
+      transition: color .2s ease, border-color .2s ease;
+    }
+    .research-subnav-links a:hover { color: var(--ink); }
+    .research-subnav-links a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--orange); }
+    @media (max-width: 968px) {
+      .research-subnav-inner { padding: .7rem var(--gutter); gap: 1rem; }
+      .research-subnav-links { gap: 1.15rem; }
+      .research-subnav-label { display: none; }
+    }
+
+    /* ----------------------------------------------------------
        HERO — top-anchored billboard
        ---------------------------------------------------------- */
     .hero {
       background: var(--paper);
-      padding: 6.5rem 2rem 0;
+      padding: 2.5rem 2rem 0;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -507,16 +557,6 @@
     .hero-signals .signal { display: inline-flex; align-items: center; gap: .55rem; white-space: nowrap; }
     .hero-signals .sep { color: var(--ink-line); }
 
-    /* In-page index — same mono register, right-aligned in the signals strip */
-    .hero-index { margin-left: auto; display: inline-flex; align-items: center; gap: 1.5rem; }
-    .hero-index-label { color: var(--ink-faint); }
-    .hero-index a {
-      color: var(--ink-dim);
-      text-decoration: none;
-      white-space: nowrap;
-      transition: color .2s ease;
-    }
-    .hero-index a:hover { color: var(--orange); }
     .signal-dot {
       width: 6px; height: 6px;
       border-radius: 50%;
@@ -863,91 +903,88 @@
     }
 
     /* ----------------------------------------------------------
-       APPROACH — four ruled columns
+       APPROACH HANDOFF — two claims and a door to approach.html.
+       The full approach and methodology live on approach.html; this
+       is the landing page's pointer to them, not a second copy.
        ---------------------------------------------------------- */
-    .approach-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-    .approach-container { max-width: var(--max-width); margin: 0 auto; }
-    .approach-grid {
+    .handoff-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+    .handoff-container { max-width: var(--max-width); margin: 0 auto; }
+    .handoff {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border-top: 1px solid var(--ink-line-soft);
+      grid-template-columns: 1.15fr 1fr;
+      gap: 4rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--ink-line);
+      align-items: start;
     }
-    .approach-card { padding: 2.5rem 1.75rem 2.5rem 0; position: relative; }
-    .approach-card + .approach-card { padding-left: 1.75rem; border-left: 1px solid var(--ink-line-soft); }
-    .approach-card::before {
+    .handoff-lead { display: flex; flex-direction: column; align-items: flex-start; gap: 1.35rem; }
+    .handoff-title {
+      font-size: clamp(2rem, 3.6vw, 2.9rem);
+      font-weight: 900;
+      line-height: 1.02;
+      letter-spacing: -.04em;
+      max-width: 20ch;
+    }
+    .handoff-title em { font-style: normal; color: var(--orange); }
+    .handoff-lead .btn-secondary { margin-top: .5rem; }
+    .handoff-claim { padding: 1.6rem 0; border-top: 1px solid var(--ink-line-soft); }
+    .handoff-claim:first-child { border-top: none; padding-top: 0; }
+    .handoff-claim:last-child { padding-bottom: 0; }
+    .handoff-claim-label {
+      font-family: var(--font-mono);
+      font-size: .66rem;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink);
+      margin-bottom: .7rem;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .handoff-claim-label::before {
       content: '';
-      position: absolute;
-      top: -1px;
-      left: 0;
-      width: 0;
+      width: 18px;
       height: 1px;
       background: var(--orange);
-      transition: width .4s cubic-bezier(.16, 1, .3, 1);
+      flex-shrink: 0;
     }
-    .approach-card:hover::before { width: calc(100% - 1.75rem); }
-    .approach-card + .approach-card:hover::before { left: 1.75rem; }
-    .approach-num {
+    .handoff-claim p {
+      font-size: .94rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--ink-dim);
+      letter-spacing: -.005em;
+      max-width: 42ch;
+    }
+
+    /* Data-partnership note under the Barometer plate — absorbs what used
+       to be a whole Partnerships section for one Google Health card. */
+    .map-note {
+      max-width: 78ch;
+      margin: 2.5rem auto 0;
+      padding-top: 1.6rem;
+      border-top: 1px solid var(--ink-line-soft);
+      font-size: .88rem;
+      font-weight: 300;
+      line-height: 1.65;
+      color: var(--ink-dim);
+      letter-spacing: -.005em;
+      text-align: center;
+    }
+    .map-note-label {
+      display: block;
       font-family: var(--font-mono);
-      font-size: .62rem;
+      font-size: .6rem;
       font-weight: 500;
       letter-spacing: .16em;
       text-transform: uppercase;
       color: var(--ink-faint);
-      margin-bottom: 1rem;
+      margin-bottom: .6rem;
     }
-    .approach-title { font-size: 1.18rem; font-weight: 900; letter-spacing: -.02em; margin-bottom: .7rem; }
-    .approach-text { color: var(--ink-dim); line-height: 1.6; font-size: .92rem; font-weight: 300; }
-    .approach-cta { margin-top: 3rem; }
 
-    /* ----------------------------------------------------------
-       PARTNERSHIPS — hairline plates
-       ---------------------------------------------------------- */
-    .partnerships-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-    .partnerships-container { max-width: var(--max-width); margin: 0 auto; }
-    .collab-list { display: flex; flex-direction: column; gap: 2rem; }
-    .collab-card {
-      border: 1px solid var(--ink-line);
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 2.5rem;
-      padding: 2.5rem;
-      align-items: start;
-      transition: border-color .25s ease;
-    }
-    .collab-card:hover { border-color: var(--ink-faint); }
-    .collab-logo { width: 100%; height: auto; display: block; border: 1px solid var(--ink-line); }
-    .collab-title {
-      font-size: clamp(1.25rem, 1.8vw, 1.6rem);
-      font-weight: 900;
-      letter-spacing: -.025em;
-      line-height: 1.25;
-      margin-bottom: .85rem;
-      display: flex;
-      align-items: center;
-      gap: .9rem;
-      flex-wrap: wrap;
-    }
-    .status-tag {
-      font-family: var(--font-mono);
-      font-size: .62rem;
-      font-weight: 500;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      padding: .3rem .65rem;
-      border: 1px solid var(--ink-line);
-      color: var(--ink-faint);
-      white-space: nowrap;
-    }
-    .status-tag.active { color: var(--orange); border-color: rgba(255, 107, 53, .4); }
-    .collab-description {
-      font-size: .98rem;
-      font-weight: 300;
-      line-height: 1.65;
-      color: var(--ink-dim);
-      max-width: 64ch;
-      letter-spacing: -.005em;
-    }
-    .collab-card .quiet-link { margin-top: 1.25rem; }
+    /* "See all" row under a teaser list */
+    .teaser-more { display: flex; align-items: center; gap: 1.75rem; flex-wrap: wrap; margin-top: 3rem; }
 
     /* ----------------------------------------------------------
        OPEN QUESTIONS — hairline lattice
@@ -1101,40 +1138,6 @@
     .pub-journal { font-size: .92rem; font-weight: 500; color: var(--ink); margin-bottom: 1.1rem; }
     .pub-links { display: flex; align-items: center; gap: 1.75rem; flex-wrap: wrap; }
 
-    /* Expandable abstracts — JS hooks preserved (.paper-toggle, .paper-abstract-wrap) */
-    .paper-toggle {
-      background: none;
-      border: none;
-      font-family: inherit;
-      font-weight: 600;
-      color: var(--ink-dim);
-      font-size: .88rem;
-      letter-spacing: -.005em;
-      cursor: pointer;
-      padding: 0;
-      display: inline-flex;
-      align-items: center;
-      gap: .45rem;
-      transition: color .2s ease;
-    }
-    .paper-toggle:hover { color: var(--orange); }
-    .paper-toggle .toggle-arrow { transition: transform .3s cubic-bezier(.16,1,.3,1); display: inline-block; font-size: .8rem; }
-    .paper-toggle[aria-expanded="true"] .toggle-arrow { transform: rotate(180deg); }
-    .paper-abstract-wrap { max-height: 0; overflow: hidden; transition: max-height .45s cubic-bezier(.16,1,.3,1); }
-    .paper-abstract-wrap.open { max-height: 600px; }
-    .paper-abstract {
-      font-size: .95rem;
-      font-weight: 300;
-      line-height: 1.7;
-      color: var(--ink-dim);
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--ink-line-soft);
-      max-width: 78ch;
-    }
-
-    .working-head { margin-top: 5rem; }
-
     /* ----------------------------------------------------------
        REPORTS & BRIEFS — house publications, data-driven.
        Renders from the REPORTS array near the foot of the page.
@@ -1196,96 +1199,6 @@
       .reports-legend { gap: .85rem 1.75rem; margin-bottom: 2.5rem; }
       .reports-sub-head { margin-top: 4rem; }
     }
-
-    /* ----------------------------------------------------------
-       TEAM — leadership lattice + ruled collaborators
-       ---------------------------------------------------------- */
-    .team-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-    .team-container { max-width: var(--max-width); margin: 0 auto; }
-    .leads-grid {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 1px;
-      background: var(--ink-line);
-      border-top: 1px solid var(--ink-line);
-      border-bottom: 1px solid var(--ink-line);
-    }
-    .lead-cell {
-      background: var(--paper);
-      padding: 1.75rem 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: .5rem;
-    }
-    .lead-mark {
-      font-family: var(--font-mono);
-      font-size: .6rem;
-      font-weight: 500;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--orange);
-    }
-    .lead-name { font-size: .95rem; font-weight: 600; letter-spacing: -.01em; }
-
-    .collaborators-head { margin-top: 5rem; }
-    .collaborators-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      border-top: 1px solid var(--ink-line-soft);
-    }
-    .collaborator { padding: 2rem 1.5rem 2rem 0; position: relative; }
-    .collaborator + .collaborator { padding-left: 1.5rem; border-left: 1px solid var(--ink-line-soft); }
-    .collaborator::before {
-      content: '';
-      position: absolute;
-      top: -1px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--orange);
-      transition: width .35s cubic-bezier(.16, 1, .3, 1);
-    }
-    .collaborator:hover::before { width: calc(100% - 1.5rem); }
-    .collaborator + .collaborator:hover::before { left: 1.5rem; }
-    .collaborator-name { font-size: 1rem; font-weight: 600; letter-spacing: -.015em; margin-bottom: .5rem; }
-    .collaborator-org {
-      font-family: var(--font-mono);
-      font-size: .62rem;
-      font-weight: 500;
-      letter-spacing: .13em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      line-height: 1.6;
-    }
-
-    /* ----------------------------------------------------------
-       METHODOLOGY — hairline plate
-       ---------------------------------------------------------- */
-    .methodology-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-    .methodology-container { max-width: var(--max-width); margin: 0 auto; }
-    .data-box { border: 1px solid var(--ink-line); padding: 3rem; }
-    .data-title { font-size: 1.35rem; font-weight: 900; letter-spacing: -.025em; margin-bottom: 1.75rem; }
-    .data-list { list-style: none; padding: 0; max-width: 72ch; }
-    .data-list li {
-      font-size: .98rem;
-      font-weight: 300;
-      line-height: 1.6;
-      color: var(--ink-dim);
-      padding-left: 2.4rem;
-      position: relative;
-      margin-bottom: 1rem;
-      letter-spacing: -.005em;
-    }
-    .data-list li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: .75em;
-      width: 24px;
-      height: 1px;
-      background: var(--orange);
-    }
-    .data-box .btn-secondary { margin-top: 1.25rem; }
 
     /* ----------------------------------------------------------
        CTA — ink coda
@@ -1560,8 +1473,7 @@
        ---------------------------------------------------------- */
     @media (max-width: 1080px) {
       .nav-right { gap: 1.5rem; }
-      .dropdown-content { min-width: 540px; }
-      .leads-grid { grid-template-columns: repeat(3, 1fr); }
+      .dropdown-content { min-width: 720px; }
     }
 
     @media (max-width: 968px) {
@@ -1577,7 +1489,7 @@
         font-size: .74rem !important;
       }
 
-      .hero { padding: 6rem var(--gutter) 0; min-height: auto; }
+      .hero { padding: 2rem var(--gutter) 0; min-height: auto; }
       .hero-container { gap: 2rem; padding-top: 0; }
       .hero h1 { font-size: clamp(2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
       .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
@@ -1586,7 +1498,6 @@
       .hero-signals { margin-top: 1rem; padding: 1rem 0 1.5rem; gap: .75rem; }
       .hero-signals .sep { display: none; }
       .hero-signals .signal { padding-right: .5rem; }
-      .hero-index { margin-left: 0; flex-basis: 100%; gap: 1.25rem; margin-top: .35rem; flex-wrap: wrap; }
 
       .premise { padding: 4.5rem var(--gutter) 5rem; }
       .premise-grid { grid-template-columns: repeat(2, 1fr); gap: 0; margin-top: 3rem; }
@@ -1609,37 +1520,17 @@
       .indicator-tab { padding: .55rem .8rem; font-size: .58rem; }
       .map-legend { gap: 1rem 1.5rem; padding: 0 1.25rem 1.5rem; }
 
-      .approach-section, .partnerships-section, .focus-section,
-      .team-section, .methodology-section { padding: 0 var(--gutter) 5rem; }
+      .focus-section, .handoff-section { padding: 0 var(--gutter) 5rem; }
       .publications-section { padding: 0 var(--gutter) 5rem; }
 
-      .approach-grid { grid-template-columns: 1fr; }
-      .approach-card { padding: 1.9rem 0; border-bottom: 1px solid var(--ink-line-soft); }
-      .approach-card + .approach-card { padding-left: 0; border-left: none; }
-      .approach-card:last-child { border-bottom: none; }
-      .approach-card:hover::before, .approach-card + .approach-card:hover::before { width: 100%; left: 0; }
-
-      .collab-card { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.75rem; }
-      .collab-logo { max-width: 200px; }
+      .handoff { grid-template-columns: 1fr; gap: 2.25rem; padding-top: 2rem; }
+      .map-note { text-align: left; margin-top: 2rem; }
 
       .questions-grid { grid-template-columns: 1fr; }
       .question-cell { padding: 1.75rem 1.5rem; }
 
       .referenced-by-container { flex-direction: column; align-items: flex-start; gap: 1rem; }
       .referenced-by-orgs { justify-content: flex-start; gap: .85rem 1.75rem; }
-
-      .working-head, .collaborators-head { margin-top: 3.5rem; }
-
-      .leads-grid { grid-template-columns: repeat(2, 1fr); }
-      .lead-cell { padding: 1.4rem 1.1rem; }
-
-      .collaborators-grid { grid-template-columns: 1fr; }
-      .collaborator { padding: 1.5rem 0; border-bottom: 1px solid var(--ink-line-soft); }
-      .collaborator + .collaborator { padding-left: 0; border-left: none; }
-      .collaborator:last-child { border-bottom: none; }
-      .collaborator:hover::before, .collaborator + .collaborator:hover::before { width: 100%; left: 0; }
-
-      .data-box { padding: 1.75rem; }
 
       .cta { padding: 5rem var(--gutter); }
       .cta h2 { font-size: clamp(2.2rem, 8vw, 3.2rem); }
@@ -1660,7 +1551,6 @@
       .cta-actions .btn-primary, .cta-actions .btn-secondary { width: 100%; justify-content: center; }
       .map-links { flex-direction: column; gap: 1rem; }
       .map-links .btn-secondary { width: 100%; justify-content: center; }
-      .leads-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     /* Tablet tier (iPads in portrait, small landscape) — scale the hero up
@@ -1675,7 +1565,6 @@
       .hb-cta-row { grid-column: 1 / -1; justify-content: flex-start; }
       .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
       .questions-grid { grid-template-columns: repeat(2, 1fr); }
-      .leads-grid { grid-template-columns: repeat(3, 1fr); }
     }
   </style>
 </head>
@@ -1767,6 +1656,27 @@
                   <span class="dropdown-external">↗</span>
                 </a>
               </div>
+              <div class="dropdown-mega-col">
+                <div class="dropdown-mega-col-label">Study</div>
+                <a href="research-reports.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Reports &amp; Briefs</span>
+                    <span class="dropdown-item-desc">Our research in plain language · free to read</span>
+                  </span>
+                </a>
+                <a href="research-publications.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Publications</span>
+                    <span class="dropdown-item-desc">Peer-reviewed papers &amp; working papers</span>
+                  </span>
+                </a>
+                <a href="approach.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Approach &amp; Methodology</span>
+                    <span class="dropdown-item-desc">How we identify, diagnose &amp; measure</span>
+                  </span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -1809,6 +1719,12 @@
             <a href="posts.html" class="mobile-card"><span class="mobile-card-name">Ambassador Notes</span><span class="mobile-card-desc">Notes &amp; briefs from our Ambassadors</span></a>
             <a href="https://blogs.finmango.org/" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">Mango Ink: Blogs <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Long-form writing from the FinMango team</span></a>
           </div>
+          <div class="mobile-cards-group">
+            <div class="mobile-cards-label">Study</div>
+            <a href="research-reports.html" class="mobile-card"><span class="mobile-card-name">Reports &amp; Briefs</span><span class="mobile-card-desc">Our research in plain language · free to read</span></a>
+            <a href="research-publications.html" class="mobile-card"><span class="mobile-card-name">Publications</span><span class="mobile-card-desc">Peer-reviewed papers &amp; working papers</span></a>
+            <a href="approach.html" class="mobile-card"><span class="mobile-card-name">Approach &amp; Methodology</span><span class="mobile-card-desc">How we identify, diagnose &amp; measure</span></a>
+          </div>
         </div>
       </div>
     </div>
@@ -1822,6 +1738,24 @@
     </div>
   </div>
   <!-- /chrome:nav -->
+
+  <!-- chrome:research-subnav -->
+  <!-- Links wrapper is a <div role="navigation">, NOT a <nav>: the system CSS
+       styles the bare `nav` element (position: fixed), so a nested <nav>
+       here would be pulled out of flow. -->
+  <div class="research-subnav" role="navigation" aria-label="Research sections">
+    <div class="research-subnav-inner">
+      <span class="research-subnav-label" aria-hidden="true">Research /</span>
+      <div class="research-subnav-links">
+        <a href="research.html" aria-current="page">Overview</a>
+        <a href="research-reports.html">Reports &amp; Briefs</a>
+        <a href="research-publications.html">Publications</a>
+        <a href="barometer.html">Barometer</a>
+        <a href="approach.html">Approach &amp; Methodology</a>
+      </div>
+    </div>
+  </div>
+  <!-- /chrome:research-subnav -->
 
   <!-- ======================= HERO ======================= -->
   <section class="hero">
@@ -1855,13 +1789,6 @@
       <span class="signal">50 states tracked</span>
       <span class="sep">·</span>
       <span class="signal">Updated weekly</span>
-      <div class="hero-index" role="navigation" aria-label="On this page">
-        <span class="hero-index-label" aria-hidden="true">Index /</span>
-        <a href="#barometer-preview">Barometer</a>
-        <a href="#reports">Reports</a>
-        <a href="#publications">Publications</a>
-        <a href="#team">Team</a>
-      </div>
     </div>
   </section>
 
@@ -1883,10 +1810,10 @@
           <div class="premise-stat-number">190<em>+</em></div>
           <div class="premise-stat-label">Countries covered</div>
         </div>
-        <a href="#publications" class="premise-stat">
+        <a href="research-publications.html" class="premise-stat">
           <div class="premise-stat-number">7</div>
           <div class="premise-stat-label">Published &amp; working papers</div>
-          <div class="premise-stat-source">Publications ↓</div>
+          <div class="premise-stat-source">Publications →</div>
         </a>
         <div class="premise-stat">
           <div class="premise-stat-number">20<em>+</em></div>
@@ -1951,6 +1878,11 @@
         </a>
         <a href="student-map.html" class="quiet-link">View the young adult financial map <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
+
+      <p class="map-note">
+        <span class="map-note-label">Data partnership</span>
+        A working relationship with Google's Health Trends team gives us privileged API access — the data engine behind the Barometer's real-time signals across all 50 states. <a href="approach.html#data-methodology" class="quiet-link">How we use it <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </p>
     </div>
   </section>
 
@@ -1958,363 +1890,47 @@
   <script src="scripts/map-svg.js"></script>
   <script src="scripts/research-map.js"></script>
 
-  <!-- ======================= REPORTS & BRIEFS ======================= -->
+  <!-- ======================= REPORTS & BRIEFS (teaser) ======================= -->
+  <!-- The full library, with type and topic filters, lives on
+       research-reports.html. Both render from data/reports.js. -->
   <section class="reports-section" id="reports">
-    <div class="container">
+    <div class="reports-container">
       <div class="section-head">
         <span class="eyebrow">02 · Reports &amp; Briefs</span>
         <h2>Our research, in <em>plain language.</em></h2>
-        <p class="section-sub">Preliminary research and house briefs that read our own work so policymakers, journalists, and partners don't have to parse a repository first. Each brief links to its source documents — and down to the FinMango tools and data it informed.</p>
-      </div>
-
-      <div class="reports-legend">
-        <span class="reports-legend-item"><span class="report-type">Working Paper</span> Longer, methodological field studies — our pre-journal work.</span>
-        <span class="reports-legend-item"><span class="report-type">Focus Note</span> Short. One finding or recommendation, for a policy audience.</span>
-        <span class="reports-legend-item"><span class="report-type">Data Spotlight</span> A light read built off a dataset or measurement tool.</span>
+        <p class="section-sub">House briefs that read our own work so policymakers, journalists, and partners don't have to parse a repository first. Each one links to its source documents — and down to the FinMango tools it informed.</p>
       </div>
 
       <div class="reports-featured" id="reports-featured"></div>
 
-      <div class="section-head reports-sub-head">
-        <span class="eyebrow">02.1 · More from preliminary research</span>
-        <h3>Shorter <em>briefs.</em></h3>
+      <div class="teaser-more">
+        <a href="research-reports.html" class="btn-secondary">
+          All <span id="reports-count">—</span> reports &amp; briefs
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="research-reports.html#library" class="quiet-link">Filter by topic <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
-
-      <div class="reports-grid" id="reports-grid"></div>
     </div>
   </section>
 
-  <script>
-    /* ============================================================
-       REPORTS & BRIEFS — single content model (DRAFT).
-       Seeded from finmango/research → "3 - Preliminary Research.md".
-       Add a report by appending one object to REPORTS. Each card
-       renders from this array; featured: true gets the large
-       two-column treatment with key findings + related tools.
-       Structured so a future All / Reports / Data / Publications
-       filter is a front-end swap (data-type / data-tags on cards).
-       ============================================================ */
-    (function () {
-      const REPORT_TYPES = {
-        'working-paper':  { label: 'Working Paper' },
-        'focus-note':     { label: 'Focus Note' },
-        'data-spotlight': { label: 'Data Spotlight' },
-      };
-
-      const REPORTS = [
-        {
-          id: 'housing-affordability-seed-s26',
-          type: 'focus-note',
-          featured: true,
-          title: 'Analyzing the American Housing Affordability Crisis',
-          partner: 'SEED Consulting · University of Virginia',
-          term: 'Spring 2026',
-          authors: [
-            { name: 'Claudia Dean', affiliation: 'Project Leader, SEED Consulting (UVA)' },
-            { name: 'Shreeya Suresh', affiliation: 'SEED Consulting (UVA)' },
-            { name: 'Tyler George', affiliation: 'SEED Consulting (UVA)' },
-            { name: 'Christopher Wang', affiliation: 'SEED Consulting (UVA)' },
-          ],
-          plainLanguageSummary: 'An examination of the U.S. housing affordability crisis across five very different places — New York City, Los Angeles, Portland, McKinney (TX), and McCall (ID) — chosen to show how the same crisis looks different in cities, suburbs, and rural towns. Housing counts as "unaffordable" once rent and utilities pass 30% of monthly income, and the brief traces how that pressure spills into health, education, and the wider economy.',
-          keyFindings: [
-            '53% of Americans spend more than half of household income on housing',
-            '49% of renters are cost-burdened',
-            'Suburban home prices are up 40% since 2020',
-            'Rural residents now need ~$75K/year to afford a median-priced home — a 105% jump vs. pre-pandemic',
-          ],
-          documents: [
-            { label: 'Final Presentation — SEED × FinMango (S26)', kind: 'PPTX', url: 'reports/housing-affordability-seed-s26/SEED_x_FinMango_S26_Final_Presentation.pptx' },
-          ],
-          relatedTools: [
-            { label: 'Mango Stories: Understand the Housing Crisis', url: 'housing-affordability-stories.html' },
-            { label: 'Housing Affordability Calculator', url: 'housing-calculator.html' },
-            { label: 'Rent vs. Buy Calculator', url: 'rent-vs-buy.html' },
-            { label: 'Financial Health Barometer', url: 'barometer.html' },
-          ],
-          publicationUrl: null,
-          doi: null,
-          tags: ['housing'],
-        },
-        {
-          id: 'food-insecurity-snap-seed-f25',
-          type: 'focus-note',
-          featured: true,
-          title: 'Food Insecurity & SNAP Access Across the United States',
-          partner: 'SEED Consulting · University of Virginia',
-          term: 'Fall 2025',
-          authors: [
-            { name: 'Jaiden Khemani', affiliation: 'Project Leader, SEED Consulting (UVA)' },
-            { name: 'Henna Fernandez', affiliation: 'SEED Consulting (UVA)' },
-            { name: 'Alex Jennings', affiliation: 'SEED Consulting (UVA)' },
-            { name: 'Mae Bledsoe', affiliation: 'SEED Consulting (UVA)' },
-            { name: 'Matt Tam', affiliation: 'SEED Consulting (UVA)' },
-          ],
-          plainLanguageSummary: 'A look at food insecurity and SNAP access across five diverse communities — Atlanta, Chicago, Kansas City, Twin Falls (ID), and Wolfe County (KY). The finding: hunger is driven less by an absolute shortage of food than by structural barriers — transportation gaps, the uneven spread of SNAP retailers that stock fresh produce, restrictive state eligibility rules, and benefits that haven’t kept pace with housing and grocery costs.',
-          keyFindings: [
-            'Every $1 in SNAP benefits generates roughly $1.54 in GDP',
-            'Transportation gaps and car dependency limit access more than food supply does',
-            'Regional food banks are strained as benefits are cut',
-          ],
-          documents: [
-            { label: 'Client Presentation — FinMango × SEED (F25)', kind: 'PPTX', url: 'reports/food-insecurity-snap-seed-f25/FinMango_x_SEED_F25_Client_Presentation.pptx' },
-            { label: 'Atlanta, GA — Case Study', kind: 'PDF', url: 'reports/food-insecurity-snap-seed-f25/Atlanta_GA_Case_Study.pdf' },
-            { label: 'Chicago, IL — Case Study', kind: 'PDF', url: 'reports/food-insecurity-snap-seed-f25/Chicago_IL_Case_Study.pdf' },
-            { label: 'Kansas City, MO — Case Study', kind: 'PDF', url: 'reports/food-insecurity-snap-seed-f25/Kansas_City_MO_Case_Study.pdf' },
-            { label: 'Twin Falls, ID — Case Study', kind: 'PDF', url: 'reports/food-insecurity-snap-seed-f25/Twin_Falls_ID_Case_Study.pdf' },
-            { label: 'Wolfe County, KY — Case Study', kind: 'PDF', url: 'reports/food-insecurity-snap-seed-f25/Wolfe_County_KY_Case_Study.pdf' },
-          ],
-          relatedTools: [
-            { label: 'Food Assistance / SNAP Eligibility Calculator', url: 'food-assistance-calculator.html' },
-            { label: 'Mango Stories: Food Insecurity', url: 'food-insecurity-stories.html' },
-            { label: 'Food Security Hub', url: 'food-security.html' },
-          ],
-          publicationUrl: null,
-          doi: null,
-          tags: ['food security'],
-        },
-        {
-          id: 'affordable-housing-calculator-rec',
-          type: 'focus-note',
-          title: 'A Recommendation: Affordable Housing via an Accessible Calculator & Partnerships',
-          plainLanguageSummary: 'A recommendation for improving financial health through affordable housing, built on two moves: a housing affordability calculator that combines market data and connects people to available grants, and strategic partnerships with organizations like LISC to stretch community impact through shared resources.',
-          documents: [{ label: 'Read the recommendation', kind: 'PDF', url: 'reports/briefs/affordable-housing-recommendation.pdf' }],
-          tags: ['housing'],
-        },
-        {
-          id: 'climate-migration-colombia',
-          type: 'focus-note',
-          title: 'Climate Migration in Colombia',
-          plainLanguageSummary: 'Climate change is displacing Colombians through disasters, food insecurity, and poverty, driving migration both within the country and beyond its borders. The brief argues the response demands global investment, local aid, and far greater awareness of climate impacts.',
-          documents: [{ label: 'Read the brief', kind: 'PDF', url: 'reports/briefs/climate-migration-colombia.pdf' }],
-          tags: ['climate migration'],
-        },
-        {
-          id: 'immigration-policy-analysis',
-          type: 'focus-note',
-          title: 'Immigration Policy Analysis',
-          plainLanguageSummary: 'A review of immigration policies around the world through the lens of climate change, regional challenges, and migration trends. It recommends better data tracking and deeper partnerships with NGOs.',
-          documents: [{ label: 'Read the brief', kind: 'PDF', url: 'reports/briefs/immigration-policy-analysis.pdf' }],
-          tags: ['immigration'],
-        },
-        {
-          id: 'climate-migration-trend-scanner',
-          type: 'focus-note',
-          title: 'Climate Migration Trend Scanner',
-          plainLanguageSummary: 'A concept report, developed with SEED Consulting, for a Climate Migration Trend Scanner — laying out the strategy, target audiences, data sources, and the machine-learning approach behind a future early-detection tool.',
-          documents: [{ label: 'Open the report folder', kind: 'FOLDER', url: 'https://drive.google.com/drive/folders/1uC4ukGnMD8vc7IXRcHpsTfxWP_noAGKA?usp=sharing' }],
-          tags: ['climate migration'],
-        },
-        {
-          id: 'brazilian-financial-ecosystem',
-          type: 'focus-note',
-          title: 'Brazilian Financial Ecosystem Report',
-          plainLanguageSummary: 'Brazil’s financial ecosystem is vast and layered, with many kinds of providers operating side by side. The report maps six key sectors, each with its own players, macroeconomic effects, and challenges.',
-          documents: [{ label: 'Read the report', kind: 'PDF', url: 'reports/briefs/brazilian-financial-ecosystem.pdf' }],
-          tags: ['brazil', 'global markets'],
-        },
-        {
-          id: 'financial-health-measurement-toolkit',
-          type: 'focus-note',
-          title: 'Financial Health Measurement Toolkit',
-          plainLanguageSummary: 'A breakdown of what "financial health" actually means, a survey of existing financial-health measurement instruments, and suggestions for where the field should go next. FinMango maintains a running catalog of these tools for thought leaders and policymakers.',
-          documents: [{ label: 'Read the report', kind: 'PDF', url: 'reports/briefs/financial-health-measurement-toolkit.pdf' }],
-          tags: ['financial health'],
-        },
-        {
-          id: 'returning-citizens-barriers',
-          type: 'focus-note',
-          title: 'Acknowledging the Barriers Returning Citizens Face',
-          plainLanguageSummary: 'Drawing on interviews, this brief maps the wide-ranging barriers faced by people returning from incarceration, then works to prioritize which of those barriers can realistically be addressed first.',
-          documents: [{ label: 'View the presentation', kind: 'PDF', url: 'reports/briefs/returning-citizens-barriers.pdf' }],
-          tags: ['equity'],
-        },
-        {
-          id: 'argentina-brazil-comparative',
-          type: 'focus-note',
-          title: 'Comparative Study: Argentina & Brazil',
-          plainLanguageSummary: 'Financial illiteracy is widespread among lower-income households in Argentina, limiting access to credit and slowing economic mobility. The study argues for stronger public-private partnerships to expand financial education and opportunity.',
-          documents: [{ label: 'Read the study', kind: 'PDF', url: 'reports/briefs/argentina-brazil-comparative.pdf' }],
-          tags: ['financial literacy', 'global markets'],
-        },
-        {
-          id: 'nigerian-economic-data',
-          type: 'focus-note',
-          title: 'Case Study of Nigerian Economic Data',
-          plainLanguageSummary: 'FinMango’s analysis of Nigeria’s economic data surfaced recurring problems — outdated information and a thin set of reporting sources — that point to a need for standardized data collection. In response, FinMango is building automated data-collection tools and pushing for better reporting.',
-          documents: [{ label: 'Read the case study', kind: 'PDF', url: 'reports/briefs/nigerian-economic-data.pdf' }],
-          tags: ['nigeria', 'data'],
-        },
-      ];
-
-      const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-
-      function authorsHtml(authors) {
-        return authors.map((a) => `${esc(a.name)}<span class="aff"> (${esc(a.affiliation)})</span>`).join(', ');
-      }
-      function metaHtml(r) {
-        return [r.partner, r.term].filter(Boolean).map((m) => `<span>${esc(m)}</span>`).join('');
-      }
-      function tagsHtml(r) {
-        if (!r.tags || !r.tags.length) return '';
-        return `<div class="report-tags">${r.tags.map((t) => `<span class="report-tag">${esc(t)}</span>`).join('')}</div>`;
-      }
-      function docsHtml(docs) {
-        return (docs || []).map((d) =>
-          `<a class="report-doc" href="${esc(d.url)}" target="_blank" rel="noopener noreferrer"><span class="kind">${esc(d.kind)}</span> ${esc(d.label)}</a>`
-        ).join('');
-      }
-      function upLinkHtml(r) {
-        if (!r.publicationUrl) return '';
-        const doi = r.doi ? ` · ${esc(r.doi)}` : '';
-        return `<a class="report-link" href="${esc(r.publicationUrl)}" target="_blank" rel="noopener noreferrer"><span class="dir up" aria-hidden="true">↑</span> Peer-reviewed paper${doi}</a>`;
-      }
-
-      function featuredHtml(r) {
-        const t = REPORT_TYPES[r.type] || { label: r.type };
-        const findings = (r.keyFindings || []).map((f) => `<li>${esc(f)}</li>`).join('');
-        const tools = (r.relatedTools || []).map((tool) =>
-          `<a class="report-link" href="${esc(tool.url)}"><span class="dir down" aria-hidden="true">↓</span> ${esc(tool.label)}</a>`
-        ).join('');
-        return `<article class="report-featured" data-type="${esc(r.type)}" data-tags="${esc((r.tags || []).join(' '))}">
-          <div class="rf-main">
-            <span class="report-type">${esc(t.label)}</span>
-            <h3 class="report-title">${esc(r.title)}</h3>
-            <div class="report-meta">${metaHtml(r)}</div>
-            <p class="report-authors">${authorsHtml(r.authors || [])}</p>
-            <p class="report-summary">${esc(r.plainLanguageSummary)}</p>
-            ${tagsHtml(r)}
-            <div class="report-docs">${docsHtml(r.documents)}${upLinkHtml(r)}</div>
-          </div>
-          <div class="rf-side">
-            ${findings ? `<div><div class="rf-block-label">Key findings</div><ul class="findings-list">${findings}</ul></div>` : ''}
-            ${tools ? `<div><div class="rf-block-label">What it informed ↓</div><div class="rf-links">${tools}</div></div>` : ''}
-          </div>
-        </article>`;
-      }
-
-      function cardHtml(r) {
-        const t = REPORT_TYPES[r.type] || { label: r.type };
-        return `<article class="report-card" data-type="${esc(r.type)}" data-tags="${esc((r.tags || []).join(' '))}">
-          <span class="report-type">${esc(t.label)}</span>
-          <h3 class="report-title">${esc(r.title)}</h3>
-          <p class="report-summary">${esc(r.plainLanguageSummary)}</p>
-          ${tagsHtml(r)}
-          <div class="report-docs">${docsHtml(r.documents)}${upLinkHtml(r)}</div>
-        </article>`;
-      }
-
-      function render(list) {
-        const featured = list.filter((r) => r.featured);
-        const standard = list.filter((r) => !r.featured);
-        const fEl = document.getElementById('reports-featured');
-        const gEl = document.getElementById('reports-grid');
-        if (fEl) fEl.innerHTML = featured.map(featuredHtml).join('');
-        if (gEl) gEl.innerHTML = standard.map(cardHtml).join('');
-      }
-
-      render(REPORTS);
-      window.FinMangoReports = { REPORTS, REPORT_TYPES, render };
-    })();
-  </script>
-
-  <!-- ======================= PUBLICATIONS ======================= -->
+  <!-- ======================= PUBLICATIONS (teaser) ======================= -->
+  <!-- Abstracts, working papers, team and collaborators live on
+       research-publications.html. Both render from data/publications.js. -->
   <section class="publications-section" id="publications">
     <div class="publications-container">
       <div class="section-head">
         <span class="eyebrow">03 · Publications</span>
-        <h2>Published research.</h2>
+        <h2>Published <em>research.</em></h2>
+        <p class="section-sub">Peer-reviewed papers and technical whitepapers, plus five working papers in progress with our academic partners.</p>
       </div>
 
-      <div class="pub-list">
-        <div class="pub-row">
-          <div class="pub-meta">
-            <span class="pub-tag-featured">Featured</span>
-            <span>2025</span>
-            <span>Technical Whitepaper · v2.4</span>
-            <span>Open Source</span>
-          </div>
-          <h3 class="pub-title">Financial Health Barometer: 2025 Methodology &amp; Data Architecture</h3>
-          <p class="pub-authors">FinMango Research Team</p>
-          <p class="pub-journal">FinMango Technical Whitepaper (v2.4)</p>
-          <div class="pub-links">
-            <a href="https://github.com/finmango/research/blob/main/WHITEPAPER_2025.md" target="_blank" rel="noopener noreferrer" class="quiet-link">Read the whitepaper <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <button class="paper-toggle" aria-expanded="false" aria-controls="abs-whitepaper"><span class="toggle-label">Read abstract</span><span class="toggle-arrow">↓</span></button>
-          </div>
-          <div class="paper-abstract-wrap" id="abs-whitepaper">
-            <p class="paper-abstract">The whitepaper documents the data pipeline behind the Financial Health Barometer — a composite index combining Google Health Trends conditional probabilities, BLS and Census administrative data, and state-level housing and credit signals. We detail indicator construction, normalization choices, and the reasoning behind four composite tiers (Low → High).</p>
-          </div>
-        </div>
+      <div class="pub-list" id="pub-list-latest"></div>
 
-        <div class="pub-row">
-          <div class="pub-meta">
-            <span>2023</span>
-            <span>Am. J. of Health Education</span>
-            <span>7 authors</span>
-            <span>Peer-reviewed</span>
-          </div>
-          <h3 class="pub-title">The Mango Model: Best Practices in the Creation of a COVID-19 Open Data Project Through a Partnership with Google Health and the Non-Profit FinMango</h3>
-          <p class="pub-authors">Oscar Wahltinez, Scott Glasgow, Aurora Cheung, James F. Glasgow, Martin Noguera, James W. Glasgow &amp; Pamela Neidert Hoalt</p>
-          <p class="pub-journal">American Journal of Health Education</p>
-          <div class="pub-links">
-            <a href="https://www.tandfonline.com/doi/abs/10.1080/19325037.2023.2209620" target="_blank" rel="noopener noreferrer" class="quiet-link">Read the full paper <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <button class="paper-toggle" aria-expanded="false" aria-controls="abs-mango"><span class="toggle-label">Read abstract</span><span class="toggle-arrow">↓</span></button>
-          </div>
-          <div class="paper-abstract-wrap" id="abs-mango">
-            <p class="paper-abstract">A practitioner's account of how a nonprofit-tech partnership can produce globally useful public-health data. We describe the decisions, missteps, and governance structures behind a dataset that ultimately spanned 22,579 locations across 190+ countries — and argue that the partnership model, not the tooling, is what made it scale.</p>
-          </div>
-        </div>
-
-        <div class="pub-row">
-          <div class="pub-meta">
-            <span>2022</span>
-            <span>Nature · Scientific Data</span>
-            <span>12 authors</span>
-            <span>Open Access</span>
-          </div>
-          <h3 class="pub-title">COVID-19 Open-Data: A global-scale spatially granular meta-dataset for coronavirus disease</h3>
-          <p class="pub-authors">Oscar Wahltinez, Aurora Cheung, Ruth Alcantara, Donny Cheung, Mayank Daswani, Anthony Erlinger, Matt Lee, Pranali Yawalkar, Paula Lê, Ofir Picazo Navarro, Michael P. Brenner &amp; Kevin Murphy</p>
-          <p class="pub-journal">Nature (Scientific Data)</p>
-          <div class="pub-links">
-            <a href="https://www.nature.com/articles/s41597-022-01263-z" target="_blank" rel="noopener noreferrer" class="quiet-link">Read the full paper <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-            <button class="paper-toggle" aria-expanded="false" aria-controls="abs-covid"><span class="toggle-label">Read abstract</span><span class="toggle-arrow">↓</span></button>
-          </div>
-          <div class="paper-abstract-wrap" id="abs-covid">
-            <p class="paper-abstract">A harmonized, spatially granular meta-dataset covering epidemiology, hospitalization, mobility, policy, and demographic data across 190+ countries — updated daily throughout the pandemic. The paper documents the schema, sourcing strategy, and reconciliation logic used to merge thousands of heterogeneous government feeds into a single, queryable resource.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="section-head working-head">
-        <span class="eyebrow">03.1 · In progress</span>
-        <h2>Working papers.</h2>
-      </div>
-
-      <div class="pub-list">
-        <div class="pub-row">
-          <div class="pub-meta"><span>2026</span><span>Housing · Mental Health</span><span class="pub-tag-progress">In Progress</span></div>
-          <h3 class="pub-title">Predictive Signals: Do Mental Health-Related Google Searches Reflect Eviction Trends in Real Estate?</h3>
-          <p class="pub-authors">with Eren Çifi, PhD — Austin Peay State University</p>
-        </div>
-        <div class="pub-row">
-          <div class="pub-meta"><span>2026</span><span>AI · Labor Markets</span><span class="pub-tag-progress">In Progress</span></div>
-          <h3 class="pub-title">AI Adoption in Banking: Efficiency Gains and Employment Trade-offs</h3>
-          <p class="pub-authors">with Eren Çifi, PhD — Austin Peay State University</p>
-        </div>
-        <div class="pub-row">
-          <div class="pub-meta"><span>2026</span><span>Climate · Community Banking</span><span class="pub-tag-progress">In Progress</span></div>
-          <h3 class="pub-title">Tornadoes and Financial Resilience: Assessing the Effects of Natural Disasters on Community Banks</h3>
-          <p class="pub-authors">with Eren Çifi, PhD — Austin Peay State University</p>
-        </div>
-        <div class="pub-row">
-          <div class="pub-meta"><span>2026</span><span>ESG · Market Behavior</span><span class="pub-tag-progress">In Progress</span></div>
-          <h3 class="pub-title">Sustainable Investment Search Behavior as a Predictor of Market Activity</h3>
-          <p class="pub-authors">with Madhavi Venkatesan, PhD — Northeastern University</p>
-        </div>
-        <div class="pub-row">
-          <div class="pub-meta"><span>2026</span><span>Financial Literacy</span><span class="pub-tag-progress">In Progress</span></div>
-          <h3 class="pub-title">Comparative Analysis of Financial Literacy Search Patterns</h3>
-          <p class="pub-authors">with John Longo, PhD — Rutgers University, and Danny Jang — Financial Futures</p>
-        </div>
+      <div class="teaser-more">
+        <a href="research-publications.html" class="btn-secondary">
+          Full bibliography &amp; working papers
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
     </div>
   </section>
@@ -2356,80 +1972,11 @@
     </div>
   </section>
 
-  <!-- ======================= APPROACH ======================= -->
-  <section class="approach-section" id="approach">
-    <div class="approach-container">
-      <div class="section-head">
-        <span class="eyebrow">05 · Our approach</span>
-        <h2>Why we do what we do.</h2>
-        <p class="section-sub">We identify the systemic barriers endangering young adults' financial health — housing, healthcare, debt, predatory lending. We diagnose root causes. We provide the evidence decision-makers need to build solutions that actually work.</p>
-      </div>
-
-      <div class="approach-grid">
-        <div class="approach-card">
-          <div class="approach-num">01</div>
-          <h3 class="approach-title">Identify what others miss</h3>
-          <p class="approach-text">Market failures. Policy gaps. Structural inequalities. Finding them before they become crises.</p>
-        </div>
-        <div class="approach-card">
-          <div class="approach-num">02</div>
-          <h3 class="approach-title">Diagnose root causes</h3>
-          <p class="approach-text">Economic theory. Big data. Google Health Trends. Understanding WHY systems fail young adults.</p>
-        </div>
-        <div class="approach-card">
-          <div class="approach-num">03</div>
-          <h3 class="approach-title">Radically transparent</h3>
-          <p class="approach-text">All research on GitHub. Every methodology. Every insight. Every limitation. Total transparency.</p>
-        </div>
-        <div class="approach-card">
-          <div class="approach-num">04</div>
-          <h3 class="approach-title">Empower decisions</h3>
-          <p class="approach-text">WHO. World Bank. IMF. Policymakers worldwide. We provide evidence. They build solutions.</p>
-        </div>
-      </div>
-
-      <div class="approach-cta">
-        <a href="approach.html" class="btn-secondary">
-          Our approach &amp; methodology
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================= PARTNERSHIPS ======================= -->
-  <section class="partnerships-section" id="partnerships">
-    <div class="partnerships-container">
-      <div class="section-head">
-        <span class="eyebrow">06 · Partnerships</span>
-        <h2>Google collaborations.</h2>
-      </div>
-
-      <div class="collab-list">
-        <div class="collab-card">
-          <img src="google.png" alt="Google Health" class="collab-logo" loading="lazy">
-          <div>
-            <h3 class="collab-title">Google Health Trends API <span class="status-tag active">Active</span></h3>
-            <p class="collab-description">A working relationship with Google's Health Trends team gives us privileged API access — the data engine behind the Financial Health Barometer's real-time signals across all 50 states.</p>
-          </div>
-        </div>
-        <div class="collab-card">
-          <img src="google.png" alt="Google Health" class="collab-logo" loading="lazy">
-          <div>
-            <h3 class="collab-title">COVID-19 Open Data Project <span class="status-tag">Archived</span></h3>
-            <p class="collab-description">A comprehensive meta-dataset containing epidemiological information from 22,579 unique locations within 190+ countries and territories. Recognized by Google.org during the pandemic.</p>
-            <a href="covid-19-open-data-project.html" class="quiet-link">Explore the COVID-19 data portal <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ======================= OPEN QUESTIONS ======================= -->
   <section class="focus-section" id="focus">
     <div class="focus-container">
       <div class="section-head">
-        <span class="eyebrow">07 · Open questions</span>
+        <span class="eyebrow">05 · Open questions</span>
         <h2>What we're asking.</h2>
         <p class="section-sub">A research agenda is really a list of honest questions — the quiet ones, the inconvenient ones, the ones the data keeps hinting at. These are the six we're chasing now.</p>
       </div>
@@ -2469,60 +2016,31 @@
     </div>
   </section>
 
-  <!-- ======================= TEAM ======================= -->
-  <section class="team-section" id="team">
-    <div class="team-container">
-      <div class="section-head">
-        <span class="eyebrow">08 · Our team</span>
-        <h2>Research leadership.</h2>
-        <p class="section-sub">Our team brings experience from Google, Microsoft, Bloomberg News, and Wall Street. We combine technical expertise with academic rigor to tackle complex financial challenges.</p>
-      </div>
-
-      <div class="leads-grid">
-        <div class="lead-cell"><span class="lead-mark">T.R.</span><span class="lead-name">Tony Ramos</span></div>
-        <div class="lead-cell"><span class="lead-mark">O.W.</span><span class="lead-name">Oscar Wahltinez</span></div>
-        <div class="lead-cell"><span class="lead-mark">A.P.</span><span class="lead-name">Anjal Parikh</span></div>
-        <div class="lead-cell"><span class="lead-mark">S.C.</span><span class="lead-name">Sarah Cherian</span></div>
-        <div class="lead-cell"><span class="lead-mark">S.G.</span><span class="lead-name">Scott Glasgow</span></div>
-        <div class="lead-cell"><span class="lead-mark">S.P.</span><span class="lead-name">Soham Patel</span></div>
-      </div>
-
-      <div class="section-head collaborators-head">
-        <span class="eyebrow">08.1 · Academic partners</span>
-        <h2>Collaborators.</h2>
-      </div>
-
-      <div class="collaborators-grid">
-        <div class="collaborator"><div class="collaborator-name">Eren Çifi, PhD</div><div class="collaborator-org">Austin Peay State University</div></div>
-        <div class="collaborator"><div class="collaborator-name">Madhavi Venkatesan, PhD</div><div class="collaborator-org">Northeastern University</div></div>
-        <div class="collaborator"><div class="collaborator-name">Chen Zhang, PhD</div><div class="collaborator-org">Iowa State University</div></div>
-        <div class="collaborator"><div class="collaborator-name">John Longo, PhD</div><div class="collaborator-org">Rutgers University</div></div>
-        <div class="collaborator"><div class="collaborator-name">Christos Makridis, PhD</div><div class="collaborator-org">Arizona State / Stanford</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================= METHODOLOGY ======================= -->
-  <section class="methodology-section" id="methodology">
-    <div class="methodology-container">
-      <div class="section-head">
-        <span class="eyebrow">09 · Methodology</span>
-        <h2>Our data approach.</h2>
-        <p class="section-sub">Most studies using Google Trends rely on normalized Relative Search Volume (RSV) indices. Our unique approach employs the Google Health Trends API to access actual conditional probability values.</p>
-      </div>
-
-      <div class="data-box">
-        <h3 class="data-title">This approach yields:</h3>
-        <ul class="data-list">
-          <li>Greater mathematical rigor, avoiding distortions introduced by normalization</li>
-          <li>More robust statistical analysis due to interpretable, probabilistically grounded metrics</li>
-          <li>Cross-term and cross-time comparability</li>
-          <li>Deeper insights into search behavior and more precise linkages</li>
-        </ul>
-        <a href="https://github.com/finmango/research/blob/main/WHITEPAPER_2025.md" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-          Read the whitepaper
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+  <!-- ======================= APPROACH HANDOFF ======================= -->
+  <!-- The six-step methodology, the Nature case study and the Health
+       Trends data methodology all live on approach.html. -->
+  <section class="handoff-section" id="approach">
+    <div class="handoff-container">
+      <div class="handoff">
+        <div class="handoff-lead">
+          <span class="eyebrow">06 · Approach &amp; methodology</span>
+          <h2 class="handoff-title">Why we do <em>what we do.</em></h2>
+          <p class="section-sub">We identify the systemic barriers endangering young adults' financial health — housing, healthcare, debt, predatory lending. We diagnose root causes. We provide the evidence decision-makers need to build solutions that actually work.</p>
+          <a href="approach.html" class="btn-secondary">
+            Our approach &amp; methodology
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="handoff-claims">
+          <div class="handoff-claim">
+            <div class="handoff-claim-label">Radically transparent</div>
+            <p>All research on GitHub. Every methodology. Every insight. Every limitation.</p>
+          </div>
+          <div class="handoff-claim">
+            <div class="handoff-claim-label">Built to be used</div>
+            <p>WHO. World Bank. IMF. Policymakers worldwide. We provide evidence. They build solutions.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -2640,20 +2158,34 @@
   </script>
   <!-- /chrome:script -->
 
+  <script src="data/reports.js"></script>
+  <script src="data/publications.js"></script>
+  <script src="scripts/research-cards.js"></script>
   <script>
-    // Expandable paper abstracts
-    document.querySelectorAll('.paper-toggle').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var expanded = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', String(!expanded));
-        var wrap = document.getElementById(btn.getAttribute('aria-controls'));
-        if (wrap && wrap.classList.contains('paper-abstract-wrap')) {
-          wrap.classList.toggle('open');
-        }
-        var label = btn.querySelector('.toggle-label');
-        if (label) label.textContent = expanded ? 'Read abstract' : 'Hide abstract';
-      });
-    });
+    /* ============================================================
+       LANDING TEASERS — one featured report, three publications.
+       Both read the same data files the library pages use, so a new
+       report or paper shows up here without touching this file.
+       ============================================================ */
+    (function () {
+      var CARDS = window.FinMangoResearchCards;
+      if (!CARDS) return;
+
+      var R = window.FINMANGO_REPORTS;
+      if (R) {
+        var featured = R.REPORTS.filter(function (r) { return r.featured; })[0];
+        var host = document.getElementById('reports-featured');
+        if (featured && host) host.innerHTML = CARDS.reportFeaturedHtml(featured, R.REPORT_TYPES);
+        var count = document.getElementById('reports-count');
+        if (count) count.textContent = R.REPORTS.length;
+      }
+
+      var P = window.FINMANGO_PUBLICATIONS;
+      var pubHost = document.getElementById('pub-list-latest');
+      if (P && pubHost) {
+        pubHost.innerHTML = P.PUBLISHED.slice(0, 3).map(CARDS.publicationTeaserHtml).join('');
+      }
+    })();
   </script>
 
 </body>

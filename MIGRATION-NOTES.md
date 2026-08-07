@@ -688,3 +688,107 @@ for every converted page.
 - Standalone documents (print one-pagers, social graphic templates,
   judging tools, barrier-breakers sub-pages without site chrome) were
   intentionally NOT migrated: they aren't part of the site chrome system.
+
+---
+
+## Research section split — research.html restructured (August 2026)
+
+Not a reskin. `research.html` had grown to nine numbered sections and was
+doing the job of a landing page, a report library, a bibliography, a team
+page and a methodology page at once. Split so the landing page argues and
+the libraries hold the content.
+
+### New pages
+- **`research-reports.html`** — the full Reports & Briefs library (11
+  reports) with client-side Type and Topic filters, an empty state, and a
+  reset. Filter chips reuse `.indicator-tab`.
+- **`research-publications.html`** — full bibliography with expandable
+  abstracts, working papers, research leadership (6) and academic
+  collaborators (5).
+
+### New shared sources of truth
+- **`data/reports.js`** (`window.FINMANGO_REPORTS`) — the `REPORTS` array
+  lifted verbatim out of research.html's inline `<script>`. Same pattern as
+  `data/dashboard-data.js` per SYNC-ARCHITECTURE.md.
+- **`data/publications.js`** (`window.FINMANGO_PUBLICATIONS`) — published,
+  working, leads, collaborators.
+- **`scripts/research-cards.js`** (`window.FinMangoResearchCards`) — the one
+  copy of the report-card / publication-row markup. All three research pages
+  render from it, so a class change lands everywhere at once. ES5, no build.
+- **`templates/research-subnav.html`** — the section bar partial.
+
+### research.html — what left, and where it went
+- `02 · Reports & Briefs` → one featured teaser; library moved out.
+- `03 · Publications` → three most recent; abstracts + working papers moved out.
+- `05 · Our approach` → **deleted** two of four cards (Identify, Diagnose —
+  already steps 1–2 of approach.html's six-step process). The other two
+  ("Radically transparent", "Built to be used") survive verbatim in a new
+  compact `.handoff-section` that links to approach.html.
+- `06 · Partnerships` → **deleted**. The COVID card duplicated the Google.org
+  recognition block directly above it; the Google Health Trends sentence
+  survives verbatim as `.map-note` under the Barometer plate.
+- `08 · Team` → moved to research-publications.html. **Anjal Parikh is not on
+  about.html**, so deleting this section outright would have dropped a name
+  from the site. Collaborators moved too — they are the working-paper co-authors.
+- `09 · Methodology` → moved to **approach.html** as `#data-methodology`.
+  This one was NOT a duplicate: approach.html covers the six-step process and
+  the Nature case study but never the Health Trends API / RSV
+  conditional-probability argument. Moved, not cut.
+- Hero `.hero-index` strip removed — the research subnav supersedes it.
+
+Result: body content 830 → ~310 lines. Nothing lost.
+
+### Research subnav
+`Research / Overview · Reports & Briefs · Publications · Barometer ·
+Approach & Methodology` on all four research pages, with `aria-current="page"`
+per page. Deliberately NOT a top-nav dropdown: Research is one of the five
+top-level targets, and a second dropdown next to "Our Work" would give two
+competing paths to the Barometer.
+
+- Static, not sticky. It carries `margin-top: 86px` to clear the fixed nav
+  (1.4rem × 2 padding + 40px logo + 1px border, measured in Chromium), and
+  pages carrying it drop hero top padding 6.5rem → 2.5rem (6rem → 2rem mobile).
+  Sticky was tried and rejected: the nav shrinks to ~63px after 50px of
+  scroll, so any fixed `top` value tucks the bar under the nav for part of
+  the scroll range.
+- **The links wrapper is a `<div role="navigation">`, not a `<nav>`.** The
+  system CSS styles the bare `nav` selector as `position: fixed`, so a nested
+  `<nav>` gets pulled out of flow. Caught in review; do not "fix" it.
+- Horizontally scrollable on mobile with the "Research /" label hidden.
+
+### Nav — third mega-menu column (137 pages)
+Added a **Study** column (Reports & Briefs, Publications, Approach &
+Methodology) to the Our Work mega menu, desktop and mobile, rather than
+minting a second dropdown. CSS per page: `.dropdown-mega-grid` 2 → 3 columns,
+`.dropdown-content` min-width 600 → 880px (540 → 720px under 1080px), and
+`.dropdown-mega-col:first-child` → `:not(:last-child)` for the divider.
+Verified fitting the viewport at 1440px (880px wide, left edge 200px) and at
+1000px (720px wide, left edge 16px).
+
+Nine pages (ai-economic-signal, community-wall, covid-19-open-data-project,
+food-navtech, housing-navtech, navtech, post, posts, write) indent that CSS
+differently and were patched scoped to the `.dropdown-content` rule so the
+`@media (min-width: 600px)` query was never touched.
+
+### Also fixed
+- `.reports-section` wrapped its content in `.container` (which adds its own
+  gutter) while every sibling section used a `-container` class, so the
+  Reports block sat 40px further in than the rest of the page. Now
+  `.reports-container` on research.html and research-reports.html.
+- `_redirects`: `/research/reports`, `/research/publications`,
+  `/research/approach`, `/research/methodology` aliases.
+
+### Flags / open questions
+- **`scripts/sync_shared_components.py` is stale and must not be run.** It
+  extracts nav/footer/CSS from `index.html` by hardcoded line numbers
+  (`NAV_HTML = L(2626, 2726)`) that no longer match the file, and it still
+  expects an announcement bar that no longer exists. Running it would revert
+  the Study column and strip per-page `aria-current`. The nav change here was
+  applied by a one-off scoped script instead. Rewriting that script against
+  the `chrome:nav` / `chrome:footer` markers is open work.
+- Premise stat still reads "7 published & working papers" (3 published + 5
+  working = 8). Left as-is — it likely counts 2 peer-reviewed + 5 working and
+  excludes the whitepaper. Worth a decision.
+- The reports Type filter currently renders only "All" and "Focus Note",
+  because every seeded report is a focus note. Working Paper and Data
+  Spotlight chips appear automatically once a report uses those types.
