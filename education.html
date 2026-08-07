@@ -531,40 +531,60 @@
 
     .hero-cta-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; margin-top: 2.25rem; }
 
-    /* photo pair */
+    /* cohort photo + the instructor who teaches them */
     .hero-figures { position: relative; }
     .hero-fig-main {
       display: block;
       width: 100%;
       height: auto;
-      aspect-ratio: 4 / 3;
+      /* wider than the source, biased low — trims the empty ceiling
+         without clipping the back rows of students */
+      aspect-ratio: 16 / 9;
       object-fit: cover;
+      object-position: center 78%;
       border: 1px solid var(--ink-line);
     }
-    .hero-fig-inset {
-      display: block;
+    .hero-fig-portrait {
       position: absolute;
-      left: -2.75rem;
-      bottom: -3rem;
-      width: 44%;
+      left: -4.5rem;
+      bottom: -3.25rem;
+      width: 38%;
+      max-width: 208px;
+      background: var(--paper);
+      padding: .55rem .55rem .8rem;
+      border: 1px solid var(--ink-line);
+      box-shadow: 0 30px 60px -34px rgba(10, 10, 10, .55);
+    }
+    .hero-fig-portrait img {
+      display: block;
+      width: 100%;
       height: auto;
       aspect-ratio: 1 / 1;
       object-fit: cover;
-      border: 6px solid var(--paper);
-      outline: 1px solid var(--ink-line);
-      box-shadow: 0 30px 60px -34px rgba(10, 10, 10, .5);
     }
-    .hero-fig-caption {
-      position: absolute;
-      right: 0;
-      bottom: -2.1rem;
+    .hero-fig-portrait figcaption {
+      display: flex;
+      flex-direction: column;
+      gap: .18rem;
+      padding: .7rem .35rem 0;
+    }
+    .hero-fig-name {
+      font-size: .92rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: 1.2;
+    }
+    .hero-fig-role,
+    .hero-fig-since {
       font-family: var(--font-mono);
-      font-size: .6rem;
+      font-size: .55rem;
       font-weight: 500;
-      letter-spacing: .14em;
+      letter-spacing: .12em;
       text-transform: uppercase;
-      color: var(--ink-faint);
+      line-height: 1.55;
     }
+    .hero-fig-role { color: var(--orange); }
+    .hero-fig-since { color: var(--ink-faint); }
 
     /* stat rail under the whole hero */
     .hero-rail {
@@ -1592,8 +1612,20 @@
       .hero h1 { font-size: clamp(2rem, 9vw, 3.2rem); letter-spacing: -.04em; max-width: 18ch; }
       .hero-sub { margin-top: 1.25rem; }
       .hero-cta-row { margin-top: 1.75rem; }
-      .hero-fig-inset { display: none; }
-      .hero-fig-caption { display: none; }
+      /* Bob moves out from under the photo and sits beside his name */
+      .hero-fig-portrait {
+        position: static;
+        width: 100%;
+        max-width: none;
+        margin-top: 1rem;
+        padding: .6rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: none;
+      }
+      .hero-fig-portrait img { width: 76px; flex-shrink: 0; }
+      .hero-fig-portrait figcaption { padding: 0; gap: .25rem; }
       .hero-rail { grid-template-columns: repeat(2, 1fr); margin-top: 3rem; }
       .hero-rail-item { padding: 1.35rem 1rem 1.35rem 0; border-bottom: 1px solid var(--ink-line-soft); }
       .hero-rail-item + .hero-rail-item { padding-left: 1.25rem; }
@@ -1861,9 +1893,15 @@
         </div>
 
         <div class="hero-figures">
-          <img class="hero-fig-main" src="education1.jpg" alt="A full class of students seated on the steps at Kent State University holding a FinMango banner" fetchpriority="high" width="1200" height="675">
-          <img class="hero-fig-inset" src="education2.jpg" alt="Two students holding a FinMango flag over a desk of Millionaire Mindset worksheets" loading="lazy" width="1080" height="1080">
-          <span class="hero-fig-caption">Kent State · Millionaire Mindset</span>
+          <img class="hero-fig-main" src="Barrier%20Breakers%202026%20Pics/IMG_3792.JPG" alt="Hundreds of Northeast Ohio students seated on the tiered steps at Kent State University for a FinMango program" fetchpriority="high" width="2304" height="1536">
+          <figure class="hero-fig-portrait">
+            <img src="gilly.jpg" alt="Bob Gillingham, lead instructor of Millionaire Mindset" width="402" height="402">
+            <figcaption>
+              <span class="hero-fig-name">Bob Gillingham</span>
+              <span class="hero-fig-role">Lead instructor</span>
+              <span class="hero-fig-since">Teaching since 1997</span>
+            </figcaption>
+          </figure>
         </div>
       </div>
 
@@ -2391,7 +2429,7 @@
       </div>
 
       <div class="event-gallery">
-        <img class="g-big" src="Barrier%20Breakers%202026%20Pics/IMG_3792.JPG" alt="The Barrier Breakers 2026 cohort seated on the grand staircase at Kent State University" loading="lazy">
+        <img class="g-big" src="Barrier%20Breakers%202026%20Pics/IMG_9151.jpg" alt="Students pitching their Plated Purpose project to a judge at Barrier Breakers 2026" loading="lazy">
         <img class="g-tall" src="Barrier%20Breakers%202026%20Pics/IMG_3777.jpg" alt="Students competing at Barrier Breakers 2026" loading="lazy">
         <img src="Barrier%20Breakers%202026%20Pics/IMG_3834.jpg" alt="Students brainstorming at Barrier Breakers 2026" loading="lazy">
         <img class="g-wide" src="Barrier%20Breakers%202026%20Pics/IMG_9165.jpg" alt="Barrier Breakers 2026 group photo" loading="lazy" style="object-position: center 28%">
