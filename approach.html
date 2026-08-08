@@ -81,6 +81,7 @@
       --max-width: 1280px;
       --hero-max: 1440px;
       --gutter: 2.5rem;
+      --rail-w: 220px;
     }
 
     html { scroll-behavior: smooth; }
@@ -315,7 +316,7 @@
       top: calc(100% + 14px);
       right: -1rem;
       background: var(--paper);
-      min-width: 880px;
+      min-width: 600px;
       border: 1px solid var(--ink-line);
       box-shadow: 0 24px 60px -24px rgba(10, 10, 10, .18);
       z-index: 1001;
@@ -337,9 +338,9 @@
       transform: translateY(0);
     }
 
-    .dropdown-mega-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .dropdown-mega-grid { display: grid; grid-template-columns: 1fr 1fr; }
     .dropdown-mega-col { padding: .85rem 0; }
-    .dropdown-mega-col:not(:last-child) { border-right: 1px solid var(--ink-line-soft); }
+    .dropdown-mega-col:first-child { border-right: 1px solid var(--ink-line-soft); }
     .dropdown-mega-col-label {
       font-family: var(--font-mono);
       font-size: .58rem;
@@ -399,6 +400,7 @@
       text-transform: uppercase;
     }
     .research-subnav-label { color: var(--ink-faint); flex-shrink: 0; }
+    .research-subnav-label::after { content: ' /'; }
     .research-subnav-links {
       display: flex;
       align-items: center;
@@ -422,6 +424,80 @@
       .research-subnav-inner { padding: .7rem var(--gutter); gap: 1rem; }
       .research-subnav-links { gap: 1.15rem; }
       .research-subnav-label { display: none; }
+    }
+
+    /* ----------------------------------------------------------
+       RESEARCH SUBNAV — WIDE: sticky left rail.
+       Same markup as the strip above, re-laid-out. The rail is fixed
+       and opaque, so page content scrolls *behind* it; body gets a
+       matching padding-left so nothing sits underneath. Ink sections
+       stay full-bleed against the rail's edge rather than the viewport.
+       Below 1200px none of this applies and the strip takes over.
+       ---------------------------------------------------------- */
+    @media (min-width: 1200px) {
+      /* Offset the flow content only. Padding the body would also shift
+         every position: fixed element (the nav ran 220px off the right
+         edge and clipped Donate; the Barometer tooltip missed the cursor
+         by the same amount), because a padded body becomes the containing
+         block for them here. Sections and the footer are the entire body
+         flow on these pages. */
+      body.has-research-rail > section,
+      body.has-research-rail > footer { margin-left: var(--rail-w); }
+
+      .research-subnav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: var(--rail-w);
+        height: 100vh;
+        margin-top: 0;
+        padding-top: 7rem;
+        background: var(--paper);
+        border-bottom: none;
+        z-index: 1030;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+      }
+      /* Hairline starts below the nav so it doesn't run up behind the logo. */
+      .research-subnav::after {
+        content: '';
+        position: absolute;
+        top: 86px;
+        right: 0;
+        bottom: 0;
+        width: 1px;
+        background: var(--ink-line-soft);
+      }
+
+      .research-subnav-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.4rem;
+        max-width: none;
+        margin: 0;
+        padding: 0 1.5rem 2rem 2.5rem;
+      }
+      .research-subnav-label::after { content: none; }
+
+      .research-subnav-links {
+        flex-direction: column;
+        align-items: stretch;
+        gap: .15rem;
+        overflow: visible;
+        width: 100%;
+      }
+      .research-subnav-links a {
+        padding: .55rem 0 .55rem .9rem;
+        border-bottom: none;
+        border-left: 1.5px solid var(--ink-line);
+        white-space: normal;
+        line-height: 1.45;
+      }
+      .research-subnav-links a:hover { border-left-color: var(--ink-faint); }
+      .research-subnav-links a[aria-current="page"] {
+        border-bottom-color: transparent;
+        border-left-color: var(--orange);
+      }
     }
 
     /* ----------------------------------------------------------
@@ -1144,7 +1220,7 @@
        ---------------------------------------------------------- */
     @media (max-width: 1080px) {
       .nav-right { gap: 1.5rem; }
-      .dropdown-content { min-width: 720px; }
+      .dropdown-content { min-width: 540px; }
       .process-flow { grid-template-columns: repeat(2, 1fr); }
     }
 
@@ -1217,7 +1293,7 @@
   </style>
 </head>
 
-<body>
+<body class="has-research-rail">
 
   <!-- chrome:nav -->
   <nav id="nav">
@@ -1304,27 +1380,6 @@
                   <span class="dropdown-external">↗</span>
                 </a>
               </div>
-              <div class="dropdown-mega-col">
-                <div class="dropdown-mega-col-label">Study</div>
-                <a href="research-reports.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Reports &amp; Briefs</span>
-                    <span class="dropdown-item-desc">Our research in plain language · free to read</span>
-                  </span>
-                </a>
-                <a href="research-publications.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Publications</span>
-                    <span class="dropdown-item-desc">Peer-reviewed papers &amp; working papers</span>
-                  </span>
-                </a>
-                <a href="approach.html" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Approach &amp; Methodology</span>
-                    <span class="dropdown-item-desc">How we identify, diagnose &amp; measure</span>
-                  </span>
-                </a>
-              </div>
             </div>
           </div>
         </div>
@@ -1367,12 +1422,6 @@
             <a href="posts.html" class="mobile-card"><span class="mobile-card-name">Ambassador Notes</span><span class="mobile-card-desc">Notes &amp; briefs from our Ambassadors</span></a>
             <a href="https://blogs.finmango.org/" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">Mango Ink: Blogs <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Long-form writing from the FinMango team</span></a>
           </div>
-          <div class="mobile-cards-group">
-            <div class="mobile-cards-label">Study</div>
-            <a href="research-reports.html" class="mobile-card"><span class="mobile-card-name">Reports &amp; Briefs</span><span class="mobile-card-desc">Our research in plain language · free to read</span></a>
-            <a href="research-publications.html" class="mobile-card"><span class="mobile-card-name">Publications</span><span class="mobile-card-desc">Peer-reviewed papers &amp; working papers</span></a>
-            <a href="approach.html" class="mobile-card"><span class="mobile-card-name">Approach &amp; Methodology</span><span class="mobile-card-desc">How we identify, diagnose &amp; measure</span></a>
-          </div>
         </div>
       </div>
     </div>
@@ -1393,7 +1442,7 @@
        here would be pulled out of flow. -->
   <div class="research-subnav" role="navigation" aria-label="Research sections">
     <div class="research-subnav-inner">
-      <span class="research-subnav-label" aria-hidden="true">Research /</span>
+      <span class="research-subnav-label" aria-hidden="true">Research</span>
       <div class="research-subnav-links">
         <a href="research.html">Overview</a>
         <a href="research-reports.html">Reports &amp; Briefs</a>
