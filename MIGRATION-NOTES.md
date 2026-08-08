@@ -844,3 +844,63 @@ sub-pixel rounding) both with and without the rail.
 - The 1200px cutover is the point where 220px of rail plus the 1280px
   content well stops fitting comfortably. Lowering it would start squeezing
   the Barometer map.
+
+---
+
+## Research subnav removed entirely (August 2026)
+
+Third and final iteration. Both sub-navigation designs were rejected on
+review; this removes the bar from all four research pages and restores the
+original page frame. **The page split stays** — research-reports.html and
+research-publications.html keep their content, URLs and filters.
+
+### Why a side rail could never work here
+
+Worth recording so nobody rebuilds it. The content well is 1280px
+(`--max-width`), so the free margin is `(viewport - 1280) / 2`:
+
+| viewport | margin per side |
+|---|---|
+| 1440px | 80px |
+| 1728px | 224px |
+| 2000px | 360px |
+
+A usable rail needs ~190px. So a rail can only sit in the margin without
+displacing anything at roughly **1660px and wider** — which is not where
+most visitors are. Below that the rail has to push the content, and pushing
+it broke three things at once, all visible in review:
+
+1. The nav container stayed at 80–1360 while content, the ink band and the
+   footer moved to 220 — nothing lined up with the masthead any more.
+2. `.premise` stopped being full-bleed (220→edge instead of 0→edge), which
+   is the whole point of the one ink moment per page.
+3. The hero lost 220px of column, so `<h1>` wrapped the closing "?" onto a
+   line by itself. `.hero h1 em` is `white-space: nowrap`, so "a forecast"
+   held together and the bare "?" orphaned below it.
+
+There is also a standing conflict: a fixed, opaque rail and full-bleed dark
+sections cannot coexist. Either the rail paints paper-colour over the ink
+band, or the band stops short of the edge.
+
+### What replaced it
+
+Nothing. The top nav plus in-page links carry it:
+- research.html → "All 11 reports & briefs" and "Full bibliography &
+  working papers" buttons under each teaser.
+- Library pages → cross-links in the masthead signal strip
+  ("Peer-reviewed publications →" / "Reports & briefs →") and the CTA.
+
+`templates/research-subnav.html` deleted. `--rail-w`, `.has-research-rail`
+and every `.research-subnav*` rule removed from the four pages.
+
+Library mastheads now clear the fixed nav on their own (`.lib-hero`
+padding-top 8rem desktop / 7rem mobile) since the bar's 86px margin is gone.
+research.html and approach.html hero padding restored to 6.5rem / 6rem.
+
+### Verified
+Chromium at 2000 / 1728 / 1440 / 1100 / 390px across the four research pages
+with about.html as an unmodified control. At every width the nav container,
+page content and ink band share one left edge, and research.html's numbers
+are identical to about.html's. The `<h1>` last line measures 395–575px
+across widths (an orphaned "?" would be under 90px), no horizontal overflow,
+no JS errors.
