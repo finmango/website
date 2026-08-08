@@ -792,3 +792,55 @@ differently and were patched scoped to the `.dropdown-content` rule so the
 - The reports Type filter currently renders only "All" and "Focus Note",
   because every seeded report is a focus note. Working Paper and Data
   Spotlight chips appear automatically once a report uses those types.
+
+---
+
+## Research subnav → left rail; nav Study column reverted (August 2026)
+
+Follow-up to the section split, per review. Two changes.
+
+### 1. The Study column is out of the main nav
+The Our Work mega menu is back to two columns (Build / Measure) on all 137
+pages, and `templates/nav.html` with it — `.dropdown-mega-grid` back to
+`1fr 1fr`, `.dropdown-content` min-width back to 600px (540px under 1080px),
+`.dropdown-mega-col:not(:last-child)` back to `:first-child`. The research
+sub-pages are reached from the research rail and in-page links, not the
+global nav. Verified the collateral pages are byte-identical to their
+pre-split state apart from the routine `dashboard-data.js?v=` bump.
+
+### 2. The horizontal strip is now a sticky left rail
+Same markup, two presentations, one breakpoint:
+
+- **≥1200px** — `.research-subnav` becomes `position: fixed`, 220px wide
+  (`--rail-w`), full height, opaque paper so content scrolls *behind* it.
+  Links stack with an orange left border marking the current page. The
+  hairline right edge is drawn by `::after` starting at 86px so it doesn't
+  run up behind the logo.
+- **<1200px** — none of the above applies and the horizontal strip that
+  already shipped takes over unchanged, including the mobile treatment.
+
+**The layout offset is `margin-left` on `body > section, body > footer`, NOT
+`padding-left` on `body`.** Padding the body was tried first and broke two
+things, because a padded body became the containing block for fixed
+descendants here: the fixed nav started at x=220 and ran 220px past the
+right edge, clipping the Donate button entirely; and `#preview-tooltip`
+(fixed, positioned from `e.clientX` in `scripts/research-map.js:151`)
+missed the cursor by the same 220px. Offsetting only the flow content
+leaves every fixed element alone. Sections and the footer are the whole
+body flow on these four pages, so the two selectors cover it.
+
+Ink sections stay full-bleed against the rail's edge rather than the
+viewport — `.premise` and `.cta` span 220px→right edge at ≥1200px.
+
+Verified in Chromium at 1600 / 1440 / 1280 / 1100 / 390px across all four
+research pages plus `about.html` as a control: nav at x=0 everywhere,
+Donate visible everywhere, no horizontal overflow, no JS errors, and the
+Barometer tooltip tracking the cursor at +14px (the intended +15 less
+sub-pixel rounding) both with and without the rail.
+
+### Flags
+- `--rail-w` is a per-page token in each of the four pages' `:root`. If the
+  rail ever moves into a shared stylesheet, that token goes with it.
+- The 1200px cutover is the point where 220px of rail plus the 1280px
+  content well stops fitting comfortably. Lowering it would start squeezing
+  the Barometer map.
