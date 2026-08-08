@@ -76,7 +76,6 @@
       --max-width: 1280px;
       --hero-max: 1440px;
       --gutter: 2.5rem;
-      --rail-w: 220px;
     }
 
     html { scroll-behavior: smooth; }
@@ -386,136 +385,11 @@
     .mobile-controls { display: none; gap: 1rem; align-items: center; }
 
     /* ----------------------------------------------------------
-       RESEARCH SUBNAV — section bar under the fixed nav.
-       Static (scrolls away), so it carries a top margin equal to the
-       unscrolled nav height: 1.4rem x 2 padding + 40px logo + 1px border.
-       The hero's top padding drops to match.
-       ---------------------------------------------------------- */
-    .research-subnav {
-      margin-top: 86px;
-      background: var(--paper);
-      border-bottom: 1px solid var(--ink-line-soft);
-    }
-    .research-subnav-inner {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: .8rem var(--gutter);
-      display: flex;
-      align-items: center;
-      gap: 1.75rem;
-      font-family: var(--font-mono);
-      font-size: .64rem;
-      font-weight: 500;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-    }
-    .research-subnav-label { color: var(--ink-faint); flex-shrink: 0; }
-    .research-subnav-label::after { content: ' /'; }
-    .research-subnav-links {
-      display: flex;
-      align-items: center;
-      gap: 1.6rem;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .research-subnav-links::-webkit-scrollbar { display: none; }
-    .research-subnav-links a {
-      color: var(--ink-dim);
-      text-decoration: none;
-      white-space: nowrap;
-      padding-bottom: 3px;
-      border-bottom: 1.5px solid transparent;
-      transition: color .2s ease, border-color .2s ease;
-    }
-    .research-subnav-links a:hover { color: var(--ink); }
-    .research-subnav-links a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--orange); }
-    @media (max-width: 968px) {
-      .research-subnav-inner { padding: .7rem var(--gutter); gap: 1rem; }
-      .research-subnav-links { gap: 1.15rem; }
-      .research-subnav-label { display: none; }
-    }
-
-    /* ----------------------------------------------------------
-       RESEARCH SUBNAV — WIDE: sticky left rail.
-       Same markup as the strip above, re-laid-out. The rail is fixed
-       and opaque, so page content scrolls *behind* it; body gets a
-       matching padding-left so nothing sits underneath. Ink sections
-       stay full-bleed against the rail's edge rather than the viewport.
-       Below 1200px none of this applies and the strip takes over.
-       ---------------------------------------------------------- */
-    @media (min-width: 1200px) {
-      /* Offset the flow content only. Padding the body would also shift
-         every position: fixed element (the nav ran 220px off the right
-         edge and clipped Donate; the Barometer tooltip missed the cursor
-         by the same amount), because a padded body becomes the containing
-         block for them here. Sections and the footer are the entire body
-         flow on these pages. */
-      body.has-research-rail > section,
-      body.has-research-rail > footer { margin-left: var(--rail-w); }
-
-      .research-subnav {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: var(--rail-w);
-        height: 100vh;
-        margin-top: 0;
-        padding-top: 7rem;
-        background: var(--paper);
-        border-bottom: none;
-        z-index: 1030;
-        overflow-y: auto;
-        overscroll-behavior: contain;
-      }
-      /* Hairline starts below the nav so it doesn't run up behind the logo. */
-      .research-subnav::after {
-        content: '';
-        position: absolute;
-        top: 86px;
-        right: 0;
-        bottom: 0;
-        width: 1px;
-        background: var(--ink-line-soft);
-      }
-
-      .research-subnav-inner {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1.4rem;
-        max-width: none;
-        margin: 0;
-        padding: 0 1.5rem 2rem 2.5rem;
-      }
-      .research-subnav-label::after { content: none; }
-
-      .research-subnav-links {
-        flex-direction: column;
-        align-items: stretch;
-        gap: .15rem;
-        overflow: visible;
-        width: 100%;
-      }
-      .research-subnav-links a {
-        padding: .55rem 0 .55rem .9rem;
-        border-bottom: none;
-        border-left: 1.5px solid var(--ink-line);
-        white-space: normal;
-        line-height: 1.45;
-      }
-      .research-subnav-links a:hover { border-left-color: var(--ink-faint); }
-      .research-subnav-links a[aria-current="page"] {
-        border-bottom-color: transparent;
-        border-left-color: var(--orange);
-      }
-    }
-
-    /* ----------------------------------------------------------
        HERO — top-anchored billboard
        ---------------------------------------------------------- */
     .hero {
       background: var(--paper);
-      padding: 2.5rem 2rem 0;
+      padding: 6.5rem 2rem 0;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -1565,7 +1439,7 @@
         font-size: .74rem !important;
       }
 
-      .hero { padding: 2rem var(--gutter) 0; min-height: auto; }
+      .hero { padding: 6rem var(--gutter) 0; min-height: auto; }
       .hero-container { gap: 2rem; padding-top: 0; }
       .hero h1 { font-size: clamp(2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
       .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
@@ -1645,7 +1519,7 @@
   </style>
 </head>
 
-<body class="has-research-rail">
+<body>
 
   <!-- chrome:nav active="research.html" -->
   <nav id="nav">
@@ -1788,23 +1662,6 @@
   </div>
   <!-- /chrome:nav -->
 
-  <!-- chrome:research-subnav -->
-  <!-- Links wrapper is a <div role="navigation">, NOT a <nav>: the system CSS
-       styles the bare `nav` element (position: fixed), so a nested <nav>
-       here would be pulled out of flow. -->
-  <div class="research-subnav" role="navigation" aria-label="Research sections">
-    <div class="research-subnav-inner">
-      <span class="research-subnav-label" aria-hidden="true">Research</span>
-      <div class="research-subnav-links">
-        <a href="research.html" aria-current="page">Overview</a>
-        <a href="research-reports.html">Reports &amp; Briefs</a>
-        <a href="research-publications.html">Publications</a>
-        <a href="barometer.html">Barometer</a>
-        <a href="approach.html">Approach &amp; Methodology</a>
-      </div>
-    </div>
-  </div>
-  <!-- /chrome:research-subnav -->
 
   <!-- ======================= HERO ======================= -->
   <section class="hero">
