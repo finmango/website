@@ -904,3 +904,49 @@ page content and ink band share one left edge, and research.html's numbers
 are identical to about.html's. The `<h1>` last line measures 395–575px
 across widths (an orphaned "?" would be under 90px), no horizontal overflow,
 no JS errors.
+
+---
+
+## Research section index (August 2026)
+
+Fourth and successful attempt at cross-page navigation for the research
+section, after a horizontal strip and a left rail were both rejected.
+
+### What it is
+A four-cell ruled lattice — Overview / Reports & Briefs / Publications /
+Approach — carrying a mono number, a name and a one-line description, with
+the current page marked by a persistent orange top rule and "You are here"
+instead of a link.
+
+### Why this one works where the other two didn't
+It is **page content in normal flow**, not chrome. That single decision
+removes every failure mode of the first two attempts:
+
+- Nothing is fixed or offset, so the masthead cannot fall out of alignment.
+  The index grid aligns exactly with `.nav-container` at every width
+  (both 80–1360 at 1440px, both 224–1504 at 1728px).
+- No content is displaced, so `.premise` and `.cta` stay full-bleed and the
+  hero keeps its full column — no orphaned "?".
+- No second bar under the nav competing with the hero.
+
+Construction is lifted from `.questions-grid`: 1px-gap lattice over an
+`--ink-line` background, cells on `--paper`, orange top rule via `::before`.
+On research.html it lands directly above the premise stat grid and shares
+its four-column rhythm, so it reads as part of the page rather than bolted
+on. Wrapper is a `div` with `role="navigation"` — **not** a `<nav>`, since
+the system CSS styles bare `nav` as `position: fixed`.
+
+Responsive: 4 columns → 2 at 968px → 1 at 520px.
+
+### Verified
+Chromium at 2000 / 1728 / 1440 / 1100 / 760 / 390px on all four research
+pages, with about.html as an unmodified control. Index aligns with the nav
+container at every width, ink bands remain 0→viewport, correct current-page
+cell on each page, 4/2/1 columns at the right breakpoints, no horizontal
+overflow, no JS errors.
+
+### Pre-existing, not introduced here
+`approach.html`'s `<h1>` orphans its trailing "." onto its own line at
+exactly 390px (last-line width 9px). Measured identical on `origin/main`
+before this change at 390/420/480px, so it predates the index. Left alone;
+worth a separate fix.
