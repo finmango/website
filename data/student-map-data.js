@@ -1,10 +1,10 @@
 // Young Adult Financial Health Map Data
-// Auto-generated: 2026-08-07T05:36:37.200Z
+// Auto-generated: 2026-08-08T05:21:49.519Z
 // Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS, Zillow
 
 const YOUNG_ADULT_DATA = {
     "meta": {
-        "generated": "2026-08-07T05:36:37.198Z",
+        "generated": "2026-08-08T05:21:49.517Z",
         "version": "3.2",
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
@@ -56,11 +56,11 @@ const YOUNG_ADULT_DATA = {
         },
         "unemployment": {
             "value": 7.1,
-            "change": -1.1,
+            "change": -0.8,
             "label": "Youth Unemployment Rate",
             "unit": "%",
             "trend": "up",
-            "source_note": "BLS (Ages 20-24) June 2026"
+            "source_note": "BLS (Ages 20-24) July 2026"
         },
         "debt_to_income": {
             "value": 45.2,
