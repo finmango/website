@@ -1687,8 +1687,21 @@
       .proof-actions .btn-primary, .proof-actions .btn-secondary,
       .shelf-foot .btn-primary, .shelf-foot .btn-secondary,
       .resource-links .btn-primary, .resource-links .btn-secondary { width: 100%; justify-content: center; }
-      .hero-rail { grid-template-columns: 1fr; }
-      .hero-rail-item + .hero-rail-item { padding-left: 0; border-left: none; }
+      /* full-width buttons are already stacked here, so let long labels wrap
+         instead of forcing the whole hero wider than a 320px screen */
+      .btn-primary, .btn-secondary { white-space: normal; text-align: center; }
+      /* the file name and its nowrap type label won't sit side by side this narrow */
+      .kit { padding: 1.75rem 1.35rem 1.5rem; }
+      .kit-file { flex-direction: column; align-items: flex-start; gap: .3rem; }
+      /* keep the stats as a 2x2 block — stacking four of them ate half a screen */
+      .hero-rail { grid-template-columns: 1fr 1fr; margin-top: 2.25rem; }
+      .hero-rail-item { padding: 1rem .5rem 1rem 0; }
+      .hero-rail-item + .hero-rail-item { padding-left: .85rem; }
+      /* re-assert after the rule above, or item 3 picks up the right column's indent */
+      .hero-rail-item:nth-child(odd) { padding-left: 0; border-left: none; }
+      .hero-rail-item:nth-last-child(-n+2) { border-bottom: none; padding-bottom: 0; }
+      .hero-rail-num { font-size: 1.6rem; margin-bottom: .35rem; }
+      .hero-rail-label { font-size: .54rem; letter-spacing: .09em; line-height: 1.5; }
       .event-gallery { grid-auto-rows: 132px; }
       .event-gallery .g-wide, .event-gallery .g-tall { grid-column: span 1; grid-row: span 1; }
       .proof-number { flex-direction: column; gap: .35rem; }
