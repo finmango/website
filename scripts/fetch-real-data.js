@@ -117,6 +117,65 @@ function loadNLIHCFallbackData() {
     }
 }
 
+/**
+ * Load the previously published snapshot (data/latest.json).
+ * This is the run's memory: when an upstream API is down, yesterday's numbers
+ * are a far better answer than a synthesized one. Read once, reused by the
+ * unemployment carry-forward, the indicator carry-forward and the timeseries.
+ */
+let previousSnapshotCache;
+function loadPreviousSnapshot() {
+    if (previousSnapshotCache !== undefined) return previousSnapshotCache;
+    try {
+        const p = path.join(__dirname, '..', 'data', 'latest.json');
+        previousSnapshotCache = JSON.parse(fs.readFileSync(p, 'utf8'));
+    } catch (error) {
+        previousSnapshotCache = null;
+    }
+    return previousSnapshotCache;
+}
+
+/**
+ * Rebuild an unemployment map from the last published snapshot.
+ *
+ * BLS goes down for maintenance often enough that treating an outage as "no
+ * unemployment anywhere" is the wrong default — it wipes the single biggest
+ * input to Financial Anxiety and lets every state collapse onto a synthetic
+ * baseline. Carrying the last known rate forward keeps the index anchored to
+ * real measurements until BLS answers again.
+ *
+ * latest.json stores the rate but not the year-ago comparison, so the change
+ * is carried across directly rather than recomputed from a value we no longer
+ * have.
+ */
+function carryForwardUnemployment() {
+    const previous = loadPreviousSnapshot();
+    if (!previous?.states) return null;
+
+    const results = {};
+    for (const state of Object.values(previous.states)) {
+        const rate = state?.metrics?.unemployment_rate;
+        if (typeof rate !== 'number') continue;
+
+        results[state.abbr] = {
+            value: rate,
+            previousValue: null,
+            carriedChange: state.financial_anxiety?.change ?? 0,
+            date: previous.as_of || null,
+            carriedForward: true
+        };
+    }
+
+    const count = Object.keys(results).length;
+    if (count === 0) {
+        console.warn('  ⚠️  No previous unemployment data to carry forward');
+        return null;
+    }
+
+    console.log(`  ↩️  Carried forward unemployment for ${count} states from ${previous.as_of}`);
+    return results;
+}
+
 // NLIHC Housing Wage definition: hourly wage needed to afford FMR at 30% of
 // income, assuming 2,080 work hours per year. Matches NLIHC OOR methodology.
 function deriveHousingWage(fmr2br) {
@@ -246,6 +305,20 @@ async function fetchBLSUnemployment() {
                 })
             });
 
+            // During a BLS outage the API answers 503 with an HTML maintenance
+            // page. Parsing that as JSON throws a misleading "Unexpected token
+            // '<'" — check the response itself so the log names the real cause.
+            if (!response.ok) {
+                console.error(`BLS API error: HTTP ${response.status} ${response.statusText}`);
+                continue;
+            }
+
+            const contentType = response.headers.get('content-type') || '';
+            if (!contentType.includes('json')) {
+                console.error(`BLS API error: expected JSON, got ${contentType || 'no content-type'}`);
+                continue;
+            }
+
             const data = await response.json();
 
             if (data.status === 'REQUEST_SUCCEEDED' && data.Results?.series) {
@@ -277,7 +350,13 @@ async function fetchBLSUnemployment() {
         }
     }
 
-    console.log(`  ✓ Retrieved unemployment data for ${Object.keys(results).length} states`);
+    const retrieved = Object.keys(results).length;
+    if (retrieved === 0) {
+        console.warn('  ⚠️  BLS returned no usable data — falling back to the last published values');
+        return null;
+    }
+
+    console.log(`  ✓ Retrieved unemployment data for ${retrieved} states`);
     return results;
 }
 
@@ -623,9 +702,12 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
                 anxietyValue += Math.min(trends.states.financial_anxiety[abbr], 10);
             }
 
-            const change = unemp.previousValue
+            // carriedChange is set when this rate came from the last published
+            // snapshot rather than a live BLS response — the year-ago value
+            // needed to recompute it isn't stored, so it rides along instead.
+            const change = unemp.carriedChange ?? (unemp.previousValue
                 ? ((unemp.value - unemp.previousValue) / unemp.previousValue * 100)
-                : 0;
+                : 0);
 
             states[stateCode].financial_anxiety = {
                 value: Math.round(Math.max(80, Math.min(200, anxietyValue))),
@@ -812,13 +894,55 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             : null;
     }
 
-    // Fill in missing values with estimates based on regional patterns
+    // Prefer the last published reading over a synthesized one, then fall back
+    // to regional estimates for anything with no history at all.
+    carryForwardMissingIndicators(states);
     fillMissingValues(states, REGIONAL_STRESS);
 
     // Calculate ranks for each indicator
     calculateRanks(states);
 
     return states;
+}
+
+/**
+ * Carry the previous run's indicator values forward for any state the current
+ * run could not calculate.
+ *
+ * Yesterday's real measurement beats today's estimate: an upstream outage
+ * should freeze an indicator, not replace it with a number derived from a
+ * hardcoded baseline and published under a "BLS LAUS" source label.
+ */
+function carryForwardMissingIndicators(states) {
+    const previous = loadPreviousSnapshot();
+    if (!previous?.states) return;
+
+    const indicators = ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability'];
+    const carried = {};
+
+    for (const [stateCode, state] of Object.entries(states)) {
+        const prevState = previous.states[stateCode];
+        if (!prevState) continue;
+
+        for (const indicator of indicators) {
+            if (state[indicator].value !== null) continue;
+
+            const prevValue = prevState[indicator]?.value;
+            if (typeof prevValue !== 'number') continue;
+
+            state[indicator] = {
+                value: prevValue,
+                change: prevState[indicator].change ?? 0,
+                rank: null,
+                carried_forward_from: previous.as_of || null
+            };
+            carried[indicator] = (carried[indicator] || 0) + 1;
+        }
+    }
+
+    for (const [indicator, count] of Object.entries(carried)) {
+        console.log(`  ↩️  ${indicator}: carried ${count} states forward from ${previous.as_of}`);
+    }
 }
 
 /**
@@ -837,9 +961,17 @@ function fillMissingValues(states, regionalStress = {}) {
         averages[indicator] = values.length > 0
             ? values.reduce((a, b) => a + b, 0) / values.length
             : 120; // Higher baseline for crisis display
+
+        // Nothing to average from means every state is being estimated off a
+        // hardcoded constant — a whole-country outage, not a data gap. Say so
+        // loudly; a silent version of this shipped 51 synthetic values once.
+        if (values.length === 0) {
+            console.warn(`  ⚠️  ${indicator}: no live or previous values anywhere — estimating all 51 states from the ${averages[indicator]} baseline`);
+        }
     }
 
     // Fill missing values with averages adjusted by regional stress
+    const estimated = {};
     for (const stateCode of Object.keys(states)) {
         const abbr = states[stateCode].abbr;
         const multiplier = regionalStress[abbr] || 1.0;
@@ -848,8 +980,14 @@ function fillMissingValues(states, regionalStress = {}) {
             if (states[stateCode][indicator].value === null) {
                 states[stateCode][indicator].value = Math.round(averages[indicator] * multiplier);
                 states[stateCode][indicator].change = 0;
+                states[stateCode][indicator].estimated = true;
+                estimated[indicator] = (estimated[indicator] || 0) + 1;
             }
         }
+    }
+
+    for (const [indicator, count] of Object.entries(estimated)) {
+        console.warn(`  ⚠️  ${indicator}: estimated ${count} states from regional baselines`);
     }
 }
 
@@ -907,13 +1045,18 @@ async function main() {
     const nlihc = loadNLIHCFallbackData();
 
     // Fetch data from all sources in parallel
-    const [unemployment, housing, poverty, rentBurden, fmr] = await Promise.all([
+    const [liveUnemployment, housing, poverty, rentBurden, fmr] = await Promise.all([
         fetchBLSUnemployment(),
         fetchFREDHousingPrices(),
         fetchCensusPoverty(),
         fetchCensusRentBurden(),
         fetchHUDFairMarketRents()
     ]);
+
+    // BLS unavailable → reuse the last published rates rather than letting the
+    // biggest input to Financial Anxiety disappear for every state at once.
+    const unemployment = liveUnemployment || carryForwardUnemployment();
+    const unemploymentStale = !liveUnemployment && !!unemployment;
 
     // Fetch Google Trends separately (with quota protection)
     const trends = await fetchGoogleTrends();
@@ -935,7 +1078,11 @@ async function main() {
             source: 'BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs',
             update_frequency: 'daily',
             data_sources: {
-                unemployment: unemployment ? 'BLS LAUS' : 'estimated',
+                unemployment: liveUnemployment
+                    ? 'BLS LAUS'
+                    : (unemploymentStale
+                        ? `BLS LAUS (carried forward from ${loadPreviousSnapshot()?.as_of || 'previous run'} — BLS unavailable)`
+                        : 'estimated'),
                 housing_prices: housing ? 'FRED HPI' : 'estimated',
                 poverty: poverty ? 'Census SAIPE' : 'estimated',
                 rent_burden: rentBurden ? 'Census ACS B25071' : (nlihc ? 'NLIHC OOR 2025 (fallback)' : (jchs ? 'Harvard JCHS 2025' : 'estimated')),
@@ -996,13 +1143,7 @@ if (typeof module !== 'undefined') module.exports = DASHBOARD_DATA;
  * history and the current data point.
  */
 function loadPreviousTimeseries() {
-    try {
-        const prevPath = path.join(__dirname, '..', 'data', 'latest.json');
-        const prev = JSON.parse(fs.readFileSync(prevPath, 'utf8'));
-        return prev?.timeseries?.national || null;
-    } catch (error) {
-        return null;
-    }
+    return loadPreviousSnapshot()?.timeseries?.national || null;
 }
 
 function generateTimeseries(national, nationalTrends) {
