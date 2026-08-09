@@ -382,11 +382,24 @@
     .mobile-controls { display: none; gap: 1rem; align-items: center; }
 
     /* ----------------------------------------------------------
-       HERO — top-anchored billboard
+       HERO — ink slab.
+       Every other page opens on paper. This one is the ask, so it
+       opens on ink and puts a paper card in the middle of it: the
+       give box is then the brightest object on the screen.
        ---------------------------------------------------------- */
-    .hero {
+
+    /* The hero is ink, so the fixed nav can't stay translucent here —
+       the slab would bleed through it and muddy the wordmark. */
+    nav {
       background: var(--paper);
-      padding: 6.5rem 2rem 6.5rem;
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    .hero {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 8.5rem 2rem 6rem;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -404,8 +417,19 @@
       left: -12%;
       width: 60vw;
       height: 60vw;
-      background: radial-gradient(circle, rgba(255, 107, 53, .09) 0%, transparent 60%);
+      background: radial-gradient(circle, rgba(255, 107, 53, .22) 0%, transparent 60%);
       filter: blur(40px);
+    }
+    /* second bloom, behind the give card, so the card sits in warm light */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      top: 10%;
+      right: -14%;
+      width: 46vw;
+      height: 46vw;
+      background: radial-gradient(circle, rgba(255, 107, 53, .16) 0%, transparent 62%);
+      filter: blur(50px);
     }
 
     .hero-container {
@@ -431,7 +455,7 @@
       font-weight: 500;
       letter-spacing: .16em;
       text-transform: uppercase;
-      color: var(--ink-faint);
+      color: var(--paper-faint);
       display: inline-flex;
       align-items: center;
       gap: .6rem;
@@ -449,12 +473,21 @@
       100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
     }
 
+    /* copy left, give card right */
+    .hero-split {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(340px, .9fr);
+      gap: 4rem;
+      align-items: center;
+    }
+    .hero-copy { display: flex; flex-direction: column; gap: 1.75rem; }
+
     .hero h1 {
-      font-size: clamp(3rem, 8.5vw, 8.5rem);
+      font-size: clamp(2.6rem, 4.6vw, 4.6rem);
       font-weight: 900;
-      line-height: .96;
-      letter-spacing: -.05em;
-      max-width: 14ch;
+      line-height: .98;
+      letter-spacing: -.045em;
+      max-width: 15ch;
     }
     .hero h1 em {
       font-style: normal;
@@ -477,32 +510,157 @@
       stroke-width: 5;
       stroke-linecap: round;
       fill: none;
-      opacity: .5;
+      opacity: .7;
       stroke-dasharray: 1000;
       stroke-dashoffset: 1000;
       animation: draw-stroke 1.2s cubic-bezier(.16, 1, .3, 1) .5s forwards;
     }
     @keyframes draw-stroke { to { stroke-dashoffset: 0; } }
 
-    .hb-bottom {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: end;
-      gap: 3rem;
-      padding-top: 1.75rem;
-      border-top: 1px solid var(--ink-line-soft);
-    }
     .hb-sub {
-      font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+      font-size: clamp(1.02rem, 1.4vw, 1.25rem);
       font-weight: 300;
-      line-height: 1.5;
-      color: var(--ink-dim);
-      max-width: 44ch;
+      line-height: 1.55;
+      color: var(--paper-dim);
+      max-width: 42ch;
       letter-spacing: -.015em;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--paper-line);
     }
-    .hb-sub strong { color: var(--ink); font-weight: 500; }
+    .hb-sub strong { color: var(--paper); font-weight: 500; }
 
-    .hb-cta-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; justify-content: flex-end; }
+    /* ----------------------------------------------------------
+       GIVE CARD — the one bright object on the ink slab
+       ---------------------------------------------------------- */
+    .give {
+      background: var(--paper);
+      color: var(--ink);
+      padding: 1.9rem;
+      box-shadow: 0 32px 90px rgba(0, 0, 0, .5);
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+    .give-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .give-title { font-size: 1.15rem; font-weight: 700; letter-spacing: -.02em; }
+    .give-head .give-secure {
+      font-family: var(--font-mono);
+      font-size: .6rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      white-space: nowrap;
+    }
+
+    /* frequency segmented control */
+    .give-freq {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--ink-line);
+    }
+    .give-freq .freq {
+      padding: .72rem .5rem;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-size: .85rem;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      color: var(--ink-dim);
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease;
+    }
+    .give-freq .freq:hover { color: var(--ink); }
+    .give-freq .freq[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+
+    /* amount grid: 3 presets, then a preset + free-entry field */
+    .give-amounts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .5rem;
+    }
+    .give-amounts .amt {
+      padding: .95rem .4rem;
+      background: transparent;
+      border: 1px solid var(--ink-line);
+      font-family: inherit;
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--ink);
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease, color .2s ease;
+    }
+    .give-amounts .amt:hover { border-color: var(--ink); }
+    .give-amounts .amt[aria-pressed="true"] {
+      background: var(--orange);
+      border-color: var(--orange);
+      color: #fff;
+    }
+
+    .give-other {
+      grid-column: span 2;
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      padding: 0 .85rem;
+      border: 1px solid var(--ink-line);
+      transition: border-color .2s ease;
+    }
+    .give-other:focus-within { border-color: var(--orange); }
+    .give-other span { font-size: 1.02rem; font-weight: 700; color: var(--ink-faint); }
+    .give-other input {
+      width: 100%;
+      padding: .95rem 0;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--ink);
+      -moz-appearance: textfield;
+    }
+    .give-other input::-webkit-outer-spin-button,
+    .give-other input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .give-other input:focus { outline: none; }
+    .give-other input::placeholder { color: var(--ink-faint); font-weight: 600; }
+
+    /* the button the whole page exists for */
+    .give-go {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .8rem;
+      padding: 1.25rem 1.5rem;
+      background: var(--orange);
+      color: #fff;
+      font-size: 1.08rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      text-decoration: none;
+      text-align: center;
+      transition: background .25s cubic-bezier(.16, 1, .3, 1);
+    }
+    .give-go:hover { background: var(--ink); }
+    .give-go svg {
+      width: 16px; height: 16px;
+      flex-shrink: 0;
+      transition: transform .25s cubic-bezier(.16, 1, .3, 1);
+    }
+    .give-go:hover svg { transform: translateX(4px); }
+
+    .give-note {
+      font-size: .78rem;
+      line-height: 1.45;
+      color: var(--ink-faint);
+      text-align: center;
+    }
 
     /* ----------------------------------------------------------
        IMPACT — ruled stats strip on paper
@@ -635,6 +793,8 @@
       letter-spacing: -.01em;
     }
     .cta-actions { display: flex; gap: .9rem; flex-wrap: wrap; }
+    /* the closing ask carries the same weight as the give card's button */
+    .cta-actions .btn-primary { padding: 1.25rem 2.1rem; font-size: 1.05rem; }
 
     /* ----------------------------------------------------------
        FOOTER — continues the ink, separated by hairline
@@ -877,11 +1037,14 @@
         font-size: .74rem !important;
       }
 
-      .hero { padding: 6rem var(--gutter) 4rem; min-height: auto; }
+      .hero { padding: 6.5rem var(--gutter) 3.5rem; min-height: auto; }
       .hero-container { gap: 2rem; padding-top: 0; }
       .hero h1 { font-size: clamp(2.2rem, 10vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
-      .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
-      .hb-cta-row { justify-content: flex-start; width: 100%; gap: .75rem; }
+      .hero-split { grid-template-columns: 1fr; gap: 2.25rem; }
+      /* eyebrow and the 501(c)(3) tag won't sit side by side at this width */
+      .hero-top { flex-direction: column; align-items: flex-start; gap: .8rem; }
+      .hb-sub { padding-top: 1.25rem; }
+      .give { padding: 1.4rem; }
       .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
 
       .section-head { margin-bottom: 2.5rem; }
@@ -910,21 +1073,17 @@
 
     @media (max-width: 560px) {
       /* CTAs: full-width stack instead of ragged wrap */
-      .hb-cta-row, .cta-actions { flex-direction: column; }
-      .hb-cta-row .btn-primary, .hb-cta-row .btn-secondary,
+      .cta-actions { flex-direction: column; }
       .cta-actions .btn-primary, .cta-actions .btn-secondary { width: 100%; justify-content: center; }
     }
 
     /* Tablet tier (iPads in portrait, small landscape) — scale the hero up
        from phone sizing so it uses the wider canvas */
     @media (min-width: 600px) and (max-width: 968px) {
-      .hero h1 { font-size: clamp(3.2rem, 8.6vw, 4.8rem); }
-      .hb-bottom {
-        grid-template-columns: 1.2fr 1fr;
-        gap: 2rem 3rem;
-        align-items: start;
-      }
-      .hb-cta-row { grid-column: 1 / -1; justify-content: flex-start; }
+      /* card drops under the copy but the copy still gets a big headline */
+      .hero h1 { font-size: clamp(3rem, 7vw, 4.2rem); }
+      .hero-split { grid-template-columns: 1fr; gap: 2.75rem; }
+      .give { max-width: 520px; }
       .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
       .impact-strip { grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink-line); }
       .impact-stat { padding: 1.75rem 1.5rem 0 0; border-top: none; }
@@ -1077,7 +1236,7 @@
   <!-- /chrome:nav -->
 
   <!-- ======================= HERO ======================= -->
-  <section class="hero">
+  <section class="hero on-ink">
     <div class="hero-bg"></div>
     <div class="hero-container">
 
@@ -1086,17 +1245,44 @@
         <div class="hb-status"><span class="hb-pulse"></span>501(c)(3) · Tax-deductible</div>
       </div>
 
-      <h1>Fund impactful <em>research<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em>. Empower <em>advocates</em> for&nbsp;change.</h1>
+      <div class="hero-split">
+        <div class="hero-copy">
+          <h1>Fund impactful <em>research<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em>. Empower <em>advocates</em> for&nbsp;change.</h1>
+          <p class="hb-sub">
+            Your donation doesn't just support our work — it funds <strong>evidence that decision-makers can't ignore</strong> and voices they can't silence.
+          </p>
+        </div>
 
-      <div class="hb-bottom">
-        <p class="hb-sub">
-          Your donation doesn't just support our work — it funds <strong>evidence that decision-makers can't ignore</strong> and voices they can't silence.
-        </p>
-        <div class="hb-cta-row">
-          <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-page#/donate" target="_blank" rel="noopener noreferrer" class="btn-primary">
-            Donate now
+        <div class="give" id="give">
+          <div class="give-head">
+            <span class="give-title">Make a gift</span>
+            <span class="give-secure">Secure · every.org</span>
+          </div>
+
+          <div class="give-freq" role="group" aria-label="Giving frequency">
+            <button type="button" class="freq" data-freq="once" aria-pressed="true">One-time</button>
+            <button type="button" class="freq" data-freq="monthly" aria-pressed="false">Monthly</button>
+          </div>
+
+          <div class="give-amounts" role="group" aria-label="Donation amount">
+            <button type="button" class="amt" data-amt="25" aria-pressed="false">$25</button>
+            <button type="button" class="amt" data-amt="50" aria-pressed="true">$50</button>
+            <button type="button" class="amt" data-amt="100" aria-pressed="false">$100</button>
+            <button type="button" class="amt" data-amt="250" aria-pressed="false">$250</button>
+            <div class="give-other">
+              <span aria-hidden="true">$</span>
+              <input type="number" id="giveOther" min="1" step="1" placeholder="Other" inputmode="numeric" aria-label="Other amount, in dollars">
+            </div>
+          </div>
+
+          <a class="give-go" id="giveGo"
+             href="https://www.every.org/finmango?amount=50&frequency=once&theme_color=ff8f00&utm_campaign=donate-page#/donate"
+             target="_blank" rel="noopener noreferrer">
+            <span id="giveGoLabel">Donate $50</span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
+
+          <p class="give-note">FinMango is a 501(c)(3). Your gift is tax-deductible and you'll get a receipt by email.</p>
         </div>
       </div>
 
@@ -1263,18 +1449,109 @@
   <!-- Every.org Embed Widget -->
   <script async defer src="https://embeds.every.org/0.4/button.js?explicit=1" id="every-donate-btn-js"></script>
   <script>
-    function instEveryOrg() {
-      if(window.everyDotOrgDonateButton) {
-        window.everyDotOrgDonateButton.createWidget({
-          selector: 'a[href*="every.org/finmango"]',
-          nonprofitSlug: 'finmango'
+    (function () {
+      var SLUG = 'finmango';
+      var card = document.getElementById('give');
+      var goLink = document.getElementById('giveGo');
+      var goLabel = document.getElementById('giveGoLabel');
+      var other = document.getElementById('giveOther');
+
+      // amount 0 means "let the donor choose on every.org"
+      var state = { amount: 50, frequency: 'once' };
+
+      function everyUrl() {
+        var q = 'theme_color=ff8f00&utm_campaign=donate-page';
+        if (state.amount > 0) {
+          q = 'amount=' + state.amount + '&frequency=' + state.frequency + '&' + q;
+        }
+        return 'https://www.every.org/' + SLUG + '?' + q + '#/donate';
+      }
+
+      // Keep the href, the button label, and the embedded widget (once it has
+      // loaded) all describing the same gift.
+      function sync() {
+        if (goLink) goLink.href = everyUrl();
+        if (goLabel) {
+          goLabel.textContent = state.amount > 0
+            ? 'Donate $' + state.amount.toLocaleString('en-US')
+            : 'Donate';
+        }
+        var w = window.everyDotOrgDonateButton;
+        if (w && w.setOptions) {
+          w.setOptions({
+            nonprofitSlug: SLUG,
+            defaultDonationAmount: state.amount > 0 ? state.amount : undefined,
+            defaultFrequency: state.frequency,
+            primaryColor: '#FF6B35'
+          });
+        }
+      }
+
+      function press(nodes, match) {
+        Array.prototype.forEach.call(nodes, function (n) {
+          n.setAttribute('aria-pressed', match(n) ? 'true' : 'false');
         });
       }
-    }
-    var everyScript = document.getElementById("every-donate-btn-js");
-    if (everyScript) {
-      everyScript.onload = instEveryOrg;
-    }
+
+      if (card) {
+        var amtBtns = card.querySelectorAll('.amt');
+        var freqBtns = card.querySelectorAll('.freq');
+
+        Array.prototype.forEach.call(amtBtns, function (b) {
+          b.addEventListener('click', function () {
+            state.amount = Number(b.dataset.amt);
+            press(amtBtns, function (n) { return n === b; });
+            if (other) other.value = '';
+            sync();
+          });
+        });
+
+        if (other) {
+          other.addEventListener('input', function () {
+            var v = Math.floor(Number(other.value));
+            state.amount = v > 0 ? v : 0;
+            press(amtBtns, function () { return false; });
+            sync();
+          });
+        }
+
+        Array.prototype.forEach.call(freqBtns, function (b) {
+          b.addEventListener('click', function () {
+            state.frequency = b.dataset.freq;
+            press(freqBtns, function (n) { return n === b; });
+            sync();
+          });
+        });
+      }
+
+      // ---- every.org widget -------------------------------------------------
+      var started = false;
+      function initWidget() {
+        if (started || !window.everyDotOrgDonateButton) return;
+        started = true;
+        window.everyDotOrgDonateButton.createWidget({
+          selector: 'a[href*="every.org/' + SLUG + '"]',
+          nonprofitSlug: SLUG,
+          primaryColor: '#FF6B35'
+        });
+        sync();
+      }
+
+      var tag = document.getElementById('every-donate-btn-js');
+      if (tag) tag.addEventListener('load', initWidget);
+      // The tag is async, so it can finish executing before this inline block
+      // parses (warm cache) — in which case that load event already fired and
+      // we would never hear it. Try now, then poll briefly. If the script is
+      // blocked outright, we simply stop: the links still reach every.org.
+      initWidget();
+      var tries = 0;
+      var poll = setInterval(function () {
+        initWidget();
+        if (started || ++tries > 40) clearInterval(poll);
+      }, 250);
+
+      sync();
+    })();
   </script>
 
 </body>
