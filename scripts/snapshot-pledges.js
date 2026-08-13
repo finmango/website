@@ -23,6 +23,7 @@ const ROOT = path.join(__dirname, '..');
 const OUT = path.join(ROOT, 'data', 'pledges.js');
 const SHARED = path.join(ROOT, 'functions', '_shared.js');
 const TIMEOUT_MS = 30000;
+const ATTEMPTS = 3;
 
 // Single source of truth for the endpoint — read it rather than duplicating it.
 function wallUrl() {
@@ -48,13 +49,34 @@ function publicRow(p) {
   };
 }
 
+// One bad response used to cost the wall a whole day: a single 404 from Apps
+// Script on 2026-08-13 kept a snapshot from the previous morning, so a pledge
+// approved in between was missing from the first paint until the next build.
+// The failures are transient — cold starts and the occasional 404 on the /exec
+// redirect — so retry before giving up on the day.
+async function fetchPledges() {
+  let lastErr;
+  for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+    try {
+      const res = await fetch(wallUrl(), {
+        headers: { accept: 'application/json' },
+        signal: AbortSignal.timeout(TIMEOUT_MS)
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return await res.json();
+    } catch (err) {
+      lastErr = err;
+      if (attempt < ATTEMPTS) {
+        console.warn('  attempt ' + attempt + ' failed (' + err.message + ') — retrying');
+        await new Promise((r) => setTimeout(r, attempt * 5000));
+      }
+    }
+  }
+  throw lastErr;
+}
+
 async function main() {
-  const res = await fetch(wallUrl(), {
-    headers: { accept: 'application/json' },
-    signal: AbortSignal.timeout(TIMEOUT_MS)
-  });
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  const data = await res.json();
+  const data = await fetchPledges();
   if (!data || data.result !== 'success' || !Array.isArray(data.pledges)) {
     throw new Error('unexpected payload: ' + JSON.stringify(data).slice(0, 200));
   }

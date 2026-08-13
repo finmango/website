@@ -1570,10 +1570,23 @@
         new Date(b.t || 0) - new Date(a.t || 0))[0];
       paint(freshest ? freshest.rows : null);
 
-      Promise.resolve(window.__pledgeReq || fetch('/api/wall?action=pledges').then(r => r.json()))
-        .then((data) => {
-          if (!data || data.result !== 'success') return; // keep what's on screen
-          const rows = (data.pledges || []).filter(p => p && p.id && p.barrier);
+      // The live list is the only thing carrying a pledge approved since the
+      // last build, so one failed request shouldn't cost a visitor a card.
+      // /api/wall answers 502 when it has nothing cached and Apps Script is
+      // still cold — it primes the edge entry in the background regardless, so
+      // a second try a moment later normally lands on a warm cache. null means
+      // "no usable answer"; an empty array would still be an answer.
+      const askWall = () => fetch('/api/wall?action=pledges').then(r => r.json());
+      const liveRows = (data) => (data && data.result === 'success')
+        ? (data.pledges || []).filter(p => p && p.id && p.barrier)
+        : null;
+
+      Promise.resolve(window.__pledgeReq || askWall())
+        .then(liveRows, () => null)
+        .then((rows) => rows || new Promise((r) => setTimeout(r, 2500))
+          .then(askWall).then(liveRows).catch(() => null))
+        .then((rows) => {
+          if (!rows) return; // keep what's on screen
           try { localStorage.setItem(WALL_CACHE_KEY, JSON.stringify({ t: Date.now(), rows: rows })); } catch (e) {}
           paint(rows);
         })
