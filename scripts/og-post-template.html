@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>FinMango Ambassador Note — social card</title>
+<style>
+  /* Local fonts so renders are hermetic (no network needed in CI/sandboxes) —
+     same bundle scripts/render-og.js uses. */
+  @font-face {
+    font-family: 'DM Sans';
+    src: url('fonts/dm-sans-var.woff2') format('woff2');
+    font-weight: 100 1000;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'JetBrains Mono';
+    src: url('fonts/jetbrains-mono-500.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  /* Editorial system — same tokens as index.html */
+  :root {
+    --paper: #FAFAF7;
+    --ink: #0A0A0A;
+    --orange: #FF6B35;
+    --ink-faint: rgba(10, 10, 10, .42);
+    --ink-line-soft: rgba(10, 10, 10, .12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1200px; height: 630px;
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--paper);
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+  }
+
+  /* The whole card is the screenshot target: the cover, whole and uncropped,
+     over a ground that continues its own edge colour, with one slim brand
+     strip. The note's title and dek are the share's text — repeating them in
+     the image would just fight the cover's own headline. */
+  #capture {
+    position: relative;
+    width: 1200px; height: 630px;
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .cover-area {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 38px 44px 26px;
+  }
+  .cover-area img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .strip {
+    flex: none;
+    height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 0 44px 4px;
+    border-top: 1px solid var(--ink-line-soft);
+  }
+  .brand-logo { height: 30px; width: auto; display: block; }
+  .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .meta .tick { width: 24px; height: 2px; background: var(--orange); flex: none; }
+
+  /* A cover on a dark ground (dark-mode charts, night photography) takes the
+     whole card dark with it — flip the strip so it stays readable. */
+  #capture.on-dark { color: #fff; }
+  #capture.on-dark .strip { border-top-color: rgba(255, 255, 255, .18); }
+  #capture.on-dark .meta { color: rgba(255, 255, 255, .66); }
+  #capture.on-dark .brand-logo { filter: invert(1) brightness(1.6); }
+</style>
+</head>
+<body>
+<div id="capture">
+  <div class="cover-area"><img id="cover" alt="" /></div>
+  <div class="strip">
+    <img class="brand-logo" src="../finmango.png" alt="FinMango" />
+    <div class="meta" id="meta"><span class="tick"></span>Ambassador Note</div>
+  </div>
+</div>
+
+<script>
+  // Average a small tile in each corner: a flat border (a chart's white margin)
+  // gives four matching corners and becomes the card's ground, so the cover
+  // blends into it; anything with content at its edges leaves the four
+  // disagreeing and we keep paper. Same test as js/cover-fit.js, so a cover's
+  // ground matches on the page and in the share.
+  function sampleEdgeColor(img) {
+    try {
+      var canvas = document.createElement('canvas');
+      canvas.width = canvas.height = 1;
+      var ctx = canvas.getContext('2d');
+      var w = img.naturalWidth, h = img.naturalHeight;
+      var tile = Math.max(2, Math.min(16, Math.round(Math.min(w, h) * 0.02)));
+      var corners = [[0, 0], [w - tile, 0], [0, h - tile], [w - tile, h - tile]].map(function (p) {
+        ctx.drawImage(img, p[0], p[1], tile, tile, 0, 0, 1, 1);
+        return ctx.getImageData(0, 0, 1, 1).data;
+      });
+      var avg = [0, 1, 2].map(function (i) {
+        return corners.reduce(function (sum, px) { return sum + px[i]; }, 0) / corners.length;
+      });
+      var spread = Math.max.apply(null, corners.map(function (px) {
+        return Math.max.apply(null, [0, 1, 2].map(function (i) { return Math.abs(px[i] - avg[i]); }));
+      }));
+      if (spread > 12) return '';
+      return { css: 'rgb(' + avg.map(Math.round).join(',') + ')', lum: (0.299 * avg[0] + 0.587 * avg[1] + 0.114 * avg[2]) / 255 };
+    } catch (e) {
+      return '';
+    }
+  }
+
+  // Called by scripts/generate-post-og.js with the cover as a data: URI.
+  window.setPost = async function (data) {
+    var img = document.getElementById('cover');
+    var capture = document.getElementById('capture');
+
+    await new Promise(function (resolve, reject) {
+      img.onload = resolve;
+      img.onerror = function () { reject(new Error('cover did not decode')); };
+      img.src = data.cover;
+    });
+
+    var sampled = sampleEdgeColor(img);
+    var ground = data.bg ? { css: data.bg, lum: 1 } : sampled;
+    if (ground && ground.css) {
+      capture.style.background = ground.css;
+      capture.classList.toggle('on-dark', ground.lum < 0.5);
+    }
+
+    var bits = [data.category || 'Ambassador Note', data.author || ''].filter(Boolean);
+    document.getElementById('meta').innerHTML =
+      '<span class="tick"></span>' + bits.join('  ·  ').replace(/[<>&]/g, ' ');
+
+    if (document.fonts && document.fonts.ready) await document.fonts.ready;
+    return {
+      width: img.naturalWidth,
+      height: img.naturalHeight,
+      ratio: img.naturalWidth / img.naturalHeight,
+      ground: ground && ground.css ? ground.css : ''
+    };
+  };
+</script>
+</body>
+</html>

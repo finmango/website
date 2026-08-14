@@ -33,6 +33,15 @@ function sizedCoverUrl(cover, w) {
   return cover;
 }
 
+// Some crawlers (and link-checkers) probe an og:image with HEAD first. Pages
+// only routes the methods a Function exports, so without this the probe falls
+// through to static asset serving and comes back as the site's HTML — answer it
+// with the real image headers instead.
+export async function onRequestHead(context) {
+  const res = await onRequestGet(context);
+  return new Response(null, { status: res.status, headers: res.headers });
+}
+
 export async function onRequestGet(context) {
   const { request, waitUntil } = context;
   const url = new URL(request.url);

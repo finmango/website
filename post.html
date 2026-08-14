@@ -452,6 +452,10 @@
   </footer>
   <!-- /chrome:footer -->
 
+  <!-- Frames the hero cover to its own shape instead of cropping wide charts
+       and tall portraits into 16:9 (js/cover-fit.js). -->
+  <script src="js/cover-fit.js" defer></script>
+
   <script>
     // Reads go through the same-origin, edge-cached proxy (functions/api/posts.js)
     // so repeat visits skip the slow Apps Script round-trip. The /post Function
@@ -607,7 +611,7 @@
 
     function render(p) {
       const tagLine = [p.category, (p.tags || []).join(' · ')].filter(Boolean).join('  ·  ');
-      const cover = p.cover ? '<figure class="article-cover"><img src="' + escapeHtml(coverSrc(p, 1600)) + '" alt="" fetchpriority="high" decoding="async"></figure>' : '';
+      const cover = p.cover ? '<figure class="article-cover" data-cover-frame="hero" data-cover-post="' + escapeHtml(p.id) + '"><img src="' + escapeHtml(coverSrc(p, 1600)) + '" alt="" fetchpriority="high" decoding="async"></figure>' : '';
       const affil = p.authorAffiliation ? ' <span>· ' + escapeHtml(p.authorAffiliation) + '</span>' : '';
       const name = p.authorName || 'FinMango contributor';
       // If the author tied this note to their ambassador profile, link the byline to it.
@@ -659,7 +663,7 @@
     // the article itself stays light. The list request hits the same
     // edge-cached /api/posts endpoint posts.html uses, so it's cheap.
     function miniCard(p) {
-      const cover = p.cover ? '<div class="mn-cover"><img src="' + escapeHtml(coverSrc(p, 480)) + '" alt="" loading="lazy" decoding="async"></div>' : '';
+      const cover = p.cover ? '<div class="mn-cover" data-cover-frame="fixed" data-cover-post="' + escapeHtml(p.id) + '"><img src="' + escapeHtml(coverSrc(p, 480)) + '" alt="" loading="lazy" decoding="async"></div>' : '';
       const meta = [escapeHtml(p.authorName || 'FinMango'), escapeHtml(fmtDate(p.publishedAt || p.createdAt))].filter(Boolean).join(' · ');
       return '<a class="mn-card" href="/post?id=' + encodeURIComponent(p.id) + '">' + cover +
         '<span class="mn-cat">' + escapeHtml(p.category || 'Note') + '</span>' +
