@@ -1,16 +1,16 @@
 // Financial Health Barometer Data
-// Auto-generated: 2026-08-13T05:38:45.060Z
+// Auto-generated: 2026-08-14T05:35:32.097Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
-  "as_of": "2026-08-13",
+  "as_of": "2026-08-14",
   "meta": {
-    "generated": "2026-08-13T05:38:45.021Z",
+    "generated": "2026-08-14T05:35:32.056Z",
     "version": "2.4",
     "source": "BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs",
     "update_frequency": "daily",
     "data_sources": {
-      "unemployment": "BLS LAUS (carried forward from 2026-08-12 — BLS unavailable)",
+      "unemployment": "BLS LAUS (carried forward from 2026-08-13 — BLS unavailable)",
       "housing_prices": "FRED HPI",
       "poverty": "Census SAIPE",
       "rent_burden": "Census ACS B25071",
@@ -19,7 +19,7 @@ const DASHBOARD_DATA = {
       "jchs_calibration": "Harvard JCHS State of the Nation's Housing 2025",
       "trends": "Google Trends"
     },
-    "augmented_at": "2026-08-13T05:38:45.059Z"
+    "augmented_at": "2026-08-14T05:35:32.097Z"
   },
   "national": {
     "financial_anxiety": {
