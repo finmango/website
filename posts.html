@@ -410,6 +410,10 @@
        The live list still upgrades it a moment later. -->
   <script src="data/posts.js"></script>
 
+  <!-- Frames every cover to its own shape instead of cropping wide charts and
+       tall portraits to fit the 16:9 slot (js/cover-fit.js). -->
+  <script src="js/cover-fit.js" defer></script>
+
   <script>
     // Reads go through the same-origin, edge-cached proxy (functions/api/posts.js)
     // so the list loads fast and survives Apps Script cold starts — see docs/POSTS-SETUP.md.
@@ -433,7 +437,7 @@
       return [escapeHtml(p.authorName || 'FinMango'), escapeHtml(fmtDate(p.publishedAt || p.createdAt))].filter(Boolean).join(' · ');
     }
     function card(p) {
-      const cover = p.cover ? '<div class="card-cover"><img src="' + escapeHtml(coverSrc(p, 800)) + '" alt="" loading="lazy" decoding="async"></div>' : '';
+      const cover = p.cover ? '<div class="card-cover" data-cover-frame="fixed" data-cover-post="' + escapeHtml(p.id) + '"><img src="' + escapeHtml(coverSrc(p, 800)) + '" alt="" loading="lazy" decoding="async"></div>' : '';
       return '<a class="card" href="/post?id=' + encodeURIComponent(p.id) + '">' + cover +
         '<div class="card-cat">' + escapeHtml(p.category || 'Post') + '</div>' +
         '<div class="card-title">' + escapeHtml(p.title) + '</div>' +
@@ -444,7 +448,7 @@
     // page's LCP image, so it loads eagerly at high priority.
     function featuredCard(p) {
       return '<a class="card featured" href="/post?id=' + encodeURIComponent(p.id) + '">' +
-        '<div class="card-cover"><img src="' + escapeHtml(coverSrc(p, 1200)) + '" alt="" fetchpriority="high" decoding="async"></div>' +
+        '<div class="card-cover" data-cover-frame="fixed" data-cover-post="' + escapeHtml(p.id) + '"><img src="' + escapeHtml(coverSrc(p, 1200)) + '" alt="" fetchpriority="high" decoding="async"></div>' +
         '<div class="featured-body">' +
           '<div class="card-cat">Latest · ' + escapeHtml(p.category || 'Post') + '</div>' +
           '<div class="card-title">' + escapeHtml(p.title) + '</div>' +
