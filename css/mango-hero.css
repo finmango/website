@@ -12,7 +12,7 @@
   width: 100%;
   max-width: var(--hero-max);
   margin: 0 auto;
-  height: clamp(160px, 23vh, 230px);
+  height: clamp(118px, 16vh, 168px);
   pointer-events: none;
 }
 
@@ -94,7 +94,9 @@ nav.mango-layer {
 }
 
 /* The art spins; the anchor only translates, which keeps the label upright
-   and the focus ring square to the page */
+   and the focus ring square to the page. One flat silhouette, no gradient and
+   no gloss — the shape carries it, and a hairline shadow is only there to sit
+   the fruit on the page rather than paste it onto one. */
 .mango-art {
   position: absolute;
   inset: 0;
@@ -102,49 +104,40 @@ nav.mango-layer {
   height: 100%;
   pointer-events: none;
   will-change: transform;
-  filter: drop-shadow(0 12px 20px rgba(10, 10, 10, .18));
-  transition: filter .2s ease;
+  filter: drop-shadow(0 4px 9px rgba(10, 10, 10, .10));
 }
 
-.mango:hover .mango-art,
-.mango:focus-visible .mango-art {
-  filter: drop-shadow(0 16px 26px rgba(229, 81, 27, .34));
+.mango-art path {
+  fill: var(--orange);
+  transition: fill .25s cubic-bezier(.16, 1, .3, 1);
 }
 
+.mango.tone-deep .mango-art path { fill: var(--orange-deep); }
+
+/* Same move the page's buttons make: on hover it goes to ink */
+.mango:hover .mango-art path,
+.mango:focus-visible .mango-art path { fill: var(--ink); }
+
+/* Mono, uppercase, tracked out — the site's own label voice. Set on the
+   fruit rather than beside it, so a tumbling pile never collides captions. */
 .mango-label {
   position: absolute;
   left: 50%;
-  top: 54%;
+  top: 64%;
   transform: translate(-50%, -50%);
-  width: 78%;
+  width: 84%;
   text-align: center;
-  color: #fff;
-  font-family: var(--font-body);
-  font-weight: 700;
-  letter-spacing: -.015em;
-  line-height: 1.08;
-  text-shadow: 0 1px 4px rgba(122, 45, 0, .5);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  line-height: 1.5;
   pointer-events: none;
   transition: opacity .25s ease;
 }
 
-/* The big one carries the wordmark instead of a text label. The logo art is
-   ink-on-transparent, so flip it to white to sit on the fruit. */
-.mango-wordmark {
-  position: absolute;
-  left: 50%;
-  top: 54%;
-  transform: translate(-50%, -50%);
-  width: 62%;
-  height: auto;
-  filter: brightness(0) invert(1);
-  opacity: .96;
-  pointer-events: none;
-  transition: opacity .25s ease;
-}
-
-.mango.is-docked .mango-label,
-.mango.is-docked .mango-wordmark { opacity: 0; }
+.mango.is-docked .mango-label { opacity: 0; }
 
 /* Name pill, shown only once the mangos are acting as a dock */
 .mango-tip {

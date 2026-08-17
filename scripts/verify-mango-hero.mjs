@@ -112,7 +112,7 @@ for (const [w, h] of [[1440, 900], [390, 844]]) {
   await p.mouse.down();
   await p.mouse.up();
   await p.waitForTimeout(900);
-  ok('a click navigates', p.url().includes('barometer.html'), p.url());
+  ok('a click navigates', p.url().endsWith(r.href), `${r.href} → ${p.url()}`);
   await p.close();
 }
 
@@ -272,6 +272,26 @@ for (const [w, h] of [[1440, 900], [390, 844]]) {
   ok('mango art is hidden from assistive tech', a11y.artHidden);
   ok('external mangos are rel=noopener and say so', a11y.externalsSafe);
   ok('mangos take touch away from the page while draggable', a11y.touchAction === 'none');
+  await p.close();
+}
+
+/* ---------- 11. The pile settles right-side-up ----------
+   A mango lying flat but with its leaf underneath is a valid resting angle
+   for the physics and looks wrong on the page. */
+for (const [w, h] of [[1440, 900], [390, 844]]) {
+  const p = await browser.newPage({ viewport: { width: w, height: h } });
+  await p.goto(URL, { waitUntil: 'networkidle' });
+  await p.waitForTimeout(7000);
+  const tilts = await p.evaluate(() => [...document.querySelectorAll('.mango')].map(e => {
+    const m = new DOMMatrixReadOnly(getComputedStyle(e.querySelector('.mango-art')).transform);
+    let deg = Math.atan2(m.b, m.a) * 180 / Math.PI;
+    while (deg > 180) deg -= 360;
+    while (deg < -180) deg += 360;
+    return { n: e.getAttribute('aria-label'), deg: Math.round(deg) };
+  }));
+  const upside = tilts.filter(t => Math.abs(t.deg) > 90);
+  ok(`every mango settles stem-up at ${w}px`, upside.length === 0,
+    upside.map(t => `${t.n} ${t.deg}°`).join(', ') || tilts.map(t => `${t.deg}°`).join(' '));
   await p.close();
 }
 

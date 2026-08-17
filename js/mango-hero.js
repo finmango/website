@@ -70,9 +70,10 @@
   /* A mango has a belly and a beak, so left alone it lies down rather than
      standing on end. Without this the pile settles into a bed of upright
      eggs, which is the single thing that most gives the effect away. */
-  var SETTLE_TORQUE = 0.0045;
+  var SETTLE_TORQUE = 0.009;
   var SETTLE_DAMPING = 0.90;
   var SETTLE_SPEED = 1.3;   // only while it has stopped rolling
+  var TWO_PI = Math.PI * 2;
 
   /* Pointer gravity. Push only, short range — an attraction term at any
      useful radius keeps every mango permanently agitated and nothing rests. */
@@ -80,14 +81,36 @@
   var REPEL_FORCE = 0.45;
   var pointer = { x: 0, y: 0, active: false };
 
-  /* The art is 140x112 with the stem and leaf in the top strip, so the fruit
-     itself is inset from the element box. The simulation tracks the body, not
-     the box, or the pile sits on an invisible margin. */
-  var ART_RATIO = 140 / 112;     // element width / height
-  var BODY_HALF_W = 0.457;       // of element width
-  var BODY_HALF_H = 0.397;       // of element height
-  var BODY_OFFSET_Y = 0.067;     // body centre sits below the box centre
-  var COLLIDE_R = 0.52;          // of element height — the nestling knob
+  /* ---------- Art ----------
+     One flat silhouette and one leaf, both filled from CSS so the palette
+     stays in the stylesheet. The outline is generated rather than drawn by
+     hand: x is a plain cosine, so both ends round off with vertical tangents,
+     one term skews the thickness toward the belly and one tilts the spine so
+     the stem end rides higher. Hand-placed control points kept producing flat
+     spots and kinks along the lower right. */
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  var ART_BOX = '0 0 140 122';   // 122, not 120 — the belly reaches y=121.2
+  var ART_BODY = 'M132 66 C132 69.7,130.9 73.6,129 77.5 C127 81.4,123.9 85.5,120.2 89.4 ' +
+    'C116.4 93.3,111.6 97.3,106.4 100.9 C101.3 104.5,95.2 108,89.2 110.9 ' +
+    'C83.1 113.7,76.4 116.3,70 118 C63.6 119.7,56.9 120.8,50.8 121 ' +
+    'C44.8 121.2,38.7 120.6,33.6 119.1 C28.4 117.5,23.6 115.1,19.8 112 ' +
+    'C16.1 108.9,13 104.8,11 100.5 C9.1 96.1,8 91,8 86 C8 81,9.1 75.5,11 70.6 ' +
+    'C13 65.6,16.1 60.5,19.8 56.2 C23.6 51.9,28.4 47.9,33.6 44.7 ' +
+    'C38.7 41.5,44.8 39,50.8 37.2 C56.9 35.4,63.6 34.4,70 34 ' +
+    'C76.4 33.6,83.1 34.1,89.2 34.9 C95.2 35.8,101.3 37.4,106.4 39.3 ' +
+    'C111.6 41.3,116.4 43.7,120.2 46.4 C123.9 49.1,127 52.2,129 55.5 ' +
+    'C130.9 58.7,132 62.3,132 66Z';
+  var ART_LEAF = 'M107 34 Q127.7 37.2 133 17 Q112.3 13.8 107 34Z';
+
+  /* The leaf needs headroom, so the fruit sits low in its box. The simulation
+     tracks the body, not the box, or the pile rests on an invisible margin. */
+  var ART_RATIO = 140 / 122;     // element width / height
+  var BODY_HALF_W = 0.443;       // of element width
+  var BODY_HALF_H = 0.359;       // of element height
+  var BODY_OFFSET_Y = 0.134;     // body centre sits below the box centre
+  /* Body half-width works out at 0.508 of the element height, so this sits
+     just inside touching — they nestle rather than hovering apart. */
+  var COLLIDE_R = 0.49;          // of element height — the nestling knob
 
   /* Share of the window the settled pile is allowed to occupy. The slack is
      not cosmetic: a pile wedged between both walls can never resolve its
@@ -117,24 +140,16 @@
   var dockGap = 14;
 
   /* ---------- Content ----------
-     Draft link set: the main pages plus the projects worth surfacing.
-     Swap freely — this is the only block that needs editing.
-
-     `phone: false` drops a mango on narrow screens. Eight labelled mangos at
-     390px are too small to read or to hit, so the phone gets the five that
-     matter most; the full menu is still one tap away in the masthead. */
+     Four, deliberately. This is a quiet accent on a serious page, not the
+     page's subject. `tone` picks the fill from the stylesheet; `size` is the
+     element width in px at desktop and scales down from there. */
   var MANGO_DATA = [
-    { label: '', art: 'ripe', size: 190, url: 'about.html', logo: true, big: true,
-      aria: 'About FinMango', tip: 'About FinMango' },
-    { label: 'Research', art: 'blush', size: 126, url: 'research.html' },
-    { label: 'Education', art: 'golden', size: 120, url: 'education.html' },
-    { label: 'Barometer', art: 'ripe', size: 114, url: 'barometer.html',
-      aria: 'Financial Health Barometer', tip: 'Financial Health Barometer' },
-    { label: 'Ambassadors', art: 'golden', size: 114, url: 'ambassadors.html', phone: false },
-    { label: 'Barrier Breakers', art: 'blush', size: 106, url: 'barrier-breakers.html', phone: false },
-    { label: 'COVID Data', art: 'golden', size: 100, url: 'covid-19-open-data-project.html',
-      aria: 'COVID-19 Open Data Project', tip: 'COVID-19 Open Data Project', phone: false },
-    { label: 'Donate', art: 'ripe', size: 110, url: 'donate.html' }
+    { label: 'Research', tone: 'deep', size: 120, url: 'research.html' },
+    { label: 'Education', tone: 'orange', size: 110, url: 'education.html' },
+    { label: 'Ambassador Notes', tone: 'orange', size: 106, url: 'posts.html',
+      aria: 'Ambassador Notes', tip: 'Notes and briefs from our Ambassadors' },
+    { label: 'The Pledge', tone: 'deep', size: 96, url: 'pledge-wall.html',
+      aria: 'Sign the Pledge Wall', tip: 'Sign the Pledge Wall' }
   ];
 
   function smoothstep(t) {
@@ -181,6 +196,22 @@
     return clamp(floorDoc - window.pageYOffset, 240, viewH);
   }
 
+  /* Inline rather than an <img>, so the fill is a stylesheet decision and one
+     shape serves every tone */
+  function buildArt() {
+    var svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('class', 'mango-art');
+    svg.setAttribute('viewBox', ART_BOX);
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('focusable', 'false');
+    for (var i = 0; i < 2; i++) {
+      var path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('d', i === 0 ? ART_BODY : ART_LEAF);
+      svg.appendChild(path);
+    }
+    return svg;
+  }
+
   /* ---------- Building ---------- */
   function build() {
     for (var k = 0; k < mangos.length; k++) {
@@ -190,18 +221,14 @@
     measure();
 
     var isMobile = viewW < 768;
-    var cast = [];
     var natural = 0;
     for (var c = 0; c < MANGO_DATA.length; c++) {
-      if (isMobile && MANGO_DATA[c].phone === false) continue;
-      cast.push(MANGO_DATA[c]);
       natural += MANGO_DATA[c].size * BODY_HALF_W * 2;
     }
 
-    /* Scale the fruit so the settled row always leaves slack at the walls.
+    /* Scale the fruit so the settled pile always leaves slack at the walls.
        A pile wedged between both walls can never resolve its overlaps, so it
-       jostles forever, never sleeps, and pins a core — which is exactly what
-       eight full-size mangos do in a 768px window. */
+       jostles forever and never sleeps. */
     var scale = Math.min(1, (viewW * PILE_BUDGET) / natural);
 
     /* They start as a loose ring just above the band and fall a short way
@@ -209,54 +236,37 @@
        arrive slowly enough to settle instead of scattering to the walls, and
        they start already touching, so they shoulder each other into a
        contiguous heap rather than leaving gaps where each one happened to
-       land. Weighted right of centre to balance the left-set copy. */
-    /* A narrow window has no room to absorb a bouncy landing — the pile
-       ricochets off both walls and settles as two clumps with a hole in the
-       middle, or strands one mango against an edge. Below 1024 they start
-       inside the band and barely fall at all. */
-    var tight = viewW < 1024;
-    var ringX = viewW * (isMobile ? 0.5 : (tight ? 0.54 : 0.62));
-    var ringY = bandTopDoc + (tight ? bandHeight * 0.30 : -30);
-    var ringR = Math.min(viewW * 0.13, isMobile ? 50 : 135);
+       land. Weighted right of centre to balance the left-set copy.
 
-    for (var i = 0; i < cast.length; i++) {
-      var data = cast[i];
+       A narrow window has no room to absorb a bouncy landing — the pile
+       ricochets off both walls and settles as two clumps with a hole in the
+       middle. Below 1024 they start inside the band and barely fall at all. */
+    var tight = viewW < 1024;
+    var ringX = viewW * (isMobile ? 0.5 : (tight ? 0.58 : 0.66));
+    var ringY = bandTopDoc + bandHeight * (tight ? 0.30 : 0.22);
+    var ringR = Math.min(viewW * 0.035, isMobile ? 38 : 48);
+
+    for (var i = 0; i < MANGO_DATA.length; i++) {
+      var data = MANGO_DATA[i];
       var w = Math.round(data.size * scale);
       var h = Math.round(w / ART_RATIO);
 
       var el = document.createElement('a');
-      el.className = 'mango';
+      el.className = 'mango tone-' + data.tone;
       el.href = data.url;
       el.setAttribute('draggable', 'false');
       el.setAttribute('aria-label', data.aria || data.label);
       el.style.width = w + 'px';
       el.style.height = h + 'px';
-      el.style.fontSize = Math.max(10, w * 0.122) + 'px';
+      el.style.fontSize = Math.max(8, w * 0.092) + 'px';
 
-      var art = document.createElement('img');
-      art.className = 'mango-art';
-      art.src = 'images/mangos/mango-' + data.art + '.svg';
-      art.alt = '';
-      art.setAttribute('aria-hidden', 'true');
-      art.setAttribute('draggable', 'false');
+      var art = buildArt();
       el.appendChild(art);
 
-      if (data.logo) {
-        var mark = document.createElement('img');
-        mark.className = 'mango-wordmark';
-        mark.src = 'finmango.png';
-        mark.alt = '';
-        mark.width = 500;
-        mark.height = 196;
-        mark.setAttribute('aria-hidden', 'true');
-        mark.setAttribute('draggable', 'false');
-        el.appendChild(mark);
-      } else {
-        var label = document.createElement('span');
-        label.className = 'mango-label';
-        label.textContent = data.label;
-        el.appendChild(label);
-      }
+      var label = document.createElement('span');
+      label.className = 'mango-label';
+      label.textContent = data.label;
+      el.appendChild(label);
 
       var tip = document.createElement('span');
       tip.className = 'mango-tip';
@@ -265,9 +275,9 @@
 
       layer.appendChild(el);
 
-      /* The big one starts in the middle of the ring, the rest around it */
-      var angle = (i / cast.length) * Math.PI * 2;
-      var dist = i === 0 ? 0 : ringR;
+      /* Spread around a small ring, offset so they are not axis-aligned */
+      var angle = ((i + 0.35) / MANGO_DATA.length) * Math.PI * 2;
+      var dist = ringR;
       var m = {
         el: el,
         art: art,
@@ -286,7 +296,6 @@
         av: (jitter(i, 5) - 0.5) * 0.12,
         exX: w * BODY_HALF_W,
         exY: h * BODY_HALF_H,
-        dockBig: !!data.big,
         dockW: dockSize,               // resolved in layoutDock
         tx: 0,
         ty: 0,
@@ -315,8 +324,8 @@
     var i;
 
     for (i = 0; i < mangos.length; i++) {
-      mangos[i].dockW = mangos[i].dockBig ? Math.round(dockSize * 1.28) : dockSize;
-      totalW += mangos[i].dockW;
+      mangos[i].dockW = dockSize;
+      totalW += dockSize;
     }
     totalW += (mangos.length - 1) * dockGap;
 
@@ -596,10 +605,25 @@
             m.av += ((m.vx / m.r) - m.av) * ROLL_COUPLING;
 
             /* Once it has stopped rolling, torque it down onto its side.
-               -sin(2a) is zero at every flat angle and pushes away from
-               upright, so a mango on its beak topples the short way. */
+               Measured against the nearest lying-down angle, so a mango
+               topples whichever way is shorter. Note the -sin(off) rather
+               than the tidier-looking -sin(2*angle): the latter's torque
+               falls to zero as a mango approaches upright, which is exactly
+               where it is needed, and one can then drop below the sleep
+               threshold still balanced on its end. */
             if (Math.abs(m.vx) < SETTLE_SPEED) {
-              m.av -= Math.sin(m.angle * 2) * SETTLE_TORQUE;
+              /* Measured against upright, not merely against lying flat: a
+                 mango resting with its leaf underneath is technically flat
+                 and looks wrong, so the only stable orientation is stem up.
+                 -sin always drives the short way round. */
+              var off = m.angle - Math.round(m.angle / TWO_PI) * TWO_PI;
+              var righting = Math.sin(off);
+              /* Dead upside down is a balance point where sin vanishes, and a
+                 mango can sleep there. Keep a floor so it always topples. */
+              if (Math.abs(off) > 2.5 && Math.abs(righting) < 0.25) {
+                righting = off > 0 ? 0.25 : -0.25;
+              }
+              m.av -= righting * SETTLE_TORQUE;
               m.av *= SETTLE_DAMPING;   // or the pile rocks forever
             }
           }
@@ -693,7 +717,7 @@
     if (sizeChanged) {
       m.el.style.width = w + 'px';
       m.el.style.height = h + 'px';
-      m.el.style.fontSize = Math.max(9, w * 0.122) + 'px';
+      m.el.style.fontSize = Math.max(8, w * 0.092) + 'px';
     }
 
     m.el.style.transform = 'translate3d(' +
