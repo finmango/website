@@ -1435,6 +1435,9 @@
 
       .hero { padding: 6rem var(--gutter) 0; min-height: auto; }
       .hero-container { gap: 2rem; padding-top: 0; }
+      /* "Economic Mobility / Since 2017" is label-noise on a small screen —
+         the headline and subline already say it. Desktop keeps the rule. */
+      .hero-top { display: none; }
       .hero h1 { font-size: clamp(2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
       .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
       .hb-stats { gap: 2rem; flex-wrap: wrap; }
@@ -1465,24 +1468,78 @@
 
       .barometer-section { padding: 4.5rem var(--gutter) 5rem; }
       .barometer-head { grid-template-columns: 1fr; gap: 1.75rem; margin-bottom: 2.5rem; }
+      /* Size the headline off the viewport so "The crisis isn't coming. It's
+         here." stays on a single line down to ~300px instead of breaking
+         mid-sentence. No nowrap: if the webfont falls back to wider metrics
+         it wraps rather than overflowing the section. */
+      .barometer-headline { font-size: min(2.2rem, 5.85vw); max-width: none; letter-spacing: -.045em; }
       .barometer-instrument { grid-template-columns: 1fr; }
       .barometer-map-wrapper { border-right: none; border-bottom: 1px solid var(--paper-line); min-height: 240px; padding: 1.75rem; }
       .barometer-indicator { padding: 1.35rem 1.5rem; }
 
-      .problem-grid { grid-template-columns: 1fr; margin-top: 3.5rem; }
-      .problem-stat { padding: 1.75rem 0; border-bottom: 1px solid var(--paper-line); }
+      /* Legend on one row: shrink the type and swatches, let the four items
+         span the width. Still allowed to wrap as a fallback on tiny screens. */
+      .barometer-legend {
+        justify-content: space-between;
+        gap: .4rem .5rem;
+        font-size: clamp(.45rem, 2.05vw, .62rem);
+        letter-spacing: .04em;
+        margin-top: 1rem;
+      }
+      .barometer-legend-item { gap: .3rem; white-space: nowrap; }
+      .barometer-legend-color { width: 10px; height: 5px; flex: none; }
+
+      /* Stats: number beside the copy instead of stacked above it — same
+         content, roughly half the height. */
+      .problem-grid { grid-template-columns: 1fr; margin-top: 3rem; }
+      .problem-stat {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        column-gap: 1.1rem;
+        row-gap: .15rem;
+        align-items: baseline;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid var(--paper-line);
+      }
       .problem-stat + .problem-stat { padding-left: 0; border-left: none; }
       .problem-stat:last-child { border-bottom: none; }
       .problem-stat:hover::before, .problem-stat + .problem-stat:hover::before { width: 100%; left: 0; }
-      .problem-bridge { margin-top: 3rem; }
+      .problem-stat-number {
+        grid-row: 1 / span 2;
+        font-size: 2.5rem;
+        margin-bottom: 0;
+        min-width: 3.4ch;
+      }
+      .problem-stat-text { grid-column: 2; max-width: none; font-size: .92rem; line-height: 1.45; }
+      .problem-stat-source { grid-column: 2; margin-top: .35rem; }
 
+      .problem-bridge { margin-top: 2.75rem; }
+      .problem-bridge strong { white-space: nowrap; }
+
+      /* Solution: icon rail on the left, copy on the right — turns three
+         tall stacked blocks into three compact rows. */
       .solution { padding: 5rem var(--gutter); }
       .solution-head { margin-bottom: 2.5rem; }
       .solution-grid { grid-template-columns: 1fr; }
-      .solution-card { padding: 2.25rem 0; border-bottom: 1px solid var(--ink-line-soft); }
+      .solution-card {
+        display: grid;
+        grid-template-columns: 46px 1fr;
+        column-gap: 1.1rem;
+        row-gap: .1rem;
+        align-items: start;
+        padding: 1.5rem 0;
+        border-bottom: 1px solid var(--ink-line-soft);
+      }
       .solution-card + .solution-card { padding-left: 0; border-left: none; }
       .solution-card:last-child { border-bottom: none; }
       .solution-card:hover::before, .solution-card + .solution-card:hover::before { width: 100%; left: 0; }
+      /* Icon pairs with the label/title on the first two rows; the body copy
+         then runs full-bleed so it doesn't pick the lines back up. */
+      .solution-icon { grid-row: 1 / span 2; width: 46px; height: 46px; margin-bottom: 0; }
+      .solution-num { grid-column: 2; margin-bottom: .15rem; }
+      .solution-title { grid-column: 2; font-size: 1.3rem; margin-bottom: 0; }
+      .solution-text { grid-column: 1 / -1; font-size: .92rem; line-height: 1.5; margin: .75rem 0 .65rem; }
+      .solution-link { grid-column: 1 / -1; margin-top: 0; font-size: .85rem; }
 
       .moments { padding: 0 var(--gutter) 5rem; }
       .moments-head { flex-direction: column; align-items: flex-start; gap: 1.25rem; margin-bottom: 2rem; }
@@ -1793,7 +1850,7 @@
         </a>
       </div>
 
-      <p class="problem-bridge">You wouldn't expect someone with a broken leg to run a marathon. So why do we expect people drowning in systemic barriers to thrive on budgeting advice alone? <strong>We start with the structural fix.</strong></p>
+      <p class="problem-bridge">You can't budget your way out of a <strong>broken system.</strong></p>
 
     </div>
   </section>
@@ -1873,7 +1930,7 @@
       <div class="moments-head">
         <div class="moments-head-text">
           <span class="eyebrow">From the field</span>
-          <h2>Ten million reached — <em>here are a few.</em></h2>
+          <h2>We build for young adults. <em>Here are a few.</em></h2>
         </div>
         <a href="education.html" class="moments-link">
           See the programs
