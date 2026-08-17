@@ -18,9 +18,6 @@
   var plate = document.getElementById('mango-dock-plate');
   var hero = document.querySelector('.hero');
   var band = document.getElementById('mango-band');
-  var hint = document.getElementById('mango-hint');
-  var controls = document.getElementById('mango-controls');
-  var resetBtn = document.getElementById('mango-reset');
   var mobileMenu = document.getElementById('mobileMenu');
 
   if (!hero || !band) return;
@@ -119,7 +116,6 @@
 
   var mangos = [];
   var animationId = null;
-  var hasInteracted = false;
   var builtNatural = 0;    // width the current pile actually occupies
   var builtMobile = false;
 
@@ -363,14 +359,6 @@
         mangos[i].el.classList.toggle('is-docked', isDocked);
       }
     }
-
-    if (dockProgress > 0.15) {
-      if (controls) controls.classList.add('is-retired');
-      if (hint) hint.classList.add('is-hidden');
-    } else {
-      if (controls) controls.classList.remove('is-retired');
-      if (hint && !hasInteracted) hint.classList.remove('is-hidden');
-    }
   }
 
   /* ---------- Drag and throw ---------- */
@@ -445,8 +433,6 @@
       document.addEventListener('pointermove', onMove, { passive: false });
       document.addEventListener('pointerup', onEnd);
       document.addEventListener('pointercancel', onEnd);
-
-      markInteracted();
     }
 
     function onMove(e) {
@@ -514,13 +500,6 @@
     });
 
     m.el.addEventListener('blur', function () { m.frozen = false; });
-  }
-
-  function markInteracted() {
-    if (hasInteracted) return;
-    hasInteracted = true;
-    if (hint) hint.classList.add('is-hidden');
-    if (controls && dockProgress <= 0.15) controls.classList.add('is-visible');
   }
 
   /* Returns true when the cursor actually pushed, which is also what wakes a
@@ -760,14 +739,6 @@
     }
   }
 
-  function reset() {
-    hasInteracted = false;
-    if (hint) hint.classList.remove('is-hidden');
-    if (controls) controls.classList.remove('is-visible');
-    lastFrame = 0;
-    accumulator = 0;
-    build();
-  }
 
   /* ---------- Reduced motion ----------
      No loop, no dock, no drift. A tidy cluster resting in the band, still
@@ -813,8 +784,6 @@
   } else {
     start();
   }
-
-  if (resetBtn) resetBtn.addEventListener('click', reset);
 
   if (canHover && !reduceMotion) {
     window.addEventListener('mousemove', function (e) {

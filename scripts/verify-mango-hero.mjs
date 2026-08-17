@@ -317,13 +317,17 @@ for (const [w, h] of [[1440, 900], [390, 844]]) {
   await p.close();
 }
 
-/* ---------- 9. Reset control ---------- */
+/* ---------- 9. No instructional chrome, and the pile re-settles after play ---------- */
 {
   const p = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await p.goto(URL, { waitUntil: 'networkidle' });
   await p.waitForTimeout(5500);
-  ok('the hint is showing before anyone touches it',
-    !(await p.evaluate(() => document.getElementById('mango-hint').classList.contains('is-hidden'))));
+
+  ok('the hero carries no hint or control chrome',
+    await p.evaluate(() => !document.querySelector(
+      '.mango-hint, .mango-controls, .mango-reset, #mango-hint, #mango-reset')));
+  ok('the only affordance is the cursor',
+    await p.evaluate(() => getComputedStyle(document.querySelector('.mango')).cursor === 'grab'));
 
   const r = (await rects(p))[2];
   await p.mouse.move(r.x, r.y);
@@ -331,18 +335,10 @@ for (const [w, h] of [[1440, 900], [390, 844]]) {
   for (let i = 1; i <= 10; i++) { await p.mouse.move(r.x + i * 14, r.y - i * 16); await p.waitForTimeout(10); }
   await p.mouse.up();
   await p.waitForTimeout(300);
-
-  ok('the hint retires after the first drag',
-    await p.evaluate(() => document.getElementById('mango-hint').classList.contains('is-hidden')));
-  ok('the reset control appears after the first drag',
-    await p.evaluate(() => document.getElementById('mango-controls').classList.contains('is-visible')));
-
-  await p.waitForTimeout(6000);
-  await p.click('#mango-reset');
-  await p.waitForTimeout(400);
-  ok('reset drops a fresh pile', !(await p.evaluate(() => window.__mangoHero.isResting())));
-  await p.waitForTimeout(7000);
-  ok('the reset pile settles again', await p.evaluate(() => window.__mangoHero.isResting()));
+  ok('a throw wakes the pile', !(await p.evaluate(() => window.__mangoHero.isResting())));
+  await p.waitForTimeout(8000);
+  ok('the pile settles again after being thrown around',
+    await p.evaluate(() => window.__mangoHero.isResting()));
   await p.close();
 }
 

@@ -166,78 +166,9 @@ nav.mango-layer {
   transform: translate(-50%, 0);
 }
 
-/* ---------- Hint + controls, in the site's mono voice ----------
-   The pile is weighted right of centre, so the band's bottom-left corner is
-   the one bit of it that stays clear of fruit. */
-.mango-hint {
-  position: absolute;
-  left: 0;
-  bottom: .55rem;
-  display: inline-flex;
-  align-items: center;
-  gap: .55rem;
-  font-family: var(--font-mono);
-  font-size: .62rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: .18em;
-  color: var(--ink-faint);
-  white-space: nowrap;
-  pointer-events: none;
-  transition: opacity .3s ease;
-}
-
-.mango-hint svg { width: 15px; height: 15px; }
-.mango-hint.is-hidden { opacity: 0; }
-
-.mango-controls {
-  position: absolute;
-  right: 0;
-  top: 0;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity .3s ease, transform .3s ease;
-  pointer-events: none;
-}
-
-.mango-controls.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-/* Belongs to the hero — retires once the mangos become a dock */
-.mango-controls.is-retired {
-  opacity: 0;
-  transform: translateY(8px);
-  pointer-events: none;
-}
-
-.mango-reset {
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-  padding: .5rem .9rem;
-  background: transparent;
-  color: var(--ink-dim);
-  border: 1px solid var(--ink-line);
-  border-radius: 100px;
-  font-family: var(--font-mono);
-  font-size: .6rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: .16em;
-  cursor: pointer;
-  transition: border-color .25s ease, color .25s ease;
-}
-
-.mango-reset:hover { border-color: var(--ink); color: var(--ink); }
-
-@media (max-width: 768px) {
-  /* The pile fills the band's bottom edge on a phone, so the hint moves to
-     the top where there is still clear paper */
-  .mango-hint { font-size: .56rem; letter-spacing: .14em; top: 0; bottom: auto; }
-}
+/* No hint line and no reset button, by design. The grab cursor and the
+   hover-to-ink are the whole affordance; anything that has to be captioned
+   "drag me" is louder than this is meant to be. */
 
 /* ---------- Reduced motion: no loop, no dock, no drift ----------
    The mangos become a static cluster sitting in the band. Still real links,
@@ -250,13 +181,10 @@ nav.mango-layer {
 .mango-layer.is-static .mango { cursor: pointer; }
 
 @media (prefers-reduced-motion: reduce) {
-  .mango-art,
+  .mango-art path,
   .mango-label,
-  .mango-wordmark,
   .mango-tip { transition: none; }
 
-  .mango-hint,
-  .mango-controls,
   .mango-dock-plate { display: none; }
 
   .mango { cursor: pointer; }
