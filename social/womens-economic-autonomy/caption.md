@@ -7,10 +7,13 @@ big Fraunces headline, a hairline, one or two subhead lines, one chart or figure
 source in mono. No body prose — a slide that needs a paragraph needs to be two
 slides or a shorter claim.
 
-- **Slides:** `slide-01.jpg` … `slide-08.jpg`, 2160×2700 (1080×1350 at 2x, 4:5)
+- **Slides:** `slide-01.jpg` … `slide-08.jpg`, 2160×2700 (1080×1350 at 2x, 4:5) — Instagram
+- **PDF:** `womens-economic-autonomy.pdf`, 8 pages at 810×1012.5pt — LinkedIn document post
 - **Source:** [`social-carousel-womens-autonomy.html`](../../social-carousel-womens-autonomy.html)
-- **Rebuild:** `node tools/capture_carousel.js social-carousel-womens-autonomy.html social/womens-economic-autonomy`
-  (add `--png` for lossless)
+- **Rebuild:** `node tools/capture_carousel.js social-carousel-womens-autonomy.html social/womens-economic-autonomy --pdf`
+  (add `--png` for lossless images; `--pdf` composes the JPEGs, so it can't be combined with `--png`)
+- **Zip for handoff:** `cd social/womens-economic-autonomy && zip -j carousel.zip slide-*.jpg caption.md`
+  (not committed — the slides are already here individually)
 - **Post:** https://finmango.org/post?id=women-s-economic-autonomy-latin-america-s-invisibl-260810-233728
 
 ---
