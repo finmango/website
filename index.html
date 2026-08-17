@@ -1049,55 +1049,64 @@
        ---------------------------------------------------------- */
     .featured { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
     .featured-container { max-width: var(--max-width); margin: 0 auto; }
+    /* The card sits between two paper sections and above the ink CTA, so it
+       earns attention with an orange masthead rule rather than by going dark
+       (which would merge into the coda below it). */
     .featured-card {
       border: 1px solid var(--ink-line);
+      border-top: 4px solid var(--orange);
       display: grid;
-      grid-template-columns: 1fr 1.2fr;
+      grid-template-columns: 1fr .8fr;
+      align-items: stretch;
       overflow: hidden;
     }
-    .featured-image {
-      border-right: 1px solid var(--ink-line);
+    .featured-content {
+      padding: 3rem;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2.5rem;
-      background: rgba(255, 107, 53, .04);
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.35rem;
+      order: 1;
     }
-    .featured-image img { width: 100%; height: auto; display: block; }
-    .featured-content { padding: 3rem 3rem 3rem 3rem; display: flex; flex-direction: column; gap: 1.25rem; }
     .featured-content h3 {
-      font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+      font-size: clamp(1.7rem, 2.8vw, 2.5rem);
       font-weight: 900;
-      letter-spacing: -.035em;
-      line-height: 1.05;
+      letter-spacing: -.04em;
+      line-height: 1.02;
+      max-width: 18ch;
     }
-    .featured-meta {
+    /* Credential reads as a stamp, not a grey mono footnote */
+    .featured-badge {
       font-family: var(--font-mono);
-      font-size: .64rem;
+      font-size: .6rem;
       font-weight: 500;
-      letter-spacing: .14em;
+      letter-spacing: .16em;
       text-transform: uppercase;
-      color: var(--ink-faint);
+      color: var(--orange);
+      border: 1px solid rgba(255, 107, 53, .35);
+      padding: .4rem .7rem;
+      background: rgba(255, 107, 53, .06);
     }
     .featured-text {
       color: var(--ink-dim);
       line-height: 1.6;
       font-size: 1rem;
       font-weight: 300;
-      max-width: 56ch;
+      max-width: 58ch;
       letter-spacing: -.005em;
     }
+    /* Stat rail as ruled cells — same instrument language as the barometer */
     .featured-stats {
       display: grid;
-      grid-template-columns: repeat(3, auto);
-      justify-content: start;
-      gap: 3rem;
-      padding: 1.5rem 0;
-      border-top: 1px solid var(--ink-line-soft);
-      border-bottom: 1px solid var(--ink-line-soft);
+      grid-template-columns: repeat(3, 1fr);
+      width: 100%;
+      border: 1px solid var(--ink-line);
+      margin-top: .35rem;
     }
+    .featured-stat { padding: 1.1rem 1.2rem; }
+    .featured-stat + .featured-stat { border-left: 1px solid var(--ink-line); }
     .featured-stat-number {
-      font-size: 1.9rem;
+      font-size: clamp(1.5rem, 2.1vw, 1.9rem);
       font-weight: 900;
       letter-spacing: -.035em;
       line-height: 1;
@@ -1105,11 +1114,64 @@
     .featured-stat-number em { font-style: normal; color: var(--orange); }
     .featured-stat-label {
       font-family: var(--font-mono);
-      font-size: .58rem;
-      letter-spacing: .13em;
+      font-size: .55rem;
+      letter-spacing: .12em;
+      line-height: 1.5;
       text-transform: uppercase;
       color: var(--ink-faint);
-      margin-top: .45rem;
+      margin-top: .5rem;
+    }
+
+    /* Credential panel — the co-brand lockup plus the journals it ran in */
+    .featured-aside {
+      order: 2;
+      border-left: 1px solid var(--ink-line);
+      background: rgba(255, 107, 53, .045);
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2.25rem;
+    }
+    /* The source file is a 1080² white plate with the lockup floating in the
+       middle, so crop the dead margin away and multiply the white ground into
+       the panel instead of letting it sit there as an empty box. */
+    .featured-lockup img {
+      display: block;
+      width: 100%;
+      max-width: 340px;
+      /* height:auto is load-bearing — the img carries height="1080", which is
+         a presentational hint that outranks aspect-ratio without it. */
+      height: auto;
+      margin: 0 auto;
+      aspect-ratio: 4 / 1;
+      object-fit: cover;
+      mix-blend-mode: multiply;
+    }
+    .featured-journals { display: flex; flex-direction: column; gap: .9rem; }
+    .featured-journals-label {
+      font-family: var(--font-mono);
+      font-size: .55rem;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--ink-line);
+    }
+    .featured-journal { display: flex; flex-direction: column; gap: .15rem; }
+    .featured-journal-name {
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      line-height: 1.25;
+    }
+    .featured-journal-note {
+      font-family: var(--font-mono);
+      font-size: .58rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
     }
     .featured-link {
       display: inline-flex;
@@ -1435,9 +1497,13 @@
 
       .hero { padding: 6rem var(--gutter) 0; min-height: auto; }
       .hero-container { gap: 2rem; padding-top: 0; }
-      /* "Economic Mobility / Since 2017" is label-noise on a small screen —
-         the headline and subline already say it. Desktop keeps the rule. */
-      .hero-top { display: none; }
+      /* Keep the eyebrow + "Since 2017" rule on phones so the homepage
+         matches about/research/education, but tighten it to the same
+         compact treatment education.html uses so it reads as a quiet
+         dateline rather than a full-weight row above the headline. */
+      .hero-top { flex-wrap: wrap; gap: .5rem 1rem; }
+      .hb-status { font-size: .62rem; letter-spacing: .13em; }
+      .hero-top .eyebrow { font-size: .62rem; letter-spacing: .13em; }
       .hero h1 { font-size: clamp(2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
       .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
       .hb-stats { gap: 2rem; flex-wrap: wrap; }
@@ -1506,6 +1572,7 @@
       .problem-stat:hover::before, .problem-stat + .problem-stat:hover::before { width: 100%; left: 0; }
       .problem-stat-number {
         grid-row: 1 / span 2;
+        align-self: center;
         font-size: 2.5rem;
         margin-bottom: 0;
         min-width: 3.4ch;
@@ -1546,11 +1613,25 @@
       .moments-grid { grid-template-columns: 1fr; gap: 1.5rem; }
       .moment-2 { margin-top: 0; }
 
+      /* Single column, credential panel on top as a compact masthead band so
+         the Google Health lockup is the first thing read. */
       .featured { padding: 0 var(--gutter) 5rem; }
       .featured-card { grid-template-columns: 1fr; }
-      .featured-image { border-right: none; border-bottom: 1px solid var(--ink-line); padding: 1.75rem; }
-      .featured-content { padding: 2rem 1.75rem; }
-      .featured-stats { gap: 1.75rem; grid-template-columns: repeat(3, auto); }
+      .featured-aside {
+        order: 0;
+        border-left: none;
+        border-bottom: 1px solid var(--ink-line);
+        padding: 1.75rem;
+        gap: 1.35rem;
+      }
+      .featured-lockup img { max-width: 260px; margin: 0; }
+      .featured-journals { gap: .7rem; }
+      .featured-journals-label { padding-bottom: .6rem; }
+      .featured-journal-name { font-size: .92rem; }
+      .featured-content { padding: 1.75rem; gap: 1.1rem; }
+      .featured-content h3 { max-width: none; }
+      .featured-stat { padding: .9rem .85rem; }
+      .featured-stat-label { font-size: .5rem; letter-spacing: .09em; margin-top: .4rem; }
 
       .cta { padding: 5rem var(--gutter); }
       .cta-bottom { grid-template-columns: 1fr; gap: 1.75rem; }
@@ -1564,7 +1645,11 @@
     }
 
     @media (max-width: 560px) {
-      .featured-stats { grid-template-columns: 1fr; gap: 1.25rem; }
+      /* Three short readouts stay side by side rather than stacking into a
+         tall column — they fit, and the rail reads as one instrument. */
+      .featured-stat { padding: .8rem .6rem; }
+      .featured-stat-number { font-size: 1.35rem; }
+      .featured-stat-label { font-size: .46rem; letter-spacing: .07em; }
       /* Keep the four readouts as a compact 2×2 grid on phones rather than a
          tall single-column stack, and tighten the spacing so they don't
          dominate the section vertically. */
@@ -1957,20 +2042,34 @@
   <!-- ======================= FEATURED RESEARCH ======================= -->
   <section class="featured">
     <div class="featured-container">
-      <div class="featured-card">
-        <div class="featured-image"><img src="google.png" alt="FinMango × Google Health research partnership" width="1080" height="1080" loading="lazy" decoding="async"></div>
+      <article class="featured-card">
+        <aside class="featured-aside">
+          <div class="featured-lockup">
+            <img src="google.png" alt="FinMango and Google Health partnership" width="1080" height="1080" loading="lazy" decoding="async">
+          </div>
+          <div class="featured-journals">
+            <div class="featured-journals-label">Published in</div>
+            <div class="featured-journal">
+              <span class="featured-journal-name">Nature</span>
+              <span class="featured-journal-note">Scientific Data</span>
+            </div>
+            <div class="featured-journal">
+              <span class="featured-journal-name">American Journal of Health Education</span>
+            </div>
+          </div>
+        </aside>
         <div class="featured-content">
-          <div class="featured-meta">Peer-reviewed · Nature (Scientific Data) · American Journal of Health Education</div>
+          <div class="featured-badge">Peer-reviewed</div>
           <h3>Published in Nature. Used worldwide.</h3>
           <p class="featured-text">Our peer-reviewed partnership with Google Health produced open-source datasets now used by research institutions, governments, and global health organizations — the evidence base decision-makers need to build equitable financial and health systems.</p>
           <div class="featured-stats">
-            <div><div class="featured-stat-number">22K<em>+</em></div><div class="featured-stat-label">Locations tracked</div></div>
-            <div><div class="featured-stat-number">190<em>+</em></div><div class="featured-stat-label">Countries covered</div></div>
-            <div><div class="featured-stat-number">Open</div><div class="featured-stat-label">Source on GitHub</div></div>
+            <div class="featured-stat"><div class="featured-stat-number">22K<em>+</em></div><div class="featured-stat-label">Locations tracked</div></div>
+            <div class="featured-stat"><div class="featured-stat-number">190<em>+</em></div><div class="featured-stat-label">Countries covered</div></div>
+            <div class="featured-stat"><div class="featured-stat-number">Open</div><div class="featured-stat-label">Source on GitHub</div></div>
           </div>
           <a href="research.html" class="featured-link">Explore our research <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
-      </div>
+      </article>
     </div>
   </section>
 
