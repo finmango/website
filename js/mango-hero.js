@@ -140,12 +140,10 @@
      page's subject. `tone` picks the fill from the stylesheet; `size` is the
      element width in px at desktop and scales down from there. */
   var MANGO_DATA = [
-    { label: 'Research', tone: 'deep', size: 120, url: 'research.html' },
-    { label: 'Education', tone: 'orange', size: 110, url: 'education.html' },
-    { label: 'Ambassador Notes', tone: 'orange', size: 106, url: 'posts.html',
-      aria: 'Ambassador Notes', tip: 'Notes and briefs from our Ambassadors' },
-    { label: 'The Pledge', tone: 'deep', size: 96, url: 'pledge-wall.html',
-      aria: 'Sign the Pledge Wall', tip: 'Sign the Pledge Wall' }
+    { name: 'Research', tone: 'deep', size: 72, url: 'research.html' },
+    { name: 'Education', tone: 'soft', size: 66, url: 'education.html' },
+    { name: 'Ambassador Notes', tone: 'soft', size: 64, url: 'posts.html' },
+    { name: 'Sign the Pledge Wall', tone: 'deep', size: 58, url: 'pledge-wall.html' }
   ];
 
   function smoothstep(t) {
@@ -181,7 +179,7 @@
     heroHeight = hero.offsetHeight || viewH;
 
     var isMobile = viewW < 768;
-    dockSize = isMobile ? 36 : 50;
+    dockSize = isMobile ? 28 : 38;
     dockGap = isMobile ? 7 : 14;
   }
 
@@ -240,7 +238,7 @@
     var tight = viewW < 1024;
     var ringX = viewW * (isMobile ? 0.5 : (tight ? 0.58 : 0.66));
     var ringY = bandTopDoc + bandHeight * (tight ? 0.30 : 0.22);
-    var ringR = Math.min(viewW * 0.035, isMobile ? 38 : 48);
+    var ringR = Math.min(viewW * 0.02, isMobile ? 24 : 30);
 
     for (var i = 0; i < MANGO_DATA.length; i++) {
       var data = MANGO_DATA[i];
@@ -251,22 +249,18 @@
       el.className = 'mango tone-' + data.tone;
       el.href = data.url;
       el.setAttribute('draggable', 'false');
-      el.setAttribute('aria-label', data.aria || data.label);
+      el.setAttribute('aria-label', data.name);
       el.style.width = w + 'px';
       el.style.height = h + 'px';
-      el.style.fontSize = Math.max(8, w * 0.092) + 'px';
 
       var art = buildArt();
       el.appendChild(art);
 
-      var label = document.createElement('span');
-      label.className = 'mango-label';
-      label.textContent = data.label;
-      el.appendChild(label);
-
+      /* No text on the fruit. The name is the accessible name for assistive
+         tech, and surfaces visually only on hover or focus. */
       var tip = document.createElement('span');
       tip.className = 'mango-tip';
-      tip.textContent = data.tip || data.label || data.aria;
+      tip.textContent = data.name;
       el.appendChild(tip);
 
       layer.appendChild(el);
@@ -696,7 +690,6 @@
     if (sizeChanged) {
       m.el.style.width = w + 'px';
       m.el.style.height = h + 'px';
-      m.el.style.fontSize = Math.max(8, w * 0.092) + 'px';
     }
 
     m.el.style.transform = 'translate3d(' +

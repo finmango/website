@@ -12,7 +12,7 @@
   width: 100%;
   max-width: var(--hero-max);
   margin: 0 auto;
-  height: clamp(118px, 16vh, 168px);
+  height: clamp(84px, 11vh, 118px);
   pointer-events: none;
 }
 
@@ -23,6 +23,13 @@
    masthead — without this reset the mango layer becomes a full-viewport
    sheet of blurred paper over the whole page. */
 nav.mango-layer {
+  /* Tints of the brand orange over paper, not the brand orange itself. At
+     full strength four mangos read as buttons; muted they sit back and the
+     page's own type stays the loudest thing on it. Full strength is what
+     hover restores. */
+  --mango-soft: #FCC4AD;
+  --mango-deep: #EE9878;
+
   position: fixed;
   inset: 0;
   z-index: 1035;
@@ -93,10 +100,10 @@ nav.mango-layer {
   outline-offset: 6px;
 }
 
-/* The art spins; the anchor only translates, which keeps the label upright
-   and the focus ring square to the page. One flat silhouette, no gradient and
-   no gloss — the shape carries it, and a hairline shadow is only there to sit
-   the fruit on the page rather than paste it onto one. */
+/* The art spins; the anchor only translates, which keeps the name pill
+   upright and the focus ring square to the page. One flat silhouette, no
+   gradient and no gloss — the shape carries it, and a hairline shadow is only
+   there to sit the fruit on the page rather than paste it onto one. */
 .mango-art {
   position: absolute;
   inset: 0;
@@ -104,42 +111,26 @@ nav.mango-layer {
   height: 100%;
   pointer-events: none;
   will-change: transform;
-  filter: drop-shadow(0 4px 9px rgba(10, 10, 10, .10));
+  filter: drop-shadow(0 3px 7px rgba(10, 10, 10, .07));
 }
 
 .mango-art path {
-  fill: var(--orange);
-  transition: fill .25s cubic-bezier(.16, 1, .3, 1);
+  fill: var(--mango-soft);
+  transition: fill .3s cubic-bezier(.16, 1, .3, 1);
 }
 
-.mango.tone-deep .mango-art path { fill: var(--orange-deep); }
+.mango.tone-deep .mango-art path { fill: var(--mango-deep); }
 
-/* Same move the page's buttons make: on hover it goes to ink */
+/* Hover ripens it back to the brand orange — the only moment the fruit is
+   allowed to be loud */
 .mango:hover .mango-art path,
-.mango:focus-visible .mango-art path { fill: var(--ink); }
+.mango:focus-visible .mango-art path { fill: var(--orange); }
 
-/* Mono, uppercase, tracked out — the site's own label voice. Set on the
-   fruit rather than beside it, so a tumbling pile never collides captions. */
-.mango-label {
-  position: absolute;
-  left: 50%;
-  top: 64%;
-  transform: translate(-50%, -50%);
-  width: 84%;
-  text-align: center;
-  color: var(--paper);
-  font-family: var(--font-mono);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: .12em;
-  line-height: 1.5;
-  pointer-events: none;
-  transition: opacity .25s ease;
-}
+.mango.tone-deep:hover .mango-art path,
+.mango.tone-deep:focus-visible .mango-art path { fill: var(--orange-deep); }
 
-.mango.is-docked .mango-label { opacity: 0; }
-
-/* Name pill, shown only once the mangos are acting as a dock */
+/* No text on the fruit. The name is the anchor's accessible name, and shows
+   visually here on hover or focus. */
 .mango-tip {
   position: absolute;
   bottom: 100%;
@@ -149,10 +140,11 @@ nav.mango-layer {
   border-radius: 100px;
   background: var(--ink);
   color: var(--paper);
-  font-family: var(--font-body);
-  font-size: .72rem;
-  font-weight: 600;
-  letter-spacing: -.01em;
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .12em;
   white-space: nowrap;
   opacity: 0;
   transform: translate(-50%, 4px);
@@ -160,15 +152,15 @@ nav.mango-layer {
   pointer-events: none;
 }
 
-.mango.is-docked:hover .mango-tip,
-.mango.is-docked:focus-visible .mango-tip {
+.mango:hover .mango-tip,
+.mango:focus-visible .mango-tip {
   opacity: 1;
   transform: translate(-50%, 0);
 }
 
-/* No hint line and no reset button, by design. The grab cursor and the
-   hover-to-ink are the whole affordance; anything that has to be captioned
-   "drag me" is louder than this is meant to be. */
+/* No hint line and no reset button, by design. The grab cursor and the fruit
+   ripening under the pointer are the whole affordance; anything that has to
+   be captioned "drag me" is louder than this is meant to be. */
 
 /* ---------- Reduced motion: no loop, no dock, no drift ----------
    The mangos become a static cluster sitting in the band. Still real links,
@@ -182,7 +174,6 @@ nav.mango-layer {
 
 @media (prefers-reduced-motion: reduce) {
   .mango-art path,
-  .mango-label,
   .mango-tip { transition: none; }
 
   .mango-dock-plate { display: none; }

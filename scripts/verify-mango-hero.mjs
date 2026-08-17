@@ -328,6 +328,25 @@ for (const [w, h] of [[1440, 900], [390, 844]]) {
       '.mango-hint, .mango-controls, .mango-reset, #mango-hint, #mango-reset')));
   ok('the only affordance is the cursor',
     await p.evaluate(() => getComputedStyle(document.querySelector('.mango')).cursor === 'grab'));
+  ok('no text is legible on the fruit at rest',
+    await p.evaluate(() => [...document.querySelectorAll('.mango')].every(e =>
+      [...e.children].every(c =>
+        !c.textContent.trim() || getComputedStyle(c).opacity === '0'))));
+
+  /* With the labels gone, hover is the only way to read a name */
+  const named = await p.evaluate(async () => {
+    const el = document.querySelectorAll('.mango')[1];
+    const r = el.getBoundingClientRect();
+    el.dispatchEvent(new PointerEvent('pointerover', { bubbles: true }));
+    el.classList.add('is-hovered');
+    return { text: el.querySelector('.mango-tip').textContent, w: r.width };
+  });
+  await p.mouse.move((await rects(p))[1].x, (await rects(p))[1].y);
+  await p.waitForTimeout(400);
+  const tipShown = await p.evaluate(() =>
+    getComputedStyle(document.querySelectorAll('.mango')[1].querySelector('.mango-tip')).opacity);
+  ok('hovering a mango reveals its name', Number(tipShown) > 0.5 && named.text.length > 3,
+    `"${named.text}" at opacity ${tipShown}`);
 
   const r = (await rects(p))[2];
   await p.mouse.move(r.x, r.y);
