@@ -10,15 +10,18 @@
      Social carousel — Ambassador Note: "Women's Economic Autonomy: Latin
      America's Invisible Infrastructure" (Lizbeth Sinaí Rodríguez, Aug 2026).
      --------------------------------------------------------------------------
-     Same visual system as the note covers that read as data reports: dark green
-     ground, cream Fraunces display, amber accent, JetBrains Mono for the
-     eyebrow and source lines.
+     Built on the anatomy of the note covers that read as data reports (see the
+     cover on "The Twenty Point Gap"): logo and mono meta on top, one big
+     Fraunces headline, a hairline, one or two lines of Fraunces subhead — the
+     second dropped to sage — then a single chart or figure, then the source in
+     mono. No body prose: if a slide needs a paragraph, it needs to be two
+     slides or a shorter claim.
 
-     Eleven 1080x1350 (4:5) slides — the tallest frame Instagram and LinkedIn
+     Eight 1080x1350 (4:5) slides — the tallest frame Instagram and LinkedIn
      both render without cropping. Each .slide is its own screenshot target;
      tools/capture_carousel.js walks them in order.
 
-     Fonts are loaded from scripts/fonts/ rather than the Google Fonts CDN so a
+     Fonts load from scripts/fonts/ rather than the Google Fonts CDN so a
      headless render is hermetic and byte-identical anywhere.
      ========================================================================== */
 
@@ -29,12 +32,6 @@
     font-display: block;
   }
   @font-face {
-    font-family: 'DM Sans';
-    src: url('scripts/fonts/dm-sans-var.woff2') format('woff2');
-    font-weight: 100 1000;
-    font-display: block;
-  }
-  @font-face {
     font-family: 'JetBrains Mono';
     src: url('scripts/fonts/jetbrains-mono-500.woff2') format('woff2');
     font-weight: 500;
@@ -42,8 +39,8 @@
   }
 
   :root {
-    /* Sampled straight off the note covers so the carousel and the blog art
-       are visibly the same object. */
+    /* Sampled off the note covers so the carousel and the blog art are visibly
+       the same object. */
     --green: #354C44;
     --green-deep: #22382F;
     --green-lift: #3E574C;
@@ -53,14 +50,14 @@
     --sage-dim: #7E9689;
     --amber: #E6AA3C;
 
-    --pad: 84px;
+    --pad: 88px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
     background: #12100E;
-    font-family: 'DM Sans', -apple-system, sans-serif;
+    font-family: 'JetBrains Mono', monospace;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -70,12 +67,10 @@
 
   /* Preview chrome only — never inside a .slide, so it never lands in a capture. */
   .slug {
-    font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     letter-spacing: .18em;
     text-transform: uppercase;
     color: #6D6A63;
-    align-self: center;
   }
 
   .slide {
@@ -85,8 +80,7 @@
     flex: none;
     overflow: hidden;
     color: var(--cream);
-    background:
-      radial-gradient(115% 80% at 22% 12%, var(--green-lift) 0%, var(--green) 46%, var(--green-deep) 100%);
+    background: radial-gradient(115% 80% at 22% 12%, var(--green-lift) 0%, var(--green) 46%, var(--green-deep) 100%);
     display: flex;
     flex-direction: column;
     padding: var(--pad);
@@ -106,125 +100,85 @@
 
   .slide > * { position: relative; z-index: 1; }
 
-  /* ---------- shared type ---------- */
+  /* ---------- top row: the wordmark, then mono meta ---------- */
 
-  .eyebrow {
-    font-family: 'JetBrains Mono', monospace;
+  .top {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    font-size: 20px;
     font-weight: 500;
-    font-size: 21px;
     letter-spacing: .16em;
     text-transform: uppercase;
     color: var(--sage-dim);
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    flex: none;
   }
-  .eyebrow .mark { width: 17px; height: 17px; background: var(--amber); flex: none; }
-  .eyebrow .brand { color: var(--amber); }
-  .eyebrow .dot { color: var(--sage-dim); opacity: .55; }
+  .top .logo {
+    height: 54px;
+    width: auto;
+    display: block;
+    filter: brightness(0) invert(1);
+  }
+  .top .dot { opacity: .5; }
 
-  .body { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
-  .body.top { justify-content: flex-start; padding-top: 78px; }
+  /* ---------- headline stack ---------- */
 
-  h1, h2 {
+  .head { flex: none; padding-top: 84px; }
+  /* No chart on this slide: centre the type rather than stranding it up top. */
+  .slide.plain .head { margin: auto 0; padding-top: 0; }
+
+  h1 {
     font-family: 'Fraunces', Georgia, serif;
     font-variation-settings: 'opsz' 144, 'wght' 900, 'SOFT' 100, 'WONK' 0;
     font-weight: 900;
-    line-height: .96;
-    letter-spacing: -.008em;
+    font-size: 150px;
+    line-height: .92;
+    letter-spacing: -.012em;
   }
-  h1 { font-size: 116px; }
-  h2 { font-size: 76px; }
-  h2.tight { font-size: 66px; line-height: 1.02; }
+  h1.two { font-size: 118px; }
+  h1.long { font-size: 96px; }
 
-  .serif-lead {
+  .hair {
+    height: 1px;
+    background: rgba(244, 238, 224, .22);
+    margin: 40px 0 34px;
+  }
+
+  .sub {
     font-family: 'Fraunces', Georgia, serif;
     font-variation-settings: 'opsz' 144, 'wght' 700, 'SOFT' 100, 'WONK' 0;
     font-weight: 700;
-    font-size: 46px;
-    line-height: 1.22;
+    font-size: 42px;
+    line-height: 1.24;
+    max-width: 26ch;
   }
-  .serif-lead.sm { font-size: 38px; line-height: 1.3; }
+  .sub.dim { color: var(--sage); margin-top: 14px; }
+  .sub.amber { color: var(--amber); margin-top: 14px; max-width: 30ch; }
 
-  .prose {
-    font-size: 33px;
-    line-height: 1.46;
-    color: var(--sage);
-    font-weight: 400;
-    max-width: 20ch;
-  }
-  .prose.wide { max-width: none; }
-  .prose strong { color: var(--cream); font-weight: 600; }
+  /* ---------- the chart sits on the floor of the slide ---------- */
 
-  .label {
-    font-family: 'JetBrains Mono', monospace;
+  .chart { margin-top: auto; padding-top: 60px; }
+  .chart-label {
     font-size: 19px;
     letter-spacing: .15em;
     text-transform: uppercase;
     color: var(--sage-dim);
-  }
-  .label.amber { color: var(--amber); }
-  .label.bright { color: var(--sage); }
-
-  .rule { height: 5px; background: var(--amber); width: 132px; flex: none; }
-  .hair { height: 1px; background: rgba(244, 238, 224, .16); flex: none; }
-
-  /* ---------- footer ---------- */
-
-  .foot {
-    flex: none;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 30px;
-    padding-top: 30px;
-    border-top: 1px solid rgba(244, 238, 224, .16);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 19px;
-    letter-spacing: .13em;
-    text-transform: uppercase;
-    color: var(--sage-dim);
-  }
-  .foot .swipe { color: var(--amber); white-space: nowrap; }
-  .foot .stack { display: flex; flex-direction: column; gap: 9px; }
-  .foot .stack .who { color: var(--sage); }
-
-  .source {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 17px;
-    letter-spacing: .11em;
-    text-transform: uppercase;
-    color: var(--sage-dim);
+    text-align: right;
+    margin-bottom: 22px;
   }
 
-  /* ---------- big numbers ---------- */
-
-  .figure {
-    font-family: 'Fraunces', Georgia, serif;
-    font-variation-settings: 'opsz' 144, 'wght' 900, 'SOFT' 100, 'WONK' 0;
-    font-weight: 900;
-    color: var(--amber);
-    font-size: 300px;
-    line-height: .84;
-    letter-spacing: -.02em;
-  }
-  .figure.sm { font-size: 150px; }
-
-  /* ---------- bars ---------- */
-
-  .bar-block { display: flex; flex-direction: column; gap: 26px; }
+  .bars { display: flex; flex-direction: column; gap: 26px; }
   .bar-name {
     font-family: 'Fraunces', Georgia, serif;
     font-variation-settings: 'opsz' 144, 'wght' 800, 'SOFT' 100, 'WONK' 0;
     font-weight: 800;
-    font-size: 36px;
+    font-size: 40px;
     line-height: 1;
     margin-bottom: 12px;
   }
   .track {
     position: relative;
-    height: 70px;
+    height: 78px;
     background: var(--track);
     display: flex;
     align-items: center;
@@ -235,39 +189,15 @@
     font-family: 'Fraunces', Georgia, serif;
     font-variation-settings: 'opsz' 72, 'wght' 700, 'SOFT' 100, 'WONK' 0;
     font-weight: 700;
-    font-size: 40px;
+    font-size: 44px;
     line-height: 1;
-    padding: 0 24px;
+    padding: 0 26px;
     color: var(--cream);
     white-space: nowrap;
   }
 
-  /* One split bar reading 100% across, the way the note's own chart does. */
-  .split { display: flex; height: 210px; }
-  .split .seg { display: flex; align-items: center; justify-content: center; }
-  .split .seg.women { background: var(--amber); }
-  .split .seg.men { background: var(--track); }
-  .split .seg .pct {
-    font-family: 'Fraunces', Georgia, serif;
-    font-variation-settings: 'opsz' 144, 'wght' 900, 'SOFT' 100, 'WONK' 0;
-    font-weight: 900;
-    font-size: 96px;
-    line-height: 1;
-  }
-  .split .seg.women .pct { color: var(--track); }
-  .split .seg.men .pct { color: var(--cream); }
-  .split-legend { display: flex; margin-top: 20px; }
-  .split-legend span {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 20px;
-    letter-spacing: .17em;
-    text-transform: uppercase;
-    text-align: center;
-  }
-
-  /* The gap bracket — the signature move on the data-report covers. Eight points
-     is a narrow span, so the tag sits beside the bracket rather than under it. */
-  .bracket { position: relative; height: 46px; margin-top: -4px; }
+  /* The gap bracket — the signature move on the data-report covers. */
+  .bracket { position: relative; height: 46px; }
   .bracket .span {
     position: absolute;
     top: 0;
@@ -279,7 +209,6 @@
   .bracket .tag {
     position: absolute;
     top: 14px;
-    font-family: 'JetBrains Mono', monospace;
     font-size: 19px;
     letter-spacing: .14em;
     text-transform: uppercase;
@@ -287,70 +216,75 @@
     white-space: nowrap;
   }
 
-  /* ---------- numbered lists / stat rows ---------- */
-
-  .rows { display: flex; flex-direction: column; gap: 54px; }
-  .row { display: flex; gap: 40px; align-items: flex-start; }
-  .row .num {
+  /* One bar reading 100% across, the way the note's own chart does. */
+  .split { display: flex; height: 224px; }
+  .split .seg { display: flex; align-items: center; justify-content: center; }
+  .split .seg.women { background: var(--amber); }
+  .split .seg.men { background: var(--track); }
+  .split .seg .pct {
     font-family: 'Fraunces', Georgia, serif;
     font-variation-settings: 'opsz' 144, 'wght' 900, 'SOFT' 100, 'WONK' 0;
     font-weight: 900;
-    font-size: 116px;
-    line-height: .82;
-    color: var(--amber);
-    flex: none;
-    width: 300px;
-    text-align: right;
+    font-size: 104px;
+    line-height: 1;
   }
-  .row .num.sage { color: var(--sage); }
-  .row .txt { padding-top: 10px; }
-  .row .txt .prose { max-width: none; font-size: 31px; }
-
-  .steps { display: flex; flex-direction: column; gap: 54px; }
-  .step { display: flex; gap: 34px; align-items: flex-start; }
-  .step .serif-lead { font-size: 42px; }
-  .step .idx {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 26px;
-    letter-spacing: .1em;
-    color: var(--amber);
-    flex: none;
-    padding-top: 12px;
-    width: 60px;
+  .split .seg.women .pct { color: var(--track); }
+  .split .seg.men .pct { color: var(--cream); }
+  .split-legend { display: flex; margin-top: 20px; }
+  .split-legend span {
+    font-size: 20px;
+    letter-spacing: .17em;
+    text-transform: uppercase;
+    text-align: center;
   }
 
-  .pull {
-    border-left: 6px solid var(--amber);
-    padding-left: 34px;
-  }
-
-  .quote-mark {
+  /* Two stacked hour-blocks — care work, drawn rather than described. */
+  .hours { display: flex; flex-direction: column; gap: 34px; }
+  .hour-row { display: flex; align-items: center; gap: 26px; }
+  .hour-row .who {
     font-family: 'Fraunces', Georgia, serif;
-    font-variation-settings: 'opsz' 144, 'wght' 900, 'SOFT' 100, 'WONK' 0;
-    font-size: 150px;
-    line-height: .5;
-    color: var(--amber);
-    height: 76px;
+    font-variation-settings: 'opsz' 144, 'wght' 800, 'SOFT' 100, 'WONK' 0;
+    font-weight: 800;
+    font-size: 38px;
+    width: 190px;
+    flex: none;
   }
+  .blocks { display: flex; gap: 14px; }
+  .blocks i { display: block; width: 76px; height: 76px; background: var(--amber); }
+  .blocks.men i { background: var(--sage); }
 
-  .logo {
-    height: 44px;
-    width: auto;
-    filter: brightness(0) invert(1) opacity(.92);
+  /* ---------- foot ---------- */
+
+  .foot {
+    flex: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 54px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(244, 238, 224, .16);
+    font-size: 19px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--sage-dim);
   }
+  .foot .stack { display: flex; flex-direction: column; gap: 9px; }
+  .foot .stack .who { color: var(--sage); }
+  .foot .go { color: var(--amber); white-space: nowrap; }
 
   .cta {
     display: inline-flex;
     align-items: center;
-    gap: 20px;
+    gap: 18px;
     background: var(--amber);
     color: var(--track);
-    font-family: 'JetBrains Mono', monospace;
     font-size: 24px;
     letter-spacing: .13em;
     text-transform: uppercase;
     padding: 26px 34px;
     align-self: flex-start;
+    margin-top: 46px;
   }
 
   @media print { body { background: #fff; gap: 0; padding: 0; } .slug { display: none; } }
@@ -359,146 +293,105 @@
 <body>
 
 <!-- ========================= 01 — cover ========================= -->
-<div class="slug">slide 01 / 11 — cover</div>
-<div class="slide">
-  <div class="eyebrow">
-    <span class="mark"></span><span class="brand">FinMango</span>
+<div class="slug">slide 01 / 08 — cover</div>
+<div class="slide plain">
+  <div class="top">
+    <img class="logo" src="finmango.png" alt="FinMango" />
     <span class="dot">·</span>Ambassador Note<span class="dot">·</span>2026
   </div>
 
-  <div class="body">
-    <div class="label bright" style="margin-bottom:34px;">Women's Economic Autonomy</div>
-    <h1>Latin America's<br>Invisible<br>Infrastructure</h1>
-    <div class="rule" style="margin:44px 0 38px;"></div>
-    <p class="prose wide" style="max-width:24ch;">
-      <strong>$6.7 trillion</strong> in lost human capital wealth — and what the field
-      reveals about why.
-    </p>
+  <div class="head">
+    <h1 class="two">Invisible<br>Infrastructure</h1>
+    <div class="hair"></div>
+    <p class="sub">Latin America treats women's economic autonomy as a social agenda.</p>
+    <p class="sub dim">It is infrastructure — and the region is operating below capacity.</p>
   </div>
+
+  <div class="chart"></div>
 
   <div class="foot">
     <div class="stack">
       <span class="who">Lizbeth Sinaí Rodríguez</span>
       <span>Crefemme · Financial Education for Women</span>
     </div>
-    <span class="swipe">Swipe →</span>
+    <span class="go">Swipe →</span>
   </div>
 </div>
 
-<!-- ========================= 02 — the number ========================= -->
-<div class="slug">slide 02 / 11 — the cost</div>
-<div class="slide">
-  <div class="eyebrow">
-    <span class="mark"></span><span class="brand">FinMango</span>
+<!-- ========================= 02 — $6.7T ========================= -->
+<div class="slug">slide 02 / 08 — the cost</div>
+<div class="slide plain">
+  <div class="top">
+    <img class="logo" src="finmango.png" alt="FinMango" />
     <span class="dot">·</span>The Cost<span class="dot">·</span>01
   </div>
 
-  <div class="body">
-    <div class="label" style="margin-bottom:26px;">Gender gaps in lifetime earnings cost the region</div>
-    <div class="figure">$6.7T</div>
-    <p class="serif-lead" style="margin-top:40px; max-width:22ch;">
-      in human capital wealth across Latin America and the Caribbean.
-    </p>
-    <div class="hair" style="margin:46px 0 38px;"></div>
-    <p class="prose wide" style="max-width:30ch;">
-      Human capital — the value of a country's future earnings — is two-thirds of global
-      wealth, ahead of natural and every other form of capital. This is not a peripheral
-      asset class. It is the base.
-    </p>
+  <div class="head">
+    <h1>$6.7 Trillion</h1>
+    <div class="hair"></div>
+    <p class="sub">Lost in human capital wealth across Latin America and the Caribbean.</p>
+    <p class="sub dim">The price of gender gaps in lifetime earnings.</p>
   </div>
 
+  <div class="chart"></div>
+
   <div class="foot">
-    <span class="source">Source: World Bank, 2018</span>
-    <span class="swipe">→</span>
+    <span>Source: World Bank, 2018</span>
+    <span class="go">→</span>
   </div>
 </div>
 
-<!-- ========================= 03 — the 38/62 split ========================= -->
-<div class="slug">slide 03 / 11 — the split</div>
+<!-- ========================= 03 — 38 / 62 ========================= -->
+<div class="slug">slide 03 / 08 — the split</div>
 <div class="slide">
-  <div class="eyebrow">
-    <span class="mark"></span><span class="brand">FinMango</span>
+  <div class="top">
+    <img class="logo" src="finmango.png" alt="FinMango" />
     <span class="dot">·</span>The Split<span class="dot">·</span>02
   </div>
 
-  <div class="body">
-    <h2 class="tight">Women hold 38% of global human capital wealth</h2>
-    <div class="label" style="margin:36px 0 22px;">Share of the value of future lifetime earnings</div>
+  <div class="head">
+    <h1 class="two">Women hold 38%</h1>
+    <div class="hair"></div>
+    <p class="sub">Of global human capital wealth — the value of citizens' future earnings.</p>
+    <p class="sub dim">A third or less in lower-middle-income countries.</p>
+  </div>
 
-    <div>
-      <div class="split">
-        <div class="seg women" style="width:38%"><span class="pct">38%</span></div>
-        <div class="seg men" style="width:62%"><span class="pct">62%</span></div>
-      </div>
-      <div class="split-legend">
-        <span style="width:38%; color:var(--amber);">Women</span>
-        <span style="width:62%; color:var(--sage);">Men</span>
-      </div>
+  <div class="chart">
+    <div class="chart-label">Share of future lifetime earnings</div>
+    <div class="split">
+      <div class="seg women" style="width:38%"><span class="pct">38%</span></div>
+      <div class="seg men" style="width:62%"><span class="pct">62%</span></div>
     </div>
-
-    <p class="prose wide" style="margin-top:46px; max-width:30ch;">
-      In lower-middle-income countries it is a third or less. Globally, human capital
-      wealth is about <strong>20% lower than it could be</strong> — specifically because
-      women earn less than men.
-    </p>
-  </div>
-
-  <div class="foot">
-    <span class="source">Source: World Bank, 2018</span>
-    <span class="swipe">→</span>
-  </div>
-</div>
-
-<!-- ========================= 04 — informality + care ========================= -->
-<div class="slug">slide 04 / 11 — two constraints</div>
-<div class="slide">
-  <div class="eyebrow">
-    <span class="mark"></span><span class="brand">FinMango</span>
-    <span class="dot">·</span>The Mechanics<span class="dot">·</span>03
-  </div>
-
-  <div class="body">
-    <h2 class="tight" style="margin-bottom:64px;">Two constraints that cap<br>the region's own capacity</h2>
-
-    <div class="rows">
-      <div class="row">
-        <div class="num">50%</div>
-        <div class="txt">
-          <div class="label amber" style="margin-bottom:14px;">Informality</div>
-          <p class="prose">Roughly half of employed women in the region work informally — outside
-            social protection, financing and training.</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="num sage">21.4%</div>
-        <div class="txt">
-          <div class="label bright" style="margin-bottom:14px;">Unpaid care</div>
-          <p class="prose">Of regional GDP is unpaid care work — up to three times the hours men
-            give it, and none of it recorded in national accounts.</p>
-        </div>
-      </div>
+    <div class="split-legend">
+      <span style="width:38%; color:var(--amber);">Women</span>
+      <span style="width:62%; color:var(--sage);">Men</span>
     </div>
   </div>
 
   <div class="foot">
-    <span class="source">Sources: OECD, 2025 · UN Women, 2025</span>
-    <span class="swipe">→</span>
+    <span>Source: World Bank, 2018</span>
+    <span class="go">→</span>
   </div>
 </div>
 
-<!-- ========================= 05 — the access gap ========================= -->
-<div class="slug">slide 05 / 11 — the access gap</div>
+<!-- ========================= 04 — the access gap ========================= -->
+<div class="slug">slide 04 / 08 — the access gap</div>
 <div class="slide">
-  <div class="eyebrow">
-    <span class="mark"></span><span class="brand">FinMango</span>
-    <span class="dot">·</span>The Access Gap<span class="dot">·</span>04
+  <div class="top">
+    <img class="logo" src="finmango.png" alt="FinMango" />
+    <span class="dot">·</span>The Access Gap<span class="dot">·</span>03
   </div>
 
-  <div class="body">
-    <h2 class="tight">The gap widens when<br>money goes digital</h2>
+  <div class="head">
+    <h1 class="two">The Access Gap</h1>
+    <div class="hair"></div>
+    <p class="sub">Two in three women in Latin America have a financial account.</p>
+    <p class="sub dim">In digital payments the gap is wider still: 55% against 64%.</p>
+  </div>
 
-    <div class="label" style="margin:46px 0 26px;">Has a financial account, 2024</div>
-    <div class="bar-block">
+  <div class="chart">
+    <div class="chart-label">Has a financial account, 2024</div>
+    <div class="bars">
       <div>
         <div class="bar-name">Women</div>
         <div class="track"><div class="fill" style="width:66%"></div><span class="val">66%</span></div>
@@ -512,209 +405,122 @@
         <div class="tag" style="left:calc(74% + 18px);">8-point gap</div>
       </div>
     </div>
-
-    <div class="label" style="margin:34px 0 26px;">Makes or receives digital payments</div>
-    <div class="bar-block">
-      <div>
-        <div class="bar-name">Women</div>
-        <div class="track"><div class="fill" style="width:55%"></div><span class="val">55%</span></div>
-      </div>
-      <div>
-        <div class="bar-name">Men</div>
-        <div class="track"><div class="fill sage" style="width:64%"></div><span class="val">64%</span></div>
-      </div>
-      <div class="bracket">
-        <div class="span" style="left:55%; width:9%;"></div>
-        <div class="tag" style="left:calc(64% + 18px);">9-point gap</div>
-      </div>
-    </div>
   </div>
 
   <div class="foot">
-    <span class="source">Source: FinDev Gateway, 2025</span>
-    <span class="swipe">→</span>
+    <span>Source: FinDev Gateway, 2025</span>
+    <span class="go">→</span>
   </div>
 </div>
 
-<!-- ========================= 06 — why it compounds ========================= -->
-<div class="slug">slide 06 / 11 — why it compounds</div>
+<!-- ========================= 05 — unpaid care ========================= -->
+<div class="slug">slide 05 / 08 — unpaid care</div>
 <div class="slide">
-  <div class="eyebrow">
-    <span class="mark"></span><span class="brand">FinMango</span>
-    <span class="dot">·</span>Why It Compounds<span class="dot">·</span>05
+  <div class="top">
+    <img class="logo" src="finmango.png" alt="FinMango" />
+    <span class="dot">·</span>Unpaid Care<span class="dot">·</span>04
   </div>
 
-  <div class="body">
-    <div class="quote-mark">“</div>
-    <p class="serif-lead" style="font-size:52px;">
-      A woman without an account cannot build credit history. Without credit history she
-      cannot access financing. Without financing her business stays small.
-    </p>
-    <div class="rule" style="margin:44px 0 36px;"></div>
-    <p class="prose wide" style="max-width:28ch;">
-      And the time she spends on unpaid care limits how much she can do about any of it.
-      These are not three separate problems. They compound.
-    </p>
+  <div class="head">
+    <h1 class="two">21.4% of GDP</h1>
+    <div class="hair"></div>
+    <p class="sub">The value of unpaid care work in Latin America.</p>
+    <p class="sub dim">It appears in no national account.</p>
   </div>
 
-  <div class="foot">
-    <div class="stack">
-      <span class="who">Lizbeth Sinaí Rodríguez</span>
-      <span>FinMango Ambassador</span>
-    </div>
-    <span class="swipe">→</span>
-  </div>
-</div>
-
-<!-- ========================= 07 — why now ========================= -->
-<div class="slug">slide 07 / 11 — why now</div>
-<div class="slide">
-  <div class="eyebrow">
-    <span class="mark"></span><span class="brand">FinMango</span>
-    <span class="dot">·</span>Why Now<span class="dot">·</span>06
-  </div>
-
-  <div class="body">
-    <div class="label" style="margin-bottom:20px;">The demographic window closes in</div>
-    <div class="figure">2038</div>
-    <p class="serif-lead" style="margin-top:38px; max-width:24ch;">
-      For the first time in the region's history, the number of people over 60 will equal
-      the number of children under 14.
-    </p>
-    <div class="hair" style="margin:44px 0 34px;"></div>
-    <p class="prose wide" style="max-width:30ch;">
-      Growth is projected at just <strong>2.1–2.3% in 2026</strong>. Productivity is flat.
-      If there will be fewer workers tomorrow, can the region afford to underuse the ones
-      it already has?
-    </p>
-  </div>
-
-  <div class="foot">
-    <span class="source">Sources: ECLAC, 2025 · Colombo &amp; Valencia-Dongo, 2026</span>
-    <span class="swipe">→</span>
-  </div>
-</div>
-
-<!-- ========================= 08 — from the field ========================= -->
-<div class="slug">slide 08 / 11 — from the field</div>
-<div class="slide">
-  <div class="eyebrow">
-    <span class="mark"></span><span class="brand">FinMango</span>
-    <span class="dot">·</span>From the Field<span class="dot">·</span>07
-  </div>
-
-  <div class="body">
-    <div class="label amber" style="margin-bottom:30px;">Sayula, Jalisco · Mexico, 2024</div>
-    <h2>Fifty women.<br>One month.<br>Almost no attrition.</h2>
-    <div class="hair" style="margin:46px 0 36px;"></div>
-    <p class="prose wide" style="max-width:30ch;">
-      <strong>Female Financial Autonomy</strong> ran three hours every Saturday plus
-      Wednesday evenings online. Nearly all participants were mothers running their own
-      businesses. By conventional expectations, attrition should have been high.
-    </p>
-    <p class="serif-lead sm" style="color:var(--amber); margin-top:36px;">
-      Almost all fifty finished.
-    </p>
-  </div>
-
-  <div class="foot">
-    <span class="source">Program funded by the U.S. Department of State</span>
-    <span class="swipe">→</span>
-  </div>
-</div>
-
-<!-- ========================= 09 — what it revealed ========================= -->
-<div class="slug">slide 09 / 11 — what it revealed</div>
-<div class="slide">
-  <div class="eyebrow">
-    <span class="mark"></span><span class="brand">FinMango</span>
-    <span class="dot">·</span>What It Revealed<span class="dot">·</span>08
-  </div>
-
-  <div class="body">
-    <h2 class="tight">The binding constraint<br>was never information</h2>
-    <p class="prose wide" style="margin:38px 0 44px; max-width:32ch;">
-      Several participants had never approached a formal financial institution — not for
-      lack of information, but because they expected to be rejected or treated poorly. The
-      real barriers were <strong>trust, risk perception, networks, and norms</strong> about
-      who is permitted to make economic decisions.
-    </p>
-    <div class="pull">
-      <p class="serif-lead sm">
-        The program ended with participants pitching to a committee that included the U.S.
-        Consul General in Guadalajara. Attendance and preparation rose sharply — because
-        someone with institutional standing was going to take their business seriously.
-      </p>
-    </div>
-  </div>
-
-  <div class="foot">
-    <span class="source">Field note · Sayula, Jalisco</span>
-    <span class="swipe">→</span>
-  </div>
-</div>
-
-<!-- ========================= 10 — three shifts ========================= -->
-<div class="slug">slide 10 / 11 — three shifts</div>
-<div class="slide">
-  <div class="eyebrow">
-    <span class="mark"></span><span class="brand">FinMango</span>
-    <span class="dot">·</span>What To Do<span class="dot">·</span>09
-  </div>
-
-  <div class="body">
-    <h2 style="margin-bottom:58px;">Three shifts</h2>
-
-    <div class="steps">
-      <div class="step">
-        <div class="idx">01</div>
-        <p class="serif-lead sm">Design financial products <em>for</em> people without credit
-          history — not around them.</p>
+  <div class="chart">
+    <div class="chart-label">Hours of unpaid care work</div>
+    <div class="hours">
+      <div class="hour-row">
+        <span class="who">Women</span>
+        <div class="blocks"><i></i><i></i><i></i></div>
       </div>
-      <div class="step">
-        <div class="idx">02</div>
-        <p class="serif-lead sm">Pair training with access to a product, a market, or a
-          network — or expect limited returns.</p>
-      </div>
-      <div class="step">
-        <div class="idx">03</div>
-        <p class="serif-lead sm">Treat care infrastructure as a labor supply intervention,
-          not a welfare expense.</p>
+      <div class="hour-row">
+        <span class="who">Men</span>
+        <div class="blocks men"><i></i></div>
       </div>
     </div>
   </div>
 
   <div class="foot">
-    <span class="source">Autonomy as productive infrastructure</span>
-    <span class="swipe">→</span>
+    <span>Source: UN Women, 2025</span>
+    <span class="go">→</span>
   </div>
 </div>
 
-<!-- ========================= 11 — close ========================= -->
-<div class="slug">slide 11 / 11 — close</div>
-<div class="slide">
-  <div class="eyebrow">
-    <span class="mark"></span><span class="brand">FinMango</span>
+<!-- ========================= 06 — 2038 ========================= -->
+<div class="slug">slide 06 / 08 — why now</div>
+<div class="slide plain">
+  <div class="top">
+    <img class="logo" src="finmango.png" alt="FinMango" />
+    <span class="dot">·</span>Why Now<span class="dot">·</span>05
+  </div>
+
+  <div class="head">
+    <h1>2038</h1>
+    <div class="hair"></div>
+    <p class="sub">The year people over 60 will equal children under 14 for the first time.</p>
+    <p class="sub dim">If there will be fewer workers tomorrow, can the region afford to
+      underuse the ones it already has?</p>
+  </div>
+
+  <div class="chart"></div>
+
+  <div class="foot">
+    <span>Source: Colombo &amp; Valencia-Dongo, 2026</span>
+    <span class="go">→</span>
+  </div>
+</div>
+
+<!-- ========================= 07 — from the field ========================= -->
+<div class="slug">slide 07 / 08 — from the field</div>
+<div class="slide plain">
+  <div class="top">
+    <img class="logo" src="finmango.png" alt="FinMango" />
+    <span class="dot">·</span>From the Field<span class="dot">·</span>06
+  </div>
+
+  <div class="head">
+    <h1 class="two">Fifty Women</h1>
+    <div class="hair"></div>
+    <p class="sub">One intensive month in Sayula, Jalisco. Almost all fifty finished.</p>
+    <p class="sub dim">The binding constraint was never information. It was expecting
+      to be rejected.</p>
+  </div>
+
+  <div class="chart"></div>
+
+  <div class="foot">
+    <span>Female Financial Autonomy · Mexico, 2024</span>
+    <span class="go">→</span>
+  </div>
+</div>
+
+<!-- ========================= 08 — close ========================= -->
+<div class="slug">slide 08 / 08 — close</div>
+<div class="slide plain">
+  <div class="top">
+    <img class="logo" src="finmango.png" alt="FinMango" />
     <span class="dot">·</span>Ambassador Note
   </div>
 
-  <div class="body">
-    <h2 class="tight">The question is no longer whether Latin America can afford to invest in
-      women's economic autonomy.</h2>
-    <p class="serif-lead" style="color:var(--amber); margin-top:40px;">
-      It is how much longer it can afford not to.
-    </p>
-    <div class="hair" style="margin:54px 0 46px;"></div>
+  <div class="head">
+    <h1 class="two">How much<br>longer?</h1>
+    <div class="hair"></div>
+    <p class="sub">The question is no longer whether Latin America can afford to invest in
+      women's economic autonomy.</p>
+    <p class="sub amber">It is how much longer it can afford not to.</p>
     <div class="cta">Read the full note <span>→</span></div>
-    <div class="label" style="margin-top:26px;">finmango.org/posts</div>
   </div>
+
+  <div class="chart"></div>
 
   <div class="foot">
     <div class="stack">
       <span class="who">Lizbeth Sinaí Rodríguez</span>
       <span>Crefemme · FinMango Ambassador</span>
     </div>
-    <img class="logo" src="finmango.png" alt="FinMango" />
+    <span class="go">finmango.org</span>
   </div>
 </div>
 
