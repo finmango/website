@@ -1,0 +1,270 @@
+/* ==========================================================
+   FINMANGO — MANGO PHYSICS HERO
+   Draggable, throwable mangos that double as navigation.
+   Mechanic ported from sglasgow.com; the look is FinMango's own.
+   ========================================================== */
+
+/* The band of clear hero the pile settles into. Sized here rather than in
+   JS so the layout stays a CSS concern; the script measures it. */
+.mango-band {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  max-width: var(--hero-max);
+  margin: 0 auto;
+  height: clamp(160px, 23vh, 230px);
+  pointer-events: none;
+}
+
+/* Fixed to the viewport so the mangos survive the scroll into the dock.
+   Sits under the nav (1050) and the mobile menu (1040) on purpose — a thrown
+   mango passes behind the masthead instead of covering the menu. */
+/* Element selector, because the site styles bare `nav` as the frosted
+   masthead — without this reset the mango layer becomes a full-viewport
+   sheet of blurred paper over the whole page. */
+nav.mango-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1035;
+  pointer-events: none;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border: 0;
+  padding: 0;
+  width: 100%;
+  transition: none;
+}
+
+.mango-layer[hidden] { display: none; }
+
+/* Frosted plate behind the dock. Ink rather than paper: the dock floats over
+   whatever section you have scrolled to, and this page alternates paper and
+   ink grounds. A paper plate turns into a grey slab over the ink sections,
+   whereas ink reads as deliberate on both — and orange fruit on ink is the
+   site's own on-ink treatment. */
+.mango-dock-plate {
+  position: absolute;
+  border-radius: 100px;
+  background: rgba(10, 10, 10, .82);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--paper-line);
+  box-shadow: 0 20px 50px -20px rgba(10, 10, 10, .45);
+  opacity: 0;
+  /* visibility, not just opacity — an always-on backdrop-filter makes the
+     compositor do work on every frame even while the plate is invisible */
+  visibility: hidden;
+  transition: opacity .35s ease, visibility .35s;
+  pointer-events: none;
+}
+
+.mango-layer.is-docked .mango-dock-plate {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mango {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  border-radius: 50%;
+  text-decoration: none;
+  cursor: grab;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+  will-change: transform;
+}
+
+.mango:active { cursor: grabbing; }
+
+/* Docked mangos are navigation, not toys — give touches back to the page */
+.mango.is-docked {
+  touch-action: auto;
+  cursor: pointer;
+}
+
+.mango:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 6px;
+}
+
+/* The art spins; the anchor only translates, which keeps the label upright
+   and the focus ring square to the page */
+.mango-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  will-change: transform;
+  filter: drop-shadow(0 12px 20px rgba(10, 10, 10, .18));
+  transition: filter .2s ease;
+}
+
+.mango:hover .mango-art,
+.mango:focus-visible .mango-art {
+  filter: drop-shadow(0 16px 26px rgba(229, 81, 27, .34));
+}
+
+.mango-label {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  transform: translate(-50%, -50%);
+  width: 78%;
+  text-align: center;
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: -.015em;
+  line-height: 1.08;
+  text-shadow: 0 1px 4px rgba(122, 45, 0, .5);
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+
+/* The big one carries the wordmark instead of a text label. The logo art is
+   ink-on-transparent, so flip it to white to sit on the fruit. */
+.mango-wordmark {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  transform: translate(-50%, -50%);
+  width: 62%;
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: .96;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+
+.mango.is-docked .mango-label,
+.mango.is-docked .mango-wordmark { opacity: 0; }
+
+/* Name pill, shown only once the mangos are acting as a dock */
+.mango-tip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-bottom: 12px;
+  padding: .38rem .7rem;
+  border-radius: 100px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition: opacity .2s ease, transform .2s ease;
+  pointer-events: none;
+}
+
+.mango.is-docked:hover .mango-tip,
+.mango.is-docked:focus-visible .mango-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ---------- Hint + controls, in the site's mono voice ----------
+   The pile is weighted right of centre, so the band's bottom-left corner is
+   the one bit of it that stays clear of fruit. */
+.mango-hint {
+  position: absolute;
+  left: 0;
+  bottom: .55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  font-family: var(--font-mono);
+  font-size: .62rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .18em;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+
+.mango-hint svg { width: 15px; height: 15px; }
+.mango-hint.is-hidden { opacity: 0; }
+
+.mango-controls {
+  position: absolute;
+  right: 0;
+  top: 0;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .3s ease, transform .3s ease;
+  pointer-events: none;
+}
+
+.mango-controls.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Belongs to the hero — retires once the mangos become a dock */
+.mango-controls.is-retired {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+.mango-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .5rem .9rem;
+  background: transparent;
+  color: var(--ink-dim);
+  border: 1px solid var(--ink-line);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: .6rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  cursor: pointer;
+  transition: border-color .25s ease, color .25s ease;
+}
+
+.mango-reset:hover { border-color: var(--ink); color: var(--ink); }
+
+@media (max-width: 768px) {
+  /* The pile fills the band's bottom edge on a phone, so the hint moves to
+     the top where there is still clear paper */
+  .mango-hint { font-size: .56rem; letter-spacing: .14em; top: 0; bottom: auto; }
+}
+
+/* ---------- Reduced motion: no loop, no dock, no drift ----------
+   The mangos become a static cluster sitting in the band. Still real links,
+   still keyboard reachable — this version is meant to look finished. */
+.mango-layer.is-static {
+  position: absolute;
+  inset: auto 0 auto 0;
+}
+
+.mango-layer.is-static .mango { cursor: pointer; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mango-art,
+  .mango-label,
+  .mango-wordmark,
+  .mango-tip { transition: none; }
+
+  .mango-hint,
+  .mango-controls,
+  .mango-dock-plate { display: none; }
+
+  .mango { cursor: pointer; }
+}
