@@ -674,21 +674,26 @@
       border: 1px solid var(--paper-line);
     }
 
-    /* stats — ruled columns, not boxes */
+    /* stats — ruled columns, not boxes. Columns are sized to their content
+       and packed left rather than each taking a third of the container: the
+       numbers are short ("5" especially), so 1fr columns left most of the row
+       empty. The top rule still spans the full width to tie the block to the
+       section above it. */
     .mission-stats {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      margin-top: 4.5rem;
+      grid-template-columns: repeat(3, max-content);
+      justify-content: start;
+      margin-top: 3rem;
       border-top: 1px solid var(--paper-line);
     }
-    .mission-stat { padding: 2.25rem 2rem 0 0; }
-    .mission-stat + .mission-stat { padding-left: 2rem; border-left: 1px solid var(--paper-line); }
+    .mission-stat { padding: 1.75rem 3rem 0 0; }
+    .mission-stat + .mission-stat { padding-left: 3rem; border-left: 1px solid var(--paper-line); }
     .mission-stat-num {
-      font-size: clamp(2.5rem, 4vw, 3.6rem);
+      font-size: clamp(2.2rem, 3.2vw, 3rem);
       font-weight: 900;
       line-height: 1;
       letter-spacing: -.04em;
-      margin-bottom: .6rem;
+      margin-bottom: .45rem;
     }
     .mission-stat-num em { font-style: normal; color: var(--orange); font-size: .55em; vertical-align: .35em; }
     .mission-stat-label {
@@ -1261,9 +1266,13 @@
       .mission { padding: 4.5rem var(--gutter) 5rem; }
       .mission-grid { grid-template-columns: 1fr; gap: 2.5rem; }
       .mission h2 { max-width: none; }
-      .mission-stats { grid-template-columns: 1fr; margin-top: 3rem; border-top: none; }
-      .mission-stat { padding: 1.5rem 0; border-top: 1px solid var(--paper-line); }
-      .mission-stat + .mission-stat { padding-left: 0; border-left: none; }
+      /* Three short readouts sit side by side rather than stacking into three
+         full-width rows — same content, roughly a quarter of the height.
+         Columns stay content-sized (from the base rule) so tablets don't get
+         the same stretched-thirds dead space desktop had. */
+      .mission-stats { margin-top: 2.5rem; }
+      .mission-stat { padding: 1.5rem 2rem 0 0; }
+      .mission-stat + .mission-stat { padding-left: 2rem; }
 
       .section-head { margin-bottom: 2.5rem; }
 
@@ -1312,6 +1321,14 @@
 
       .team-grid { grid-template-columns: repeat(2, 1fr); }
       .team-photo, .team-photo-frame { width: 72px; height: 72px; }
+
+      /* On a phone the row is narrow enough that even thirds read better than
+         left-packed columns, and the type has to come down to fit. */
+      .mission-stats { grid-template-columns: repeat(3, 1fr); justify-content: stretch; }
+      .mission-stat { padding: 1.25rem .75rem 0 0; }
+      .mission-stat + .mission-stat { padding-left: .75rem; }
+      .mission-stat-num { font-size: clamp(1.4rem, 6.2vw, 2rem); margin-bottom: .35rem; }
+      .mission-stat-label { font-size: .55rem; letter-spacing: .1em; }
     }
 
     /* Tablet tier (iPads in portrait, small landscape) — scale the hero up
@@ -1326,9 +1343,6 @@
       .hb-cta-row { grid-column: 1 / -1; justify-content: flex-start; }
       .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
       .team-grid { grid-template-columns: repeat(4, 1fr); }
-      .mission-stats { grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--paper-line); }
-      .mission-stat { padding: 1.75rem 1.5rem 0 0; border-top: none; }
-      .mission-stat + .mission-stat { padding-left: 1.5rem; border-left: 1px solid var(--paper-line); }
     }
   </style>
 </head>
