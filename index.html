@@ -1134,18 +1134,34 @@
       gap: 2.25rem;
     }
     /* The source file is a 1080² white plate with the lockup floating in the
-       middle, so crop the dead margin away and multiply the white ground into
-       the panel instead of letting it sit there as an empty box. */
-    .featured-lockup img {
-      display: block;
+       middle — measured bounding box x 192-879, y 480-604. object-fit:cover
+       only crops the vertical margin, so the horizontal 36% stayed as baked-in
+       padding and the mark rendered far smaller than its panel. Instead: give
+       the window the lockup's own 688:125 proportions and offset the image so
+       the mark alone fills it. All values derive from that box, so they hold at
+       any width:
+         width       1080/688 = 156.977%
+         margin-left  -192/688 = -27.907%
+         margin-top   -480/688 = -69.767%
+       Percentage margins resolve against the container's width, which is what
+       makes the crop scale rather than drift.
+       340px cap is the resolution ceiling, not a taste call: the mark is 688px
+       natively, so beyond ~344 CSS px it upscales and softens on 2x screens. */
+    .featured-lockup {
       width: 100%;
       max-width: 340px;
-      /* height:auto is load-bearing — the img carries height="1080", which is
-         a presentational hint that outranks aspect-ratio without it. */
-      height: auto;
       margin: 0 auto;
-      aspect-ratio: 4 / 1;
-      object-fit: cover;
+      aspect-ratio: 688 / 125;
+      overflow: hidden;
+    }
+    .featured-lockup img {
+      display: block;
+      width: 156.977%;
+      max-width: none;
+      /* height:auto is load-bearing — the img carries height="1080", a
+         presentational hint that outranks the computed height without it. */
+      height: auto;
+      margin: -69.767% 0 0 -27.907%;
       mix-blend-mode: multiply;
     }
     .featured-journals { display: flex; flex-direction: column; gap: .9rem; }
@@ -1624,7 +1640,9 @@
         padding: 1.75rem;
         gap: 1.35rem;
       }
-      .featured-lockup img { max-width: 260px; margin: 0; }
+      /* Left-aligned in the band; the 340px cap carries over, and on narrow
+         phones the panel itself constrains it to a full-width fit. */
+      .featured-lockup { margin: 0; }
       .featured-journals { gap: .7rem; }
       .featured-journals-label { padding-bottom: .6rem; }
       .featured-journal-name { font-size: .92rem; }
