@@ -381,29 +381,23 @@
     .mobile-controls { display: none; gap: 1rem; align-items: center; }
 
     /* ----------------------------------------------------------
-       HERO — top-anchored billboard
+       HERO — one statement, one action
        ---------------------------------------------------------- */
     .hero {
       background: var(--paper);
-      padding: 6.5rem 2rem 6.5rem;
-      display: flex;
-      flex-direction: column;
+      padding: 7rem var(--gutter) 4.5rem;
       position: relative;
       overflow: hidden;
     }
-    .hero-bg {
-      position: absolute; inset: 0;
-      pointer-events: none;
-      z-index: 0;
-    }
+    .hero-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
     .hero-bg::before {
       content: '';
       position: absolute;
-      top: 28%;
-      left: -12%;
-      width: 60vw;
-      height: 60vw;
-      background: radial-gradient(circle, rgba(255, 107, 53, .09) 0%, transparent 60%);
+      top: 20%;
+      left: -14%;
+      width: 58vw;
+      height: 58vw;
+      background: radial-gradient(circle, rgba(255, 107, 53, .1) 0%, transparent 60%);
       filter: blur(40px);
     }
 
@@ -415,15 +409,10 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 3rem;
-      padding-top: 1.5rem;
+      gap: 2.25rem;
     }
 
-    .hero-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .hero-top { display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
     .hb-status {
       font-family: var(--font-mono);
       font-size: .68rem;
@@ -434,13 +423,17 @@
       display: inline-flex;
       align-items: center;
       gap: .6rem;
+      text-decoration: none;
+      transition: color .2s ease;
     }
+    a.hb-status:hover { color: var(--orange); }
     .hb-pulse {
       width: 6px; height: 6px;
       border-radius: 50%;
       background: var(--orange);
       box-shadow: 0 0 0 0 rgba(255, 107, 53, .5);
       animation: hb-pulse 2.4s ease-out infinite;
+      flex-shrink: 0;
     }
     @keyframes hb-pulse {
       0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, .5); }
@@ -451,7 +444,7 @@
     .hero h1 {
       font-size: clamp(3rem, 8.5vw, 8.5rem);
       font-weight: 900;
-      line-height: .96;
+      line-height: .94;
       letter-spacing: -.05em;
       max-width: 14ch;
     }
@@ -488,33 +481,336 @@
       grid-template-columns: 1fr auto;
       align-items: end;
       gap: 3rem;
-      padding-top: 1.75rem;
+      padding-top: 1.6rem;
       border-top: 1px solid var(--ink-line-soft);
     }
     .hb-sub {
-      font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+      font-size: clamp(1.05rem, 1.5vw, 1.3rem);
       font-weight: 300;
       line-height: 1.5;
       color: var(--ink-dim);
-      max-width: 44ch;
+      max-width: 40ch;
       letter-spacing: -.015em;
     }
     .hb-sub strong { color: var(--ink); font-weight: 500; }
-
     .hb-cta-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; justify-content: flex-end; }
+
+    /* ----------------------------------------------------------
+       SECTION HEADS
+       ---------------------------------------------------------- */
+    .section-head { display: flex; flex-direction: column; gap: 1.1rem; align-items: flex-start; }
+    .section-head h2 {
+      font-size: clamp(2.4rem, 5.5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -.045em;
+      max-width: 14ch;
+      text-wrap: balance;
+    }
+    .section-head h2 em { font-style: normal; color: var(--orange); }
+    .section-sub {
+      font-size: 1.02rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--ink-dim);
+      max-width: 46ch;
+      letter-spacing: -.01em;
+    }
+    .section-sub a { color: var(--ink); text-decoration-color: var(--orange); text-underline-offset: 2px; }
+    .section-sub a:hover { color: var(--orange); }
+    .on-ink .section-sub { color: var(--paper-dim); }
+
+    /* ----------------------------------------------------------
+       PLEDGE — the page's centrepiece. Sticky rail on the left,
+       the signature card on the right. Signatures ride the
+       Community Wall backend (docs/COMMUNITY-WALL-SETUP.md).
+       ---------------------------------------------------------- */
+    .pledge {
+      padding: 5.5rem var(--gutter) 4rem;
+      background: linear-gradient(180deg, rgba(255, 107, 53, .05), transparent 22rem);
+      border-top: 2px solid var(--orange);
+      position: relative;
+      overflow: hidden;
+    }
+    .pledge::before {
+      content: '';
+      position: absolute;
+      top: -14%;
+      right: -14%;
+      width: 44vw;
+      height: 44vw;
+      background: radial-gradient(circle, rgba(255, 107, 53, .08) 0%, transparent 60%);
+      filter: blur(40px);
+      pointer-events: none;
+    }
+    .pledge-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 30rem) 1fr;
+      gap: 4.5rem;
+      align-items: start;
+    }
+    .pledge-rail { position: sticky; top: 7rem; }
+    .pledge-rail .section-head { gap: 1.25rem; }
+    .pledge-rail-foot {
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      margin-top: 1.75rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--ink-line);
+    }
+    .pledge-live {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .pledge-wall-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      font-size: .92rem;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      color: var(--ink);
+      text-decoration: none;
+      align-self: flex-start;
+      border-bottom: 1px solid var(--ink-line);
+      padding-bottom: .15rem;
+      transition: color .2s ease, border-color .2s ease;
+    }
+    .pledge-wall-link svg { width: 13px; height: 13px; transition: transform .3s cubic-bezier(.16,1,.3,1); }
+    .pledge-wall-link:hover { color: var(--orange); border-color: var(--orange); }
+    .pledge-wall-link:hover svg { transform: translateX(3px); }
+
+    /* the card you sign */
+    .pledge-card {
+      background: var(--paper);
+      border: 1px solid var(--ink-line);
+      border-top: 2px solid var(--orange);
+      padding: 2.25rem 2.25rem 2.5rem;
+    }
+    .pledge-step {
+      display: flex;
+      align-items: baseline;
+      gap: .7rem;
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: var(--ink-faint);
+      margin-bottom: 1.1rem;
+    }
+    .pledge-step b { color: var(--orange); font-weight: 500; }
+    .pledge-step-2 { margin-top: 2.5rem; padding-top: 1.75rem; border-top: 1px solid var(--ink-line-soft); }
+
+    /* the barriers — names only; a tight wrapping row, one click */
+    .pledge-grid { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .pledge-chip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      padding: .7rem 1.05rem;
+      border: 1px solid var(--ink-line);
+      cursor: pointer;
+      font-size: .95rem;
+      font-weight: 600;
+      letter-spacing: -.02em;
+      transition: border-color .2s ease, background .2s ease, color .2s ease;
+    }
+    .pledge-chip:hover { border-color: var(--ink); }
+    .pledge-chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .pledge-chip::before {
+      content: '';
+      width: .8rem; height: .8rem;
+      border: 1px solid var(--ink-line);
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+    .pledge-chip:has(input:checked) { border-color: var(--orange); background: rgba(255, 107, 53, .06); }
+    .pledge-chip:has(input:checked)::before {
+      background: var(--orange);
+      border-color: var(--orange);
+      box-shadow: inset 0 0 0 2.5px var(--paper);
+    }
+    .pledge-chip:has(input:focus-visible) { outline: 2px solid var(--orange); outline-offset: 3px; }
+    /* once one is picked, the rest step back */
+    .pledge-grid:has(input:checked) .pledge-chip:not(:has(input:checked)) { color: var(--ink-dim); }
+
+    /* the quiet line standing in for the form until a barrier is picked */
+    .pledge-prompt {
+      font-size: .95rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--ink-dim);
+      letter-spacing: -.01em;
+      max-width: 52ch;
+    }
+    .pledge-prompt strong { font-weight: 600; color: var(--ink); }
+
+    .pledge-check {
+      width: 2rem; height: 2rem;
+      border: 1px solid var(--ink-line);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-size: .85rem;
+      color: transparent;
+      transition: background .2s ease, border-color .2s ease, color .2s ease;
+    }
+    .pledge-check::after { content: '✓'; }
+
+    /* the signature form */
+    .pledge-form { display: flex; flex-direction: column; gap: 1.1rem; }
+    .pledge-form[hidden], .pledge-done[hidden], .pledge-prompt[hidden] { display: none !important; }
+    .pledge-standing {
+      font-size: 1.05rem;
+      font-weight: 300;
+      letter-spacing: -.02em;
+      color: var(--ink-dim);
+      margin-bottom: -.2rem;
+    }
+    .pledge-standing b { font-weight: 700; color: var(--ink); }
+    .pledge-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .pledge-field label {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: var(--ink-faint);
+      display: block;
+      margin-bottom: .5rem;
+    }
+    .pledge-field input,
+    .pledge-field textarea {
+      width: 100%;
+      padding: .9rem 1rem;
+      border: 1px solid var(--ink-line);
+      background: transparent;
+      font-family: inherit;
+      font-size: .95rem;
+      color: var(--ink);
+    }
+    .pledge-field textarea { resize: vertical; min-height: 4.75rem; line-height: 1.5; }
+    .pledge-field input::placeholder,
+    .pledge-field textarea::placeholder { color: var(--ink-faint); }
+    .pledge-field input:focus,
+    .pledge-field textarea:focus { outline: none; border-color: var(--orange); }
+    .pledge-count {
+      display: block;
+      margin-top: .4rem;
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      letter-spacing: .1em;
+      color: var(--ink-faint);
+      text-align: right;
+    }
+    .pledge-form .btn-primary { align-self: flex-start; }
+    .pledge-status { font-size: .85rem; font-weight: 500; min-height: 1.2em; }
+    .pledge-status.err { color: #B91C1C; }
+    .pledge-privacy { font-size: .78rem; font-weight: 300; line-height: 1.55; color: var(--ink-faint); max-width: 52ch; }
+
+    /* optional photo */
+    .pledge-photo-row { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .pledge-photo-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: .7rem 1.1rem;
+      border: 1px solid var(--ink-line);
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color .2s ease, color .2s ease;
+    }
+    .pledge-photo-btn:hover { border-color: var(--ink); }
+    .pledge-photo-hint { font-size: .78rem; font-weight: 300; color: var(--ink-faint); line-height: 1.4; }
+    .pledge-photo-preview { display: flex; align-items: center; gap: 1rem; margin-top: .85rem; }
+    .pledge-photo-preview[hidden] { display: none !important; }
+    .pledge-photo-preview img {
+      width: 84px; height: 63px;
+      object-fit: cover;
+      border: 1px solid var(--ink-line);
+      display: block;
+    }
+    .pledge-photo-remove {
+      background: none;
+      border: none;
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--ink-dim);
+      cursor: pointer;
+      border-bottom: 1px solid var(--ink-line);
+      padding: 0 0 .1rem;
+    }
+    .pledge-photo-remove:hover { color: #B91C1C; border-color: #B91C1C; }
+
+    /* wall consent */
+    .pledge-consent {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .8rem;
+      align-items: start;
+      cursor: pointer;
+      position: relative;
+    }
+    .pledge-consent input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    .pledge-consent .pledge-check { width: 1.4rem; height: 1.4rem; font-size: .68rem; margin-top: .1rem; }
+    .pledge-consent-text { font-size: .82rem; font-weight: 300; line-height: 1.5; color: var(--ink-dim); }
+    .pledge-consent-text a { color: var(--ink); text-decoration-color: var(--orange); text-underline-offset: 2px; }
+    .pledge-consent-text a:hover { color: var(--orange); }
+    .pledge-consent input:checked ~ .pledge-check { background: var(--orange); border-color: var(--orange); color: #fff; }
+    .pledge-consent input:focus-visible ~ .pledge-check { outline: 2px solid var(--orange); outline-offset: 3px; }
+
+    /* signed state */
+    .pledge-done-kicker {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--orange);
+    }
+    .pledge-done h3 { font-size: 1.75rem; font-weight: 900; letter-spacing: -.035em; margin: .75rem 0 .6rem; }
+    .pledge-done p { font-size: .95rem; font-weight: 300; color: var(--ink-dim); line-height: 1.6; max-width: 52ch; }
+    .pledge-done-actions { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1.6rem; }
+    .pledge-done-more { margin-top: 1.35rem; }
+    .pledge-done-more a { color: var(--ink); text-decoration-color: var(--orange); text-underline-offset: 2px; }
+    .pledge-done-more a:hover { color: var(--orange); }
+    .pledge-again { margin-top: 1rem; font-size: .76rem; }
+    .pledge-again a { color: var(--ink-faint); }
+    .pledge-again a:hover { color: var(--orange); }
 
     /* ----------------------------------------------------------
        IN PERSON — photo plates; tilted, hairline-framed, mono
        captions. Echoes the ambassador-page collage.
        ---------------------------------------------------------- */
-    .moments { padding: 0 var(--gutter); background: var(--paper); }
+    .moments { padding: 4rem var(--gutter) 5.5rem; background: var(--paper); }
     .moments-container { max-width: var(--max-width); margin: 0 auto; }
     .moments-head {
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
       gap: 2rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2.25rem;
     }
     .moments-link {
       display: inline-flex;
@@ -569,497 +865,120 @@
     .moment-3 { transform: rotate(-.7deg); }
 
     /* ----------------------------------------------------------
-       OPPORTUNITIES — the ladder: ruled rows, ascending commitment
+       WAYS IN — the page's one ink moment: every deeper commitment
+       in a single place, then straight into the footer.
        ---------------------------------------------------------- */
-    .opps { padding: 5.5rem var(--gutter) 6.5rem; background: var(--paper); }
-    .opps-container { max-width: var(--max-width); margin: 0 auto; }
-
-    .section-head {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-      margin-bottom: 3.5rem;
-      align-items: flex-start;
-    }
-    .section-head h2 {
-      font-size: clamp(2.4rem, 5.5vw, 4.5rem);
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: -.045em;
-      max-width: 18ch;
-      text-wrap: balance;
-    }
-    .section-head h2 em { font-style: normal; color: var(--orange); }
-    .section-sub {
-      font-size: clamp(1rem, 1.3vw, 1.15rem);
-      font-weight: 300;
-      line-height: 1.55;
-      color: var(--ink-dim);
-      max-width: 52ch;
-      letter-spacing: -.01em;
-    }
-    .section-sub a { color: var(--ink); text-decoration-color: var(--orange); text-underline-offset: 2px; }
-    .section-sub a:hover { color: var(--orange); }
-
-    .opps-list { border-top: 1px solid var(--ink-line); }
-
-    a.opp-row {
-      display: grid;
-      grid-template-columns: 160px 1fr auto;
-      gap: 2.5rem;
-      align-items: center;
-      padding: 2.1rem 0;
-      border-bottom: 1px solid var(--ink-line-soft);
-      text-decoration: none;
-      color: inherit;
-      position: relative;
-    }
-    a.opp-row::before {
-      content: '';
-      position: absolute;
-      top: -1px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--orange);
-      transition: width .4s cubic-bezier(.16, 1, .3, 1);
-      z-index: 1;
-    }
-    a.opp-row:hover::before { width: 100%; }
-
-    .opp-time {
-      font-family: var(--font-mono);
-      font-size: .62rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      color: var(--ink-faint);
-    }
-    .opp-body { display: flex; flex-direction: column; min-width: 0; }
-    .opp-title {
-      font-size: 1.35rem;
-      font-weight: 900;
-      letter-spacing: -.025em;
-      transition: color .2s ease;
-      display: inline-flex;
-      align-items: baseline;
-      gap: .5rem;
-    }
-    a.opp-row:hover .opp-title { color: var(--orange); }
-    .opp-external {
-      font-size: .85rem;
-      font-weight: 400;
-      color: var(--ink-faint);
-    }
-    .opp-desc {
-      font-size: .95rem;
-      font-weight: 300;
-      line-height: 1.55;
-      color: var(--ink-dim);
-      margin-top: .35rem;
-      max-width: 60ch;
-      letter-spacing: -.005em;
-    }
-    .opp-arrow {
-      width: 18px; height: 18px;
-      color: var(--ink-faint);
-      transition: transform .3s cubic-bezier(.16, 1, .3, 1), color .2s ease;
-    }
-    a.opp-row:hover .opp-arrow { transform: translateX(5px); color: var(--orange); }
-
-    /* the marquee opportunity gets a hairline emphasis + tag */
-    a.opp-row.opp-featured {
-      background: linear-gradient(90deg, rgba(255, 107, 53, .045), transparent 55%);
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-      margin: 0 -1.5rem;
-      width: calc(100% + 3rem);
-    }
-    .opp-tag {
-      font-family: var(--font-mono);
-      font-size: .54rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      color: var(--orange);
-      border: 1px solid rgba(255, 107, 53, .35);
-      padding: .15rem .45rem;
-      align-self: center;
-      white-space: nowrap;
-    }
-
-    /* ----------------------------------------------------------
-       PLEDGE — the lowest rung. 30 seconds, no money, no meetings.
-       Signatures ride the Community Wall backend (see
-       docs/COMMUNITY-WALL-SETUP.md) with a "PLEDGE —" prefix.
-       ---------------------------------------------------------- */
-    .pledge {
-      padding: 6rem var(--gutter) 6.5rem;
-      background: linear-gradient(180deg, rgba(255, 107, 53, .045), transparent 26rem);
-      border-top: 2px solid var(--orange);
-      position: relative;
-      overflow: hidden;
-    }
-    .pledge::before {
-      content: '';
-      position: absolute;
-      top: -12%;
-      right: -14%;
-      width: 46vw;
-      height: 46vw;
-      background: radial-gradient(circle, rgba(255, 107, 53, .08) 0%, transparent 60%);
-      filter: blur(40px);
-      pointer-events: none;
-    }
-    .pledge-container { max-width: var(--max-width); margin: 0 auto; position: relative; z-index: 1; }
-    .pledge-head-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
-      width: 100%;
-    }
-    .pledge-live {
-      font-family: var(--font-mono);
-      font-size: .68rem;
-      font-weight: 500;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      display: inline-flex;
-      align-items: center;
-      gap: .6rem;
-      white-space: nowrap;
-    }
-    .pledge-live .hb-pulse { flex-shrink: 0; }
-    .pledge-col-label {
-      font-family: var(--font-mono);
-      font-size: .62rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .18em;
-      color: var(--ink-faint);
-      margin-bottom: 1.6rem;
-      display: block;
-    }
-    .pledge-body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    /* the barriers — a compact plate grid, two across, so the pledge
-       stays one screen instead of two */
-    .pledge-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: .6rem;
-    }
-    .pledge-chip {
-      position: relative;
-      display: block;
-      padding: .9rem 1rem 1rem;
-      border: 1px solid var(--ink-line);
-      cursor: pointer;
-      transition: border-color .2s ease, background .2s ease;
-    }
-    /* Seventh barrier in a two-across grid would sit alone on the last row —
-       spanning it full-width reads as deliberate instead of leftover. */
-    .pledge-chip-wide { grid-column: 1 / -1; }
-    .pledge-chip:hover { border-color: var(--ink); }
-    .pledge-chip:has(input:checked) { border-color: var(--orange); background: rgba(255, 107, 53, .05); }
-    .pledge-chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-    .pledge-chip-title {
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-      font-size: .95rem;
-      font-weight: 700;
-      letter-spacing: -.02em;
-      transition: color .2s ease;
-    }
-    .pledge-chip:hover .pledge-chip-title { color: var(--orange); }
-    .pledge-chip-title::before {
-      content: '';
-      width: .9rem; height: .9rem;
-      border: 1px solid var(--ink-line);
-      border-radius: 50%;
-      flex-shrink: 0;
-      transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
-    }
-    .pledge-chip input:checked ~ .pledge-chip-title::before {
-      background: var(--orange);
-      border-color: var(--orange);
-      box-shadow: inset 0 0 0 2.5px var(--paper);
-    }
-    .pledge-chip input:focus-visible ~ .pledge-chip-title::before { outline: 2px solid var(--orange); outline-offset: 3px; }
-    .pledge-chip-desc {
-      display: block;
-      font-size: .78rem;
-      font-weight: 300;
-      line-height: 1.45;
-      color: var(--ink-dim);
-      margin-top: .3rem;
-    }
-    /* once a barrier is picked, the others recede */
-    .pledge-grid:has(input:checked) .pledge-chip:not(:has(input:checked)) .pledge-chip-desc { opacity: .5; }
-
-    /* placeholder standing in for the form until a barrier is picked */
-    .pledge-prompt {
-      display: flex;
-      gap: .9rem;
-      align-items: flex-start;
-      border: 1px dashed var(--ink-line);
-      padding: 1.35rem 1.4rem;
-      background: rgba(255, 107, 53, .02);
-    }
-    .pledge-prompt-mark {
-      font-family: var(--font-mono);
-      font-size: .95rem;
-      color: var(--orange);
-      line-height: 1.35;
-      flex-shrink: 0;
-    }
-    .pledge-prompt p { font-size: .95rem; font-weight: 400; line-height: 1.5; color: var(--ink); letter-spacing: -.01em; }
-    .pledge-prompt ul { list-style: none; margin-top: .9rem; display: flex; flex-direction: column; gap: .45rem; }
-    .pledge-prompt li {
-      display: flex;
-      gap: .6rem;
-      font-size: .86rem;
-      font-weight: 300;
-      line-height: 1.5;
-      color: var(--ink-dim);
-    }
-    .pledge-prompt li::before { content: '·'; color: var(--orange); font-weight: 700; }
-    .pledge-prompt li strong { font-weight: 600; color: var(--ink); }
-
-    .pledge-check {
-      width: 2rem; height: 2rem;
-      border: 1px solid var(--ink-line);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      font-family: var(--font-mono);
-      font-size: .85rem;
-      color: transparent;
-      transition: background .2s ease, border-color .2s ease, color .2s ease;
-    }
-    .pledge-check::after { content: '✓'; }
-
-    /* the signature form */
-    .pledge-form { display: flex; flex-direction: column; gap: 1.1rem; }
-    .pledge-form[hidden], .pledge-done[hidden], .pledge-prompt[hidden] { display: none !important; }
-    .pledge-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .pledge-field label {
-      font-family: var(--font-mono);
-      font-size: .62rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .14em;
-      color: var(--ink-faint);
-      display: block;
-      margin-bottom: .5rem;
-    }
-    .pledge-field input,
-    .pledge-field textarea {
-      width: 100%;
-      padding: .9rem 1rem;
-      border: 1px solid var(--ink-line);
-      background: transparent;
-      font-family: inherit;
-      font-size: .95rem;
-      color: var(--ink);
-    }
-    .pledge-field textarea { resize: vertical; min-height: 4.75rem; line-height: 1.5; }
-    .pledge-field input::placeholder,
-    .pledge-field textarea::placeholder { color: var(--ink-faint); }
-    .pledge-field input:focus,
-    .pledge-field textarea:focus { outline: none; border-color: var(--orange); }
-    .pledge-count {
-      display: block;
-      margin-top: .4rem;
-      font-family: var(--font-mono);
-      font-size: .62rem;
-      letter-spacing: .1em;
-      color: var(--ink-faint);
-      text-align: right;
-    }
-    .pledge-form .btn-primary { align-self: flex-start; }
-    .pledge-status { font-size: .85rem; font-weight: 500; min-height: 1.2em; }
-    .pledge-status.err { color: #B91C1C; }
-    .pledge-privacy { font-size: .78rem; font-weight: 300; line-height: 1.55; color: var(--ink-faint); max-width: 44ch; }
-
-    /* optional photo */
-    .pledge-photo-row { display: flex; align-items: center; gap: 1rem; }
-    .pledge-photo-btn {
-      display: inline-flex;
-      align-items: center;
-      padding: .7rem 1.1rem;
-      border: 1px solid var(--ink-line);
-      font-size: .82rem;
-      font-weight: 600;
-      letter-spacing: -.01em;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: border-color .2s ease, color .2s ease;
-    }
-    .pledge-photo-btn:hover { border-color: var(--ink); }
-    .pledge-photo-hint { font-size: .78rem; font-weight: 300; color: var(--ink-faint); line-height: 1.4; }
-    .pledge-photo-preview {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-top: .85rem;
-    }
-    .pledge-photo-preview[hidden] { display: none !important; }
-    .pledge-photo-preview img {
-      width: 84px; height: 63px;
-      object-fit: cover;
-      border: 1px solid var(--ink-line);
-      display: block;
-    }
-    .pledge-photo-remove {
-      background: none;
-      border: none;
-      font-family: var(--font-mono);
-      font-size: .62rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: var(--ink-dim);
-      cursor: pointer;
-      border-bottom: 1px solid var(--ink-line);
-      padding: 0 0 .1rem;
-    }
-    .pledge-photo-remove:hover { color: #B91C1C; border-color: #B91C1C; }
-
-    /* wall consent */
-    .pledge-consent {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: .8rem;
-      align-items: start;
-      cursor: pointer;
-      position: relative;
-    }
-    .pledge-consent input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-    .pledge-consent .pledge-check { width: 1.4rem; height: 1.4rem; font-size: .68rem; margin-top: .1rem; }
-    .pledge-consent-text { font-size: .82rem; font-weight: 300; line-height: 1.5; color: var(--ink-dim); }
-    .pledge-consent-text a { color: var(--ink); text-decoration-color: var(--orange); text-underline-offset: 2px; }
-    .pledge-consent-text a:hover { color: var(--orange); }
-    .pledge-consent input:checked ~ .pledge-check { background: var(--orange); border-color: var(--orange); color: #fff; }
-    .pledge-consent input:focus-visible ~ .pledge-check { outline: 2px solid var(--orange); outline-offset: 3px; }
-
-    /* signed state */
-    .pledge-done {
-      border: 1px solid var(--ink-line);
-      padding: 2rem 1.75rem 2.25rem;
-      background: linear-gradient(135deg, rgba(255, 107, 53, .05), transparent 60%);
-    }
-    .pledge-done-kicker {
-      font-family: var(--font-mono);
-      font-size: .62rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      color: var(--orange);
-    }
-    .pledge-done h3 { font-size: 1.5rem; font-weight: 900; letter-spacing: -.03em; margin: .75rem 0 .5rem; }
-    .pledge-done p { font-size: .92rem; font-weight: 300; color: var(--ink-dim); line-height: 1.55; }
-    .pledge-done-actions { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1.5rem; }
-    .pledge-done-more { margin-top: 1.35rem; }
-    .pledge-done-more a { color: var(--ink); text-decoration-color: var(--orange); text-underline-offset: 2px; }
-    .pledge-done-more a:hover { color: var(--orange); }
-    .pledge-again {
-      margin-top: 1rem;
-      font-size: .76rem;
-    }
-    .pledge-again a { color: var(--ink-faint); }
-    .pledge-again a:hover { color: var(--orange); }
-
-    /* the next rung up — keeps deeper commitments in view from inside
-       the pledge, for anyone who wants more than 30 seconds */
-    .pledge-next {
-      display: flex;
-      align-items: center;
-      gap: 1rem 2rem;
-      flex-wrap: wrap;
-      margin-top: 3.25rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--ink-line);
-    }
-    .pledge-next-label {
-      font-family: var(--font-mono);
-      font-size: .62rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .18em;
-      color: var(--ink-faint);
-      white-space: nowrap;
-    }
-    .pledge-next-links { display: flex; gap: 1.75rem; flex-wrap: wrap; }
-    .pledge-next-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: .4rem;
-      font-size: .92rem;
-      font-weight: 600;
-      letter-spacing: -.01em;
-      color: var(--ink);
-      text-decoration: none;
-      border-bottom: 1px solid var(--ink-line);
-      padding-bottom: .15rem;
-      transition: color .2s ease, border-color .2s ease;
-    }
-    .pledge-next-links a:hover { color: var(--orange); border-color: var(--orange); }
-    .pledge-next-links .ext { font-size: .78rem; color: var(--ink-faint); }
-    .pledge-next-links a:hover .ext { color: var(--orange); }
-
-    /* ----------------------------------------------------------
-       CTA — the page's one ink moment, runs into the footer
-       ---------------------------------------------------------- */
-    .cta {
-      padding: 7.5rem var(--gutter) 7rem;
+    .ways {
+      padding: 6.5rem var(--gutter) 6rem;
       background: var(--ink);
       color: var(--paper);
       position: relative;
       overflow: hidden;
     }
-    .cta-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-      position: relative;
-      z-index: 1;
+    .ways-container { max-width: var(--max-width); margin: 0 auto; position: relative; z-index: 1; }
+    .ways-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 2rem 3rem;
+      padding-bottom: 2.25rem;
+      margin-bottom: 2.75rem;
+      border-bottom: 1px solid var(--paper-line);
     }
-    .cta h2 {
-      font-size: clamp(2.8rem, 7.5vw, 7rem);
+    .ways-head h2 {
+      font-size: clamp(2.6rem, 6.5vw, 5.5rem);
       font-weight: 900;
       line-height: .96;
       letter-spacing: -.05em;
-      max-width: 14ch;
+      margin-top: 1rem;
     }
-    .cta h2 em { font-style: normal; color: var(--orange); }
-    .cta-bottom {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 3rem;
-      align-items: end;
-      padding-top: 1.75rem;
-      border-top: 1px solid var(--paper-line);
-    }
-    .cta-subtitle {
-      font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+    .ways-head h2 em { font-style: normal; color: var(--orange); }
+    .ways-head p {
+      font-size: 1.05rem;
       font-weight: 300;
-      line-height: 1.5;
+      line-height: 1.55;
       color: var(--paper-dim);
+      max-width: 34ch;
+      letter-spacing: -.01em;
+      padding-bottom: .4rem;
+    }
+
+    .ways-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    a.way {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 1.5rem;
+      padding: 1.85rem 1.9rem 1.95rem;
+      border: 1px solid var(--paper-line);
+      text-decoration: none;
+      color: var(--paper);
+      transition: border-color .25s ease, background .25s ease, transform .35s cubic-bezier(.16, 1, .3, 1);
+    }
+    a.way:hover {
+      border-color: var(--orange);
+      background: rgba(255, 107, 53, .06);
+      transform: translateY(-3px);
+    }
+    .way-cost {
+      font-family: var(--font-mono);
+      font-size: .6rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      color: var(--paper-faint);
+      display: block;
+      margin-bottom: .9rem;
+    }
+    a.way:hover .way-cost { color: var(--orange); }
+    .way-title {
+      font-size: 1.45rem;
+      font-weight: 900;
+      letter-spacing: -.03em;
+      display: flex;
+      align-items: baseline;
+      gap: .45rem;
+    }
+    .way-ext { font-size: .8rem; font-weight: 400; color: var(--paper-faint); }
+    .way-desc {
+      display: block;
+      font-size: .92rem;
+      font-weight: 300;
+      line-height: 1.55;
+      color: var(--paper-dim);
+      margin-top: .45rem;
       max-width: 42ch;
+      letter-spacing: -.005em;
+    }
+    .way-arrow {
+      width: 18px; height: 18px;
+      color: var(--paper-faint);
+      align-self: center;
+      flex-shrink: 0;
+      transition: transform .3s cubic-bezier(.16, 1, .3, 1), color .2s ease;
+    }
+    a.way:hover .way-arrow { transform: translateX(5px); color: var(--orange); }
+    a.way-donate { border-color: rgba(255, 107, 53, .45); background: rgba(255, 107, 53, .07); }
+    a.way-donate .way-cost { color: var(--orange); }
+
+    .ways-foot {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--paper-line);
+      font-size: .92rem;
+      font-weight: 300;
+      color: var(--paper-dim);
       letter-spacing: -.01em;
     }
-    .cta-actions { display: flex; gap: .9rem; flex-wrap: wrap; }
+    .ways-foot a {
+      color: var(--paper);
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 1px solid var(--paper-line);
+      padding-bottom: .1rem;
+      transition: color .2s ease, border-color .2s ease;
+    }
+    .ways-foot a:hover { color: var(--orange); border-color: var(--orange); }
 
     /* ----------------------------------------------------------
        FOOTER — continues the ink, separated by hairline
@@ -1284,6 +1203,13 @@
     /* ----------------------------------------------------------
        RESPONSIVE
        ---------------------------------------------------------- */
+    @media (max-width: 1180px) {
+      .pledge-container { grid-template-columns: 1fr; gap: 2.75rem; }
+      .pledge-rail { position: static; }
+      .pledge-rail .section-head h2 { max-width: none; }
+      .pledge-rail-foot { flex-direction: row; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
+    }
+
     @media (max-width: 1080px) {
       .nav-right { gap: 1.5rem; }
       .dropdown-content { min-width: 540px; }
@@ -1302,42 +1228,28 @@
         font-size: .74rem !important;
       }
 
-      .hero { padding: 6rem var(--gutter) 4rem; min-height: auto; }
-      .hero-container { gap: 2rem; padding-top: 0; }
+      .hero { padding: 6rem var(--gutter) 3.5rem; }
+      .hero-container { gap: 1.75rem; }
       .hero h1 { font-size: clamp(2.2rem, 10vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
       .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
       .hb-cta-row { justify-content: flex-start; width: 100%; gap: .75rem; }
       .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
 
-      .section-head { margin-bottom: 2.5rem; }
+      .pledge { padding: 4rem var(--gutter) 4.5rem; }
+      .pledge-card { padding: 1.6rem 1.4rem 1.9rem; }
+      .pledge-step-2 { margin-top: 2rem; padding-top: 1.5rem; }
 
+      .moments { padding: 4.5rem var(--gutter) 5rem; }
       .moments-head { flex-direction: column; align-items: flex-start; gap: 1rem; margin-bottom: 1.75rem; }
-      .moments-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+      .moments-grid { gap: 1rem; }
       .moment-2 { margin-top: 0; }
+      .moment-1, .moment-2, .moment-3 { transform: none; }
 
-      .opps { padding: 5rem var(--gutter); }
-      a.opp-row {
-        grid-template-columns: 1fr auto;
-        grid-template-areas: "time time" "body arrow";
-        gap: .65rem 1.25rem;
-        padding: 1.75rem 0;
-      }
-      .opp-time { grid-area: time; }
-      .opp-body { grid-area: body; }
-      .opp-arrow { grid-area: arrow; align-self: center; }
-
-      .pledge { padding: 5rem var(--gutter); }
-      .pledge-body { grid-template-columns: 1fr; gap: 2.5rem; }
-      .pledge-head-row { flex-direction: column; align-items: flex-start; gap: .75rem; }
-      .pledge-next { margin-top: 2.5rem; }
-
-      a.opp-row.opp-featured { margin: 0; width: 100%; padding-left: 1rem; padding-right: 1rem; }
-
-      .cta { padding: 5rem var(--gutter); }
-      .cta h2 { font-size: clamp(2.2rem, 8vw, 3.2rem); }
-      .cta-bottom { grid-template-columns: 1fr; gap: 1.75rem; }
-      .cta-actions { width: 100%; }
-      .cta-actions .btn-primary, .cta-actions .btn-secondary { flex: 1; justify-content: center; }
+      .ways { padding: 4.5rem var(--gutter) 5rem; }
+      .ways-head { grid-template-columns: 1fr; align-items: start; gap: 1.25rem; padding-bottom: 1.75rem; margin-bottom: 2rem; }
+      .ways-head h2 { font-size: clamp(2.2rem, 8vw, 3.2rem); margin-top: .5rem; }
+      .ways-grid { grid-template-columns: 1fr; }
+      a.way { padding: 1.5rem 1.4rem 1.6rem; gap: 1rem; }
 
       .footer-container { grid-template-columns: 1fr 1fr; gap: 2.25rem; padding: 3rem var(--gutter) 2.5rem; }
       .footer-brand-col { grid-column: 1 / -1; }
@@ -1345,17 +1257,20 @@
       .footer-bottom a { margin: 0 .6rem; }
     }
 
+    /* below tablet the three plates stack — three-across gets too small to read */
+    @media (max-width: 720px) {
+      .moments-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+    }
+
     @media (max-width: 560px) {
+      .hero-top { flex-direction: column; align-items: flex-start; gap: .7rem; }
       /* CTAs: full-width stack instead of ragged wrap */
-      .hb-cta-row, .cta-actions, .pledge-done-actions { flex-direction: column; }
+      .hb-cta-row, .pledge-done-actions { flex-direction: column; }
       .hb-cta-row .btn-primary, .hb-cta-row .btn-secondary,
-      .cta-actions .btn-primary, .cta-actions .btn-secondary,
       .pledge-done-actions .btn-primary, .pledge-done-actions .btn-secondary { width: 100%; justify-content: center; }
       .pledge-form .btn-primary { align-self: stretch; justify-content: center; }
-      /* one barrier per row on phones — two columns squeezes the copy */
-      .pledge-grid { grid-template-columns: 1fr; }
+      .pledge-chip { width: 100%; }
       .pledge-field-row { grid-template-columns: 1fr; }
-      .pledge-next-links { flex-direction: column; gap: .85rem; align-items: flex-start; }
     }
 
     /* Tablet tier (iPads in portrait, small landscape) — scale the hero up
@@ -1369,12 +1284,7 @@
       }
       .hb-cta-row { grid-column: 1 / -1; justify-content: flex-start; }
       .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
-      a.opp-row {
-        grid-template-columns: 140px 1fr auto;
-        grid-template-areas: none;
-        gap: 2rem;
-      }
-      .opp-time, .opp-body, .opp-arrow { grid-area: auto; }
+      .ways-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -1529,231 +1439,136 @@
 
       <div class="hero-top">
         <div class="eyebrow">Join the movement</div>
-        <div class="hb-status"><span class="hb-pulse"></span>6 ways to start</div>
+        <a href="pledge-wall.html" class="hb-status"><span class="hb-pulse"></span><span id="pledgeLive">See the Pledge Wall</span></a>
       </div>
 
       <h1>The affordability crisis won't <em>fix&nbsp;itself.<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em></h1>
 
       <div class="hb-bottom">
         <p class="hb-sub">
-          Whether you have <strong>30 seconds or 10 hours a week</strong>, there's a way to fight back — starting with <strong>the pledge</strong>.
+          It starts with <strong>naming the barrier</strong>. Sign the pledge — thirty seconds, no money, no meetings.
         </p>
         <div class="hb-cta-row">
           <a href="#pledge" class="btn-primary">
-            Take the pledge — 30 seconds
+            Take the pledge
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
-          <a href="pledge-wall.html" class="btn-secondary">See the Pledge Wall</a>
+          <a href="#ways" class="btn-secondary">Other ways to help</a>
         </div>
       </div>
 
-    </div>
-  </section>
-
-  <!-- ======================= OPPORTUNITIES ======================= -->
-  <section class="opps" id="opportunities">
-    <div class="opps-container">
-      <div class="section-head">
-        <span class="eyebrow">Every action counts</span>
-        <h2>Find your <em>level.</em></h2>
-        <p class="section-sub">Every rung is real work. Start with the 30-second pledge just below — or go deeper: volunteer your skills, become an ambassador, partner with us. Scale up when you're ready.</p>
-      </div>
-
-      <div class="opps-list">
-        <a href="#pledge" class="opp-row opp-featured">
-          <span class="opp-time">30 sec</span>
-          <span class="opp-body">
-            <span class="opp-title">Take the pledge <span class="opp-tag">New</span></span>
-            <span class="opp-desc">Pick the barrier you're standing against — housing, medical debt, wages — and put your name (and photo, if you like) on the public Pledge Wall. No money, no meetings.</span>
-          </span>
-          <svg class="opp-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-
-        <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer" class="opp-row">
-          <span class="opp-time">1 min</span>
-          <span class="opp-body">
-            <span class="opp-title">Subscribe to our newsletter <span class="opp-external">↗</span></span>
-            <span class="opp-desc">Get research, education, and advocacy updates delivered to your inbox.</span>
-          </span>
-          <svg class="opp-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-
-        <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer" class="opp-row">
-          <span class="opp-time">2 min</span>
-          <span class="opp-body">
-            <span class="opp-title">Share our mission <span class="opp-external">↗</span></span>
-            <span class="opp-desc">Spread the word on social media. Help us reach those who need it most.</span>
-          </span>
-          <svg class="opp-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer" class="opp-row">
-          <span class="opp-time">2–5 hrs/wk</span>
-          <span class="opp-body">
-            <span class="opp-title">Volunteer your skills <span class="opp-external">↗</span></span>
-            <span class="opp-desc">Contribute expertise in design, research, writing, data analysis, or outreach. Remote and flexible.</span>
-          </span>
-          <svg class="opp-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-
-        <a href="ambassadors.html" class="opp-row">
-          <span class="opp-time">A semester</span>
-          <span class="opp-body">
-            <span class="opp-title">Become an ambassador</span>
-            <span class="opp-desc">Lead financial health work on your campus or in your community, backed by training, a global cohort, and our research.</span>
-          </span>
-          <svg class="opp-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-
-        <a href="mailto:global@finmango.org?subject=Partnership%20Inquiry" class="opp-row">
-          <span class="opp-time">Custom</span>
-          <span class="opp-body">
-            <span class="opp-title">Partner with us</span>
-            <span class="opp-desc">Organizations, sponsors, and academic institutions — let's collaborate on systemic change.</span>
-          </span>
-          <svg class="opp-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
     </div>
   </section>
 
   <!-- ======================= PLEDGE ======================= -->
   <section class="pledge" id="pledge">
     <div class="pledge-container">
-      <div class="section-head">
-        <div class="pledge-head-row">
-          <span class="eyebrow">30 seconds · No money, no meetings</span>
-          <span class="pledge-live"><span class="hb-pulse"></span><span id="pledgeLive">Join the wall</span></span>
+
+      <div class="pledge-rail">
+        <div class="section-head">
+          <span class="eyebrow">30 seconds</span>
+          <h2>Take the <em>pledge.</em></h2>
+          <p class="section-sub">Financial stress isn't a personal failing — it's built by systems. Name the barrier that hits closest to home and put your first name on it.</p>
         </div>
-        <h2>Take the <em>pledge.</em></h2>
-        <p class="section-sub">Financial stress isn't a personal failing — it's built by systems. Pick the barrier that hits closest to home and put your first name on it. Your card joins the <a href="pledge-wall.html">Pledge Wall</a> alongside everyone else standing with you. Thirty seconds, no money, no meetings.</p>
+        <div class="pledge-rail-foot">
+          <span class="pledge-live"><span class="hb-pulse"></span><span id="pledgeLiveCount">Join the wall</span></span>
+          <a href="pledge-wall.html" class="pledge-wall-link">
+            See who's already standing
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
       </div>
 
-      <div class="pledge-body">
-        <div class="pledge-left">
-          <span class="pledge-col-label">01 · Pick the barrier you're standing against</span>
-          <div class="pledge-grid" id="pledgeLines" role="radiogroup" aria-label="The barrier you're standing against">
-            <label class="pledge-chip">
-              <input type="radio" name="pledgeBarrier" value="Housing">
-              <span class="pledge-chip-title">Housing</span>
-              <span class="pledge-chip-desc">Rent outpacing wages. Starter homes out of reach.</span>
-            </label>
-            <label class="pledge-chip">
-              <input type="radio" name="pledgeBarrier" value="Healthcare costs">
-              <span class="pledge-chip-title">Healthcare costs</span>
-              <span class="pledge-chip-desc">Medical debt that wrecks credit. Care skipped over price.</span>
-            </label>
-            <label class="pledge-chip">
-              <input type="radio" name="pledgeBarrier" value="Debt & credit">
-              <span class="pledge-chip-title">Debt &amp; credit</span>
-              <span class="pledge-chip-desc">Predatory lending. Minimum-payment traps.</span>
-            </label>
-            <label class="pledge-chip">
-              <input type="radio" name="pledgeBarrier" value="Food access">
-              <span class="pledge-chip-title">Food access</span>
-              <span class="pledge-chip-desc">Food deserts, grocery inflation, benefits that don't stretch.</span>
-            </label>
-            <label class="pledge-chip">
-              <input type="radio" name="pledgeBarrier" value="Work & income">
-              <span class="pledge-chip-title">Work &amp; income</span>
-              <span class="pledge-chip-desc">Wages that don't keep up. Gig work with no floor.</span>
-            </label>
-            <label class="pledge-chip">
-              <input type="radio" name="pledgeBarrier" value="Education">
-              <span class="pledge-chip-title">Education</span>
-              <span class="pledge-chip-desc">Student debt. Aid letters that hide the real cost.</span>
-            </label>
-            <label class="pledge-chip pledge-chip-wide">
-              <input type="radio" name="pledgeBarrier" value="Banking access">
-              <span class="pledge-chip-title">Banking access</span>
-              <span class="pledge-chip-desc">Accounts out of reach. Fees on money you already earned.</span>
-            </label>
-          </div>
+      <div class="pledge-card">
+        <div class="pledge-step"><b>01</b> Pick your barrier</div>
+        <div class="pledge-grid" id="pledgeLines" role="radiogroup" aria-label="The barrier you're standing against">
+          <label class="pledge-chip">
+            <input type="radio" name="pledgeBarrier" value="Housing">Housing
+          </label>
+          <label class="pledge-chip">
+            <input type="radio" name="pledgeBarrier" value="Healthcare costs">Healthcare costs
+          </label>
+          <label class="pledge-chip">
+            <input type="radio" name="pledgeBarrier" value="Debt &amp; credit">Debt &amp; credit
+          </label>
+          <label class="pledge-chip">
+            <input type="radio" name="pledgeBarrier" value="Food access">Food access
+          </label>
+          <label class="pledge-chip">
+            <input type="radio" name="pledgeBarrier" value="Work &amp; income">Work &amp; income
+          </label>
+          <label class="pledge-chip">
+            <input type="radio" name="pledgeBarrier" value="Education">Education
+          </label>
+          <label class="pledge-chip">
+            <input type="radio" name="pledgeBarrier" value="Banking access">Banking access
+          </label>
         </div>
 
-        <div class="pledge-right">
-          <span class="pledge-col-label">02 · Sign it</span>
+        <div class="pledge-step pledge-step-2"><b>02</b> Sign it</div>
 
-          <div class="pledge-prompt" id="pledgePrompt">
-            <span class="pledge-prompt-mark" aria-hidden="true">01 →</span>
-            <div>
-              <p>Pick a barrier and the signature form opens right here.</p>
-              <ul>
-                <li><strong>One required field</strong> — the community you're standing up for.</li>
-                <li>A first name, a note, and a photo if you want them on your card.</li>
-                <li>No money, no meetings, no email list.</li>
-              </ul>
+        <p class="pledge-prompt" id="pledgePrompt">Pick one above and the form opens right here — <strong>one required field</strong>, plus a name, a note and a photo if you want them on your card.</p>
+
+        <form id="pledgeForm" class="pledge-form" novalidate hidden>
+          <p class="pledge-standing" id="pledgeStanding" hidden>You're standing against <b id="pledgeStandingName"></b>.</p>
+          <div class="pledge-field-row">
+            <div class="pledge-field">
+              <label for="pledgeName">First name (optional)</label>
+              <input type="text" id="pledgeName" maxlength="80" placeholder="e.g. Sam" autocomplete="given-name">
+            </div>
+            <div class="pledge-field">
+              <label for="pledgeLocation">Your community</label>
+              <input type="text" id="pledgeLocation" maxlength="120" placeholder="e.g. Akron, Ohio or Nairobi, Kenya" required>
             </div>
           </div>
+          <div class="pledge-field">
+            <label for="pledgeWhy">Why this barrier? (optional)</label>
+            <textarea id="pledgeWhy" maxlength="400" rows="3" placeholder="A sentence or two — why it matters to you, or how you've seen it play out where you live."></textarea>
+            <span class="pledge-count" id="pledgeWhyCount" aria-hidden="true">0 / 400</span>
+          </div>
+          <div class="pledge-field">
+            <label for="pledgePhoto">Add a photo (optional)</label>
+            <div class="pledge-photo-row">
+              <label class="pledge-photo-btn" for="pledgePhoto">Choose a photo</label>
+              <input type="file" id="pledgePhoto" accept="image/*" style="position:absolute;opacity:0;width:1px;height:1px;">
+              <span class="pledge-photo-hint">You, your crew, your block — it goes on your wall card.</span>
+            </div>
+            <div class="pledge-photo-preview" id="pledgePhotoPreview" hidden>
+              <img id="pledgePhotoImg" alt="Your photo, ready to go">
+              <button type="button" class="pledge-photo-remove" id="pledgePhotoRemove">Remove</button>
+            </div>
+          </div>
+          <label class="pledge-consent">
+            <input type="checkbox" id="pledgeShowOnWall" checked>
+            <span class="pledge-check" aria-hidden="true"></span>
+            <span class="pledge-consent-text">Show my pledge on the public <a href="pledge-wall.html" target="_blank" rel="noopener">Pledge Wall</a> — first name, community, barrier, note &amp; photo, and let visitors share my card. Uncheck to be counted quietly instead.</span>
+          </label>
+          <!-- honeypot: humans never see or fill this -->
+          <input type="text" id="pledgeWebsite" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;height:1px;width:1px;" aria-hidden="true">
+          <button type="submit" class="btn-primary" id="pledgeSubmit">
+            Sign the pledge
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+          <p class="pledge-status" id="pledgeStatus" role="status" aria-live="polite"></p>
+          <p class="pledge-privacy">We record only what's on this form — no email list attached. Opted into the wall? A human reviews your card first. Opted out? We just count you.</p>
+        </form>
 
-          <form id="pledgeForm" class="pledge-form" novalidate hidden>
-            <div class="pledge-field-row">
-              <div class="pledge-field">
-                <label for="pledgeName">First name (optional)</label>
-                <input type="text" id="pledgeName" maxlength="80" placeholder="e.g. Sam" autocomplete="given-name">
-              </div>
-              <div class="pledge-field">
-                <label for="pledgeLocation">Your community</label>
-                <input type="text" id="pledgeLocation" maxlength="120" placeholder="e.g. Akron, Ohio or Nairobi, Kenya" required>
-              </div>
-            </div>
-            <div class="pledge-field">
-              <label for="pledgeWhy">Why this barrier? (optional)</label>
-              <textarea id="pledgeWhy" maxlength="400" rows="3" placeholder="A sentence or two — why it matters to you, or how you've seen it play out where you live."></textarea>
-              <span class="pledge-count" id="pledgeWhyCount" aria-hidden="true">0 / 400</span>
-            </div>
-            <div class="pledge-field">
-              <label for="pledgePhoto">Add a photo (optional)</label>
-              <div class="pledge-photo-row">
-                <label class="pledge-photo-btn" for="pledgePhoto">Choose a photo</label>
-                <input type="file" id="pledgePhoto" accept="image/*" style="position:absolute;opacity:0;width:1px;height:1px;">
-                <span class="pledge-photo-hint">You, your crew, your block — it goes on your wall card.</span>
-              </div>
-              <div class="pledge-photo-preview" id="pledgePhotoPreview" hidden>
-                <img id="pledgePhotoImg" alt="Your photo, ready to go">
-                <button type="button" class="pledge-photo-remove" id="pledgePhotoRemove">Remove</button>
-              </div>
-            </div>
-            <label class="pledge-consent">
-              <input type="checkbox" id="pledgeShowOnWall" checked>
-              <span class="pledge-check" aria-hidden="true"></span>
-              <span class="pledge-consent-text">Show my pledge on the public <a href="pledge-wall.html" target="_blank" rel="noopener">Pledge Wall</a> — first name, community, barrier, note &amp; photo, and let visitors share my card. Uncheck to be counted quietly instead.</span>
-            </label>
-            <!-- honeypot: humans never see or fill this -->
-            <input type="text" id="pledgeWebsite" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;height:1px;width:1px;" aria-hidden="true">
-            <button type="submit" class="btn-primary" id="pledgeSubmit">
-              Sign the pledge
+        <div class="pledge-done" id="pledgeDone" hidden>
+          <span class="pledge-done-kicker">✓ Pledge signed</span>
+          <h3>You're in.</h3>
+          <p id="pledgeDoneMsg">Your name is on the record — against a barrier, and against the idea that financial stress is a personal failing. Pass it on:</p>
+          <div class="pledge-done-actions">
+            <a class="btn-primary" href="https://twitter.com/intent/tweet?text=I%20just%20signed%20the%20FinMango%20pledge%20and%20named%20the%20systemic%20barrier%20I%27m%20standing%20against.%20Financial%20stress%20isn%27t%20a%20personal%20failing.%20It%20takes%2030%20seconds%3A&url=https%3A%2F%2Fwww.finmango.org%2Fget-involved.html%23pledge" target="_blank" rel="noopener noreferrer">
+              Share on X
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </button>
-            <p class="pledge-status" id="pledgeStatus" role="status" aria-live="polite"></p>
-            <p class="pledge-privacy">We record only what's on this form — no email list attached. Opted into the wall? A human reviews your card first. Opted out? We just count you.</p>
-          </form>
-
-          <div class="pledge-done" id="pledgeDone" hidden>
-            <span class="pledge-done-kicker">✓ Pledge signed</span>
-            <h3>You're in.</h3>
-            <p id="pledgeDoneMsg">Your name is on the record — against a barrier, and against the idea that financial stress is a personal failing. Pass it on:</p>
-            <div class="pledge-done-actions">
-              <a class="btn-primary" href="https://twitter.com/intent/tweet?text=I%20just%20signed%20the%20FinMango%20pledge%20and%20named%20the%20systemic%20barrier%20I%27m%20standing%20against.%20Financial%20stress%20isn%27t%20a%20personal%20failing.%20It%20takes%2030%20seconds%3A&url=https%3A%2F%2Fwww.finmango.org%2Fget-involved.html%23pledge" target="_blank" rel="noopener noreferrer">
-                Share on X
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-              <a class="btn-secondary" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fwww.finmango.org%2Fget-involved.html" target="_blank" rel="noopener noreferrer">Share on LinkedIn</a>
-            </div>
-            <p class="pledge-done-more" id="pledgeDoneWall">Opted into the wall? Your card appears on <a href="pledge-wall.html">the Pledge Wall</a> once a human reviews it — usually within a couple of days.</p>
-            <p class="pledge-again"><a href="#pledge" id="pledgeAgain">Signing for someone else on this device? Sign again</a></p>
+            </a>
+            <a class="btn-secondary" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fwww.finmango.org%2Fget-involved.html" target="_blank" rel="noopener noreferrer">Share on LinkedIn</a>
           </div>
+          <p class="pledge-done-more" id="pledgeDoneWall">Opted into the wall? Your card appears on <a href="pledge-wall.html">the Pledge Wall</a> once a human reviews it — usually within a couple of days.</p>
+          <p class="pledge-again"><a href="#pledge" id="pledgeAgain">Signing for someone else on this device? Sign again</a></p>
         </div>
       </div>
 
-      <div class="pledge-next">
-        <span class="pledge-next-label">Got more than 30 seconds?</span>
-        <span class="pledge-next-links">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer">Volunteer your skills <span class="ext">↗</span></a>
-          <a href="ambassadors.html">Become an ambassador</a>
-          <a href="mailto:global@finmango.org?subject=Partnership%20Inquiry">Partner with us</a>
-        </span>
-      </div>
     </div>
   </section>
 
@@ -1784,21 +1599,56 @@
     </div>
   </section>
 
-  <!-- ======================= CTA (ink moment) ======================= -->
-  <section class="cta on-ink">
-    <div class="cta-container">
-      <span class="eyebrow">Start now</span>
-      <h2>Ready to <em>get&nbsp;involved?</em></h2>
-      <div class="cta-bottom">
-        <p class="cta-subtitle">Every contribution — big or small — moves us closer to a world where financial health is a right.</p>
-        <div class="cta-actions">
-          <a href="donate.html" class="btn-primary">
-            Donate
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="ambassadors.html" class="btn-secondary">Become an ambassador</a>
+  <!-- ======================= WAYS IN (ink moment) ======================= -->
+  <section class="ways on-ink" id="ways">
+    <div class="ways-container">
+      <div class="ways-head">
+        <div>
+          <span class="eyebrow">More than 30 seconds?</span>
+          <h2>Go <em>deeper.</em></h2>
         </div>
+        <p>Four ways to put real weight behind it. Pick the one that fits the time you have.</p>
       </div>
+
+      <div class="ways-grid">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/viewform" target="_blank" rel="noopener noreferrer" class="way">
+          <span>
+            <span class="way-cost">2–5 hrs / week</span>
+            <span class="way-title">Volunteer your skills <span class="way-ext">↗</span></span>
+            <span class="way-desc">Design, research, writing, data, outreach. Remote and flexible.</span>
+          </span>
+          <svg class="way-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        <a href="ambassadors.html" class="way">
+          <span>
+            <span class="way-cost">A semester</span>
+            <span class="way-title">Become an ambassador</span>
+            <span class="way-desc">Lead the work on your campus, backed by training, a global cohort, and our research.</span>
+          </span>
+          <svg class="way-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        <a href="mailto:global@finmango.org?subject=Partnership%20Inquiry" class="way">
+          <span>
+            <span class="way-cost">Let's talk</span>
+            <span class="way-title">Partner with us</span>
+            <span class="way-desc">Organizations, sponsors, and universities — let's build systemic change together.</span>
+          </span>
+          <svg class="way-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+
+        <a href="donate.html" class="way way-donate">
+          <span>
+            <span class="way-cost">Any amount</span>
+            <span class="way-title">Donate</span>
+            <span class="way-desc">Fund the research, the programs, and the tools — all of it stays free to use.</span>
+          </span>
+          <svg class="way-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <p class="ways-foot">Not ready for any of that? Follow along on <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">X</a> or read the <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">blog</a> — and pass this page to someone who needs it.</p>
     </div>
   </section>
 
@@ -1854,8 +1704,16 @@
 
       // the form stays folded away until a barrier is picked — keeps the
       // pledge to one screen so the deeper rungs stay in view
+      const standing = document.getElementById('pledgeStanding');
+      const standingName = document.getElementById('pledgeStandingName');
       const openForm = () => {
         if (!done.hidden) return; // already signed on this device
+        // name the pick back to them where the chip descriptions used to be
+        const picked = lines.querySelector('input:checked');
+        if (picked) {
+          standingName.textContent = picked.value.toLowerCase();
+          standing.hidden = false;
+        }
         prompt.hidden = true;
         form.hidden = false;
       };
@@ -1889,6 +1747,7 @@
         if (d && d.result === 'success') {
           const n = (d.pledges || []).length + 8;
           document.getElementById('pledgeLive').textContent = n + ' standing so far';
+          document.getElementById('pledgeLiveCount').textContent = n + ' standing so far';
         }
       }).catch(() => {});
 
@@ -1998,10 +1857,11 @@
         clearPhoto();
         document.getElementById('pledgeWhyCount').textContent = '0 / 400';
         setStatus('');
+        standing.hidden = true;
         done.hidden = true;
         // the radios live outside the form, so a barrier is still picked
         if (lines.querySelector('input:checked')) {
-          form.hidden = false;
+          openForm();
           document.getElementById('pledgeName').focus();
         } else {
           prompt.hidden = false;
