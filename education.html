@@ -925,6 +925,83 @@
     .proof-number strong em { font-style: normal; color: var(--orange); font-size: .55em; vertical-align: .4em; }
     .proof-number span { font-size: .9rem; font-weight: 300; color: var(--paper-dim); line-height: 1.5; }
 
+    /* The wall itself — the reviews, on the page, instead of a link to them.
+       Columns rather than grid so cards of wildly different lengths pack
+       tight without leaving ragged holes. */
+    .reviews { max-width: var(--max-width); margin: 4.5rem auto 0; }
+    .reviews-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1.25rem 2rem;
+      flex-wrap: wrap;
+      padding-bottom: 1.1rem;
+      border-bottom: 1px solid var(--paper-line);
+    }
+    .reviews-head h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+    }
+    .reviews-note {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      /* --paper-dim, not --paper-faint: faint lands at 3.7:1 on this band,
+         under the 4.5:1 floor for text this size. */
+      color: var(--paper-dim);
+    }
+    .reviews-wall { columns: 3; column-gap: 1.25rem; margin-top: 1.75rem; }
+    .review {
+      break-inside: avoid;
+      margin-bottom: 1.25rem;
+      padding: 1.35rem 1.4rem;
+      border: 1px solid var(--paper-line);
+      background: rgba(250, 250, 247, .03);
+    }
+    .review p {
+      font-size: .95rem;
+      font-weight: 300;
+      line-height: 1.6;
+      color: var(--paper);
+      max-width: none;
+    }
+    .review-meta {
+      display: block;
+      margin-top: .85rem;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--paper-dim);
+    }
+    .reviews-actions { display: flex; gap: .9rem; flex-wrap: wrap; margin-top: .5rem; }
+    .reviews-more {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--paper);
+      background: none;
+      border: 1px solid var(--paper-line);
+      padding: .8rem 1.4rem;
+      cursor: pointer;
+      transition: border-color .18s ease, background .18s ease;
+    }
+    .reviews-more:hover { border-color: var(--orange); background: rgba(255, 107, 53, .1); }
+    .reviews-more:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+    .reviews-end {
+      font-size: .9rem;
+      font-weight: 300;
+      color: var(--paper-dim);
+      align-self: center;
+      max-width: none;
+    }
+    .reviews-end a { color: var(--paper); text-decoration: underline; text-underline-offset: 3px; }
+    .reviews-end a:hover { color: var(--orange); }
+    .reviews-end:focus-visible { outline: 2px solid var(--orange); outline-offset: 4px; }
+
     /* ----------------------------------------------------------
        LIBRARY — the free stuff, all in one place
        ---------------------------------------------------------- */
@@ -1593,6 +1670,7 @@
       .hero-split { gap: 2.5rem; }
       .kit { grid-template-columns: 1fr; gap: 2rem; padding: 2.5rem 2rem 2.25rem; }
       .proof-container { grid-template-columns: 1fr; gap: 2.5rem; }
+      .reviews-wall { columns: 2; }
     }
 
     @media (max-width: 968px) {
@@ -1682,6 +1760,8 @@
     @media (max-width: 560px) {
       /* CTAs: full-width stack instead of ragged wrap */
       .hero-cta-row, .cta-actions, .proof-actions, .shelf-foot, .resource-links { flex-direction: column; }
+      .reviews-wall { columns: 1; }
+      .reviews-more { width: 100%; }
       .hero-cta-row .btn-primary, .hero-cta-row .btn-secondary,
       .cta-actions .btn-primary, .cta-actions .btn-secondary,
       .proof-actions .btn-primary, .proof-actions .btn-secondary,
@@ -1911,7 +1991,9 @@
               Just took the class? Take the survey
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
-            <a href="https://docs.google.com/spreadsheets/d/1s6Cme1fAsFG-XFtyo9c1MSoLzafpK9MmASopbEvPBMA/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-secondary">Read 16,000+ student reviews</a>
+            <!-- Points at the raw sheet by default so it still works with no JS;
+                 rewritten to jump to the on-page wall once that wall renders. -->
+            <a id="heroReviewsLink" href="https://docs.google.com/spreadsheets/d/1s6Cme1fAsFG-XFtyo9c1MSoLzafpK9MmASopbEvPBMA/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-secondary">Read <span data-review-stat="total">16,000+</span> student reviews</a>
           </div>
         </div>
 
@@ -2096,8 +2178,10 @@
       <div class="proof-container">
         <div>
           <span class="eyebrow">The receipts</span>
-          <h2>16,000 reviews. <em>Not one of them edited.</em></h2>
-          <p>After every program, students review it anonymously. We publish every response exactly as written — the raves, the shrugs, and the criticism. The whole spreadsheet is public.</p>
+          <!-- Static text is the conservative no-JS view; data/reviews.js
+               replaces every [data-review-stat] with the exact live figure. -->
+          <h2><span data-review-stat="total">16,000+</span> reviews. <em>Not one of them edited.</em></h2>
+          <p>After every program, students review it anonymously. We publish every response exactly as written — the raves, the shrugs, and the criticism. Here are some of them, and the whole spreadsheet is public.</p>
           <div class="proof-actions">
             <a href="https://docs.google.com/spreadsheets/d/1s6Cme1fAsFG-XFtyo9c1MSoLzafpK9MmASopbEvPBMA/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-primary">
               Read every review
@@ -2107,19 +2191,41 @@
           </div>
         </div>
 
+        <!-- Numbers come from data/reviews.js, computed across every response
+             in the sheet. The markup below is the no-JS / pre-hydration view;
+             the figures are refreshed in place on load so they can never drift
+             from the spreadsheet the buttons above link to. -->
         <div class="proof-numbers">
           <div class="proof-number">
-            <strong>100K<em>+</em></strong>
-            <span>students taught in classrooms to date</span>
+            <strong data-review-stat="total">16,000+</strong>
+            <span>reviews collected since <span data-review-stat="firstYear">2021</span> — every one published unedited</span>
           </div>
           <div class="proof-number">
-            <strong>30<em>+</em></strong>
-            <span>schools reached across Ohio and beyond, every year</span>
+            <strong data-review-stat="roth">84<em>%</em></strong>
+            <span>leave the week saying they plan to open a Roth&nbsp;IRA</span>
           </div>
           <div class="proof-number">
-            <strong>100<em>%</em></strong>
-            <span>of reviews published unedited — straight from students</span>
+            <strong data-review-stat="score">4.3</strong>
+            <span>average across the survey's three measures, out of 5</span>
           </div>
+        </div>
+      </div>
+
+      <!-- ---------------- The wall: actual reviews, on the page ---------------- -->
+      <div class="reviews" id="reviews" hidden>
+        <div class="reviews-head">
+          <h3>Straight from the survey.</h3>
+          <span class="reviews-note" data-review-stat="sampleNote">A random sample, unedited</span>
+        </div>
+        <div class="reviews-wall" id="reviewsWall"></div>
+        <div class="reviews-actions">
+          <button type="button" class="reviews-more" id="reviewsMore">Show more reviews</button>
+          <!-- End state, revealed once the sample runs out: hiding the button
+               on its own drops keyboard focus, and a reader who got this far is
+               exactly the one who wants the unabridged sheet. -->
+          <p class="reviews-end" id="reviewsEnd" tabindex="-1" hidden>
+            That's the whole sample. <a href="https://docs.google.com/spreadsheets/d/1s6Cme1fAsFG-XFtyo9c1MSoLzafpK9MmASopbEvPBMA/edit?usp=sharing" target="_blank" rel="noopener noreferrer">Read every response in the spreadsheet ↗</a>
+          </p>
         </div>
       </div>
     </div>
@@ -2898,6 +3004,102 @@
         .catch(function () { return fetchTable(''); })
         .then(function (table) { show(tableToPosts(table), null); })
         .catch(function (err) { console.warn('Bob Notes: could not load the sheet —', err); });
+    })();
+  </script>
+
+  <!-- ======================= STUDENT REVIEW WALL ======================= -->
+  <script src="data/reviews.js"></script>
+  <script>
+    /* The receipts band claimed 16,000 unedited reviews and showed none of
+       them. This paints the real ones from the snapshot in data/reviews.js
+       (regenerated daily by scripts/snapshot-reviews.js).
+
+       The snapshot is sampled without regard to sentiment, and this renders it
+       in that order — no re-sorting by length, no filtering for the flattering
+       ones. If the file is missing or empty the section simply stays hidden and
+       the band reads as it did before, with its two links out to the sheet. */
+    (function () {
+      var snap = window.__REVIEWS_SNAPSHOT;
+      if (!snap || !snap.rows || !snap.rows.length) return;
+
+      var section = document.getElementById('reviews');
+      var wall = document.getElementById('reviewsWall');
+      var more = document.getElementById('reviewsMore');
+      var end$ = document.getElementById('reviewsEnd');
+      if (!section || !wall || !more) return;
+
+      var rows = snap.rows;
+      var stats = snap.stats || {};
+      var BATCH = 9;
+      var shown = 0;
+
+      function setStat(key, text) {
+        var nodes = document.querySelectorAll('[data-review-stat="' + key + '"]');
+        for (var i = 0; i < nodes.length; i++) {
+          // Keep the trailing <em>%</em> the markup ships with — only the
+          // number itself is replaced.
+          var em = nodes[i].querySelector('em');
+          nodes[i].textContent = text;
+          if (em) nodes[i].appendChild(em);
+        }
+      }
+
+      if (typeof stats.total === 'number') setStat('total', stats.total.toLocaleString('en-US'));
+      if (stats.firstYear) setStat('firstYear', String(stats.firstYear));
+      if (typeof stats.rothYesPct === 'number') setStat('roth', String(stats.rothYesPct));
+      if (typeof stats.scoreMean === 'number') setStat('score', stats.scoreMean.toFixed(1));
+      if (typeof stats.total === 'number' && rows.length) {
+        setStat('sampleNote', rows.length + ' of ' + stats.total.toLocaleString('en-US') + ' · unedited · not sorted by rating');
+      }
+
+      function render(n) {
+        var frag = document.createDocumentFragment();
+        var end = Math.min(shown + n, rows.length);
+        for (var i = shown; i < end; i++) {
+          var r = rows[i];
+          var card = document.createElement('article');
+          card.className = 'review';
+
+          var p = document.createElement('p');
+          p.textContent = '“' + r.c + '”';
+          card.appendChild(p);
+
+          var meta = document.createElement('span');
+          meta.className = 'review-meta';
+          meta.textContent = (r.k || 'Student') + (r.y ? ' · ' + r.y : '');
+          card.appendChild(meta);
+
+          frag.appendChild(card);
+        }
+        wall.appendChild(frag);
+        shown = end;
+
+        if (shown >= rows.length) {
+          var hadFocus = document.activeElement === more;
+          more.hidden = true;
+          if (end$) {
+            end$.hidden = false;
+            // Only chase focus if the button the reader just pressed is the
+            // thing that vanished — never yank it during the first paint.
+            if (hadFocus) end$.focus();
+          }
+        } else {
+          more.textContent = 'Show more reviews (' + (rows.length - shown) + ' more)';
+        }
+      }
+
+      section.hidden = false;
+      render(BATCH);
+      more.addEventListener('click', function () { render(BATCH); });
+
+      // The wall exists now, so the hero's review button should land on it
+      // rather than bouncing the reader out to the raw spreadsheet.
+      var heroLink = document.getElementById('heroReviewsLink');
+      if (heroLink) {
+        heroLink.setAttribute('href', '#reviews');
+        heroLink.removeAttribute('target');
+        heroLink.removeAttribute('rel');
+      }
     })();
   </script>
 
