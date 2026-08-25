@@ -641,12 +641,19 @@
       margin-bottom: 3.5rem;
     }
     .barometer-head-left { display: flex; flex-direction: column; gap: 1.5rem; }
+    /* "The crisis isn't coming. It's here." reads as one sentence, so it gets
+       one line. The old max-width: 16ch broke it mid-sentence at every desktop
+       width even though the column had room. The headline sits in the 1fr
+       column of .barometer-head, which is (viewport - 384px) wide until the
+       container caps out, and the sentence needs ~12.95x its own font-size to
+       set on one line — so size it off that column and it fits from the 968px
+       breakpoint up, reaching the full 4rem at ~1245px and holding there. */
     .barometer-headline {
-      font-size: clamp(2.2rem, 5vw, 4rem);
+      font-size: clamp(2.2rem, calc((100vw - 400px) / 13.2), 4rem);
       font-weight: 900;
       line-height: 1.02;
       letter-spacing: -.04em;
-      max-width: 16ch;
+      max-width: none;
     }
     .barometer-headline em { font-style: normal; color: var(--orange); }
     .barometer-subline {
