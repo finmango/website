@@ -5,9 +5,12 @@
   <meta name="robots" content="noindex">
   <title>Ambassador collage — every cohort, 2023 to now</title>
   <!--
-    Source for ambassador-collage.jpg (poster, one row per cohort) and
-    ambassador-collage-square.png (1080x1080 social mosaic).
+    Source for the ambassador mosaics:
+      ambassador-collage-square.jpg  2160x2160, faces only
+      ambassador-collage-story.jpg   1080x1920 (9:16), faces only
     Render both with: node scripts/render-ambassador-collage.js
+    #poster is an optional named-and-captioned variant:
+      node scripts/render-ambassador-collage.js poster
     Fonts are bundled in scripts/fonts/, so no network access is needed.
     Roster mirrors the cohort sections in ambassadors.html — update both together.
   -->
@@ -184,44 +187,29 @@
       color: var(--ink-faint);
     }
 
-    /* ==================== SQUARE (1080x1080) ==================== */
-    #square {
+    /* ==================== MOSAICS (no type, faces only) ====================
+       45 photographs, edge to edge, chronological so the founding cohort
+       leads. --gap is the only seam; set it to 0 for a seamless block. */
+    .mosaic { --gap: 3px; background: var(--paper); display: flex; flex-direction: column; gap: var(--gap); }
+    .mosaic .tile { border: 0; flex: 1 1 0; min-width: 0; }
+    .mosaic .row { display: flex; gap: var(--gap); }
+    /* Headshots sit slightly above centre, so bias the crop upward. */
+    .mosaic .tile img { object-position: center 40%; }
+
+    /* 45 splits into six full-bleed rows of 7 and 8 — the alternation keeps
+       a square canvas from reading as a rigid grid. */
+    #square { width: 1080px; height: 1080px; }
+    #square .row { flex: 1 1 0; min-height: 0; }
+
+    /* At 9:16, five columns by nine rows lands 45 exactly, on square tiles. */
+    #story {
       width: 1080px;
-      height: 1080px;
-      background: var(--paper);
-      display: flex;
-      flex-direction: column;
-    }
-    .sq-head { height: 330px; padding: 56px 64px 0; display: flex; flex-direction: column; }
-    .sq-head .eyebrow { font-size: 13px; }
-    .sq-title {
-      font-size: 66px;
-      font-weight: 900;
-      line-height: .94;
-      letter-spacing: -.045em;
-      margin-top: 22px;
-    }
-    .sq-title em { font-style: italic; font-weight: 500; color: var(--orange); }
-    .sq-meta {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: var(--ink-faint);
-      margin-top: auto;
-      padding-bottom: 24px;
-      display: flex;
-      justify-content: space-between;
-    }
-    /* 45 ambassadors land exactly in a 9x5 mosaic at 120x150 per tile. */
-    .sq-grid {
+      height: 1920px;
       display: grid;
-      grid-template-columns: repeat(9, 120px);
-      grid-template-rows: repeat(5, 150px);
-      height: 750px;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(9, 1fr);
     }
-    .sq-grid .tile { width: 120px; height: 150px; border: 0; outline: .5px solid rgba(250, 250, 247, .35); outline-offset: -.5px; }
+
   </style>
 </head>
 <body>
@@ -245,17 +233,9 @@
     </div>
   </div>
 
-  <div id="square">
-    <div class="sq-head">
-      <div class="eyebrow">FinMango Ambassadors</div>
-      <div class="sq-title">45 ambassadors.<br>4 cohorts.<br><em>16 countries.</em></div>
-      <div class="sq-meta">
-        <span>2023 &rarr; 2026</span>
-        <span>finmango.org/ambassadors</span>
-      </div>
-    </div>
-    <div class="sq-grid" id="squareGrid"></div>
-  </div>
+  <div id="square" class="mosaic"></div>
+
+  <div id="story" class="mosaic"></div>
 
   <script>
   // Roster mirrors the cohort sections in ambassadors.html, newest first.
@@ -352,9 +332,23 @@
       </section>`;
   }).join('');
 
-  // Square: one 9x5 mosaic, oldest cohort first so it reads as growth.
-  document.getElementById('squareGrid').innerHTML =
-    [...AMBASSADORS].reverse().map(a => tile(a, false)).join('');
+  // Both mosaics run oldest cohort first, so they read as growth.
+  const CHRONOLOGICAL = [...AMBASSADORS].reverse();
+
+  // Rows of 7 and 8, alternating, sum to 45 across six full-bleed rows.
+  const SQUARE_ROWS = [7, 8, 7, 8, 7, 8];
+  let cursor = 0;
+  document.getElementById('square').innerHTML = SQUARE_ROWS.map(n => {
+    const row = CHRONOLOGICAL.slice(cursor, cursor + n);
+    cursor += n;
+    return `<div class="row">${row.map(a => tile(a, false)).join('')}</div>`;
+  }).join('');
+  if (cursor !== CHRONOLOGICAL.length) {
+    throw new Error(`SQUARE_ROWS covers ${cursor} of ${CHRONOLOGICAL.length} ambassadors`);
+  }
+
+  document.getElementById('story').innerHTML =
+    CHRONOLOGICAL.map(a => tile(a, false)).join('');
   </script>
 </body>
 </html>

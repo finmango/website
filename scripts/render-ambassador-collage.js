@@ -1,8 +1,9 @@
 // Renders the ambassador collage from scripts/ambassador-collage-template.html.
 //
 // Two outputs, both captured as elements so their height follows the layout:
-//   ambassador-collage.jpg         poster, 2800px wide, one row per cohort
-//   ambassador-collage-square.png  1080x1080 social mosaic, faces only
+//   ambassador-collage-square.jpg  2160x2160 mosaic, faces only
+//   ambassador-collage-story.jpg   1080x1920 (9:16) mosaic, faces only
+// Plus an optional captioned poster, rendered only when asked for by name.
 //
 // Fonts and photos are local, so no network access is needed.
 //
@@ -18,21 +19,24 @@ catch { puppeteer = require('puppeteer-core'); }
 const TEMPLATE = path.resolve(__dirname, 'ambassador-collage-template.html');
 const ROOT = path.resolve(__dirname, '..');
 
+// All three are photographic edge to edge, so JPEG over PNG throughout.
+// 2x on the square gives a 2160px master; the story renders at its native
+// 1080x1920, and 2x there would only exceed what a story ever displays.
 const TARGETS = {
-  // 45 photographs compress far better as JPEG than PNG; 1.5x keeps the
-  // 13px names crisp without pushing the file into the megabytes.
+  square: { selector: '#square', output: 'ambassador-collage-square.jpg', scale: 2, type: 'jpeg', quality: 92 },
+  story: { selector: '#story', output: 'ambassador-collage-story.jpg', scale: 1, type: 'jpeg', quality: 92 },
   poster: { selector: '#poster', output: 'ambassador-collage.jpg', scale: 1.5, type: 'jpeg', quality: 92 },
-  // The square is mostly flat cream behind large type, where PNG is both
-  // smaller and cleaner, and it is already at its final social pixel size.
-  square: { selector: '#square', output: 'ambassador-collage-square.png', scale: 1, type: 'png' },
 };
+
+// The captioned poster is opt-in; a bare run makes the two mosaics.
+const DEFAULT_TARGETS = ['square', 'story'];
 
 const which = process.argv[2];
 if (which && !TARGETS[which]) {
   console.error(`Unknown target "${which}". Known: ${Object.keys(TARGETS).join(', ')}.`);
   process.exit(1);
 }
-const targets = which ? [which] : Object.keys(TARGETS);
+const targets = which ? [which] : DEFAULT_TARGETS;
 
 function findChrome() {
   const candidates = [
