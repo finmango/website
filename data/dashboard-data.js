@@ -1,16 +1,16 @@
 // Financial Health Barometer Data
-// Auto-generated: 2026-08-25T05:15:15.110Z
+// Auto-generated: 2026-08-26T05:14:45.507Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
-  "as_of": "2026-08-25",
+  "as_of": "2026-08-26",
   "meta": {
-    "generated": "2026-08-25T05:15:15.070Z",
+    "generated": "2026-08-26T05:14:45.469Z",
     "version": "2.4",
     "source": "BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs",
     "update_frequency": "daily",
     "data_sources": {
-      "unemployment": "BLS LAUS (carried forward from 2026-08-24 — BLS unavailable)",
+      "unemployment": "BLS LAUS (carried forward from 2026-08-25 — BLS unavailable)",
       "housing_prices": "FRED HPI",
       "poverty": "Census SAIPE",
       "rent_burden": "Census ACS B25071",
@@ -19,7 +19,7 @@ const DASHBOARD_DATA = {
       "jchs_calibration": "Harvard JCHS State of the Nation's Housing 2025",
       "trends": "Google Trends"
     },
-    "augmented_at": "2026-08-25T05:15:15.110Z"
+    "augmented_at": "2026-08-26T05:14:45.506Z"
   },
   "national": {
     "financial_anxiety": {
@@ -33,12 +33,12 @@ const DASHBOARD_DATA = {
       "trend": "up"
     },
     "housing_stress": {
-      "value": 156.5,
-      "change": 15.8,
+      "value": 152.5,
+      "change": 13.8,
       "trend": "up"
     },
     "affordability": {
-      "value": 135.2,
+      "value": 132.8,
       "change": 0,
       "trend": "up"
     }
@@ -59,8 +59,8 @@ const DASHBOARD_DATA = {
       },
       "housing_stress": {
         "value": 167,
-        "change": 14.1,
-        "rank": 13
+        "change": 14,
+        "rank": 12
       },
       "affordability": {
         "value": 158,
@@ -74,7 +74,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 980,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 14.101454476367401,
+        "housing_price_change": 13.970848148379181,
         "regional_stress_multiplier": 1.25,
         "jchs_renters_cost_burdened": 47.7,
         "jchs_renters_severely_burdened": 25,
@@ -107,14 +107,14 @@ const DASHBOARD_DATA = {
         "rank": 29
       },
       "housing_stress": {
-        "value": 155,
-        "change": 17,
-        "rank": 27
+        "value": 149,
+        "change": 14.2,
+        "rank": 30
       },
       "affordability": {
-        "value": 131,
+        "value": 127,
         "change": 0,
-        "rank": 27
+        "rank": 30
       },
       "metrics": {
         "unemployment_rate": 4.4,
@@ -123,7 +123,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1350,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 17.03766718654,
+        "housing_price_change": 14.1546920482373,
         "regional_stress_multiplier": 1.08,
         "jchs_renters_cost_burdened": 41.9,
         "jchs_renters_severely_burdened": 18.4,
@@ -156,12 +156,12 @@ const DASHBOARD_DATA = {
         "rank": 21
       },
       "housing_stress": {
-        "value": 160,
-        "change": 10.4,
+        "value": 156,
+        "change": 8.2,
         "rank": 19
       },
       "affordability": {
-        "value": 138,
+        "value": 136,
         "change": 0,
         "rank": 23
       },
@@ -172,7 +172,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1390,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 10.376918797828994,
+        "housing_price_change": 8.215184253366877,
         "regional_stress_multiplier": 1.1,
         "jchs_renters_cost_burdened": 50.9,
         "jchs_renters_severely_burdened": 24.2,
@@ -205,14 +205,14 @@ const DASHBOARD_DATA = {
         "rank": 6
       },
       "housing_stress": {
-        "value": 156,
-        "change": 15.3,
-        "rank": 25
+        "value": 150,
+        "change": 12.7,
+        "rank": 29
       },
       "affordability": {
-        "value": 150,
+        "value": 147,
         "change": 0,
-        "rank": 13
+        "rank": 14
       },
       "metrics": {
         "unemployment_rate": 4.1,
@@ -221,7 +221,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 850,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 15.292133477894222,
+        "housing_price_change": 12.67016199186515,
         "regional_stress_multiplier": 1.22,
         "jchs_renters_cost_burdened": 46.4,
         "jchs_renters_severely_burdened": 24,
@@ -254,14 +254,14 @@ const DASHBOARD_DATA = {
         "rank": 18
       },
       "housing_stress": {
-        "value": 187,
-        "change": 10.4,
-        "rank": 4
+        "value": 181,
+        "change": 7.7,
+        "rank": 6
       },
       "affordability": {
-        "value": 155,
+        "value": 151,
         "change": 0,
-        "rank": 8
+        "rank": 10
       },
       "metrics": {
         "unemployment_rate": 5.2,
@@ -270,7 +270,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1850,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 10.410426251003166,
+        "housing_price_change": 7.6767609833675685,
         "regional_stress_multiplier": 1.12,
         "jchs_renters_cost_burdened": 55.8,
         "jchs_renters_severely_burdened": 28.7,
@@ -303,12 +303,12 @@ const DASHBOARD_DATA = {
         "rank": 39
       },
       "housing_stress": {
-        "value": 149,
-        "change": 6.2,
-        "rank": 35
+        "value": 143,
+        "change": 3.4,
+        "rank": 34
       },
       "affordability": {
-        "value": 123,
+        "value": 119,
         "change": 0,
         "rank": 39
       },
@@ -319,7 +319,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1650,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 6.157341875884679,
+        "housing_price_change": 3.4006762570746503,
         "regional_stress_multiplier": 1.02,
         "jchs_renters_cost_burdened": 51.5,
         "jchs_renters_severely_burdened": 24,
@@ -352,12 +352,12 @@ const DASHBOARD_DATA = {
         "rank": 33
       },
       "housing_stress": {
-        "value": 186,
-        "change": 27,
-        "rank": 6
+        "value": 179,
+        "change": 23.6,
+        "rank": 8
       },
       "affordability": {
-        "value": 146,
+        "value": 142,
         "change": 0,
         "rank": 16
       },
@@ -368,7 +368,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1400,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 27.01030927835051,
+        "housing_price_change": 23.62775707523416,
         "regional_stress_multiplier": 1.02,
         "jchs_renters_cost_burdened": 50.5,
         "jchs_renters_severely_burdened": 27.3,
@@ -401,14 +401,14 @@ const DASHBOARD_DATA = {
         "rank": 36
       },
       "housing_stress": {
-        "value": 152,
-        "change": 17,
-        "rank": 32
+        "value": 151,
+        "change": 16.6,
+        "rank": 25
       },
       "affordability": {
-        "value": 126,
+        "value": 125,
         "change": 0,
-        "rank": 36
+        "rank": 32
       },
       "metrics": {
         "unemployment_rate": 4.9,
@@ -417,7 +417,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1275,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 17.00374305723257,
+        "housing_price_change": 16.62293908947258,
         "regional_stress_multiplier": 1,
         "jchs_renters_cost_burdened": 49.7,
         "jchs_renters_severely_burdened": 24.8,
@@ -450,14 +450,14 @@ const DASHBOARD_DATA = {
         "rank": 4
       },
       "housing_stress": {
-        "value": 159,
-        "change": 2.3,
-        "rank": 21
+        "value": 156,
+        "change": 0.9,
+        "rank": 20
       },
       "affordability": {
-        "value": 154,
+        "value": 152,
         "change": 0,
-        "rank": 10
+        "rank": 8
       },
       "metrics": {
         "unemployment_rate": 6,
@@ -466,7 +466,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1750,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 2.33419606862113,
+        "housing_price_change": 0.8856612321482514,
         "regional_stress_multiplier": 1.18,
         "jchs_renters_cost_burdened": 46.2,
         "jchs_renters_severely_burdened": 21.5,
@@ -499,12 +499,12 @@ const DASHBOARD_DATA = {
         "rank": 14
       },
       "housing_stress": {
-        "value": 187,
-        "change": 8.9,
-        "rank": 5
+        "value": 182,
+        "change": 6.6,
+        "rank": 4
       },
       "affordability": {
-        "value": 157,
+        "value": 154,
         "change": 0,
         "rank": 7
       },
@@ -515,7 +515,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1550,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 8.898622785209737,
+        "housing_price_change": 6.610716591349264,
         "regional_stress_multiplier": 1.15,
         "jchs_renters_cost_burdened": 57.2,
         "jchs_renters_severely_burdened": 29.6,
@@ -548,12 +548,12 @@ const DASHBOARD_DATA = {
         "rank": 15
       },
       "housing_stress": {
-        "value": 165,
-        "change": 13.8,
-        "rank": 16
+        "value": 159,
+        "change": 10.9,
+        "rank": 17
       },
       "affordability": {
-        "value": 144,
+        "value": 140,
         "change": 0,
         "rank": 18
       },
@@ -564,7 +564,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1275,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 13.82695250047275,
+        "housing_price_change": 10.895599886102888,
         "regional_stress_multiplier": 1.1,
         "jchs_renters_cost_burdened": 51.6,
         "jchs_renters_severely_burdened": 25.8,
@@ -598,7 +598,7 @@ const DASHBOARD_DATA = {
       },
       "housing_stress": {
         "value": 200,
-        "change": 10.9,
+        "change": 10.6,
         "rank": 1
       },
       "affordability": {
@@ -613,7 +613,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1950,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 10.855570069042722,
+        "housing_price_change": 10.56137547681471,
         "regional_stress_multiplier": 1.2,
         "jchs_renters_cost_burdened": 56.5,
         "jchs_renters_severely_burdened": 29.5,
@@ -646,14 +646,14 @@ const DASHBOARD_DATA = {
         "rank": 30
       },
       "housing_stress": {
-        "value": 141,
-        "change": 10.6,
-        "rank": 43
+        "value": 143,
+        "change": 11.5,
+        "rank": 35
       },
       "affordability": {
-        "value": 121,
+        "value": 123,
         "change": 0,
-        "rank": 40
+        "rank": 36
       },
       "metrics": {
         "unemployment_rate": 3.7,
@@ -662,7 +662,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1200,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 10.561285831804094,
+        "housing_price_change": 11.49636889949724,
         "regional_stress_multiplier": 1.05,
         "jchs_renters_cost_burdened": 47.8,
         "jchs_renters_severely_burdened": 21.5,
@@ -695,14 +695,14 @@ const DASHBOARD_DATA = {
         "rank": 26
       },
       "housing_stress": {
-        "value": 166,
-        "change": 23.1,
+        "value": 164,
+        "change": 21.8,
         "rank": 14
       },
       "affordability": {
-        "value": 139,
+        "value": 138,
         "change": 0,
-        "rank": 22
+        "rank": 20
       },
       "metrics": {
         "unemployment_rate": 5.1,
@@ -711,7 +711,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1175,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 23.083796885820888,
+        "housing_price_change": 21.75531457096136,
         "regional_stress_multiplier": 1.05,
         "jchs_renters_cost_burdened": 50.2,
         "jchs_renters_severely_burdened": 25,
@@ -744,14 +744,14 @@ const DASHBOARD_DATA = {
         "rank": 24
       },
       "housing_stress": {
-        "value": 150,
-        "change": 19.2,
-        "rank": 34
+        "value": 143,
+        "change": 16.2,
+        "rank": 36
       },
       "affordability": {
-        "value": 131,
+        "value": 127,
         "change": 0,
-        "rank": 28
+        "rank": 31
       },
       "metrics": {
         "unemployment_rate": 3.3,
@@ -760,7 +760,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 975,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 19.17558693892238,
+        "housing_price_change": 16.226537216828486,
         "regional_stress_multiplier": 1.04,
         "jchs_renters_cost_burdened": 47.3,
         "jchs_renters_severely_burdened": 23.2,
@@ -793,12 +793,12 @@ const DASHBOARD_DATA = {
         "rank": 37
       },
       "housing_stress": {
-        "value": 115,
-        "change": 14.8,
+        "value": 112,
+        "change": 13.1,
         "rank": 49
       },
       "affordability": {
-        "value": 103,
+        "value": 101,
         "change": 0,
         "rank": 49
       },
@@ -809,7 +809,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 875,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 14.794676994885556,
+        "housing_price_change": 13.143807870370367,
         "regional_stress_multiplier": 0.92,
         "jchs_renters_cost_burdened": 42.8,
         "jchs_renters_severely_burdened": 20.5,
@@ -842,14 +842,14 @@ const DASHBOARD_DATA = {
         "rank": 31
       },
       "housing_stress": {
-        "value": 138,
-        "change": 20,
+        "value": 129,
+        "change": 15.6,
         "rank": 45
       },
       "affordability": {
-        "value": 119,
+        "value": 113,
         "change": 0,
-        "rank": 41
+        "rank": 44
       },
       "metrics": {
         "unemployment_rate": 3.8,
@@ -858,7 +858,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 950,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 19.952150725215574,
+        "housing_price_change": 15.578271722334492,
         "regional_stress_multiplier": 1,
         "jchs_renters_cost_burdened": 44.5,
         "jchs_renters_severely_burdened": 21,
@@ -891,14 +891,14 @@ const DASHBOARD_DATA = {
         "rank": 8
       },
       "housing_stress": {
-        "value": 159,
-        "change": 18,
-        "rank": 22
+        "value": 155,
+        "change": 16.2,
+        "rank": 21
       },
       "affordability": {
-        "value": 151,
+        "value": 149,
         "change": 0,
-        "rank": 12
+        "rank": 13
       },
       "metrics": {
         "unemployment_rate": 4.7,
@@ -907,7 +907,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 900,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 18.04229681043781,
+        "housing_price_change": 16.20879663460589,
         "regional_stress_multiplier": 1.18,
         "jchs_renters_cost_burdened": 46.8,
         "jchs_renters_severely_burdened": 24.5,
@@ -942,12 +942,12 @@ const DASHBOARD_DATA = {
       "housing_stress": {
         "value": 166,
         "change": 6.3,
-        "rank": 15
+        "rank": 13
       },
       "affordability": {
         "value": 164,
         "change": 0,
-        "rank": 3
+        "rank": 4
       },
       "metrics": {
         "unemployment_rate": 4.4,
@@ -956,7 +956,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 975,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 6.27819124943617,
+        "housing_price_change": 6.334122892573488,
         "regional_stress_multiplier": 1.3,
         "jchs_renters_cost_burdened": 52.5,
         "jchs_renters_severely_burdened": 28.2,
@@ -989,14 +989,14 @@ const DASHBOARD_DATA = {
         "rank": 40
       },
       "housing_stress": {
-        "value": 151,
-        "change": 22,
-        "rank": 33
+        "value": 141,
+        "change": 17,
+        "rank": 38
       },
       "affordability": {
-        "value": 124,
+        "value": 118,
         "change": 0,
-        "rank": 38
+        "rank": 40
       },
       "metrics": {
         "unemployment_rate": 3.1,
@@ -1005,7 +1005,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1175,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 21.99828018800138,
+        "housing_price_change": 16.967456449896368,
         "regional_stress_multiplier": 0.95,
         "jchs_renters_cost_burdened": 48.2,
         "jchs_renters_severely_burdened": 24.5,
@@ -1038,14 +1038,14 @@ const DASHBOARD_DATA = {
         "rank": 46
       },
       "housing_stress": {
-        "value": 160,
-        "change": 14.9,
-        "rank": 20
+        "value": 153,
+        "change": 11.2,
+        "rank": 22
       },
       "affordability": {
-        "value": 128,
+        "value": 124,
         "change": 0,
-        "rank": 32
+        "rank": 34
       },
       "metrics": {
         "unemployment_rate": 4.3,
@@ -1054,7 +1054,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1600,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 14.861308280031277,
+        "housing_price_change": 11.236387720838522,
         "regional_stress_multiplier": 1,
         "jchs_renters_cost_burdened": 49.5,
         "jchs_renters_severely_burdened": 24.2,
@@ -1087,14 +1087,14 @@ const DASHBOARD_DATA = {
         "rank": 38
       },
       "housing_stress": {
-        "value": 178,
-        "change": 18.7,
-        "rank": 9
+        "value": 172,
+        "change": 16.1,
+        "rank": 10
       },
       "affordability": {
-        "value": 141,
+        "value": 137,
         "change": 0,
-        "rank": 20
+        "rank": 22
       },
       "metrics": {
         "unemployment_rate": 4.4,
@@ -1103,7 +1103,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1750,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 18.712244528847897,
+        "housing_price_change": 16.05314022337085,
         "regional_stress_multiplier": 1.02,
         "jchs_renters_cost_burdened": 50.8,
         "jchs_renters_severely_burdened": 26.5,
@@ -1136,12 +1136,12 @@ const DASHBOARD_DATA = {
         "rank": 13
       },
       "housing_stress": {
-        "value": 168,
-        "change": 21.4,
-        "rank": 12
+        "value": 161,
+        "change": 18,
+        "rank": 15
       },
       "affordability": {
-        "value": 146,
+        "value": 142,
         "change": 0,
         "rank": 17
       },
@@ -1152,7 +1152,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1075,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 21.428722526600797,
+        "housing_price_change": 17.975715034894513,
         "regional_stress_multiplier": 1.08,
         "jchs_renters_cost_burdened": 49.2,
         "jchs_renters_severely_burdened": 25,
@@ -1185,14 +1185,14 @@ const DASHBOARD_DATA = {
         "rank": 32
       },
       "housing_stress": {
-        "value": 153,
-        "change": 13,
-        "rank": 31
+        "value": 147,
+        "change": 10.3,
+        "rank": 32
       },
       "affordability": {
-        "value": 128,
+        "value": 124,
         "change": 0,
-        "rank": 33
+        "rank": 35
       },
       "metrics": {
         "unemployment_rate": 4.4,
@@ -1201,7 +1201,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1150,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 12.98980641541196,
+        "housing_price_change": 10.330184435447588,
         "regional_stress_multiplier": 1.12,
         "jchs_renters_cost_burdened": 46.5,
         "jchs_renters_severely_burdened": 22.8,
@@ -1235,8 +1235,8 @@ const DASHBOARD_DATA = {
       },
       "housing_stress": {
         "value": 182,
-        "change": 14,
-        "rank": 7
+        "change": 14.2,
+        "rank": 5
       },
       "affordability": {
         "value": 173,
@@ -1250,7 +1250,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 925,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 14.035323530202417,
+        "housing_price_change": 14.166401527203295,
         "regional_stress_multiplier": 1.35,
         "jchs_renters_cost_burdened": 52,
         "jchs_renters_severely_burdened": 29,
@@ -1283,14 +1283,14 @@ const DASHBOARD_DATA = {
         "rank": 22
       },
       "housing_stress": {
-        "value": 145,
-        "change": 18.3,
-        "rank": 40
+        "value": 137,
+        "change": 14.8,
+        "rank": 43
       },
       "affordability": {
-        "value": 128,
+        "value": 123,
         "change": 0,
-        "rank": 34
+        "rank": 37
       },
       "metrics": {
         "unemployment_rate": 3.7,
@@ -1299,7 +1299,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 975,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 18.268028345143815,
+        "housing_price_change": 14.83530803311881,
         "regional_stress_multiplier": 1.05,
         "jchs_renters_cost_burdened": 46.5,
         "jchs_renters_severely_burdened": 23.5,
@@ -1332,12 +1332,12 @@ const DASHBOARD_DATA = {
         "rank": 34
       },
       "housing_stress": {
-        "value": 133,
-        "change": 15,
+        "value": 125,
+        "change": 11.3,
         "rank": 46
       },
       "affordability": {
-        "value": 115,
+        "value": 110,
         "change": 0,
         "rank": 45
       },
@@ -1348,7 +1348,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1100,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 14.963719203509951,
+        "housing_price_change": 11.271801538294877,
         "regional_stress_multiplier": 1,
         "jchs_renters_cost_burdened": 47.5,
         "jchs_renters_severely_burdened": 22,
@@ -1381,12 +1381,12 @@ const DASHBOARD_DATA = {
         "rank": 41
       },
       "housing_stress": {
-        "value": 127,
-        "change": 15.2,
+        "value": 122,
+        "change": 12.7,
         "rank": 47
       },
       "affordability": {
-        "value": 110,
+        "value": 107,
         "change": 0,
         "rank": 47
       },
@@ -1397,7 +1397,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 975,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 15.237048930955815,
+        "housing_price_change": 12.668287401172648,
         "regional_stress_multiplier": 0.95,
         "jchs_renters_cost_burdened": 43.5,
         "jchs_renters_severely_burdened": 20.5,
@@ -1431,13 +1431,13 @@ const DASHBOARD_DATA = {
       },
       "housing_stress": {
         "value": 179,
-        "change": 12.2,
-        "rank": 8
+        "change": 12.3,
+        "rank": 9
       },
       "affordability": {
         "value": 150,
         "change": 0,
-        "rank": 14
+        "rank": 12
       },
       "metrics": {
         "unemployment_rate": 5.1,
@@ -1446,7 +1446,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1450,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 12.236922807324987,
+        "housing_price_change": 12.306465315463706,
         "regional_stress_multiplier": 1.12,
         "jchs_renters_cost_burdened": 53.8,
         "jchs_renters_severely_burdened": 26.5,
@@ -1479,12 +1479,12 @@ const DASHBOARD_DATA = {
         "rank": 51
       },
       "housing_stress": {
-        "value": 146,
-        "change": 22.5,
-        "rank": 38
+        "value": 140,
+        "change": 19.3,
+        "rank": 40
       },
       "affordability": {
-        "value": 112,
+        "value": 108,
         "change": 0,
         "rank": 46
       },
@@ -1495,7 +1495,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1400,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 22.49881748766807,
+        "housing_price_change": 19.265615076536232,
         "regional_stress_multiplier": 0.88,
         "jchs_renters_cost_burdened": 48,
         "jchs_renters_severely_burdened": 23,
@@ -1528,12 +1528,12 @@ const DASHBOARD_DATA = {
         "rank": 42
       },
       "housing_stress": {
-        "value": 193,
-        "change": 26.9,
+        "value": 188,
+        "change": 24.2,
         "rank": 3
       },
       "affordability": {
-        "value": 149,
+        "value": 146,
         "change": 0,
         "rank": 15
       },
@@ -1544,7 +1544,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1550,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 26.93905445969125,
+        "housing_price_change": 24.200960131440468,
         "regional_stress_multiplier": 1.05,
         "jchs_renters_cost_burdened": 55.2,
         "jchs_renters_severely_burdened": 28.5,
@@ -1577,12 +1577,12 @@ const DASHBOARD_DATA = {
         "rank": 7
       },
       "housing_stress": {
-        "value": 161,
-        "change": 14.7,
+        "value": 158,
+        "change": 13.5,
         "rank": 18
       },
       "affordability": {
-        "value": 153,
+        "value": 151,
         "change": 0,
         "rank": 11
       },
@@ -1593,7 +1593,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1025,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 14.737363113283433,
+        "housing_price_change": 13.496734660969128,
         "regional_stress_multiplier": 1.18,
         "jchs_renters_cost_burdened": 47,
         "jchs_renters_severely_burdened": 23.8,
@@ -1626,14 +1626,14 @@ const DASHBOARD_DATA = {
         "rank": 10
       },
       "housing_stress": {
-        "value": 200,
-        "change": 24,
+        "value": 198,
+        "change": 22.4,
         "rank": 2
       },
       "affordability": {
-        "value": 170,
+        "value": 169,
         "change": 0,
-        "rank": 2
+        "rank": 3
       },
       "metrics": {
         "unemployment_rate": 4.6,
@@ -1642,7 +1642,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1500,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 23.978400154284618,
+        "housing_price_change": 22.396543883583455,
         "regional_stress_multiplier": 1.15,
         "jchs_renters_cost_burdened": 54.5,
         "jchs_renters_severely_burdened": 29.2,
@@ -1675,12 +1675,12 @@ const DASHBOARD_DATA = {
         "rank": 17
       },
       "housing_stress": {
-        "value": 158,
-        "change": 14.8,
+        "value": 153,
+        "change": 12.3,
         "rank": 23
       },
       "affordability": {
-        "value": 138,
+        "value": 135,
         "change": 0,
         "rank": 24
       },
@@ -1691,7 +1691,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1175,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 14.817779375010218,
+        "housing_price_change": 12.32622357646162,
         "regional_stress_multiplier": 1.08,
         "jchs_renters_cost_burdened": 50.5,
         "jchs_renters_severely_burdened": 25.5,
@@ -1725,7 +1725,7 @@ const DASHBOARD_DATA = {
       },
       "housing_stress": {
         "value": 100,
-        "change": 14.7,
+        "change": 14.8,
         "rank": 51
       },
       "affordability": {
@@ -1740,7 +1740,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 925,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 14.669530154277698,
+        "housing_price_change": 14.842703082126215,
         "regional_stress_multiplier": 0.85,
         "jchs_renters_cost_burdened": 38.5,
         "jchs_renters_severely_burdened": 16,
@@ -1773,14 +1773,14 @@ const DASHBOARD_DATA = {
         "rank": 20
       },
       "housing_stress": {
-        "value": 155,
-        "change": 21.5,
-        "rank": 28
+        "value": 149,
+        "change": 18.3,
+        "rank": 31
       },
       "affordability": {
-        "value": 136,
+        "value": 132,
         "change": 0,
-        "rank": 25
+        "rank": 26
       },
       "metrics": {
         "unemployment_rate": 3.6,
@@ -1789,7 +1789,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 950,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 21.490709659117766,
+        "housing_price_change": 18.262110197703656,
         "regional_stress_multiplier": 1.06,
         "jchs_renters_cost_burdened": 48.5,
         "jchs_renters_severely_burdened": 24.5,
@@ -1822,12 +1822,12 @@ const DASHBOARD_DATA = {
         "rank": 9
       },
       "housing_stress": {
-        "value": 146,
-        "change": 13,
-        "rank": 39
+        "value": 143,
+        "change": 11.6,
+        "rank": 37
       },
       "affordability": {
-        "value": 140,
+        "value": 138,
         "change": 0,
         "rank": 21
       },
@@ -1838,7 +1838,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 925,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 12.972849516087589,
+        "housing_price_change": 11.586452762923342,
         "regional_stress_multiplier": 1.15,
         "jchs_renters_cost_burdened": 46,
         "jchs_renters_severely_burdened": 23,
@@ -1871,14 +1871,14 @@ const DASHBOARD_DATA = {
         "rank": 25
       },
       "housing_stress": {
-        "value": 149,
-        "change": 7.5,
-        "rank": 36
+        "value": 146,
+        "change": 6,
+        "rank": 33
       },
       "affordability": {
-        "value": 129,
+        "value": 128,
         "change": 0,
-        "rank": 31
+        "rank": 29
       },
       "metrics": {
         "unemployment_rate": 5.2,
@@ -1887,7 +1887,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1450,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 7.53564412901591,
+        "housing_price_change": 5.985701718519612,
         "regional_stress_multiplier": 1.05,
         "jchs_renters_cost_burdened": 52.8,
         "jchs_renters_severely_burdened": 26,
@@ -1920,14 +1920,14 @@ const DASHBOARD_DATA = {
         "rank": 27
       },
       "housing_stress": {
-        "value": 154,
-        "change": 19.8,
-        "rank": 30
+        "value": 151,
+        "change": 18.1,
+        "rank": 26
       },
       "affordability": {
-        "value": 131,
+        "value": 129,
         "change": 0,
-        "rank": 29
+        "rank": 27
       },
       "metrics": {
         "unemployment_rate": 4.1,
@@ -1936,7 +1936,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1125,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 19.813620309416798,
+        "housing_price_change": 18.06222021835047,
         "regional_stress_multiplier": 1.02,
         "jchs_renters_cost_burdened": 48.5,
         "jchs_renters_severely_burdened": 25,
@@ -1969,14 +1969,14 @@ const DASHBOARD_DATA = {
         "rank": 28
       },
       "housing_stress": {
-        "value": 164,
-        "change": 24.3,
-        "rank": 17
+        "value": 160,
+        "change": 22.1,
+        "rank": 16
       },
       "affordability": {
-        "value": 136,
+        "value": 134,
         "change": 0,
-        "rank": 26
+        "rank": 25
       },
       "metrics": {
         "unemployment_rate": 4.1,
@@ -1985,7 +1985,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1275,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 24.32254669823729,
+        "housing_price_change": 22.076373683064112,
         "regional_stress_multiplier": 0.98,
         "jchs_renters_cost_burdened": 51,
         "jchs_renters_severely_burdened": 27,
@@ -2018,12 +2018,12 @@ const DASHBOARD_DATA = {
         "rank": 11
       },
       "housing_stress": {
-        "value": 177,
-        "change": 18.6,
-        "rank": 10
+        "value": 172,
+        "change": 16.6,
+        "rank": 11
       },
       "affordability": {
-        "value": 155,
+        "value": 152,
         "change": 0,
         "rank": 9
       },
@@ -2034,7 +2034,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1125,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 18.60588215833527,
+        "housing_price_change": 16.57771204424153,
         "regional_stress_multiplier": 1.15,
         "jchs_renters_cost_burdened": 50.2,
         "jchs_renters_severely_burdened": 25.8,
@@ -2067,12 +2067,12 @@ const DASHBOARD_DATA = {
         "rank": 47
       },
       "housing_stress": {
-        "value": 108,
-        "change": 13.8,
+        "value": 103,
+        "change": 11.4,
         "rank": 50
       },
       "affordability": {
-        "value": 96,
+        "value": 93,
         "change": 0,
         "rank": 50
       },
@@ -2083,7 +2083,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 875,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 13.849944167744905,
+        "housing_price_change": 11.36340000693312,
         "regional_stress_multiplier": 0.88,
         "jchs_renters_cost_burdened": 40.5,
         "jchs_renters_severely_burdened": 18.5,
@@ -2116,12 +2116,12 @@ const DASHBOARD_DATA = {
         "rank": 12
       },
       "housing_stress": {
-        "value": 158,
-        "change": 14,
+        "value": 153,
+        "change": 11.9,
         "rank": 24
       },
       "affordability": {
-        "value": 142,
+        "value": 139,
         "change": 0,
         "rank": 19
       },
@@ -2132,7 +2132,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1125,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 13.977241457453186,
+        "housing_price_change": 11.851640423068996,
         "regional_stress_multiplier": 1.12,
         "jchs_renters_cost_burdened": 49.5,
         "jchs_renters_severely_burdened": 24.8,
@@ -2165,14 +2165,14 @@ const DASHBOARD_DATA = {
         "rank": 16
       },
       "housing_stress": {
-        "value": 142,
-        "change": 6.8,
-        "rank": 42
+        "value": 141,
+        "change": 6.2,
+        "rank": 39
       },
       "affordability": {
-        "value": 130,
+        "value": 129,
         "change": 0,
-        "rank": 30
+        "rank": 28
       },
       "metrics": {
         "unemployment_rate": 4.4,
@@ -2181,7 +2181,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1275,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 6.784619109102634,
+        "housing_price_change": 6.204649489275784,
         "regional_stress_multiplier": 1.05,
         "jchs_renters_cost_burdened": 50.5,
         "jchs_renters_severely_burdened": 24.5,
@@ -2214,14 +2214,14 @@ const DASHBOARD_DATA = {
         "rank": 48
       },
       "housing_stress": {
-        "value": 143,
-        "change": 10.9,
+        "value": 140,
+        "change": 9.6,
         "rank": 41
       },
       "affordability": {
-        "value": 117,
+        "value": 115,
         "change": 0,
-        "rank": 43
+        "rank": 41
       },
       "metrics": {
         "unemployment_rate": 3.6,
@@ -2230,7 +2230,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1350,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 10.865352316477614,
+        "housing_price_change": 9.590360224522628,
         "regional_stress_multiplier": 1.02,
         "jchs_renters_cost_burdened": 48.5,
         "jchs_renters_severely_burdened": 21.5,
@@ -2263,14 +2263,14 @@ const DASHBOARD_DATA = {
         "rank": 50
       },
       "housing_stress": {
-        "value": 148,
-        "change": 22.2,
-        "rank": 37
+        "value": 140,
+        "change": 18.1,
+        "rank": 42
       },
       "affordability": {
-        "value": 118,
+        "value": 114,
         "change": 0,
-        "rank": 42
+        "rank": 43
       },
       "metrics": {
         "unemployment_rate": 2.6,
@@ -2279,7 +2279,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1275,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 22.195707349370995,
+        "housing_price_change": 18.079650417353527,
         "regional_stress_multiplier": 0.92,
         "jchs_renters_cost_burdened": 48.5,
         "jchs_renters_severely_burdened": 24,
@@ -2312,14 +2312,14 @@ const DASHBOARD_DATA = {
         "rank": 43
       },
       "housing_stress": {
-        "value": 155,
-        "change": 17.9,
-        "rank": 29
+        "value": 151,
+        "change": 16,
+        "rank": 27
       },
       "affordability": {
-        "value": 126,
+        "value": 123,
         "change": 0,
-        "rank": 37
+        "rank": 38
       },
       "metrics": {
         "unemployment_rate": 3.7,
@@ -2328,7 +2328,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1450,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 17.908133501182103,
+        "housing_price_change": 15.954445566312279,
         "regional_stress_multiplier": 0.98,
         "jchs_renters_cost_burdened": 47.5,
         "jchs_renters_severely_burdened": 23,
@@ -2361,14 +2361,14 @@ const DASHBOARD_DATA = {
         "rank": 35
       },
       "housing_stress": {
-        "value": 156,
-        "change": 10.9,
-        "rank": 26
+        "value": 151,
+        "change": 8.2,
+        "rank": 28
       },
       "affordability": {
-        "value": 128,
+        "value": 125,
         "change": 0,
-        "rank": 35
+        "rank": 33
       },
       "metrics": {
         "unemployment_rate": 5.2,
@@ -2377,7 +2377,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1650,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 10.909501581087193,
+        "housing_price_change": 8.238362592701218,
         "regional_stress_multiplier": 1.02,
         "jchs_renters_cost_burdened": 51.5,
         "jchs_renters_severely_burdened": 25.5,
@@ -2410,14 +2410,14 @@ const DASHBOARD_DATA = {
         "rank": 3
       },
       "housing_stress": {
-        "value": 170,
-        "change": 18.1,
-        "rank": 11
+        "value": 180,
+        "change": 21.8,
+        "rank": 7
       },
       "affordability": {
-        "value": 164,
+        "value": 170,
         "change": 0,
-        "rank": 4
+        "rank": 2
       },
       "metrics": {
         "unemployment_rate": 4.2,
@@ -2426,7 +2426,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 800,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 18.0570532300755,
+        "housing_price_change": 21.801153218011542,
         "regional_stress_multiplier": 1.28,
         "jchs_renters_cost_burdened": 46.5,
         "jchs_renters_severely_burdened": 24.5,
@@ -2459,14 +2459,14 @@ const DASHBOARD_DATA = {
         "rank": 44
       },
       "housing_stress": {
-        "value": 141,
-        "change": 23.2,
+        "value": 137,
+        "change": 20.9,
         "rank": 44
       },
       "affordability": {
-        "value": 117,
+        "value": 115,
         "change": 0,
-        "rank": 44
+        "rank": 42
       },
       "metrics": {
         "unemployment_rate": 3.3,
@@ -2475,7 +2475,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 1000,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 23.23006243373778,
+        "housing_price_change": 20.920752458955086,
         "regional_stress_multiplier": 0.95,
         "jchs_renters_cost_burdened": 46,
         "jchs_renters_severely_burdened": 22.5,
@@ -2508,12 +2508,12 @@ const DASHBOARD_DATA = {
         "rank": 45
       },
       "housing_stress": {
-        "value": 122,
-        "change": 15.5,
+        "value": 119,
+        "change": 14.3,
         "rank": 48
       },
       "affordability": {
-        "value": 106,
+        "value": 104,
         "change": 0,
         "rank": 48
       },
@@ -2524,7 +2524,7 @@ const DASHBOARD_DATA = {
         "rent_burden_source": "census_acs",
         "fair_market_rent_2br": 975,
         "fmr_source": "jchs_2025",
-        "housing_price_change": 15.485348392547463,
+        "housing_price_change": 14.335307774089273,
         "regional_stress_multiplier": 0.95,
         "jchs_renters_cost_burdened": 39.5,
         "jchs_renters_severely_burdened": 17,
@@ -3989,7 +3989,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2026-08-01",
-          "value": 157
+          "value": 153
         }
       ],
       "affordability": [
@@ -4471,7 +4471,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2026-08-01",
-          "value": 135
+          "value": 133
         }
       ]
     }
