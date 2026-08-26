@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <title>Ambassador collage — every cohort, 2023 to now</title>
+  <!--
+    Source for ambassador-collage.jpg (poster, one row per cohort) and
+    ambassador-collage-square.png (1080x1080 social mosaic).
+    Render both with: node scripts/render-ambassador-collage.js
+    Fonts are bundled in scripts/fonts/, so no network access is needed.
+    Roster mirrors the cohort sections in ambassadors.html — update both together.
+  -->
+  <style>
+    @font-face {
+      font-family: 'DM Sans';
+      src: url('fonts/dm-sans-var.woff2') format('woff2');
+      font-weight: 100 1000;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'JetBrains Mono';
+      src: url('fonts/jetbrains-mono-500.woff2') format('woff2');
+      font-weight: 500;
+      font-display: block;
+    }
+
+    :root {
+      --paper: #FAFAF7;
+      --ink: #0A0A0A;
+      --orange: #FF6B35;
+      --ink-dim: rgba(10, 10, 10, .62);
+      --ink-faint: rgba(10, 10, 10, .58);
+      --ink-line: rgba(10, 10, 10, .1);
+      --font-body: 'DM Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #E8E6E1;
+      font-family: var(--font-body);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 48px;
+      padding: 48px;
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--ink-faint);
+      display: inline-flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .eyebrow::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--orange);
+      flex-shrink: 0;
+    }
+
+    /* Shared portrait tile — 4:5 crop, hairline frame, flag badge. */
+    .tile { position: relative; overflow: hidden; background: var(--paper); border: 1px solid var(--ink-line); }
+    .tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .flag {
+      position: absolute;
+      background: var(--paper);
+      border-radius: 50%;
+      border: 1px solid var(--ink-line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    /* ==================== POSTER ==================== */
+    #poster {
+      width: 2800px;
+      background: var(--paper);
+      padding: 96px 96px 72px;
+    }
+
+    /* Headline left, counts right, both sitting on the same rule — the
+       canvas is wide enough that a left-only header would read lopsided. */
+    .poster-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 80px;
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 36px;
+    }
+    .poster-head .eyebrow { font-size: 15px; }
+    .poster-title {
+      font-size: 104px;
+      font-weight: 900;
+      line-height: .94;
+      letter-spacing: -.045em;
+      margin-top: 26px;
+    }
+    .poster-title em { font-style: italic; font-weight: 500; color: var(--orange); }
+    .poster-stats {
+      display: flex;
+      gap: 88px;
+      flex-shrink: 0;
+      padding-bottom: 10px;
+    }
+    .poster-stats > div { text-align: right; }
+    .stat-num { font-size: 56px; font-weight: 900; letter-spacing: -.035em; line-height: 1; }
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--ink-faint);
+      margin-top: 10px;
+    }
+
+    .cohort { margin-top: 58px; }
+    .cohort-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--ink-line);
+      padding-bottom: 16px;
+      margin-bottom: 34px;
+    }
+    .cohort-year { font-size: 72px; font-weight: 900; line-height: .86; letter-spacing: -.05em; }
+    .cohort-year span { color: var(--orange); }
+    .cohort-note {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--ink-faint);
+      text-align: right;
+      padding-bottom: 6px;
+    }
+
+    /* Fixed tile width + centred rows: each cohort reads as one filmstrip,
+       and a short cohort sits centred rather than trailing empty columns. */
+    .cohort-row { display: flex; justify-content: center; gap: 22px; }
+    .card { width: 180px; display: flex; flex-direction: column; gap: 12px; }
+    .card .tile { aspect-ratio: 4 / 5; }
+    .card .flag { bottom: 8px; right: 8px; width: 28px; height: 28px; font-size: 13px; }
+    .card-name {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.32;
+      letter-spacing: -.01em;
+      /* Fixed three-line box — the longest names need it, and a constant
+         height keeps every cohort row on the same baseline. */
+      height: 52px;
+      overflow: hidden;
+    }
+
+    .poster-foot {
+      margin-top: 72px;
+      border-top: 1px solid var(--ink);
+      padding-top: 28px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .foot-line { font-size: 26px; font-weight: 600; letter-spacing: -.02em; }
+    .foot-line em { font-style: italic; font-weight: 500; color: var(--orange); }
+    .foot-url {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--ink-faint);
+    }
+
+    /* ==================== SQUARE (1080x1080) ==================== */
+    #square {
+      width: 1080px;
+      height: 1080px;
+      background: var(--paper);
+      display: flex;
+      flex-direction: column;
+    }
+    .sq-head { height: 330px; padding: 56px 64px 0; display: flex; flex-direction: column; }
+    .sq-head .eyebrow { font-size: 13px; }
+    .sq-title {
+      font-size: 66px;
+      font-weight: 900;
+      line-height: .94;
+      letter-spacing: -.045em;
+      margin-top: 22px;
+    }
+    .sq-title em { font-style: italic; font-weight: 500; color: var(--orange); }
+    .sq-meta {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--ink-faint);
+      margin-top: auto;
+      padding-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+    }
+    /* 45 ambassadors land exactly in a 9x5 mosaic at 120x150 per tile. */
+    .sq-grid {
+      display: grid;
+      grid-template-columns: repeat(9, 120px);
+      grid-template-rows: repeat(5, 150px);
+      height: 750px;
+    }
+    .sq-grid .tile { width: 120px; height: 150px; border: 0; outline: .5px solid rgba(250, 250, 247, .35); outline-offset: -.5px; }
+  </style>
+</head>
+<body>
+
+  <div id="poster">
+    <div class="poster-head">
+      <div>
+        <div class="eyebrow">FinMango Ambassador Program</div>
+        <h1 class="poster-title">Every ambassador,<br><em>2023 to now.</em></h1>
+      </div>
+      <div class="poster-stats">
+        <div><div class="stat-num" id="statPeople">45</div><div class="stat-label">Ambassadors</div></div>
+        <div><div class="stat-num" id="statCohorts">4</div><div class="stat-label">Cohorts</div></div>
+        <div><div class="stat-num" id="statCountries">16</div><div class="stat-label">Countries</div></div>
+      </div>
+    </div>
+    <div id="cohorts"></div>
+    <div class="poster-foot">
+      <div class="foot-line">Financial health is a right, <em>not a privilege.</em></div>
+      <div class="foot-url">finmango.org/ambassadors</div>
+    </div>
+  </div>
+
+  <div id="square">
+    <div class="sq-head">
+      <div class="eyebrow">FinMango Ambassadors</div>
+      <div class="sq-title">45 ambassadors.<br>4 cohorts.<br><em>16 countries.</em></div>
+      <div class="sq-meta">
+        <span>2023 &rarr; 2026</span>
+        <span>finmango.org/ambassadors</span>
+      </div>
+    </div>
+    <div class="sq-grid" id="squareGrid"></div>
+  </div>
+
+  <script>
+  // Roster mirrors the cohort sections in ambassadors.html, newest first.
+  const AMBASSADORS = [
+    { y: 2026, n: "David Johnson",                     f: '🇺🇸', p: "33.jpg" },
+    { y: 2026, n: "Dylan Forman",                      f: '🇺🇸', p: "34.jpg" },
+    { y: 2026, n: "Pranita Jadhav",                    f: '🇮🇳', p: "35.jpg" },
+    { y: 2026, n: "Hans Patel",                        f: '🇺🇸', p: "36.jpg" },
+    { y: 2026, n: "Onyemeri Ihegazie",                 f: '🇳🇬', p: "37.jpg" },
+    { y: 2026, n: "Harshil Shah",                      f: '🇺🇸', p: "38_Updated.jpg" },
+    { y: 2026, n: "Eduardo Charles Alba",              f: '🇩🇴', p: "39.jpg" },
+    { y: 2026, n: "Caleb Vales",                       f: '🇺🇸', p: "40.jpg" },
+    { y: 2026, n: "Aren Inan",                         f: '🇺🇸', p: "41.jpg" },
+    { y: 2026, n: "Hayley Foote",                      f: '🇺🇸', p: "42.jpg" },
+    { y: 2026, n: "Sophie Hong",                       f: '🇺🇸', p: "43.jpg" },
+    { y: 2026, n: "Devin Acar",                        f: '🇺🇸', p: "45.jpg" },
+    { y: 2026, n: "Kristina Schilt",                   f: '🇺🇸', p: "46.jpg" },
+    { y: 2025, n: "Aaliyah de Toeni Zhu",              f: '🇺🇸', p: "32.jpg" },
+    { y: 2025, n: "Jose Ismael Batista",               f: '🇵🇦', p: "31.jpg" },
+    { y: 2025, n: "Dami Mike-Adeogun",                 f: '🇳🇬', p: "30.jpg" },
+    { y: 2025, n: "Anvitha Marlapati",                 f: '🇺🇸', p: "29.jpg" },
+    { y: 2025, n: "Bradley Smith",                     f: '🇺🇸', p: "28.jpg" },
+    { y: 2025, n: "Mansi Rupesh More",                 f: '🇮🇳', p: "27.jpg" },
+    { y: 2025, n: "Valentina Villa",                   f: '🇫🇷', p: "26.jpg" },
+    { y: 2025, n: "Danny Jang",                        f: '🇺🇸', p: "25.jpg" },
+    { y: 2025, n: "Ananya Mallick",                    f: '🇲🇾', p: "24.jpg" },
+    { y: 2025, n: "Alexander Keller",                  f: '🇺🇸', p: "23.jpg" },
+    { y: 2025, n: "Priyanka Anantha",                  f: '🇮🇳', p: "22.jpg" },
+    { y: 2025, n: "Varsha Tulsani",                    f: '🇮🇳', p: "21.jpg" },
+    { y: 2024, n: "Mariana Nunes Santos Gomes",        f: '🇧🇷', p: "20.jpg" },
+    { y: 2024, n: "Nathalie Ríos",                     f: '🇵🇦', p: "19.jpg" },
+    { y: 2024, n: "Sylvester Renatus Kikoti",          f: '🇹🇿', p: "18.jpg" },
+    { y: 2024, n: "Meaza Haregewoin Fiseha",           f: '🇪🇹', p: "17.jpg" },
+    { y: 2024, n: "María Manuela Córdoba Aguirre",     f: '🇨🇴', p: "16.jpg" },
+    { y: 2024, n: "Beverly Jazmine Delgado Corrales",  f: '🇲🇽', p: "15.jpg" },
+    { y: 2024, n: "Lizbeth Sinaí Rodríguez Rodríguez", f: '🇲🇽', p: "14.jpg" },
+    { y: 2024, n: "Phanindra Nagapuri",                f: '🇮🇳', p: "13.png" },
+    { y: 2024, n: "Hilya Magano Indongo",              f: '🇳🇦', p: "12.jpg" },
+    { y: 2024, n: "Shanice Akoth",                     f: '🇰🇪', p: "11.jpg" },
+    { y: 2023, n: "Ankita Kureel",                     f: '🇮🇳', p: "10.png" },
+    { y: 2023, n: "Christian Giadolor",                f: '🇺🇸', p: "9.png" },
+    { y: 2023, n: "Poulet Padilla Ruvalcaba",          f: '🇲🇽', p: "8.png" },
+    { y: 2023, n: "Thomas Lee",                        f: '🇺🇸', p: "7.png" },
+    { y: 2023, n: "Mary Wangechi",                     f: '🇰🇪', p: "6.png" },
+    { y: 2023, n: "Angelica Carlos",                   f: '🇵🇭', p: "5.png" },
+    { y: 2023, n: "Keylie Muthoni Ogola",              f: '🇰🇪', p: "4.png" },
+    { y: 2023, n: "Fedrick Binamungu Simon",           f: '🇹🇿', p: "3.png" },
+    { y: 2023, n: "Sophia Moffa",                      f: '🇺🇸', p: "2.png" },
+    { y: 2023, n: "Niveen Younis",                     f: '🇱🇧', p: "1.png" },
+  ];
+
+  // One line per cohort, echoing the subtitles on ambassadors.html.
+  const COHORT_NOTES = {
+    2023: 'Founding cohort',
+    2024: '4 continents',
+    2025: '',
+    2026: 'Current cohort',
+  };
+
+  const PHOTO_BASE = '../';
+
+  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  const tile = (a, withFlag = true) =>
+    `<div class="tile"><img src="${PHOTO_BASE}${esc(a.p)}" alt="${esc(a.n)}">`
+    + (withFlag ? `<div class="flag">${a.f}</div>` : '')
+    + `</div>`;
+
+  const years = [...new Set(AMBASSADORS.map(a => a.y))].sort((a, b) => b - a);
+  const countries = new Set(AMBASSADORS.map(a => a.f));
+
+  document.getElementById('statPeople').textContent = AMBASSADORS.length;
+  document.getElementById('statCohorts').textContent = years.length;
+  document.getElementById('statCountries').textContent = countries.size;
+
+  // Poster: one section per cohort, newest first.
+  document.getElementById('cohorts').innerHTML = years.map(year => {
+    const cohort = AMBASSADORS.filter(a => a.y === year);
+    const flags = new Set(cohort.map(a => a.f));
+    const note = [
+      COHORT_NOTES[year],
+      `${cohort.length} ambassadors`,
+      `${flags.size} ${flags.size === 1 ? 'country' : 'countries'}`,
+    ].filter(Boolean).join(' · ');
+    const cards = cohort.map(a =>
+      `<div class="card">${tile(a)}<div class="card-name">${esc(a.n)}</div></div>`
+    ).join('');
+    return `<section class="cohort">
+        <div class="cohort-head">
+          <div class="cohort-year"><span>'</span>${String(year).slice(2)}</div>
+          <div class="cohort-note">${note}</div>
+        </div>
+        <div class="cohort-row">${cards}</div>
+      </section>`;
+  }).join('');
+
+  // Square: one 9x5 mosaic, oldest cohort first so it reads as growth.
+  document.getElementById('squareGrid').innerHTML =
+    [...AMBASSADORS].reverse().map(a => tile(a, false)).join('');
+  </script>
+</body>
+</html>
