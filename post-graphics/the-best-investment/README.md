@@ -7,7 +7,7 @@ Source post: `/post?id=the-best-investment-i-made-had-no-paycheck-260724-104642`
 
 | File | For |
 | --- | --- |
-| `carousel.html` | The deck. Eight 1080x1350 slides, plus a browser preview and per-slide PNG export. |
+| `carousel.html` | The deck. Eight 1080x1350 slides on `../deck.css`, plus a browser preview and per-slide PNG export. |
 | `slide-01.png` … `slide-08.png` | The Instagram carousel, 1440x1800 each. Upload in order. |
 | `finmango-the-best-investment-linkedin.pdf` | The same eight slides as a LinkedIn document post, 8 pages at 4:5. |
 | `captions.md` | Instagram caption, LinkedIn caption, per-slide alt text, posting notes. |
@@ -35,7 +35,10 @@ CSS filters right where html2canvas approximates them.
 
 ## Starting a deck for a different post
 
-Copy this folder to `post-graphics/<slug>/`, drop in that post's `cover.jpg`,
-rewrite the eight slides, and run the script with the new slug. The slide
-classes (`.slide--cover`, `.slide--ink`, `.compare`, `.list`, `.quote`) are
-the reusable part; the copy is not.
+Copy this folder to `post-graphics/<slug>/`, keep the `../deck.css` and
+`../deck.js` links, drop in that post's `cover.jpg`, rewrite the eight slides,
+and run the script with the new slug. `deck.css` holds the reusable pieces: two
+cover treatments (`.slide--cover` full bleed, `.slide--split` portrait over
+type), `.slide--ink` for a dark canvas, and `.list`, `.stack`, `.compare`,
+`.quote`, `.question-old` / `.question-new` for the middle slides. The copy is
+not reusable.
