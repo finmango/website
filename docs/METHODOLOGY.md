@@ -12,11 +12,28 @@ The FinMango Financial Health Barometer is a US state-level indicator system tha
 
 | Source | Data | Frequency | Notes |
 |--------|------|-----------|-------|
-| **Bureau of Labor Statistics (BLS)** | State unemployment rates | Monthly | No API key required; LAUS series |
+| **Bureau of Labor Statistics (BLS)** | State unemployment rates | Monthly | LAUS series. `BLS_API_KEY` strongly recommended — see below |
 | **FRED (St. Louis Fed)** | Housing Price Index (HPI) | Monthly | Requires free API key |
 | **Census Bureau SAIPE** | Poverty rates by state | Annual | Small Area Income and Poverty Estimates |
 | **Census Bureau ACS** | Rent burden (B25071) | Annual | Median gross rent as % of income |
 | **HUD FMR API** | Fair Market Rents | Annual | 2-bedroom rent by state/county |
+
+### A note on the BLS quota
+
+Set `BLS_API_KEY` (free, from https://data.bls.gov/registrationEngine/). The API
+technically works without one, but the anonymous v1 quota is **25 requests per
+day counted per IP address**, and shared CI runners routinely exhaust it before
+this job runs. That is not a hypothetical: unemployment was offline here for
+**23 consecutive days** (2026-08-10 to 2026-09-01) because BLS was answering
+`REQUEST_NOT_PROCESSED — daily threshold ... has been reached`.
+
+Two things hid it. The response arrives as HTTP 200 with a `text/plain`
+content-type, so a content-type guard rejected it unread and logged "expected
+JSON, got text/plain" — which reads like an outage. And the freshness badge was
+keyed to the file's regeneration time rather than the data's age, so the page
+showed a green LIVE badge throughout. Both are fixed: the body is parsed and the
+real status reported, and with a key the pipeline uses v2 (500 requests/day,
+50 series per request).
 
 ### Calibration Data Source (Academic Research)
 
@@ -180,7 +197,15 @@ Precedence for every component:
    its age cap. Sits *above* the reference datasets: yesterday's actual ACS
    number beats today's JCHS approximation of it.
 3. **Reference dataset** — Harvard JCHS 2025 or NLIHC OOR 2025.
-4. **Tier estimate** — a hardcoded prior, flagged `tier_estimate`.
+4. **Tier estimate** — a hardcoded prior, flagged `tier_estimate`. Two housing
+   components have one: rent burden (three bands worth 21/12/6 points, every
+   other state 0) and fair market rent (a single high-cost band worth 15
+   points). Like the regional multipliers these are assumptions rather than
+   measurements. They now sit below carry-forward, so in normal operation they
+   should not fire; `meta.tier_estimates` publishes both tables and counts how
+   many states were actually scored from them this run. If they are firing for
+   more than a handful of states, repair the upstream fetch rather than tuning
+   the tiers.
 5. **Nothing** — the whole indicator is carried forward
    (`carried_forward_from`), or failing that estimated from regional baselines
    (`estimated: true`).
@@ -315,6 +340,39 @@ interest in the single term above, rescaled so its most recent month equals
 today's composite index, then smoothed with a 3-month trailing average. Only the
 final point is an actual index value.
 
+## Data Freshness
+
+Two different clocks, which had been conflated:
+
+| Field | Meaning |
+|-------|---------|
+| `meta.generated` | When the data file was last written |
+| `meta.data_age` | How old the oldest measurement any published index still relies on actually is |
+
+The daily workflow restamps `meta.generated` on every run whether or not new
+data arrived, so it says nothing about whether the numbers moved. The frontend
+badge previously keyed off it, which meant the "STALE DATA" warning at 26 hours
+and the red banner at 72 hours **could never fire while the workflow was
+healthy** — the pipeline ran fine and republished held values, so the badge
+stayed green through a three-week unemployment outage.
+
+The badge now keys off `meta.data_age.age_days`:
+
+| Condition | Display |
+|-----------|---------|
+| Measurements ≥ 14 days old | Banner naming the held source, badge "DATA *n*D OLD" |
+| Measurements 2-13 days old | Badge "HELD · *n*D" |
+| File not regenerated in 72h | Banner, badge "PIPELINE STALLED" |
+
+14 days is the threshold because the fastest-moving input (BLS LAUS) is monthly:
+a fortnight without a fresh read means a release was likely missed rather than
+merely not yet due.
+
+Separately, `metrics.unemployment_period` records the BLS **reference month** the
+rate describes. This is the source's own inherent lag and is distinct from how
+recently it was fetched — a rate pulled this morning still describes a prior
+month.
+
 ## Update Frequency
 
 The pipeline runs daily, but its inputs do not. Most days, most numbers are
@@ -346,7 +404,7 @@ describe, so a poverty-driven reading today reflects a prior year's conditions.
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 2.5 | Sep 2026 | Accuracy and transparency pass: replaced the fabricated 5% HPI default with age-capped component carry-forward; split the mislabelled FMR/median-rent field; replaced hardcoded `change: 0` with null plus `change_basis`; rotating trends fetch across all 51 states with a coverage gate; published regional multipliers, index bounds, clamp flags and per-run provenance; retired the `Math.random()` legacy pipeline; added regression tests |
+| 2.5 | Sep 2026 | Accuracy and transparency pass: fixed the BLS quota misdiagnosis and added v2/key support; re-based the freshness badge on measurement age rather than file age; disclosed the tier estimates; replaced the fabricated 5% HPI default with age-capped component carry-forward; split the mislabelled FMR/median-rent field; replaced hardcoded `change: 0` with null plus `change_basis`; rotating trends fetch across all 51 states with a coverage gate; published regional multipliers, index bounds, clamp flags and per-run provenance; retired the `Math.random()` legacy pipeline; added regression tests |
 | 2.4 | Dec 2024 | Added Harvard JCHS 2025 as calibration source; source attribution |
 | 2.3 | Dec 2024 | Added HUD FMR and Census ACS rent burden |
 | 2.2 | Dec 2024 | Added regional stress multipliers |

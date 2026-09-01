@@ -316,4 +316,38 @@ test('housing wage follows the NLIHC formula', () => {
     assert.strictEqual(deriveHousingWage(null), null);
 });
 
+test('tier estimates only fire when nothing can be carried forward', () => {
+    // With a carryable ACS reading present, the hand-assigned tier must lose.
+    __setPreviousSnapshot({
+        as_of: daysAgo(2),
+        states: Object.fromEntries(ALL.map(a => [`US-${a}`, {
+            abbr: a,
+            metrics: {
+                rent_burden_pct: 28.5,
+                rent_burden_source: 'census_acs',
+                rent_burden_pct_observed: daysAgo(2)
+            }
+        }]))
+    });
+    const states = calculateIndices(unemployment, null, poverty);
+    assert.notStrictEqual(states['US-CA'].metrics.rent_burden_source, 'tier_estimate');
+});
+
+test('a tier-scored state is labelled tier_estimate', () => {
+    __setPreviousSnapshot(null);
+    const states = calculateIndices(unemployment, null, poverty);
+    assert.strictEqual(states['US-CA'].metrics.rent_burden_source, 'tier_estimate');
+    assert.strictEqual(states['US-CA'].metrics.fmr_score_source, 'tier_estimate');
+});
+
+test('a state outside every tier scores 0, not a silent default', () => {
+    __setPreviousSnapshot(null);
+    const states = calculateIndices(unemployment, null, poverty);
+    // Nebraska is in no rent-burden tier and is not high-cost, so both housing
+    // component scores are 0 and its housing stress is the bare base of 100.
+    const ne = states['US-NE'];
+    assert.strictEqual(ne.metrics.rent_burden_source, 'tier_estimate');
+    assert.strictEqual(ne.housing_stress.value, Math.round(100 * ne.metrics.regional_stress_multiplier));
+});
+
 console.log(`\n${passed} passed${process.exitCode ? ', some failed' : ''}`);

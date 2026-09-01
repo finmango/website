@@ -275,39 +275,94 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // --- Data Freshness Check ---
+    //
+    // Two different clocks, previously conflated into one:
+    //
+    //   meta.generated  — when this file was last written. The daily workflow
+    //                     restamps it on every run, so it says nothing about
+    //                     whether new data actually arrived.
+    //   meta.data_age   — how old the oldest measurement any published index
+    //                     still depends on actually is.
+    //
+    // Keying the badge off meta.generated meant the STALE warning could never
+    // fire while the workflow was healthy: unemployment was carried forward for
+    // 23 consecutive days behind a green LIVE badge. The measurement clock is
+    // the one that matters to a reader, so it drives the badge; the file clock
+    // is only a backstop for a pipeline that has stopped running entirely.
     function checkDataFreshness() {
-        if (!DASHBOARD_DATA.meta?.generated) {
-            console.warn('[Freshness] No generated timestamp in DASHBOARD_DATA.meta');
+        const fileAgeHours = DASHBOARD_DATA.meta?.generated
+            ? (Date.now() - new Date(DASHBOARD_DATA.meta.generated).getTime()) / 3600000
+            : null;
+
+        const dataAge = DASHBOARD_DATA.meta?.data_age;
+        const dataAgeDays = typeof dataAge?.age_days === 'number' ? dataAge.age_days : null;
+
+        if (fileAgeHours === null && dataAgeDays === null) {
+            console.warn('[Freshness] No freshness metadata in DASHBOARD_DATA.meta');
             return;
         }
 
-        const generated = new Date(DASHBOARD_DATA.meta.generated);
-        const now = new Date();
-        const ageMs = now - generated;
-        const ageHours = ageMs / (1000 * 60 * 60);
+        console.log(`[Freshness] File age: ${fileAgeHours === null ? 'unknown' : fileAgeHours.toFixed(1) + 'h'}; ` +
+            `oldest measurement: ${dataAgeDays === null ? 'unknown' : dataAgeDays + 'd'}`);
 
-        console.log(`[Freshness] Data age: ${ageHours.toFixed(1)} hours (generated: ${generated.toISOString()})`);
-
-        if (ageHours > 72) {
-            // Critical: show prominent red banner
-            const dateStr = generated.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-            if (els.staleDataBanner) {
-                els.staleDataBanner.textContent = `⚠️ Data has not updated since ${dateStr}. Results may be inaccurate.`;
-                els.staleDataBanner.style.display = 'block';
-            }
-            console.error(`[Freshness] CRITICAL: Data is ${ageHours.toFixed(0)} hours old (>72h). Banner displayed.`);
+        // The pipeline itself has stopped: nothing is being refreshed at all.
+        if (fileAgeHours !== null && fileAgeHours > 72) {
+            const dateStr = new Date(DASHBOARD_DATA.meta.generated)
+                .toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            showBanner(`⚠️ The data pipeline has not run since ${dateStr}. These figures may be well out of date.`);
+            setBadge('⚠ PIPELINE STALLED');
+            return;
         }
 
-        if (ageHours > 26) {
-            // Stale: replace LIVE badge with amber warning
-            if (els.liveIndicator) {
-                els.liveIndicator.innerHTML = '⚠ STALE DATA';
-                els.liveIndicator.style.cssText = 'color:#92400E; background:#FEF3C7; border:1px solid #F59E0B; border-radius:4px; padding:2px 8px; font-weight:600; font-size:0.8rem;';
-            }
-            console.warn(`[Freshness] Data is ${ageHours.toFixed(0)} hours old (>26h). LIVE badge replaced with STALE DATA.`);
-        } else {
-            console.log(`[Freshness] Data is current (${ageHours.toFixed(1)}h old).`);
+        // The pipeline is running, but the measurements behind it are not moving.
+        // 14 days is the threshold: the fastest-moving input (BLS LAUS) is
+        // monthly, so a fortnight without a fresh read means a release was
+        // likely missed rather than merely not due yet.
+        if (dataAgeDays !== null && dataAgeDays >= 14) {
+            showBanner(`⚠️ Underlying data has not refreshed since ${dataAge.oldest_observation} ` +
+                `(${dataAgeDays} days). The ${labelForSource(dataAge.oldest_source)} figures are being ` +
+                `held at their last published values, not re-measured.`);
+            setBadge(`⚠ DATA ${dataAgeDays}D OLD`);
+            return;
         }
+
+        if (dataAgeDays !== null && dataAgeDays >= 2) {
+            setBadge(`HELD · ${dataAgeDays}D`, 'held');
+            return;
+        }
+
+        if (fileAgeHours !== null && fileAgeHours > 26) {
+            setBadge('⚠ STALE DATA');
+        }
+    }
+
+    function labelForSource(key) {
+        const LABELS = {
+            unemployment: 'unemployment',
+            housing_prices: 'house price',
+            rent_burden: 'rent burden',
+            fair_market_rent: 'fair market rent',
+            financial_anxiety: 'Financial Anxiety',
+            food_insecurity: 'Food Insecurity',
+            housing_stress: 'Housing Stress',
+            affordability: 'Affordability'
+        };
+        return LABELS[key] || String(key).replace(/_/g, ' ');
+    }
+
+    function showBanner(text) {
+        if (!els.staleDataBanner) return;
+        els.staleDataBanner.textContent = text;
+        els.staleDataBanner.style.display = 'block';
+        console.error(`[Freshness] ${text}`);
+    }
+
+    function setBadge(text, tone) {
+        if (!els.liveIndicator) return;
+        els.liveIndicator.innerHTML = text;
+        els.liveIndicator.style.cssText = tone === 'held'
+            ? 'color:#92400E; background:#FEF3C7; border:1px solid #FCD34D; border-radius:4px; padding:2px 8px; font-weight:600; font-size:0.8rem;'
+            : 'color:#92400E; background:#FEF3C7; border:1px solid #F59E0B; border-radius:4px; padding:2px 8px; font-weight:600; font-size:0.8rem;';
     }
 
     // --- Header & Top Stats ---

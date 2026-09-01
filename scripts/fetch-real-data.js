@@ -272,6 +272,34 @@ function carryForwardMetric(abbr, field, { maxAgeDays, wasPrimary }) {
 }
 
 /**
+ * Tier estimates — the last-resort fallback for the two housing components.
+ *
+ * Like REGIONAL_STRESS, these are author-assigned priors rather than
+ * measurements: a state is placed in a band by hand and given that band's score.
+ * They exist so a state is never simply absent from the map, and they now sit
+ * BELOW carry-forward in the precedence chain, so in normal operation they
+ * should never fire. Any state actually scored from them is labelled
+ * `tier_estimate` in its published metrics, and the count is reported in
+ * meta.tier_estimates so it is visible when it does happen.
+ *
+ * If you find these firing for more than a handful of states, the fix is to
+ * repair the upstream fetch, not to tune the tiers.
+ */
+const RENT_BURDEN_TIERS = {
+    // Assumed median gross rent as a share of income, mapped to (pct - 25) * 3
+    tier1: { states: ['CA', 'NY', 'MA', 'HI', 'DC', 'NJ'], assumed_pct: 32, score: 21 },
+    tier2: { states: ['WA', 'CO', 'FL', 'MD', 'MN', 'CT', 'OR'], assumed_pct: 29, score: 12 },
+    tier3: { states: ['NH', 'VA', 'AZ', 'NV', 'TX', 'IL', 'RI', 'VT', 'AK'], assumed_pct: 27, score: 6 }
+    // Every other state is assumed to sit at the 25% baseline and scores 0.
+};
+
+const FMR_HIGH_COST_TIER = {
+    states: ['CA', 'NY', 'MA', 'HI', 'DC', 'NJ', 'WA', 'CO', 'MD', 'CT'],
+    score: 15
+    // Every other state scores 0.
+};
+
+/**
  * Regional stress multipliers.
  *
  * IMPORTANT — these are author-assigned priors, not measurements. They are not
@@ -520,79 +548,107 @@ function summariseTrends(cache, nationalTimeSeries, todayISO, nextCursor) {
 }
 
 /**
- * Fetch state unemployment rates from BLS API v1.0 (NO API KEY REQUIRED)
+ * Fetch state unemployment rates from the BLS API.
  * Series ID format: LASST{FIPS}0000000000003
+ *
+ * v2 is used when BLS_API_KEY is set (500 requests/day, per registration).
+ * Without a key this falls back to v1, whose 25 requests/day quota is counted
+ * PER IP — and on shared CI runners that quota is routinely exhausted by other
+ * tenants before this job runs. That is what took unemployment offline here for
+ * 23 consecutive days: not a BLS outage, a shared anonymous quota.
+ *
+ * Get a free key at https://data.bls.gov/registrationEngine/
  */
 async function fetchBLSUnemployment() {
-    console.log('📊 Fetching unemployment data from BLS...');
-    const results = {};
+    const apiKey = process.env.BLS_API_KEY;
+    const version = apiKey ? 'v2' : 'v1';
+    console.log(`📊 Fetching unemployment data from BLS (${version})...`);
+    if (!apiKey) {
+        console.log('   ⚠️  BLS_API_KEY not set — using the anonymous v1 quota (25/day, shared per IP).');
+        console.log('      Get a free key at https://data.bls.gov/registrationEngine/');
+    }
 
-    // BLS allows 25 series per request, so we batch
+    const results = {};
     const stateAbbrs = Object.keys(STATE_FIPS);
     const currentYear = new Date().getFullYear();
     const lastYear = currentYear - 1;
 
-    // Build series IDs for all states
-    const seriesIds = stateAbbrs.map(abbr => {
-        const fips = STATE_FIPS[abbr];
-        return `LASST${fips}0000000000003`; // Unemployment rate series
-    });
+    const seriesIds = stateAbbrs.map(abbr => `LASST${STATE_FIPS[abbr]}0000000000003`);
 
-    // Split into batches of 25
+    // BLS allows 25 series per request on v1, 50 on v2
+    const batchSize = apiKey ? 50 : 25;
     const batches = [];
-    for (let i = 0; i < seriesIds.length; i += 25) {
-        batches.push(seriesIds.slice(i, i + 25));
+    for (let i = 0; i < seriesIds.length; i += batchSize) {
+        batches.push(seriesIds.slice(i, i + batchSize));
     }
+
+    const url = apiKey
+        ? 'https://api.bls.gov/publicAPI/v2/timeseries/data/'
+        : 'https://api.bls.gov/publicAPI/v1/timeseries/data/';
+
+    let quotaExhausted = false;
 
     for (const batch of batches) {
         try {
-            const response = await fetch('https://api.bls.gov/publicAPI/v1/timeseries/data/', {
+            const body = {
+                seriesid: batch,
+                startyear: lastYear.toString(),
+                endyear: currentYear.toString()
+            };
+            if (apiKey) body.registrationkey = apiKey;
+
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    seriesid: batch,
-                    startyear: lastYear.toString(),
-                    endyear: currentYear.toString()
-                })
+                body: JSON.stringify(body)
             });
 
-            // During a BLS outage the API answers 503 with an HTML maintenance
-            // page. Parsing that as JSON throws a misleading "Unexpected token
-            // '<'" — check the response itself so the log names the real cause.
             if (!response.ok) {
                 console.error(`BLS API error: HTTP ${response.status} ${response.statusText}`);
                 continue;
             }
 
-            const contentType = response.headers.get('content-type') || '';
-            if (!contentType.includes('json')) {
-                console.error(`BLS API error: expected JSON, got ${contentType || 'no content-type'}`);
+            // BLS serves JSON under a text/plain content-type, including for its
+            // error responses. The previous content-type guard rejected those
+            // unread and logged "expected JSON, got text/plain", which hid the
+            // actual message — a quota rejection — behind what looked like an
+            // outage for three weeks. Parse first, then decide.
+            const raw = await response.text();
+            let data;
+            try {
+                data = JSON.parse(raw);
+            } catch {
+                console.error(`BLS API error: response was not JSON (${raw.slice(0, 120)})`);
                 continue;
             }
 
-            const data = await response.json();
-
-            if (data.status === 'REQUEST_SUCCEEDED' && data.Results?.series) {
-                for (const series of data.Results.series) {
-                    // Extract state from series ID
-                    const fips = series.seriesID.substring(5, 7);
-                    const stateAbbr = Object.entries(STATE_FIPS).find(([abbr, f]) => f === fips)?.[0];
-
-                    if (stateAbbr && series.data?.length > 0) {
-                        // Get most recent value
-                        const latestValue = parseFloat(series.data[0].value);
-                        // Get value from same month last year for change calculation
-                        const lastYearValue = series.data.find(d =>
-                            d.year === lastYear.toString() && d.period === series.data[0].period
-                        );
-
-                        results[stateAbbr] = {
-                            value: latestValue,
-                            previousValue: lastYearValue ? parseFloat(lastYearValue.value) : null,
-                            date: `${series.data[0].year}-${series.data[0].period.replace('M', '')}`
-                        };
-                    }
+            if (data.status !== 'REQUEST_SUCCEEDED') {
+                const message = Array.isArray(data.message) ? data.message.join('; ') : data.status;
+                console.error(`BLS API error: ${data.status} — ${message}`);
+                if (/threshold|quota/i.test(message)) {
+                    quotaExhausted = true;
+                    break; // further batches will fail identically
                 }
+                continue;
+            }
+
+            for (const series of data.Results?.series || []) {
+                const fips = series.seriesID.substring(5, 7);
+                const stateAbbr = Object.entries(STATE_FIPS).find(([, f]) => f === fips)?.[0];
+                if (!stateAbbr || !series.data?.length) continue;
+
+                const latest = series.data[0];
+                const lastYearValue = series.data.find(d =>
+                    d.year === lastYear.toString() && d.period === latest.period
+                );
+
+                results[stateAbbr] = {
+                    value: parseFloat(latest.value),
+                    previousValue: lastYearValue ? parseFloat(lastYearValue.value) : null,
+                    // The BLS reference month, not the fetch date. This is the
+                    // observation the carry-forward age cap is measured from.
+                    date: `${latest.year}-${latest.period.replace('M', '')}`
+                };
             }
 
             await delay(1000); // Rate limiting
@@ -603,12 +659,17 @@ async function fetchBLSUnemployment() {
 
     const retrieved = Object.keys(results).length;
     if (retrieved === 0) {
-        console.warn('  ⚠️  BLS returned no usable data — falling back to the last published values');
-        return null;
+        if (quotaExhausted) {
+            console.warn('  ⚠️  BLS daily request quota exhausted — falling back to the last published values');
+            console.warn('      Set BLS_API_KEY to use the v2 quota (500/day) instead of the shared anonymous one.');
+        } else {
+            console.warn('  ⚠️  BLS returned no usable data — falling back to the last published values');
+        }
+        return { data: null, reason: quotaExhausted ? 'quota exhausted' : 'no usable response' };
     }
 
     console.log(`  ✓ Retrieved unemployment data for ${retrieved} states`);
-    return results;
+    return { data: results, reason: null };
 }
 
 /**
@@ -1054,14 +1115,9 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             rentBurdenScore = (calibratedMedian - 25) * 3;
             rentBurdenSource = 'jchs_2025';
         } else {
-            // Fallback: use tier-based estimates if no data available
-            const TIER1 = ['CA', 'NY', 'MA', 'HI', 'DC', 'NJ']; // ~32%+ rent burden
-            const TIER2 = ['WA', 'CO', 'FL', 'MD', 'MN', 'CT', 'OR']; // ~29-31%
-            const TIER3 = ['NH', 'VA', 'AZ', 'NV', 'TX', 'IL', 'RI', 'VT', 'AK']; // ~27-29%
-
-            if (TIER1.includes(abbr)) rentBurdenScore = 21; // (32-25)*3
-            else if (TIER2.includes(abbr)) rentBurdenScore = 12; // (29-25)*3
-            else if (TIER3.includes(abbr)) rentBurdenScore = 6; // (27-25)*3
+            // Last resort: a hand-assigned tier. See RENT_BURDEN_TIERS.
+            const tier = Object.values(RENT_BURDEN_TIERS).find(t => t.states.includes(abbr));
+            rentBurdenScore = tier ? tier.score : 0;
             rentBurdenSource = 'tier_estimate';
         }
 
@@ -1091,9 +1147,8 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             fmrScore = (fmrRatio - 1) * 40;
             fmrSource = 'jchs_2025';
         } else {
-            // Fallback: known high-cost states
-            const HIGH_COST = ['CA', 'NY', 'MA', 'HI', 'DC', 'NJ', 'WA', 'CO', 'MD', 'CT'];
-            if (HIGH_COST.includes(abbr)) fmrScore = 15;
+            // Last resort: a hand-assigned tier. See FMR_HIGH_COST_TIER.
+            fmrScore = FMR_HIGH_COST_TIER.states.includes(abbr) ? FMR_HIGH_COST_TIER.score : 0;
             fmrSource = 'tier_estimate';
         }
 
@@ -1171,6 +1226,10 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         // missing data and replaced it with null.
         states[stateCode].metrics = {
             unemployment_rate: unemployment?.[abbr]?.value ?? null,
+            // The BLS reference month the rate describes. Distinct from when we
+            // fetched it: LAUS is monthly and published with its own lag, so a
+            // freshly fetched rate still describes a prior month.
+            unemployment_period: unemployment?.[abbr]?.date ?? null,
             poverty_rate: poverty?.[abbr]?.povertyRate ?? null,
             rent_burden_pct: rentBurden?.[abbr]?.medianRentBurden
                 ?? rentBurdenCarried?.value
@@ -1510,6 +1569,51 @@ function describeTrendsSource(trends) {
 }
 
 /**
+ * Summarise how old the *measurements* are, as distinct from how old the file is.
+ *
+ * These two had been conflated, with real consequences. The frontend measured
+ * staleness against meta.generated, which the daily workflow restamps on every
+ * run whether or not any new data arrived — so the "STALE DATA" badge at 26
+ * hours and the red banner at 72 hours could never fire while the workflow was
+ * healthy. Unemployment was carried forward for 23 consecutive days behind a
+ * green LIVE badge because of it.
+ *
+ * `oldest_observation` is what the badge should key off: the date of the oldest
+ * reading any published index still depends on.
+ */
+function summariseDataAge(meta, states) {
+    const observations = [];
+
+    if (meta.unemployment_observed) observations.push(['unemployment', meta.unemployment_observed]);
+
+    for (const [component, detail] of Object.entries(meta.carried_forward || {})) {
+        if (detail.oldest_observation) observations.push([component, detail.oldest_observation]);
+    }
+
+    // Any indicator explicitly held from a previous run
+    for (const state of Object.values(states)) {
+        for (const indicator of ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability']) {
+            const from = state[indicator]?.carried_forward_from;
+            if (from) observations.push([indicator, from]);
+        }
+    }
+
+    if (observations.length === 0) return null;
+
+    observations.sort((a, b) => a[1].localeCompare(b[1]));
+    const [oldestSource, oldest] = observations[0];
+
+    // Floor, not round: a reading taken this morning is 0 days old, not 1.
+    const ageDays = Math.max(0, Math.floor((Date.now() - new Date(oldest).getTime()) / 86400000));
+
+    return {
+        oldest_observation: oldest,
+        oldest_source: oldestSource,
+        age_days: ageDays
+    };
+}
+
+/**
  * Main execution
  */
 async function main() {
@@ -1533,8 +1637,10 @@ async function main() {
 
     // BLS unavailable → reuse the last published rates rather than letting the
     // biggest input to Financial Anxiety disappear for every state at once.
-    const unemployment = liveUnemployment || carryForwardUnemployment();
-    const unemploymentStale = !liveUnemployment && !!unemployment;
+    const liveUnemploymentData = liveUnemployment?.data || null;
+    const unemploymentFailure = liveUnemployment?.reason || null;
+    const unemployment = liveUnemploymentData || carryForwardUnemployment();
+    const unemploymentStale = !liveUnemploymentData && !!unemployment;
 
     // Fetch Google Trends separately (with quota protection)
     const trends = await fetchGoogleTrends();
@@ -1546,6 +1652,16 @@ async function main() {
     const states = calculateIndices(unemployment, housing, poverty, rentBurden, fmr, jchs, trends, nlihc);
     const national = calculateNational(states);
     const carried = summariseCarryForward(states);
+
+    // Tier estimates should never fire in normal operation now that they sit
+    // below carry-forward. Count them so it is obvious when they do.
+    const tierCounts = {
+        rent_burden: Object.values(states).filter(st => st.metrics?.rent_burden_source === 'tier_estimate').length,
+        fmr_score: Object.values(states).filter(st => st.metrics?.fmr_score_source === 'tier_estimate').length
+    };
+    for (const [component, count] of Object.entries(tierCounts)) {
+        if (count > 0) console.warn(`  ⚠️  ${component}: ${count} states scored from a hand-assigned tier estimate`);
+    }
 
     for (const [component, detail] of Object.entries(carried)) {
         console.log(`  ↩️  ${component}: ${JSON.stringify(detail)}`);
@@ -1561,11 +1677,11 @@ async function main() {
             source: 'BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs',
             update_frequency: 'daily',
             data_sources: {
-                unemployment: liveUnemployment
+                unemployment: liveUnemploymentData
                     ? 'BLS LAUS'
                     : (unemploymentStale
-                        ? `BLS LAUS (carried forward from ${loadPreviousSnapshot()?.as_of || 'previous run'} — BLS unavailable)`
-                        : 'estimated'),
+                        ? `BLS LAUS (carried forward from ${loadPreviousSnapshot()?.meta?.unemployment_observed || loadPreviousSnapshot()?.as_of || 'previous run'} — BLS ${unemploymentFailure || 'unavailable'})`
+                        : `estimated — BLS ${unemploymentFailure || 'unavailable'}`),
                 housing_prices: withCarryForward(housing ? 'FRED HPI' : 'estimated', carried.housing_prices, 'FRED HPI'),
                 poverty: poverty ? 'Census SAIPE' : 'estimated',
                 rent_burden: withCarryForward(
@@ -1589,7 +1705,7 @@ async function main() {
 
             // Observation date behind the current unemployment rates, preserved
             // across carries so staleness is measured from the BLS release.
-            unemployment_observed: liveUnemployment
+            unemployment_observed: liveUnemploymentData
                 ? generated.slice(0, 10)
                 : (loadPreviousSnapshot()?.meta?.unemployment_observed || loadPreviousSnapshot()?.as_of || null),
 
@@ -1600,6 +1716,17 @@ async function main() {
             // where to resume; this is what lets 51 states be covered on a
             // quota that only allows a few dozen requests per day.
             trends_cache: trends?.cache || loadPreviousSnapshot()?.meta?.trends_cache || null,
+
+            // How many states fell through to a hand-assigned tier, and the
+            // tier tables themselves. Published for the same reason as the
+            // regional multipliers: an assumption that moves a state's score
+            // should be inspectable, not buried in the source.
+            tier_estimates: {
+                note: 'Author-assigned fallback bands, not measurements. Used only when a component has no live read and nothing to carry forward. states_scored counts how many states are affected in this reading.',
+                states_scored: tierCounts,
+                rent_burden_tiers: RENT_BURDEN_TIERS,
+                fmr_high_cost_tier: FMR_HIGH_COST_TIER
+            },
 
             // The author-assigned regional priors, published in full so any
             // reader can divide them back out. See REGIONAL_STRESS above.
@@ -1626,6 +1753,13 @@ async function main() {
     };
 
 
+
+    // How old the underlying measurements are — the clock the freshness badge
+    // keys off, as opposed to how recently this file was regenerated.
+    output.meta.data_age = summariseDataAge(output.meta, states);
+    if (output.meta.data_age) {
+        console.log(`  🕐 Oldest observation in this reading: ${output.meta.data_age.oldest_observation} (${output.meta.data_age.age_days}d, ${output.meta.data_age.oldest_source})`);
+    }
 
     // Write outputs
     const dataDir = path.join(__dirname, '..', 'data');
