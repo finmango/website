@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             ['updateMapView', () => updateMapView(APP_STATE.currentIndicator)],
             ['updateRankingsTable', updateRankingsTable],
             ['initEmbedBuilder', initEmbedBuilder],
+            ['renderProvenance', renderProvenance],
             ['openStateFromUrl', openStateFromUrl]
         ];
 
@@ -109,14 +110,37 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Data & Helpers ---
     function formatValue(val) {
+        // Indicators publish null when no value could be computed or carried
+        // forward. Rendering that as "NaN" or crashing the card is worse than
+        // saying nothing is available.
+        if (typeof val !== 'number' || !isFinite(val)) return '--';
         return val.toFixed(1);
     }
 
-    function formatChange(val) {
-        const sign = val >= 0 ? '▲' : '▼';
-        const cssClass = val >= 0 ? 'up' : 'down'; // High values are generally "bad" in this context (stress), but let's stick to standard colors (Green down, Red up usually for "bad" things?)
-        // Actually, let's keep it simple: Up arrow, Down arrow.
-        // In spec: Red = High Stress. So if value goes UP, that's BAD (Red).
+    // Render a period-over-period change.
+    //
+    // Three distinct states, which this used to collapse into one. An indicator
+    // with no change series at all (Food Insecurity and Affordability have
+    // none — SAIPE poverty is annual, and Affordability is a restatement of the
+    // other two) publishes change: null. That was previously stored as a
+    // hardcoded 0 and rendered here as a red "▲ 0.0%", telling every reader
+    // that food insecurity was rising when no change had been measured.
+    //
+    //   null  -> "no change data", with the reason on hover
+    //   ~0    -> flat, neutral
+    //   +/-   -> up (red) or down (green)
+    function formatChange(val, basis) {
+        if (typeof val !== 'number' || !isFinite(val)) {
+            const title = basis ? ` title="${String(basis).replace(/"/g, '&quot;')}"` : '';
+            return `<span class="change-none"${title}>no change data</span>`;
+        }
+
+        if (Math.abs(val) < 0.05) {
+            return `<span class="flat" title="No measurable change since the last reading"> — 0.0%</span>`;
+        }
+
+        const sign = val > 0 ? '▲' : '▼';
+        const cssClass = val > 0 ? 'up' : 'down'; // Red = rising stress
         return `<span class="${cssClass}"> ${sign} ${Math.abs(val).toFixed(1)}%</span>`;
     }
 
@@ -133,40 +157,212 @@ document.addEventListener('DOMContentLoaded', async () => {
         return '#EF4444'; // Red (High)
     }
 
-    // --- Data Freshness Check ---
-    function checkDataFreshness() {
-        if (!DASHBOARD_DATA.meta?.generated) {
-            console.warn('[Freshness] No generated timestamp in DASHBOARD_DATA.meta');
+    // --- Provenance: what this reading actually used ---
+    //
+    // The methodology section lists the sources the Barometer is *designed*
+    // around. This renders what each source actually returned for the current
+    // reading, straight out of meta.data_sources, so a fallback or a carried
+    // forward value is visible on the page rather than only in the JSON.
+    function renderProvenance() {
+        const host = document.getElementById('provenance-table');
+        if (!host) return;
+
+        const sources = DASHBOARD_DATA.meta?.data_sources;
+        if (!sources) {
+            host.innerHTML = '<p>Provenance metadata is unavailable for this reading.</p>';
             return;
         }
 
-        const generated = new Date(DASHBOARD_DATA.meta.generated);
-        const now = new Date();
-        const ageMs = now - generated;
-        const ageHours = ageMs / (1000 * 60 * 60);
+        const LABELS = {
+            unemployment: 'Unemployment rate',
+            housing_prices: 'House price index',
+            poverty: 'Poverty rate',
+            rent_burden: 'Rent burden',
+            fair_market_rent: 'Fair market rent',
+            housing_wage: 'Housing wage',
+            jchs_calibration: 'Housing cost burden calibration',
+            trends: 'Search trends'
+        };
 
-        console.log(`[Freshness] Data age: ${ageHours.toFixed(1)} hours (generated: ${generated.toISOString()})`);
-
-        if (ageHours > 72) {
-            // Critical: show prominent red banner
-            const dateStr = generated.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-            if (els.staleDataBanner) {
-                els.staleDataBanner.textContent = `⚠️ Data has not updated since ${dateStr}. Results may be inaccurate.`;
-                els.staleDataBanner.style.display = 'block';
-            }
-            console.error(`[Freshness] CRITICAL: Data is ${ageHours.toFixed(0)} hours old (>72h). Banner displayed.`);
+        // Anything that is not a clean primary read gets flagged, so a reader
+        // scanning the table sees degraded inputs without parsing the text.
+        function statusOf(value) {
+            const v = String(value).toLowerCase();
+            if (v.includes('not loaded') || v.includes('not used')) return ['unused', 'Not used'];
+            if (v.includes('estimated')) return ['estimated', 'Estimated'];
+            if (v.includes('carried forward for all')) return ['carried', 'Held (all states)'];
+            if (v.includes('carried forward')) return ['carried', 'Carried forward'];
+            if (v.includes('not applied')) return ['carried', 'Published, not applied'];
+            if (v.includes('fallback')) return ['fallback', 'Fallback source'];
+            return ['live', 'Primary source'];
         }
 
-        if (ageHours > 26) {
-            // Stale: replace LIVE badge with amber warning
-            if (els.liveIndicator) {
-                els.liveIndicator.innerHTML = '⚠ STALE DATA';
-                els.liveIndicator.style.cssText = 'color:#92400E; background:#FEF3C7; border:1px solid #F59E0B; border-radius:4px; padding:2px 8px; font-weight:600; font-size:0.8rem;';
-            }
-            console.warn(`[Freshness] Data is ${ageHours.toFixed(0)} hours old (>26h). LIVE badge replaced with STALE DATA.`);
-        } else {
-            console.log(`[Freshness] Data is current (${ageHours.toFixed(1)}h old).`);
+        const rows = Object.entries(sources).map(([key, value]) => {
+            const [cls, label] = statusOf(value);
+            const name = LABELS[key] || key.replace(/_/g, ' ');
+            return `<tr>
+                <td><strong>${name}</strong></td>
+                <td>${String(value)}</td>
+                <td><span class="prov-badge prov-${cls}">${label}</span></td>
+            </tr>`;
+        }).join('');
+
+        host.innerHTML = `<table class="data-dictionary">
+            <thead><tr><th>Input</th><th>What answered for this reading</th><th>Status</th></tr></thead>
+            <tbody>${rows}</tbody>
+        </table>`;
+
+        renderTrendsCoverage();
+        renderPartialWarning();
+    }
+
+    // A state whose composite lost a term is not comparable with states that
+    // still have all four, so it gets said out loud rather than left to be
+    // inferred from a field in the JSON.
+    function renderPartialWarning() {
+        const el = document.getElementById('provenance-partial');
+        if (!el) return;
+
+        const partial = Object.values(DASHBOARD_DATA.states || {})
+            .filter(st => st.housing_stress && st.housing_stress.partial)
+            .map(st => st.abbr);
+
+        if (partial.length === 0) {
+            el.style.display = 'none';
+            return;
         }
+
+        el.style.display = 'block';
+        el.innerHTML = `<strong>Incomplete indices:</strong> Housing Stress for
+            ${partial.length} state${partial.length === 1 ? '' : 's'}
+            (${partial.join(', ')}) is missing its house-price term, which could not be
+            sourced or carried forward. Those scores omit a component the other states
+            include, so they are not directly comparable and will read lower than they
+            should. They are flagged <code>partial</code> in the data.`;
+    }
+
+    // Coverage of the rotating Health Trends fetch. The boost only reaches the
+    // published index once all 51 states have a current reading, so readers
+    // need to know which state the rotation is in.
+    function renderTrendsCoverage() {
+        const el = document.getElementById('provenance-trends');
+        if (!el) return;
+
+        const coverage = DASHBOARD_DATA.meta?.trends_coverage;
+        if (!coverage) {
+            el.textContent = '';
+            return;
+        }
+
+        const entries = Object.entries(coverage);
+        const complete = entries.filter(([, c]) => c.complete).length;
+        const lowest = Math.min(...entries.map(([, c]) => c.states_covered));
+        const highest = Math.max(...entries.map(([, c]) => c.states_covered));
+        const total = entries[0]?.[1]?.states_total || 51;
+
+        if (complete === entries.length) {
+            el.innerHTML = `<strong>Search trends coverage:</strong> all ${total} states current across
+                all four indicators, so the volatility boost is included in the published index.`;
+            return;
+        }
+
+        const span = lowest === highest ? `${lowest}` : `${lowest}\u2013${highest}`;
+        el.innerHTML = `<strong>Search trends coverage:</strong> ${span} of ${total} states have a
+            current reading. The Health Trends quota is too small to poll every state daily, so the
+            fetch rotates and completes roughly weekly. Until coverage is complete the volatility
+            boost is <strong>published but not added to the index</strong>, so no state is ranked
+            higher simply because the rotation reached it first.`;
+    }
+
+    // --- Data Freshness Check ---
+    //
+    // Two different clocks, previously conflated into one:
+    //
+    //   meta.generated  — when this file was last written. The daily workflow
+    //                     restamps it on every run, so it says nothing about
+    //                     whether new data actually arrived.
+    //   meta.data_age   — how old the oldest measurement any published index
+    //                     still depends on actually is.
+    //
+    // Keying the badge off meta.generated meant the STALE warning could never
+    // fire while the workflow was healthy: unemployment was carried forward for
+    // 23 consecutive days behind a green LIVE badge. The measurement clock is
+    // the one that matters to a reader, so it drives the badge; the file clock
+    // is only a backstop for a pipeline that has stopped running entirely.
+    function checkDataFreshness() {
+        const fileAgeHours = DASHBOARD_DATA.meta?.generated
+            ? (Date.now() - new Date(DASHBOARD_DATA.meta.generated).getTime()) / 3600000
+            : null;
+
+        const dataAge = DASHBOARD_DATA.meta?.data_age;
+        const dataAgeDays = typeof dataAge?.age_days === 'number' ? dataAge.age_days : null;
+
+        if (fileAgeHours === null && dataAgeDays === null) {
+            console.warn('[Freshness] No freshness metadata in DASHBOARD_DATA.meta');
+            return;
+        }
+
+        console.log(`[Freshness] File age: ${fileAgeHours === null ? 'unknown' : fileAgeHours.toFixed(1) + 'h'}; ` +
+            `oldest measurement: ${dataAgeDays === null ? 'unknown' : dataAgeDays + 'd'}`);
+
+        // The pipeline itself has stopped: nothing is being refreshed at all.
+        if (fileAgeHours !== null && fileAgeHours > 72) {
+            const dateStr = new Date(DASHBOARD_DATA.meta.generated)
+                .toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            showBanner(`⚠️ The data pipeline has not run since ${dateStr}. These figures may be well out of date.`);
+            setBadge('⚠ PIPELINE STALLED');
+            return;
+        }
+
+        // The pipeline is running, but the measurements behind it are not moving.
+        // 14 days is the threshold: the fastest-moving input (BLS LAUS) is
+        // monthly, so a fortnight without a fresh read means a release was
+        // likely missed rather than merely not due yet.
+        if (dataAgeDays !== null && dataAgeDays >= 14) {
+            showBanner(`⚠️ Underlying data has not refreshed since ${dataAge.oldest_observation} ` +
+                `(${dataAgeDays} days). The ${labelForSource(dataAge.oldest_source)} figures are being ` +
+                `held at their last published values, not re-measured.`);
+            setBadge(`⚠ DATA ${dataAgeDays}D OLD`);
+            return;
+        }
+
+        if (dataAgeDays !== null && dataAgeDays >= 2) {
+            setBadge(`HELD · ${dataAgeDays}D`, 'held');
+            return;
+        }
+
+        if (fileAgeHours !== null && fileAgeHours > 26) {
+            setBadge('⚠ STALE DATA');
+        }
+    }
+
+    function labelForSource(key) {
+        const LABELS = {
+            unemployment: 'unemployment',
+            housing_prices: 'house price',
+            rent_burden: 'rent burden',
+            fair_market_rent: 'fair market rent',
+            financial_anxiety: 'Financial Anxiety',
+            food_insecurity: 'Food Insecurity',
+            housing_stress: 'Housing Stress',
+            affordability: 'Affordability'
+        };
+        return LABELS[key] || String(key).replace(/_/g, ' ');
+    }
+
+    function showBanner(text) {
+        if (!els.staleDataBanner) return;
+        els.staleDataBanner.textContent = text;
+        els.staleDataBanner.style.display = 'block';
+        console.error(`[Freshness] ${text}`);
+    }
+
+    function setBadge(text, tone) {
+        if (!els.liveIndicator) return;
+        els.liveIndicator.innerHTML = text;
+        els.liveIndicator.style.cssText = tone === 'held'
+            ? 'color:#92400E; background:#FEF3C7; border:1px solid #FCD34D; border-radius:4px; padding:2px 8px; font-weight:600; font-size:0.8rem;'
+            : 'color:#92400E; background:#FEF3C7; border:1px solid #F59E0B; border-radius:4px; padding:2px 8px; font-weight:600; font-size:0.8rem;';
     }
 
     // --- Header & Top Stats ---
@@ -199,16 +395,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const national = DASHBOARD_DATA.national;
 
         els.valAnxiety.textContent = formatValue(national.financial_anxiety.value);
-        els.changeAnxiety.innerHTML = formatChange(national.financial_anxiety.change);
+        els.changeAnxiety.innerHTML = formatChange(national.financial_anxiety.change, national.financial_anxiety.change_basis);
 
         els.valFood.textContent = formatValue(national.food_insecurity.value);
-        els.changeFood.innerHTML = formatChange(national.food_insecurity.change);
+        els.changeFood.innerHTML = formatChange(national.food_insecurity.change, national.food_insecurity.change_basis);
 
         els.valHousing.textContent = formatValue(national.housing_stress.value);
-        els.changeHousing.innerHTML = formatChange(national.housing_stress.change);
+        els.changeHousing.innerHTML = formatChange(national.housing_stress.change, national.housing_stress.change_basis);
 
         els.valAfford.textContent = formatValue(national.affordability.value);
-        els.changeAfford.innerHTML = formatChange(national.affordability.change);
+        els.changeAfford.innerHTML = formatChange(national.affordability.change, national.affordability.change_basis);
 
         // Apply severity border classes
         applyCardSeverity();
@@ -413,7 +609,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="panel-indicator-value" style="color: ${getColorForValue(indData.value, ind.key)}">${formatValue(indData.value)}</div>
                     <div class="panel-indicator-meta">
                         <div class="panel-rank">Rank #${indData.rank}</div>
-                        <div class="panel-change">${formatChange(indData.change)}</div>
+                        <div class="panel-change">${formatChange(indData.change, indData.change_basis)}</div>
                     </div>
                 </div>
                 <div class="panel-comparison">
@@ -605,12 +801,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             const valueWidth = ctx.measureText(d.value.toFixed(1)).width;
             ctx.fillStyle = 'rgba(10,10,10,.38)';
             ctx.font = `500 18px ${body}`;
-            const change = typeof d.change === 'number' ? d.change : 0;
-            const flat = Math.abs(change) < 0.05;   // 0.0% is flat, not a rise
-            const arrow = flat ? '—' : (change > 0 ? '▲' : '▼');
+            // A null change has no percentage to print — say so rather than
+            // rendering a 0.0% that reads as a measured result.
+            const hasChange = typeof d.change === 'number' && isFinite(d.change);
+            const changeText = !hasChange
+                ? 'no change data'
+                : (Math.abs(d.change) < 0.05
+                    ? '— 0.0%'
+                    : `${d.change > 0 ? '▲' : '▼'} ${Math.abs(d.change).toFixed(1)}%`);
             const meta = (d.rank ? `#${d.rank} of 51` : '') +
-                (d.rank ? '  ·  ' : '') +
-                `${arrow} ${Math.abs(change).toFixed(1)}%`;
+                (d.rank ? '  ·  ' : '') + changeText;
             ctx.fillText(meta, x + valueWidth + 16, y + 62);
 
             // Severity bar (0-200 scale, same as the dashboard)

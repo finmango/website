@@ -1,6 +1,19 @@
 /**
- * FinMango Research - Calculate Indices
- * Processes raw term data into weighted indicators and generates the final dashboard JSON.
+ * FinMango Research - Calculate Indices (LEGACY / RETIRED)
+ *
+ * This is the original Google-Trends-only pipeline, superseded by
+ * scripts/fetch-real-data.js. It is retained for reference only and is NO
+ * LONGER WIRED INTO THE DAILY WORKFLOW.
+ *
+ * It must not be used to publish data. It filled `change` fields with
+ * Math.random() and derived `trend` from a threshold on that random number, so
+ * every run it produced invented movement figures that were indistinguishable,
+ * in the published JSON, from measured ones. It also overwrote
+ * data/dashboard-data.js and data/latest.json wholesale, discarding the real
+ * pipeline's provenance metadata.
+ *
+ * Running it now requires an explicit --i-know-this-publishes-mock-data flag
+ * and writes only to data/raw/, never over the live dashboard files.
  */
 
 const fs = require('fs');
@@ -93,7 +106,15 @@ function calculateChange(current, previous) {
 }
 
 async function main() {
-    console.log('Calculating Indices...');
+    if (!process.argv.includes('--i-know-this-publishes-mock-data')) {
+        console.error('scripts/calculate-indices.js is retired. Use scripts/fetch-real-data.js.');
+        console.error('This pipeline has no change history and no provenance metadata;');
+        console.error('publishing its output would overwrite the real dataset.');
+        process.exitCode = 1;
+        return;
+    }
+
+    console.log('Calculating Indices (LEGACY - writing to data/raw/ only)...');
 
     const timestamp = new Date().toISOString().split('T')[0];
 
@@ -138,7 +159,8 @@ async function main() {
 
             output.states[region][indName] = {
                 value: indexValue,
-                change: (Math.random() * 10) - 5, // Mock change since no history
+                change: null, // No history in this pipeline; do not invent one
+                change_basis: 'not available - legacy pipeline has no history',
                 rank: 0 // Will calc later
             };
         }
@@ -162,8 +184,9 @@ async function main() {
 
         output.national[indName] = {
             value: avg,
-            change: (Math.random() * 6) - 3, // Mock
-            trend: avg > 100 ? "up" : "down" // Mock
+            change: null, // No history in this pipeline; do not invent one
+            change_basis: 'not available - legacy pipeline has no history',
+            trend: null
         };
     }
 
@@ -186,12 +209,14 @@ const DASHBOARD_DATA = ${JSON.stringify(output, null, 2)};
 if (typeof window !== 'undefined') window.DASHBOARD_DATA = DASHBOARD_DATA;
 `;
 
-    fs.writeFileSync(path.join(__dirname, '../data/dashboard-data.js'), jsContent);
+    // Writes to data/raw/ only. This pipeline must never overwrite the live
+    // dashboard files — it has no provenance metadata and no change history.
+    const outDir = path.join(__dirname, '../data/raw');
+    fs.mkdirSync(outDir, { recursive: true });
+    fs.writeFileSync(path.join(outDir, `legacy-dashboard-data-${timestamp}.js`), jsContent);
+    fs.writeFileSync(path.join(outDir, `legacy-indices-${timestamp}.json`), JSON.stringify(output, null, 2));
 
-    // Also save JSON for researchers
-    fs.writeFileSync(path.join(__dirname, '../data/latest.json'), JSON.stringify(output, null, 2));
-
-    console.log('Calculation complete. Updated dashboard-data.js');
+    console.log(`Calculation complete. Wrote data/raw/legacy-indices-${timestamp}.json`);
 }
 
 if (require.main === module) {

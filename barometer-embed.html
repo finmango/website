@@ -161,6 +161,7 @@
 
         .tile-change.up { color: #EF4444; }
         .tile-change.down { color: #10B981; }
+        .tile-change.none { font-style: italic; opacity: .7; }
 
         .tile-bar {
             height: 3px;
@@ -339,11 +340,19 @@
                     var d = source[ind.key];
                     if (!d) return '';
                     var color = colorFor(d.value);
-                    var change = typeof d.change === 'number' ? d.change : 0;
-                    // A 0.0% move is flat, not a rise — don't paint it red.
-                    var flat = Math.abs(change) < 0.05;
-                    var dir = flat ? 'flat' : (change > 0 ? 'up' : 'down');
-                    var arrow = flat ? '—' : (change > 0 ? '▲' : '▼');
+                    // Three states, not two. A null change means the indicator
+                    // has no change series at all (Food Insecurity rests on
+                    // annual poverty data; Affordability is derived from the
+                    // other two), and printing 0.0% there showed a measured
+                    // result where none exists. A real 0.0% move is flat, not
+                    // a rise — don't paint that red either.
+                    var hasChange = typeof d.change === 'number' && isFinite(d.change);
+                    var flat = hasChange && Math.abs(d.change) < 0.05;
+                    var dir = !hasChange ? 'none' : (flat ? 'flat' : (d.change > 0 ? 'up' : 'down'));
+                    var changeText = !hasChange
+                        ? 'no change data'
+                        : (flat ? '— 0.0%'
+                                : (d.change > 0 ? '▲ ' : '▼ ') + Math.abs(d.change).toFixed(1) + '%');
                     var width = Math.max(2, Math.min(100, (d.value / 200) * 100));
                     var rank = d.rank ? ' · #' + d.rank + ' of 51' : '';
                     return '<div class="tile">' +
@@ -351,8 +360,7 @@
                         '<div class="tile-row">' +
                         '<span class="tile-value" style="color:' + color + '">' +
                         d.value.toFixed(1) + '</span>' +
-                        '<span class="tile-change ' + dir + '">' + arrow + ' ' +
-                        Math.abs(change).toFixed(1) + '%</span>' +
+                        '<span class="tile-change ' + dir + '">' + changeText + '</span>' +
                         '</div>' +
                         '<div class="tile-bar"><span style="width:' + width +
                         '%;background:' + color + '"></span></div>' +
