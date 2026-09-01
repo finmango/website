@@ -31,24 +31,30 @@ jobs:
           # Create data directories if missing
           mkdir -p data/raw
 
+          # Guard the index calculation before it touches published data.
+          # These tests encode the accuracy claims the public methodology page
+          # makes, so a regression here would make that page wrong.
+          echo "::group::Index calculation tests"
+          node scripts/test/barometer-indices.test.js
+          echo "::endgroup::"
+
           # Fetch real economic data from BLS, FRED, Census, HUD APIs
           # Note: JCHS reference data is loaded from data/jchs-reference-2025.json
           echo "::group::Real data fetch"
           node scripts/fetch-real-data.js
           echo "::endgroup::"
 
-          # Validate that the output file is non-empty and contains DASHBOARD_DATA
+          # Validate that the output file is non-empty and contains DASHBOARD_DATA.
+          #
+          # There is deliberately no fallback pipeline here any more. The old
+          # fallback (fetch-trends.js + calculate-indices.js) filled every
+          # `change` field with Math.random() and carried no provenance
+          # metadata, so a failed real fetch silently replaced the published
+          # dataset with invented movement figures. Serving yesterday's real
+          # numbers — which the frontend labels as stale after 26 hours — is
+          # strictly better than serving today's fabricated ones.
           if [ ! -s data/dashboard-data.js ] || ! grep -q "DASHBOARD_DATA" data/dashboard-data.js; then
-            echo "::warning::Real data fetch produced incomplete output — running legacy pipeline as fallback"
-            echo "::group::Legacy pipeline fallback"
-            node scripts/fetch-trends.js || true
-            node scripts/calculate-indices.js || true
-            echo "::endgroup::"
-          fi
-
-          # Final validation: fail the step if we still have no usable data file
-          if [ ! -s data/dashboard-data.js ]; then
-            echo "::error::dashboard-data.js is missing or empty after both pipelines. Dashboard will serve stale data."
+            echo "::error::Real data fetch produced incomplete output. Keeping the last good dataset; the frontend will surface a staleness warning."
             exit 1
           fi
 

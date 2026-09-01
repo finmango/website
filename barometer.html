@@ -508,6 +508,15 @@
         }
         .indicator-change .up { color: var(--signal-bad); }
         .indicator-change .down { color: var(--signal-good); }
+        /* No measured change, and no change series at all, are distinct from a
+           rise. Both render neutral so neither reads as movement. */
+        .indicator-change .flat { color: var(--paper-dim); }
+        .indicator-change .change-none {
+            color: var(--paper-dim);
+            font-style: italic;
+            border-bottom: 1px dotted var(--paper-line);
+            cursor: help;
+        }
 
         .indicator-sparkline { margin-top: .25rem; height: 28px; opacity: .55; }
         .indicator-card.active .indicator-sparkline { opacity: .8; }
@@ -889,6 +898,25 @@
             height: 1px;
             background: var(--orange);
         }
+        .prov-badge {
+            display: inline-block;
+            padding: 1px 8px;
+            border-radius: 999px;
+            font-size: .72rem;
+            font-weight: 600;
+            letter-spacing: .02em;
+            white-space: nowrap;
+        }
+        .prov-live { background: rgba(16,185,129,.15); color: #10B981; }
+        .prov-fallback { background: rgba(245,158,11,.15); color: #F59E0B; }
+        .prov-carried { background: rgba(249,115,22,.15); color: #F97316; }
+        .prov-estimated { background: rgba(239,68,68,.15); color: #EF4444; }
+        .prov-unused { background: rgba(255,255,255,.08); color: var(--paper-dim); }
+        .provenance-note {
+            margin-top: 1rem;
+            padding-top: .9rem;
+            border-top: 1px solid var(--paper-line);
+        }
         .methodology-accordion-content strong { color: var(--paper); font-weight: 600; }
         .methodology-accordion-content em { color: var(--paper-dim); }
         .methodology-accordion-content a { color: var(--orange); text-decoration: none; }
@@ -1039,6 +1067,12 @@
         }
         .panel-change .up { color: var(--signal-bad); }
         .panel-change .down { color: var(--signal-good); }
+        .panel-change .flat { color: var(--paper-dim); }
+        .panel-change .change-none {
+            color: var(--paper-dim);
+            font-style: italic;
+            cursor: help;
+        }
 
         .panel-comparison { margin-top: .75rem; }
         .panel-comparison-label {
@@ -1869,6 +1903,25 @@
                 </a>
             </div>
 
+            <!-- What this run actually used (rendered from the data file itself) -->
+            <div class="methodology-accordion-item">
+                <button class="methodology-accordion-btn open" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <h4>What today&rsquo;s reading actually used</h4>
+                    <span class="accordion-arrow">&#9660;</span>
+                </button>
+                <div class="methodology-accordion-body open">
+                    <div class="methodology-accordion-content">
+                        <p>The table below is not a description of the intended pipeline &mdash; it is
+                        read from the published data file, so it shows which source answered for
+                        <em>this</em> reading. Government APIs go down, and when one does the
+                        Barometer carries the last real measurement forward rather than inventing a
+                        replacement. When that happens it says so here.</p>
+                        <div id="provenance-table"></div>
+                        <p class="provenance-note" id="provenance-trends"></p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Data Sources -->
             <div class="methodology-accordion-item">
                 <button class="methodology-accordion-btn open" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
@@ -1878,8 +1931,9 @@
                 <div class="methodology-accordion-body open">
                     <div class="methodology-accordion-content">
                         <p>The Financial Health Barometer aggregates official government statistics with real-time
-                            volatility data. Our composite indices are calculated daily using the following official
-                            datasets:</p>
+                            volatility data. The table below is the pipeline as <em>designed</em> &mdash; for what
+                            actually answered for the current reading, including any fallbacks or carried-forward
+                            values, see &ldquo;What today&rsquo;s reading actually used&rdquo; above.</p>
                         <table class="data-dictionary">
                             <thead>
                                 <tr>
@@ -1969,12 +2023,47 @@
                     <div class="methodology-accordion-content">
                         <p>The base index values (120 for Financial Anxiety, 85 for Food Insecurity, 100 for Housing Stress)
                             are chosen to place typical economic conditions in the "Moderate" range.</p>
-                        <p><strong>Regional Multipliers</strong> (0.85&ndash;1.35&times;) are applied to each state based on
-                            structural economic factors (cost of living, historical poverty rates, labor market conditions).</p>
-                        <p><strong>Health Trends API Boost</strong> (+0&ndash;10 pts): FinMango accesses the restricted
+
+                        <p><strong>Regional multipliers (0.85&ndash;1.35&times;) are the single most consequential
+                            judgement call in this tool, and they are not measurements.</strong> Every index value you
+                            see is multiplied by its state&rsquo;s figure. They were assigned by hand to reflect
+                            structural conditions that annual federal series are slow to capture &mdash; cost of living,
+                            entrenched poverty, labour-market depth. They are <em>not</em> estimated from data, not
+                            fitted to any outcome, and carry no confidence interval. Reasonable analysts would choose
+                            different numbers.</p>
+
+                        <p>Their effect is large enough that we publish it plainly. If the multipliers were removed
+                            and the indices left purely data-driven:</p>
+                        <ul>
+                            <li><strong>42 of 51</strong> Financial Anxiety ranks would change.</li>
+                            <li><strong>Mississippi would move 24 places.</strong></li>
+                            <li>The multiplier range spans about <strong>60 index points</strong> on the 120 base
+                                &mdash; against roughly <strong>72 points</strong> for the entire national spread of
+                                actual state unemployment rates.</li>
+                        </ul>
+                        <p>Put plainly: roughly half the variation you see between states on the map comes from this
+                            table rather than from the government data. Treat state-to-state gaps as indicative, not as
+                            measured differences. Every state&rsquo;s multiplier is published in
+                            <a href="data/latest.json" target="_blank" rel="noopener noreferrer">latest.json</a> under
+                            <code>meta.regional_multipliers</code>, and per state under
+                            <code>metrics.regional_stress_multiplier</code>, so you can divide it back out and rebuild
+                            the unadjusted index yourself.</p>
+
+                        <p><strong>Index bounds.</strong> Each index is clamped to a fixed range (Financial Anxiety,
+                            Housing Stress and Affordability to 80&ndash;200; Food Insecurity to 55&ndash;160). A state
+                            sitting exactly at a bound has been cut off there, and is <em>tied</em> with any other state
+                            at that bound &mdash; the order between them is an artefact of sorting, not a real
+                            difference. Clamped values carry a <code>clamped</code> flag in the published data.</p>
+
+                        <p><strong>Health Trends boost</strong> (+0&ndash;10 pts): FinMango accesses the restricted
                             <strong>Google Health Trends API</strong>, which returns absolute search probabilities
                             (P(term) &times; 10,000,000) rather than the relative 0&ndash;100 scale on the public
-                            Google Trends website. The raw API value is used directly as the boost (capped at 10 pts).</p>
+                            Google Trends website. The raw API value is used directly as the boost (capped at 10 pts).
+                            The quota is too small to read all 51 states daily, so the fetch rotates through the states
+                            and refreshes the full set roughly weekly. <strong>The boost is only added to an indicator
+                            once every state has a current reading</strong> &mdash; a boost reaching some states and not
+                            others would rank states by which ones the quota happened to reach that week. Coverage for
+                            the current reading is shown at the top of this section.</p>
                     </div>
                 </div>
             </div>
@@ -1995,6 +2084,16 @@
                             <li><strong>120&ndash;150 (Orange):</strong> Elevated Stress &mdash; Warning Signs</li>
                             <li><strong>&gt; 150 (Red):</strong> Crisis Level &mdash; Immediate Attention Needed</li>
                         </ul>
+                        <p><strong>These bands are not comparable across indicators.</strong> The four indices are
+                            built from different inputs on different base values (120, 85 and 100) and are clamped to
+                            different ranges. A Housing Stress reading of 150 and a Food Insecurity reading of 150 do
+                            not represent the same severity of hardship, and the gap between two indicators for one
+                            state is not meaningful. Compare a single indicator across states, or across time &mdash;
+                            not across indicators.</p>
+                        <p><strong>Affordability is not an independent measurement.</strong> It is defined as 60% of
+                            Housing Stress plus 40% of Food Insecurity, so it restates the two indices beside it rather
+                            than adding new information &mdash; in the current reading it tracks Housing Stress at
+                            r&nbsp;=&nbsp;0.90 by construction. Do not read it as a fourth, corroborating signal.</p>
                     </div>
                 </div>
             </div>
@@ -2007,9 +2106,24 @@
                 </button>
                 <div class="methodology-accordion-body">
                     <div class="methodology-accordion-content">
-                        <p>The historical trend chart uses data from the <strong>Google Health Trends API</strong>
-                            to show how stress indicators have changed over time. Historical values are scaled so
-                            that the most recent month equals today's composite index, preserving the trend shape.</p>
+                        <p><strong>The trend chart is not a history of the index.</strong> The index is computed
+                            daily from current data and has never been back-calculated for past months &mdash; the
+                            federal inputs behind it do not exist as a consistent daily series going back a decade.
+                            What the chart shows instead is the <em>shape</em> of Google Health Trends search interest
+                            in a <strong>single representative search term</strong> per indicator, rescaled so its most
+                            recent month equals today&rsquo;s composite index value, then smoothed with a 3-month
+                            trailing average.</p>
+                        <p>The term behind each line:</p>
+                        <ul>
+                            <li><strong>Financial Anxiety</strong> &mdash; &ldquo;debt help&rdquo;</li>
+                            <li><strong>Food Insecurity</strong> &mdash; &ldquo;food stamps&rdquo;</li>
+                            <li><strong>Housing Stress</strong> &mdash; &ldquo;eviction help&rdquo;</li>
+                            <li><strong>Affordability</strong> &mdash; &ldquo;cost of living&rdquo;</li>
+                        </ul>
+                        <p>So the Food Insecurity line traces how often people searched &ldquo;food stamps&rdquo;, not
+                            how the poverty-based index moved. Read a historical point as search behaviour at that
+                            time, drawn on the index&rsquo;s scale &mdash; not as what the Barometer would have read
+                            that month. Only the final point is an actual index value.</p>
                         <p>Because search data is inherently volatile, month-to-month fluctuations may be large
                             &mdash; focus on longer-term direction rather than individual data points.</p>
                     </div>
@@ -2033,12 +2147,63 @@
                 </div>
             </div>
 
+            <!-- Known Limitations -->
+            <div class="methodology-accordion-item">
+                <button class="methodology-accordion-btn" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open');">
+                    <h4>Known limitations</h4>
+                    <span class="accordion-arrow">&#9660;</span>
+                </button>
+                <div class="methodology-accordion-body">
+                    <div class="methodology-accordion-content">
+                        <p>Everything we know to be a weakness in this instrument, in one place. If you find
+                            another, <a href="https://github.com/finmango/website/issues" target="_blank" rel="noopener noreferrer">open an issue</a>.</p>
+                        <ul>
+                            <li><strong>Roughly half the state-to-state variation is an assumption, not a
+                                measurement.</strong> The hand-assigned regional multipliers reorder 42 of 51 ranks.
+                                See &ldquo;Scaling &amp; Regional Adjustment&rdquo; above.</li>
+                            <li><strong>Two of the four indicators have no change data at all.</strong> Food
+                                Insecurity rests on annual Census SAIPE poverty figures, and Affordability is derived
+                                from the other two indices. Neither has a period-over-period change to report, so both
+                                display &ldquo;no change data&rdquo; rather than a percentage.</li>
+                            <li><strong>Affordability is not independent.</strong> It is a weighted restatement of
+                                Housing Stress and Food Insecurity, so it cannot corroborate them.</li>
+                            <li><strong>The indicators update far more slowly than &ldquo;daily&rdquo; suggests.</strong>
+                                The pipeline runs every day, but its inputs do not: unemployment is monthly, poverty
+                                and rent burden are annual, and house prices are quarterly. Most days, most numbers are
+                                unchanged. The Barometer summarises official statistics in near-real-time; it cannot
+                                see ahead of their release schedule.</li>
+                            <li><strong>Annual sources carry their own lag.</strong> Census SAIPE and ACS releases run
+                                one to two years behind the period they describe. A poverty-driven reading today
+                                reflects conditions from a prior year.</li>
+                            <li><strong>The trend chart shows search interest, not index history.</strong> Only the
+                                most recent point is an actual index value.</li>
+                            <li><strong>Clamping creates ties.</strong> States pinned at an index bound cannot be
+                                ordered against each other, though the ranking still prints a number for each.</li>
+                            <li><strong>Index bands are not comparable between indicators.</strong> Compare one
+                                indicator across states or over time, never two indicators against each other.</li>
+                            <li><strong>State-level figures hide the variation that matters most.</strong> Housing cost
+                                and hardship differ enormously within a state; a state median describes no particular
+                                household.</li>
+                            <li><strong>When an upstream API fails, the affected numbers are held, not recomputed.</strong>
+                                The last real measurement is carried forward and labelled as such in
+                                &ldquo;What today&rsquo;s reading actually used&rdquo;. If nothing can be carried
+                                forward, a regional estimate is used and the state is flagged
+                                <code>estimated</code> in the data.</li>
+                            <li><strong>The index is heuristic.</strong> Its base values, weights and multipliers were
+                                chosen for readability, not derived from a model of household finances. It has no
+                                error bars. For econometric work, use the raw underlying metrics in the CSV export
+                                rather than the composite scores.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
             <!-- Citation (always visible) -->
             <div style="border-top: 1px solid var(--paper-line); margin-top: .5rem; padding-top: 1.25rem;">
                 <div class="citation-label">Cite This Data</div>
                 <p class="citation-intro">To cite the Financial Health Barometer in publications:</p>
                 <div class="citation-block">
-                    FinMango Research Team. (2025). <em>Financial Health Barometer: Real-Time US Economic Stress
+                    FinMango Research Team. (<span id="citation-year">2026</span>). <em>Financial Health Barometer: Real-Time US Economic Stress
                         Indicators</em> [Data set]. FinMango. https://finmango.org/barometer
                 </div>
                 <p class="license-line"><a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a> · Open Source · <a href="https://finmango.org/barometer">finmango.org/barometer</a></p>

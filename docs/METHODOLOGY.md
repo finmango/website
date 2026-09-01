@@ -1,6 +1,6 @@
 # Financial Health Barometer - Methodology
 
-**Version 2.4** | Last Updated: December 2024
+**Version 2.5** | Last Updated: September 2026
 
 ## Overview
 
@@ -87,7 +87,8 @@ Affordability = (Housing Stress × 0.60) + (Food Insecurity × 0.40)
 
 ## Regional Stress Multipliers
 
-Regional multipliers account for persistent structural economic differences:
+Regional multipliers are intended to account for persistent structural economic
+differences that annual federal series are slow to capture:
 
 | Region | States | Multiplier | Rationale |
 |--------|--------|------------|-----------|
@@ -96,13 +97,82 @@ Regional multipliers account for persistent structural economic differences:
 | Industrial Midwest | MI, OH, IN, IL, MN | 1.04-1.12 | Mixed employment recovery |
 | Mountain/Plains | WY, ND, SD, NE, IA | 0.85-0.95 | Lower cost of living |
 
+### These are priors, not measurements
+
+**This is the largest source of uncertainty in the Barometer and the most
+important thing to understand before citing it.**
+
+The multipliers are assigned by hand. They are not estimated from any dataset,
+not fitted to any outcome, and have no standard error. Every published index
+value is multiplied by its state's figure, and the effect on what readers see
+is substantial:
+
+- Removing them changes **42 of 51** Financial Anxiety ranks.
+- **Mississippi moves 24 places.**
+- The 0.85-1.35 range spans roughly **60 index points** on the 120 base,
+  against roughly **72 points** for the entire national spread of actual state
+  unemployment rates.
+
+In other words, about half the state-to-state variation on the map comes from
+this table rather than from the government data. State-to-state gaps should be
+read as indicative, not as measured differences.
+
+Every state's multiplier is published in `data/latest.json` under
+`meta.regional_multipliers` and per state under
+`metrics.regional_stress_multiplier`, so any reader can divide it back out and
+reconstruct the unadjusted index.
+
+**Changing a value in `REGIONAL_STRESS` silently reorders the public map.** Do
+not edit one without updating the disclosure on `barometer.html` and the figures
+above.
+
 ## Data Quality & Transparency
 
 ### Source Attribution
 
 Each state's output includes source tracking:
 - `rent_burden_source`: `census_acs` | `jchs_2025` | `tier_estimate`
-- `fmr_source`: `hud_fmr` | `jchs_2025` | `tier_estimate`
+- `fmr_score_source`: which input supplied the FMR term of the housing score
+  (`hud_fmr` | `jchs_2025` | `tier_estimate`)
+- `fair_market_rent_2br` / `fair_market_rent_source`: HUD Fair Market Rent only.
+  Null when HUD is unreachable. This field previously fell back to the JCHS
+  median rent while still labelling itself a Fair Market Rent, putting two
+  different quantities under one name — they disagreed for all 51 states, by as
+  much as $730 (California).
+- `median_rent_2br` / `median_rent_source`: JCHS state median rent, now its own
+  field rather than sharing the FMR one.
+- `housing_price_change` / `housing_price_change_source`: FRED FHFA HPI year-over-year
+  change, or null. A missing observation contributes nothing to the score; it is
+  never replaced with a default.
+- `regional_stress_multiplier`: the author-assigned prior applied to this state.
+- `trends_boost`: the Health Trends reading per indicator, and whether it was
+  `applied` to the index.
+- `clamped`: present on an indicator whose value was cut off at an index bound.
+- `estimated` / `carried_forward_from`: set when a value could not be computed
+  from live data this run.
+
+Run-level provenance lives in `meta.data_sources` and is rendered on the public
+page under "What today's reading actually used", so a fallback or carried-forward
+value is visible to readers rather than only present in the JSON.
+
+### Missing data policy
+
+The pipeline never substitutes a synthesized number for a measurement without
+saying so. In order of preference:
+
+1. **Live API value** — used and labelled with its source.
+2. **Carried forward** — the last published real measurement, labelled
+   `carried_forward_from` with the date it came from.
+3. **Regional estimate** — a national average scaled by the state's multiplier,
+   flagged `estimated: true`.
+
+There is deliberately no fallback data pipeline. The legacy
+`scripts/calculate-indices.js` filled `change` fields with `Math.random()` and
+carried no provenance metadata, so a failed real fetch could silently replace the
+published dataset with invented movement figures. It is retired, gated behind an
+explicit flag, and can no longer write to the live dashboard files. If the real
+fetch fails, the previous dataset stands and the frontend surfaces a staleness
+warning after 26 hours.
 
 ### JCHS Reference Fields
 
@@ -113,18 +183,106 @@ When Harvard JCHS data is used:
 
 ## Index Scaling
 
-Indices are relative measures of economic stress, scaled 80-200 to maximize volatility visibility:
+Indices are relative measures of economic stress:
 
 - **< 90 (Green):** Low Stress / Stable (Healthy Baseline)
 - **90 - 120 (Yellow):** Moderate Stress
 - **120 - 150 (Orange):** Elevated Stress - Warning Signs
 - **> 150 (Red):** Crisis Level - Immediate Attention Needed
 
+### Bounds and ties
+
+Each index is clamped to a fixed range, published in `meta.index_bounds`:
+
+| Indicator | Bounds |
+|-----------|--------|
+| Financial Anxiety | 80-200 |
+| Food Insecurity | 55-160 |
+| Housing Stress | 80-200 |
+| Affordability | 80-200 |
+
+A state sitting exactly at a bound has been cut off there and is **tied** with
+any other state at that bound; the order printed between them is an artefact of
+sort order, not a difference in the data. Clamped values carry a `clamped` field
+(`ceiling` or `floor`).
+
+### The bands are not comparable across indicators
+
+The four indices are built from different inputs, on different base values (120,
+85, 100), and are clamped to different ranges. A Housing Stress reading of 150
+and a Food Insecurity reading of 150 do not represent the same severity. Compare
+one indicator across states or over time — never two indicators against each
+other.
+
+**Affordability is not an independent measurement.** It is defined as
+`0.60 × Housing Stress + 0.40 × Food Insecurity`, so it restates the two indices
+beside it (r ≈ 0.90 with Housing Stress by construction) and cannot corroborate
+them.
+
+## Change Data
+
+Only two indicators have a period-over-period change to report:
+
+| Indicator | Change basis |
+|-----------|--------------|
+| Financial Anxiety | Year-over-year unemployment rate (BLS) |
+| Housing Stress | Year-over-year FHFA house price index (FRED) |
+| Food Insecurity | **None** — SAIPE poverty data is annual |
+| Affordability | **None** — derived index, no independent series |
+
+Indicators without a change series publish `change: null` and a `change_basis`
+string explaining why. They previously published a hardcoded `0`, which the
+dashboard rendered as a red "▲ 0.0%" — displaying a rise where nothing had been
+measured. A national change of exactly zero now reports `trend: "flat"`, and an
+absent one reports `trend: null`.
+
+## Search Trends Layer
+
+The Google Health Trends API returns absolute probabilities
+(P(term | time, geo) × 10,000,000), not the relative 0-100 scale of the public
+Google Trends site. One representative term is queried per indicator:
+
+| Indicator | Term |
+|-----------|------|
+| Financial Anxiety | "debt help" |
+| Food Insecurity | "food stamps" |
+| Housing Stress | "eviction help" |
+| Affordability | "cost of living" |
+
+**Rotating fetch.** The quota allows roughly 40 requests per run, far short of
+the 51 states × 4 indicators a full sweep needs. The fetch previously covered a
+hardcoded list of 10 states, which handed those 10 a volatility boost the other
+41 could never receive and quietly moved them up the rankings. It now advances a
+cursor through all 51 states (9 per run), caching each reading with the date it
+was fetched in `meta.trends_cache`, reaching full coverage in six days and
+refreshing on a rolling basis. Readings older than 10 days are dropped. The
+cursor only advances when a slice completes, so a quota-truncated run retries the
+same states rather than leaving a permanent hole.
+
+**Coverage gate.** The boost is added to an indicator only once every state has a
+current reading (`meta.trends_coverage[indicator].complete`). Until then the
+readings are published but not applied, so no state ranks higher merely because
+the rotation reached it first.
+
+**The trend chart is not index history.** The index is computed daily and has
+never been back-calculated for past months. The chart shows the shape of search
+interest in the single term above, rescaled so its most recent month equals
+today's composite index, then smoothed with a 3-month trailing average. Only the
+final point is an actual index value.
+
 ## Update Frequency
 
-- **Daily:** Unemployment data (BLS)
-- **Monthly:** Housing prices (FRED HPI)
-- **Annual:** Poverty, rent burden, FMR, JCHS calibration
+The pipeline runs daily, but its inputs do not. Most days, most numbers are
+unchanged — the Barometer summarises official statistics in near-real-time, it
+cannot see ahead of their release schedule.
+
+- **Daily:** pipeline run; rotating slice of the search-trends layer
+- **Monthly:** unemployment (BLS LAUS)
+- **Quarterly:** house prices (FRED FHFA HPI)
+- **Annual:** poverty (SAIPE), rent burden (ACS), FMR (HUD), JCHS calibration
+
+Annual federal sources also run one to two years behind the period they
+describe, so a poverty-driven reading today reflects a prior year's conditions.
 
 ## References
 
@@ -143,6 +301,7 @@ Indices are relative measures of economic stress, scaled 80-200 to maximize vola
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.5 | Sep 2026 | Accuracy and transparency pass: removed the fabricated 5% HPI default; split the mislabelled FMR/median-rent field; replaced hardcoded `change: 0` with null plus `change_basis`; rotating trends fetch across all 51 states with a coverage gate; published regional multipliers, index bounds, clamp flags and per-run provenance; retired the `Math.random()` legacy pipeline; added regression tests |
 | 2.4 | Dec 2024 | Added Harvard JCHS 2025 as calibration source; source attribution |
 | 2.3 | Dec 2024 | Added HUD FMR and Census ACS rent burden |
 | 2.2 | Dec 2024 | Added regional stress multipliers |
