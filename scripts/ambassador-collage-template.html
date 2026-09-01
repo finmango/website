@@ -190,8 +190,9 @@
     }
 
     /* ==================== MOSAICS (no type, faces only) ====================
-       45 photographs, edge to edge, chronological so the founding cohort
-       leads. --gap is the only seam; set it to 0 for a seamless block. */
+       45 photographs, edge to edge, in a seeded shuffle so no cohort's
+       photography clumps. --gap is the only seam; set it to 0 for a
+       seamless block. */
     .mosaic { --gap: 3px; background: var(--paper); display: flex; flex-direction: column; gap: var(--gap); }
     .mosaic .tile { border: 0; flex: 1 1 0; min-width: 0; }
     .mosaic .row { display: flex; gap: var(--gap); }
@@ -445,22 +446,55 @@
       </section>`;
   }).join('');
 
-  // Both mosaics run oldest cohort first, so they read as growth.
-  const CHRONOLOGICAL = [...AMBASSADORS].reverse();
+  // Chronological order groups each cohort together, which also groups its
+  // photography — the 2023 studio headshots clump, the 2026 phone shots
+  // clump — so the mosaics shuffle instead. The shuffle is seeded rather
+  // than random so a re-render reproduces the image exactly. Override with
+  // ?seed=N to compare arrangements, or ?order=chrono for the plain
+  // oldest-first sequence.
+  const SHUFFLE_SEED = 7;
+
+  const params = new URLSearchParams(location.search);
+  const seed = Number(params.get('seed') ?? SHUFFLE_SEED);
+  const chronological = [...AMBASSADORS].reverse();
+
+  // mulberry32 — small, fast, and identical across browsers for a given seed.
+  function mulberry32(a) {
+    return function () {
+      a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function seededShuffle(list, s) {
+    const rand = mulberry32(s);
+    const out = [...list];
+    for (let i = out.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      [out[i], out[j]] = [out[j], out[i]];
+    }
+    return out;
+  }
+
+  const MOSAIC_ORDER = params.get('order') === 'chrono'
+    ? chronological
+    : seededShuffle(chronological, seed);
 
   // Rows of 7 and 8, alternating, sum to 45 across six full-bleed rows.
   const SQUARE_ROWS = [7, 8, 7, 8, 7, 8];
   let cursor = 0;
   const squareHTML = SQUARE_ROWS.map(n => {
-    const row = CHRONOLOGICAL.slice(cursor, cursor + n);
+    const row = MOSAIC_ORDER.slice(cursor, cursor + n);
     cursor += n;
     return `<div class="row">${row.map(a => tile(a, false)).join('')}</div>`;
   }).join('');
-  if (cursor !== CHRONOLOGICAL.length) {
-    throw new Error(`SQUARE_ROWS covers ${cursor} of ${CHRONOLOGICAL.length} ambassadors`);
+  if (cursor !== MOSAIC_ORDER.length) {
+    throw new Error(`SQUARE_ROWS covers ${cursor} of ${MOSAIC_ORDER.length} ambassadors`);
   }
 
-  const storyHTML = CHRONOLOGICAL.map(a => tile(a, false)).join('');
+  const storyHTML = MOSAIC_ORDER.map(a => tile(a, false)).join('');
 
   // Every mosaic — bare or under an announcement scrim — paints from here.
   const MOSAIC_HTML = { square: squareHTML, story: storyHTML };

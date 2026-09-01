@@ -9,8 +9,11 @@
 //
 // Fonts and photos are local, so no network access is needed.
 //
-// Usage: node scripts/render-ambassador-collage.js [target]
-//   (no argument renders everything except the poster)
+// Usage: node scripts/render-ambassador-collage.js [target] [--seed=N] [--out-dir=DIR]
+//   (no target renders everything except the poster)
+//   --seed overrides the template's mosaic shuffle, for comparing
+//   arrangements; --out-dir writes elsewhere so a sweep does not clobber
+//   the committed images. Output names gain a -sN suffix when seeded.
 const path = require('path');
 const fs = require('fs');
 
@@ -37,7 +40,10 @@ const TARGETS = {
 // The captioned poster is opt-in; a bare run makes the mosaics and promos.
 const DEFAULT_TARGETS = ['square', 'story', 'notes-square', 'notes-story'];
 
-const which = process.argv[2];
+const args = process.argv.slice(2);
+const seed = (args.find(a => a.startsWith('--seed=')) || '').split('=')[1];
+const outDir = (args.find(a => a.startsWith('--out-dir=')) || '').split('=')[1];
+const which = args.find(a => !a.startsWith('--'));
 if (which && !TARGETS[which]) {
   console.error(`Unknown target "${which}". Known: ${Object.keys(TARGETS).join(', ')}.`);
   process.exit(1);
@@ -67,7 +73,7 @@ function findChrome() {
     const { selector, output, scale, type, quality } = TARGETS[name];
     const page = await browser.newPage();
     await page.setViewport({ width: 1800, height: 1200, deviceScaleFactor: scale });
-    await page.goto('file://' + TEMPLATE, { waitUntil: 'networkidle0' });
+    await page.goto('file://' + TEMPLATE + (seed ? `?seed=${encodeURIComponent(seed)}` : ''), { waitUntil: 'networkidle0' });
     await page.evaluate(() => document.fonts.ready);
     // Every photo must be decoded before the capture, or tiles come out blank.
     await page.evaluate(() => Promise.all(
@@ -80,12 +86,13 @@ function findChrome() {
     const el = await page.$(selector);
     if (!el) throw new Error(`Template is missing ${selector}`);
     const box = await el.boundingBox();
-    const outPath = path.join(ROOT, output);
+    const named = seed ? output.replace(/\.(jpg|png)$/, `-s${seed}.$1`) : output;
+    const outPath = path.join(outDir ? path.resolve(outDir) : ROOT, named);
     await el.screenshot({ path: outPath, type, quality, captureBeyondViewport: true });
     await page.close();
 
     const kb = Math.round(fs.statSync(outPath).size / 1024);
-    console.log(`Wrote ${output} (${Math.round(box.width)}x${Math.round(box.height)} @${scale}x, ${kb}KB)`);
+    console.log(`Wrote ${named} (${Math.round(box.width)}x${Math.round(box.height)} @${scale}x, ${kb}KB)`);
   }
 
   await browser.close();
