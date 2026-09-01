@@ -8,7 +8,9 @@
     Source for the ambassador mosaics:
       ambassador-collage-square.jpg  2160x2160, faces only
       ambassador-collage-story.jpg   1080x1920 (9:16), faces only
-    Render both with: node scripts/render-ambassador-collage.js
+      ambassador-notes-square.jpg    1080x1080, Ambassador Notes announcement
+      ambassador-notes-story.jpg     1080x1920, same announcement at 9:16
+    Render all four with: node scripts/render-ambassador-collage.js
     #poster is an optional named-and-captioned variant:
       node scripts/render-ambassador-collage.js poster
     Fonts are bundled in scripts/fonts/, so no network access is needed.
@@ -198,17 +200,94 @@
 
     /* 45 splits into six full-bleed rows of 7 and 8 — the alternation keeps
        a square canvas from reading as a rigid grid. */
-    #square { width: 1080px; height: 1080px; }
-    #square .row { flex: 1 1 0; min-height: 0; }
+    .m-square { width: 1080px; height: 1080px; }
+    .m-square .row { flex: 1 1 0; min-height: 0; }
 
     /* At 9:16, five columns by nine rows lands 45 exactly, on square tiles. */
-    #story {
+    .m-story {
       width: 1080px;
       height: 1920px;
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       grid-template-rows: repeat(9, 1fr);
     }
+
+    /* ==================== ANNOUNCEMENT OVERLAYS ====================
+       A mosaic under a three-part scrim: a dark strip behind the kicker at
+       the top, a light middle where the faces stay legible as faces, and a
+       dark base under the headline. Wherever white type lands the scrim is
+       at least .86 black, which holds 4.5:1 even over the palest headshot;
+       between those bands it drops to .30 so the mosaic still reads. */
+    .promo { position: relative; overflow: hidden; background: var(--ink); }
+    .promo > .mosaic { position: absolute; inset: 0; }
+    .promo .scrim { position: absolute; inset: 0; }
+    .promo-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #FFFFFF;
+    }
+    .promo .eyebrow { color: rgba(255, 255, 255, .86); }
+    .promo-title { font-weight: 900; line-height: .93; letter-spacing: -.045em; }
+    .promo-rule { height: 3px; background: var(--orange); }
+    .promo-dek { font-weight: 500; letter-spacing: -.015em; color: rgba(255, 255, 255, .92); }
+    .promo-foot {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 24px;
+      border-top: 1px solid rgba(255, 255, 255, .28);
+      font-family: var(--font-mono);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+    }
+    .promo-foot span:last-child { color: rgba(255, 255, 255, .72); text-align: right; }
+
+    #notesSquare { width: 1080px; height: 1080px; }
+    #notesSquare .scrim {
+      background: linear-gradient(180deg,
+        rgba(10, 10, 10, .90) 0%,
+        rgba(10, 10, 10, .86) 10%,
+        rgba(10, 10, 10, .30) 20%,
+        rgba(10, 10, 10, .30) 36%,
+        rgba(10, 10, 10, .93) 56%,
+        rgba(10, 10, 10, .97) 100%);
+    }
+    #notesSquare .promo-content { padding: 52px 72px 64px; }
+    #notesSquare .promo-title { font-size: 124px; }
+    #notesSquare .promo-rule { width: 88px; margin: 34px 0 26px; }
+    #notesSquare .promo-dek { font-size: 34px; max-width: 810px; }
+    #notesSquare .promo-foot { margin-top: 46px; padding-top: 24px; font-size: 19px; }
+
+    /* Instagram and LinkedIn overlay their own UI on roughly the top and
+       bottom 250px of a story, so the type stops well short of both. */
+    #notesStory { width: 1080px; height: 1920px; }
+    #notesStory .scrim {
+      background: linear-gradient(180deg,
+        rgba(10, 10, 10, .90) 0%,
+        rgba(10, 10, 10, .86) 17%,
+        rgba(10, 10, 10, .30) 26%,
+        rgba(10, 10, 10, .30) 44%,
+        rgba(10, 10, 10, .93) 60%,
+        rgba(10, 10, 10, .97) 88%,
+        rgba(10, 10, 10, .95) 100%);
+    }
+    #notesStory .promo-content { padding: 250px 76px 290px; }
+    #notesStory .promo-title { font-size: 132px; }
+    #notesStory .promo-rule { width: 96px; margin: 40px 0 30px; }
+    #notesStory .promo-dek { font-size: 38px; max-width: 840px; }
+    #notesStory .promo-foot {
+      margin-top: 54px;
+      padding-top: 26px;
+      font-size: 20px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    #notesStory .promo-foot span:last-child { text-align: left; }
 
   </style>
 </head>
@@ -233,9 +312,43 @@
     </div>
   </div>
 
-  <div id="square" class="mosaic"></div>
+  <div id="square" class="mosaic m-square" data-mosaic="square"></div>
 
-  <div id="story" class="mosaic"></div>
+  <div id="story" class="mosaic m-story" data-mosaic="story"></div>
+
+  <div id="notesSquare" class="promo">
+    <div class="mosaic m-square" data-mosaic="square"></div>
+    <div class="scrim"></div>
+    <div class="promo-content">
+      <div class="eyebrow">New on finmango.org</div>
+      <div>
+        <div class="promo-title">Ambassador<br>Notes</div>
+        <div class="promo-rule"></div>
+        <div class="promo-dek">Young adults on what financial health actually looks like where they live.</div>
+        <div class="promo-foot">
+          <span>finmango.org/posts</span>
+          <span>45 ambassadors &middot; 16 countries</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="notesStory" class="promo">
+    <div class="mosaic m-story" data-mosaic="story"></div>
+    <div class="scrim"></div>
+    <div class="promo-content">
+      <div class="eyebrow">New on finmango.org</div>
+      <div>
+        <div class="promo-title">Ambassador<br>Notes</div>
+        <div class="promo-rule"></div>
+        <div class="promo-dek">Young adults on what financial health actually looks like where they live.</div>
+        <div class="promo-foot">
+          <span>finmango.org/posts</span>
+          <span>45 ambassadors &middot; 16 countries &middot; since 2023</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
   // Roster mirrors the cohort sections in ambassadors.html, newest first.
@@ -338,7 +451,7 @@
   // Rows of 7 and 8, alternating, sum to 45 across six full-bleed rows.
   const SQUARE_ROWS = [7, 8, 7, 8, 7, 8];
   let cursor = 0;
-  document.getElementById('square').innerHTML = SQUARE_ROWS.map(n => {
+  const squareHTML = SQUARE_ROWS.map(n => {
     const row = CHRONOLOGICAL.slice(cursor, cursor + n);
     cursor += n;
     return `<div class="row">${row.map(a => tile(a, false)).join('')}</div>`;
@@ -347,8 +460,13 @@
     throw new Error(`SQUARE_ROWS covers ${cursor} of ${CHRONOLOGICAL.length} ambassadors`);
   }
 
-  document.getElementById('story').innerHTML =
-    CHRONOLOGICAL.map(a => tile(a, false)).join('');
+  const storyHTML = CHRONOLOGICAL.map(a => tile(a, false)).join('');
+
+  // Every mosaic — bare or under an announcement scrim — paints from here.
+  const MOSAIC_HTML = { square: squareHTML, story: storyHTML };
+  for (const el of document.querySelectorAll('[data-mosaic]')) {
+    el.innerHTML = MOSAIC_HTML[el.dataset.mosaic];
+  }
   </script>
 </body>
 </html>

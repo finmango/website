@@ -3,12 +3,14 @@
 // Two outputs, both captured as elements so their height follows the layout:
 //   ambassador-collage-square.jpg  2160x2160 mosaic, faces only
 //   ambassador-collage-story.jpg   1080x1920 (9:16) mosaic, faces only
+//   ambassador-notes-square.jpg    1080x1080 Ambassador Notes announcement
+//   ambassador-notes-story.jpg     1080x1920 announcement at 9:16
 // Plus an optional captioned poster, rendered only when asked for by name.
 //
 // Fonts and photos are local, so no network access is needed.
 //
-// Usage: node scripts/render-ambassador-collage.js [poster|square]
-//   (no argument renders both)
+// Usage: node scripts/render-ambassador-collage.js [target]
+//   (no argument renders everything except the poster)
 const path = require('path');
 const fs = require('fs');
 
@@ -25,11 +27,15 @@ const ROOT = path.resolve(__dirname, '..');
 const TARGETS = {
   square: { selector: '#square', output: 'ambassador-collage-square.jpg', scale: 2, type: 'jpeg', quality: 92 },
   story: { selector: '#story', output: 'ambassador-collage-story.jpg', scale: 1, type: 'jpeg', quality: 92 },
+  // The announcements carry type over photographs, so they render at their
+  // native social sizes and at a higher quality to keep edges clean.
+  'notes-square': { selector: '#notesSquare', output: 'ambassador-notes-square.jpg', scale: 1, type: 'jpeg', quality: 95 },
+  'notes-story': { selector: '#notesStory', output: 'ambassador-notes-story.jpg', scale: 1, type: 'jpeg', quality: 95 },
   poster: { selector: '#poster', output: 'ambassador-collage.jpg', scale: 1.5, type: 'jpeg', quality: 92 },
 };
 
-// The captioned poster is opt-in; a bare run makes the two mosaics.
-const DEFAULT_TARGETS = ['square', 'story'];
+// The captioned poster is opt-in; a bare run makes the mosaics and promos.
+const DEFAULT_TARGETS = ['square', 'story', 'notes-square', 'notes-story'];
 
 const which = process.argv[2];
 if (which && !TARGETS[which]) {
