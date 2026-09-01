@@ -190,6 +190,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const v = String(value).toLowerCase();
             if (v.includes('not loaded') || v.includes('not used')) return ['unused', 'Not used'];
             if (v.includes('estimated')) return ['estimated', 'Estimated'];
+            if (v.includes('carried forward for all')) return ['carried', 'Held (all states)'];
             if (v.includes('carried forward')) return ['carried', 'Carried forward'];
             if (v.includes('not applied')) return ['carried', 'Published, not applied'];
             if (v.includes('fallback')) return ['fallback', 'Fallback source'];
@@ -212,6 +213,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         </table>`;
 
         renderTrendsCoverage();
+        renderPartialWarning();
+    }
+
+    // A state whose composite lost a term is not comparable with states that
+    // still have all four, so it gets said out loud rather than left to be
+    // inferred from a field in the JSON.
+    function renderPartialWarning() {
+        const el = document.getElementById('provenance-partial');
+        if (!el) return;
+
+        const partial = Object.values(DASHBOARD_DATA.states || {})
+            .filter(st => st.housing_stress && st.housing_stress.partial)
+            .map(st => st.abbr);
+
+        if (partial.length === 0) {
+            el.style.display = 'none';
+            return;
+        }
+
+        el.style.display = 'block';
+        el.innerHTML = `<strong>Incomplete indices:</strong> Housing Stress for
+            ${partial.length} state${partial.length === 1 ? '' : 's'}
+            (${partial.join(', ')}) is missing its house-price term, which could not be
+            sourced or carried forward. Those scores omit a component the other states
+            include, so they are not directly comparable and will read lower than they
+            should. They are flagged <code>partial</code> in the data.`;
     }
 
     // Coverage of the rotating Health Trends fetch. The boost only reaches the

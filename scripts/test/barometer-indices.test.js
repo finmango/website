@@ -11,6 +11,7 @@
 
 const assert = require('assert');
 const {
+    __setPreviousSnapshot,
     calculateIndices,
     calculateNational,
     trendsBoostFor,
@@ -21,6 +22,10 @@ const {
 let passed = 0;
 function test(name, fn) {
     try {
+        // Default every test to "no history", so a test that cares about
+        // carry-forward has to opt in explicitly and none of them silently
+        // depend on whatever data/latest.json happens to contain.
+        __setPreviousSnapshot(null);
         fn();
         passed++;
         console.log(`  ✓ ${name}`);
@@ -52,23 +57,126 @@ function trendsFor(coveredStates) {
 
 console.log('Barometer index calculation');
 
-test('a missing FRED observation adds no house-price points (no invented 5% default)', () => {
-    // The old `hpi?.change || 5` gave every FRED-less state a fabricated year
-    // of 5% house-price growth, worth 10 index points.
-    const withoutHPI = calculateIndices(unemployment, null, poverty);
-    const withZeroHPI = calculateIndices(
+// A previous snapshot carrying a real FRED reading for every state.
+function snapshotWithHPI(change, observedOn) {
+    return {
+        as_of: observedOn,
+        states: Object.fromEntries(ALL.map(a => [`US-${a}`, {
+            abbr: a,
+            metrics: {
+                housing_price_change: change,
+                housing_price_change_observed: observedOn
+            }
+        }]))
+    };
+}
+
+const today = new Date();
+const daysAgo = n => new Date(today.getTime() - n * 86400000).toISOString().slice(0, 10);
+
+test('a missing FRED observation is carried forward, not dropped and not defaulted', () => {
+    // Dropping the term is not neutral: it is worth ~29 points on average, so a
+    // state that lost it would show a phantom housing-market improvement.
+    __setPreviousSnapshot(snapshotWithHPI(8.0, daysAgo(3)));
+    const carried = calculateIndices(unemployment, null, poverty);
+
+    __setPreviousSnapshot(null);
+    const live = calculateIndices(
         unemployment,
-        Object.fromEntries(ALL.map(a => [a, { change: 0 }])),
+        Object.fromEntries(ALL.map(a => [a, { change: 8.0 }])),
         poverty
     );
+
     assert.strictEqual(
-        withoutHPI['US-TX'].housing_stress.value,
-        withZeroHPI['US-TX'].housing_stress.value,
-        'missing HPI should score the same as a measured 0% change'
+        carried['US-TX'].housing_stress.value,
+        live['US-TX'].housing_stress.value,
+        'a carried-forward reading should score identically to the live one'
+    );
+    assert.strictEqual(carried['US-TX'].metrics.housing_price_change, 8.0);
+    assert.match(carried['US-TX'].metrics.housing_price_change_source, /carried forward/);
+});
+
+test('a carried-forward reading keeps its ORIGINAL observation date', () => {
+    // Otherwise each republish resets the staleness clock and a dead source is
+    // carried forever, one day at a time.
+    const observed = daysAgo(40);
+    __setPreviousSnapshot(snapshotWithHPI(8.0, observed));
+    const states = calculateIndices(unemployment, null, poverty);
+    assert.strictEqual(states['US-TX'].metrics.housing_price_change_observed, observed);
+});
+
+test('a carried-forward reading expires rather than being carried indefinitely', () => {
+    // FRED HPI is quarterly; past 180 days a real release has been missed.
+    __setPreviousSnapshot(snapshotWithHPI(8.0, daysAgo(400)));
+    const states = calculateIndices(unemployment, null, poverty);
+    assert.strictEqual(states['US-TX'].metrics.housing_price_change, null);
+    assert.strictEqual(states['US-TX'].housing_stress.partial, true);
+    assert.match(states['US-TX'].housing_stress.partial_reason, /omits a component/);
+});
+
+test('an index missing a component is flagged partial, never silently rescaled', () => {
+    __setPreviousSnapshot(null);
+    const states = calculateIndices(unemployment, null, poverty);
+    assert.strictEqual(states['US-TX'].housing_stress.partial, true);
+});
+
+test('a complete index carries no partial flag', () => {
+    const states = calculateIndices(
+        unemployment,
+        Object.fromEntries(ALL.map(a => [a, { change: 5 }])),
+        poverty
+    );
+    assert.ok(!('partial' in states['US-TX'].housing_stress));
+});
+
+test('a missing observation is never replaced with the old fabricated 5% default', () => {
+    __setPreviousSnapshot(null);
+    const missing = calculateIndices(unemployment, null, poverty);
+    const fabricated = calculateIndices(
+        unemployment,
+        Object.fromEntries(ALL.map(a => [a, { change: 5 }])),
+        poverty
+    );
+    assert.notStrictEqual(
+        missing['US-TX'].housing_stress.value,
+        fabricated['US-TX'].housing_stress.value
     );
 });
 
+test('a fallback value is never laundered into a carried-forward measurement', () => {
+    // The previous run's rent burden came from a hardcoded tier estimate. It
+    // must not reappear tomorrow labelled as a carried-forward ACS reading.
+    __setPreviousSnapshot({
+        as_of: daysAgo(1),
+        states: Object.fromEntries(ALL.map(a => [`US-${a}`, {
+            abbr: a,
+            metrics: { rent_burden_pct: 32, rent_burden_source: 'tier_estimate' }
+        }]))
+    });
+    const states = calculateIndices(unemployment, null, poverty);
+    assert.notStrictEqual(states['US-TX'].metrics.rent_burden_source, 'census_acs_carried_forward');
+});
+
+test('a prior ACS reading outranks the JCHS approximation of it', () => {
+    const jchs = { states: Object.fromEntries(ALL.map(a => [a, { renters_cost_burdened: 52, median_rent: 925 }])) };
+    __setPreviousSnapshot({
+        as_of: daysAgo(2),
+        states: Object.fromEntries(ALL.map(a => [`US-${a}`, {
+            abbr: a,
+            metrics: {
+                rent_burden_pct: 30.2,
+                rent_burden_source: 'census_acs',
+                rent_burden_pct_observed: daysAgo(2)
+            }
+        }]))
+    });
+    const states = calculateIndices(unemployment, null, poverty, null, null, jchs);
+    assert.strictEqual(states['US-TX'].metrics.rent_burden_source, 'census_acs_carried_forward');
+    assert.strictEqual(states['US-TX'].metrics.rent_burden_pct, 30.2);
+});
+
 test('a genuine 0% house-price change is preserved, not rewritten as 5%', () => {
+    __setPreviousSnapshot(snapshotWithHPI(9.9, daysAgo(1))); // must not be used
     const states = calculateIndices(
         unemployment,
         Object.fromEntries(ALL.map(a => [a, { change: 0 }])),

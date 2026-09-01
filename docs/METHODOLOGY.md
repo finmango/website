@@ -158,13 +158,58 @@ value is visible to readers rather than only present in the JSON.
 ### Missing data policy
 
 The pipeline never substitutes a synthesized number for a measurement without
-saying so. In order of preference:
+saying so, and it never drops a term from a composite when the last real
+reading is still usable.
+
+**Why dropping is not the safe default.** Housing Stress is
+`100 + rentBurdenScore + fmrScore + hpiScore`. If FRED misses one state, letting
+that term contribute nothing does not make the index "more cautious" — it
+redefines the index for that one state while the other 50 keep all four terms.
+The house-price term is worth 29 points on average (55 for West Virginia, 19% of
+a typical score). Mississippi with FRED missing would read 144 instead of 182
+and fall from 5th to 33rd: a phantom improvement caused entirely by an outage.
+Because every input here is slow-moving relative to the daily run — house prices
+quarterly, poverty, rent burden and FMR annual — reusing the last real
+observation is close to lossless and far closer to the truth than either a
+fabricated constant or a silently dropped term.
+
+Precedence for every component:
 
 1. **Live API value** — used and labelled with its source.
-2. **Carried forward** — the last published real measurement, labelled
-   `carried_forward_from` with the date it came from.
-3. **Regional estimate** — a national average scaled by the state's multiplier,
-   flagged `estimated: true`.
+2. **Carried forward** — the last real measurement for that same series, within
+   its age cap. Sits *above* the reference datasets: yesterday's actual ACS
+   number beats today's JCHS approximation of it.
+3. **Reference dataset** — Harvard JCHS 2025 or NLIHC OOR 2025.
+4. **Tier estimate** — a hardcoded prior, flagged `tier_estimate`.
+5. **Nothing** — the whole indicator is carried forward
+   (`carried_forward_from`), or failing that estimated from regional baselines
+   (`estimated: true`).
+
+Two guards keep carry-forward honest:
+
+- **Age caps**, set to roughly twice each source's real publication interval, so
+  a value expires only when a genuine release has been missed. Staleness is
+  measured from the original observation date (`*_observed`), preserved across
+  repeated carries — otherwise each republish would reset the clock and a dead
+  source would be carried forever, one day at a time.
+
+  | Series | Cadence | Cap |
+  |--------|---------|-----|
+  | Unemployment (BLS LAUS) | Monthly | 90 days |
+  | House prices (FRED HPI) | Quarterly | 180 days |
+  | Rent burden (Census ACS) | Annual | 550 days |
+  | Fair Market Rent (HUD) | Annual | 550 days |
+  | Search trends (Health Trends) | Rotating | 10 days |
+
+- **No laundering.** A value is only carried if it was itself a primary read.
+  Without this check, a hardcoded tier estimate would reappear the next day
+  labelled as a carried-forward ACS measurement.
+
+**When a component does expire**, the term drops out and the indicator is marked
+`partial: true` with a `partial_reason`. The public page raises a warning naming
+the affected states, because a composite missing a term is not comparable with
+the states that have all four. Run-level carry-forward detail is published in
+`meta.carried_forward` and rendered in the provenance table.
 
 There is deliberately no fallback data pipeline. The legacy
 `scripts/calculate-indices.js` filled `change` fields with `Math.random()` and
@@ -301,7 +346,7 @@ describe, so a poverty-driven reading today reflects a prior year's conditions.
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 2.5 | Sep 2026 | Accuracy and transparency pass: removed the fabricated 5% HPI default; split the mislabelled FMR/median-rent field; replaced hardcoded `change: 0` with null plus `change_basis`; rotating trends fetch across all 51 states with a coverage gate; published regional multipliers, index bounds, clamp flags and per-run provenance; retired the `Math.random()` legacy pipeline; added regression tests |
+| 2.5 | Sep 2026 | Accuracy and transparency pass: replaced the fabricated 5% HPI default with age-capped component carry-forward; split the mislabelled FMR/median-rent field; replaced hardcoded `change: 0` with null plus `change_basis`; rotating trends fetch across all 51 states with a coverage gate; published regional multipliers, index bounds, clamp flags and per-run provenance; retired the `Math.random()` legacy pipeline; added regression tests |
 | 2.4 | Dec 2024 | Added Harvard JCHS 2025 as calibration source; source attribution |
 | 2.3 | Dec 2024 | Added HUD FMR and Census ACS rent burden |
 | 2.2 | Dec 2024 | Added regional stress multipliers |

@@ -138,6 +138,16 @@ function loadNLIHCFallbackData() {
  * unemployment carry-forward, the indicator carry-forward and the timeseries.
  */
 let previousSnapshotCache;
+
+/**
+ * Test seam. The carry-forward paths are the hardest part of this pipeline to
+ * get right and the most costly to get wrong, so tests need to drive them with
+ * a known previous snapshot rather than whatever happens to be on disk.
+ */
+function __setPreviousSnapshot(snapshot) {
+    previousSnapshotCache = snapshot;
+}
+
 function loadPreviousSnapshot() {
     if (previousSnapshotCache !== undefined) return previousSnapshotCache;
     try {
@@ -162,9 +172,24 @@ function loadPreviousSnapshot() {
  * is carried across directly rather than recomputed from a value we no longer
  * have.
  */
+// LAUS is monthly; past 90 days a real release has been missed and the carried
+// rate should no longer be presented as current.
+const UNEMPLOYMENT_MAX_AGE_DAYS = 90;
+
 function carryForwardUnemployment() {
     const previous = loadPreviousSnapshot();
     if (!previous?.states) return null;
+
+    // Without an age cap a prolonged BLS outage would keep republishing the
+    // same rate indefinitely, each run looking as current as the last.
+    const observedOn = previous.meta?.unemployment_observed || previous.as_of;
+    if (observedOn) {
+        const ageDays = (Date.now() - new Date(observedOn).getTime()) / 86400000;
+        if (isFinite(ageDays) && ageDays > UNEMPLOYMENT_MAX_AGE_DAYS) {
+            console.warn(`  ⚠️  Previous unemployment data is ${Math.round(ageDays)} days old (cap ${UNEMPLOYMENT_MAX_AGE_DAYS}) — not carrying forward`);
+            return null;
+        }
+    }
 
     const results = {};
     for (const state of Object.values(previous.states)) {
@@ -175,8 +200,9 @@ function carryForwardUnemployment() {
             value: rate,
             previousValue: null,
             carriedChange: state.financial_anxiety?.change ?? 0,
-            date: previous.as_of || null,
-            carriedForward: true
+            date: observedOn || previous.as_of || null,
+            carriedForward: true,
+            observedOn: observedOn || previous.as_of || null
         };
     }
 
@@ -188,6 +214,61 @@ function carryForwardUnemployment() {
 
     console.log(`  ↩️  Carried forward unemployment for ${count} states from ${previous.as_of}`);
     return results;
+}
+
+/**
+ * Carry a single *component* of a composite index forward from the last
+ * published snapshot.
+ *
+ * Dropping a component is not a neutral act. Housing Stress is
+ * 100 + rentBurdenScore + fmrScore + hpiScore, so a missing FRED observation
+ * does not make the index "less certain" — it silently redefines it for that
+ * one state while the other 50 keep all four terms. In the current reading the
+ * house-price term is worth 29 points on average (55 for West Virginia, 19% of
+ * a typical score). If FRED alone missed Mississippi, its Housing Stress would
+ * read 144 instead of 182 and it would fall from 5th to 33rd — a phantom
+ * improvement caused entirely by an API outage.
+ *
+ * That is why the last real measurement is reused instead. Every input here is
+ * slow-moving relative to the daily run — house prices are quarterly, poverty,
+ * rent burden and FMR are annual — so yesterday's value is very close to
+ * lossless, and vastly closer to the truth than either a fabricated constant or
+ * a silently dropped term.
+ *
+ * Two guards keep this honest:
+ *  - `maxAgeDays` stops a dead source from being carried indefinitely. Each cap
+ *    is set to roughly twice the source's real publication interval, so a value
+ *    expires only when a genuine release has been missed.
+ *  - `wasPrimary` refuses to carry a value that was itself a fallback or a tier
+ *    estimate. Without it, a hardcoded prior would be laundered into looking
+ *    like a carried-forward measurement after one run.
+ *
+ * When a component does expire, it falls through to the reference datasets and
+ * ultimately to carryForwardMissingIndicators, which holds the whole indicator
+ * rather than publishing a partial composite.
+ */
+function carryForwardMetric(abbr, field, { maxAgeDays, wasPrimary }) {
+    const previous = loadPreviousSnapshot();
+    const metrics = previous?.states?.[`US-${abbr}`]?.metrics;
+    if (!metrics) return null;
+
+    const value = metrics[field];
+    if (typeof value !== 'number') return null;
+
+    // Only a value that was a primary read (or an unexpired carry of one) may
+    // be carried again.
+    if (!wasPrimary(metrics)) return null;
+
+    // The snapshot records when the value was published; measure staleness from
+    // the original observation date where one was kept, so repeated carries do
+    // not reset the clock.
+    const observedOn = metrics[`${field}_observed`] || previous.as_of;
+    if (!observedOn) return null;
+
+    const ageDays = (Date.now() - new Date(observedOn).getTime()) / 86400000;
+    if (!isFinite(ageDays) || ageDays > maxAgeDays) return null;
+
+    return { value, observedOn, ageDays: Math.round(ageDays) };
 }
 
 /**
@@ -828,6 +909,7 @@ function clampIndex(raw, min, max) {
  */
 function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr = null, jchs = null, trends = null, nlihc = null) {
     const states = {};
+    const asOfToday = new Date().toISOString().slice(0, 10);
     const stateAbbrs = Object.keys(STATE_FIPS);
 
     // Calculate national averages for relative comparisons
@@ -942,10 +1024,23 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         let rentBurdenScore = 0;
         let rentBurdenSource = 'default';
 
+        // Precedence for every component below: live read, then the last real
+        // measurement carried forward, then a reference dataset, then a
+        // hardcoded tier estimate. Yesterday's actual ACS number beats today's
+        // JCHS approximation of it, so carry-forward sits above the reference
+        // sources, not below them.
+        let rentBurdenCarried = null;
+
         if (stateRentBurden) {
             // Primary source: Census ACS B25071 (median gross rent as % of income)
             rentBurdenScore = (stateRentBurden.medianRentBurden - 25) * 3;
             rentBurdenSource = 'census_acs';
+        } else if ((rentBurdenCarried = carryForwardMetric(abbr, 'rent_burden_pct', {
+            maxAgeDays: 550, // ACS is annual; expire after a missed release
+            wasPrimary: m => m.rent_burden_source === 'census_acs'
+        }))) {
+            rentBurdenScore = (rentBurdenCarried.value - 25) * 3;
+            rentBurdenSource = 'census_acs_carried_forward';
         } else if (jchsState) {
             // Secondary source: Harvard JCHS 2025 (authoritative research)
             // Use renter cost burden % directly (already accounts for 30%+ threshold)
@@ -974,11 +1069,21 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         let fmrScore = 0;
         let fmrSource = 'default';
 
+        let fmrCarried = null;
+
         if (stateFMR) {
             // Primary source: HUD Fair Market Rents API
             const fmrRatio = stateFMR.fmr_2br / nationalAvgFMR;
             fmrScore = (fmrRatio - 1) * 40; // +40 points per 100% above average
             fmrSource = 'hud_fmr';
+        } else if ((fmrCarried = carryForwardMetric(abbr, 'fair_market_rent_2br', {
+            maxAgeDays: 550, // HUD publishes FMRs annually
+            wasPrimary: m => m.fair_market_rent_source === 'HUD FMR API'
+                || m.fair_market_rent_source === 'HUD FMR API (carried forward)'
+        }))) {
+            const fmrRatio = fmrCarried.value / nationalAvgFMR;
+            fmrScore = (fmrRatio - 1) * 40;
+            fmrSource = 'hud_fmr_carried_forward';
         } else if (jchsState && jchsState.median_rent) {
             // Secondary source: JCHS median rent by state
             const nationalAvgJCHS = 1200; // Approximate national median from JCHS
@@ -993,13 +1098,34 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         }
 
         // Housing price change impact (from FRED HPI).
-        // Previously this defaulted to 5% when FRED had no observation, which
-        // invented a year of house-price growth for that state and added 10
-        // points to its housing stress. It also rewrote a genuine 0% change as
-        // 5%, because `|| 5` cannot tell "no data" from "no change". A missing
-        // observation now contributes nothing and is reported as missing.
-        const hpiChange = typeof hpi?.change === 'number' ? hpi.change : null;
+        //
+        // This term used to default to 5% when FRED had no observation, which
+        // invented a year of house-price growth and added 10 points; `|| 5`
+        // also rewrote a genuine 0% change as 5%, unable to tell "no data" from
+        // "no change". Neither a fabricated constant nor a dropped term is
+        // acceptable here: the term is worth 29 points on average, so dropping
+        // it would read as a housing-market improvement caused by an outage.
+        // The last real observation is carried forward instead. FRED HPI is
+        // quarterly, so across a daily gap this is very nearly lossless.
+        let hpiChange = typeof hpi?.change === 'number' ? hpi.change : null;
+        let hpiSource = hpiChange !== null ? 'FRED FHFA HPI' : null;
+        let hpiCarried = null;
+
+        if (hpiChange === null) {
+            hpiCarried = carryForwardMetric(abbr, 'housing_price_change', {
+                maxAgeDays: 180, // quarterly series; expire after two missed releases
+                wasPrimary: m => typeof m.housing_price_change === 'number'
+            });
+            if (hpiCarried) {
+                hpiChange = hpiCarried.value;
+                hpiSource = `FRED FHFA HPI, carried forward from ${hpiCarried.observedOn}`;
+            }
+        }
+
+        // Only once a value is genuinely unavailable does the term drop out —
+        // and then the indicator is flagged rather than quietly rescaled.
         const hpiScore = hpiChange !== null ? hpiChange * 2 : 0;
+        const hpiMissing = hpiChange === null;
 
         // Combine all factors into housing stress score
         // BASE 100 + rent burden impact + FMR impact + HPI impact
@@ -1009,14 +1135,24 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         const housingBoost = boosts.housing_stress;
         if (housingBoost.applied) stressValue += housingBoost.value;
 
+        // A composite missing one of its terms is not comparable with the
+        // states that have all four, so say so on the indicator itself rather
+        // than leaving the gap to be inferred from the metrics block.
         const housingClamped = clampIndex(stressValue, 80, 200);
         states[stateCode].housing_stress = {
             value: housingClamped.value,
             change: hpiChange !== null ? parseFloat(hpiChange.toFixed(1)) : null,
-            change_basis: hpiChange !== null
-                ? 'year-over-year FHFA house price index (FRED)'
-                : 'not available - no FRED HPI observation for this state',
+            change_basis: hpiChange === null
+                ? 'not available - no FRED HPI observation for this state'
+                : (hpiCarried
+                    ? `year-over-year FHFA house price index (FRED), carried forward from ${hpiCarried.observedOn}`
+                    : 'year-over-year FHFA house price index (FRED)'),
             rank: null,
+            ...(hpiMissing && {
+                partial: true,
+                partial_reason: 'house-price term unavailable and too old to carry forward; '
+                    + 'this score omits a component the other states include'
+            }),
             ...(housingClamped.clamped && { clamped: housingClamped.clamped })
         };
 
@@ -1036,8 +1172,15 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         states[stateCode].metrics = {
             unemployment_rate: unemployment?.[abbr]?.value ?? null,
             poverty_rate: poverty?.[abbr]?.povertyRate ?? null,
-            rent_burden_pct: rentBurden?.[abbr]?.medianRentBurden ?? jchsState?.renters_cost_burdened ?? null,
+            rent_burden_pct: rentBurden?.[abbr]?.medianRentBurden
+                ?? rentBurdenCarried?.value
+                ?? jchsState?.renters_cost_burdened ?? null,
             rent_burden_source: rentBurdenSource,
+            // Original observation date, preserved across repeated carries so
+            // staleness is measured from the real reading, not the last republish.
+            rent_burden_pct_observed: rentBurden?.[abbr]
+                ? asOfToday
+                : (rentBurdenCarried?.observedOn ?? null),
 
             // HUD Fair Market Rent, and ONLY HUD FMR. This field previously
             // fell back to the JCHS median rent while still labelling itself
@@ -1046,15 +1189,23 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             // top-level fmr_2br field for every state (California: $1,850 here
             // against $2,580 there). Median rent now has its own field and the
             // FMR field is null when HUD is unreachable.
-            fair_market_rent_2br: fmr?.[abbr]?.fmr_2br ?? null,
-            fair_market_rent_source: fmr?.[abbr] ? 'HUD FMR API' : null,
+            fair_market_rent_2br: fmr?.[abbr]?.fmr_2br ?? fmrCarried?.value ?? null,
+            fair_market_rent_source: fmr?.[abbr]
+                ? 'HUD FMR API'
+                : (fmrCarried ? 'HUD FMR API (carried forward)' : null),
+            fair_market_rent_2br_observed: fmr?.[abbr]
+                ? asOfToday
+                : (fmrCarried?.observedOn ?? null),
             median_rent_2br: jchsState?.median_rent ?? null,
             median_rent_source: jchsState?.median_rent ? 'Harvard JCHS 2025' : null,
 
             // Which input actually supplied the FMR term of the housing score
             fmr_score_source: fmrSource,
             housing_price_change: hpiChange,
-            housing_price_change_source: hpiChange !== null ? 'FRED FHFA HPI' : null,
+            housing_price_change_source: hpiSource,
+            housing_price_change_observed: hpi?.[abbr] || typeof hpi?.change === 'number'
+                ? asOfToday
+                : (hpiCarried?.observedOn ?? null),
 
             // Author-assigned regional prior. Not measured, not fitted, and not
             // derived from any of the sources above — see REGIONAL_STRESS.
@@ -1281,6 +1432,64 @@ function calculateNational(states) {
 }
 
 /**
+ * Count, per component, how many states are running on a carried-forward
+ * reading rather than a live one, and how stale the oldest of them is.
+ *
+ * Component carries happen per state, but the provenance table readers see is
+ * run-level. Without this, a run where FRED answered for 3 states and 48 were
+ * carried would still display a flat "FRED HPI".
+ */
+function summariseCarryForward(states) {
+    const FIELDS = {
+        housing_prices: ['housing_price_change_source', 'housing_price_change_observed'],
+        rent_burden: ['rent_burden_source', 'rent_burden_pct_observed'],
+        fair_market_rent: ['fair_market_rent_source', 'fair_market_rent_2br_observed']
+    };
+
+    const summary = {};
+    for (const [key, [sourceField, observedField]] of Object.entries(FIELDS)) {
+        let carried = 0;
+        let oldest = null;
+        for (const state of Object.values(states)) {
+            const source = state.metrics?.[sourceField];
+            if (typeof source !== 'string' || !/carried[ _]forward/i.test(source)) continue;
+            carried++;
+            const observed = state.metrics?.[observedField];
+            if (observed && (!oldest || observed < oldest)) oldest = observed;
+        }
+        if (carried > 0) summary[key] = { states_carried: carried, oldest_observation: oldest };
+    }
+
+    const partial = Object.values(states).filter(st => st.housing_stress?.partial).length;
+    if (partial > 0) summary.housing_stress_partial = { states_partial: partial };
+
+    return summary;
+}
+
+/**
+ * Append any carry-forward detail to a source label, so the published
+ * provenance string tells the whole story on its own.
+ *
+ * `primaryName` matters when the live fetch returned nothing at all: the base
+ * label is then "estimated" or a reference dataset, but the states are actually
+ * running on carried readings from the real source. Labelling that
+ * "estimated (carried forward...)" would be self-contradictory and would
+ * understate the data — so the primary source's own name is used instead.
+ */
+function withCarryForward(label, detail, primaryName) {
+    if (!detail) return label;
+
+    const when = detail.oldest_observation ? `, oldest observed ${detail.oldest_observation}` : '';
+    const allCarried = detail.states_carried === Object.keys(STATE_FIPS).length;
+    const base = (allCarried && primaryName) ? primaryName : label;
+    const scope = allCarried
+        ? 'carried forward for all 51 states'
+        : `carried forward for ${detail.states_carried} of 51 states`;
+
+    return `${base} (${scope}${when})`;
+}
+
+/**
  * Describe, for the published meta block, what the Health Trends layer actually
  * did this run — not merely whether a key was present. A reader checking
  * provenance needs to know whether the boost reached the numbers.
@@ -1336,6 +1545,11 @@ async function main() {
     console.log('🔢 Calculating composite indices...');
     const states = calculateIndices(unemployment, housing, poverty, rentBurden, fmr, jchs, trends, nlihc);
     const national = calculateNational(states);
+    const carried = summariseCarryForward(states);
+
+    for (const [component, detail] of Object.entries(carried)) {
+        console.log(`  ↩️  ${component}: ${JSON.stringify(detail)}`);
+    }
 
     // Build output
     const generated = new Date().toISOString();
@@ -1352,10 +1566,14 @@ async function main() {
                     : (unemploymentStale
                         ? `BLS LAUS (carried forward from ${loadPreviousSnapshot()?.as_of || 'previous run'} — BLS unavailable)`
                         : 'estimated'),
-                housing_prices: housing ? 'FRED HPI' : 'estimated',
+                housing_prices: withCarryForward(housing ? 'FRED HPI' : 'estimated', carried.housing_prices, 'FRED HPI'),
                 poverty: poverty ? 'Census SAIPE' : 'estimated',
-                rent_burden: rentBurden ? 'Census ACS B25071' : (nlihc ? 'NLIHC OOR 2025 (fallback)' : (jchs ? 'Harvard JCHS 2025' : 'estimated')),
-                fair_market_rent: fmr ? 'HUD FMR API' : (nlihc ? 'NLIHC OOR 2025 (fallback)' : (jchs ? 'Harvard JCHS 2025' : 'estimated')),
+                rent_burden: withCarryForward(
+                    rentBurden ? 'Census ACS B25071' : (nlihc ? 'NLIHC OOR 2025 (fallback)' : (jchs ? 'Harvard JCHS 2025' : 'estimated')),
+                    carried.rent_burden, 'Census ACS B25071'),
+                fair_market_rent: withCarryForward(
+                    fmr ? 'HUD FMR API' : (nlihc ? 'NLIHC OOR 2025 (fallback)' : (jchs ? 'Harvard JCHS 2025' : 'estimated')),
+                    carried.fair_market_rent, 'HUD FMR API'),
                 housing_wage: fmr ? 'Derived from HUD FMR (NLIHC formula)' : (nlihc ? 'NLIHC OOR 2025 (fallback)' : 'estimated'),
                 jchs_calibration: jchs ? 'Harvard JCHS State of the Nation\'s Housing 2025' : 'not loaded',
                 trends: describeTrendsSource(trends)
@@ -1365,6 +1583,16 @@ async function main() {
             // is only added to an indicator once all 51 states have a current
             // reading, so a partial week shows complete: false and the boost is
             // published but not applied.
+            // Per-component carry-forward detail, so a reader can see exactly
+            // which inputs are running on a held value and how old it is.
+            carried_forward: carried,
+
+            // Observation date behind the current unemployment rates, preserved
+            // across carries so staleness is measured from the BLS release.
+            unemployment_observed: liveUnemployment
+                ? generated.slice(0, 10)
+                : (loadPreviousSnapshot()?.meta?.unemployment_observed || loadPreviousSnapshot()?.as_of || null),
+
             trends_coverage: trends?.coverage || null,
             trends_terms: trends?.term_used || null,
 
@@ -1516,6 +1744,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+    __setPreviousSnapshot,
     calculateIndices,
     calculateNational,
     trendsBoostFor,

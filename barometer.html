@@ -917,6 +917,12 @@
             padding-top: .9rem;
             border-top: 1px solid var(--paper-line);
         }
+        .provenance-warn {
+            border-top: none;
+            border-left: 3px solid #F59E0B;
+            padding: .7rem .9rem;
+            background: rgba(245,158,11,.08);
+        }
         .methodology-accordion-content strong { color: var(--paper); font-weight: 600; }
         .methodology-accordion-content em { color: var(--paper-dim); }
         .methodology-accordion-content a { color: var(--orange); text-decoration: none; }
@@ -1918,6 +1924,7 @@
                         replacement. When that happens it says so here.</p>
                         <div id="provenance-table"></div>
                         <p class="provenance-note" id="provenance-trends"></p>
+                        <p class="provenance-note provenance-warn" id="provenance-partial" style="display:none"></p>
                     </div>
                 </div>
             </div>
@@ -2184,11 +2191,13 @@
                             <li><strong>State-level figures hide the variation that matters most.</strong> Housing cost
                                 and hardship differ enormously within a state; a state median describes no particular
                                 household.</li>
-                            <li><strong>When an upstream API fails, the affected numbers are held, not recomputed.</strong>
-                                The last real measurement is carried forward and labelled as such in
-                                &ldquo;What today&rsquo;s reading actually used&rdquo;. If nothing can be carried
-                                forward, a regional estimate is used and the state is flagged
-                                <code>estimated</code> in the data.</li>
+                            <li><strong>When an upstream API fails, the affected numbers are held, not
+                                recomputed.</strong> The last real measurement is carried forward and labelled
+                                in &ldquo;What today&rsquo;s reading actually used&rdquo;. Dropping a term from a
+                                composite would be worse than holding it: the house-price term alone is worth
+                                about 29 index points, so a state that lost it would show a phantom improvement.
+                                Carried values expire once a real release has been missed; past that the index is
+                                flagged <code>partial</code> and a warning names the affected states.</li>
                             <li><strong>The index is heuristic.</strong> Its base values, weights and multipliers were
                                 chosen for readability, not derived from a model of household finances. It has no
                                 error bars. For econometric work, use the raw underlying metrics in the CSV export
