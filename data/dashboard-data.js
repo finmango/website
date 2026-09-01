@@ -1,16 +1,16 @@
 // Financial Health Barometer Data
-// Auto-generated: 2026-08-31T05:19:14.608Z
+// Auto-generated: 2026-09-01T05:19:03.558Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
-  "as_of": "2026-08-31",
+  "as_of": "2026-09-01",
   "meta": {
-    "generated": "2026-08-31T05:19:14.564Z",
+    "generated": "2026-09-01T05:19:03.516Z",
     "version": "2.4",
     "source": "BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs",
     "update_frequency": "daily",
     "data_sources": {
-      "unemployment": "BLS LAUS (carried forward from 2026-08-30 — BLS unavailable)",
+      "unemployment": "BLS LAUS (carried forward from 2026-08-31 — BLS unavailable)",
       "housing_prices": "FRED HPI",
       "poverty": "Census SAIPE",
       "rent_burden": "Census ACS B25071",
@@ -19,7 +19,7 @@ const DASHBOARD_DATA = {
       "jchs_calibration": "Harvard JCHS State of the Nation's Housing 2025",
       "trends": "Google Trends"
     },
-    "augmented_at": "2026-08-31T05:19:14.608Z"
+    "augmented_at": "2026-09-01T05:19:03.557Z"
   },
   "national": {
     "financial_anxiety": {
@@ -2548,10 +2548,6 @@ const DASHBOARD_DATA = {
     "national": {
       "financial_anxiety": [
         {
-          "date": "2016-09-01",
-          "value": 42
-        },
-        {
           "date": "2016-10-01",
           "value": 43
         },
@@ -3026,13 +3022,13 @@ const DASHBOARD_DATA = {
         {
           "date": "2026-08-01",
           "value": 139
+        },
+        {
+          "date": "2026-09-01",
+          "value": 139
         }
       ],
       "food_insecurity": [
-        {
-          "date": "2016-09-01",
-          "value": 98
-        },
         {
           "date": "2016-10-01",
           "value": 100
@@ -3508,13 +3504,13 @@ const DASHBOARD_DATA = {
         {
           "date": "2026-08-01",
           "value": 103
+        },
+        {
+          "date": "2026-09-01",
+          "value": 103
         }
       ],
       "housing_stress": [
-        {
-          "date": "2016-09-01",
-          "value": 43
-        },
         {
           "date": "2016-10-01",
           "value": 44
@@ -3990,13 +3986,13 @@ const DASHBOARD_DATA = {
         {
           "date": "2026-08-01",
           "value": 153
+        },
+        {
+          "date": "2026-09-01",
+          "value": 153
         }
       ],
       "affordability": [
-        {
-          "date": "2016-09-01",
-          "value": 84
-        },
         {
           "date": "2016-10-01",
           "value": 83
@@ -4471,6 +4467,10 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2026-08-01",
+          "value": 133
+        },
+        {
+          "date": "2026-09-01",
           "value": 133
         }
       ]
