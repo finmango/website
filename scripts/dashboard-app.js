@@ -144,17 +144,40 @@ document.addEventListener('DOMContentLoaded', async () => {
         return `<span class="${cssClass}"> ${sign} ${Math.abs(val).toFixed(1)}%</span>`;
     }
 
+    // Severity ramp. Standardized scale, matches the map legend & methodology:
+    //   < 90      Low
+    //   90 - 120  Moderate
+    //   120 - 150 Elevated
+    //   > 150     High
+    //
+    // Two ramps, because the ramp has to be read against its ground. The old
+    // single set (#10B981 / #F59E0B / #F97316 / #EF4444) put three adjacent
+    // oranges next to each other — 1.18, 1.31 and 1.34:1 between neighbours,
+    // i.e. indistinguishable — so a choropleth painted with it read as one
+    // flat blob regardless of the data.
+    //
+    // ON INK (everything on screen: the map, the indicator cards, the state
+    // panel, the rankings bars). Steps through hue with 2.00 / 1.82 / 2.13:1
+    // between neighbours and 4:1 or better against #0A0A0A.
+    // Keep in sync with .legend-* and .indicator-card.severity-* in
+    // barometer.html, and with getColor() in index.html.
     function getColorForValue(value, indicator) {
-        // Standardized Scale: Matches Map Legend & Methodology
-        // < 90      : Low       (Green)
-        // 90 - 120  : Moderate  (Yellow)
-        // 120 - 150 : Elevated  (Orange)
-        // > 150     : High      (Red)
+        if (value < 90) return '#14B8A6';  // teal
+        if (value < 120) return '#FDE68A'; // pale amber
+        if (value < 150) return '#FB923C'; // orange
+        return '#DC2626';                  // red
+    }
 
-        if (value < 90) return '#10B981'; // Green (Low)
-        if (value < 120) return '#F59E0B'; // Yellow (Moderate)
-        if (value < 150) return '#F97316'; // Orange (Elevated)
-        return '#EF4444'; // Red (High)
+    // ON PAPER (the downloadable share card, drawn on #FAFAF7). The ink ramp
+    // cannot be reused here: #FDE68A against paper is 1.19:1, so a Moderate
+    // bar would be invisible on the card. This one darkens monotonically as
+    // severity rises — 2.94 / 4.71 / 6.99 / 10.85:1 against paper, with 1.48:1
+    // or better between neighbours.
+    function getColorForValueOnPaper(value, indicator) {
+        if (value < 90) return '#12A594';  // teal
+        if (value < 120) return '#A16207'; // dark amber
+        if (value < 150) return '#9A3412'; // dark orange
+        return '#701A1A';                  // deep red
     }
 
     // --- Provenance: what this reading actually used ---
@@ -759,11 +782,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Paper
         ctx.fillStyle = '#FAFAF7';
         ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = '#FF6B35';
+        ctx.fillStyle = '#F25A27';
         ctx.fillRect(0, 0, w, 10);
 
         // Eyebrow
-        ctx.fillStyle = '#FF6B35';
+        ctx.fillStyle = '#F25A27';
         ctx.font = `700 20px ${body}`;
         ctx.textBaseline = 'alphabetic';
         drawTrackedText(ctx, 'FINANCIAL HEALTH BAROMETER', pad, pad + 34, 3.4);
@@ -788,7 +811,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!d) return;
             const x = pad + (i % 2) * colW;
             const y = rowTop + Math.floor(i / 2) * rowH;
-            const color = getColorForValue(d.value, ind.key);
+            const color = getColorForValueOnPaper(d.value, ind.key);
 
             ctx.fillStyle = 'rgba(10,10,10,.62)';
             ctx.font = `500 20px ${body}`;
@@ -1012,7 +1035,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     borderColor: '#000000',
                     borderWidth: 3,
                     tension: 0.4,
-                    pointBackgroundColor: '#FF6B35',
+                    pointBackgroundColor: '#F25A27',
                     pointRadius: 4
                 }]
             },

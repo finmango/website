@@ -29,7 +29,7 @@
             --ink-dim: rgba(10, 10, 10, .62);
             --ink-faint: rgba(10, 10, 10, .58);
             --line: rgba(10, 10, 10, .12);
-            --orange: #FF6B35;
+            --orange: #F25A27;
             --logo-filter: none;
             --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
@@ -268,11 +268,27 @@
                 document.documentElement.setAttribute('data-theme', 'dark');
             }
 
+            // Severity ramp. The old set was #10B981 / #F59E0B / #F97316 /
+            // #EF4444 — three adjacent oranges carrying 1.18, 1.31 and 1.34:1
+            // between neighbours, so the choropleth read as one flat blob.
+            //
+            // This embed flips ground via ?theme=dark, and a ramp has to be
+            // read against its ground, so there are two. The ink set steps
+            // through hue (2.00 / 1.82 / 2.13:1 apart, 4:1+ on #0A0A0A); the
+            // paper set darkens monotonically instead, because the ink set's
+            // pale amber is 1.19:1 on #FAFAF7 and would vanish.
+            // Keep in sync with getColorForValue()/getColorForValueOnPaper()
+            // in scripts/dashboard-app.js.
+            var RAMP_ON_INK   = ['#14B8A6', '#FDE68A', '#FB923C', '#DC2626'];
+            var RAMP_ON_PAPER = ['#12A594', '#A16207', '#9A3412', '#701A1A'];
+
             function colorFor(value) {
-                if (value < 90) return '#10B981';
-                if (value < 120) return '#F59E0B';
-                if (value < 150) return '#F97316';
-                return '#EF4444';
+                var dark = document.documentElement.getAttribute('data-theme') === 'dark';
+                var ramp = dark ? RAMP_ON_INK : RAMP_ON_PAPER;
+                if (value < 90) return ramp[0];
+                if (value < 120) return ramp[1];
+                if (value < 150) return ramp[2];
+                return ramp[3];
             }
 
             function normalizeState(raw) {
