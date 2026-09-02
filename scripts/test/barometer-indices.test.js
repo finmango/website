@@ -350,4 +350,68 @@ test('a state outside every tier scores 0, not a silent default', () => {
     assert.strictEqual(ne.housing_stress.value, Math.round(100 * ne.metrics.regional_stress_multiplier));
 });
 
+test('the FMR national average covers carried states, not just live ones', () => {
+    // The FMR score is a ratio against the national average, so the average
+    // must be taken over the same population the ratios are scored on. Taking
+    // it over the live subset only, while scoring states on carried values,
+    // compares each state against a population it is not part of.
+    const fmrMap = Object.fromEntries(ALL.map((a, i) => [a, { fmr_2br: 1000 + i * 40 }]));
+
+    // All live.
+    __setPreviousSnapshot(null);
+    const allLive = calculateIndices(unemployment, null, poverty, null, fmrMap);
+
+    // Same figures, but HUD is down and every one of them is carried forward.
+    __setPreviousSnapshot({
+        as_of: daysAgo(2),
+        states: Object.fromEntries(ALL.map((a, i) => [`US-${a}`, {
+            abbr: a,
+            metrics: {
+                fair_market_rent_2br: 1000 + i * 40,
+                fair_market_rent_source: 'HUD FMR API',
+                fair_market_rent_2br_observed: daysAgo(2)
+            }
+        }]))
+    });
+    const allCarried = calculateIndices(unemployment, null, poverty);
+
+    for (const abbr of ['CA', 'MS', 'NY']) {
+        assert.strictEqual(
+            allCarried[`US-${abbr}`].housing_stress.value,
+            allLive[`US-${abbr}`].housing_stress.value,
+            `${abbr}: a carried FMR should score identically to the same live figure`
+        );
+    }
+});
+
+test('a partial HUD outage does not rescale the states that did answer', () => {
+    // Only three states answer live; the rest carry the same figures. Every
+    // state should still be scored against the full-population average.
+    const full = Object.fromEntries(ALL.map((a, i) => [a, 1000 + i * 40]));
+    __setPreviousSnapshot({
+        as_of: daysAgo(2),
+        states: Object.fromEntries(ALL.map(a => [`US-${a}`, {
+            abbr: a,
+            metrics: {
+                fair_market_rent_2br: full[a],
+                fair_market_rent_source: 'HUD FMR API',
+                fair_market_rent_2br_observed: daysAgo(2)
+            }
+        }]))
+    });
+
+    const partial = calculateIndices(unemployment, null, poverty, null,
+        { CA: { fmr_2br: full.CA }, NY: { fmr_2br: full.NY }, MS: { fmr_2br: full.MS } });
+
+    __setPreviousSnapshot(null);
+    const complete = calculateIndices(unemployment, null, poverty, null,
+        Object.fromEntries(ALL.map(a => [a, { fmr_2br: full[a] }])));
+
+    assert.strictEqual(
+        partial['US-CA'].housing_stress.value,
+        complete['US-CA'].housing_stress.value,
+        'a live state must not be rescaled by which other states answered'
+    );
+});
+
 console.log(`\n${passed} passed${process.exitCode ? ', some failed' : ''}`);

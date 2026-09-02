@@ -410,7 +410,7 @@ async function fetchGoogleTrends() {
 
     if (!apiKey) {
         console.log('\u26A0\uFE0F  GOOGLE_TRENDS_API_KEY not set - skipping trends fetch');
-        return summariseTrends(cache, {}, todayISO, cache.cursor);
+        return summariseTrends(cache, {}, todayISO, cache.cursor, { attempted: false });
     }
 
     console.log('\u{1F4C8} Fetching Google Trends data (rotating slice)...');
@@ -434,6 +434,11 @@ async function fetchGoogleTrends() {
 
     let requestCount = 0;
     let stopped = false;
+    // Distinguish "the rotation has not reached these states yet" from "every
+    // request came back empty". Both leave coverage at 0, but only the second
+    // means the integration is broken.
+    let stateRequests = 0;
+    let stateReadings = 0;
 
     for (const indicator of Object.keys(TRENDS_TERMS)) {
         const term = TRENDS_TERMS[indicator][0];
@@ -469,6 +474,7 @@ async function fetchGoogleTrends() {
                     break;
                 }
 
+                stateRequests++;
                 if (response.ok) {
                     const data = await response.json();
                     const points = data.lines?.[0]?.points;
@@ -477,6 +483,7 @@ async function fetchGoogleTrends() {
                             value: points[points.length - 1].value,
                             fetched: todayISO
                         };
+                        stateReadings++;
                     }
                 }
 
@@ -494,8 +501,17 @@ async function fetchGoogleTrends() {
     // them and leaving a permanent hole in coverage.
     const nextCursor = stopped ? cursor : (cursor + TRENDS_STATES_PER_RUN) % allStates.length;
 
-    console.log(`  \u2713 Trends: ${requestCount} requests made this run`);
-    return summariseTrends(cache, nationalTimeSeries, todayISO, nextCursor);
+    console.log(`  \u2713 Trends: ${requestCount} requests, ${stateReadings}/${stateRequests} state requests returned data`);
+    if (stateRequests > 0 && stateReadings === 0) {
+        console.warn('  \u26A0\uFE0F  Health Trends returned no data for any state this run — check API access.');
+        console.warn('      Coverage cannot complete while this persists, so the volatility boost stays withheld.');
+    }
+
+    return summariseTrends(cache, nationalTimeSeries, todayISO, nextCursor, {
+        state_requests: stateRequests,
+        state_readings: stateReadings,
+        attempted: true
+    });
 }
 
 /**
@@ -507,7 +523,7 @@ async function fetchGoogleTrends() {
  * others is not a signal, it is a thumb on the scale for whichever states
  * happened to be fetched, and it moves the rankings that readers compare.
  */
-function summariseTrends(cache, nationalTimeSeries, todayISO, nextCursor) {
+function summariseTrends(cache, nationalTimeSeries, todayISO, nextCursor, runStats = {}) {
     const totalStates = Object.keys(STATE_FIPS).length;
     const states = {};
     const coverage = {};
@@ -536,11 +552,25 @@ function summariseTrends(cache, nationalTimeSeries, todayISO, nextCursor) {
         console.log(`   ${indicator}: ${status}`);
     }
 
+    // Preserve the date of the last run that actually retrieved something, so a
+    // silently dead integration is visible rather than looking like a rotation
+    // still working its way round.
+    const previousCache = loadPreviousSnapshot()?.meta?.trends_cache;
+    const lastSuccess = runStats.state_readings > 0
+        ? todayISO
+        : (previousCache?.last_successful_fetch || null);
+
     return {
         states,
         coverage,
         nationalTimeSeries,
-        cache: { states: cache.states, cursor: nextCursor, updated: todayISO },
+        run: runStats,
+        cache: {
+            states: cache.states,
+            cursor: nextCursor,
+            updated: todayISO,
+            last_successful_fetch: lastSuccess
+        },
         term_used: Object.fromEntries(
             Object.entries(TRENDS_TERMS).map(([k, v]) => [k, v[0]])
         )
@@ -973,19 +1003,39 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
     const asOfToday = new Date().toISOString().slice(0, 10);
     const stateAbbrs = Object.keys(STATE_FIPS);
 
-    // Calculate national averages for relative comparisons
-    let nationalAvgRentBurden = 27; // National baseline (healthy is ~25%)
-    let nationalAvgFMR = 1400; // National 2-BR FMR baseline
-
-    if (rentBurden) {
-        const burdens = Object.values(rentBurden).map(r => r.medianRentBurden);
-        nationalAvgRentBurden = burdens.reduce((a, b) => a + b, 0) / burdens.length;
+    // Resolve, up front, the Fair Market Rent each state will actually be scored
+    // against — live where HUD answered, carried forward where it did not.
+    //
+    // This has to happen before the national average is taken, because the FMR
+    // score is a RATIO against that average. Computing the average from only
+    // the live subset while scoring states on carried values compares each
+    // state against a different population than it belongs to. With HUD fully
+    // down the average would fall back to the 1400 constant while the states
+    // themselves carried real HUD figures averaging about 1529 — inflating
+    // expensive states by up to 6 index points and understating cheap ones.
+    // A partial HUD outage is worse still: the average would be taken over
+    // whichever handful of states happened to answer.
+    const effectiveFMR = {};
+    for (const abbr of stateAbbrs) {
+        const live = fmr?.[abbr]?.fmr_2br;
+        if (typeof live === 'number') {
+            effectiveFMR[abbr] = { value: live, carried: null };
+            continue;
+        }
+        const carried = carryForwardMetric(abbr, 'fair_market_rent_2br', {
+            maxAgeDays: 550, // HUD publishes FMRs annually
+            wasPrimary: m => m.fair_market_rent_source === 'HUD FMR API'
+                || m.fair_market_rent_source === 'HUD FMR API (carried forward)'
+        });
+        if (carried) effectiveFMR[abbr] = { value: carried.value, carried };
     }
 
-    if (fmr) {
-        const fmrs = Object.values(fmr).map(f => f.fmr_2br);
-        nationalAvgFMR = fmrs.reduce((a, b) => a + b, 0) / fmrs.length;
-    }
+    // National 2-BR FMR baseline, taken over every state that has a usable
+    // figure — the same population the ratios are scored against.
+    const fmrValues = Object.values(effectiveFMR).map(e => e.value);
+    const nationalAvgFMR = fmrValues.length > 0
+        ? fmrValues.reduce((a, b) => a + b, 0) / fmrValues.length
+        : 1400; // Only reached when no state has an FMR at all
 
     // Base scaling parameters (adjusted for crisis-level display)
     const BASE_INDEX = 120; // Start higher to show stress
@@ -1077,7 +1127,6 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         // DATA-DRIVEN FORMULA using Census ACS + Harvard JCHS calibration
         const hpi = housing?.[abbr];
         const stateRentBurden = rentBurden?.[abbr];
-        const stateFMR = fmr?.[abbr];
         const jchsState = jchs?.states?.[abbr];
 
         // Calculate rent burden score from actual Census data or JCHS reference
@@ -1098,7 +1147,13 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             rentBurdenSource = 'census_acs';
         } else if ((rentBurdenCarried = carryForwardMetric(abbr, 'rent_burden_pct', {
             maxAgeDays: 550, // ACS is annual; expire after a missed release
+            // Must accept the label a previous carry writes, or the chain
+            // breaks after a single day and drops to a tier estimate — the
+            // 550-day cap would never actually be reached. The original
+            // observation date still bounds the age, so accepting the carried
+            // label does not extend the window.
             wasPrimary: m => m.rent_burden_source === 'census_acs'
+                || m.rent_burden_source === 'census_acs_carried_forward'
         }))) {
             rentBurdenScore = (rentBurdenCarried.value - 25) * 3;
             rentBurdenSource = 'census_acs_carried_forward';
@@ -1125,21 +1180,15 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         let fmrScore = 0;
         let fmrSource = 'default';
 
-        let fmrCarried = null;
+        // Resolved in the pre-pass above so the ratio and the average it is
+        // taken against cover the same set of states.
+        const resolvedFMR = effectiveFMR[abbr];
+        const fmrCarried = resolvedFMR?.carried || null;
 
-        if (stateFMR) {
-            // Primary source: HUD Fair Market Rents API
-            const fmrRatio = stateFMR.fmr_2br / nationalAvgFMR;
+        if (resolvedFMR) {
+            const fmrRatio = resolvedFMR.value / nationalAvgFMR;
             fmrScore = (fmrRatio - 1) * 40; // +40 points per 100% above average
-            fmrSource = 'hud_fmr';
-        } else if ((fmrCarried = carryForwardMetric(abbr, 'fair_market_rent_2br', {
-            maxAgeDays: 550, // HUD publishes FMRs annually
-            wasPrimary: m => m.fair_market_rent_source === 'HUD FMR API'
-                || m.fair_market_rent_source === 'HUD FMR API (carried forward)'
-        }))) {
-            const fmrRatio = fmrCarried.value / nationalAvgFMR;
-            fmrScore = (fmrRatio - 1) * 40;
-            fmrSource = 'hud_fmr_carried_forward';
+            fmrSource = fmrCarried ? 'hud_fmr_carried_forward' : 'hud_fmr';
         } else if (jchsState && jchsState.median_rent) {
             // Secondary source: JCHS median rent by state
             const nationalAvgJCHS = 1200; // Approximate national median from JCHS
@@ -1211,16 +1260,6 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             ...(housingClamped.clamped && { clamped: housingClamped.clamped })
         };
 
-        // Affordability: Composite of housing costs, poverty, and regional cost of living
-        // Housing weight: 60%, Food/Poverty proxy: 40%
-        // Uses null-coalescing (??), not || , to avoid treating a valid score of 0 as missing.
-        const housingVal = states[stateCode].housing_stress.value ?? (130 * regionalMultiplier);
-        const povertyVal = states[stateCode].food_insecurity.value ?? (115 * regionalMultiplier);
-        let affordValue = (housingVal * 0.60 + povertyVal * 0.40);
-
-        const affordBoost = boosts.affordability;
-        if (affordBoost.applied) affordValue += affordBoost.value;
-
         // Store raw metrics for transparency/export.
         // Null-coalescing (??) throughout: `||` treated a legitimate 0 as
         // missing data and replaced it with null.
@@ -1262,7 +1301,7 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             fmr_score_source: fmrSource,
             housing_price_change: hpiChange,
             housing_price_change_source: hpiSource,
-            housing_price_change_observed: hpi?.[abbr] || typeof hpi?.change === 'number'
+            housing_price_change_observed: typeof hpi?.change === 'number'
                 ? asOfToday
                 : (hpiCarried?.observedOn ?? null),
 
@@ -1282,17 +1321,6 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             jchs_median_rent: jchsState?.median_rent ?? null
         };
 
-        // Affordability is a weighted restatement of the two indices above, so
-        // it has no change series of its own to report.
-        const affordClamped = clampIndex(affordValue, 80, 200);
-        states[stateCode].affordability = {
-            value: affordClamped.value,
-            change: null,
-            change_basis: 'not available - derived index, no independent change series',
-            rank: null,
-            ...(affordClamped.clamped && { clamped: affordClamped.clamped })
-        };
-
         // Top-level raw housing fields consumed by the Housing Policy Lab's
         // syncWithBarometerData(). Live sources win; NLIHC OOR 2025 is the
         // fallback when the Census/HUD APIs are unreachable.
@@ -1310,8 +1338,14 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             : null;
 
         // fmr_2br: HUD FY2025 state-level 2-bedroom FMR (median of counties)
-        let fmrValue = fmr?.[abbr]?.fmr_2br ?? null;
-        let fmrOut = fmr?.[abbr] ? 'HUD FY2025' : null;
+        // Use the same resolved figure the index was scored on. Keying these
+        // off live HUD alone put a carried HUD value in the index while these
+        // fields showed NLIHC — two disagreeing rents in one record, with the
+        // Housing Policy Lab reading the second.
+        let fmrValue = resolvedFMR?.value ?? null;
+        let fmrOut = resolvedFMR
+            ? (fmrCarried ? `HUD FY2025 (carried forward from ${fmrCarried.observedOn})` : 'HUD FY2025')
+            : null;
         if (fmrValue === null && nlihcState) {
             fmrValue = nlihcState.fmr_2br;
             fmrOut = 'NLIHC OOR 2025 (fallback)';
@@ -1323,7 +1357,7 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         // housing_wage: NLIHC Housing Wage, derived from FMR when possible so
         // the two numbers stay internally consistent.
         let wageValue = deriveHousingWage(fmrValue);
-        let wageSource = fmrValue !== null && fmr?.[abbr]
+        let wageSource = fmrValue !== null && resolvedFMR
             ? 'Derived from HUD FMR (NLIHC formula)'
             : (nlihcState ? 'NLIHC OOR 2025 (fallback)' : null);
         if (wageValue === null && nlihcState) {
@@ -1339,10 +1373,74 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
     carryForwardMissingIndicators(states);
     fillMissingValues(states, REGIONAL_STRESS);
 
+    // Affordability is derived LAST, from the final Housing Stress and Food
+    // Insecurity values.
+    //
+    // It used to be computed inside the state loop, before those two had been
+    // carried forward or filled — so during a Census outage it fell back to a
+    // hardcoded `115 * multiplier` for its food term while Food Insecurity was
+    // separately carried forward to its real value moments later. The published
+    // Affordability then contradicted its own published definition (Texas
+    // showed 115 where 0.6·housing + 0.4·food gives 107.4) with nothing marking
+    // it as estimated. Deriving it here means it always equals the formula the
+    // methodology page states.
+    deriveAffordability(states, trends);
+
     // Calculate ranks for each indicator
     calculateRanks(states);
 
     return states;
+}
+
+// Affordability is excluded: it is derived from the three below after they
+// have settled, so carrying it forward or estimating it would only produce a
+// value that deriveAffordability immediately overwrites.
+const BASE_INDICATORS = ['financial_anxiety', 'food_insecurity', 'housing_stress'];
+
+/**
+ * Derive Affordability from the final Housing Stress and Food Insecurity values.
+ *
+ * Purely a restatement of those two indices (60/40), so it is computed after
+ * every other indicator has settled — including carry-forward and estimation —
+ * rather than mid-loop off values that may still be null.
+ */
+function deriveAffordability(states, trends) {
+    for (const [stateCode, state] of Object.entries(states)) {
+        const housing = state.housing_stress;
+        const food = state.food_insecurity;
+        if (typeof housing?.value !== 'number' || typeof food?.value !== 'number') continue;
+
+        let value = housing.value * 0.60 + food.value * 0.40;
+
+        const boost = trendsBoostFor(trends, 'affordability', state.abbr);
+        if (boost.applied) value += boost.value;
+
+        const clamped = clampIndex(value, 80, 200);
+
+        // Affordability inherits whatever qualifies its inputs: a missing
+        // component, a carried value or a regional estimate all flow through.
+        const inherited = {};
+        if (housing.partial) {
+            inherited.partial = true;
+            inherited.partial_reason = 'derived from a Housing Stress score that omits its house-price term';
+        }
+        if (housing.estimated || food.estimated) inherited.estimated = true;
+        const carriedFrom = housing.carried_forward_from || food.carried_forward_from;
+        if (carriedFrom) inherited.carried_forward_from = carriedFrom;
+
+        state.affordability = {
+            value: clamped.value,
+            change: null,
+            change_basis: 'not available - derived index, no independent change series',
+            rank: null,
+            ...inherited,
+            ...(clamped.clamped && { clamped: clamped.clamped })
+        };
+
+        if (state.metrics?.trends_boost) {
+            state.metrics.trends_boost.affordability = { value: boost.value, applied: boost.applied };
+        }
+    }
 }
 
 /**
@@ -1357,7 +1455,7 @@ function carryForwardMissingIndicators(states) {
     const previous = loadPreviousSnapshot();
     if (!previous?.states) return;
 
-    const indicators = ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability'];
+    const indicators = BASE_INDICATORS;
     const carried = {};
 
     for (const [stateCode, state] of Object.entries(states)) {
@@ -1390,7 +1488,7 @@ function carryForwardMissingIndicators(states) {
  * Fill missing values with regional estimates
  */
 function fillMissingValues(states, regionalStress = {}) {
-    const indicators = ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability'];
+    const indicators = BASE_INDICATORS;
 
     // Calculate national averages from available data
     const averages = {};
@@ -1561,11 +1659,24 @@ function describeTrendsSource(trends) {
 
     const applied = coverage.filter(c => c.complete).length;
     if (applied === coverage.length) return 'Google Health Trends API (boost applied, all 51 states covered)';
-    if (applied === 0) {
-        const best = Math.max(...coverage.map(c => c.states_covered));
-        return `Google Health Trends API (published but NOT applied - coverage still building, best ${best}/51)`;
+
+    // A rotation that is progressing and one that is returning nothing both sit
+    // at low coverage. Only the first is "building".
+    const run = trends.run || {};
+    if (run.attempted === false) {
+        return 'Google Health Trends API (not fetched - no API key configured; boost withheld)';
     }
-    return `Google Health Trends API (boost applied to ${applied} of ${coverage.length} indicators; others still building coverage)`;
+    if (run.state_requests > 0 && run.state_readings === 0) {
+        const since = trends.cache?.last_successful_fetch;
+        return `Google Health Trends API (NOT WORKING - ${run.state_requests} requests returned no data`
+            + `${since ? `, last successful fetch ${since}` : ', no successful fetch on record'}; boost withheld)`;
+    }
+
+    const best = Math.max(...coverage.map(c => c.states_covered));
+    if (applied === 0) {
+        return `Google Health Trends API (published but NOT applied - coverage building, best ${best}/51)`;
+    }
+    return `Google Health Trends API (boost applied to ${applied} of ${coverage.length} indicators; others building coverage, best ${best}/51)`;
 }
 
 /**
@@ -1710,6 +1821,9 @@ async function main() {
                 : (loadPreviousSnapshot()?.meta?.unemployment_observed || loadPreviousSnapshot()?.as_of || null),
 
             trends_coverage: trends?.coverage || null,
+            // What the latest fetch actually retrieved, so a dead integration is
+            // distinguishable from a rotation still in progress.
+            trends_run: trends?.run || null,
             trends_terms: trends?.term_used || null,
 
             // Rotating fetch state. Republished every run so the next run knows

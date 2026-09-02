@@ -107,9 +107,17 @@ function augment() {
         const metricFMR = typeof metrics.fair_market_rent_2br === 'number' ? metrics.fair_market_rent_2br : null;
         let fmrValue = liveFMR;
         let fmrSource = state.fmr_2br?.source || null;
-        if (fmrValue === null && metricFMR !== null && metrics.fmr_source === 'hud_fmr') {
+        // metrics.fmr_source was split into fmr_score_source (which input drove
+        // the housing score) and fair_market_rent_source (the provenance of the
+        // FMR figure itself). This branch still tested the removed name, so it
+        // could never fire and HUD figures were never promoted here.
+        // fair_market_rent_2br is HUD-only by construction now, so its presence
+        // is the check — including when the value was carried forward.
+        if (fmrValue === null && metricFMR !== null && metrics.fair_market_rent_source) {
             fmrValue = metricFMR;
-            fmrSource = 'HUD FY2025';
+            fmrSource = metrics.fair_market_rent_source.includes('carried forward')
+                ? `HUD FY2025 (${metrics.fair_market_rent_source})`
+                : 'HUD FY2025';
         }
         if (fmrValue === null && nlihcState) {
             fmrValue = nlihcState.fmr_2br;
