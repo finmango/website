@@ -109,13 +109,26 @@
       /* Palette — the whole page runs on these five */
       --paper: #FAFAF7;
       --ink: #0A0A0A;
-      --orange: #FF6B35;
+      --orange: #F25A27;
       --orange-deep: #E5511B;
+      /* Two accents, not one, split by ROLE:
+           --orange      display type and graphics — headline ems, big stat
+                         numbers, rules, dots, SVG strokes. At 30px/900 and up
+                         its 2.7:1 on paper is a deliberate brand deviation.
+           --orange-ink  everything at interface scale — button and pill
+                         fills carrying white text, badges, captions, link
+                         hovers, the focus ring. Clears AA on both counts
+                         (4.95:1 as text on paper, 5.18:1 under white).
+         Keeping these separate is what lets the brand orange stay bright
+         without the small type inheriting an unreadable 2.7:1. */
+      --orange-ink: #C2410C;
       --signal-good: #34D399;   /* used only on ink */
       --signal-bad: #F87171;    /* used only on ink */
 
-      /* Derived ink opacities */
-      --ink-dim: rgba(10, 10, 10, .62);
+      /* Derived ink opacities. dim and faint were .62/.58 — 4% apart, so two
+         tokens rendered as one grey. dim now carries body copy at 7.5:1 and
+         faint stays the label tier at 4.8:1, a gap you can actually see. */
+      --ink-dim: rgba(10, 10, 10, .70);
       --ink-faint: rgba(10, 10, 10, .58);
       --ink-line: rgba(10, 10, 10, .1);
       --ink-line-soft: rgba(10, 10, 10, .06);
@@ -158,10 +171,10 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    ::selection { background: var(--orange); color: #fff; }
+    ::selection { background: var(--orange-ink); color: #fff; }
 
     :focus-visible {
-      outline: 2px solid var(--orange);
+      outline: 2px solid var(--orange-ink);
       outline-offset: 3px;
     }
 
@@ -188,9 +201,12 @@
       padding: 0 var(--gutter);
     }
 
+    /* The label tier was uniformly .72rem (11.5px at a 16px root) — disciplined
+       but there is a lot of it, and section eyebrows are the tier a reader
+       actually navigates by. Those go up; the data readouts stay at .72rem. */
     .eyebrow {
       font-family: var(--font-mono);
-      font-size: .72rem;
+      font-size: .79rem;
       font-weight: 500;
       text-transform: uppercase;
       letter-spacing: 0.12em;
@@ -214,7 +230,7 @@
       align-items: center;
       gap: .85rem;
       padding: 1.05rem 1.7rem;
-      background: var(--orange);
+      background: var(--orange-ink);
       color: #FFFFFF;
       font-weight: 600;
       font-size: .95rem;
@@ -337,7 +353,7 @@
       display: inline-flex;
       align-items: center;
       padding: .55rem 1.15rem !important;
-      background: var(--orange);
+      background: var(--orange-ink);
       color: #fff !important;
       text-decoration: none !important;
       font-size: .82rem !important;
@@ -366,7 +382,7 @@
       transition: transform .25s ease;
       color: var(--ink-faint);
     }
-    .dropdown:hover .chev, .dropdown:focus-within .chev { transform: rotate(180deg); color: var(--orange); }
+    .dropdown:hover .chev, .dropdown:focus-within .chev { transform: rotate(180deg); color: var(--orange-ink); }
 
     .dropdown-content {
       visibility: hidden;
@@ -419,7 +435,7 @@
       text-decoration: none;
       transition: background .15s ease;
     }
-    .dropdown-item:hover, .dropdown-item:focus-visible { background: rgba(255, 107, 53, .06); }
+    .dropdown-item:hover, .dropdown-item:focus-visible { background: rgba(242, 90, 39, .06); }
     .dropdown-item-text { display: flex; flex-direction: column; gap: .12rem; }
     .dropdown-item-name {
       font-size: .88rem;
@@ -428,10 +444,10 @@
       letter-spacing: -.01em;
       transition: color .15s ease;
     }
-    .dropdown-item:hover .dropdown-item-name { color: var(--orange); }
+    .dropdown-item:hover .dropdown-item-name { color: var(--orange-ink); }
     .dropdown-item-desc { font-size: .7rem; font-weight: 400; color: var(--ink-dim); letter-spacing: .005em; }
     .dropdown-external { font-size: .8rem; color: var(--ink-faint); transition: all .15s ease; flex-shrink: 0; }
-    .dropdown-item:hover .dropdown-external { color: var(--orange); transform: translate(2px, -2px); }
+    .dropdown-item:hover .dropdown-external { color: var(--orange-ink); transform: translate(2px, -2px); }
 
     .mobile-controls { display: none; gap: 1rem; align-items: center; }
 
@@ -451,15 +467,18 @@
       pointer-events: none;
       z-index: 0;
     }
+    /* Was a 60vw square (864px at desktop) radial gradient at .09 alpha with
+       an additional blur(40px) on top — a large compositing cost for something
+       that did not survive to the screen. Same warmth, no blur layer, and it
+       actually reads now. */
     .hero-bg::before {
       content: '';
       position: absolute;
-      top: 28%;
-      left: -12%;
-      width: 60vw;
-      height: 60vw;
-      background: radial-gradient(circle, rgba(255, 107, 53, .09) 0%, transparent 60%);
-      filter: blur(40px);
+      top: 18%;
+      left: -10%;
+      width: 46vw;
+      height: 46vw;
+      background: radial-gradient(circle, rgba(242, 90, 39, .13) 0%, transparent 62%);
     }
 
     .hero-container {
@@ -494,13 +513,13 @@
       width: 6px; height: 6px;
       border-radius: 50%;
       background: var(--orange);
-      box-shadow: 0 0 0 0 rgba(255, 107, 53, .5);
+      box-shadow: 0 0 0 0 rgba(242, 90, 39, .5);
       animation: hb-pulse 2.4s ease-out infinite;
     }
     @keyframes hb-pulse {
-      0% { box-shadow: 0 0 0 0 rgba(255, 107, 53, .5); }
-      70% { box-shadow: 0 0 0 10px rgba(255, 107, 53, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(255, 107, 53, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(242, 90, 39, .5); }
+      70% { box-shadow: 0 0 0 10px rgba(242, 90, 39, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(242, 90, 39, 0); }
     }
 
     .hero h1 {
@@ -538,28 +557,33 @@
     }
     @keyframes draw-stroke { to { stroke-dashoffset: 0; } }
 
+    /* Was 1fr auto auto — subhead, stats and both CTAs on a single line, which
+       squeezed 10M+/100K+ (the strongest proof on the page) into the narrowest
+       slot in the row. Two rows instead: the claim and its numbers share the
+       first, the CTAs get the second and stop crowding the right edge. */
     .hb-bottom {
       display: grid;
-      grid-template-columns: 1fr auto auto;
+      grid-template-columns: 1fr auto;
       align-items: end;
-      gap: 3rem;
+      gap: 2.25rem 3rem;
       padding-top: 1.75rem;
       border-top: 1px solid var(--ink-line-soft);
     }
+    .hb-cta-row { grid-column: 1 / -1; }
     .hb-sub {
       font-size: clamp(1.05rem, 1.5vw, 1.35rem);
       font-weight: 400;
       line-height: 1.5;
       color: var(--ink-dim);
-      max-width: 44ch;
+      max-width: 50ch;
       letter-spacing: -.015em;
     }
-    .hb-sub strong { color: var(--ink); font-weight: 500; }
+    .hb-sub strong { color: var(--ink); font-weight: 600; }
 
-    .hb-stats { display: flex; gap: 2.5rem; align-items: flex-end; }
+    .hb-stats { display: flex; gap: 3.25rem; align-items: flex-end; }
     .hb-stat { display: flex; flex-direction: column; gap: .4rem; }
     .hb-stat-num {
-      font-size: clamp(2rem, 3.2vw, 2.7rem);
+      font-size: clamp(2.25rem, 3.6vw, 3.1rem);
       font-weight: 900;
       letter-spacing: -.04em;
       line-height: .95;
@@ -574,7 +598,7 @@
       color: var(--ink-faint);
     }
 
-    .hb-cta-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; justify-content: flex-end; }
+    .hb-cta-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; justify-content: flex-start; }
 
     /* Trust strip — quiet, folded into the hero's bottom edge */
     .hero-trust {
@@ -603,20 +627,39 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 2rem;
+      gap: 1.5rem 2.5rem;
       min-width: 0;
+      flex-wrap: wrap;
     }
+    /* Logo strips have to be normalised by optical weight, never by a shared
+       box. A single max-height/max-width pair sized these five by whichever
+       edge happened to bind first, and because their ink sits in frames of
+       very different proportion the result was Google legible at 120px while
+       SEED and RAZ shrank to smudges. Measured ink box inside each file:
+         google1   499x84  of 500x89   (5.9:1 wordmark, no padding)
+         seed      252x247 of 500x281  (1.0:1 mark, 50% baked-in side padding)
+         iprofile  497x130 of 500x135  (3.8:1)
+         raz       489x218 of 500x281  (2.2:1, vertical padding)
+         financial 493x155 of 500x162  (3.2:1)
+       So each gets its own frame height, back-solved so the *ink* lands on a
+       common optical cap-height — wide wordmarks sit shorter than square
+       marks at equal visual weight, which is how the eye reads them as one
+       row. --h is the frame; the comment on each rule is the ink it yields. */
     .hero-trust img {
-      height: auto;
-      max-height: 34px;
-      max-width: 120px;
+      height: var(--h);
       width: auto;
+      max-width: none;
       object-fit: contain;
-      filter: grayscale(1) contrast(.85);
+      filter: grayscale(1);
       mix-blend-mode: multiply;
-      opacity: .55;
+      opacity: .72;
       transition: opacity .25s ease, filter .25s ease;
     }
+    .hero-trust img[src*="google1"]   { --h: 21px; }  /* ink 20px */
+    .hero-trust img[src*="seed"]      { --h: 43px; }  /* ink 38px */
+    .hero-trust img[src*="iprofile"]  { --h: 27px; }  /* ink 26px */
+    .hero-trust img[src*="raz"]       { --h: 39px; }  /* ink 30px */
+    .hero-trust img[src*="financial"] { --h: 27px; }  /* ink 26px */
     .hero-trust img:hover { opacity: 1; filter: grayscale(0) contrast(1); }
     .trust-break { display: none; }
 
@@ -739,7 +782,7 @@
     }
     #home-barometer-map { width: 100%; height: auto; max-height: 320px; }
     #home-barometer-map path {
-      stroke: rgba(10, 10, 10, .55);
+      stroke: rgba(10, 10, 10, .7);
       stroke-width: .75;
       transition: filter .2s ease;
     }
@@ -760,7 +803,7 @@
     .barometer-indicator:nth-child(1), .barometer-indicator:nth-child(3) { box-shadow: inset -1px 0 0 var(--paper-line); }
     .barometer-indicator:hover { background: rgba(250, 250, 247, .04); }
     .barometer-indicator.active {
-      background: rgba(255, 107, 53, .08);
+      background: rgba(242, 90, 39, .08);
       border-left-color: var(--orange);
     }
     .barometer-indicator-label {
@@ -801,10 +844,17 @@
     }
     .barometer-legend-item { display: flex; align-items: center; gap: .45rem; }
     .barometer-legend-color { width: 14px; height: 6px; }
-    .barometer-legend-color.low { background: #10B981; }
-    .barometer-legend-color.moderate { background: #F59E0B; }
-    .barometer-legend-color.elevated { background: #F97316; }
-    .barometer-legend-color.high { background: #EF4444; }
+    /* Choropleth ramp. The old bands were #10B981 / #F59E0B / #F97316 /
+       #EF4444 — three adjacent oranges whose adjacent contrast ratios were
+       1.18, 1.31 and 1.34:1, i.e. indistinguishable, so the map read as one
+       flat orange blob and the brand orange doubled as a data value. These
+       four step monotonically in hue and carry 2.00 / 1.82 / 2.13:1 between
+       neighbours, each at 4:1 or better against the ink ground. Keep in sync
+       with getColor() in the barometer script below. */
+    .barometer-legend-color.low { background: #14B8A6; }
+    .barometer-legend-color.moderate { background: #FDE68A; }
+    .barometer-legend-color.elevated { background: #FB923C; }
+    .barometer-legend-color.high { background: #DC2626; }
 
     /* Problem stats — ruled columns, not boxes */
     .problem-grid {
@@ -915,9 +965,11 @@
     .solution-card:hover::before { width: calc(100% - 2.5rem); }
     .solution-card + .solution-card:hover::before { left: 2.5rem; }
 
+    /* 68px was too small for 1–1.5px linework to resolve — the drawings read
+       as texture rather than illustration. 96px lets them actually be seen. */
     .solution-icon {
-      width: 68px; height: 68px;
-      margin-bottom: 1.75rem;
+      width: 96px; height: 96px;
+      margin-bottom: 1.5rem;
       transition: transform .35s cubic-bezier(.16, 1, .3, 1);
     }
     .solution-icon svg { width: 100%; height: 100%; }
@@ -931,18 +983,26 @@
     .solution-icon .draw-in { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawLine 1.5s cubic-bezier(.16, 1, .3, 1) forwards; }
     .solution-icon .draw-in-delay-1 { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawLine 1.5s cubic-bezier(.16, 1, .3, 1) .2s forwards; }
     .solution-icon .draw-in-delay-2 { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawLine 1.5s cubic-bezier(.16, 1, .3, 1) .4s forwards; }
-    .solution-icon .pulse-dot { animation: pulsePoint 2.5s ease infinite; }
-    .solution-icon .float-element { animation: floatUp 3s ease infinite; }
-    .solution-icon .globe-line { stroke-dasharray: 8 4; animation: spinGlobe 6s linear infinite; }
-    .solution-icon .tassel { transform-origin: 50px 28px; animation: tiltTassel 3s ease infinite; }
+    /* The draw-in on load is the flourish; four further loops running forever
+       in three 96px icons was just motion. They now animate on hover only, so
+       the section is still at rest when you are reading it. */
+    .solution-icon .globe-line { stroke-dasharray: 8 4; }
+    .solution-icon .tassel { transform-origin: 50px 28px; }
+    .solution-card:hover .solution-icon .pulse-dot { animation: pulsePoint 2.5s ease infinite; }
+    .solution-card:hover .solution-icon .float-element { animation: floatUp 3s ease infinite; }
+    .solution-card:hover .solution-icon .globe-line { animation: spinGlobe 6s linear infinite; }
+    .solution-card:hover .solution-icon .tassel { animation: tiltTassel 3s ease infinite; }
 
+    /* "Prove / Equip / Push" is the idea that makes this section more than
+       three links, so it stops being smaller and lighter than the body copy
+       underneath it. */
     .solution-num {
       font-family: var(--font-mono);
-      font-size: .72rem;
+      font-size: .79rem;
       font-weight: 500;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--ink-faint);
+      color: var(--orange-ink);
       margin-bottom: .6rem;
     }
     .solution-title {
@@ -972,7 +1032,7 @@
       align-self: flex-start;
     }
     .solution-link svg { width: 13px; height: 13px; transition: transform .3s cubic-bezier(.16,1,.3,1); }
-    .solution-link:hover { color: var(--orange); }
+    .solution-link:hover { color: var(--orange-ink); }
     .solution-link:hover svg { transform: translateX(3px); }
 
     /* ----------------------------------------------------------
@@ -1009,7 +1069,7 @@
       transition: color .2s ease;
     }
     .moments-link svg { width: 13px; height: 13px; transition: transform .3s cubic-bezier(.16,1,.3,1); }
-    .moments-link:hover { color: var(--orange); }
+    .moments-link:hover { color: var(--orange-ink); }
     .moments-link:hover svg { transform: translateX(3px); }
 
     .moments-grid {
@@ -1025,7 +1085,8 @@
       padding: .6rem .6rem 0;
       transition: transform .35s cubic-bezier(.16, 1, .3, 1), border-color .25s ease;
     }
-    .moment:hover { transform: translateY(-6px) rotate(0deg) !important; border-color: var(--orange); }
+    .moment { --rot: 0deg; --lift: 0px; transform: translateY(var(--lift)) rotate(var(--rot)); }
+    .moment:hover { --lift: -6px; --rot: 0deg; border-color: var(--orange-ink); }
     .moment img {
       width: 100%;
       height: auto;
@@ -1045,10 +1106,10 @@
       justify-content: space-between;
       gap: 1rem;
     }
-    .moment figcaption em { font-style: normal; color: var(--orange); }
-    .moment-1 { transform: rotate(-1deg); }
-    .moment-2 { transform: rotate(.9deg); margin-top: 1.75rem; }
-    .moment-3 { transform: rotate(-.7deg); }
+    .moment figcaption em { font-style: normal; color: var(--orange-ink); }
+    .moment-1 { --rot: -1deg; }
+    .moment-2 { --rot: .9deg; margin-top: 1.75rem; }
+    .moment-3 { --rot: -.7deg; }
 
     /* ----------------------------------------------------------
        FEATURED RESEARCH — editorial plate
@@ -1062,7 +1123,7 @@
       border: 1px solid var(--ink-line);
       border-top: 4px solid var(--orange);
       display: grid;
-      grid-template-columns: 1fr .8fr;
+      grid-template-columns: 1fr .58fr;
       align-items: stretch;
       overflow: hidden;
     }
@@ -1088,10 +1149,10 @@
       font-weight: 500;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--orange);
-      border: 1px solid rgba(255, 107, 53, .35);
+      color: var(--orange-ink);
+      border: 1px solid rgba(194, 65, 12, .35);
       padding: .4rem .7rem;
-      background: rgba(255, 107, 53, .06);
+      background: rgba(194, 65, 12, .05);
     }
     .featured-text {
       color: var(--ink-dim);
@@ -1132,7 +1193,7 @@
     .featured-aside {
       order: 2;
       border-left: 1px solid var(--ink-line);
-      background: rgba(255, 107, 53, .045);
+      background: rgba(242, 90, 39, .045);
       padding: 3rem 2.5rem;
       display: flex;
       flex-direction: column;
@@ -1207,75 +1268,8 @@
       align-self: flex-start;
     }
     .featured-link svg { width: 13px; height: 13px; transition: transform .3s cubic-bezier(.16,1,.3,1); }
-    .featured-link:hover { color: var(--orange); }
+    .featured-link:hover { color: var(--orange-ink); }
     .featured-link:hover svg { transform: translateX(3px); }
-
-    /* ----------------------------------------------------------
-       CTA — ink coda. Tools fold in here as a single quiet line.
-       ---------------------------------------------------------- */
-    .cta {
-      padding: 7.5rem var(--gutter) 7rem;
-      background: var(--ink);
-      color: var(--paper);
-      position: relative;
-      overflow: hidden;
-    }
-    .cta-container {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-      position: relative;
-      z-index: 1;
-    }
-    .cta h2 {
-      font-size: clamp(2.8rem, 7.5vw, 7rem);
-      font-weight: 900;
-      line-height: .96;
-      letter-spacing: -.05em;
-      max-width: 14ch;
-    }
-    .cta h2 em { font-style: normal; color: var(--orange); }
-    .cta-bottom {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 3rem;
-      align-items: end;
-      padding-top: 1.75rem;
-      border-top: 1px solid var(--paper-line);
-    }
-    .cta-subtitle {
-      font-size: clamp(1.05rem, 1.5vw, 1.3rem);
-      font-weight: 400;
-      line-height: 1.5;
-      color: var(--paper-dim);
-      max-width: 42ch;
-      letter-spacing: -.01em;
-    }
-    .cta-actions { display: flex; gap: .9rem; flex-wrap: wrap; }
-    .cta-tools {
-      font-size: .92rem;
-      font-weight: 400;
-      color: var(--paper-faint);
-      line-height: 1.7;
-      max-width: 64ch;
-    }
-    .cta-tools a {
-      color: var(--paper-dim);
-      text-decoration: none;
-      border-bottom: 1px solid var(--paper-line);
-      transition: color .2s ease, border-color .2s ease;
-      padding-bottom: 1px;
-    }
-    .cta-tools a:hover { color: var(--orange); border-bottom-color: var(--orange); }
-
-    /* the one hand-drawn flourish kept on the page */
-    .cta-squiggle {
-      width: 110px;
-      height: 12px;
-      opacity: .35;
-    }
 
     /* ----------------------------------------------------------
        FOOTER — continues the ink, separated by hairline
@@ -1285,31 +1279,46 @@
       color: var(--paper);
       border-top: 1px solid var(--paper-line);
     }
-    .footer-newsletter { padding: 2.25rem var(--gutter); border-bottom: 1px solid var(--paper-line); }
+    /* With the "Build the ladder" coda gone this band is the last thing above
+       the footer proper, so it has to close the page rather than read as a
+       thin newsletter strip: more air, a real headline, and the two actions
+       the coda used to carry sitting next to Subscribe. */
+    .footer-newsletter { padding: 3.5rem var(--gutter); border-bottom: 1px solid var(--paper-line); }
     .footer-newsletter-container {
       max-width: var(--max-width);
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 2rem;
+      gap: 2.5rem;
       flex-wrap: wrap;
     }
-    .footer-newsletter h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -.02em; margin-bottom: .2rem; }
-    .footer-newsletter p { font-size: .88rem; color: var(--paper-dim); font-weight: 400; }
-    .footer-newsletter-btn {
-      display: inline-block;
-      padding: .8rem 1.6rem;
-      font-size: .88rem;
-      font-weight: 600;
-      background: var(--orange);
-      color: #fff;
-      text-decoration: none;
-      transition: background .25s ease, color .25s ease;
-      white-space: nowrap;
+    /* max-width in ch resolved against the inherited 17px body size, not the
+       2rem headline, so the column came out ~320px and the headline broke to
+       three lines with half the band empty. rem instead. */
+    .footer-newsletter-text { max-width: 34rem; flex: 1 1 30rem; }
+    .footer-newsletter h3 {
+      font-size: clamp(1.45rem, 2.3vw, 2rem);
+      font-weight: 900;
+      letter-spacing: -.035em;
+      line-height: 1.08;
+      margin-bottom: .6rem;
     }
-    .footer-newsletter-btn:hover { background: var(--paper); color: var(--ink); }
-
+    .footer-newsletter p {
+      font-size: .95rem;
+      color: var(--paper-dim);
+      font-weight: 400;
+      line-height: 1.55;
+      max-width: 46ch;
+    }
+    .footer-newsletter p a {
+      color: var(--paper);
+      text-decoration: none;
+      border-bottom: 1px solid var(--paper-line);
+      transition: color .2s ease, border-color .2s ease;
+    }
+    .footer-newsletter p a:hover { color: var(--orange); border-bottom-color: var(--orange); }
+    .footer-cta-actions { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; justify-content: flex-end; }
     .footer-container {
       max-width: var(--max-width);
       margin: 0 auto;
@@ -1335,7 +1344,7 @@
     .footer-social a svg { width: 15px; height: 15px; fill: currentColor; }
     .footer-section h4 {
       font-family: var(--font-mono);
-      font-size: .72rem;
+      font-size: .76rem;
       font-weight: 500;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -1437,7 +1446,7 @@
       border-radius: 50%;
       transition: transform .3s ease, background .3s ease, color .3s ease, border-color .3s ease;
     }
-    .mobile-dropdown-toggle.active .arrow { transform: rotate(180deg); background: var(--orange); color: #fff; border-color: var(--orange); }
+    .mobile-dropdown-toggle.active .arrow { transform: rotate(180deg); background: var(--orange-ink); color: #fff; border-color: var(--orange-ink); }
 
     .mobile-dropdown-content { max-height: 0; overflow: hidden; transition: max-height .4s ease-out; }
     .mobile-dropdown-content.open { max-height: 1200px; padding: .85rem 0; }
@@ -1462,7 +1471,7 @@
     .mobile-card-name { font-size: .98rem; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: .35rem; letter-spacing: -.01em; }
     .mobile-card-desc { font-size: .74rem; font-weight: 300; color: var(--ink-dim); line-height: 1.35; }
     .mobile-card-external { font-size: .78rem; color: var(--ink-faint); }
-    .mobile-card:active .mobile-card-name { color: var(--orange); }
+    .mobile-card:active .mobile-card-name { color: var(--orange-ink); }
 
     .mobile-menu-footer {
       padding-top: 1.25rem;
@@ -1481,7 +1490,7 @@
       font-size: .95rem;
       font-weight: 600;
       text-decoration: none;
-      background: var(--orange);
+      background: var(--orange-ink);
       color: #fff;
       transition: background .2s ease;
     }
@@ -1524,8 +1533,7 @@
          compact treatment education.html uses so it reads as a quiet
          dateline rather than a full-weight row above the headline. */
       .hero-top { flex-wrap: wrap; gap: .5rem 1rem; }
-      .hb-status { font-size: .72rem; letter-spacing: 0.12em; }
-      .hero-top .eyebrow { font-size: .72rem; letter-spacing: 0.12em; }
+      .hero-top .eyebrow { font-size: .72rem; }
       .hero h1 { font-size: clamp(2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
       .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
       .hb-stats { gap: 2rem; flex-wrap: wrap; }
@@ -1536,23 +1544,16 @@
         width: 100%;
         justify-content: flex-start;
         flex-wrap: wrap;
-        gap: .9rem 2.25rem;
+        gap: 1.1rem 2rem;
       }
       .trust-break { display: block; flex-basis: 100%; height: 0; }
-      .hero-trust img {
-        max-height: 24px;
-        max-width: 92px;
-        height: 24px;
-        object-fit: contain;
-        object-position: left center;
-      }
-      /* first tier: the two anchor partners, slightly larger */
-      .hero-trust img:nth-of-type(1),
-      .hero-trust img:nth-of-type(2) {
-        max-height: 32px;
-        max-width: 124px;
-        height: 32px;
-      }
+      /* Same optical ratios, scaled to ~0.72 of desktop. */
+      .hero-trust img { object-position: left center; }
+      .hero-trust img[src*="google1"]   { --h: 16px; }
+      .hero-trust img[src*="seed"]      { --h: 32px; }
+      .hero-trust img[src*="iprofile"]  { --h: 20px; }
+      .hero-trust img[src*="raz"]       { --h: 29px; }
+      .hero-trust img[src*="financial"] { --h: 20px; }
 
       .barometer-section { padding: 4.5rem var(--gutter) 5rem; }
       .barometer-head { grid-template-columns: 1fr; gap: 1.75rem; margin-bottom: 2.5rem; }
@@ -1570,7 +1571,6 @@
       .barometer-legend {
         justify-content: space-between;
         gap: .4rem .5rem;
-        font-size: .72rem;
         letter-spacing: .04em;
         margin-top: 1rem;
       }
@@ -1612,7 +1612,7 @@
       .solution-grid { grid-template-columns: 1fr; }
       .solution-card {
         display: grid;
-        grid-template-columns: 46px 1fr;
+        grid-template-columns: 56px 1fr;
         column-gap: 1.1rem;
         row-gap: .1rem;
         align-items: start;
@@ -1624,7 +1624,7 @@
       .solution-card:hover::before, .solution-card + .solution-card:hover::before { width: 100%; left: 0; }
       /* Icon pairs with the label/title on the first two rows; the body copy
          then runs full-bleed so it doesn't pick the lines back up. */
-      .solution-icon { grid-row: 1 / span 2; width: 46px; height: 46px; margin-bottom: 0; }
+      .solution-icon { grid-row: 1 / span 2; width: 56px; height: 56px; margin-bottom: 0; }
       .solution-num { grid-column: 2; margin-bottom: .15rem; }
       .solution-title { grid-column: 2; font-size: 1.3rem; margin-bottom: 0; }
       .solution-text { grid-column: 1 / -1; font-size: .92rem; line-height: 1.5; margin: .75rem 0 .65rem; }
@@ -1634,6 +1634,13 @@
       .moments-head { flex-direction: column; align-items: flex-start; gap: 1.25rem; margin-bottom: 2rem; }
       .moments-grid { grid-template-columns: 1fr; gap: 1.5rem; }
       .moment-2 { margin-top: 0; }
+      /* Three full-width 3:2 plates is a lot of scroll for photography that
+         is setting mood, not carrying information. Flatten the tilt (1px
+         hairlines antialias to fuzz at an angle on a phone) and let the last
+         two share a row. */
+      .moment { --rot: 0deg; }
+      .moments-grid { grid-template-columns: 1fr 1fr; }
+      .moment-1 { grid-column: 1 / -1; }
 
       /* Single column, credential panel on top as a compact masthead band so
          the Google Health lockup is the first thing read. */
@@ -1655,13 +1662,13 @@
       .featured-content { padding: 1.75rem; gap: 1.1rem; }
       .featured-content h3 { max-width: none; }
       .featured-stat { padding: .9rem .85rem; }
-      .featured-stat-label { font-size: .72rem; letter-spacing: .09em; margin-top: .4rem; }
+      .featured-stat-label { letter-spacing: .09em; margin-top: .4rem; }
 
-      .cta { padding: 5rem var(--gutter); }
-      .cta-bottom { grid-template-columns: 1fr; gap: 1.75rem; }
-      .cta-actions { width: 100%; }
-      .cta-actions .btn-primary, .cta-actions .btn-secondary { flex: 1; justify-content: center; }
-
+      .footer-newsletter { padding: 2.5rem var(--gutter); }
+      .footer-newsletter-container { align-items: flex-start; gap: 1.5rem; }
+      .footer-newsletter-text { max-width: none; }
+      .footer-cta-actions { width: 100%; }
+      .footer-cta-actions > a { flex: 1; justify-content: center; text-align: center; }
       .footer-container { grid-template-columns: 1fr 1fr; gap: 2.25rem; padding: 3rem var(--gutter) 2.5rem; }
       .footer-brand-col { grid-column: 1 / -1; }
       .footer-bottom { flex-direction: column; text-align: center; }
@@ -1673,18 +1680,16 @@
          tall column — they fit, and the rail reads as one instrument. */
       .featured-stat { padding: .8rem .6rem; }
       .featured-stat-number { font-size: 1.35rem; }
-      .featured-stat-label { font-size: .72rem; letter-spacing: .07em; }
+      .featured-stat-label { letter-spacing: .07em; }
       /* Keep the four readouts as a compact 2×2 grid on phones rather than a
          tall single-column stack, and tighten the spacing so they don't
          dominate the section vertically. */
       .barometer-indicator { padding: 1rem 1.1rem; gap: .3rem; }
       .barometer-indicator-value { font-size: clamp(1.5rem, 7vw, 1.85rem); }
-      .barometer-indicator-label { font-size: .72rem; }
-      .barometer-indicator-change { font-size: .72rem; }
       /* CTAs: full-width stack instead of ragged wrap */
-      .hb-cta-row, .cta-actions { flex-direction: column; }
+      .hb-cta-row, .footer-cta-actions { flex-direction: column; }
       .hb-cta-row .btn-primary, .hb-cta-row .btn-secondary,
-      .cta-actions .btn-primary, .cta-actions .btn-secondary { width: 100%; justify-content: center; }
+      .footer-cta-actions .btn-primary, .footer-cta-actions .btn-secondary { width: 100%; justify-content: center; }
     }
 
     /* Tablet tier (iPads in portrait, small landscape) — scale the hero up
@@ -1701,9 +1706,12 @@
       .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
       /* logos fit on one row at tablet width */
       .trust-break { display: none; }
-      .hero-trust-logos { gap: 1rem 2.5rem; }
-      .hero-trust img,
-      .hero-trust img:nth-of-type(1), .hero-trust img:nth-of-type(2) { max-height: 28px; max-width: 104px; height: 28px; }
+      .hero-trust-logos { gap: 1rem 2.25rem; }
+      .hero-trust img[src*="google1"]   { --h: 18px; }
+      .hero-trust img[src*="seed"]      { --h: 36px; }
+      .hero-trust img[src*="iprofile"]  { --h: 23px; }
+      .hero-trust img[src*="raz"]       { --h: 33px; }
+      .hero-trust img[src*="financial"] { --h: 23px; }
     }
   </style>
 </head>
@@ -1896,11 +1904,11 @@
       <div class="hero-trust-label">Partners &amp; collaborators</div>
       <div class="hero-trust-logos">
         <img src="google1.png" alt="Google" width="500" height="89" loading="lazy" decoding="async">
-        <img src="seed.png" alt="SEED" width="500" height="281" loading="lazy" decoding="async">
+        <img src="seed.png" alt="SEED Consulting" width="500" height="281" loading="lazy" decoding="async">
         <span class="trust-break" aria-hidden="true"></span>
-        <img src="iprofile.png" alt="iProfile" width="500" height="135" loading="lazy" decoding="async">
-        <img src="raz.png" alt="Raz" width="500" height="281" loading="lazy" decoding="async">
-        <img src="financial.png" alt="Financial" width="500" height="162" loading="lazy" decoding="async">
+        <img src="iprofile.png" alt="iProfile Foundation" width="500" height="135" loading="lazy" decoding="async">
+        <img src="raz.png" alt="Raz Capital" width="500" height="281" loading="lazy" decoding="async">
+        <img src="financial.png" alt="Financial Inclusion Forum Africa" width="500" height="162" loading="lazy" decoding="async">
       </div>
     </div>
   </section>
@@ -1976,13 +1984,13 @@
           <div class="solution-icon" aria-hidden="true">
             <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 65 C28 65.5, 52 64.8, 68 65" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
-              <path class="draw-in" d="M20 64 L20 46 C20.2 44, 26.8 44, 27 46 L27 64" stroke="#FF6B35" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-              <path class="draw-in-delay-1" d="M34 64 L34 28 C34.3 26, 40.7 26, 41 28 L41 64" stroke="#FF6B35" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
-              <path class="draw-in-delay-2" d="M48 64 L48 38 C48.2 36, 54.8 36, 55 38 L55 64" stroke="#FF6B35" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path class="draw-in" d="M20 64 L20 46 C20.2 44, 26.8 44, 27 46 L27 64" stroke="#F25A27" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path class="draw-in-delay-1" d="M34 64 L34 28 C34.3 26, 40.7 26, 41 28 L41 64" stroke="#F25A27" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path class="draw-in-delay-2" d="M48 64 L48 38 C48.2 36, 54.8 36, 55 38 L55 64" stroke="#F25A27" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M18 48 C26 44, 32 26, 38 24 C44 22, 50 32, 58 30" stroke="#0A0A0A" stroke-width="1" stroke-linecap="round" stroke-dasharray="4 3" opacity="0.5"/>
-              <circle class="pulse-dot" cx="23" cy="46" r="3" fill="#FF6B35" opacity="0.8"/>
-              <circle class="pulse-dot" cx="37" cy="28" r="3" fill="#FF6B35" opacity="0.8" style="animation-delay: 0.4s"/>
-              <circle class="pulse-dot" cx="51" cy="38" r="3" fill="#FF6B35" opacity="0.8" style="animation-delay: 0.8s"/>
+              <circle class="pulse-dot" cx="23" cy="46" r="3" fill="#F25A27" opacity="0.8"/>
+              <circle class="pulse-dot" cx="37" cy="28" r="3" fill="#F25A27" opacity="0.8" style="animation-delay: 0.4s"/>
+              <circle class="pulse-dot" cx="51" cy="38" r="3" fill="#F25A27" opacity="0.8" style="animation-delay: 0.8s"/>
               <circle cx="62" cy="18" r="7" stroke="#0A0A0A" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.6"/>
               <path d="M67 23 L72 28" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
             </svg>
@@ -1996,10 +2004,10 @@
           <div class="solution-icon" aria-hidden="true">
             <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path class="draw-in" d="M40 22 L14 34 C13 34.5, 13 35.5, 14 36 L40 48 L66 36 C67 35.5, 67 34.5, 66 34 Z" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-              <path class="draw-in-delay-1" d="M40 22 L40 24 L66 35" stroke="#FF6B35" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
-              <g class="tassel"><path d="M50 34 L50 52 C50 53, 52 56, 50 58" stroke="#FF6B35" stroke-width="1.3" stroke-linecap="round"/><circle cx="50" cy="59" r="2.5" fill="#FF6B35" opacity="0.8"/></g>
+              <path class="draw-in-delay-1" d="M40 22 L40 24 L66 35" stroke="#F25A27" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+              <g class="tassel"><path d="M50 34 L50 52 C50 53, 52 56, 50 58" stroke="#F25A27" stroke-width="1.3" stroke-linecap="round"/><circle cx="50" cy="59" r="2.5" fill="#F25A27" opacity="0.8"/></g>
               <path class="draw-in-delay-1" d="M26 37 L26 52 C26 54, 32 58, 40 58 C48 58, 54 54, 54 52 L54 37" stroke="#0A0A0A" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-              <g class="float-element"><path d="M30 66 C34 64, 38 64, 40 66 C42 64, 46 64, 50 66" stroke="#FF6B35" stroke-width="1.1" stroke-linecap="round" fill="none" opacity="0.5"/><path d="M40 66 L40 62" stroke="#FF6B35" stroke-width="1" stroke-linecap="round" opacity="0.4"/></g>
+              <g class="float-element"><path d="M30 66 C34 64, 38 64, 40 66 C42 64, 46 64, 50 66" stroke="#F25A27" stroke-width="1.1" stroke-linecap="round" fill="none" opacity="0.5"/><path d="M40 66 L40 62" stroke="#F25A27" stroke-width="1" stroke-linecap="round" opacity="0.4"/></g>
             </svg>
           </div>
           <div class="solution-num">Equip</div>
@@ -2011,17 +2019,17 @@
           <div class="solution-icon" aria-hidden="true">
             <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="40" cy="38" r="24" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-              <path class="globe-line" d="M40 14 C30 22, 28 32, 30 38 C28 44, 30 52, 40 62" stroke="#FF6B35" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.6"/>
-              <path class="globe-line" d="M40 14 C50 22, 52 32, 50 38 C52 44, 50 52, 40 62" stroke="#FF6B35" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.6" style="animation-delay: -2s"/>
+              <path class="globe-line" d="M40 14 C30 22, 28 32, 30 38 C28 44, 30 52, 40 62" stroke="#F25A27" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.6"/>
+              <path class="globe-line" d="M40 14 C50 22, 52 32, 50 38 C52 44, 50 52, 40 62" stroke="#F25A27" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.6" style="animation-delay: -2s"/>
               <path d="M18 30 C24 28, 34 27, 40 28 C46 27, 56 28, 62 30" stroke="#0A0A0A" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.35"/>
               <path d="M17 44 C24 46, 34 47, 40 46 C46 47, 56 46, 63 44" stroke="#0A0A0A" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.35"/>
-              <path d="M16 38 C24 36, 34 35.5, 40 36 C46 35.5, 56 36, 64 38" stroke="#FF6B35" stroke-width="1.1" stroke-linecap="round" fill="none" opacity="0.5"/>
-              <circle class="pulse-dot" cx="28" cy="34" r="2" fill="#FF6B35" opacity="0.7"/>
-              <circle class="pulse-dot" cx="52" cy="40" r="2" fill="#FF6B35" opacity="0.7" style="animation-delay: 0.6s"/>
-              <circle class="pulse-dot" cx="40" cy="50" r="2" fill="#FF6B35" opacity="0.7" style="animation-delay: 1.2s"/>
+              <path d="M16 38 C24 36, 34 35.5, 40 36 C46 35.5, 56 36, 64 38" stroke="#F25A27" stroke-width="1.1" stroke-linecap="round" fill="none" opacity="0.5"/>
+              <circle class="pulse-dot" cx="28" cy="34" r="2" fill="#F25A27" opacity="0.7"/>
+              <circle class="pulse-dot" cx="52" cy="40" r="2" fill="#F25A27" opacity="0.7" style="animation-delay: 0.6s"/>
+              <circle class="pulse-dot" cx="40" cy="50" r="2" fill="#F25A27" opacity="0.7" style="animation-delay: 1.2s"/>
               <path d="M29 35 C36 32, 44 34, 51 39" stroke="#0A0A0A" stroke-width="0.7" stroke-linecap="round" stroke-dasharray="3 3" opacity="0.3"/>
               <path d="M52 41 C48 46, 44 49, 41 50" stroke="#0A0A0A" stroke-width="0.7" stroke-linecap="round" stroke-dasharray="3 3" opacity="0.3"/>
-              <g class="float-element"><path d="M58 62 L66 58 L68 66 Z" stroke="#FF6B35" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><path d="M66 58 L72 56" stroke="#FF6B35" stroke-width="1" stroke-linecap="round" opacity="0.4"/><path d="M68 66 L72 68" stroke="#FF6B35" stroke-width="1" stroke-linecap="round" opacity="0.4"/></g>
+              <g class="float-element"><path d="M58 62 L66 58 L68 66 Z" stroke="#F25A27" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><path d="M66 58 L72 56" stroke="#F25A27" stroke-width="1" stroke-linecap="round" opacity="0.4"/><path d="M68 66 L72 68" stroke="#F25A27" stroke-width="1" stroke-linecap="round" opacity="0.4"/></g>
             </svg>
           </div>
           <div class="solution-num">Push</div>
@@ -2097,39 +2105,24 @@
     </div>
   </section>
 
-  <!-- ======================= CTA ======================= -->
-  <section class="cta on-ink">
-    <div class="cta-container">
-      <svg class="cta-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" fill="none"/>
-      </svg>
-      <h2>Build the ladder, <em>not just the safety&nbsp;net.</em></h2>
-      <div class="cta-bottom">
-        <p class="cta-subtitle">Economic mobility shouldn't depend on luck or your zip code. Help us build a system that doesn't fail people.</p>
-        <div class="cta-actions">
-          <a href="get-involved.html" class="btn-primary">
-            Join the movement
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="donate.html" class="btn-secondary">Support our mission</a>
-        </div>
-      </div>
-      <p class="cta-tools">Everything we build is open source and free — the <a href="https://finmango.org/housing-calculator" target="_blank" rel="noopener noreferrer">Housing Affordability</a> and <a href="https://finmango.org/family-planning" target="_blank" rel="noopener noreferrer">Family Planning</a> calculators, the <a href="barometer.html">Financial Health Barometer</a>, and all our code on <a href="https://github.com/finmango" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
-    </div>
-  </section>
-
   </main>
 
   <!-- ======================= FOOTER ======================= -->
   <!-- chrome:footer -->
-  <footer>
+  <footer class="on-ink">
     <div class="footer-newsletter">
       <div class="footer-newsletter-container">
-        <div>
-          <h3>Stay updated</h3>
-          <p>Research, education, and advocacy updates. No spam.</p>
+        <div class="footer-newsletter-text">
+          <h3>Economic mobility shouldn't depend on your zip&nbsp;code.</h3>
+          <p>Help us build a system that doesn't fail people — or <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">subscribe</a> for research and advocacy updates. No spam.</p>
         </div>
-        <a href="https://blogs.finmango.org/" class="footer-newsletter-btn" target="_blank" rel="noopener noreferrer">Subscribe</a>
+        <div class="footer-cta-actions">
+          <a href="get-involved.html" class="btn-primary">
+            Join the movement
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="donate.html" class="btn-secondary">Donate</a>
+        </div>
       </div>
     </div>
     <div class="footer-container">
@@ -2224,7 +2217,8 @@
       let currentIndicator = 'financial_anxiety';
       const mapEl = document.getElementById('home-barometer-map');
 
-      function getColor(v) { return v < 90 ? '#10B981' : v < 120 ? '#F59E0B' : v < 150 ? '#F97316' : '#EF4444'; }
+      // Keep in sync with .barometer-legend-color in the stylesheet.
+      function getColor(v) { return v < 90 ? '#14B8A6' : v < 120 ? '#FDE68A' : v < 150 ? '#FB923C' : '#DC2626'; }
       function fmtChange(v) { if (v == null) return '--'; return `${v >= 0 ? '↑' : '↓'} ${Math.abs(v).toFixed(1)} PTS`; }
 
       async function loadMap() {
