@@ -1113,6 +1113,10 @@
 
     .barometer-indicator-change.up { color: rgba(255, 200, 200, 0.9); }
     .barometer-indicator-change.down { color: rgba(200, 255, 200, 0.9); }
+    /* `null >= 0` is true, so a missing change series previously rendered in
+       the rising-stress colour while the text read "--". */
+    .barometer-indicator-change.flat,
+    .barometer-indicator-change.none { color: rgba(255, 255, 255, 0.55); }
 
     .barometer-legend {
       display: flex;
@@ -2934,9 +2938,16 @@
       }
 
       function formatChange(val) {
-        if (val === null || val === undefined) return '--';
-        const sign = val >= 0 ? '↑' : '↓';
-        return `${sign} ${Math.abs(val).toFixed(1)} pts`;
+        if (val === null || val === undefined) return 'no change data';
+        if (Math.abs(val) < 0.05) return '— 0.0 pts';
+        return `${val > 0 ? '↑' : '↓'} ${Math.abs(val).toFixed(1)} pts`;
+      }
+
+      // Tone must agree with the text: null is "no data", not a rise.
+      function changeTone(val) {
+        if (val === null || val === undefined) return 'none';
+        if (Math.abs(val) < 0.05) return 'flat';
+        return val > 0 ? 'up' : 'down';
       }
 
       async function loadMap() {
@@ -2990,25 +3001,25 @@
         document.getElementById('home-val-anxiety').textContent = anxietyData.value.toFixed(0);
         const anxietyChange = document.getElementById('home-change-anxiety');
         anxietyChange.textContent = formatChange(anxietyData.change);
-        anxietyChange.className = 'barometer-indicator-change ' + (anxietyData.change >= 0 ? 'up' : 'down');
+        anxietyChange.className = 'barometer-indicator-change ' + changeTone(anxietyData.change);
 
         const foodData = national.food_insecurity;
         document.getElementById('home-val-food').textContent = foodData.value.toFixed(0);
         const foodChange = document.getElementById('home-change-food');
         foodChange.textContent = formatChange(foodData.change);
-        foodChange.className = 'barometer-indicator-change ' + (foodData.change >= 0 ? 'up' : 'down');
+        foodChange.className = 'barometer-indicator-change ' + changeTone(foodData.change);
 
         const housingData = national.housing_stress;
         document.getElementById('home-val-housing').textContent = housingData.value.toFixed(0);
         const housingChange = document.getElementById('home-change-housing');
         housingChange.textContent = formatChange(housingData.change);
-        housingChange.className = 'barometer-indicator-change ' + (housingData.change >= 0 ? 'up' : 'down');
+        housingChange.className = 'barometer-indicator-change ' + changeTone(housingData.change);
 
         const affordData = national.affordability;
         document.getElementById('home-val-afford').textContent = affordData.value.toFixed(0);
         const affordChange = document.getElementById('home-change-afford');
         affordChange.textContent = formatChange(affordData.change);
-        affordChange.className = 'barometer-indicator-change ' + (affordData.change >= 0 ? 'up' : 'down');
+        affordChange.className = 'barometer-indicator-change ' + changeTone(affordData.change);
       }
 
       const indicatorCards = document.querySelectorAll('.barometer-indicator');

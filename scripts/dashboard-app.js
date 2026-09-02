@@ -211,11 +211,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         // scanning the table sees degraded inputs without parsing the text.
         function statusOf(value) {
             const v = String(value).toLowerCase();
-            if (v.includes('not loaded') || v.includes('not used')) return ['unused', 'Not used'];
+            // Check the failure strings before the generic ones: a dead
+            // integration reported "NOT WORKING" was falling through every
+            // branch and rendering as a green "Primary source".
+            if (v.includes('not working')) return ['estimated', 'Not working'];
+            // A term omitted from the composite is missing, not measured.
+            if (v.includes('omitted') || v.startsWith('unavailable')) return ['estimated', 'Term omitted'];
+            if (v.includes('no api key')) return ['unused', 'No API key'];
+            if (v.includes('not applied') || v.includes('withheld')) return ['carried', 'Published, not applied'];
+            if (v.includes('not loaded') || v.includes('not used') || v.includes('not fetched')) return ['unused', 'Not used'];
             if (v.includes('estimated')) return ['estimated', 'Estimated'];
             if (v.includes('carried forward for all')) return ['carried', 'Held (all states)'];
             if (v.includes('carried forward')) return ['carried', 'Carried forward'];
-            if (v.includes('not applied')) return ['carried', 'Published, not applied'];
             if (v.includes('fallback')) return ['fallback', 'Fallback source'];
             return ['live', 'Primary source'];
         }
@@ -286,6 +293,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (complete === entries.length) {
             el.innerHTML = `<strong>Search trends coverage:</strong> all ${total} states current across
                 all four indicators, so the volatility boost is included in the published index.`;
+            return;
+        }
+
+        // A rotation still working its way round and one that is returning
+        // nothing both sit at low coverage; only the first is progress.
+        const run = DASHBOARD_DATA.meta?.trends_run;
+        if (run && run.attempted === false) {
+            el.innerHTML = `<strong>Search trends not configured:</strong> no Health Trends API key is
+                set for the pipeline, so no search data was requested. The volatility boost is withheld
+                and the indices shown are built from the official government series alone.`;
+            return;
+        }
+        if (run && run.state_requests > 0 && run.state_readings === 0) {
+            const since = DASHBOARD_DATA.meta?.trends_cache?.last_successful_fetch;
+            el.innerHTML = `<strong>Search trends unavailable:</strong> the Health Trends API returned no
+                data for any state in the latest run${since ? `, and none since ${since}` : ''}. The
+                volatility boost is withheld entirely, so the indices shown are built from the official
+                government series alone. Nothing is estimated to cover the gap.`;
             return;
         }
 
@@ -1244,7 +1269,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                         m.poverty_rate ? m.poverty_rate.toFixed(1) : '',
                         state.housing_stress.value.toFixed(1),
                         m.rent_burden_pct ? m.rent_burden_pct.toFixed(1) : '',
-                        m.fair_market_rent_2br ? m.fair_market_rent_2br : '',
+                        // fair_market_rent_2br is HUD-only now, so fall back to the
+                        // top-level resolved figure rather than exporting a blank
+                        // column whenever HUD has not answered.
+                        m.fair_market_rent_2br ?? state.fmr_2br?.value ?? '',
                         state.affordability.value.toFixed(1)
                     ];
                     csvContent += row.join(',') + '\n';
