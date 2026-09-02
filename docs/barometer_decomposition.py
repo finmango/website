@@ -28,7 +28,18 @@ def pearson(xs, ys):
 
 S = data["states"]
 m = lambda s: s["metrics"]
-nat_fmr = st.mean(m(s)["fair_market_rent_2br"] for s in S.values())
+
+# metrics.fair_market_rent_2br is HUD-only since v2.5 and is null whenever HUD
+# did not answer; the figure the index was actually scored on is the resolved
+# top-level fmr_2br. Read that so the decomposition matches the pipeline.
+def fmr_of(s):
+    v = m(s).get("fair_market_rent_2br")
+    if v is None and s.get("fmr_2br"):
+        v = s["fmr_2br"]["value"]
+    return v
+
+fmr_vals = [fmr_of(s) for s in S.values() if fmr_of(s) is not None]
+nat_fmr = st.mean(fmr_vals) if fmr_vals else 1400
 print(f"Assumed National Avg 2BR FMR (mean of state values) = {nat_fmr:.0f}\n")
 
 rows = []
@@ -37,8 +48,11 @@ for s in S.values():
     fa = (120 + (M["unemployment_rate"] - 3.5) * 18) * M["regional_stress_multiplier"]
     fi = (85 + (M["poverty_rate"] - 10) * 6) * M["regional_stress_multiplier"]
     rent_score = (M["rent_burden_pct"] - 25) * 3
-    fmr_score = (M["fair_market_rent_2br"] / nat_fmr - 1) * 40
-    hpi_score = M["housing_price_change"] * 2
+    fmr_v = fmr_of(s)
+    fmr_score = ((fmr_v / nat_fmr - 1) * 40) if fmr_v is not None else 0
+    # Null when the house-price term was unavailable (the indicator is then
+    # flagged `partial`); the pipeline omits the term, so mirror that here.
+    hpi_score = (M["housing_price_change"] or 0) * 2
     hs = (100 + rent_score + fmr_score + hpi_score) * M["regional_stress_multiplier"]
     aff = s["housing_stress"]["value"] * 0.60 + s["food_insecurity"]["value"] * 0.40
     rows.append(dict(

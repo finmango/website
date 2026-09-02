@@ -350,4 +350,170 @@ test('a state outside every tier scores 0, not a silent default', () => {
     assert.strictEqual(ne.housing_stress.value, Math.round(100 * ne.metrics.regional_stress_multiplier));
 });
 
+test('the FMR national average covers carried states, not just live ones', () => {
+    // The FMR score is a ratio against the national average, so the average
+    // must be taken over the same population the ratios are scored on. Taking
+    // it over the live subset only, while scoring states on carried values,
+    // compares each state against a population it is not part of.
+    const fmrMap = Object.fromEntries(ALL.map((a, i) => [a, { fmr_2br: 1000 + i * 40 }]));
+
+    // All live.
+    __setPreviousSnapshot(null);
+    const allLive = calculateIndices(unemployment, null, poverty, null, fmrMap);
+
+    // Same figures, but HUD is down and every one of them is carried forward.
+    __setPreviousSnapshot({
+        as_of: daysAgo(2),
+        states: Object.fromEntries(ALL.map((a, i) => [`US-${a}`, {
+            abbr: a,
+            metrics: {
+                fair_market_rent_2br: 1000 + i * 40,
+                fair_market_rent_source: 'HUD FMR API',
+                fair_market_rent_2br_observed: daysAgo(2)
+            }
+        }]))
+    });
+    const allCarried = calculateIndices(unemployment, null, poverty);
+
+    for (const abbr of ['CA', 'MS', 'NY']) {
+        assert.strictEqual(
+            allCarried[`US-${abbr}`].housing_stress.value,
+            allLive[`US-${abbr}`].housing_stress.value,
+            `${abbr}: a carried FMR should score identically to the same live figure`
+        );
+    }
+});
+
+test('a partial HUD outage does not rescale the states that did answer', () => {
+    // Only three states answer live; the rest carry the same figures. Every
+    // state should still be scored against the full-population average.
+    const full = Object.fromEntries(ALL.map((a, i) => [a, 1000 + i * 40]));
+    __setPreviousSnapshot({
+        as_of: daysAgo(2),
+        states: Object.fromEntries(ALL.map(a => [`US-${a}`, {
+            abbr: a,
+            metrics: {
+                fair_market_rent_2br: full[a],
+                fair_market_rent_source: 'HUD FMR API',
+                fair_market_rent_2br_observed: daysAgo(2)
+            }
+        }]))
+    });
+
+    const partial = calculateIndices(unemployment, null, poverty, null,
+        { CA: { fmr_2br: full.CA }, NY: { fmr_2br: full.NY }, MS: { fmr_2br: full.MS } });
+
+    __setPreviousSnapshot(null);
+    const complete = calculateIndices(unemployment, null, poverty, null,
+        Object.fromEntries(ALL.map(a => [a, { fmr_2br: full[a] }])));
+
+    assert.strictEqual(
+        partial['US-CA'].housing_stress.value,
+        complete['US-CA'].housing_stress.value,
+        'a live state must not be rescaled by which other states answered'
+    );
+});
+
+test('Financial Anxiety with no year-ago BLS observation publishes null change, not 0', () => {
+    const noPrev = Object.fromEntries(ALL.map(a => [a, { value: 4.0, previousValue: null }]));
+    const states = calculateIndices(noPrev, null, poverty);
+    assert.strictEqual(states['US-TX'].financial_anxiety.change, null);
+    assert.match(states['US-TX'].financial_anxiety.change_basis, /not available/);
+});
+
+test('a carried unemployment rate with no change on record stays null', () => {
+    const carriedIn = Object.fromEntries(ALL.map(a => [a, { value: 4.0, previousValue: null, carriedForward: true, carriedChange: null }]));
+    const states = calculateIndices(carriedIn, null, poverty);
+    assert.strictEqual(states['US-TX'].financial_anxiety.change, null);
+});
+
+test('top-level rent_burden agrees with a carried ACS reading', () => {
+    __setPreviousSnapshot({
+        as_of: daysAgo(2),
+        states: Object.fromEntries(ALL.map(a => [`US-${a}`, {
+            abbr: a,
+            metrics: { rent_burden_pct: 31.4, rent_burden_source: 'census_acs', rent_burden_pct_observed: daysAgo(2) }
+        }]))
+    });
+    const nlihc = { states: Object.fromEntries(ALL.map(a => [a, { rent_burden: 99, fmr_2br: 1000, housing_wage: 20 }])) };
+    const states = calculateIndices(unemployment, null, poverty, null, null, null, null, nlihc);
+    assert.strictEqual(states['US-TX'].metrics.rent_burden_source, 'census_acs_carried_forward');
+    assert.strictEqual(states['US-TX'].rent_burden.value, 31.4, 'must not show the NLIHC 99 while the index used the carried 31.4');
+    assert.match(states['US-TX'].rent_burden.source, /carried forward/);
+});
+
+test('a whole-indicator hold keeps its original date across days', () => {
+    // Yesterday's snapshot was itself a hold dated three days ago.
+    __setPreviousSnapshot({
+        as_of: daysAgo(1),
+        states: Object.fromEntries(ALL.map(a => [`US-${a}`, {
+            abbr: a,
+            food_insecurity: { value: 101, change: null, carried_forward_from: daysAgo(3) },
+            metrics: {}
+        }]))
+    });
+    const states = calculateIndices(unemployment, null, null); // no poverty -> FI held
+    assert.strictEqual(states['US-TX'].food_insecurity.carried_forward_from, daysAgo(3),
+        'origin must not slide to yesterday');
+});
+
+test('a whole-indicator hold expires and the state is estimated, not silently kept', () => {
+    __setPreviousSnapshot({
+        as_of: daysAgo(1),
+        states: Object.fromEntries(ALL.map(a => [`US-${a}`, {
+            abbr: a,
+            food_insecurity: { value: 101, change: null, carried_forward_from: daysAgo(600) },
+            metrics: {}
+        }]))
+    });
+    const states = calculateIndices(unemployment, null, null);
+    assert.strictEqual(states['US-TX'].food_insecurity.estimated, true);
+    assert.ok(!('carried_forward_from' in states['US-TX'].food_insecurity));
+});
+
+test('an estimated value is never re-carried as history', () => {
+    __setPreviousSnapshot({
+        as_of: daysAgo(1),
+        states: Object.fromEntries(ALL.map(a => [`US-${a}`, {
+            abbr: a,
+            food_insecurity: { value: 130, change: null, estimated: true },
+            metrics: {}
+        }]))
+    });
+    const states = calculateIndices(unemployment, null, null);
+    assert.strictEqual(states['US-TX'].food_insecurity.estimated, true);
+    assert.ok(!('carried_forward_from' in states['US-TX'].food_insecurity));
+});
+
+test('Financial Anxiety is not re-held once the unemployment carry has expired', () => {
+    __setPreviousSnapshot({
+        as_of: daysAgo(1),
+        states: Object.fromEntries(ALL.map(a => [`US-${a}`, {
+            abbr: a,
+            financial_anxiety: { value: 140, change: 1.0 },
+            metrics: {}
+        }]))
+    });
+    const states = calculateIndices(null, null, poverty); // no unemployment at all
+    assert.strictEqual(states['US-TX'].financial_anxiety.estimated, true);
+    assert.ok(!('carried_forward_from' in states['US-TX'].financial_anxiety));
+});
+
+test('a regional estimate is clamped to the published bounds', () => {
+    // Force an estimate off a high average: MS has the 1.35 multiplier.
+    __setPreviousSnapshot({
+        as_of: daysAgo(1),
+        states: Object.fromEntries(ALL.map(a => [`US-${a}`, {
+            abbr: a,
+            food_insecurity: { value: 150, change: null, estimated: true },
+            metrics: {}
+        }]))
+    });
+    const states = calculateIndices(unemployment, null, null);
+    for (const s of Object.values(states)) {
+        assert.ok(s.food_insecurity.value >= 55 && s.food_insecurity.value <= 160,
+            `${s.abbr} estimate ${s.food_insecurity.value} outside 55-160`);
+    }
+});
+
 console.log(`\n${passed} passed${process.exitCode ? ', some failed' : ''}`);
