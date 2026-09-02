@@ -199,7 +199,7 @@ function carryForwardUnemployment() {
         results[state.abbr] = {
             value: rate,
             previousValue: null,
-            carriedChange: state.financial_anxiety?.change ?? 0,
+            carriedChange: state.financial_anxiety?.change ?? null,
             date: observedOn || previous.as_of || null,
             carriedForward: true,
             observedOn: observedOn || previous.as_of || null
@@ -1041,7 +1041,6 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
     const BASE_INDEX = 120; // Start higher to show stress
     const UNEMPLOYMENT_MULTIPLIER = 18; // Each 1% unemployment adds 18 points
     const POVERTY_MULTIPLIER = 6; // Each 1% poverty above baseline adds 6 points
-    const HOUSING_CHANGE_MULTIPLIER = 4; // Each 1% housing price change adds 4 points
     const BASELINE_UNEMPLOYMENT = 3.5; // Consider < 3.5% as healthy
     const BASELINE_POVERTY = 10.0; // National target
 
@@ -1084,17 +1083,30 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
             // carriedChange is set when this rate came from the last published
             // snapshot rather than a live BLS response — the year-ago value
             // needed to recompute it isn't stored, so it rides along instead.
-            const change = unemp.carriedChange ?? (unemp.previousValue
-                ? ((unemp.value - unemp.previousValue) / unemp.previousValue * 100)
-                : 0);
+            // Three cases, each published as what it is. A carried rate brings
+            // its previously published change along (which may itself be null).
+            // A live rate with a year-ago comparison yields a real change. A
+            // live rate with no comparison period has NO change — it used to be
+            // published as 0, a hardcoded zero dressed as a measurement.
+            let change = null;
+            let changeBasis;
+            if (unemp.carriedForward) {
+                change = typeof unemp.carriedChange === 'number' ? unemp.carriedChange : null;
+                changeBasis = change !== null
+                    ? 'year-over-year unemployment rate, carried forward from previous run'
+                    : 'not available - carried forward with no change on record';
+            } else if (typeof unemp.previousValue === 'number' && unemp.previousValue !== 0) {
+                change = (unemp.value - unemp.previousValue) / unemp.previousValue * 100;
+                changeBasis = 'year-over-year unemployment rate';
+            } else {
+                changeBasis = 'not available - no year-ago BLS observation in the response';
+            }
 
             const anxietyClamped = clampIndex(anxietyValue, 80, 200);
             states[stateCode].financial_anxiety = {
                 value: anxietyClamped.value,
-                change: parseFloat(change.toFixed(1)),
-                change_basis: unemp.carriedChange != null
-                    ? 'carried forward from previous run'
-                    : (unemp.previousValue ? 'year-over-year unemployment rate' : 'no comparison period available'),
+                change: change !== null ? parseFloat(change.toFixed(1)) : null,
+                change_basis: changeBasis,
                 rank: null,
                 ...(anxietyClamped.clamped && { clamped: anxietyClamped.clamped })
             };
@@ -1327,8 +1339,13 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         const nlihcState = nlihc?.states?.[abbr];
 
         // rent_burden: median gross rent-to-income %, ACS B25071
-        let rbValue = rentBurden?.[abbr]?.medianRentBurden ?? null;
-        let rbSource = rentBurden?.[abbr] ? `ACS B25071 ${rentBurden[abbr].year}` : null;
+        // Same resolved figure the index was scored on — live ACS, else the
+        // carried ACS reading. Keying this off live alone reproduced the
+        // fmr_2br defect: index on a carried ACS value, Policy Lab shown NLIHC.
+        let rbValue = rentBurden?.[abbr]?.medianRentBurden ?? rentBurdenCarried?.value ?? null;
+        let rbSource = rentBurden?.[abbr]
+            ? `ACS B25071 ${rentBurden[abbr].year}`
+            : (rentBurdenCarried ? `ACS B25071 (carried forward from ${rentBurdenCarried.observedOn})` : null);
         if (rbValue === null && nlihcState) {
             rbValue = nlihcState.rent_burden;
             rbSource = 'NLIHC OOR 2025 (fallback)';
@@ -1357,11 +1374,16 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
         // housing_wage: NLIHC Housing Wage, derived from FMR when possible so
         // the two numbers stay internally consistent.
         let wageValue = deriveHousingWage(fmrValue);
-        let wageSource = fmrValue !== null && resolvedFMR
-            ? 'Derived from HUD FMR (NLIHC formula)'
-            : (nlihcState ? 'NLIHC OOR 2025 (fallback)' : null);
-        if (wageValue === null && nlihcState) {
+        let wageSource = null;
+        if (wageValue !== null) {
+            wageSource = resolvedFMR
+                ? (fmrCarried
+                    ? `Derived from HUD FMR carried forward from ${fmrCarried.observedOn} (NLIHC formula)`
+                    : 'Derived from HUD FMR (NLIHC formula)')
+                : 'Derived from NLIHC OOR 2025 fallback FMR (NLIHC formula)';
+        } else if (nlihcState && typeof nlihcState.housing_wage === 'number') {
             wageValue = nlihcState.housing_wage;
+            wageSource = 'NLIHC OOR 2025 published housing wage (fallback)';
         }
         states[stateCode].housing_wage = wageValue !== null
             ? { value: wageValue, source: wageSource }
@@ -1396,6 +1418,33 @@ function calculateIndices(unemployment, housing, poverty, rentBurden = null, fmr
 // have settled, so carrying it forward or estimating it would only produce a
 // value that deriveAffordability immediately overwrites.
 const BASE_INDICATORS = ['financial_anxiety', 'food_insecurity', 'housing_stress'];
+
+// The range every index is clamped to. Published in meta.index_bounds and
+// enforced on every path that produces a value — including regional estimates,
+// which previously skipped the clamp: a national average times a 1.35 regional
+// multiplier put Mississippi's estimated Food Insecurity at 162, outside its
+// own published 55-160 range.
+const INDEX_BOUNDS = {
+    financial_anxiety: [80, 200],
+    food_insecurity: [55, 160],
+    housing_stress: [80, 200],
+    affordability: [80, 200]
+};
+
+// How long a whole indicator may be held from a previous run before it expires
+// to a regional estimate. Each matches the cadence of the indicator's slowest
+// primary input: unemployment is monthly, poverty and rent burden are annual.
+const INDICATOR_CARRY_MAX_AGE_DAYS = {
+    // Financial Anxiety is NOT held as a whole indicator. Its only input,
+    // unemployment, already carries for 90 days with its own observation date.
+    // Holding the indicator again after that would date the hold from the day
+    // the unemployment carry expired, not from the BLS reading it rests on —
+    // stacking a second 90 days onto the first under a misleading origin date.
+    // Once the unemployment carry expires, the state is estimated and flagged.
+    financial_anxiety: 0,
+    food_insecurity: 550,
+    housing_stress: 550
+};
 
 /**
  * Derive Affordability from the final Housing Stress and Food Insecurity values.
@@ -1457,6 +1506,7 @@ function carryForwardMissingIndicators(states) {
 
     const indicators = BASE_INDICATORS;
     const carried = {};
+    const expired = {};
 
     for (const [stateCode, state] of Object.entries(states)) {
         const prevState = previous.states[stateCode];
@@ -1468,15 +1518,42 @@ function carryForwardMissingIndicators(states) {
             const prevValue = prevState[indicator]?.value;
             if (typeof prevValue !== 'number') continue;
 
+            // Never re-carry a regional estimate: that would launder a
+            // hardcoded baseline into something that looks like history.
+            if (prevState[indicator].estimated) continue;
+
+            // Measure age from the ORIGINAL observation, not from yesterday's
+            // publish date. Recording `previous.as_of` on every carry slid the
+            // clock forward a day at a time, so a held value never aged — the
+            // same defect the component carries were guarded against.
+            const originalDate = prevState[indicator].carried_forward_from || previous.as_of || null;
+            if (originalDate) {
+                const ageDays = (Date.now() - new Date(originalDate).getTime()) / 86400000;
+                const cap = INDICATOR_CARRY_MAX_AGE_DAYS[indicator];
+                if (isFinite(ageDays) && ageDays > cap) {
+                    expired[indicator] = (expired[indicator] || 0) + 1;
+                    continue; // falls through to fillMissingValues, flagged estimated
+                }
+            }
+
             state[indicator] = {
                 value: prevValue,
                 change: prevState[indicator].change ?? null,
                 change_basis: prevState[indicator].change_basis ?? 'carried forward from previous run',
                 rank: null,
-                carried_forward_from: previous.as_of || null
+                carried_forward_from: originalDate,
+                ...(prevState[indicator].clamped && { clamped: prevState[indicator].clamped }),
+                ...(prevState[indicator].partial && {
+                    partial: true,
+                    partial_reason: prevState[indicator].partial_reason
+                })
             };
             carried[indicator] = (carried[indicator] || 0) + 1;
         }
+    }
+
+    for (const [indicator, count] of Object.entries(expired)) {
+        console.warn(`  ⚠️  ${indicator}: ${count} states had a held value older than ${INDICATOR_CARRY_MAX_AGE_DAYS[indicator]} days — expired, will be estimated`);
     }
 
     for (const [indicator, count] of Object.entries(carried)) {
@@ -1517,7 +1594,10 @@ function fillMissingValues(states, regionalStress = {}) {
 
         for (const indicator of indicators) {
             if (states[stateCode][indicator].value === null) {
-                states[stateCode][indicator].value = Math.round(averages[indicator] * multiplier);
+                const [lo, hi] = INDEX_BOUNDS[indicator];
+                const clamped = clampIndex(averages[indicator] * multiplier, lo, hi);
+                states[stateCode][indicator].value = clamped.value;
+                if (clamped.clamped) states[stateCode][indicator].clamped = clamped.clamped;
                 states[stateCode][indicator].change = null;
                 states[stateCode][indicator].change_basis = 'not available - value is a regional estimate';
                 states[stateCode][indicator].estimated = true;
@@ -1793,7 +1873,15 @@ async function main() {
                     : (unemploymentStale
                         ? `BLS LAUS (carried forward from ${loadPreviousSnapshot()?.meta?.unemployment_observed || loadPreviousSnapshot()?.as_of || 'previous run'} — BLS ${unemploymentFailure || 'unavailable'})`
                         : `estimated — BLS ${unemploymentFailure || 'unavailable'}`),
-                housing_prices: withCarryForward(housing ? 'FRED HPI' : 'estimated', carried.housing_prices, 'FRED HPI'),
+                housing_prices: (() => {
+                    // Nothing is estimated when the house-price term is missing —
+                    // the term is omitted and the indicator flagged partial.
+                    const partialCount = carried.housing_stress_partial?.states_partial || 0;
+                    const base = housing
+                        ? 'FRED HPI'
+                        : (partialCount > 0 ? `unavailable - house-price term omitted for ${partialCount} states (flagged partial)` : 'FRED HPI');
+                    return withCarryForward(base, carried.housing_prices, 'FRED HPI');
+                })(),
                 poverty: poverty ? 'Census SAIPE' : 'estimated',
                 rent_burden: withCarryForward(
                     rentBurden ? 'Census ACS B25071' : (nlihc ? 'NLIHC OOR 2025 (fallback)' : (jchs ? 'Harvard JCHS 2025' : 'estimated')),
@@ -1801,7 +1889,17 @@ async function main() {
                 fair_market_rent: withCarryForward(
                     fmr ? 'HUD FMR API' : (nlihc ? 'NLIHC OOR 2025 (fallback)' : (jchs ? 'Harvard JCHS 2025' : 'estimated')),
                     carried.fair_market_rent, 'HUD FMR API'),
-                housing_wage: fmr ? 'Derived from HUD FMR (NLIHC formula)' : (nlihc ? 'NLIHC OOR 2025 (fallback)' : 'estimated'),
+                housing_wage: (() => {
+                    // Read from what was actually published per state, so this
+                    // agrees with the states during a carried-FMR period.
+                    const sources = Object.values(states).map(st => st.housing_wage?.source || '');
+                    const hud = sources.filter(x => x.startsWith('Derived from HUD FMR')).length;
+                    const nl = sources.filter(x => x.includes('NLIHC OOR 2025')).length;
+                    if (hud === sources.length) return fmr ? 'Derived from HUD FMR (NLIHC formula)' : 'Derived from HUD FMR carried forward (NLIHC formula)';
+                    if (hud > 0) return `Derived from HUD FMR for ${hud} states; NLIHC OOR 2025 fallback for ${nl}`;
+                    if (nl > 0) return 'Derived from NLIHC OOR 2025 fallback FMR (NLIHC formula)';
+                    return 'estimated';
+                })(),
                 jchs_calibration: jchs ? 'Harvard JCHS State of the Nation\'s Housing 2025' : 'not loaded',
                 trends: describeTrendsSource(trends)
             },
@@ -1852,12 +1950,7 @@ async function main() {
 
             // The bounds every index is clamped to. A state at a bound is tied
             // with any other state at that bound; its rank is sort order, not data.
-            index_bounds: {
-                financial_anxiety: [80, 200],
-                food_insecurity: [55, 160],
-                housing_stress: [80, 200],
-                affordability: [80, 200]
-            }
+            index_bounds: INDEX_BOUNDS
         },
         national: national,
         states: states,
@@ -1993,6 +2086,13 @@ if (require.main === module) {
 
 module.exports = {
     __setPreviousSnapshot,
+    carryForwardUnemployment,
+    summariseCarryForward,
+    summariseDataAge,
+    describeTrendsSource,
+    generateTimeseries,
+    INDICATOR_CARRY_MAX_AGE_DAYS,
+    INDEX_BOUNDS,
     calculateIndices,
     calculateNational,
     trendsBoostFor,

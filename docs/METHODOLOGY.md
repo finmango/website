@@ -230,6 +230,20 @@ Two guards keep carry-forward honest:
   Without this check, a hardcoded tier estimate would reappear the next day
   labelled as a carried-forward ACS measurement.
 
+**Whole-indicator holds.** When an indicator cannot be computed at all (no
+poverty data for Food Insecurity, say), the whole indicator is held from the
+previous run, dated from its *original* observation so repeated holds never
+slide the clock, and capped:
+
+| Indicator | Hold cap | Then |
+|-----------|----------|------|
+| Financial Anxiety | none — not held as an indicator | Its only input (unemployment) already carries for 90 days from the BLS reading; a second hold would restart the clock from the wrong origin. Once that expires the state is estimated and flagged. |
+| Food Insecurity | 550 days | Regional estimate, flagged `estimated` |
+| Housing Stress | 550 days | Regional estimate, flagged `estimated` |
+
+A value that is itself a regional estimate is never re-held as if it were
+history, and every estimate is clamped to the indicator's published bounds.
+
 **When a component does expire**, the term drops out and the indicator is marked
 `partial: true` with a `partial_reason`. The public page raises a warning naming
 the affected states, because a composite missing a term is not comparable with
@@ -295,7 +309,7 @@ Only two indicators have a period-over-period change to report:
 
 | Indicator | Change basis |
 |-----------|--------------|
-| Financial Anxiety | Year-over-year unemployment rate (BLS) |
+| Financial Anxiety | Year-over-year unemployment rate (BLS). Null when the BLS response carries no year-ago observation — previously a hardcoded 0 |
 | Housing Stress | Year-over-year FHFA house price index (FRED) |
 | Food Insecurity | **None** — SAIPE poverty data is annual |
 | Affordability | **None** — derived index, no independent series |
@@ -404,6 +418,7 @@ describe, so a poverty-driven reading today reflects a prior year's conditions.
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.5.1 | Sep 2026 | Post-merge review fixes: FMR national average taken over the same population the ratios use; rent-burden carry chain no longer breaks after one day; Affordability derived after its inputs settle; top-level rent_burden/fmr_2br/housing_wage agree with the metrics the index used; whole-indicator holds keep their origin date and expire; regional estimates clamped; Financial Anxiety publishes null (not 0) when no year-ago observation exists; 750-day simulation test |
 | 2.5 | Sep 2026 | Accuracy and transparency pass: fixed the BLS quota misdiagnosis and added v2/key support; re-based the freshness badge on measurement age rather than file age; disclosed the tier estimates; replaced the fabricated 5% HPI default with age-capped component carry-forward; split the mislabelled FMR/median-rent field; replaced hardcoded `change: 0` with null plus `change_basis`; rotating trends fetch across all 51 states with a coverage gate; published regional multipliers, index bounds, clamp flags and per-run provenance; retired the `Math.random()` legacy pipeline; added regression tests |
 | 2.4 | Dec 2024 | Added Harvard JCHS 2025 as calibration source; source attribution |
 | 2.3 | Dec 2024 | Added HUD FMR and Census ACS rent burden |

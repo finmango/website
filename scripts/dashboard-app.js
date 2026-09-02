@@ -192,6 +192,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             // integration reported "NOT WORKING" was falling through every
             // branch and rendering as a green "Primary source".
             if (v.includes('not working')) return ['estimated', 'Not working'];
+            // A term omitted from the composite is missing, not measured.
+            if (v.includes('omitted') || v.startsWith('unavailable')) return ['estimated', 'Term omitted'];
             if (v.includes('no api key')) return ['unused', 'No API key'];
             if (v.includes('not applied') || v.includes('withheld')) return ['carried', 'Published, not applied'];
             if (v.includes('not loaded') || v.includes('not used') || v.includes('not fetched')) return ['unused', 'Not used'];
@@ -274,6 +276,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         // A rotation still working its way round and one that is returning
         // nothing both sit at low coverage; only the first is progress.
         const run = DASHBOARD_DATA.meta?.trends_run;
+        if (run && run.attempted === false) {
+            el.innerHTML = `<strong>Search trends not configured:</strong> no Health Trends API key is
+                set for the pipeline, so no search data was requested. The volatility boost is withheld
+                and the indices shown are built from the official government series alone.`;
+            return;
+        }
         if (run && run.state_requests > 0 && run.state_readings === 0) {
             const since = DASHBOARD_DATA.meta?.trends_cache?.last_successful_fetch;
             el.innerHTML = `<strong>Search trends unavailable:</strong> the Health Trends API returned no
