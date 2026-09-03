@@ -103,7 +103,7 @@ def reskin_css(css):
     css = '\n'.join(kept)
 
     swaps = [
-        (r'#1a1a1a\b', '#0A0A0A'), (r'#FF8F00\b|#ff8f00\b', '#FF6B35'),
+        (r'#1a1a1a\b', '#0A0A0A'), (r'#FF8F00\b|#ff8f00\b', '#F25A27'),
         (r'#FFF8F0\b|#fff8f0\b|#fdf6ee\b|#FDF6EE\b|#FFFDF9\b|#fffdf9\b',
          '#FAFAF7'),
         (r"font-family:\s*['\"]?(Poppins|Inter|Montserrat|Nunito|Lato|"

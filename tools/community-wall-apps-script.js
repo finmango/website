@@ -472,7 +472,7 @@ function notifyModerator_(story) {
       htmlBody:
         '<p><strong>' + esc_(story.name) + '</strong> · ' + esc_(story.location) +
         ' · ' + esc_(story.topic) + '</p>' +
-        '<blockquote style="border-left:3px solid #FF6B35;padding-left:12px;margin:12px 0">' +
+        '<blockquote style="border-left:3px solid #F25A27;padding-left:12px;margin:12px 0">' +
         esc_(story.message).replace(/\n/g, '<br>') + '</blockquote>' +
         (story.email ? '<p style="color:#888">Contact (private): ' + esc_(story.email) + '</p>' : '') +
         '<p><a href="' + link('approve') + '" style="color:#1a7f37"><strong>✓ Approve</strong></a>' +
@@ -499,7 +499,7 @@ function notifyModeratorPledge_(pledge) {
         '<p><strong>' + esc_(pledge.name) + '</strong> · ' + esc_(pledge.location) +
         ' · barrier: <strong>' + esc_(pledge.barrier) + '</strong></p>' +
         (pledge.why
-          ? '<blockquote style="border-left:3px solid #FF6B35;padding-left:12px;margin:12px 0">' +
+          ? '<blockquote style="border-left:3px solid #F25A27;padding-left:12px;margin:12px 0">' +
             esc_(pledge.why).replace(/\n/g, '<br>') + '</blockquote>'
           : '<p style="color:#888">(no "why" note)</p>') +
         (pledge.photoUrl

@@ -8,7 +8,7 @@ per-page decisions lives in `MIGRATION-NOTES.md`.
 ## The system in one paragraph
 
 One paper, one ink, one orange. `--paper: #FAFAF7` background,
-`--ink: #0A0A0A` text, `--orange: #FF6B35` accent (`--orange-deep: #E5511B`
+`--ink: #0A0A0A` text, `--orange: #F25A27` accent (`--orange-deep: #E5511B`
 hover). DM Sans (300–900) is the voice; JetBrains Mono 400/500 is the
 apparatus (labels, stats, meta lines, eyebrows). Hairlines, not boxes:
 1px rules in `var(--ink-line)` separate content. Orange is never a
