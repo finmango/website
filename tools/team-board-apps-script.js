@@ -490,7 +490,7 @@ function emailAuthorChanges_(id, reviewer, comment, reviewerEmail) {
       htmlBody:
         '<p>Hi ' + escHtml_(String(post.authorName || 'there').split(/\s+/)[0]) + ',</p>' +
         '<p>Thanks for submitting <strong>' + escHtml_(title) + '</strong>! Our editorial team read it and has some feedback before it goes live:</p>' +
-        '<blockquote style="border-left:3px solid #FF6B35;margin:12px 0;padding:6px 14px;color:#333;">' +
+        '<blockquote style="border-left:3px solid #F25A27;margin:12px 0;padding:6px 14px;color:#333;">' +
         escHtml_(comment).replace(/\n/g, '<br>') + '</blockquote>' +
         '<p style="color:#666;font-size:13px;">— ' + escHtml_(reviewer) + ', FinMango editorial</p>' +
         '<p>You can submit an updated version at <a href="https://www.finmango.org/write">finmango.org/write</a>, ' +

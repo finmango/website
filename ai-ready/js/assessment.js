@@ -402,10 +402,10 @@
   function getDimensionIcon(key) {
     const icons = {
       exposure: `<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-        <circle cx="20" cy="20" r="16" stroke="#FF6B35" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3"/>
-        <path d="M20 10v10l7 3" stroke="#FF6B35" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="14" cy="28" r="2" fill="#FF6B35" opacity="0.3"/>
-        <circle cx="28" cy="14" r="1.5" fill="#FF6B35" opacity="0.4"/>
+        <circle cx="20" cy="20" r="16" stroke="#F25A27" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3"/>
+        <path d="M20 10v10l7 3" stroke="#F25A27" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="14" cy="28" r="2" fill="#F25A27" opacity="0.3"/>
+        <circle cx="28" cy="14" r="1.5" fill="#F25A27" opacity="0.4"/>
       </svg>`,
       cushion: `<svg width="40" height="40" viewBox="0 0 40 40" fill="none">
         <ellipse cx="20" cy="28" rx="10" ry="4" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/>

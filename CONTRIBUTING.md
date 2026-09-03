@@ -167,7 +167,7 @@ Same process as navigation:
 
 ```css
 /* Old */
---orange: #FF6B35;
+--orange: #F25A27;
 
 /* New */
 --orange: #FF8C42;

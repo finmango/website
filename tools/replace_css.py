@@ -32,8 +32,8 @@ new_drivers = """/* Interactive Drivers Component - Redesign */
 
 .driver-btn {
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 107, 53, 0.4);
-  color: #FF6B35;
+  border: 1px solid rgba(242, 90, 39, 0.4);
+  color: #F25A27;
   padding: 10px 18px;
   border-radius: 30px;
   font-weight: 600;
@@ -44,18 +44,18 @@ new_drivers = """/* Interactive Drivers Component - Redesign */
 }
 
 .driver-btn:hover {
-  background: #FF6B35;
+  background: #F25A27;
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
-  border-color: #FF6B35;
+  box-shadow: 0 8px 20px rgba(242, 90, 39, 0.3);
+  border-color: #F25A27;
 }
 
 .driver-info-box {
   background: rgba(15, 23, 42, 0.6);
   padding: 20px;
   border-radius: 16px;
-  border-left: 4px solid #FF6B35;
+  border-left: 4px solid #F25A27;
   font-size: 0.95rem;
   color: #cbd5e1;
   transition: opacity 0.4s ease, transform 0.4s ease;
@@ -98,7 +98,7 @@ new_drivers = """/* Interactive Drivers Component - Redesign */
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #FF6B35, #ff9f1c, #4fd1c5);
+  background: linear-gradient(90deg, #F25A27, #ff9f1c, #4fd1c5);
 }
 
 .ai-search-tool h3 {
@@ -135,13 +135,13 @@ new_drivers = """/* Interactive Drivers Component - Redesign */
 
 .ai-input-group input:focus, .ai-input-group select:focus {
   outline: none;
-  border-color: #FF6B35;
-  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.15);
+  border-color: #F25A27;
+  box-shadow: 0 0 0 4px rgba(242, 90, 39, 0.15);
   background: rgba(15, 23, 42, 0.8);
 }
 
 .ai-btn {
-  background: #FF6B35;
+  background: #F25A27;
   color: white;
   border: none;
   padding: 16px;
@@ -154,7 +154,7 @@ new_drivers = """/* Interactive Drivers Component - Redesign */
   justify-content: center;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
+  box-shadow: 0 4px 15px rgba(242, 90, 39, 0.2);
 }
 
 .ai-btn::after {
@@ -165,7 +165,7 @@ new_drivers = """/* Interactive Drivers Component - Redesign */
 .ai-btn:hover {
   background: #ff5010;
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4);
+  box-shadow: 0 10px 25px rgba(242, 90, 39, 0.4);
 }
 
 .ai-btn:hover::after {
@@ -238,7 +238,7 @@ new_drivers = """/* Interactive Drivers Component - Redesign */
 
 .loader {
   font-weight: 600;
-  color: #FF6B35;
+  color: #F25A27;
   text-align: center;
   padding: 20px;
   position: relative;
