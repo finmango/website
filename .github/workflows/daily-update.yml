@@ -101,15 +101,6 @@ jobs:
           node scripts/snapshot-reviews.js
           echo "::endgroup::"
 
-          # Social cards for notes whose cover can't survive the ~1.91:1 crop
-          # every platform applies to a link preview (a 2.7:1 chart loses a third
-          # of its width, labels and all). Needs a headless Chromium, so the
-          # install is part of the step — if either half fails, shares fall back
-          # to the raw cover and the data update carries on regardless.
-          echo "::group::Ambassador Notes social cards"
-          npm ci --no-audit --no-fund && node scripts/generate-post-og.js || true
-          echo "::endgroup::"
-
           # Stamp a fresh ?v= cache-buster on every page that loads
           # dashboard-data.js. GitHub Pages ignores _headers, so without
           # this, browsers and the Cloudflare edge serve stale data for
@@ -121,7 +112,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add data/ og/ index.html barometer.html barometer-embed.html research.html housing-policy-lab.html judges/index.html pledge-wall.html posts.html
+          git add data/ index.html barometer.html barometer-embed.html research.html housing-policy-lab.html judges/index.html pledge-wall.html posts.html
 
           if git diff --staged --quiet; then
             echo "No changes to commit"
