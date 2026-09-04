@@ -11,27 +11,15 @@ no corporate-speak, no em dashes.
 
 ## Instagram — carousel (8 slides, `slide-01.png` … `slide-08.png`)
 
-At a pre-college summer program at Rice, the conversation eventually turned to
-the $1,500 stipend every student was about to receive. Most of them had never
-held that much money at once.
+At a summer program at Rice, every student was about to receive a $1,500
+stipend. Most had never held that much money at once.
 
-David Johnson, a FinMango Ambassador and incoming first-year, was one of the
-few in the room who already knew how to budget it. His new Ambassador Note is
-about everyone else.
+David Johnson, a FinMango Ambassador, on why more money isn't the solution,
+and what incoming students actually need before the money arrives.
 
-Research stipends worth thousands. Work-study. Part-time jobs. College hands
-students real money, often for the first time, with no preparation for
-managing it. Without a foundation the cycle is simple: earn, spend, wait for
-the next stipend.
+Full note at the link in bio.
 
-His point isn't that students need more money. It's that more money is not
-the solution. What they need is what every main character gets before a new
-journey: the tools for what's ahead.
-
-Preparation before privilege. Full note at the link in bio.
-
-#FinancialHealth #FinMango #FinMangoAmbassador #FirstGen #FGLI
-#CollegeLife #FinancialEducation #PersonalFinance
+#FinancialHealth #FinMangoAmbassador #FirstGen
 
 ---
 
@@ -39,36 +27,13 @@ Preparation before privilege. Full note at the link in bio.
 
 "Why shouldn't there be preparation for handling this kind of privilege?"
 
-David Johnson is a FinMango Ambassador and an incoming first-year at Rice
-University. At a pre-matriculation summer program this year, the conversation
-among his cohort eventually turned to the $1,500 stipend each of them was
-about to receive. Most were first-generation or low-income students. Most had
-never held that much money at once. Only a few had ever saved or managed
-money.
+David Johnson, a FinMango Ambassador at Rice, watched his cohort receive
+$1,500 stipends most of them had never been taught to manage. His note asks
+for something simple: workshops before the money, not after.
 
-His new Ambassador Note starts there and widens out. Summer research stipends
-worth thousands of dollars. Work-study. Part-time jobs. College hands students
-real money, often for the first time, and many of them feel unprepared to
-manage any of it. In his words: concerning, unpredictable, and unsustainable.
+Read David's full note: https://finmango.org/post?id=preparation-before-privilege-the-guidance-college--260803-223115
 
-Two things go unaddressed. A mindset that carries over from high school, where
-questionable spending came with a dependable line of support behind it. And no
-structured help for the transition between those two lives, when the support
-is still there but less active and less immediate.
-
-More money is not the solution. Without a foundation, the student becomes a
-consumer rather than a strategy manager, and the cycle is simple: earn, spend,
-wait for the next stipend. It is dangerously easy to carry that into adult
-life.
-
-His ask is modest and specific: workshops, or at the very least structured
-lectures, before students receive the opportunity. Not just so they can
-succeed in class. So they can start building their own inheritance.
-
-Read David's full note:
-https://finmango.org/post?id=preparation-before-privilege-the-guidance-college--260803-223115
-
-#FinancialHealth #FinMangoAmbassador #FirstGen #HigherEducation
+#FinancialHealth #FinMangoAmbassador
 
 ---
 

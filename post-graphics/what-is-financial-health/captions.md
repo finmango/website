@@ -14,27 +14,13 @@ no corporate-speak, no em dashes.
 "Financial health is not all about having money. I think it's being able to
 breathe a little."
 
-That's Onyemeri Ihegazie, a FinMango Ambassador in Nigeria, and it's the
-clearest definition we've read in a while.
-
-Listen to the money conversations around you. Most of them aren't about
-building wealth. They're about surviving until the next payment, stretching
-what little there is, and deciding which need is more urgent this week.
-
-Sometimes it's transportation. Sometimes it's food. Sometimes it's school
-expenses. Sometimes it's something unexpected that rewrites the whole budget.
-
-So financial health isn't just income. It's stability. It's options. It's not
-feeling like one unexpected expense could throw your whole month off balance.
-
-Which is why Onyemeri starts where she does: understand the reality before
-offering the solution. Behind every statistic is a real person with a real
-story.
+Onyemeri Ihegazie, a FinMango Ambassador in Nigeria, on what money
+conversations actually sound like: not building wealth, but surviving until
+the next payment and deciding which need is more urgent.
 
 Full note at the link in bio.
 
-#FinancialHealth #FinMango #FinMangoAmbassador #FinancialInclusion
-#Nigeria #CostOfLiving #PersonalFinance #FinancialWellbeing
+#FinancialHealth #FinMangoAmbassador #Nigeria
 
 ---
 
@@ -43,34 +29,14 @@ Full note at the link in bio.
 "Financial health is not all about having money. I think it's being able to
 breathe a little."
 
-Onyemeri Jesus Ihegazie is a FinMango Ambassador and a student at Michael
-Okpara University of Nigeria. In her new Ambassador Note she
-makes a case worth sitting with.
+Onyemeri Jesus Ihegazie, a FinMango Ambassador in Nigeria, writes that most
+money conversations around her aren't about building wealth. They're about
+surviving until the next payment. Her point: understand the reality before
+offering the solution.
 
-Listen to the money conversations around you. Most of them are not about
-building wealth. They are about surviving until the next payment, stretching
-what little there is, and deciding which need is more urgent.
+Read Onyemeri's full note: https://finmango.org/post?id=what-is-financial-health-all-about-260804-140424
 
-Many of us spend more time working out how to make today's money last until
-tomorrow than making long-term plans. In her words: everything felt important,
-and she couldn't afford everything at once.
-
-Sometimes it's transportation. Sometimes it's food. Sometimes it's school
-expenses. Sometimes it's something unexpected that rewrites the whole budget.
-
-So financial health is not just income. It's stability. It's options. It's not
-feeling like one unexpected expense could throw your whole month off balance.
-
-Her conclusion is the part we keep coming back to: understand the reality
-before offering the solution. Before we talk about saving or investing, we
-have to acknowledge what people are actually navigating.
-
-Behind every statistic is a real person with a real story.
-
-Read Onyemeri's full note:
-https://finmango.org/post?id=what-is-financial-health-all-about-260804-140424
-
-#FinancialHealth #FinMangoAmbassador #FinancialInclusion #Nigeria
+#FinancialHealth #FinMangoAmbassador
 
 ---
 
