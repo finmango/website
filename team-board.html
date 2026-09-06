@@ -134,71 +134,6 @@
       padding: .1rem .5rem .1rem .14rem; white-space: nowrap; }
     .who-chip.plain { padding-left: .5rem; }
     .who-chip .avatar { width: 18px; height: 18px; font-size: .5rem; margin: 0; border-width: 1px; }
-    /* pledge review rows (🤝 Pledge Wall tab) reuse the .pr-* queue shell */
-    .pl-why { font-size: .88rem; color: var(--ink); line-height: 1.5; white-space: pre-wrap;
-      border-left: 3px solid var(--orange); padding: .05rem 0 .05rem .6rem; margin: .5rem 0 0; }
-    .pl-photo { display: block; width: 100%; max-width: 300px; margin: .55rem 0 0; border-radius: 8px;
-      border: 1px solid var(--ink-line-soft); background: var(--ink-line-soft); }
-    /* the signer attached a photo and it never reached Drive — say so, because a
-       blank card is indistinguishable from "no photo attached" */
-    .pl-photo-err { font-size: .78rem; line-height: 1.45; color: #8a4b1f; background: rgba(242, 90, 39,.08);
-      border: 1px solid rgba(242, 90, 39,.35); border-radius: 6px; padding: .35rem .5rem; margin: .55rem 0 0; }
-    .pl-photo-err code { font-size: .72rem; word-break: break-word; }
-    .pl-photo-row { display: flex; align-items: center; gap: .4rem; margin: .4rem 0 0; flex-wrap: wrap; }
-    .pl-edited { font-size: .72rem; font-weight: 600; color: var(--ink-dim); }
-
-    /* ===== PHOTO CROPPER (pledge queue) ===== */
-    .crop-back { position: fixed; inset: 0; z-index: 90; background: rgba(20,20,18,.62);
-      display: flex; align-items: center; justify-content: center; padding: 1.2rem; }
-    .crop-modal { background: var(--card); border-radius: 12px; border: 1px solid var(--ink-line-soft);
-      box-shadow: 0 24px 60px rgba(0,0,0,.28); width: 100%; max-width: 860px;
-      max-height: 100%; display: flex; flex-direction: column; overflow: hidden; }
-    .crop-head { padding: .85rem 1rem .6rem; border-bottom: 1px solid var(--ink-line-soft); }
-    .crop-head h3 { font-size: .98rem; font-weight: 800; letter-spacing: -.02em; }
-    .crop-head p { font-size: .78rem; color: var(--ink-dim); margin-top: .15rem; }
-    /* the checkerboard makes it obvious where the image ends */
-    .crop-stage { flex: 1; min-height: 0; overflow: auto; padding: 1rem; display: flex;
-      align-items: center; justify-content: center; background:
-        repeating-conic-gradient(var(--ink-line-soft) 0% 25%, transparent 0% 50%) 50%/16px 16px; }
-    /* crosshair signals "drag anywhere to draw a new selection" */
-    .crop-wrap { position: relative; line-height: 0; touch-action: none; user-select: none; cursor: crosshair; }
-    .crop-wrap img { display: block; max-width: 100%; height: auto; }
-    /* everything outside the selection is dimmed by four panels, so the kept
-       area is the only part shown at full brightness */
-    .crop-shade { position: absolute; background: rgba(20,20,18,.55); pointer-events: none; }
-    .crop-box { position: absolute; outline: 1px solid #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.45);
-      cursor: move; }
-    /* thirds guides — framing help, never a click target */
-    .crop-box::before { content: ''; position: absolute; inset: 0; pointer-events: none;
-      background-image: linear-gradient(rgba(255,255,255,.35) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.35) 1px, transparent 1px);
-      background-size: 100% 33.333%, 33.333% 100%;
-      background-position: 0 33.333%, 33.333% 0; background-repeat: repeat; }
-    .crop-h { position: absolute; width: 14px; height: 14px; background: #fff; border: 1px solid rgba(0,0,0,.45);
-      border-radius: 2px; }
-    /* invisible 34px grab area around each handle — the visible square stays
-       small so it doesn't hide the photo, but fingers and fast mice still catch
-       it. Pseudo-elements extend hit-testing to the handle itself. */
-    .crop-h::before { content: ''; position: absolute; inset: -10px; }
-    .crop-h.nw { left: -7px; top: -7px; cursor: nwse-resize; }
-    .crop-h.ne { right: -7px; top: -7px; cursor: nesw-resize; }
-    .crop-h.sw { left: -7px; bottom: -7px; cursor: nesw-resize; }
-    .crop-h.se { right: -7px; bottom: -7px; cursor: nwse-resize; }
-    .crop-h.n { left: 50%; top: -7px; margin-left: -7px; cursor: ns-resize; }
-    .crop-h.s { left: 50%; bottom: -7px; margin-left: -7px; cursor: ns-resize; }
-    .crop-h.w { left: -7px; top: 50%; margin-top: -7px; cursor: ew-resize; }
-    .crop-h.e { right: -7px; top: 50%; margin-top: -7px; cursor: ew-resize; }
-    .crop-foot { padding: .7rem 1rem .85rem; border-top: 1px solid var(--ink-line-soft);
-      display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
-    .crop-foot .spacer { flex: 1; }
-    .crop-dims { font-size: .72rem; color: var(--ink-faint); font-variant-numeric: tabular-nums; }
-    .crop-foot .btn-sm.on { background: var(--orange); color: #fff; border-color: var(--orange); }
-    .crop-ratios { display: inline-flex; gap: .25rem; align-items: center; }
-    .crop-ratios span { font-size: .72rem; color: var(--ink-faint); margin-right: .1rem; }
-    .draft-editing { outline: 2px solid var(--orange); border-radius: 8px; padding: .6rem .8rem; background: #fff; min-height: 120px; }
-    .draft-editing:focus { outline: 2px solid var(--orange-deep); }
-    .draft-editing.drag-over { outline: 2px dashed var(--orange-deep); background: rgba(242, 90, 39,.05); }
-
     /* ===== BOARD VIEW ===== */
     .board-scroll { flex: 1; overflow-x: auto; overflow-y: hidden; }
     .board { display: flex; gap: .9rem; padding: 1rem 1.1rem 1.25rem; height: 100%; align-items: flex-start; min-width: min-content; }
@@ -570,7 +505,6 @@
         <div id="pageList"></div>
         <div class="side-label"><span class="mono">Review</span></div>
         <button class="side-item" id="notesNavBtn"><span class="emoji">📝</span><span class="label">Ambassador Notes</span><span class="count" id="notesCount"></span></button>
-        <button class="side-item" id="pledgeNavBtn"><span class="emoji">🤝</span><span class="label">Pledge Wall</span><span class="count" id="pledgeCount"></span></button>
       </div>
       <div class="side-foot">
         <button class="side-item" id="membersBtn"><span class="emoji">👥</span><span class="label">Team members</span></button>
@@ -629,7 +563,6 @@
     var GOOGLE_CLIENT_ID = '846871931336-o1h3km8mg9qoil186ub74t83jun80b2m.apps.googleusercontent.com';
     var ALLOWED_DOMAIN = 'finmango.org';
     var LS_DOC = 'fmb_doc_v1', LS_KEY = 'fmb_key', LS_ME = 'fmb_me', LS_UI = 'fmb_ui', LS_AUTH = 'fmb_gauth', LS_NOTES = 'fmb_notes_cache';
-    var LS_PLEDGES = 'fmb_pledges_cache';
     var COL_COLORS = ['#9A9A93', '#4A7BD0', '#E8A33D', '#3E9A5F', '#F25A27', '#8B5CF6', '#D9534F', '#2E9E9E'];
     var AVA_COLORS = ['#F25A27', '#3E9A5F', '#4A7BD0', '#8B5CF6', '#E8A33D', '#2E9E9E', '#D9534F', '#5F6B7A'];
     var TAG_COLORS = [['#FFF0E8', '#C2410C'], ['#EAF3EC', '#1F7A40'], ['#EAF0FA', '#2B5AB8'], ['#F3EDFC', '#6D3FC4'],
@@ -1091,7 +1024,7 @@
         var u = JSON.parse(localStorage.getItem(LS_UI) || '{}');
         ui.boardId = u.boardId || null;
         ui.pageId = u.pageId || null;
-        ui.view = (u.view === 'table' || u.view === 'page' || u.view === 'notes' || u.view === 'pledges') ? u.view : 'board';
+        ui.view = (u.view === 'table' || u.view === 'page' || u.view === 'notes') ? u.view : 'board';
         ui.sidebarClosed = !!u.sidebarClosed;
       } catch (e) {}
       if (ui.view === 'page' && !page()) ui.view = 'board';
@@ -1164,7 +1097,7 @@
 '# Initiative: Barrier Breakers\n\n*Living doc — edit freely. Public page: [finmango.org/barrier-breakers](https://www.finmango.org/barrier-breakers) · Contact: competition@finmango.org*\n\n## What is it?\nOur annual entrepreneurship & financial literacy competition with Kent State University, powered by Valmark. Students pick a systemic barrier to financial health and pitch a way to break it. **$20K+ in prizes · 300+ students · last held March 20, 2026.**\n\n## How it works\n**Five tracks:** Transportation · Housing Affordability · Healthcare Access · Literacy & Investment · Open Track\n\n**Three ways to compete:**\n1. **Demo Day** — top team per track, 5-min pitch + 2-min Q&A. $7,500 / $4,650 / $2,750 / $1,850 / $1,250\n2. **Innovation Gallery** — poster presentations, 1-on-1 with judges. $1,250 / $750 / $250\n3. **Knowledge Track** — 20–30 min financial literacy quiz, open to all. $250 / $150 / $100\n\n## The kit — everything we built for 2026\n*This is the package: to run a future cohort, copy these, update the year, dates, prizes, and sponsors, and re-point the forms.*\n\n### Student-facing pages\n\n| Page | Link |\n| --- | --- |\n| Main page | [finmango.org/barrier-breakers](https://www.finmango.org/barrier-breakers) |\n| Apply | [barrier-breakers-apply](https://www.finmango.org/barrier-breakers-apply) |\n| RSVP & release form | [barrier-breakers-rsvp](https://www.finmango.org/barrier-breakers-rsvp) |\n| Financial literacy quiz | [barrier-breakers-quiz](https://www.finmango.org/barrier-breakers-quiz) |\n| Project submission | [barrier-breakers-projects](https://www.finmango.org/barrier-breakers-projects) |\n| Event schedule | [barrier-breakers-schedule](https://www.finmango.org/barrier-breakers-schedule) · [PDF](https://www.finmango.org/barrier-breakers-schedule.pdf) |\n\n### Judging\n\n| Page | Link |\n| --- | --- |\n| Judges portal | [barrier-breakers-judges](https://www.finmango.org/barrier-breakers-judges) |\n| Innovation Gallery judging form | [judging-form](https://www.finmango.org/judging-form) |\n| Rubric | [barrier-breakers-rubric](https://www.finmango.org/barrier-breakers-rubric) · [PDF](https://www.finmango.org/barrier-breakers-rubric.pdf) |\n\n### Print & promo\n\n| Asset | Link |\n| --- | --- |\n| One-pager (2026) | [barrier-breakers-one-pager-2026](https://www.finmango.org/barrier-breakers-one-pager-2026) · [PDF](https://www.finmango.org/barrier-breakers-one-pager-2026.pdf) |\n| Flyer | [barrier-breakers-flyer](https://www.finmango.org/barrier-breakers-flyer) · [PDF](https://www.finmango.org/barrier-breakers-flyer.pdf) |\n| Social/OG image | [barrier-breakers-og.png](https://www.finmango.org/barrier-breakers-og.png) |\n\n### Backends (Apps Script — in the [website repo](https://github.com/finmango/website) under `tools/`)\n- `barrier-breakers-projects-apps-script.js` — project submissions\n- `barrier-breakers-quiz-apps-script.js` — quiz answers & scoring\n- `barrier-breakers-track-stats-api.js` — live track stats\n- `judging-apps-script.js` — judging form backend\n- `generate_barrier_breakers_form.js` — regenerates the application form\n\n### Event photos\n- [2024 pictures](https://drive.google.com/drive/folders/1ZwCvDhe6wOlBYnfFSluk3wTX5N3ni6NX)\n- [2025 pictures](https://drive.google.com/drive/folders/1VAxMXqdfHKdAknvJAENYSbWYIcyPKzs6)\n- [2026 pictures](https://drive.google.com/drive/folders/1m2F0Jn12tfIgyUEp6UqCu6Vs2ZG0xxME)\n\n## Replication checklist (next cohort)\n1. Duplicate the pages above; update year, event date, schedule, prize amounts, and sponsors.\n2. Regenerate the application & RSVP forms (`tools/generate_barrier_breakers_form.js`) and re-point the form links.\n3. Refresh the rubric, one-pager, and flyer PDFs (print-to-PDF from the html versions).\n4. Recruit judges and refresh the judges portal roster.\n5. Confirm sponsors (Valmark) and Kent State logistics.\n6. Announce: homepage + education page sections, social banners, and the [[Ambassadors]] network.\n\n## Related\n- [[Education]] — Barrier Breakers is the capstone of the education program\n- [[Resources]] — public tools students can use in their projects', hub.id);
       }
       addPage('pg-resources', '🛠️', 'Resources',
-'# Resources & Tools 🛠️\n\nEvery public tool on the site, in one table. The public page is [finmango.org/resources](https://www.finmango.org/resources) — if you ship a new tool, add it there (`resources.html`) and to this page.\n\n## On the public Resources page\n\n| Tool | Category | What it is |\n| --- | --- | --- |\n| [Mango Stories](https://www.finmango.org/mango-stories) | Education | Real-life financial stories and lessons |\n| [Housing Calculator](https://www.finmango.org/housing-calculator) | Lifestyle | How much home you can afford |\n| [Family Financial Planning](https://www.finmango.org/family-planning) | Family | 15-year financial trajectory planner |\n| [Rent vs. Buy Calculator](https://www.finmango.org/rent-vs-buy) | Lifestyle | Total cost of renting vs. owning over time |\n| [Sports Betting Simulator](https://www.finmango.org/sports-betting) | Lifestyle | The real impact of betting on stress, time & money |\n| [Battle of the IRAs](https://www.finmango.org/ira-battle) | Retirement | Traditional vs. Roth IRA comparison |\n| [Table Banking Game](https://www.finmango.org/table-banking-game) | Education | Run a year inside a community savings group — playable in 5 languages |\n| [Inflation Time Machine](https://www.finmango.org/inflation-time-machine) | Education | How inflation eats purchasing power |\n| [Student Loan Simulator](https://www.finmango.org/student-loan-simulator) | Education | What extra payments save in interest and years |\n| [The Minimum Payment Trap](https://www.finmango.org/minimum-payment-trap) | Lifestyle | The true cost of credit-card minimum payments |\n| [New vs. Used Car Calculator](https://www.finmango.org/new-vs-used-car-calculator) | Lifestyle | Total cost of ownership, compared |\n| [Compound Interest Calculator](https://www.finmango.org/compound-interest) | Retirement | Growth over time with monthly contributions |\n| [Disaster Desk](https://www.finmango.org/disaster-desk) | Emergencies | Personalized disaster-recovery resources in 3 steps |\n| [Food Assistance Calculator](https://www.finmango.org/food-assistance-calculator) | Income | SNAP eligibility + nearby food resources |\n| [Food Desert Analyzer](https://www.finmango.org/food-desert-analyzer) | Family | Grocery access in your neighborhood |\n| [Portfolio Simulator](https://www.finmango.org/portfolio-simulator) | Retirement | Strategies tested on market data back to 1970 |\n| [Roth IRA Calculator](https://www.finmango.org/roth-ira) | Retirement | Tax-free retirement growth planner |\n| [Paycheck Calculator](https://www.finmango.org/paycheck-calculator) | Income | Take-home pay across US cities |\n| [FIRE Calculator](https://www.finmango.org/fire-calculator) | Retirement | Path to financial independence & early retirement |\n| [What\'s Money Calculator](https://www.finmango.org/whats-money) | Lifestyle | What frivolous spending would be worth, invested |\n| [Startup Calculator](https://www.finmango.org/startup-calculator) | Business | Startup costs & initial operating expenses |\n| [Mexico Paycheck Calculator](https://www.finmango.org/mexico-paycheck-calculator) | Income | Take-home pay across Mexican cities |\n| [Rule of 72 Calculator](https://www.finmango.org/rule-of-72) | Retirement | How long until your money doubles |\n| [Company Benefits Guide](https://www.finmango.org/company-benefits-guide) | Income | Understand & maximize an employee benefits package |\n| [Small Business Digital Guide](https://www.finmango.org/small-business-guide) | Business | Bringing a small business into the digital era |\n\n## Built, but not on the public Resources page (yet)\n\nLive on the site but missing from `resources.html` — worth adding or retiring deliberately:\n\n| Tool | What it is |\n| --- | --- |\n| [Budget Balancer Game](https://www.finmango.org/budget-balancer) | Budgeting game |\n| [Debt Destroyer](https://www.finmango.org/debt-destroyer) | Debt payoff planner |\n| [Credit Score Simulator](https://www.finmango.org/credit-score-simulator) | How actions move a credit score |\n| [Gig Economy Tax Estimator](https://www.finmango.org/gig-tax-estimator) | Taxes for gig & freelance income |\n| [Cost of Living Comparator](https://www.finmango.org/cost-of-living) | Compare costs between cities |\n| [The Commute Calculation](https://www.finmango.org/commute-calc) | The true cost of a commute |\n| [Market Rollercoaster](https://www.finmango.org/market-rollercoaster) | Riding out market volatility |\n| [The Medical Maze](https://www.finmango.org/medical-maze) | Navigating medical bills |\n| [The Probability Trap](https://www.finmango.org/probability-trap) | Odds, luck, and money decisions |\n| [Inflation Shopping Spree](https://www.finmango.org/inflation-shopping-spree) | Inflation, felt at the register |\n| [Financial Health Predictor](https://www.finmango.org/financial-health-predictor) | Project your financial health |\n| [Money Mango Daily](https://www.finmango.org/money-mango-daily) | A daily systems puzzle |\n| [Food Security Dashboard](https://www.finmango.org/food-security) | SNAP & food insecurity by state |\n\n## Data platforms & labs\n\n- [Financial Health Barometer](https://www.finmango.org/barometer) — real-time, state-level financial stress signals\n- [AI & The Economic Signal](https://www.finmango.org/ai-economic-signal) — AI exposure meets household stress\n- [Affordability Lab](https://www.finmango.org/affordability-lab) — affordability research & analysis\n- [Housing Policy Lab](https://www.finmango.org/housing-policy-lab) — housing policy scenarios\n- [FreshFind](https://freshfind.org/) — food-crisis early warning, built for government\n\nSee also: [[Initiatives]] for the full case pages.');
+'# Resources & Tools 🛠️\n\nEvery public tool on the site, in one table. The public page is [finmango.org/resources](https://www.finmango.org/resources) — if you ship a new tool, add it there (`resources.html`) and to this page.\n\n## On the public Resources page\n\n| Tool | Category | What it is |\n| --- | --- | --- |\n| [Mango Stories](https://www.finmango.org/mango-stories) | Education | Real-life financial stories and lessons |\n| [Housing Calculator](https://www.finmango.org/housing-calculator) | Lifestyle | How much home you can afford |\n| [Family Financial Planning](https://www.finmango.org/family-planning) | Family | 15-year financial trajectory planner |\n| [Rent vs. Buy Calculator](https://www.finmango.org/rent-vs-buy) | Lifestyle | Total cost of renting vs. owning over time |\n| [Sports Betting Simulator](https://www.finmango.org/sports-betting) | Lifestyle | The real impact of betting on stress, time & money |\n| [Battle of the IRAs](https://www.finmango.org/ira-battle) | Retirement | Traditional vs. Roth IRA comparison |\n| [Table Banking Game](https://www.finmango.org/table-banking-game) | Education | Run a year inside a community savings group — playable in 5 languages |\n| [Inflation Time Machine](https://www.finmango.org/inflation-time-machine) | Education | How inflation eats purchasing power |\n| [Student Loan Simulator](https://www.finmango.org/student-loan-simulator) | Education | What extra payments save in interest and years |\n| [The Minimum Payment Trap](https://www.finmango.org/minimum-payment-trap) | Lifestyle | The true cost of credit-card minimum payments |\n| [New vs. Used Car Calculator](https://www.finmango.org/new-vs-used-car-calculator) | Lifestyle | Total cost of ownership, compared |\n| [Compound Interest Calculator](https://www.finmango.org/compound-interest) | Retirement | Growth over time with monthly contributions |\n| [Disaster Desk](https://www.finmango.org/disaster-desk) | Emergencies | Personalized disaster-recovery resources in 3 steps |\n| [Food Assistance Calculator](https://www.finmango.org/food-assistance-calculator) | Income | SNAP eligibility + nearby food resources |\n| [Food Desert Analyzer](https://www.finmango.org/food-desert-analyzer) | Family | Grocery access in your neighborhood |\n| [Portfolio Simulator](https://www.finmango.org/portfolio-simulator) | Retirement | Strategies tested on market data back to 1970 |\n| [Roth IRA Calculator](https://www.finmango.org/roth-ira) | Retirement | Tax-free retirement growth planner |\n| [Paycheck Calculator](https://www.finmango.org/paycheck-calculator) | Income | Take-home pay across US cities |\n| [FIRE Calculator](https://www.finmango.org/fire-calculator) | Retirement | Path to financial independence & early retirement |\n| [What\'s Money Calculator](https://www.finmango.org/whats-money) | Lifestyle | What frivolous spending would be worth, invested |\n| [Startup Calculator](https://www.finmango.org/startup-calculator) | Business | Startup costs & initial operating expenses |\n| [Mexico Paycheck Calculator](https://www.finmango.org/mexico-paycheck-calculator) | Income | Take-home pay across Mexican cities |\n| [Rule of 72 Calculator](https://www.finmango.org/rule-of-72) | Retirement | How long until your money doubles |\n| [Company Benefits Guide](https://www.finmango.org/company-benefits-guide) | Income | Understand & maximize an employee benefits package |\n| [Small Business Digital Guide](https://www.finmango.org/small-business-guide) | Business | Bringing a small business into the digital era |\n\n## Built, but not on the public Resources page (yet)\n\nLive on the site but missing from `resources.html` — worth adding or retiring deliberately:\n\n| Tool | What it is |\n| --- | --- |\n| [Budget Balancer Game](https://www.finmango.org/budget-balancer) | Budgeting game |\n| [Debt Destroyer](https://www.finmango.org/debt-destroyer) | Debt payoff planner |\n| [Credit Score Simulator](https://www.finmango.org/credit-score-simulator) | How actions move a credit score |\n| [Gig Economy Tax Estimator](https://www.finmango.org/gig-tax-estimator) | Taxes for gig & freelance income |\n| [Cost of Living Comparator](https://www.finmango.org/cost-of-living) | Compare costs between cities |\n| [The Commute Calculation](https://www.finmango.org/commute-calc) | The true cost of a commute |\n| [Market Rollercoaster](https://www.finmango.org/market-rollercoaster) | Riding out market volatility |\n| [The Medical Maze](https://www.finmango.org/medical-maze) | Navigating medical bills |\n| [The Probability Trap](https://www.finmango.org/probability-trap) | Odds, luck, and money decisions |\n| [Inflation Shopping Spree](https://www.finmango.org/inflation-shopping-spree) | Inflation, felt at the register |\n| [Financial Health Predictor](https://www.finmango.org/financial-health-predictor) | Project your financial health |\n| [Food Security Dashboard](https://www.finmango.org/food-security) | SNAP & food insecurity by state |\n\n## Data platforms & labs\n\n- [Financial Health Barometer](https://www.finmango.org/barometer) — real-time, state-level financial stress signals\n- [AI & The Economic Signal](https://www.finmango.org/ai-economic-signal) — AI exposure meets household stress\n- [Affordability Lab](https://www.finmango.org/affordability-lab) — affordability research & analysis\n- [Housing Policy Lab](https://www.finmango.org/housing-policy-lab) — housing policy scenarios\n- [FreshFind](https://freshfind.org/) — food-crisis early warning, built for government\n\nSee also: [[Initiatives]] for the full case pages.');
     }
 
     // ---- Social Media & Marketing page -------------------------------------
@@ -1522,7 +1455,7 @@
     // =========================== NAVIGATION ================================
     function openBoard(id) {
       ui.boardId = id; ui.pageId = null;
-      if (ui.view === 'page' || ui.view === 'notes' || ui.view === 'pledges') ui.view = 'board';
+      if (ui.view === 'page' || ui.view === 'notes') ui.view = 'board';
       quickAddCol = null;
       persistLocal(); render(); closeSidebarOnMobile();
     }
@@ -1573,9 +1506,7 @@
         if (!p.parentId || !pageIds[p.parentId]) pageRow(p, 0);
       });
       $('notesNavBtn').classList.toggle('active', ui.view === 'notes');
-      $('pledgeNavBtn').classList.toggle('active', ui.view === 'pledges');
       updateNotesCount();
-      updatePledgeCount();
       $('app').classList.toggle('sidebar-closed', ui.sidebarClosed);
     }
 
@@ -1714,15 +1645,15 @@
 
     function renderTopbar() {
       var pageMode = inPageMode();
-      // Both review queues (notes, pledges) share the same stripped-down
-      // topbar: nothing here is renameable or filterable.
-      var notesMode = ui.view === 'notes' || ui.view === 'pledges';
+      // The review queue (notes) uses a stripped-down topbar: nothing here is
+      // renameable or filterable.
+      var notesMode = ui.view === 'notes';
       $('topbar').classList.toggle('page-mode', pageMode);
       $('topbar').classList.toggle('notes-mode', notesMode);
       $('boardNameInput').disabled = notesMode;
       if (notesMode) {
-        $('boardEmoji').textContent = ui.view === 'pledges' ? '🤝' : '📝';
-        $('boardNameInput').value = ui.view === 'pledges' ? 'Pledge Wall' : 'Ambassador Notes';
+        $('boardEmoji').textContent = '📝';
+        $('boardNameInput').value = 'Ambassador Notes';
       } else if (pageMode) {
         var p = page();
         $('boardEmoji').textContent = p.icon || '📄';
@@ -1803,7 +1734,6 @@
       if (wb0) { prevWbL = wb0.scrollLeft; prevWbT = wb0.scrollTop; }
       root.innerHTML = '';
       if (ui.view === 'notes') { renderNotes(root); return; }
-      if (ui.view === 'pledges') { renderPledges(root); return; }
       if (inPageMode()) {
         renderPage(root, page());
         if (prevScroll) {
@@ -4118,587 +4048,6 @@
       }).catch(function () { box.innerHTML = '<p class="help-note">Couldn\'t load this post.</p>'; });
     }
 
-    // ---------------------- pledge wall (review tab) ------------------------
-    // Pledges from get-involved.html#pledge used to land in one inbox with
-    // approve/reject links; now the whole team reviews them here. The HQ
-    // backend bridges to the Community Wall Apps Script with a server-side
-    // moderation key, so being signed in here is the only credential.
-    var PL_STATUS = { pending: ['Pending', '#E8A33D'], approved: ['On the wall', '#3E9A5F'],
-      rejected: ['Rejected', '#D9534F'] };
-    // Same instant-paint trick as the notes queue: the last-seen copy renders
-    // straight from localStorage while a live fetch refreshes behind it (two
-    // Apps Script cold starts per call, so nobody should wait on it).
-    var pledges = { rows: null, loading: false, refreshing: false, error: null,
-      showRejected: false, showPrivate: false, showAllLive: false,
-      // decisions painted on screen but not yet confirmed by the backend
-      pending: {} };
-    try {
-      var cachedPledges = JSON.parse(localStorage.getItem(LS_PLEDGES) || 'null');
-      if (cachedPledges && cachedPledges.rows) pledges.rows = cachedPledges.rows;
-    } catch (e) {}
-    function openPledgeView() {
-      ui.view = 'pledges'; ui.pageId = null;
-      persistLocal(); render(); closeSidebarOnMobile();
-      if (!pledges.loading) loadPledges(); // cached copy is already on screen
-    }
-    function loadPledges() {
-      pledges.loading = true; pledges.refreshing = !!pledges.rows; pledges.error = null;
-      postsApi({ action: 'pledges-list', status: 'all' }).then(function (res) {
-        pledges.loading = false; pledges.refreshing = false;
-        if (res.result !== 'success') {
-          // Keep the cached queue on a transient failure; only surface the
-          // error when there's nothing at all to show.
-          if (!pledges.rows) pledges.error = String(res.error || 'unreachable');
-        } else {
-          pledges.rows = res.pledges || [];
-          // A decision still in flight has already been painted on its row. This
-          // list predates it, so re-apply it rather than flickering back to the
-          // old status until that decision's own response arrives.
-          Object.keys(pledges.pending).forEach(function (pid) {
-            var p = pledges.rows.find(function (x) { return x.id === pid; });
-            if (p) Object.keys(pledges.pending[pid]).forEach(function (k) { p[k] = pledges.pending[pid][k]; });
-          });
-          try { localStorage.setItem(LS_PLEDGES, JSON.stringify({ t: now(), rows: pledges.rows })); } catch (e) {}
-        }
-        updatePledgeCount();
-        if (ui.view === 'pledges') render();
-      }).catch(function () {
-        pledges.loading = false; pledges.refreshing = false;
-        if (!pledges.rows) pledges.error = 'unreachable';
-        if (ui.view === 'pledges') render();
-      });
-    }
-    // The public pledge list is edge-cached, so anything that changes a card
-    // re-primes it — otherwise the wall lags a decision by the cache TTL.
-    // Failure is fine (the cache catches up on its own), but the rejection has
-    // to be handled: a bare fetch() rejects outside try/catch when offline.
-    function primeWallCache() {
-      try { fetch('/api/wall?action=pledges&refresh=1').catch(function () {}); } catch (e) {}
-    }
-    // ----- optimistic decisions (mirrors the Ambassador Notes queue) -----
-    // Approving is a decision, not a request for one, but the round trip behind
-    // it runs long enough that an unchanged row reads as "did that work?". So
-    // paint the outcome now, mark it ⏳ while it's in flight, and roll it back if
-    // the server disagrees.
-    var PLEDGE_ROW_KEYS = ['status', 'moderatedBy', 'publishedAt'];
-    function snapshotPledgeRow(id) {
-      var p = (pledges.rows || []).find(function (x) { return x.id === id; });
-      if (!p) return null;
-      var snap = {};
-      PLEDGE_ROW_KEYS.forEach(function (k) { snap[k] = p[k]; });
-      return snap;
-    }
-    function patchPledgeRow(id, patch) {
-      var p = (pledges.rows || []).find(function (x) { return x.id === id; });
-      if (!p) return;
-      Object.keys(patch).forEach(function (k) {
-        if (patch[k] === undefined) delete p[k]; else p[k] = patch[k];
-      });
-      try { localStorage.setItem(LS_PLEDGES, JSON.stringify({ t: now(), rows: pledges.rows })); } catch (e) {}
-      updatePledgeCount();
-      if (ui.view === 'pledges') render();
-    }
-    function pledgeOptimistic(decision, reviewer) {
-      var at = new Date(now()).toISOString();
-      if (decision === 'approve') return { status: 'approved', moderatedBy: reviewer, publishedAt: at };
-      if (decision === 'reject') return { status: 'rejected', moderatedBy: reviewer, publishedAt: '' };
-      return { status: 'pending', moderatedBy: '', publishedAt: '' }; // back to the queue
-    }
-    // Only pledges that can actually reach the wall need a decision: a signer
-    // who didn't opt in is counted but never shown, whatever the status says.
-    function pledgeActionable(p) { return !!p.showOnWall && p.status === 'pending'; }
-    function updatePledgeCount() {
-      var el = $('pledgeCount'); if (!el) return;
-      var n = (pledges.rows || []).filter(pledgeActionable).length;
-      el.textContent = n ? String(n) : '';
-    }
-    // Who decided this pledge. Rows moderated from the old email links have no
-    // person behind them ('email-link'), so they say so rather than inventing
-    // a face for a link click.
-    function pledgeTags(p) {
-      var chips = p.showOnWall
-        ? '<span class="who-chip plain" title="The signer opted into the public Pledge Wall — approving publishes their card">🌐 public</span>'
-        : '<span class="who-chip plain" title="The signer did not opt into the public wall — counted, never shown">🔒 private</span>';
-      var by = String(p.moderatedBy || '').trim();
-      if (by && p.status !== 'pending') {
-        var icon = p.status === 'approved' ? '✓' : '✗';
-        var label = p.status === 'approved' ? 'Approved by' : 'Rejected by';
-        chips += by === 'email-link'
-          ? '<span class="who-chip plain" title="' + esc(label + ' whoever clicked the link in the old notification email') + '">✉️ email link</span>'
-          : whoChip(icon, label, by, p.publishedAt || '');
-      }
-      return chips;
-    }
-    function pledgeRow(p, readonly) {
-      var saving = !!pledges.pending[p.id];
-      var dis = saving ? ' disabled' : '';
-      var st = PL_STATUS[p.status] || [String(p.status || 'pending'), '#9A9A93'];
-      // "On the wall" would be a lie for a private pledge that happens to be
-      // marked approved (e.g. decided from an old email link).
-      if (p.status === 'approved' && !p.showOnWall) st = ['Approved', '#3E9A5F'];
-      var when = p.createdAt ? relTime(Date.parse(p.createdAt)) : '';
-      var photoSrc = p.photoId ? '/pledge-photo?id=' + encodeURIComponent(p.photoId) : '';
-      return '<div class="pr-row" data-id="' + esc(p.id) + '">'
-        + '<div class="pr-head">'
-        + '<span class="pr-title">' + esc(p.name || 'Anonymous') + '</span>'
-        + '<span class="pr-tags"><span class="status-chip"><span class="col-dot" style="background:' + st[1] + '"></span>'
-        + esc(st[0]) + '</span>'
-        + (saving ? '<span class="who-chip plain" title="Recording the decision — a few seconds">⏳ saving</span>' : '')
-        + pledgeTags(p) + '</span></div>'
-        + '<div class="pr-meta">' + esc(p.location || 'Location unknown')
-        + ' · barrier: <strong>' + esc(p.barrier || '—') + '</strong>'
-        + (when ? ' · ' + esc(when) : '') + '</div>'
-        + (p.why ? '<div class="pl-why">' + esc(p.why) + '</div>'
-          : '<p class="help-note" style="margin:.35rem 0 0;">(no “why” note)</p>')
-        // Full size opens in a tab — the card thumbnail is deliberately small
-        // so a long queue stays scannable.
-        + (photoSrc
-          ? '<a href="' + photoSrc + '&w=1200" target="_blank" rel="noopener">'
-            + '<img class="pl-photo" src="' + photoSrc + '&w=480" alt="Photo shared by ' + esc(p.name || 'a signer')
-            + '" loading="lazy" decoding="async" onerror="this.parentNode.remove()"></a>'
-            // Crop/rotate before publishing — a photo that's merely framed
-            // badly shouldn't have to be rejected outright.
-            + '<div class="pl-photo-row">'
-              + '<button class="btn-sm ghost" data-plphoto="edit">✂ Crop / rotate</button>'
-              + (p.photoOriginalId
-                ? '<button class="btn-sm ghost" data-plphoto="revert">↩ Undo edit</button>'
-                  + '<span class="pl-edited">· edited by HQ</span>'
-                : '')
-            + '</div>'
-          : '')
-        // A photo that failed on the way in. Without this the card looks exactly
-        // like one where nobody attached anything, which is how a broken Drive
-        // write went unnoticed through a week of submissions.
-        + (p.photoError
-          ? '<p class="pl-photo-err">⚠ This signer attached a photo and it didn’t save: <code>'
-            + esc(p.photoError) + '</code><br>Ask them to re-send it, or drop the file in the '
-            + 'Pledge Wall Photos Drive folder and paste its link into the row’s <code>photoUrl</code> cell.</p>'
-          : '')
-        + (readonly
-          ? '<p class="help-note" style="margin:.45rem 0 0;">Nothing to review — this signer kept their pledge private, so it never appears on the wall.</p>'
-          : '<div class="pr-actions">'
-            // disabled while a decision is in flight, so a double-click can't
-            // queue a second, contradictory vote on the same row
-            + (p.status !== 'approved' ? '<button class="btn-sm primary" data-pl="approve"' + dis + '>✓ Approve — show on the wall</button>' : '')
-            + (p.status !== 'rejected' ? '<button class="btn-sm danger" data-pl="reject"' + dis + '>✗ ' + (p.status === 'approved' ? 'Take down' : 'Reject') + '</button>' : '')
-            + (p.status !== 'pending' ? '<button class="btn-sm ghost" data-pl="pending"' + dis + '>↩ Back to pending</button>' : '')
-            + (p.status === 'approved' ? '<a class="btn-sm ghost" href="pledge-wall.html" target="_blank" rel="noopener">View the wall ↗</a>' : '')
-            + '</div>')
-        + '</div>';
-    }
-    function pledgeAction(id, decision, btn) {
-      if (pledges.pending[id]) { toast('Still saving that one — one moment'); return; }
-      var m = me();
-      var p0 = (pledges.rows || []).find(function (x) { return x.id === id; });
-      // Pulling a card off a public wall is visible to anyone looking at it —
-      // worth one confirm, same as un-approving a scheduled post.
-      if (p0 && p0.status === 'approved' && decision !== 'approve') {
-        if (!confirm('This pledge is on the public Pledge Wall right now.\n\n'
-          + (decision === 'reject' ? 'Take it down?' : 'Move it back to pending? That takes it off the wall too.'))) return;
-      }
-      // Paint the decision, then send it. The row moves to its new section
-      // immediately instead of after two sequential Apps Script round trips
-      // (the vote, then a full re-list) with a dead button in between.
-      var reviewer = m ? m.name : 'HQ team';
-      var undo = snapshotPledgeRow(id);
-      pledges.pending[id] = pledgeOptimistic(decision, reviewer);
-      patchPledgeRow(id, pledges.pending[id]);
-      postsApi({ action: 'pledges-moderate', id: id, decision: decision, reviewer: reviewer })
-        .then(function (res) {
-          delete pledges.pending[id];
-          if (res.result === 'success') {
-            primeWallCache();
-            toast(decision === 'approve' ? 'Approved ✓ — on finmango.org/pledge-wall within a minute'
-              : decision === 'reject' ? 'Rejected — this card never appears on the wall'
-              : 'Back in the queue ↩');
-            if (ui.view === 'pledges') render(); // drop the ⏳ marker
-            loadPledges();                       // reconcile in the background
-          } else {
-            // The optimistic row was wrong — put it back the way it was.
-            restorePledgeRow(id, undo);
-            toast(String(res.error || 'That didn\'t work — try again'));
-          }
-        }).catch(function () {
-          delete pledges.pending[id];
-          restorePledgeRow(id, undo);
-          toast('Network hiccup — try again');
-        });
-    }
-    function restorePledgeRow(id, snap) {
-      if (!snap) { if (ui.view === 'pledges') render(); return; }
-      patchPledgeRow(id, snap);
-    }
-    // ===== PHOTO CROPPER =====
-    // Crop and rotate a signer's photo in the browser, then hand the re-encoded
-    // JPEG to the backend, which stores it as a NEW Drive file. Photos come in
-    // through same-origin /pledge-photo, so the canvas stays untainted and
-    // toDataURL works — reading pixels straight from drive.google.com wouldn't.
-    var CROP_MAX_OUT = 1200;  // longest edge of the saved image
-    var CROP_MIN_BOX = 24;    // smallest selection, in displayed px
-    // Free-form is the default; the locks are there because eyeballing a square
-    // by hand is the fiddly part, and wall cards read better when photos share
-    // a shape. `ar` is width/height, null for free.
-    var CROP_RATIOS = [
-      { label: 'Free', ar: null }, { label: '1:1', ar: 1 },
-      { label: '4:3', ar: 4 / 3 }, { label: '3:4', ar: 3 / 4 }, { label: '16:9', ar: 16 / 9 }
-    ];
-    function openCropper(p) {
-      var back = document.createElement('div');
-      back.className = 'crop-back';
-      back.innerHTML =
-        '<div class="crop-modal" role="dialog" aria-modal="true" aria-label="Crop photo">'
-        + '<div class="crop-head"><h3>Crop / rotate — ' + esc(p.name || 'Anonymous') + '</h3>'
-        + '<p>Drag anywhere on the photo to draw the part you want to keep, then drag the box or '
-        + 'its edges to fine-tune. The signer’s original is kept, so you can undo this later.</p></div>'
-        + '<div class="crop-stage"><div class="crop-wrap" id="cropWrap">'
-        + '<img id="cropImg" alt="">'
-        + '<div class="crop-shade" id="shTop"></div><div class="crop-shade" id="shBottom"></div>'
-        + '<div class="crop-shade" id="shLeft"></div><div class="crop-shade" id="shRight"></div>'
-        + '<div class="crop-box" id="cropBox">'
-        + ['nw', 'ne', 'sw', 'se', 'n', 's', 'w', 'e'].map(function (h) {
-            return '<div class="crop-h ' + h + '" data-h="' + h + '"></div>';
-          }).join('')
-        + '</div></div></div>'
-        + '<div class="crop-foot">'
-        + '<button class="btn-sm ghost" id="cropRotL" title="Rotate left">⟲</button>'
-        + '<button class="btn-sm ghost" id="cropRotR" title="Rotate right">⟳</button>'
-        + '<span class="crop-ratios"><span>Shape</span>'
-        + CROP_RATIOS.map(function (r, i) {
-            return '<button class="btn-sm ghost' + (i === 0 ? ' on' : '') + '" data-ratio="' + i + '">' + r.label + '</button>';
-          }).join('')
-        + '</span>'
-        + '<button class="btn-sm ghost" id="cropReset">Reset</button>'
-        + '<span class="crop-dims" id="cropDims"></span>'
-        + '<span class="spacer"></span>'
-        + '<button class="btn-sm ghost" id="cropCancel">Cancel</button>'
-        + '<button class="btn-sm primary" id="cropSave">Save photo</button>'
-        + '</div></div>';
-      document.body.appendChild(back);
-
-      var img = back.querySelector('#cropImg');
-      var wrap = back.querySelector('#cropWrap');
-      var boxEl = back.querySelector('#cropBox');
-      var dims = back.querySelector('#cropDims');
-      var saveBtn = back.querySelector('#cropSave');
-      // `source` is the unrotated original; `bitmap` is what's on screen after
-      // any rotation. Re-rendering a rotated bitmap (rather than CSS-rotating)
-      // keeps the crop maths axis-aligned and honest.
-      var source = null, bitmap = null, rot = 0;
-      var box = null;        // {x,y,w,h} in displayed px
-      var aspect = null;     // locked width/height, null = free-form
-
-      function close() {
-        document.removeEventListener('keydown', onKey);
-        back.remove();
-      }
-      function onKey(e) {
-        if (e.key === 'Escape') { e.preventDefault(); close(); }
-      }
-      document.addEventListener('keydown', onKey);
-      back.onclick = function (e) { if (e.target === back) close(); };
-      back.querySelector('#cropCancel').onclick = close;
-
-      // Draw the source at the current rotation and show the result.
-      function applyRotation() {
-        var c = document.createElement('canvas');
-        var swap = rot === 90 || rot === 270;
-        c.width = swap ? source.naturalHeight : source.naturalWidth;
-        c.height = swap ? source.naturalWidth : source.naturalHeight;
-        var ctx = c.getContext('2d');
-        ctx.translate(c.width / 2, c.height / 2);
-        ctx.rotate(rot * Math.PI / 180);
-        ctx.drawImage(source, -source.naturalWidth / 2, -source.naturalHeight / 2);
-        bitmap = c;
-        img.src = c.toDataURL('image/jpeg', 0.92);
-        // Reset with no rotation re-assigns an identical src, which need not fire
-        // `load` at all — so reset the selection here too. When the src really
-        // did change, onload runs again once the new size has laid out and wins.
-        resetBox();
-      }
-      // Biggest box of the current shape, centred. With no lock that's the whole
-      // frame, so an untouched Save re-encodes the photo as-is.
-      function resetBox() {
-        var W = img.clientWidth, H = img.clientHeight;
-        if (!aspect) { box = { x: 0, y: 0, w: W, h: H }; }
-        else {
-          var w = W, h = W / aspect;
-          if (h > H) { h = H; w = H * aspect; }
-          box = { x: (W - w) / 2, y: (H - h) / 2, w: w, h: h };
-        }
-        paint();
-      }
-      function paint() {
-        if (!box) return;
-        var W = img.clientWidth, H = img.clientHeight;
-        boxEl.style.left = box.x + 'px'; boxEl.style.top = box.y + 'px';
-        boxEl.style.width = box.w + 'px'; boxEl.style.height = box.h + 'px';
-        var set = function (id, css) { Object.assign(back.querySelector(id).style, css); };
-        set('#shTop', { left: '0px', top: '0px', width: W + 'px', height: box.y + 'px' });
-        set('#shBottom', { left: '0px', top: (box.y + box.h) + 'px', width: W + 'px', height: Math.max(H - box.y - box.h, 0) + 'px' });
-        set('#shLeft', { left: '0px', top: box.y + 'px', width: box.x + 'px', height: box.h + 'px' });
-        set('#shRight', { left: (box.x + box.w) + 'px', top: box.y + 'px', width: Math.max(W - box.x - box.w, 0) + 'px', height: box.h + 'px' });
-        // Output size, in real pixels, after the display→bitmap scale.
-        var s = bitmap.width / (W || 1);
-        var ow = Math.round(box.w * s), oh = Math.round(box.h * s);
-        var cap = Math.min(1, CROP_MAX_OUT / Math.max(ow, oh));
-        dims.textContent = Math.round(ow * cap) + ' × ' + Math.round(oh * cap) + ' px';
-      }
-
-      // Force a box to the locked shape, holding still whichever corner the drag
-      // isn't moving, then shrink to fit rather than spilling off the image.
-      function lockShape(bx, handle) {
-        if (!aspect) return bx;
-        var W = img.clientWidth, H = img.clientHeight;
-        var h = String(handle || '');
-        var westward = h.indexOf('w') >= 0, northward = h.indexOf('n') >= 0;
-        var fixX = westward ? bx.x + bx.w : bx.x;
-        var fixY = northward ? bx.y + bx.h : bx.y;
-        var w = bx.w, ht = bx.h;
-        if (h === 'w' || h === 'e') ht = w / aspect;
-        else if (h === 'n' || h === 's') w = ht * aspect;
-        else if (w / ht > aspect) ht = w / aspect;
-        else w = ht * aspect;
-        var room = Math.min(1,
-          (westward ? fixX : W - fixX) / (w || 1),
-          (northward ? fixY : H - fixY) / (ht || 1));
-        w *= room; ht *= room;
-        return { x: westward ? fixX - w : fixX, y: northward ? fixY - ht : fixY, w: w, h: ht };
-      }
-
-      // One pointer handler for three gestures: drawing a fresh selection
-      // anywhere on the photo, moving the box, and the eight resize handles.
-      var drag = null;
-      wrap.addEventListener('pointerdown', function (e) {
-        if (!box) return;
-        var handle = e.target.dataset ? e.target.dataset.h : null;
-        var rect = img.getBoundingClientRect();
-        e.preventDefault();
-        if (!handle && e.target !== boxEl) {
-          // Anywhere else on the photo starts a new selection from that point —
-          // dragging the corners inward from a full-frame box was the fiddly bit.
-          drag = { draw: true, ox: e.clientX - rect.left, oy: e.clientY - rect.top,
-            sx: e.clientX, sy: e.clientY };
-        } else {
-          drag = { handle: handle || null, sx: e.clientX, sy: e.clientY, start: Object.assign({}, box) };
-        }
-        // Capture keeps the drag alive if the pointer leaves the image, but it's
-        // an optimisation — a browser that refuses it must not lose the drag.
-        try { wrap.setPointerCapture(e.pointerId); } catch (err) { /* drag still works */ }
-      });
-      wrap.addEventListener('pointermove', function (e) {
-        if (!drag) return;
-        var W = img.clientWidth, H = img.clientHeight;
-        var clamp = function (v, lo, hi) { return Math.max(lo, Math.min(hi, v)); };
-        if (drag.draw) {
-          var rect = img.getBoundingClientRect();
-          var cx = clamp(e.clientX - rect.left, 0, W), cy = clamp(e.clientY - rect.top, 0, H);
-          var nx = Math.min(drag.ox, cx), ny = Math.min(drag.oy, cy);
-          var nw = Math.abs(cx - drag.ox), nh = Math.abs(cy - drag.oy);
-          // Ignore a stray click until it's an actual drag, so tapping the photo
-          // doesn't collapse the selection to nothing.
-          if (nw < CROP_MIN_BOX && nh < CROP_MIN_BOX) return;
-          // Anchor at the point the drag started, whichever way it went.
-          var dirH = (cy < drag.oy ? 'n' : 's') + (cx < drag.ox ? 'w' : 'e');
-          box = lockShape({ x: nx, y: ny, w: Math.max(nw, CROP_MIN_BOX), h: Math.max(nh, CROP_MIN_BOX) }, dirH);
-        } else {
-          var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy, s = drag.start;
-          if (!drag.handle) {
-            box.x = clamp(s.x + dx, 0, W - s.w); box.y = clamp(s.y + dy, 0, H - s.h);
-            box.w = s.w; box.h = s.h;
-          } else {
-            var l = s.x, t = s.y, r = s.x + s.w, b = s.y + s.h;
-            if (drag.handle.indexOf('w') >= 0) l = clamp(s.x + dx, 0, r - CROP_MIN_BOX);
-            if (drag.handle.indexOf('e') >= 0) r = clamp(r + dx, l + CROP_MIN_BOX, W);
-            if (drag.handle.indexOf('n') >= 0) t = clamp(s.y + dy, 0, b - CROP_MIN_BOX);
-            if (drag.handle.indexOf('s') >= 0) b = clamp(b + dy, t + CROP_MIN_BOX, H);
-            box = lockShape({ x: l, y: t, w: r - l, h: b - t }, drag.handle);
-          }
-        }
-        paint();
-      });
-      var endDrag = function () { drag = null; };
-      wrap.addEventListener('pointerup', endDrag);
-      wrap.addEventListener('pointercancel', endDrag);
-
-      back.querySelector('#cropRotL').onclick = function () { rot = (rot + 270) % 360; applyRotation(); };
-      back.querySelector('#cropRotR').onclick = function () { rot = (rot + 90) % 360; applyRotation(); };
-      back.querySelector('#cropReset').onclick = function () {
-        rot = 0; aspect = null; markRatio(0); applyRotation();
-      };
-      function markRatio(i) {
-        back.querySelectorAll('button[data-ratio]').forEach(function (el) {
-          el.classList.toggle('on', Number(el.dataset.ratio) === i);
-        });
-      }
-      back.querySelectorAll('button[data-ratio]').forEach(function (el) {
-        el.onclick = function () {
-          var i = Number(el.dataset.ratio);
-          aspect = CROP_RATIOS[i].ar;
-          markRatio(i);
-          // Snap what's already selected to the new shape instead of starting
-          // over — keeps the framing the reviewer had chosen.
-          if (box && aspect) { box = lockShape(box, 'se'); paint(); }
-          else if (box) paint();
-        };
-      });
-
-      // A rotated bitmap is a new image; the box resets once it has laid out.
-      img.onload = function () { resetBox(); };
-
-      saveBtn.onclick = function () {
-        if (!box || !bitmap) return;
-        var W = img.clientWidth, s = bitmap.width / (W || 1);
-        var sx = Math.round(box.x * s), sy = Math.round(box.y * s);
-        var sw = Math.max(1, Math.round(box.w * s)), sh = Math.max(1, Math.round(box.h * s));
-        var cap = Math.min(1, CROP_MAX_OUT / Math.max(sw, sh));
-        var out = document.createElement('canvas');
-        out.width = Math.max(1, Math.round(sw * cap));
-        out.height = Math.max(1, Math.round(sh * cap));
-        out.getContext('2d').drawImage(bitmap, sx, sy, sw, sh, 0, 0, out.width, out.height);
-        var dataUrl = out.toDataURL('image/jpeg', 0.85);
-
-        saveBtn.disabled = true; saveBtn.textContent = 'Saving…';
-        var m = me();
-        postsApi({ action: 'pledges-photo', id: p.id, photo: dataUrl, reviewer: m ? m.name : 'HQ team' })
-          .then(function (res) {
-            if (res.result === 'success') {
-              // Paint the new photo from the response rather than waiting on a
-              // refetch. loadPledges() keeps the previous rows when a refresh
-              // hiccups, which used to leave the OLD photo on screen behind a
-              // "saved" toast — the save had worked, the queue just never
-              // repainted. The refetch still runs, to pick up anything else.
-              var row = (pledges.rows || []).find(function (x) { return x.id === p.id; });
-              if (row && res.photoId) {
-                row.photoId = res.photoId;
-                row.photoOriginalId = res.photoOriginalId || row.photoOriginalId || '';
-                row.photoError = res.photoError || '';
-                try { localStorage.setItem(LS_PLEDGES, JSON.stringify({ t: now(), rows: pledges.rows })); } catch (e) {}
-              }
-              primeWallCache();
-              toast('Photo updated ✓');
-              close();
-              if (ui.view === 'pledges') render();
-              loadPledges();
-            } else {
-              saveBtn.disabled = false; saveBtn.textContent = 'Save photo';
-              toast(String(res.error || 'That didn\'t save — try again'));
-            }
-          }).catch(function () {
-            saveBtn.disabled = false; saveBtn.textContent = 'Save photo';
-            toast('Network hiccup — try again');
-          });
-      };
-
-      // Load the biggest version we serve, so a crop of a crop still looks fine.
-      source = new Image();
-      source.onload = function () { applyRotation(); };
-      source.onerror = function () { toast('Couldn\'t load that photo'); close(); };
-      source.src = '/pledge-photo?id=' + encodeURIComponent(p.photoId) + '&w=1200';
-    }
-
-    function pledgePhotoRevert(p, btn) {
-      if (!confirm('Put the signer’s original photo back?')) return;
-      if (btn) btn.disabled = true;
-      postsApi({ action: 'pledges-photo-revert', id: p.id }).then(function (res) {
-        if (res.result === 'success') {
-          // Same as saving a crop: repaint from the response so a flaky refetch
-          // can't leave the edited photo on screen after a successful undo.
-          var row = (pledges.rows || []).find(function (x) { return x.id === p.id; });
-          if (row && res.photoId) {
-            row.photoId = res.photoId; row.photoOriginalId = ''; row.photoError = '';
-            try { localStorage.setItem(LS_PLEDGES, JSON.stringify({ t: now(), rows: pledges.rows })); } catch (e) {}
-          }
-          primeWallCache();
-          toast('Original photo restored ↩');
-          if (ui.view === 'pledges') render();
-          loadPledges();
-        } else {
-          if (btn) btn.disabled = false;
-          toast(String(res.error || 'That didn\'t work — try again'));
-        }
-      }).catch(function () { if (btn) btn.disabled = false; toast('Network hiccup — try again'); });
-    }
-
-    function renderPledges(root) {
-      var scroll = document.createElement('div'); scroll.className = 'page-scroll';
-      var wrap = document.createElement('div'); wrap.className = 'page-wrap notes-wrap';
-      var head = document.createElement('div'); head.className = 'notes-head';
-      head.innerHTML = '<div><h1 style="font-size:1.5rem;letter-spacing:-.02em;">Pledge Wall</h1>'
-        + '<p class="help-note" style="margin:.2rem 0 0;">Pledges signed at <a href="get-involved.html#pledge" target="_blank" rel="noopener">get-involved#pledge</a>'
-        + ' land here. Approve one and the card goes up on <a href="pledge-wall.html" target="_blank" rel="noopener">the public wall</a>;'
-        + ' reject it and it stays counted but unseen. Every decision is tagged with who made it.</p></div>'
-        + '<button class="btn-sm ghost" id="plRefresh">' + (pledges.refreshing ? '⏳ Updating…' : '↻ Refresh') + '</button>';
-      wrap.appendChild(head);
-      var body = document.createElement('div');
-      wrap.appendChild(body);
-
-      if (pledges.error === 'Pledge reviews not configured') {
-        body.innerHTML = '<p class="help-note" style="margin-top:1rem;">⚙️ One config step left: add <code>WALL_MODERATION_KEY</code>'
-          + ' (the Community Wall script’s moderation passphrase) to the HQ Apps Script and redeploy a new version'
-          + ' — see <code>docs/COMMUNITY-WALL-SETUP.md</code>. Until then, pledges are moderated from the notification email links.</p>';
-      } else if (pledges.error) {
-        body.innerHTML = '<p class="help-note" style="margin-top:1rem;">⚠️ Couldn\'t reach the Pledge Wall backend — <a href="#" id="plRetry">try again</a>.</p>';
-      } else if (!pledges.rows) {
-        body.innerHTML = '<p class="help-note" style="margin-top:1rem;">Loading the queue…</p>';
-        if (!pledges.loading) loadPledges();
-      } else {
-        var all = pledges.rows;
-        var queue = all.filter(pledgeActionable);
-        var live = all.filter(function (p) { return p.showOnWall && p.status === 'approved'; });
-        var rejected = all.filter(function (p) { return p.showOnWall && p.status === 'rejected'; });
-        var priv = all.filter(function (p) { return !p.showOnWall; });
-        var liveShown = pledges.showAllLive ? live : live.slice(0, 6);
-        // The signature count is the reason the wall exists, so it's stated
-        // plainly up top — private pledges count too, they're just not shown.
-        body.innerHTML = '<p class="help-note" style="margin:.9rem 0 0;"><strong>' + all.length + '</strong> pledge'
-          + (all.length === 1 ? '' : 's') + ' signed · <strong>' + live.length + '</strong> on the wall · '
-          + priv.length + ' kept private</p>'
-          + (queue.length
-            ? '<div class="m-section">Needs review (' + queue.length + ')</div>'
-              + queue.map(function (p) { return pledgeRow(p, false); }).join('')
-            : '<p class="help-note" style="margin-top:1rem;">🎉 Queue is clear — nothing waiting for review.</p>')
-          + (live.length
-            ? '<div class="m-section">On the wall</div>' + liveShown.map(function (p) { return pledgeRow(p, false); }).join('')
-              + (live.length > liveShown.length
-                ? '<p class="help-note"><a href="#" id="plAllLive">▸ Show the other ' + (live.length - liveShown.length) + '</a></p>' : '')
-            : '')
-          + (rejected.length
-            ? '<p class="help-note" style="margin-top:1.4rem;"><a href="#" id="plRejected">'
-              + (pledges.showRejected ? '▾ Hide rejected' : '▸ Rejected (' + rejected.length + ')') + '</a></p>'
-              + (pledges.showRejected ? rejected.map(function (p) { return pledgeRow(p, false); }).join('') : '')
-            : '')
-          + (priv.length
-            ? '<p class="help-note" style="margin-top:.6rem;"><a href="#" id="plPrivate">'
-              + (pledges.showPrivate ? '▾ Hide private pledges' : '▸ Private pledges (' + priv.length + ')') + '</a></p>'
-              + (pledges.showPrivate ? priv.map(function (p) { return pledgeRow(p, true); }).join('') : '')
-            : '');
-        body.querySelectorAll('button[data-pl]').forEach(function (el) {
-          var id = el.closest('.pr-row').dataset.id;
-          el.onclick = function () { pledgeAction(id, el.dataset.pl, el); };
-        });
-        body.querySelectorAll('button[data-plphoto]').forEach(function (el) {
-          var id = el.closest('.pr-row').dataset.id;
-          el.onclick = function () {
-            var p = (pledges.rows || []).find(function (x) { return x.id === id; });
-            if (!p) return;
-            if (el.dataset.plphoto === 'edit') openCropper(p);
-            else pledgePhotoRevert(p, el);
-          };
-        });
-        var toggle = function (elId, prop) {
-          var a = body.querySelector('#' + elId);
-          if (a) a.onclick = function (e) { e.preventDefault(); pledges[prop] = !pledges[prop]; render(); };
-        };
-        toggle('plRejected', 'showRejected');
-        toggle('plPrivate', 'showPrivate');
-        toggle('plAllLive', 'showAllLive');
-      }
-      scroll.appendChild(wrap); root.appendChild(scroll);
-      var rf = $('plRefresh'); if (rf) rf.onclick = function () { if (!pledges.loading) { loadPledges(); render(); } };
-      var rt = body.querySelector('#plRetry');
-      if (rt) rt.onclick = function (e) { e.preventDefault(); pledges.error = null; loadPledges(); render(); };
-    }
-
     // ------------------------- quick find (⌘K) ------------------------------
     function openQuickFind() {
       var html = '<h2 style="margin-bottom:.6rem;">Quick find</h2>'
@@ -4712,9 +4061,6 @@
         var out = [];
         if (!q || 'ambassador notes reviews posts'.indexOf(q) > -1) {
           out.push({ icon: '📝', label: 'Ambassador Notes', path: 'review', go: function () { closeModal(); openNotesView(); } });
-        }
-        if (!q || 'pledge wall pledges reviews'.indexOf(q) > -1) {
-          out.push({ icon: '🤝', label: 'Pledge Wall', path: 'review', go: function () { closeModal(); openPledgeView(); } });
         }
         (doc.pages || []).forEach(function (p) {
           if (!q || (p.title + ' ' + p.body).toLowerCase().indexOf(q) > -1) {
@@ -4822,7 +4168,6 @@
     $('searchInput').addEventListener('input', function () { ui.search = this.value; renderView(); });
     $('membersBtn').onclick = openMembersModal;
     $('notesNavBtn').onclick = openNotesView;
-    $('pledgeNavBtn').onclick = openPledgeView;
     $('syncBtn').onclick = openSyncModal;
     $('qfHint').onclick = openQuickFind;
     // Clicking anywhere outside an open ＋ Add menu closes it.
@@ -4868,7 +4213,7 @@
       try {
         var q = new URLSearchParams(location.search);
         var v = q.get('view');
-        if (v !== 'notes' && v !== 'pledges') return null;
+        if (v !== 'notes') return null;
         return { view: v, id: String(q.get('post') || '').slice(0, 120) };
       } catch (e) { return null; }
     })();
@@ -4878,7 +4223,6 @@
       // Drop the params so a refresh — or a bookmark of this URL — doesn't keep
       // dragging the reviewer back to one note forever.
       try { history.replaceState(null, '', location.pathname); } catch (e) {}
-      if (d.view === 'pledges') { openPledgeView(); return; }
       if (d.id) { notes.openId = d.id; notes.scrollTo = d.id; }
       openNotesView();
     }
@@ -4900,7 +4244,6 @@
         // several seconds through two Apps Script cold starts. Staggered so
         // they don't contend for the same cold start.
         setTimeout(refreshNotesIfStale, 2500);
-        setTimeout(function () { if (!pledges.loading) loadPledges(); }, 5000);
       }
       applyDeepLink(); // last, so it renders over the restored view
     }

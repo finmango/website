@@ -6,7 +6,6 @@
 //
 // Usage: node scripts/render-og.js [template] [output]
 //   node scripts/render-og.js                       → site-wide og-image.png
-//   node scripts/render-og.js pledge-wall           → og-pledge-wall.png
 //   node scripts/render-og.js <path.html> <out.png> → anything else
 const path = require('path');
 const fs = require('fs');
@@ -19,7 +18,6 @@ catch { puppeteer = require('puppeteer-core'); }
 // Shorthand names keep the common renders memorable; a bare path still works.
 const TARGETS = {
   default: { template: 'og-image-template.html', output: 'og-image.png' },
-  'pledge-wall': { template: 'og-pledge-wall-template.html', output: 'og-pledge-wall.png' },
 };
 
 const [nameArg, outArg] = process.argv.slice(2);

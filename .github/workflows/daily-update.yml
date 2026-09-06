@@ -81,13 +81,6 @@ jobs:
           # in sync with the fresh barometer data
           node scripts/sync-home-fallbacks.js || true
 
-          # Bake the approved Pledge Wall entries into data/pledges.js so the
-          # wall paints real names immediately instead of waiting on Apps
-          # Script. Fails soft — a wobbly backend keeps the previous snapshot.
-          echo "::group::Pledge Wall snapshot"
-          node scripts/snapshot-pledges.js
-          echo "::endgroup::"
-
           # Same for published Ambassador Notes → data/posts.js. This backend is
           # the slow one, so the snapshot is what keeps /posts instant.
           echo "::group::Ambassador Notes snapshot"
@@ -112,7 +105,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          git add data/ index.html barometer.html barometer-embed.html research.html housing-policy-lab.html judges/index.html pledge-wall.html posts.html
+          git add data/ index.html barometer.html barometer-embed.html research.html housing-policy-lab.html judges/index.html posts.html
 
           if git diff --staged --quiet; then
             echo "No changes to commit"
