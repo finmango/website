@@ -43,6 +43,29 @@
   <link rel="canonical" href="https://www.finmango.org/get-involved.html">
   <meta name="robots" content="index, follow">
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "url": "https://www.finmango.org/get-involved.html",
+    "name": "Get Involved with FinMango",
+    "description": "Volunteer a few hours a week or lead the work on your campus as an ambassador. Plus partnerships, writing, and donations.",
+    "isPartOf": { "@type": "WebSite", "url": "https://www.finmango.org/", "name": "FinMango" },
+    "about": {
+      "@type": "Organization",
+      "name": "FinMango",
+      "url": "https://www.finmango.org/",
+      "logo": "https://www.finmango.org/finmango.png",
+      "sameAs": [
+        "https://www.linkedin.com/company/finmango/",
+        "https://www.instagram.com/finmango",
+        "https://x.com/finmango",
+        "https://github.com/finmango"
+      ]
+    }
+  }
+  </script>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-DW5HBYS9JW"></script>
   <script>
@@ -119,6 +142,22 @@
       outline: 2px solid var(--orange-ink);
       outline-offset: 3px;
     }
+    /* --orange-ink is ~2.4:1 on the ink ground; display orange clears 6:1 there */
+    .on-ink :focus-visible { outline-color: var(--orange); }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      z-index: 2000;
+      padding: .8rem 1.4rem;
+      background: var(--ink);
+      color: var(--paper);
+      font-weight: 600;
+      font-size: .9rem;
+      text-decoration: none;
+    }
+    .skip-link:focus { left: 0; }
 
     /* ----------------------------------------------------------
        SHARED PRIMITIVES
@@ -631,6 +670,30 @@
     .vol-actions { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; margin-top: .6rem; }
     .vol-note { font-size: .85rem; font-weight: 400; line-height: 1.55; color: var(--ink-dim); max-width: 46ch; }
 
+    /* what happens after the form — the question every applicant has */
+    .vol-steps {
+      max-width: var(--max-width);
+      margin: 4rem auto 0;
+      padding-top: 2.25rem;
+      border-top: 1px solid var(--ink-line);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+      list-style: none;
+      counter-reset: step;
+    }
+    .vol-steps li { counter-increment: step; display: flex; flex-direction: column; gap: .55rem; }
+    .vol-steps li::before {
+      content: '0' counter(step);
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--orange-ink);
+    }
+    .vol-step-title { font-size: 1.1rem; font-weight: 700; letter-spacing: -.02em; }
+    .vol-step-desc { font-size: .9rem; font-weight: 400; line-height: 1.55; color: var(--ink-dim); max-width: 34ch; }
+
     .vol-photo {
       position: relative;
       margin: 0;
@@ -1032,6 +1095,7 @@
 
       .volunteer { padding: 4rem var(--gutter) 4.5rem; }
       .vol-container { grid-template-columns: 1fr; gap: 2.25rem; }
+      .vol-steps { margin-top: 3rem; padding-top: 1.75rem; gap: 1.75rem; }
       .vol-photo { transform: none; }
       /* stacked, a 4:3 plate at full width is a wall of photo */
       .vol-photo img { aspect-ratio: 16 / 9; }
@@ -1054,6 +1118,7 @@
       .hero-art { grid-template-columns: 1fr; }
       .hero-plate-2 { display: none; }
       .vol-actions { flex-direction: column; align-items: stretch; gap: .75rem; }
+      .vol-steps { grid-template-columns: 1fr; }
       .vol-actions .btn-primary, .vol-actions .btn-secondary { width: 100%; justify-content: center; }
     }
 
@@ -1068,6 +1133,7 @@
 </head>
 
 <body>
+  <a href="#main" class="skip-link">Skip to main content</a>
 
   <!-- chrome:nav -->
   <nav id="nav">
@@ -1152,12 +1218,12 @@
           </div>
         </div>
 
-        <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
+        <a href="get-involved.html" class="btn-get-involved" aria-current="page">Get Involved</a>
         <a href="donate.html" class="btn-donate">Donate</a>
       </div>
 
       <div class="mobile-controls">
-        <a href="get-involved.html" class="btn-get-involved mobile-get-involved">Get Involved</a>
+        <a href="get-involved.html" class="btn-get-involved mobile-get-involved" aria-current="page">Get Involved</a>
         <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
@@ -1203,6 +1269,7 @@
   </div>
   <!-- /chrome:nav -->
 
+  <main id="main">
   <!-- ======================= HERO ======================= -->
   <section class="hero">
     <div class="hero-bg"></div>
@@ -1232,12 +1299,12 @@
           </div>
         </div>
 
-        <div class="hero-art" aria-hidden="false">
+        <div class="hero-art">
           <figure class="hero-plate hero-plate-1">
-            <img src="kent2024.jpg" alt="A large group of students with FinMango flags and certificates at Kent State University" width="2304" height="1536" fetchpriority="high" decoding="async">
+            <img src="kent2024-1200.jpg" srcset="kent2024-1200.jpg 1200w, kent2024.jpg 2304w" sizes="(max-width: 620px) 100vw, (max-width: 968px) 57vw, 420px" alt="A large group of students with FinMango flags and certificates at Kent State University" width="1200" height="800" fetchpriority="high" decoding="async">
           </figure>
           <figure class="hero-plate hero-plate-2">
-            <img src="education2.jpg" alt="Two volunteers holding the FinMango flag at a program session" width="1080" height="1080" loading="lazy" decoding="async">
+            <img src="education2.jpg" alt="Two volunteers holding the FinMango flag at a program session" width="1080" height="1080" decoding="async">
           </figure>
         </div>
 
@@ -1267,15 +1334,30 @@
           </a>
           <a href="mailto:global@finmango.org?subject=Volunteering%20with%20FinMango" class="btn-secondary">Questions first? Email us</a>
         </div>
-        <p class="vol-note">Remote and flexible, open worldwide. Tell us what you're good at and how much time you have — we'll take it from there.</p>
+        <p class="vol-note">Not sure you have the time? Apply anyway and say so — a couple of hours a week is enough to start.</p>
       </div>
 
       <figure class="vol-photo">
-        <img src="Barrier%20Breakers%202026%20Pics/IMG_9143.jpg" alt="A student presenting her project poster at Barrier Breakers" width="2048" height="1536" loading="lazy" decoding="async">
+        <img src="Barrier%20Breakers%202026%20Pics/IMG_9143-1200.jpg" srcset="Barrier%20Breakers%202026%20Pics/IMG_9143-1200.jpg 1200w, Barrier%20Breakers%202026%20Pics/IMG_9143.jpg 2048w" sizes="(max-width: 968px) 100vw, 560px" alt="A student presenting her project poster at Barrier Breakers" width="1200" height="900" loading="lazy" decoding="async">
         <figcaption><span>Student presentations · Barrier Breakers</span></figcaption>
       </figure>
 
     </div>
+
+    <ol class="vol-steps" aria-label="What happens after you apply">
+      <li>
+        <span class="vol-step-title">Apply</span>
+        <span class="vol-step-desc">Five minutes. The form asks what you're good at and how much time you have.</span>
+      </li>
+      <li>
+        <span class="vol-step-title">We match you</span>
+        <span class="vol-step-desc">We read every application and reply with where you'd fit — a project, a team, a first task.</span>
+      </li>
+      <li>
+        <span class="vol-step-title">You start</span>
+        <span class="vol-step-desc">Remote, on your own schedule, with real work from day one. Scale up or step back as life changes.</span>
+      </li>
+    </ol>
   </section>
 
   <!-- ======================= WAYS IN (ink moment) ======================= -->
@@ -1299,7 +1381,7 @@
           <svg class="way-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
 
-        <a href="mailto:global@finmango.org?subject=Partnership%20Inquiry" class="way">
+        <a href="mailto:hello@finmango.org?subject=Partnership%20Inquiry" class="way">
           <span>
             <span class="way-cost">Let's talk</span>
             <span class="way-title">Partner with us</span>
@@ -1321,6 +1403,7 @@
       <p class="ways-foot">Not ready for any of that? Follow along on <a href="https://x.com/finmango" target="_blank" rel="noopener noreferrer">X</a> or read the <a href="https://blogs.finmango.org/" target="_blank" rel="noopener noreferrer">blog</a> — and pass this page to someone who needs it.</p>
     </div>
   </section>
+  </main>
 
   <!-- ======================= FOOTER ======================= -->
   <!-- chrome:footer -->
