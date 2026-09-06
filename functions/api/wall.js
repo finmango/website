@@ -1,13 +1,12 @@
 // ============================================================================
 // /api/wall — same-origin, edge-cached read proxy for the Community Wall API
 // ----------------------------------------------------------------------------
-// community-wall.html and pledge-wall.html call this instead of hitting the
+// community-wall.html calls this instead of hitting the
 // Google Apps Script web app directly — same pattern (and same reasons) as
 // functions/api/posts.js: edge caching hides Apps Script cold starts, and
 // same-origin avoids CORS.
 //
-// Read-only: only the public "approved" (wall stories) and "pledges" (Pledge
-// Wall) actions are proxied. Submissions and hearts POST straight to the Apps
+// Read-only: only the public "approved" (wall stories) action is proxied. Submissions and hearts POST straight to the Apps
 // Script (no-cors), and moderation actions never pass through here.
 // ============================================================================
 
@@ -32,7 +31,7 @@ const SWR = WALL_TTL + WALL_GRACE; // what downstream caches are told
 // background and the next visitor gets it.
 const UPSTREAM_BUDGET = 2500; // ms
 
-const PUBLIC_ACTIONS = new Set(['approved', 'pledges']);
+const PUBLIC_ACTIONS = new Set(['approved']);
 
 export async function onRequestGet(context) {
   const { request, waitUntil } = context;
