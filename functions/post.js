@@ -38,8 +38,7 @@ export async function onRequestGet(context) {
     if (!templateRes.ok) return { res: templateRes, cacheable: false };
 
     const post = id ? await fetchPostJson(id) : null;
-    const card = post && post.id ? await ogCardFor(env, url.origin, post.id) : null;
-    const meta = buildMeta(post, id, card);
+    const meta = buildMeta(post, id);
 
     const rewriter = new HTMLRewriter()
       .on('title', { element(el) { el.setInnerContent(meta.title); } })
@@ -82,25 +81,7 @@ export async function onRequestGet(context) {
   return res;
 }
 
-// Some covers can't survive the ~1.91:1 crop every social platform applies — a
-// 2.7:1 chart loses a third of its width, labels and all. Those get a 1200x630
-// card built ahead of time by scripts/generate-post-og.js, and
-// og/posts/manifest.json records which posts have one. Everything else keeps the
-// raw cover, which makes the stronger full-bleed share.
-async function ogCardFor(env, origin, id) {
-  try {
-    const res = await env.ASSETS.fetch(new URL('/og/posts/manifest.json', origin));
-    if (!res.ok) return null;
-    const data = await res.json();
-    const entry = data && data.posts && typeof data.posts === 'object' ? data.posts[id] : null;
-    if (!entry || typeof entry !== 'object' || !entry.card) return null;
-    return { file: String(entry.card), width: entry.w || 1200, height: entry.h || 630 };
-  } catch (e) {
-    return null;   // no manifest yet, or a bad one — shares fall back to the cover
-  }
-}
-
-function buildMeta(post, id, card) {
+function buildMeta(post, id) {
   if (!post) {
     const desc = 'A note, brief, or story written by a FinMango Ambassador.';
     return {
@@ -121,14 +102,14 @@ function buildMeta(post, id, card) {
   const title = post.title || 'Ambassador Note';
   const desc = post.dek || ('An Ambassador note by ' + (post.authorName || 'a FinMango Ambassador') + ' on FinMango.');
   const canonical = SITE_BASE + '/post?id=' + encodeURIComponent(post.id);
-  // A pre-rendered 1200x630 card wins when this cover would be mangled by the
-  // crop; otherwise the cover itself goes out through our same-origin image
-  // proxy (Google Drive thumbnail URLs are unreliable for crawlers), and a post
-  // with no cover falls back to the default FinMango card.
+  // The share image is the cover the author uploaded — exactly as they made it.
+  // It goes out through our same-origin image proxy (Google Drive thumbnail URLs
+  // are unreliable for crawlers); a post with no cover falls back to the default
+  // FinMango card.
   const hasCover = !!post.cover;
-  const image = card
-    ? SITE_BASE + '/' + encodeURI(card.file)
-    : (hasCover ? SITE_BASE + '/post-image?id=' + encodeURIComponent(post.id) : DEFAULT_OG_IMAGE);
+  const image = hasCover
+    ? SITE_BASE + '/post-image?id=' + encodeURIComponent(post.id)
+    : DEFAULT_OG_IMAGE;
 
   const og = ogBlock({
     url: canonical,
@@ -138,10 +119,10 @@ function buildMeta(post, id, card) {
     imageAlt: title,
     author: post.authorName || '',
     published: post.publishedAt || '',
-    // Only assert dimensions we actually know: the generated card and the
-    // default FinMango card. Raw cover dimensions vary post to post.
-    imageWidth: card ? card.width : (hasCover ? 0 : 1200),
-    imageHeight: card ? card.height : (hasCover ? 0 : 630)
+    // Only assert dimensions we actually know: the default FinMango card. Raw
+    // cover dimensions vary post to post.
+    imageWidth: hasCover ? 0 : 1200,
+    imageHeight: hasCover ? 0 : 630
   });
 
   // Preload the sized cover the page script will render (same URL, so the

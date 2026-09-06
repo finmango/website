@@ -16,7 +16,6 @@ Drive as storage.
 | `tools/posts-apps-script.js` | The backend (deploy to Apps Script) | One-time setup |
 | `functions/` | Cloudflare edge layer: speed + social share previews | Auto (no setup) |
 | `js/cover-fit.js` + `data/cover-tuning.json` | Frames each cover to its own shape instead of cropping it into the slot; per-post overrides editable after publishing | Auto / editors |
-| `scripts/generate-post-og.js` | Builds 1200x630 social cards for covers a link preview would crop badly | Auto (daily workflow) |
 
 ## How it flows
 
@@ -232,8 +231,8 @@ Notes:
   automatically right after a publish so editors see their post live at once.
 - Old `/post.html?id=…` links still work — the existing clean-URL redirect sends
   them to `/post?id=…`, and crawlers follow it.
-- `/post` prefers a pre-rendered `og/posts/<id>.jpg` card when the note has one
-  (covers that a 1.91:1 crop would mangle) — see **Cover images** below.
+- `/post` always uses the note's own cover as the `og:image` / `twitter:image`,
+  served through `/post-image` — see **Cover images** below.
 - To preview a new cover in a share, use the platform's debugger to re-scrape
   (e.g. [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/),
   [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/)); they
@@ -241,13 +240,13 @@ Notes:
 - Test locally with `npx wrangler pages dev .` (serves the functions like
   production).
 
-## Cover images: framing, cropping, and social cards
+## Cover images: framing and cropping
 
 Covers arrive in whatever shape the author uploaded — 16:9 photos, 3:2 photos,
 4:5 portraits, and wide data-viz graphics with a headline, labels and a source
-line baked in (2.7:1 so far). Nothing in the pipeline re-crops them, so three
-things do the fitting, and **all three can be overridden after a note is
-published**.
+line baked in (2.7:1 so far). Nothing in the pipeline re-crops them, so two
+things do the fitting on the site, and **both can be overridden after a note is
+published**. In shares, the cover goes out exactly as uploaded.
 
 ### 1. On the site: automatic, per image (`js/cover-fit.js`)
 
@@ -273,8 +272,7 @@ Edit, commit, done — no re-upload, no change to the Sheet. Keys are post ids
   "women-s-economic-autonomy-latin-america-s-invisibl-260810-233728": {
     "fit": "contain",
     "focus": "50% 20%",
-    "bg": "#ffffff",
-    "og": "card"
+    "bg": "#ffffff"
   }
 }
 ```
@@ -284,38 +282,22 @@ Edit, commit, done — no re-upload, no change to the Sheet. Keys are post ids
 | `fit` | `"cover"` crops to fill the frame, `"contain"` shows the whole cover letterboxed. Omit for automatic. |
 | `focus` | Which part survives a crop, as a CSS `object-position` — `"50% 20%"`, `"left top"`. This is the "move the crop" knob. |
 | `bg` | Letterbox bar colour. Omit to sample the cover's edge. |
-| `og` | `"card"` forces a social card, `"cover"` forces the raw cover into shares. Omit for automatic. |
 
 The file is served with a 1-hour cache, so allow up to an hour for a change to
 reach everyone (or re-scrape with the platform debuggers linked above).
 
-### 3. In shares: pre-rendered 1200x630 cards
+### 3. In shares: the cover, as uploaded
 
-Every platform crops an `og:image` into a ~1.91:1 frame, so a 2.7:1 chart loses
-about a third of its width — labels and all — before anyone sees it. For covers
-that far off, `scripts/generate-post-og.js` renders the cover **whole** onto a
-1200x630 card (the cover, a ground matched to its edge colour, and one FinMango
-strip; the note's title and dek are already the share's text). `functions/
-post.js` then points `og:image` / `twitter:image` at that card. Covers between
-1.25:1 and 2.15:1 are left alone — a full-bleed photo makes the stronger share.
-
-```bash
-npm i --no-save puppeteer-core                  # or full puppeteer
-node scripts/generate-post-og.js                # anything new or changed
-node scripts/generate-post-og.js --id=<postId>  # one note
-node scripts/generate-post-og.js --force        # rebuild every card
-```
-
-Cards live in `og/posts/<postId>.jpg`; `og/posts/manifest.json` records what
-each was built from (and is what `/post` reads to find it). The run is
-idempotent — nothing new means Chromium never launches — and
-`.github/workflows/daily-update.yml` runs it right after the posts snapshot, so
-a new note gets its card within a day of publishing. Need it sooner: run the
-command above, or trigger the workflow by hand from the Actions tab.
+`functions/post.js` points `og:image` / `twitter:image` straight at the note's
+cover (through the same-origin `/post-image` proxy, since Drive thumbnail URLs
+are unreliable for crawlers). There is no generated card and no per-post
+switch: what the author uploaded is what the share shows. Platforms crop into
+their own ~1.91:1 preview frame, so a cover close to 1200x630 previews best —
+if a share looks wrong, ask the author for a re-framed cover; nothing else
+needs to change. A note with no cover falls back to the default FinMango card.
 
 To re-frame a note *after* publishing, in order of effort: set `focus` (move the
-crop), set `fit` (stop cropping), set `og` and re-run the generator (change the
-share), or ask the author for a new cover and re-run with `--force`.
+crop), set `fit` (stop cropping), or ask the author for a new cover.
 
 ## Optional upgrade: pre-render to static files (SEO)
 

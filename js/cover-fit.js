@@ -76,8 +76,7 @@
   // colour only when all four agree — four different corners mean the image has
   // content at its edges and the frame keeps its tint. Covers are same-origin
   // (/post-image), so the canvas stays readable; a raw Drive URL would taint it,
-  // hence the try/catch. scripts/og-post-template.html samples the same way for
-  // social cards, so a cover's ground matches on the page and in the share.
+  // hence the try/catch.
   function sampleEdgeColor(img) {
     try {
       const canvas = document.createElement('canvas');
