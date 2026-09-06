@@ -103,14 +103,15 @@ edge-cached ~2 minutes, so public traffic barely touches the backend.
 > Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy.
 > The /exec URL stays the same.
 
-## Review queue (Ambassador Notes)
+## Review queues (Ambassador Notes, Volunteers)
 
-The sidebar's **Review** section holds the Ambassador Notes moderation queue,
-so it lives in HQ instead of in someone's inbox:
+The sidebar's **Review** section holds the team's inboxes, so they live in HQ
+instead of in someone's email:
 
-| Tab | What lands there | Backend it bridges to |
+| Tab | What lands there | Where it reads from |
 | --- | --- | --- |
-| 📝 **Ambassador Notes** | Drafts submitted at `finmango.org/write` | Posts Apps Script (`docs/POSTS-SETUP.md`) |
+| 📝 **Ambassador Notes** | Drafts submitted at `finmango.org/write` | Posts Apps Script (`docs/POSTS-SETUP.md`), via a server-side bridge |
+| 🙋 **Volunteers** | Applications from `finmango.org/volunteer` | The Google Sheet linked to the "Volunteer Application" Google Form, read directly |
 
 It works like this: the posts backend's review passphrase is stored in **this**
 script's CONFIG, server-side, and HQ forwards a reviewer's click to it. That's
@@ -130,6 +131,27 @@ publish, and every decision is stamped with the name of whoever made it
 (visible on the row and in the backing Sheet). Key-door sessions have no
 identity, so their decisions read "team key" — one more reason to sign in with
 Google.
+
+### Volunteers tab
+
+`volunteer-apply.html` posts straight into the existing "Volunteer
+Application" Google Form, so every application is a row in that form's
+linked Sheet. The 🙋 Volunteers tab reads those rows and lets the team work
+them: **New → Contacted → Placed / Passed**, plus a one-line team note per
+person. Decisions are written back into four columns the script adds to the
+Sheet (`HQ Status`, `HQ Reviewed by`, `HQ Reviewed at`, `HQ Notes`), so the
+Sheet and HQ always agree and nothing lives only in a browser.
+
+Setup (≈2 minutes, one CONFIG value):
+
+1. Open the Volunteer Application form → **Responses** → the Sheets icon
+   (**Link to Sheets**) if it isn't linked yet. Copy the Sheet's URL.
+2. In the HQ Apps Script, set `VOLUNTEERS_SHEET_URL` to that URL. Leave
+   `VOLUNTEERS_TAB` blank unless you've renamed the responses tab.
+3. Redeploy a new version. Open HQ → 🙋 Volunteers → ↻ Refresh.
+
+The script runs as its owner, so the Sheet only needs to be readable by that
+account. The sidebar badge counts applications still marked **New**.
 
 > The Pledge Wall queue that used to sit beside this tab was retired along with
 > the public Pledge Wall. Its bridge (`WALL_MODERATION_KEY`, `wallBridgePost_`)

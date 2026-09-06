@@ -55,6 +55,16 @@ const CONFIG = {
   // "not wired up" note and the email approve/reject links still work.
   WALL_APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyogpgQ2naRVxs1LK1opqJywYZq0k9JpD7C9dLeKPqMs3BFikOh527QKuOCB6n3q1fHfQ/exec',
   WALL_MODERATION_KEY: 'REPLACE_WITH_WALL_MODERATION_KEY',
+  // Volunteer applications: the Google Sheet linked to the "Volunteer
+  // Application" Google Form (Form → Responses → "Link to Sheets"). HQ's
+  // 🙋 Volunteers tab reads it directly — no bridge, no extra key — and
+  // stamps each decision into review columns this script adds to the sheet
+  // (HQ Status / HQ Reviewed by / HQ Reviewed at / HQ Notes). Until set, the
+  // tab shows a "not wired up" note and the Sheet itself is still the record.
+  VOLUNTEERS_SHEET_URL: 'REPLACE_WITH_VOLUNTEER_RESPONSES_SHEET_URL',
+  // Leave blank to use the first tab whose header row has a Timestamp and an
+  // Email column (which is what Google Forms creates).
+  VOLUNTEERS_TAB: '',
   // Author emails (approvals, change requests) are signed by — and reply to —
   // whoever is signed in to HQ when they click the button. This address is the
   // fallback for the shared-key door, where there's no signed-in identity.
@@ -164,6 +174,13 @@ function doPost(e) {
     if (data.action === 'pledges-photo-revert') {
       requireAuth_(data);
       return json(wallBridgePost_({ action: 'pledge-photo-revert', id: String(data.id || '') }));
+    }
+    // --- Volunteer applications (HQ-authenticated, reads the Form's Sheet) ---
+    if (data.action === 'volunteers-list') { requireAuth_(data); return json(volunteersList_()); }
+    if (data.action === 'volunteers-status') {
+      requireAuth_(data);
+      return json(volunteersSetStatus_(String(data.id || ''), String(data.status || ''),
+        String(data.reviewer || 'HQ team'), data.notes == null ? null : String(data.notes).slice(0, 2000)));
     }
     return json({ result: 'error', error: 'Unknown action' });
   } catch (err) {
@@ -476,6 +493,121 @@ function wallBridgePost_(payload) {
 // The mail is signed with the signed-in reviewer's name and replies go to
 // their inbox (Apps Script can't change the From address — it always sends
 // as the account that deployed the script — but name + reply-to can).
+// ====================== VOLUNTEER APPLICATIONS =============================
+// The Volunteer Application Google Form writes one row per submission to its
+// linked Sheet. HQ reads those rows and records the team's decision in extra
+// columns at the right-hand end, so the Sheet stays the single record and
+// anyone opening it sees the same status the board shows.
+const VOL_STATUSES = ['new', 'contacted', 'placed', 'passed'];
+const VOL_COLS = ['HQ Status', 'HQ Reviewed by', 'HQ Reviewed at', 'HQ Notes'];
+
+function volunteersSheet_() {
+  if (CONFIG.VOLUNTEERS_SHEET_URL.indexOf('REPLACE_WITH') === 0) {
+    throw new Error('Volunteer reviews not configured');
+  }
+  const ss = SpreadsheetApp.openByUrl(CONFIG.VOLUNTEERS_SHEET_URL);
+  if (CONFIG.VOLUNTEERS_TAB) {
+    const named = ss.getSheetByName(CONFIG.VOLUNTEERS_TAB);
+    if (!named) throw new Error('Volunteer sheet tab "' + CONFIG.VOLUNTEERS_TAB + '" not found');
+    return named;
+  }
+  // Google Forms names its tab "Form Responses 1"; find it by shape instead
+  // of by name so a renamed tab still works.
+  const sheets = ss.getSheets();
+  for (let i = 0; i < sheets.length; i++) {
+    const head = sheets[i].getLastColumn() ? sheets[i].getRange(1, 1, 1, sheets[i].getLastColumn()).getValues()[0] : [];
+    const names = head.map(function (h) { return String(h).toLowerCase(); });
+    if (names.indexOf('timestamp') > -1 && names.some(function (h) { return h.indexOf('email') > -1; })) return sheets[i];
+  }
+  throw new Error('No form-responses tab found (needs Timestamp and Email columns)');
+}
+
+// Column indexes (1-based) by header text, adding the HQ review columns on
+// first use. Form questions are matched loosely so a reworded question keeps
+// working as long as the key word survives.
+function volunteersLayout_(sheet) {
+  let lastCol = sheet.getLastColumn();
+  let head = lastCol ? sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(String) : [];
+  const missing = VOL_COLS.filter(function (c) { return head.indexOf(c) === -1; });
+  if (missing.length) {
+    sheet.getRange(1, lastCol + 1, 1, missing.length).setValues([missing]);
+    lastCol += missing.length;
+    head = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(String);
+  }
+  const find = function (re) {
+    for (let i = 0; i < head.length; i++) if (re.test(head[i])) return i + 1;
+    return 0;
+  };
+  return {
+    lastCol: lastCol,
+    ts: find(/^timestamp$/i),
+    name: find(/^name$/i) || find(/name/i),
+    email: find(/email/i),
+    link: find(/linkedin|portfolio|url/i),
+    help: find(/how do you want to help|help/i),
+    status: head.indexOf('HQ Status') + 1,
+    by: head.indexOf('HQ Reviewed by') + 1,
+    at: head.indexOf('HQ Reviewed at') + 1,
+    notes: head.indexOf('HQ Notes') + 1
+  };
+}
+
+function volIso_(v) {
+  if (v instanceof Date) return isNaN(v) ? '' : v.toISOString();
+  const d = new Date(v);
+  return v && !isNaN(d) ? d.toISOString() : String(v || '');
+}
+
+function volunteersList_() {
+  const sheet = volunteersSheet_();
+  const L = volunteersLayout_(sheet);
+  const lastRow = sheet.getLastRow();
+  const rows = [];
+  if (lastRow >= 2) {
+    const values = sheet.getRange(2, 1, lastRow - 1, L.lastCol).getValues();
+    for (let i = 0; i < values.length; i++) {
+      const r = values[i];
+      const get = function (col) { return col ? r[col - 1] : ''; };
+      if (!String(get(L.email) || get(L.name) || '').trim()) continue; // blank row
+      const status = String(get(L.status) || '').toLowerCase();
+      rows.push({
+        // Row number + submission time: the row is the address, the time
+        // guards against writing a decision onto a row that has shifted.
+        id: 'r' + (i + 2),
+        submittedAt: volIso_(get(L.ts)),
+        name: String(get(L.name) || '').trim(),
+        email: String(get(L.email) || '').trim(),
+        link: String(get(L.link) || '').trim(),
+        help: String(get(L.help) || '').trim(),
+        status: VOL_STATUSES.indexOf(status) > -1 ? status : 'new',
+        reviewedBy: String(get(L.by) || '').trim(),
+        reviewedAt: volIso_(get(L.at)),
+        notes: String(get(L.notes) || '')
+      });
+    }
+  }
+  rows.reverse(); // newest first
+  return { result: 'success', rows: rows, sheetUrl: CONFIG.VOLUNTEERS_SHEET_URL };
+}
+
+function volunteersSetStatus_(id, status, by, notes) {
+  const m = /^r(\d+)$/.exec(id);
+  if (!m) throw new Error('Bad row id');
+  const row = Number(m[1]);
+  if (status && VOL_STATUSES.indexOf(status) === -1) throw new Error('Unknown status');
+  const sheet = volunteersSheet_();
+  const L = volunteersLayout_(sheet);
+  if (row < 2 || row > sheet.getLastRow()) throw new Error('Row not found');
+  if (status) {
+    sheet.getRange(row, L.status).setValue(status);
+    sheet.getRange(row, L.by).setValue(by);
+    sheet.getRange(row, L.at).setValue(new Date());
+  }
+  if (notes !== null) sheet.getRange(row, L.notes).setValue(notes);
+  return { result: 'success', id: id, status: status || String(sheet.getRange(row, L.status).getValue() || 'new'),
+    reviewedBy: by, reviewedAt: new Date().toISOString(), notes: notes };
+}
+
 function emailAuthorChanges_(id, reviewer, comment, reviewerEmail) {
   try {
     const res = postsBridge_({ action: 'review-get', id: id });
