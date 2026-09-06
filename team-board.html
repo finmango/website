@@ -115,25 +115,6 @@
     .topbar:not(.page-mode) .page-only { display: none !important; }
     .topbar.notes-mode .board-only, .topbar.notes-mode .page-only { display: none !important; }
     .topbar.notes-mode #boardMenuBtn { visibility: hidden; }
-    .notes-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .4rem; }
-    .pr-row.open { border-color: var(--orange); }
-    .note-detail { margin-top: .6rem; border-top: 1px solid var(--ink-line-soft); padding-top: .6rem; }
-    .pr-thumb { width: 56px; height: 38px; object-fit: cover; border-radius: 6px; flex: none; background: var(--ink-line-soft); }
-    .note-cover { margin: 0 0 .7rem; }
-    .note-cover img { width: 100%; max-height: 340px; object-fit: cover; border-radius: 8px; display: block; }
-    .note-body { font-size: .92rem; }
-    .note-body img { max-width: 100%; border-radius: 8px; }
-    .note-body iframe { width: 100%; aspect-ratio: 16/9; border: 0; border-radius: 8px; }
-    .note-review { font-size: .82rem; padding: .25rem 0; color: var(--ink-dim); display: flex; align-items: baseline; gap: .4rem; }
-    .note-review .avatar { width: 18px; height: 18px; font-size: .5rem; margin: 0; border-width: 1px; align-self: center; }
-    .note-review .when { font-family: var(--font-mono); font-size: .72rem; color: var(--ink-faint); margin-left: .4rem; }
-    /* who-did-what tags on a queue row: approver, publisher, whoever asked for changes */
-    .pr-tags { display: flex; align-items: center; gap: .3rem; flex-wrap: wrap; justify-content: flex-end; }
-    .who-chip { display: inline-flex; align-items: center; gap: .28rem; font-size: .72rem; font-weight: 600; color: var(--ink-dim);
-      background: var(--paper); border: 1px solid var(--ink-line-soft); border-radius: 99px;
-      padding: .1rem .5rem .1rem .14rem; white-space: nowrap; }
-    .who-chip.plain { padding-left: .5rem; }
-    .who-chip .avatar { width: 18px; height: 18px; font-size: .5rem; margin: 0; border-width: 1px; }
     /* ===== BOARD VIEW ===== */
     .board-scroll { flex: 1; overflow-x: auto; overflow-y: hidden; }
     .board { display: flex; gap: .9rem; padding: 1rem 1.1rem 1.25rem; height: 100%; align-items: flex-start; min-width: min-content; }
@@ -166,7 +147,6 @@
     .due { font-family: var(--font-mono); font-size: .72rem; color: var(--ink-dim); display: inline-flex; align-items: center; gap: .25rem; }
     .due.overdue { color: #C62828; font-weight: 500; }
     .due.soon { color: var(--orange-deep); }
-    .prio { font-size: .72rem; font-weight: 700; font-family: var(--font-mono); letter-spacing: .06em; margin-left: auto; }
     .mini-badge { font-size: .68rem; opacity: .75; }
     .comments-n { font-family: var(--font-mono); font-size: .72rem; color: var(--ink-faint); }
     .add-card-btn { display: flex; align-items: center; gap: .45rem; padding: .45rem .55rem; border-radius: 7px;
@@ -311,6 +291,7 @@
     .overlay.open { display: flex; }
     .modal { background: var(--paper); border-radius: 12px; box-shadow: var(--shadow-pop); width: 100%; max-width: 680px;
       padding: 1.6rem 1.8rem 1.5rem; position: relative; }
+    .modal:focus { outline: none; } /* programmatic focus only — the box isn't a control */
     .modal.narrow { max-width: 460px; }
     .modal-close { position: absolute; top: .8rem; right: .8rem; }
     .modal h2 { font-size: 1.15rem; letter-spacing: -.01em; margin-bottom: 1rem; }
@@ -339,12 +320,6 @@
     .comment .who { font-size: .78rem; font-weight: 700; }
     .comment .when { font-family: var(--font-mono); font-size: .72rem; color: var(--ink-faint); margin-left: .45rem; }
     .comment .text { font-size: .86rem; margin-top: .1rem; white-space: pre-wrap; word-wrap: break-word; }
-    .pr-row { border: 1px solid var(--ink-line-soft); background: #fff; border-radius: 8px; padding: .6rem .75rem; margin-bottom: .5rem; }
-    .pr-head { display: flex; align-items: center; gap: .6rem; justify-content: space-between; }
-    .pr-title { font-weight: 700; font-size: .92rem; color: var(--ink); text-decoration: none; flex: 1; }
-    .pr-meta { font-size: .74rem; color: var(--ink-faint); margin-top: .1rem; }
-    .pr-preview { font-size: .84rem; white-space: pre-wrap; background: var(--paper); border: 1px solid var(--ink-line-soft);
-      border-radius: 6px; padding: .55rem .7rem; margin-top: .5rem; max-height: 300px; overflow-y: auto; }
     .pr-actions { display: flex; gap: .3rem; margin-top: .5rem; flex-wrap: wrap; }
     .link-chips { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .45rem; }
     .link-chip { display: inline-flex; align-items: center; font-size: .74rem; font-weight: 600; color: var(--orange-deep);
@@ -383,6 +358,33 @@
     .signed-in-row .who { flex: 1; min-width: 0; }
     .signed-in-row .who .n { font-weight: 700; font-size: .9rem; }
     .signed-in-row .who .e { font-size: .74rem; color: var(--ink-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ===== REVIEW QUEUE (Ambassador Notes) ===== */
+    .notes-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .4rem; }
+    .pr-row { border: 1px solid var(--ink-line-soft); background: #fff; border-radius: 8px; padding: .6rem .75rem; margin-bottom: .5rem; }
+    .pr-row.open { border-color: var(--orange); }
+    .pr-head { display: flex; align-items: center; gap: .6rem; justify-content: space-between; }
+    .pr-title { font-weight: 700; font-size: .92rem; color: var(--ink); text-decoration: none; flex: 1; }
+    .pr-meta { font-size: .74rem; color: var(--ink-faint); margin-top: .1rem; }
+    .pr-thumb { width: 56px; height: 38px; object-fit: cover; border-radius: 6px; flex: none; background: var(--ink-line-soft); }
+    /* who-did-what tags on a queue row: approver, publisher, whoever asked for changes */
+    .pr-tags { display: flex; align-items: center; gap: .3rem; flex-wrap: wrap; justify-content: flex-end; }
+    .who-chip { display: inline-flex; align-items: center; gap: .28rem; font-size: .72rem; font-weight: 600; color: var(--ink-dim);
+      background: var(--paper); border: 1px solid var(--ink-line-soft); border-radius: 99px;
+      padding: .1rem .5rem .1rem .14rem; white-space: nowrap; }
+    .who-chip.plain { padding-left: .5rem; }
+    .who-chip .avatar { width: 18px; height: 18px; font-size: .5rem; margin: 0; border-width: 1px; }
+    .note-detail { margin-top: .6rem; border-top: 1px solid var(--ink-line-soft); padding-top: .6rem; }
+    .note-cover { margin: 0 0 .7rem; }
+    .note-cover img { width: 100%; max-height: 340px; object-fit: cover; border-radius: 8px; display: block; }
+    .note-body { font-size: .92rem; }
+    .note-body img { max-width: 100%; border-radius: 8px; }
+    .note-body iframe { width: 100%; aspect-ratio: 16/9; border: 0; border-radius: 8px; }
+    /* the draft editor while a photo is being dragged over it (see the drop handler in fillNoteDetail) */
+    .note-body.draft-editing.drag-over { outline: 2px dashed var(--orange); outline-offset: -2px; border-radius: 8px; background: rgba(242, 90, 39, .05); }
+    .note-review { font-size: .82rem; padding: .25rem 0; color: var(--ink-dim); display: flex; align-items: baseline; gap: .4rem; }
+    .note-review .avatar { width: 18px; height: 18px; font-size: .5rem; margin: 0; border-width: 1px; align-self: center; }
+    .note-review .when { font-family: var(--font-mono); font-size: .72rem; color: var(--ink-faint); margin-left: .4rem; }
 
     /* ===== QUICK FIND (Ctrl/Cmd+K) ===== */
     .qf-input { width: 100%; border: none; background: transparent; font-size: 1.05rem; font-weight: 600; padding: .2rem .1rem .7rem;
@@ -450,6 +452,8 @@
     @media (max-width: 760px) {
       .sidebar { position: fixed; inset: 0 auto 0 0; height: 100%; box-shadow: var(--shadow-pop); }
       .app.sidebar-closed .sidebar { margin-left: -260px; box-shadow: none; }
+      /* dim the content behind the open drawer so it reads as a layer */
+      .app:not(.sidebar-closed) .main::after { content: ''; position: fixed; inset: 0; background: rgba(10,10,10,.28); z-index: 50; }
       .search-box { width: 110px; }
       .modal { padding: 1.2rem 1.1rem; }
       .prop-grid { grid-template-columns: 92px 1fr; }
@@ -490,7 +494,7 @@
       <div class="side-head">
         <div class="ws-logo"><img src="favicon.png" alt="FinMango"></div>
         <div class="ws-name" id="wsName">FinMango HQ</div>
-        <button class="kbd-hint" id="qfHint" title="Quick find">⌘K</button>
+        <button class="kbd-hint" id="qfHint" title="Quick find" aria-label="Quick find">⌘K</button>
       </div>
       <div class="side-scroll">
         <div class="side-label">
@@ -523,12 +527,12 @@
         </div>
         <button class="icon-btn" id="boardMenuBtn" title="Options">⋯</button>
         <div class="spacer"></div>
-        <div class="view-switch board-only" role="tablist">
-          <button id="viewBoardBtn" class="active">Board</button>
-          <button id="viewTableBtn">Table</button>
+        <div class="view-switch board-only" role="tablist" aria-label="Board view">
+          <button id="viewBoardBtn" class="active" role="tab" aria-selected="true">Board</button>
+          <button id="viewTableBtn" role="tab" aria-selected="false">Table</button>
         </div>
         <div class="view-switch page-only">
-          <button id="pageSrcBtn" title="Raw markdown — for bulk edits and big restructures">Source</button>
+          <button id="pageSrcBtn" aria-pressed="false" title="Raw markdown — for bulk edits and big restructures">Source</button>
         </div>
         <button class="top-filter board-only" id="agendaBtn" title="Show cards flagged for the next leadership call, plus everything in Now">📞 Agenda</button>
         <div class="search-box board-only">
@@ -541,8 +545,8 @@
     </main>
   </div>
 
-  <div class="overlay" id="overlay"><div class="modal" id="modalBox" role="dialog" aria-modal="true"></div></div>
-  <div class="toasts" id="toasts"></div>
+  <div class="overlay" id="overlay"><div class="modal" id="modalBox" role="dialog" aria-modal="true" tabindex="-1"></div></div>
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 
   <script>
     'use strict';
@@ -597,7 +601,8 @@
       if (item) item.updatedAt = now();
     }
     function initials(name) {
-      var parts = String(name || '?').trim().split(/\s+/);
+      var parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+      if (!parts.length) return '?';
       return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
     }
     function tagColor(tag) {
@@ -619,6 +624,37 @@
       var h = Math.round(m / 60); if (h < 24) return h + 'h ago';
       var d = Math.round(h / 24); if (d < 30) return d + 'd ago';
       return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+    // ---- item factories --------------------------------------------------
+    // Every card, page, and comment in the workspace is born here, so the
+    // shape the merge/sync layer relies on (ids, timestamps, empty arrays) is
+    // defined once. `extra` layers on per-kind fields (a sticky's x/y/color).
+    function newCard(colId, title, extra) {
+      var c = { id: uid(), colId: colId || '', title: title || '', desc: '', assignee: '', due: '',
+        tags: [], comments: [], discuss: false, public: false, createdAt: now(), updatedAt: now() };
+      if (extra) Object.keys(extra).forEach(function (k) { c[k] = extra[k]; });
+      return c;
+    }
+    function newPage(title, icon) {
+      return { id: uid(), icon: icon || '📄', title: title || 'Untitled', body: '', public: false,
+        createdAt: now(), updatedAt: now() };
+    }
+    // A comment signed by whoever is signed in (or "Someone" on a key-only session).
+    function newComment(text) {
+      var m = me();
+      return { id: uid(), author: m ? m.name : 'Someone', color: m ? m.color : '#9A9A93',
+        photo: m && m.photo ? m.photo : '', text: text, ts: now() };
+    }
+    // One-of-many button groups (emoji grid, colour row): clicking a button
+    // marks it .sel and hands its data-<attr> value back.
+    function bindPicker(container, attr, onPick) {
+      container.querySelectorAll('button').forEach(function (btn) {
+        btn.onclick = function () {
+          container.querySelectorAll('button').forEach(function (x) { x.classList.remove('sel'); });
+          btn.classList.add('sel');
+          onPick(btn.dataset[attr]);
+        };
+      });
     }
     // Avatar for anything with {name, color, photo?} — Google photo when
     // available, colored initials otherwise (and if the photo fails to load).
@@ -996,7 +1032,7 @@
     try { auth = JSON.parse(localStorage.getItem(LS_AUTH) || 'null'); } catch (e) {}
     var meId = localStorage.getItem(LS_ME) || '';
     var quickAddCol = null;         // column id currently showing the quick-add box
-    var drag = null;                // { type:'card'|'col', id }
+    var drag = null;                // HTML5 drag state for column reordering: { type:'col', id }
 
     function me() { return doc.members.find(function (m) { return m.id === meId; }) || null; }
     function board() { return doc.boards.find(function (b) { return b.id === ui.boardId; }) || doc.boards[0] || null; }
@@ -1389,6 +1425,8 @@
       var out = clone(b);
       out.tombstones = out.tombstones || {};
       out.pages = out.pages || [];
+      out.members = out.members || [];
+      out.boards = out.boards || [];
       var tombs = out.tombstones;
       Object.keys(a.tombstones || {}).forEach(function (id) {
         if (!tombs[id] || a.tombstones[id] > tombs[id]) tombs[id] = a.tombstones[id];
@@ -1650,23 +1688,32 @@
       var notesMode = ui.view === 'notes';
       $('topbar').classList.toggle('page-mode', pageMode);
       $('topbar').classList.toggle('notes-mode', notesMode);
-      $('boardNameInput').disabled = notesMode;
+      var nameInput = $('boardNameInput');
+      nameInput.disabled = notesMode;
+      // A sync poll can re-render mid-keystroke; the name being typed wins
+      // over the stored one until the field commits on blur/Enter.
+      var typing = document.activeElement === nameInput;
+      function setName(v) { if (!typing) nameInput.value = v; }
       if (notesMode) {
         $('boardEmoji').textContent = '📝';
-        $('boardNameInput').value = 'Ambassador Notes';
+        setName('Ambassador Notes');
       } else if (pageMode) {
         var p = page();
         $('boardEmoji').textContent = p.icon || '📄';
-        $('boardNameInput').value = p.title;
+        setName(p.title);
         // One button, two states: "Source" opens the raw markdown, "Done" returns.
         $('pageSrcBtn').textContent = ui.pageEdit ? 'Done' : 'Source';
         $('pageSrcBtn').classList.toggle('active', ui.pageEdit);
+        $('pageSrcBtn').setAttribute('aria-pressed', ui.pageEdit ? 'true' : 'false');
       } else {
         var b = board();
         $('boardEmoji').textContent = b ? (b.icon || '📋') : '📋';
-        $('boardNameInput').value = b ? b.name : '';
-        $('viewBoardBtn').classList.toggle('active', ui.view === 'board');
-        $('viewTableBtn').classList.toggle('active', ui.view === 'table');
+        setName(b ? b.name : '');
+        [['viewBoardBtn', 'board'], ['viewTableBtn', 'table']].forEach(function (t) {
+          var on = ui.view === t[1];
+          $(t[0]).classList.toggle('active', on);
+          $(t[0]).setAttribute('aria-selected', on ? 'true' : 'false');
+        });
         $('agendaBtn').classList.toggle('on', ui.agenda);
         // Whiteboards have no columns, so the Board/Table tabs and the call-
         // agenda filter don't apply there.
@@ -1719,29 +1766,26 @@
 
     function renderView() {
       var root = $('viewRoot');
-      // Re-renders of the SAME page (sync updates, structural table edits)
-      // keep the reader's scroll position instead of jumping to the top.
+      // Re-renders of the SAME scrolling view — a wiki page (sync updates,
+      // structural table edits) or the review queue (expanding a row, a vote
+      // landing) — keep the reader's scroll position instead of jumping to
+      // the top. The key names what's on screen; a different key is a real
+      // navigation and starts at the top like one.
+      var scrollKey = ui.view === 'notes' ? 'notes' : inPageMode() ? 'page:' + ui.pageId : null;
       var prevScroll = 0;
-      if (inPageMode()) {
-        var sc0 = root.querySelector('.page-scroll');
-        if (sc0 && renderView.lastPage === ui.pageId) prevScroll = sc0.scrollTop;
-        renderView.lastPage = ui.pageId;
-      } else {
-        renderView.lastPage = null;
+      var sc0 = root.querySelector('.page-scroll');
+      if (sc0 && scrollKey && renderView.lastScrollKey === scrollKey) prevScroll = sc0.scrollTop;
+      renderView.lastScrollKey = scrollKey;
+      function restoreScroll() {
+        var sc1 = root.querySelector('.page-scroll');
+        if (sc1 && prevScroll) sc1.scrollTop = prevScroll;
       }
       var prevWbL = 0, prevWbT = 0;
       var wb0 = root.querySelector('.wb-scroll');
       if (wb0) { prevWbL = wb0.scrollLeft; prevWbT = wb0.scrollTop; }
       root.innerHTML = '';
-      if (ui.view === 'notes') { renderNotes(root); return; }
-      if (inPageMode()) {
-        renderPage(root, page());
-        if (prevScroll) {
-          var sc1 = root.querySelector('.page-scroll');
-          if (sc1) sc1.scrollTop = prevScroll;
-        }
-        return;
-      }
+      if (ui.view === 'notes') { renderNotes(root); restoreScroll(); return; }
+      if (inPageMode()) { renderPage(root, page()); restoreScroll(); return; }
       var b = board();
       if (!b) {
         root.innerHTML = '<div class="empty"><div><p style="font-size:2rem;">🗂️</p><p style="margin-top:.5rem;font-weight:600;">No boards yet</p>'
@@ -1890,12 +1934,10 @@
       return (doc.comments || []).filter(function (c) { return c.pageId === p.id; });
     }
     function addThread(p, quote, text) {
-      var m = me();
       doc.comments.push({
         id: uid(), pageId: p.id, quote: String(quote || '').slice(0, 300), resolved: false,
         createdAt: now(), updatedAt: now(),
-        items: [{ id: uid(), author: m ? m.name : 'Someone', color: m ? m.color : '#9A9A93',
-          photo: m && m.photo ? m.photo : '', text: text, ts: now() }]
+        items: [newComment(text)]
       });
       mutate();
     }
@@ -2032,9 +2074,7 @@
           if (act === 'reply') {
             var inp = box.querySelector('[data-reply]');
             var v = (inp.value || '').trim(); if (!v) return;
-            var m = me();
-            t.items.push({ id: uid(), author: m ? m.name : 'Someone', color: m ? m.color : '#9A9A93',
-              photo: m && m.photo ? m.photo : '', text: v, ts: now() });
+            t.items.push(newComment(v));
             t.updatedAt = now(); mutate(); openCommentsModal(p, t.id);
           } else if (act === 'resolve' || act === 'reopen') {
             t.resolved = act === 'resolve'; t.updatedAt = now(); mutate(); openCommentsModal(p);
@@ -2431,7 +2471,7 @@
           var target = pageByTitle(name);
           if (target) { openPage(target.id); return; }
           // Notion-style: clicking a missing wikilink just creates the page.
-          var np = { id: uid(), icon: '📄', title: name, body: '', public: false, createdAt: now(), updatedAt: now() };
+          var np = newPage(name);
           doc.pages.push(np);
           mutate({ noRender: true });
           openPage(np.id, true);
@@ -2652,11 +2692,10 @@
 
     function addSticky(b, x, y) {
       var m = me();
-      var c = { id: uid(), colId: '', title: '', desc: '', assignee: '', due: '',
-        tags: [], comments: [], discuss: false, public: false,
+      var c = newCard('', '', {
         x: Math.max(0, Math.round(x)), y: Math.max(0, Math.round(y)),
         color: STICKY_COLORS[Math.floor(Math.random() * STICKY_COLORS.length)],
-        author: m ? m.name : '', createdAt: now(), updatedAt: now() };
+        author: m ? m.name : '' });
       b.cards.push(c); b.updatedAt = now();
       mutate();
       var el = document.querySelector('.sticky[data-card-id="' + c.id + '"]');
@@ -2700,8 +2739,7 @@
       function commit() {
         var t = ta.value.trim();
         if (t) {
-          b.cards.push({ id: uid(), colId: col.id, title: t, desc: '', assignee: '', due: '',
-            tags: [], comments: [], discuss: false, public: false, createdAt: now(), updatedAt: now() });
+          b.cards.push(newCard(col.id, t));
           b.updatedAt = now();
           mutate({ noRender: true });
         }
@@ -2868,7 +2906,6 @@
       }
       b.cards.splice(insertAt, 0, card);
       b.updatedAt = now();
-      drag = null;
       mutate();
     }
     function dropColumn(b, dragId, targetId) {
@@ -2920,14 +2957,32 @@
     }
 
     // ============================ MODALS ===================================
+    // Whatever had focus when a modal opened gets it back when it closes, so a
+    // keyboard user lands where they were instead of at the top of the page.
+    var modalOpener = null;
     function openModal(html, narrow) {
       var box = $('modalBox');
+      if (!$('overlay').classList.contains('open')) modalOpener = document.activeElement;
       box.className = 'modal' + (narrow ? ' narrow' : '');
       box.innerHTML = '<button class="icon-btn modal-close" id="modalClose" aria-label="Close">✕</button>' + html;
       $('modalClose').onclick = closeModal;
       $('overlay').classList.add('open');
+      // Move focus into the dialog (Tab and Escape then act on it) unless the
+      // caller already put it in a field. The box itself takes it rather than
+      // the first input, so opening a card on a phone doesn't pop the keyboard.
+      setTimeout(function () {
+        if (!$('overlay').classList.contains('open') || box.contains(document.activeElement)) return;
+        box.focus({ preventScroll: true });
+      }, 0);
     }
-    function closeModal() { $('overlay').classList.remove('open'); $('modalBox').innerHTML = ''; }
+    function closeModal() {
+      var wasOpen = $('overlay').classList.contains('open');
+      $('overlay').classList.remove('open'); $('modalBox').innerHTML = '';
+      if (wasOpen && modalOpener && document.body.contains(modalOpener) && modalOpener.focus) {
+        try { modalOpener.focus({ preventScroll: true }); } catch (e) {}
+      }
+      modalOpener = null;
+    }
     $('overlay').addEventListener('mousedown', function (e) { if (e.target === $('overlay')) closeModal(); });
 
     // --------------------------- card modal --------------------------------
@@ -2997,9 +3052,7 @@
       attachSelectionToolbar($('cDesc'), function () { c.desc = $('cDesc').value; touch(); renderCardLinks(); });
       function addComment() {
         var v = $('cCommentInput').value.trim(); if (!v) return;
-        var m = me();
-        c.comments.push({ id: uid(), author: m ? m.name : 'Someone', color: m ? m.color : '#9A9A93',
-          photo: m && m.photo ? m.photo : '', text: v, ts: now() });
+        c.comments.push(newComment(v));
         $('cCommentInput').value = '';
         touch(); renderComments(); render();
       }
@@ -3027,8 +3080,9 @@
       var html = '<h2>' + (isNew ? 'New column' : 'Edit column') + '</h2>'
         + '<label class="field-label">Name</label><input class="text-input" id="colName" value="' + esc(col.name) + '" />'
         + '<label class="field-label">Color</label><div class="color-row" id="colColors">'
-        + COL_COLORS.map(function (cc) {
-            return '<button data-c="' + cc + '" class="' + (cc === col.color ? 'sel' : '') + '" style="background:' + cc + '" aria-label="color"></button>'; }).join('')
+        + COL_COLORS.map(function (cc, i) {
+            return '<button data-c="' + cc + '" class="' + (cc === col.color ? 'sel' : '') + '" style="background:' + cc
+              + '" aria-label="Colour ' + (i + 1) + '" title="' + cc + '"></button>'; }).join('')
         + '</div>'
         + '<div class="modal-foot"><button class="btn-sm danger" id="colDelete">Delete column</button>'
         + '<button class="btn-sm primary" id="colSave">Save</button></div>';
@@ -3036,13 +3090,7 @@
       if (isNew) { $('colName').focus(); $('colName').select(); }
       $('colName').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('colSave').click(); });
       var picked = col.color;
-      $('colColors').querySelectorAll('button').forEach(function (btn) {
-        btn.onclick = function () {
-          picked = btn.dataset.c;
-          $('colColors').querySelectorAll('button').forEach(function (x) { x.classList.remove('sel'); });
-          btn.classList.add('sel');
-        };
-      });
+      bindPicker($('colColors'), 'c', function (v) { picked = v; });
       $('colSave').onclick = function () {
         var v = $('colName').value.trim();
         if (v) col.name = v;
@@ -3075,18 +3123,12 @@
       var html = '<h2>Board options</h2>'
         + '<label class="field-label">Name</label><input class="text-input" id="bName" value="' + esc(b.name) + '" />'
         + '<label class="field-label">Icon</label><div class="emoji-grid" id="bEmojis">'
-        + EMOJIS.map(function (e) { return '<button data-e="' + e + '"' + (e === b.icon ? ' class="sel"' : '') + '>' + e + '</button>'; }).join('') + '</div>'
+        + EMOJIS.map(function (e) { return '<button data-e="' + e + '"' + (e === b.icon ? ' class="sel"' : '') + ' aria-label="Icon ' + e + '">' + e + '</button>'; }).join('') + '</div>'
         + '<div class="modal-foot"><button class="btn-sm danger" id="bDelete">Delete board</button>'
         + '<button class="btn-sm primary" id="bSave">Save</button></div>';
       openModal(html, true);
       var icon = b.icon;
-      $('bEmojis').querySelectorAll('button').forEach(function (btn) {
-        btn.onclick = function () {
-          icon = btn.dataset.e;
-          $('bEmojis').querySelectorAll('button').forEach(function (x) { x.classList.remove('sel'); });
-          btn.classList.add('sel');
-        };
-      });
+      bindPicker($('bEmojis'), 'e', function (v) { icon = v; });
       $('bSave').onclick = function () {
         var v = $('bName').value.trim();
         if (v) b.name = v;
@@ -3126,7 +3168,7 @@
       var blocked = pageDescendants(p);
       var html = '<h2>Page options</h2>'
         + '<label class="field-label">Icon</label><div class="emoji-grid" id="pEmojis">'
-        + EMOJIS.map(function (e) { return '<button data-e="' + e + '"' + (e === p.icon ? ' class="sel"' : '') + '>' + e + '</button>'; }).join('') + '</div>'
+        + EMOJIS.map(function (e) { return '<button data-e="' + e + '"' + (e === p.icon ? ' class="sel"' : '') + ' aria-label="Icon ' + e + '">' + e + '</button>'; }).join('') + '</div>'
         + '<label class="field-label" style="margin-top:1rem;">Nest under</label>'
         + '<select class="text-input" id="pParent"><option value="">— Top level —</option>'
         + (doc.pages || []).filter(function (x) { return !blocked[x.id]; }).map(function (x) {
@@ -3140,13 +3182,7 @@
         + '<button class="btn-sm primary" id="pSave">Save</button></div>';
       openModal(html, true);
       var icon = p.icon;
-      $('pEmojis').querySelectorAll('button').forEach(function (btn) {
-        btn.onclick = function () {
-          icon = btn.dataset.e;
-          $('pEmojis').querySelectorAll('button').forEach(function (x) { x.classList.remove('sel'); });
-          btn.classList.add('sel');
-        };
-      });
+      bindPicker($('pEmojis'), 'e', function (v) { icon = v; });
       $('pSave').onclick = function () {
         p.icon = icon;
         p.public = $('pPublic').checked;
@@ -3284,7 +3320,6 @@
       };
     }
 
-    // --------------------------- backup modal ------------------------------
     // ---------------------- ambassador notes (review tab) -------------------
     // The full write.html → review → publish pipeline, living inside HQ as a
     // first-class tab. The backend bridges to the posts Apps Script with a
@@ -3334,8 +3369,8 @@
       return m ? 'https://www.youtube-nocookie.com/embed/' + m[1] : null;
     }
     function sanitizeNote(html) {
-      var doc = new DOMParser().parseFromString('<div>' + (html || '') + '</div>', 'text/html');
-      var root = doc.body.firstChild;
+      var parsed = new DOMParser().parseFromString('<div>' + (html || '') + '</div>', 'text/html');
+      var root = parsed.body.firstChild;
       (function walk(node) {
         Array.prototype.slice.call(node.childNodes).forEach(function (child) {
           if (child.nodeType === 1) {
@@ -3361,7 +3396,7 @@
             }
             Array.prototype.slice.call(child.attributes).forEach(function (a) {
               var ok = NOTE_ALLOWED[tag].indexOf(a.name) > -1;
-              var badHref = a.name === 'href' && /^\s*javascript:/i.test(a.value);
+              var badHref = a.name === 'href' && !/^\s*(https?:|mailto:|#|\/)/i.test(a.value);
               var badSrc = a.name === 'src' && !/^(https?:|data:image\/)/i.test(a.value);
               if (!ok || badHref || badSrc) child.removeAttribute(a.name);
             });
@@ -4052,7 +4087,7 @@
     function openQuickFind() {
       var html = '<h2 style="margin-bottom:.6rem;">Quick find</h2>'
         + '<input class="qf-input" id="qfInput" placeholder="Search boards, cards, and pages…" autocomplete="off" />'
-        + '<div class="qf-results" id="qfResults"></div>';
+        + '<div class="qf-results" id="qfResults" role="listbox" aria-label="Results"></div>';
       openModal(html, true);
       var input = $('qfInput'), results = $('qfResults');
       var items = [];
@@ -4083,19 +4118,33 @@
         });
         return out.slice(0, 12);
       }
+      var hot = 0; // index of the highlighted result — ↑/↓ move it, Enter opens it
+      function paintHot() {
+        results.querySelectorAll('.qf-item').forEach(function (btn, i) {
+          btn.classList.toggle('hot', i === hot);
+          btn.setAttribute('aria-selected', i === hot ? 'true' : 'false');
+        });
+        var el = results.querySelector('.qf-item.hot');
+        if (el) el.scrollIntoView({ block: 'nearest' });
+      }
       function draw() {
         items = collect(input.value.trim());
+        hot = 0;
         results.innerHTML = items.length ? items.map(function (it, i) {
-          return '<button class="qf-item' + (i === 0 ? ' hot' : '') + '" data-i="' + i + '"><span class="emoji">' + esc(it.icon)
+          return '<button class="qf-item" role="option" data-i="' + i + '"><span class="emoji">' + esc(it.icon)
             + '</span><span>' + esc(it.label) + '</span><span class="path">' + esc(it.path) + '</span></button>';
         }).join('') : '<div class="qf-empty">No matches.</div>';
         results.querySelectorAll('.qf-item').forEach(function (btn) {
           btn.onclick = function () { items[Number(btn.dataset.i)].go(); };
         });
+        paintHot();
       }
       input.addEventListener('input', draw);
       input.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' && items.length) { e.preventDefault(); items[0].go(); }
+        if (!items.length) return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); hot = (hot + 1) % items.length; paintHot(); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); hot = (hot - 1 + items.length) % items.length; paintHot(); }
+        else if (e.key === 'Enter') { e.preventDefault(); items[hot].go(); }
       });
       draw();
       setTimeout(function () { input.focus(); }, 0);
@@ -4106,6 +4155,14 @@
     function closeSidebarOnMobile() {
       if (window.innerWidth <= 760) { ui.sidebarClosed = true; persistLocal(); renderSidebar(); }
     }
+    // On a phone the sidebar is a drawer over the content. A tap on the
+    // content while it's open just closes the drawer — it doesn't also act on
+    // whatever was under the finger.
+    document.querySelector('.main').addEventListener('pointerdown', function (e) {
+      if (window.innerWidth > 760 || ui.sidebarClosed || e.target.closest('#hamburger')) return;
+      e.preventDefault(); e.stopPropagation();
+      closeSidebarOnMobile();
+    }, true);
     // Creating things is instant: no prompt() dialogs anywhere. New items are
     // born "Untitled" with the cursor already in the name — type, Enter, done.
     function focusRename() {
@@ -4142,7 +4199,7 @@
       $('nbCanvas').onclick = function () { createBoard(true); };
     };
     $('addPageBtn').onclick = function () {
-      var p = { id: uid(), icon: '📄', title: 'Untitled', body: '', public: false, createdAt: now(), updatedAt: now() };
+      var p = newPage('Untitled');
       doc.pages.push(p);
       mutate({ noRender: true });
       openPage(p.id, true);
@@ -4170,6 +4227,8 @@
     $('notesNavBtn').onclick = openNotesView;
     $('syncBtn').onclick = openSyncModal;
     $('qfHint').onclick = openQuickFind;
+    // The shortcut chip reads ⌘K on Apple keyboards and Ctrl K everywhere else.
+    if (!/Mac|iPhone|iPad|iPod/.test(navigator.platform || '')) $('qfHint').textContent = 'Ctrl K';
     // Clicking anywhere outside an open ＋ Add menu closes it.
     document.addEventListener('click', function (e) {
       document.querySelectorAll('.add-block-menu').forEach(function (m) {
