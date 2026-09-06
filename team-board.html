@@ -361,6 +361,16 @@
 
     /* ===== REVIEW QUEUE (Ambassador Notes) ===== */
     .notes-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .4rem; }
+    /* volunteer applications (🙋 Volunteers tab) reuse the .pr-* queue shell */
+    .vol-skills { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .45rem; }
+    .vol-skill { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-dim);
+      border: 1px solid var(--ink-line-soft); border-radius: 99px; padding: .12rem .5rem; white-space: nowrap; }
+    .vol-note { font-size: .88rem; color: var(--ink); line-height: 1.5; white-space: pre-wrap;
+      border-left: 3px solid var(--orange); padding: .05rem 0 .05rem .6rem; margin: .5rem 0 0; }
+    .vol-team-note { width: 100%; margin-top: .55rem; font: inherit; font-size: .82rem; padding: .4rem .55rem; color: var(--ink);
+      border: 1px solid var(--ink-line-soft); border-radius: 6px; background: var(--paper); }
+    .vol-team-note:focus { outline: none; border-color: var(--orange); }
+    .vol-team-note::placeholder { color: var(--ink-faint); }
     .pr-row { border: 1px solid var(--ink-line-soft); background: #fff; border-radius: 8px; padding: .6rem .75rem; margin-bottom: .5rem; }
     .pr-row.open { border-color: var(--orange); }
     .pr-head { display: flex; align-items: center; gap: .6rem; justify-content: space-between; }
@@ -509,6 +519,7 @@
         <div id="pageList"></div>
         <div class="side-label"><span class="mono">Review</span></div>
         <button class="side-item" id="notesNavBtn"><span class="emoji">📝</span><span class="label">Ambassador Notes</span><span class="count" id="notesCount"></span></button>
+        <button class="side-item" id="volNavBtn"><span class="emoji">🙋</span><span class="label">Volunteers</span><span class="count" id="volCount"></span></button>
       </div>
       <div class="side-foot">
         <button class="side-item" id="membersBtn"><span class="emoji">👥</span><span class="label">Team members</span></button>
@@ -566,7 +577,7 @@
     // hidden and the team-key door still works.
     var GOOGLE_CLIENT_ID = '846871931336-o1h3km8mg9qoil186ub74t83jun80b2m.apps.googleusercontent.com';
     var ALLOWED_DOMAIN = 'finmango.org';
-    var LS_DOC = 'fmb_doc_v1', LS_KEY = 'fmb_key', LS_ME = 'fmb_me', LS_UI = 'fmb_ui', LS_AUTH = 'fmb_gauth', LS_NOTES = 'fmb_notes_cache';
+    var LS_DOC = 'fmb_doc_v1', LS_KEY = 'fmb_key', LS_ME = 'fmb_me', LS_UI = 'fmb_ui', LS_AUTH = 'fmb_gauth', LS_NOTES = 'fmb_notes_cache', LS_VOLS = 'fmb_vols_cache';
     var COL_COLORS = ['#9A9A93', '#4A7BD0', '#E8A33D', '#3E9A5F', '#F25A27', '#8B5CF6', '#D9534F', '#2E9E9E'];
     var AVA_COLORS = ['#F25A27', '#3E9A5F', '#4A7BD0', '#8B5CF6', '#E8A33D', '#2E9E9E', '#D9534F', '#5F6B7A'];
     var TAG_COLORS = [['#FFF0E8', '#C2410C'], ['#EAF3EC', '#1F7A40'], ['#EAF0FA', '#2B5AB8'], ['#F3EDFC', '#6D3FC4'],
@@ -1060,7 +1071,7 @@
         var u = JSON.parse(localStorage.getItem(LS_UI) || '{}');
         ui.boardId = u.boardId || null;
         ui.pageId = u.pageId || null;
-        ui.view = (u.view === 'table' || u.view === 'page' || u.view === 'notes') ? u.view : 'board';
+        ui.view = (u.view === 'table' || u.view === 'page' || u.view === 'notes' || u.view === 'volunteers') ? u.view : 'board';
         ui.sidebarClosed = !!u.sidebarClosed;
       } catch (e) {}
       if (ui.view === 'page' && !page()) ui.view = 'board';
@@ -1493,7 +1504,7 @@
     // =========================== NAVIGATION ================================
     function openBoard(id) {
       ui.boardId = id; ui.pageId = null;
-      if (ui.view === 'page' || ui.view === 'notes') ui.view = 'board';
+      if (ui.view === 'page' || ui.view === 'notes' || ui.view === 'volunteers') ui.view = 'board';
       quickAddCol = null;
       persistLocal(); render(); closeSidebarOnMobile();
     }
@@ -1544,7 +1555,9 @@
         if (!p.parentId || !pageIds[p.parentId]) pageRow(p, 0);
       });
       $('notesNavBtn').classList.toggle('active', ui.view === 'notes');
+      $('volNavBtn').classList.toggle('active', ui.view === 'volunteers');
       updateNotesCount();
+      updateVolCount();
       $('app').classList.toggle('sidebar-closed', ui.sidebarClosed);
     }
 
@@ -1685,7 +1698,7 @@
       var pageMode = inPageMode();
       // The review queue (notes) uses a stripped-down topbar: nothing here is
       // renameable or filterable.
-      var notesMode = ui.view === 'notes';
+      var notesMode = ui.view === 'notes' || ui.view === 'volunteers';
       $('topbar').classList.toggle('page-mode', pageMode);
       $('topbar').classList.toggle('notes-mode', notesMode);
       var nameInput = $('boardNameInput');
@@ -1695,8 +1708,8 @@
       var typing = document.activeElement === nameInput;
       function setName(v) { if (!typing) nameInput.value = v; }
       if (notesMode) {
-        $('boardEmoji').textContent = '📝';
-        setName('Ambassador Notes');
+        $('boardEmoji').textContent = ui.view === 'volunteers' ? '🙋' : '📝';
+        setName(ui.view === 'volunteers' ? 'Volunteer applications' : 'Ambassador Notes');
       } else if (pageMode) {
         var p = page();
         $('boardEmoji').textContent = p.icon || '📄';
@@ -1771,7 +1784,7 @@
       // landing) — keep the reader's scroll position instead of jumping to
       // the top. The key names what's on screen; a different key is a real
       // navigation and starts at the top like one.
-      var scrollKey = ui.view === 'notes' ? 'notes' : inPageMode() ? 'page:' + ui.pageId : null;
+      var scrollKey = (ui.view === 'notes' || ui.view === 'volunteers') ? ui.view : inPageMode() ? 'page:' + ui.pageId : null;
       var prevScroll = 0;
       var sc0 = root.querySelector('.page-scroll');
       if (sc0 && scrollKey && renderView.lastScrollKey === scrollKey) prevScroll = sc0.scrollTop;
@@ -1785,6 +1798,7 @@
       if (wb0) { prevWbL = wb0.scrollLeft; prevWbT = wb0.scrollTop; }
       root.innerHTML = '';
       if (ui.view === 'notes') { renderNotes(root); restoreScroll(); return; }
+      if (ui.view === 'volunteers') { renderVols(root); restoreScroll(); return; }
       if (inPageMode()) { renderPage(root, page()); restoreScroll(); return; }
       var b = board();
       if (!b) {
@@ -4083,6 +4097,208 @@
       }).catch(function () { box.innerHTML = '<p class="help-note">Couldn\'t load this post.</p>'; });
     }
 
+    // ---------------------- volunteers (review tab) -------------------------
+    // Applications from volunteer-apply.html post into the Volunteer
+    // Application Google Form, so each one is a row in that form's Sheet. HQ
+    // reads the Sheet and writes the team's decision back into it — the Sheet
+    // stays the record, this tab is the inbox.
+    var VOL_STATUS = { 'new': ['New', '#E8A33D'], contacted: ['Contacted', '#4A7BD0'], placed: ['Placed', '#3E9A5F'], passed: ['Passed', '#9A9A93'] };
+    var vols = { rows: null, loading: false, refreshing: false, error: null, fetchedAt: 0, sheetUrl: '',
+      showPlaced: false, showPassed: false,
+      // id → fields painted ahead of the backend's confirmation
+      pending: {},
+      // id → team note being typed; survives a sync re-render mid-sentence
+      drafts: {}, focusId: null };
+    try {
+      var cachedVols = JSON.parse(localStorage.getItem(LS_VOLS) || 'null');
+      if (cachedVols && cachedVols.rows) { vols.rows = cachedVols.rows; vols.fetchedAt = cachedVols.t || 0; vols.sheetUrl = cachedVols.sheetUrl || ''; }
+    } catch (e) {}
+    function saveVolsCache() {
+      try { localStorage.setItem(LS_VOLS, JSON.stringify({ t: vols.fetchedAt || now(), rows: vols.rows, sheetUrl: vols.sheetUrl })); } catch (e) {}
+    }
+    function openVolsView() {
+      ui.view = 'volunteers'; ui.pageId = null;
+      persistLocal(); render(); closeSidebarOnMobile();
+      if (!vols.loading && !(vols.rows && now() - vols.fetchedAt < NOTES_FRESH_MS)) loadVols();
+    }
+    function loadVols() {
+      vols.loading = true; vols.refreshing = !!vols.rows; vols.error = null;
+      postsApi({ action: 'volunteers-list' }).then(function (res) {
+        vols.loading = false; vols.refreshing = false;
+        if (res.result !== 'success') {
+          // Keep a cached list on a transient failure; a config problem is
+          // worth surfacing even so, because the fix is a setup step.
+          if (!vols.rows || /not configured/i.test(String(res.error || ''))) vols.error = String(res.error || 'unreachable');
+        } else {
+          vols.rows = res.rows || []; vols.fetchedAt = now(); vols.sheetUrl = res.sheetUrl || '';
+          Object.keys(vols.pending).forEach(function (id) {
+            var r = vols.rows.find(function (x) { return x.id === id; });
+            if (r) Object.keys(vols.pending[id]).forEach(function (k) { r[k] = vols.pending[id][k]; });
+          });
+          saveVolsCache();
+        }
+        updateVolCount();
+        if (ui.view === 'volunteers') render();
+      }).catch(function () {
+        vols.loading = false; vols.refreshing = false;
+        if (!vols.rows) vols.error = 'unreachable';
+        if (ui.view === 'volunteers') render();
+      });
+    }
+    function updateVolCount() {
+      var el = $('volCount'); if (!el) return;
+      var n = (vols.rows || []).filter(function (r) { return r.status === 'new'; }).length;
+      el.textContent = n ? String(n) : '';
+    }
+    // The form packs everything the Google Form has no question for into its
+    // "How do you want to help?" answer:
+    //   "Academic Research, Design, Writing · 2–5 hrs/week · Note: …"
+    function parseHelp(s) {
+      var out = { skills: [], hours: '', note: '' }, rest = [];
+      String(s || '').split(' · ').forEach(function (seg, i) {
+        var t = seg.trim();
+        if (!t) return;
+        if (/hrs\/week$/i.test(t)) out.hours = t.replace(/\s*hrs\/week$/i, '');
+        else if (/^Note:\s*/i.test(t)) rest.push(t.replace(/^Note:\s*/i, ''));
+        else if (i === 0) out.skills = t.split(/,\s*/).filter(Boolean);
+        else rest.push(t);
+      });
+      out.note = rest.join(' · ');
+      return out;
+    }
+    function volRow(r) {
+      var saving = !!vols.pending[r.id];
+      var st = VOL_STATUS[r.status] || VOL_STATUS['new'];
+      var h = parseHelp(r.help);
+      var when = r.submittedAt ? relTime(Date.parse(r.submittedAt)) : '';
+      var link = /^https?:\/\//i.test(r.link || '') ? r.link : '';
+      var byLabel = { contacted: ['✉', 'Contacted by'], placed: ['✓', 'Placed by'], passed: ['—', 'Passed by'] }[r.status];
+      var note = vols.drafts[r.id] != null ? vols.drafts[r.id] : (r.notes || '');
+      function btn(status, label, cls) {
+        if (r.status === status) return '';
+        return '<button class="btn-sm ' + cls + '" data-vol="' + status + '"' + (saving ? ' disabled' : '') + '>' + label + '</button>';
+      }
+      return '<div class="pr-row" data-id="' + esc(r.id) + '">'
+        + '<div class="pr-head">'
+        + '<span class="pr-title">' + esc(r.name || 'No name given') + '</span>'
+        + '<span class="pr-tags"><span class="status-chip"><span class="col-dot" style="background:' + st[1] + '"></span>' + esc(st[0]) + '</span>'
+        + (saving ? '<span class="who-chip plain" title="Saving — a few seconds">⏳ saving</span>' : '')
+        + (byLabel ? whoChip(byLabel[0], byLabel[1], r.reviewedBy, r.reviewedAt) : '')
+        + '</span></div>'
+        + '<div class="pr-meta">' + (r.email ? '<a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a>' : 'no email')
+        + (h.hours ? ' · <strong>' + esc(h.hours) + ' hrs/week</strong>' : '')
+        + (when ? ' · applied ' + esc(when) : '')
+        + (link ? ' · <a href="' + esc(link) + '" target="_blank" rel="noopener noreferrer">profile ↗</a>' : '') + '</div>'
+        + (h.skills.length ? '<div class="vol-skills">' + h.skills.map(function (k) { return '<span class="vol-skill">' + esc(k) + '</span>'; }).join('') + '</div>' : '')
+        + (h.note ? '<div class="vol-note">' + esc(h.note) + '</div>' : '')
+        + '<input class="vol-team-note" placeholder="Team note — who spoke to them, where they might fit…" maxlength="2000" value="' + esc(note) + '"' + (saving ? ' disabled' : '') + '>'
+        + '<div class="pr-actions">' + btn('contacted', '✉ Contacted', 'primary') + btn('placed', '✓ Placed', 'ghost')
+        + btn('passed', 'Pass', 'ghost') + (r.status !== 'new' ? btn('new', '↩ Back to new', 'ghost') : '') + '</div>'
+        + '</div>';
+    }
+    function volFind(id) { return (vols.rows || []).find(function (x) { return x.id === id; }); }
+    function volAction(id, status) {
+      if (vols.pending[id]) { toast('Still saving that one — one moment'); return; }
+      var r = volFind(id); if (!r) return;
+      var m = me(); var reviewer = m ? m.name : 'HQ team';
+      // Paint the decision, then send it: the row moves to its section now,
+      // not after the round trip.
+      var undo = { status: r.status, reviewedBy: r.reviewedBy, reviewedAt: r.reviewedAt };
+      vols.pending[id] = { status: status, reviewedBy: reviewer, reviewedAt: new Date().toISOString() };
+      Object.assign(r, vols.pending[id]); updateVolCount(); render();
+      function revert(msg) {
+        delete vols.pending[id]; Object.assign(r, undo); updateVolCount();
+        if (ui.view === 'volunteers') render(); toast(msg);
+      }
+      postsApi({ action: 'volunteers-status', id: id, status: status, reviewer: reviewer }).then(function (res) {
+        if (res.result !== 'success') return revert(String(res.error || "That didn't work — try again"));
+        delete vols.pending[id]; saveVolsCache();
+        toast(status === 'contacted' ? 'Marked contacted ✉' : status === 'placed' ? 'Placed ✓' : status === 'passed' ? 'Marked passed' : 'Back to new ↩');
+        if (ui.view === 'volunteers') render();
+      }).catch(function () { revert('Network hiccup — try again'); });
+    }
+    function volSaveNote(id, text) {
+      var r = volFind(id); if (!r) return;
+      delete vols.drafts[id];
+      if ((r.notes || '') === text) return;
+      var prev = r.notes; r.notes = text; saveVolsCache();
+      var m = me();
+      postsApi({ action: 'volunteers-status', id: id, notes: text, reviewer: m ? m.name : 'HQ team' }).then(function (res) {
+        if (res.result === 'success') { toast('Note saved'); return; }
+        r.notes = prev; saveVolsCache(); if (ui.view === 'volunteers') render();
+        toast(String(res.error || "Couldn't save that note — try again"));
+      }).catch(function () { r.notes = prev; saveVolsCache(); if (ui.view === 'volunteers') render(); toast('Network hiccup — note not saved'); });
+    }
+    function renderVols(root) {
+      var scroll = document.createElement('div'); scroll.className = 'page-scroll';
+      var wrap = document.createElement('div'); wrap.className = 'page-wrap notes-wrap';
+      var head = document.createElement('div'); head.className = 'notes-head';
+      head.innerHTML = '<div><h1 style="font-size:1.5rem;letter-spacing:-.02em;">Volunteer applications</h1>'
+        + '<p class="help-note" style="margin:.2rem 0 0;">Applications from <a href="volunteer-apply.html" target="_blank" rel="noopener">finmango.org/volunteer</a> land here.'
+        + ' Mark who you\'ve contacted, who\'s placed, and leave the team a note. Every decision is written back to the Sheet'
+        + (vols.sheetUrl ? ' (<a href="' + esc(vols.sheetUrl) + '" target="_blank" rel="noopener noreferrer">open it ↗</a>)' : '') + '.</p></div>'
+        + '<button class="btn-sm ghost" id="volRefresh">' + (vols.refreshing ? '⏳ Updating…' : '↻ Refresh') + '</button>';
+      wrap.appendChild(head);
+      var body = document.createElement('div');
+      wrap.appendChild(body);
+
+      if (/not configured/i.test(String(vols.error || ''))) {
+        body.innerHTML = '<p class="help-note" style="margin-top:1rem;">⚙️ One setup step left: in the Volunteer Application Google Form, open <strong>Responses → Link to Sheets</strong>,'
+          + ' then paste that Sheet\'s URL into <code>VOLUNTEERS_SHEET_URL</code> in the HQ Apps Script and redeploy a new version'
+          + ' — see <code>docs/TEAM-BOARD-SETUP.md</code>. Until then, applications are in the form\'s Responses tab.</p>';
+      } else if (vols.error) {
+        body.innerHTML = '<p class="help-note" style="margin-top:1rem;">⚠️ Couldn\'t reach the applications Sheet — <a href="#" id="volRetry">try again</a>.</p>';
+      } else if (!vols.rows) {
+        body.innerHTML = '<p class="help-note" style="margin-top:1rem;">Loading applications…</p>';
+        if (!vols.loading) loadVols();
+      } else {
+        var all = vols.rows;
+        var byStatus = function (st) { return all.filter(function (r) { return r.status === st; }); };
+        var fresh = byStatus('new'), talking = byStatus('contacted'), placed = byStatus('placed'), passed = byStatus('passed');
+        var rows = function (list) { return list.map(volRow).join(''); };
+        body.innerHTML = '<p class="help-note" style="margin:.9rem 0 0;"><strong>' + all.length + '</strong> application' + (all.length === 1 ? '' : 's')
+          + ' · <strong>' + placed.length + '</strong> placed · ' + talking.length + ' in conversation</p>'
+          + (fresh.length
+            ? '<div class="m-section">New (' + fresh.length + ')</div>' + rows(fresh)
+            : '<p class="help-note" style="margin-top:1rem;">🎉 Inbox is clear — no new applications.</p>')
+          + (talking.length ? '<div class="m-section">In conversation (' + talking.length + ')</div>' + rows(talking) : '')
+          + (placed.length
+            ? '<p class="help-note" style="margin-top:1.4rem;"><a href="#" id="volPlaced">' + (vols.showPlaced ? '▾ Hide placed' : '▸ Placed (' + placed.length + ')') + '</a></p>'
+              + (vols.showPlaced ? rows(placed) : '')
+            : '')
+          + (passed.length
+            ? '<p class="help-note" style="margin-top:.6rem;"><a href="#" id="volPassed">' + (vols.showPassed ? '▾ Hide passed' : '▸ Passed (' + passed.length + ')') + '</a></p>'
+              + (vols.showPassed ? rows(passed) : '')
+            : '');
+        body.querySelectorAll('button[data-vol]').forEach(function (el) {
+          var id = el.closest('.pr-row').dataset.id;
+          el.onclick = function () { volAction(id, el.dataset.vol); };
+        });
+        body.querySelectorAll('.vol-team-note').forEach(function (inp) {
+          var id = inp.closest('.pr-row').dataset.id;
+          inp.addEventListener('focus', function () { vols.focusId = id; });
+          inp.addEventListener('input', function () { vols.drafts[id] = inp.value; });
+          inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); inp.blur(); } });
+          inp.addEventListener('blur', function () { vols.focusId = null; volSaveNote(id, inp.value.trim()); });
+        });
+        var toggle = function (elId, prop) {
+          var a = body.querySelector('#' + elId);
+          if (a) a.onclick = function (e) { e.preventDefault(); vols[prop] = !vols[prop]; render(); };
+        };
+        toggle('volPlaced', 'showPlaced');
+        toggle('volPassed', 'showPassed');
+      }
+      scroll.appendChild(wrap); root.appendChild(scroll);
+      // A sync re-render mid-sentence: put the cursor back where it was.
+      if (vols.focusId) {
+        var again = body.querySelector('.pr-row[data-id="' + vols.focusId + '"] .vol-team-note');
+        if (again) { again.focus(); again.setSelectionRange(again.value.length, again.value.length); }
+      }
+      var rf = $('volRefresh'); if (rf) rf.onclick = function () { if (!vols.loading) { loadVols(); render(); } };
+      var rt = body.querySelector('#volRetry');
+      if (rt) rt.onclick = function (e) { e.preventDefault(); vols.error = null; loadVols(); render(); };
+    }
+
     // ------------------------- quick find (⌘K) ------------------------------
     function openQuickFind() {
       var html = '<h2 style="margin-bottom:.6rem;">Quick find</h2>'
@@ -4096,6 +4312,9 @@
         var out = [];
         if (!q || 'ambassador notes reviews posts'.indexOf(q) > -1) {
           out.push({ icon: '📝', label: 'Ambassador Notes', path: 'review', go: function () { closeModal(); openNotesView(); } });
+        }
+        if (!q || 'volunteers applications review inbox'.indexOf(q) > -1) {
+          out.push({ icon: '🙋', label: 'Volunteers', path: 'review', go: function () { closeModal(); openVolsView(); } });
         }
         (doc.pages || []).forEach(function (p) {
           if (!q || (p.title + ' ' + p.body).toLowerCase().indexOf(q) > -1) {
@@ -4225,6 +4444,7 @@
     $('searchInput').addEventListener('input', function () { ui.search = this.value; renderView(); });
     $('membersBtn').onclick = openMembersModal;
     $('notesNavBtn').onclick = openNotesView;
+    $('volNavBtn').onclick = openVolsView;
     $('syncBtn').onclick = openSyncModal;
     $('qfHint').onclick = openQuickFind;
     // The shortcut chip reads ⌘K on Apple keyboards and Ctrl K everywhere else.
