@@ -177,6 +177,10 @@
       outline: 2px solid var(--orange-ink);
       outline-offset: 3px;
     }
+    /* --orange-ink was tuned for paper; on the ink ground it is ~2.4:1 and
+       the ring all but disappears on the barometer tiles and footer links.
+       Display orange clears 6:1 there. */
+    .on-ink :focus-visible { outline-color: var(--orange); }
 
     .skip-link {
       position: absolute;
@@ -509,17 +513,13 @@
       align-items: center;
       gap: .6rem;
     }
+    /* A static dot. This used to pulse like the barometer's live indicator,
+       so the page carried two pulses with two meanings — "founded 2017" is
+       not a live signal. One pulse on the page, and it means live data. */
     .hb-pulse {
       width: 6px; height: 6px;
       border-radius: 50%;
       background: var(--orange);
-      box-shadow: 0 0 0 0 rgba(242, 90, 39, .5);
-      animation: hb-pulse 2.4s ease-out infinite;
-    }
-    @keyframes hb-pulse {
-      0% { box-shadow: 0 0 0 0 rgba(242, 90, 39, .5); }
-      70% { box-shadow: 0 0 0 10px rgba(242, 90, 39, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(242, 90, 39, 0); }
     }
 
     .hero h1 {
@@ -835,7 +835,7 @@
        rise. `null >= 0` is true, so these previously rendered in the rising
        stress colour while the text read "--". */
     .barometer-indicator-change.flat,
-    .barometer-indicator-change.none { color: var(--ink-soft, #7a7a7a); }
+    .barometer-indicator-change.none { color: var(--paper-faint); }
 
     .barometer-legend {
       display: flex;
@@ -1060,6 +1060,7 @@
       font-weight: 900;
       letter-spacing: -.035em;
       line-height: 1.05;
+      text-wrap: balance;
     }
     .moments-head h2 em { font-style: normal; color: var(--orange); }
     .moments-link {
@@ -1141,12 +1142,13 @@
       gap: 1.35rem;
       order: 1;
     }
-    .featured-content h3 {
+    .featured-content h2 {
       font-size: clamp(1.7rem, 2.8vw, 2.5rem);
       font-weight: 900;
       letter-spacing: -.04em;
       line-height: 1.02;
       max-width: 18ch;
+      text-wrap: balance;
     }
     /* Credential reads as a stamp, not a grey mono footnote */
     .featured-badge {
@@ -1309,6 +1311,7 @@
       letter-spacing: -.035em;
       line-height: 1.08;
       margin-bottom: .6rem;
+      text-wrap: balance;
     }
     .footer-newsletter p {
       font-size: .95rem;
@@ -1533,6 +1536,15 @@
       }
 
       .hero { padding: 6rem var(--gutter) 0; min-height: auto; }
+      /* At 46vw the glow is a 180px disc behind a single word on a phone
+         and reads as a smudge. Wider and fainter it becomes a wash again. */
+      .hero-bg::before {
+        top: 4%;
+        left: -35%;
+        width: 110vw;
+        height: 110vw;
+        background: radial-gradient(circle, rgba(242, 90, 39, .10) 0%, transparent 60%);
+      }
       .hero-container { gap: 2rem; padding-top: 0; }
       /* Keep the eyebrow + "Since 2017" rule on phones so the homepage
          matches about/research/education, but tighten it to the same
@@ -1665,7 +1677,7 @@
       .featured-journals-label { padding-bottom: .6rem; }
       .featured-journal-name { font-size: .92rem; }
       .featured-content { padding: 1.75rem; gap: 1.1rem; }
-      .featured-content h3 { max-width: none; }
+      .featured-content h2 { max-width: none; }
       .featured-stat { padding: .9rem .85rem; }
       .featured-stat-label { letter-spacing: .09em; margin-top: .4rem; }
 
@@ -1681,6 +1693,14 @@
     }
 
     @media (max-width: 560px) {
+      /* Four legend items no longer fit one row here, and the flex wrap left
+         HIGH alone on a second line. A 2x2 grid keeps the bands paired. */
+      .barometer-legend {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: .55rem 1rem;
+        letter-spacing: .06em;
+      }
       /* Three short readouts stay side by side rather than stacking into a
          tall column — they fit, and the rail reads as one instrument. */
       .featured-stat { padding: .8rem .6rem; }
@@ -1996,7 +2016,7 @@
           <div class="solution-num">Prove</div>
           <h3 class="solution-title">Research</h3>
           <p class="solution-text">We find the barriers blocking economic mobility: housing, healthcare, debt, predatory lending. Our work with Google Health and university partners builds the evidence base decision-makers rely on.</p>
-          <a href="research.html" class="solution-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          <a href="research.html" class="solution-link">Read the research <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
         <div class="solution-card">
           <div class="solution-icon" aria-hidden="true">
@@ -2011,7 +2031,7 @@
           <div class="solution-num">Equip</div>
           <h3 class="solution-title">Education</h3>
           <p class="solution-text">We reach students before the student loans and before the first credit card. Our programs run from suburban districts to inner-city schools.</p>
-          <a href="education.html" class="solution-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          <a href="education.html" class="solution-link">Explore the programs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
         <div class="solution-card">
           <div class="solution-icon" aria-hidden="true">
@@ -2033,7 +2053,7 @@
           <div class="solution-num">Inform</div>
           <h3 class="solution-title">Ambassadors</h3>
           <p class="solution-text">Our global ambassador network carries what we measure to the schools, universities, and agencies that can act on it — and reports back what financial health looks like where they live.</p>
-          <a href="ambassadors.html" class="solution-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          <a href="ambassadors.html" class="solution-link">Meet the ambassadors <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </div>
     </div>
@@ -2090,7 +2110,7 @@
         </aside>
         <div class="featured-content">
           <div class="featured-badge">Peer-reviewed</div>
-          <h3>Published in Nature. Used worldwide.</h3>
+          <h2>Published in Nature. Used worldwide.</h2>
           <p class="featured-text">Our peer-reviewed partnership with Google Health produced open-source datasets now used by research institutions, governments, and global health organizations — the evidence base decision-makers need to build equitable financial and health systems.</p>
           <div class="featured-stats">
             <div class="featured-stat"><div class="featured-stat-number">22K<em>+</em></div><div class="featured-stat-label">Locations tracked</div></div>
