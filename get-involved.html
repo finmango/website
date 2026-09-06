@@ -517,7 +517,7 @@
     .hb-bottom {
       display: grid;
       grid-template-columns: 1fr auto;
-      align-items: end;
+      align-items: center;
       gap: 3rem;
       padding-top: 1.75rem;
       border-top: 1px solid var(--ink-line-soft);
@@ -532,21 +532,72 @@
     }
     .hb-sub strong { color: var(--ink); font-weight: 600; }
 
-    .hb-cta-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; justify-content: flex-end; }
+    /* the two doors — the page's whole ask, in the ruled row where the
+       other pages put their buttons. Same system as the buttons: one
+       flat orange, one hairline. */
+    .hb-doors {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .9rem;
+      width: 100%;
+      max-width: 640px;
+      justify-self: end;
+    }
+    a.door {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+      padding: 1.4rem 1.5rem 1.5rem;
+      text-decoration: none;
+      color: var(--ink);
+      border: 1px solid var(--ink-line);
+      background: transparent;
+      transition: border-color .25s ease, background .3s cubic-bezier(.16, 1, .3, 1), color .3s cubic-bezier(.16, 1, .3, 1);
+    }
+    a.door:hover { border-color: var(--ink); }
+    .door-cost {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-faint);
+      margin-bottom: .5rem;
+    }
+    .door-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -.025em;
+      line-height: 1.15;
+    }
+    .door-title svg {
+      width: 15px; height: 15px;
+      flex-shrink: 0;
+      transition: transform .3s cubic-bezier(.16, 1, .3, 1);
+    }
+    a.door:hover .door-title svg { transform: translateX(4px); }
+    .door-desc {
+      font-size: .88rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--ink-dim);
+      letter-spacing: -.005em;
+    }
+    /* the ambassador door leads, the same way btn-primary leads btn-secondary */
+    a.door-primary { background: var(--orange-ink); border-color: var(--orange-ink); color: #fff; }
+    a.door-primary .door-cost { color: rgba(255, 255, 255, .72); }
+    a.door-primary .door-desc { color: rgba(255, 255, 255, .86); }
+    a.door-primary:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+    a.door-primary:hover .door-cost { color: var(--paper-faint); }
+    a.door-primary:hover .door-desc { color: var(--paper-dim); }
 
     /* ----------------------------------------------------------
        SECTION HEADS
        ---------------------------------------------------------- */
-    .section-head { display: flex; flex-direction: column; gap: 1.1rem; align-items: flex-start; margin-bottom: 3.5rem; }
-    .section-head h2 {
-      font-size: clamp(2.4rem, 5.5vw, 4.5rem);
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: -.045em;
-      max-width: 14ch;
-      text-wrap: balance;
-    }
-    .section-head h2 em { font-style: normal; color: var(--orange); }
     .section-sub {
       font-size: 1.02rem;
       font-weight: 400;
@@ -560,93 +611,12 @@
     .on-ink .section-sub { color: var(--paper-dim); }
 
     /* ----------------------------------------------------------
-       WAYS IN — two ruled columns on paper: the page's whole ask
-       ---------------------------------------------------------- */
-    .ways { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-    .ways-container { max-width: var(--max-width); margin: 0 auto; }
-
-    .ways-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      border-top: 1px solid var(--ink-line-soft);
-    }
-    .way {
-      padding: 3rem 3rem 3rem 0;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-    .way + .way { padding-left: 3rem; border-left: 1px solid var(--ink-line-soft); }
-    .way::before {
-      content: '';
-      position: absolute;
-      top: -1px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--orange);
-      transition: width .4s cubic-bezier(.16, 1, .3, 1);
-    }
-    .way:hover::before { width: calc(100% - 3rem); }
-    .way + .way:hover::before { left: 3rem; }
-
-    .way-photo {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 3 / 2;
-      object-fit: cover;
-      border: 1px solid var(--ink-line);
-      display: block;
-      margin-bottom: 1.75rem;
-    }
-    .way-num {
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin-bottom: .6rem;
-    }
-    .way-title {
-      font-size: 1.75rem;
-      font-weight: 900;
-      letter-spacing: -.03em;
-      margin-bottom: .9rem;
-    }
-    .way-text {
-      color: var(--ink-dim);
-      line-height: 1.6;
-      font-size: .98rem;
-      font-weight: 400;
-      margin-bottom: 1.75rem;
-      letter-spacing: -.005em;
-      max-width: 46ch;
-    }
-    .way-actions { margin-top: auto; display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
-    .way-link {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      color: var(--ink);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: .9rem;
-      transition: color .2s ease;
-    }
-    .way-link svg { width: 13px; height: 13px; transition: transform .3s cubic-bezier(.16,1,.3,1); }
-    .way-link:hover { color: var(--orange); }
-    .way-link:hover svg { transform: translateX(3px); }
-
-    /* ----------------------------------------------------------
        VOLUNTEER — what you'd actually do, and how it starts
        ---------------------------------------------------------- */
     .volunteer { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
     .vol-container {
       max-width: var(--max-width);
       margin: 0 auto;
-      padding-top: 5rem;
-      border-top: 1px solid var(--ink-line);
       display: grid;
       grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
       gap: 4.5rem;
@@ -1082,20 +1052,11 @@
       .hero-container { gap: 2rem; padding-top: 0; }
       .hero h1 { font-size: clamp(2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
       .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
-      .hb-cta-row { justify-content: flex-start; width: 100%; gap: .75rem; }
+      .hb-doors { max-width: none; justify-self: stretch; }
       .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
 
-      .section-head { margin-bottom: 2.5rem; }
-
-      .ways { padding: 0 var(--gutter) 5rem; }
-      .ways-grid { grid-template-columns: 1fr; }
-      .way { padding: 2.25rem 0; border-bottom: 1px solid var(--ink-line-soft); }
-      .way + .way { padding-left: 0; border-left: none; }
-      .way:last-child { border-bottom: none; }
-      .way:hover::before, .way + .way:hover::before { width: 100%; left: 0; }
-
       .volunteer { padding: 0 var(--gutter) 5rem; }
-      .vol-container { grid-template-columns: 1fr; gap: 2.25rem; padding-top: 3.5rem; }
+      .vol-container { grid-template-columns: 1fr; gap: 2.25rem; }
       .vol-steps { margin-top: 3rem; padding-top: 1.75rem; gap: 1.75rem; }
       .vol-photo { transform: none; }
       /* stacked, a 4:3 plate at full width is a wall of photo */
@@ -1117,12 +1078,11 @@
     }
 
     @media (max-width: 620px) {
-      .hb-cta-row, .vol-actions, .cta-actions { flex-direction: column; align-items: stretch; gap: .75rem; }
-      .hb-cta-row .btn-primary, .hb-cta-row .btn-secondary,
+      /* one door at a time */
+      .hb-doors { grid-template-columns: 1fr; }
+      .vol-actions, .cta-actions { flex-direction: column; align-items: stretch; gap: .75rem; }
       .vol-actions .btn-primary, .vol-actions .btn-secondary,
       .cta-actions .btn-primary, .cta-actions .btn-secondary { width: 100%; justify-content: center; }
-      .way-actions { flex-direction: column; align-items: stretch; gap: .75rem; }
-      .way-actions .btn-primary { width: 100%; justify-content: center; }
       .vol-steps { grid-template-columns: 1fr; }
     }
 
@@ -1135,7 +1095,7 @@
         gap: 2rem 3rem;
         align-items: start;
       }
-      .hb-cta-row { grid-column: 1 / -1; justify-content: flex-start; }
+      .hb-doors { grid-column: 1 / -1; max-width: none; }
       .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
     }
   </style>
@@ -1296,60 +1256,24 @@
         <p class="hb-sub">
           FinMango is students, volunteers and researchers chipping away at it together — and it's working. <strong>Two ways in.</strong> Both start today.
         </p>
-        <div class="hb-cta-row">
-          <a href="ambassadors.html" class="btn-primary">
-            Become an ambassador
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <div class="hb-doors">
+          <a href="ambassadors.html" class="door door-primary">
+            <span class="door-cost">A semester</span>
+            <span class="door-title">Become an ambassador
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+            <span class="door-desc">Lead the work on your campus, backed by training, a global cohort, and our research.</span>
           </a>
-          <a href="#volunteer" class="btn-secondary">Volunteer with us</a>
+          <a href="volunteer-apply.html" class="door">
+            <span class="door-cost">2–5 hrs / week</span>
+            <span class="door-title">Volunteer with us
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </span>
+            <span class="door-desc">Lend a few hours a week to the work. Remote, flexible, worldwide.</span>
+          </a>
         </div>
       </div>
 
-    </div>
-  </section>
-
-  <!-- ======================= WAYS IN ======================= -->
-  <section class="ways" id="ways-in">
-    <div class="ways-container">
-      <div class="section-head">
-        <span class="eyebrow">Two ways in</span>
-        <h2>Pick the one that fits <em>your&nbsp;life.</em></h2>
-        <p class="section-sub">A semester on your campus, or a few hours a week from wherever you are. Both are real work, and both start today.</p>
-      </div>
-
-      <div class="ways-grid">
-        <article class="way">
-          <img src="kent2024-1200.jpg" srcset="kent2024-1200.jpg 1200w, kent2024.jpg 2304w" sizes="(max-width: 968px) 100vw, 600px" alt="A large group of students with FinMango flags and certificates at Kent State University" class="way-photo" width="1200" height="800" fetchpriority="high" decoding="async">
-          <div class="way-num">01 · A semester</div>
-          <h3 class="way-title">Become an ambassador</h3>
-          <p class="way-text">
-            Lead the work on your campus, backed by training, a global cohort, and our research. Ambassadors run programs, publish notes on financial health where they live, and carry what we measure to the people who can act on it.
-          </p>
-          <div class="way-actions">
-            <a href="ambassadors.html" class="btn-primary">
-              Ambassador program
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a href="ambassador-apply.html" class="way-link">Apply now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-          </div>
-        </article>
-
-        <article class="way">
-          <img src="education2.jpg" alt="Two volunteers holding the FinMango flag at a program session" class="way-photo" width="1080" height="1080" loading="lazy" decoding="async">
-          <div class="way-num">02 · 2–5 hrs / week</div>
-          <h3 class="way-title">Volunteer with us</h3>
-          <p class="way-text">
-            Lend a few hours a week to the work. Remote, flexible, worldwide. You don't need a finance background — you need something you're already good at, and we'll match you to a project that needs it.
-          </p>
-          <div class="way-actions">
-            <a href="volunteer-apply.html" class="btn-primary">
-              Apply to volunteer
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a href="#volunteer" class="way-link">How it works <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-          </div>
-        </article>
-      </div>
     </div>
   </section>
 
