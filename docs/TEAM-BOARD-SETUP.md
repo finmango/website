@@ -151,8 +151,10 @@ Setup (≈3 minutes, one code paste and one CONFIG value):
    and the tab shows a "backend needs an update" note until it's refreshed.
 2. Open the Volunteer Application form → **Responses** → the Sheets icon
    (**Link to Sheets**) if it isn't linked yet. Copy the Sheet's URL.
-3. In the HQ Apps Script, set `VOLUNTEERS_SHEET_URL` to that URL. Leave
-   `VOLUNTEERS_TAB` blank unless you've renamed the responses tab.
+3. In the HQ Apps Script, check `VOLUNTEERS_SHEET_URL` matches that URL. It is
+   pre-filled with the team Drive's "Volunteer Application - FinMango
+   (Responses)" Sheet, so normally nothing to change. Leave `VOLUNTEERS_TAB`
+   blank unless you've renamed the responses tab.
 4. Redeploy a new version. Open HQ → 🙋 Volunteers → ↻ Refresh.
 
 If the tab still says it couldn't reach the Sheet, the backend's own error

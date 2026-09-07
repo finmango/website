@@ -61,7 +61,9 @@ const CONFIG = {
   // stamps each decision into review columns this script adds to the sheet
   // (HQ Status / HQ Reviewed by / HQ Reviewed at / HQ Notes). Until set, the
   // tab shows a "not wired up" note and the Sheet itself is still the record.
-  VOLUNTEERS_SHEET_URL: 'REPLACE_WITH_VOLUNTEER_RESPONSES_SHEET_URL',
+  // Pre-filled with "Volunteer Application - FinMango (Responses)" in the team
+  // Drive (owner: scott@finmango.org), like SPREADSHEET_URL above.
+  VOLUNTEERS_SHEET_URL: 'https://docs.google.com/spreadsheets/d/1G_foZYJu1mVzWJeHjeaw3XWsQNN_D2VPOPY2yi6unIs/edit',
   // Leave blank to use the first tab whose header row has a Timestamp and an
   // Email column (which is what Google Forms creates).
   VOLUNTEERS_TAB: '',
