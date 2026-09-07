@@ -4128,7 +4128,7 @@
         if (res.result !== 'success') {
           // Keep a cached list on a transient failure; a config problem is
           // worth surfacing even so, because the fix is a setup step.
-          if (!vols.rows || /not configured/i.test(String(res.error || ''))) vols.error = String(res.error || 'unreachable');
+          if (!vols.rows || /not configured|unknown action/i.test(String(res.error || ''))) vols.error = String(res.error || 'unreachable');
         } else {
           vols.rows = res.rows || []; vols.fetchedAt = now(); vols.sheetUrl = res.sheetUrl || '';
           Object.keys(vols.pending).forEach(function (id) {
@@ -4246,8 +4246,15 @@
         body.innerHTML = '<p class="help-note" style="margin-top:1rem;">⚙️ One setup step left: in the Volunteer Application Google Form, open <strong>Responses → Link to Sheets</strong>,'
           + ' then paste that Sheet\'s URL into <code>VOLUNTEERS_SHEET_URL</code> in the HQ Apps Script and redeploy a new version'
           + ' — see <code>docs/TEAM-BOARD-SETUP.md</code>. Until then, applications are in the form\'s Responses tab.</p>';
+      } else if (/unknown action/i.test(String(vols.error || ''))) {
+        // The deployed Apps Script predates this tab: it doesn't know the
+        // volunteers actions yet, so the fix is a code update, not a retry.
+        body.innerHTML = '<p class="help-note" style="margin-top:1rem;">⚙️ The HQ backend needs an update: the deployed Apps Script doesn\'t know about volunteer reviews yet.'
+          + ' Paste the latest <code>tools/team-board-apps-script.js</code> into the HQ Apps Script (keeping your CONFIG values), set <code>VOLUNTEERS_SHEET_URL</code>,'
+          + ' and redeploy a new version — see <code>docs/TEAM-BOARD-SETUP.md</code>. <a href="#" id="volRetry">Check again</a>.</p>';
       } else if (vols.error) {
-        body.innerHTML = '<p class="help-note" style="margin-top:1rem;">⚠️ Couldn\'t reach the applications Sheet — <a href="#" id="volRetry">try again</a>.</p>';
+        var why = vols.error === 'unreachable' ? '' : ' <span style="opacity:.7;">(' + esc(vols.error) + ')</span>';
+        body.innerHTML = '<p class="help-note" style="margin-top:1rem;">⚠️ Couldn\'t reach the applications Sheet' + why + ' — <a href="#" id="volRetry">try again</a>.</p>';
       } else if (!vols.rows) {
         body.innerHTML = '<p class="help-note" style="margin-top:1rem;">Loading applications…</p>';
         if (!vols.loading) loadVols();

@@ -142,13 +142,23 @@ person. Decisions are written back into four columns the script adds to the
 Sheet (`HQ Status`, `HQ Reviewed by`, `HQ Reviewed at`, `HQ Notes`), so the
 Sheet and HQ always agree and nothing lives only in a browser.
 
-Setup (≈2 minutes, one CONFIG value):
+Setup (≈3 minutes, one code paste and one CONFIG value):
 
-1. Open the Volunteer Application form → **Responses** → the Sheets icon
+1. Make sure the deployed HQ Apps Script has the volunteers code: open it,
+   note your CONFIG values (`ACCESS_KEY`, `POSTS_REVIEW_KEY`, …), replace the
+   file with the latest `tools/team-board-apps-script.js`, and put those
+   values back. A script that predates this tab answers `Unknown action`,
+   and the tab shows a "backend needs an update" note until it's refreshed.
+2. Open the Volunteer Application form → **Responses** → the Sheets icon
    (**Link to Sheets**) if it isn't linked yet. Copy the Sheet's URL.
-2. In the HQ Apps Script, set `VOLUNTEERS_SHEET_URL` to that URL. Leave
+3. In the HQ Apps Script, set `VOLUNTEERS_SHEET_URL` to that URL. Leave
    `VOLUNTEERS_TAB` blank unless you've renamed the responses tab.
-3. Redeploy a new version. Open HQ → 🙋 Volunteers → ↻ Refresh.
+4. Redeploy a new version. Open HQ → 🙋 Volunteers → ↻ Refresh.
+
+If the tab still says it couldn't reach the Sheet, the backend's own error
+now shows in parentheses next to the message — typically a permissions
+problem (the script's owner can't open the Sheet) or a responses tab without
+a `Timestamp` and an email column.
 
 The script runs as its owner, so the Sheet only needs to be readable by that
 account. The sidebar badge counts applications still marked **New**.
