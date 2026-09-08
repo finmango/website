@@ -502,6 +502,26 @@
       justify-content: space-between;
       align-items: center;
     }
+    .hb-status {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    /* A static dot. This used to pulse like the barometer's live indicator,
+       so the page carried two pulses with two meanings — "founded 2017" is
+       not a live signal. One pulse on the page, and it means live data. */
+    .hb-pulse {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
+    }
+
     .hero h1 {
       font-size: clamp(2.4rem, 7.8vw, 8.4rem);
       font-weight: 900;
@@ -679,6 +699,7 @@
       letter-spacing: -.04em;
       max-width: none;
     }
+    .barometer-headline em { font-style: normal; color: var(--orange); }
     .barometer-subline {
       font-size: clamp(1rem, 1.4vw, 1.15rem);
       font-weight: 400;
@@ -841,6 +862,75 @@
     .barometer-legend-color.elevated { background: #FB923C; }
     .barometer-legend-color.high { background: #DC2626; }
 
+    /* Problem stats — ruled columns, not boxes */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin-top: 5rem;
+      border-top: 1px solid var(--paper-line);
+    }
+    .problem-stat {
+      padding: 2.25rem 2rem 2.25rem 0;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+      transition: background .25s ease;
+    }
+    .problem-stat + .problem-stat { padding-left: 2rem; border-left: 1px solid var(--paper-line); }
+    .problem-stat::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--orange);
+      transition: width .35s cubic-bezier(.16, 1, .3, 1);
+    }
+    .problem-stat:hover::before { width: calc(100% - 2rem); }
+    .problem-stat + .problem-stat:hover::before { left: 2rem; }
+    .problem-stat-number {
+      font-size: clamp(2.75rem, 4.5vw, 4rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -.04em;
+      margin-bottom: .85rem;
+    }
+    .problem-stat-number em { font-style: normal; color: var(--orange); font-size: .55em; vertical-align: .35em; }
+    .problem-stat-text {
+      font-size: .98rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: var(--paper-dim);
+      max-width: 26ch;
+    }
+    .problem-stat-source {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--paper-faint);
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      transition: color .2s ease;
+    }
+    .problem-stat:hover .problem-stat-source { color: var(--orange); }
+
+    .problem-bridge {
+      font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+      font-weight: 400;
+      line-height: 1.55;
+      letter-spacing: -.015em;
+      margin-top: 4.5rem;
+      max-width: 56ch;
+      color: var(--paper-dim);
+    }
+    .problem-bridge strong { color: var(--paper); font-weight: 500; }
+
     /* ----------------------------------------------------------
        SOLUTION — three ruled columns on paper
        ---------------------------------------------------------- */
@@ -854,6 +944,7 @@
       letter-spacing: -.045em;
       max-width: 18ch;
     }
+    .solution h2 em { font-style: normal; color: var(--orange); }
 
     .solution-grid {
       display: grid;
@@ -907,6 +998,19 @@
     .solution-card:hover .solution-icon .float-element { animation: floatUp 3s ease infinite; }
     .solution-card:hover .solution-icon .globe-line { animation: spinGlobe 6s linear infinite; }
     .solution-card:hover .solution-icon .tassel { animation: tiltTassel 3s ease infinite; }
+
+    /* "Prove / Equip / Push" is the idea that makes this section more than
+       three links, so it stops being smaller and lighter than the body copy
+       underneath it. */
+    .solution-num {
+      font-family: var(--font-mono);
+      font-size: .79rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange-ink);
+      margin-bottom: .6rem;
+    }
     .solution-title {
       font-size: 1.55rem;
       font-weight: 900;
@@ -958,6 +1062,7 @@
       line-height: 1.05;
       text-wrap: balance;
     }
+    .moments-head h2 em { font-style: normal; color: var(--orange); }
     .moments-link {
       display: inline-flex;
       align-items: center;
@@ -1008,6 +1113,7 @@
       justify-content: space-between;
       gap: 1rem;
     }
+    .moment figcaption em { font-style: normal; color: var(--orange-ink); }
     .moment-1 { --rot: -1deg; }
     .moment-2 { --rot: .9deg; margin-top: 1.75rem; }
     .moment-3 { --rot: -.7deg; }
@@ -1044,6 +1150,18 @@
       max-width: 18ch;
       text-wrap: balance;
     }
+    /* Credential reads as a stamp, not a grey mono footnote */
+    .featured-badge {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--orange-ink);
+      border: 1px solid rgba(194, 65, 12, .35);
+      padding: .4rem .7rem;
+      background: rgba(194, 65, 12, .05);
+    }
     .featured-text {
       color: var(--ink-dim);
       line-height: 1.6;
@@ -1052,6 +1170,33 @@
       max-width: 58ch;
       letter-spacing: -.005em;
     }
+    /* Stat rail as ruled cells — same instrument language as the barometer */
+    .featured-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      width: 100%;
+      border: 1px solid var(--ink-line);
+      margin-top: .35rem;
+    }
+    .featured-stat { padding: 1.1rem 1.2rem; }
+    .featured-stat + .featured-stat { border-left: 1px solid var(--ink-line); }
+    .featured-stat-number {
+      font-size: clamp(1.5rem, 2.1vw, 1.9rem);
+      font-weight: 900;
+      letter-spacing: -.035em;
+      line-height: 1;
+    }
+    .featured-stat-number em { font-style: normal; color: var(--orange); }
+    .featured-stat-label {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .12em;
+      line-height: 1.5;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-top: .5rem;
+    }
+
     /* Credential panel — the co-brand lockup plus the journals it ran in */
     .featured-aside {
       order: 2;
@@ -1450,6 +1595,34 @@
       .barometer-legend-item { gap: .3rem; white-space: nowrap; }
       .barometer-legend-color { width: 10px; height: 5px; flex: none; }
 
+      /* Stats: number beside the copy instead of stacked above it — same
+         content, roughly half the height. */
+      .problem-grid { grid-template-columns: 1fr; margin-top: 3rem; }
+      .problem-stat {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        column-gap: 1.1rem;
+        row-gap: .15rem;
+        align-items: baseline;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid var(--paper-line);
+      }
+      .problem-stat + .problem-stat { padding-left: 0; border-left: none; }
+      .problem-stat:last-child { border-bottom: none; }
+      .problem-stat:hover::before, .problem-stat + .problem-stat:hover::before { width: 100%; left: 0; }
+      .problem-stat-number {
+        grid-row: 1 / span 2;
+        align-self: center;
+        font-size: 2.5rem;
+        margin-bottom: 0;
+        min-width: 3.4ch;
+      }
+      .problem-stat-text { grid-column: 2; max-width: none; font-size: .92rem; line-height: 1.45; }
+      .problem-stat-source { grid-column: 2; margin-top: .35rem; }
+
+      .problem-bridge { margin-top: 2.75rem; }
+      .problem-bridge strong { white-space: nowrap; }
+
       /* Solution: icon rail on the left, copy on the right — turns three
          tall stacked blocks into three compact rows. */
       .solution { padding: 5rem var(--gutter); }
@@ -1470,6 +1643,7 @@
       /* Icon pairs with the label/title on the first two rows; the body copy
          then runs full-bleed so it doesn't pick the lines back up. */
       .solution-icon { grid-row: 1 / span 2; width: 56px; height: 56px; margin-bottom: 0; }
+      .solution-num { grid-column: 2; margin-bottom: .15rem; }
       .solution-title { grid-column: 2; font-size: 1.3rem; margin-bottom: 0; }
       .solution-text { grid-column: 1 / -1; font-size: .92rem; line-height: 1.5; margin: .75rem 0 .65rem; }
       .solution-link { grid-column: 1 / -1; margin-top: 0; font-size: .85rem; }
@@ -1504,6 +1678,9 @@
       .featured-journal-name { font-size: .92rem; }
       .featured-content { padding: 1.75rem; gap: 1.1rem; }
       .featured-content h2 { max-width: none; }
+      .featured-stat { padding: .9rem .85rem; }
+      .featured-stat-label { letter-spacing: .09em; margin-top: .4rem; }
+
       .footer-newsletter { padding: 2.5rem var(--gutter); }
       .footer-newsletter-container { align-items: flex-start; gap: 1.5rem; }
       .footer-newsletter-text { max-width: none; }
@@ -1523,7 +1700,13 @@
         grid-template-columns: 1fr 1fr;
         gap: .55rem 1rem;
         letter-spacing: .06em;
-      }      /* Keep the four readouts as a compact 2×2 grid on phones rather than a
+      }
+      /* Three short readouts stay side by side rather than stacking into a
+         tall column — they fit, and the rail reads as one instrument. */
+      .featured-stat { padding: .8rem .6rem; }
+      .featured-stat-number { font-size: 1.35rem; }
+      .featured-stat-label { letter-spacing: .07em; }
+      /* Keep the four readouts as a compact 2×2 grid on phones rather than a
          tall single-column stack, and tighten the spacing so they don't
          dominate the section vertically. */
       .barometer-indicator { padding: 1rem 1.1rem; gap: .3rem; }
@@ -1705,6 +1888,7 @@
 
       <div class="hero-top">
         <div class="eyebrow">Economic Mobility</div>
+        <div class="hb-status"><span class="hb-pulse"></span>Since 2017</div>
       </div>
 
       <h1>Financial health should be a right. <em>So we build it.<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em></h1>
@@ -1754,7 +1938,7 @@
       <div class="barometer-head">
         <div class="barometer-head-left">
           <span class="barometer-live"><span class="barometer-live-dot"></span><span class="barometer-eyebrow-text">Live data · updated daily</span></span>
-          <h2 class="barometer-headline">The crisis isn't coming. It's here.</h2>
+          <h2 class="barometer-headline">The crisis isn't coming. <em>It's here.</em></h2>
           <p class="barometer-subline" id="barometer-headline-text">
             Right now, national financial anxiety sits at <span class="stat-num" id="headline-stat-value">137</span>. <span class="stat-change-pill" id="headline-stat-change">Tracking now.</span>
           </p>
@@ -1782,6 +1966,27 @@
         <div class="barometer-legend-item"><span class="barometer-legend-color elevated"></span> ELEVATED 120–150</div>
         <div class="barometer-legend-item"><span class="barometer-legend-color high"></span> HIGH &gt;150</div>
       </div>
+
+      <div class="problem-grid">
+        <a href="https://www.cnbc.com/2023/08/31/63percent-of-workers-are-unable-to-pay-a-500-emergency-expense-survey.html" target="_blank" rel="noopener noreferrer" class="problem-stat">
+          <div class="problem-stat-number">63<em>%</em></div>
+          <div class="problem-stat-text">of Americans can't cover a $500 emergency expense</div>
+          <div class="problem-stat-source">CNBC ↗</div>
+        </a>
+        <a href="https://www.wsj.com/economy/wsj-norc-economic-poll-73bce003" target="_blank" rel="noopener noreferrer" class="problem-stat">
+          <div class="problem-stat-number">31<em>%</em></div>
+          <div class="problem-stat-text">of Americans still believe the American Dream holds true</div>
+          <div class="problem-stat-source">WSJ / NORC ↗</div>
+        </a>
+        <a href="https://www.newportinstitute.com/resources/mental-health/financial-stress-mental-health/" target="_blank" rel="noopener noreferrer" class="problem-stat">
+          <div class="problem-stat-number">56<em>%</em></div>
+          <div class="problem-stat-text">of young adults report financial stress impacting mental health</div>
+          <div class="problem-stat-source">Newport Institute ↗</div>
+        </a>
+      </div>
+
+      <p class="problem-bridge">Numbers like these are a <strong>cost problem,</strong> not a budgeting problem — so we measure what's driving them.</p>
+
     </div>
   </section>
 
@@ -1790,7 +1995,7 @@
     <div class="solution-container">
       <div class="solution-head">
         <span class="eyebrow">How we work</span>
-        <h2>We don't just study problems. We fix them.</h2>
+        <h2>We don't just study problems. <em>We fix them.</em></h2>
       </div>
       <div class="solution-grid">
         <div class="solution-card">
@@ -1808,6 +2013,7 @@
               <path d="M67 23 L72 28" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
             </svg>
           </div>
+          <div class="solution-num">Prove</div>
           <h3 class="solution-title">Research</h3>
           <p class="solution-text">We find the barriers blocking economic mobility: housing, healthcare, debt, predatory lending. Our work with Google Health and university partners builds the evidence base decision-makers rely on.</p>
           <a href="research.html" class="solution-link">Read the research <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
@@ -1822,6 +2028,7 @@
               <g class="float-element"><path d="M30 66 C34 64, 38 64, 40 66 C42 64, 46 64, 50 66" stroke="#F25A27" stroke-width="1.1" stroke-linecap="round" fill="none" opacity="0.5"/><path d="M40 66 L40 62" stroke="#F25A27" stroke-width="1" stroke-linecap="round" opacity="0.4"/></g>
             </svg>
           </div>
+          <div class="solution-num">Equip</div>
           <h3 class="solution-title">Education</h3>
           <p class="solution-text">We reach students before the student loans and before the first credit card. Our programs run from suburban districts to inner-city schools.</p>
           <a href="education.html" class="solution-link">Explore the programs <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
@@ -1843,6 +2050,7 @@
               <g class="float-element"><path d="M58 62 L66 58 L68 66 Z" stroke="#F25A27" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.6"/><path d="M66 58 L72 56" stroke="#F25A27" stroke-width="1" stroke-linecap="round" opacity="0.4"/><path d="M68 66 L72 68" stroke="#F25A27" stroke-width="1" stroke-linecap="round" opacity="0.4"/></g>
             </svg>
           </div>
+          <div class="solution-num">Inform</div>
           <h3 class="solution-title">Ambassadors</h3>
           <p class="solution-text">Our global ambassador network carries what we measure to the schools, universities, and agencies that can act on it — and reports back what financial health looks like where they live.</p>
           <a href="ambassadors.html" class="solution-link">Meet the ambassadors <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
@@ -1856,7 +2064,8 @@
     <div class="moments-container">
       <div class="moments-head">
         <div class="moments-head-text">
-          <h2>We build for young adults. Here are a few.</h2>
+          <span class="eyebrow">From the field</span>
+          <h2>We build for young adults. <em>Here are a few.</em></h2>
         </div>
         <a href="education.html" class="moments-link">
           See the programs
@@ -1866,15 +2075,15 @@
       <div class="moments-grid">
         <figure class="moment moment-1">
           <img src="Barrier%20Breakers%202026%20Pics/IMG_3792.JPG" alt="The Barrier Breakers 2026 cohort seated on the grand staircase at Kent State University" width="2304" height="1536" loading="lazy" decoding="async">
-          <figcaption><span>Barrier Breakers · Kent State University</span></figcaption>
+          <figcaption><span>Barrier Breakers · Kent State University</span><em>01</em></figcaption>
         </figure>
         <figure class="moment moment-2">
           <img src="education3.jpg" alt="Students holding the FinMango flag at a financial health competition" width="1200" height="800" loading="lazy" decoding="async">
-          <figcaption><span>Financial Health Competition</span></figcaption>
+          <figcaption><span>Financial Health Competition</span><em>02</em></figcaption>
         </figure>
         <figure class="moment moment-3">
           <img src="hero.jpg" alt="The FinMango team holding the FinMango flag" width="1920" height="1080" loading="lazy" decoding="async">
-          <figcaption><span>Team FinMango</span></figcaption>
+          <figcaption><span>Team FinMango</span><em>03</em></figcaption>
         </figure>
       </div>
     </div>
@@ -1900,8 +2109,14 @@
           </div>
         </aside>
         <div class="featured-content">
+          <div class="featured-badge">Peer-reviewed</div>
           <h2>Published in Nature. Used worldwide.</h2>
           <p class="featured-text">Our peer-reviewed partnership with Google Health produced open-source datasets now used by research institutions, governments, and global health organizations — the evidence base decision-makers need to build equitable financial and health systems.</p>
+          <div class="featured-stats">
+            <div class="featured-stat"><div class="featured-stat-number">22K<em>+</em></div><div class="featured-stat-label">Locations tracked</div></div>
+            <div class="featured-stat"><div class="featured-stat-number">190<em>+</em></div><div class="featured-stat-label">Countries covered</div></div>
+            <div class="featured-stat"><div class="featured-stat-number">Open</div><div class="featured-stat-label">Source on GitHub</div></div>
+          </div>
           <a href="research.html" class="featured-link">Explore our research <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
       </article>
