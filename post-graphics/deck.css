@@ -341,6 +341,94 @@ body {
 .slide--split .byline { margin-bottom: 0; }
 
 /* ----------------------------------------------------------
+   HERO FIGURE — when one number is the whole slide. Sans, like
+   everything else, never a display face. Ink rather than orange:
+   at this size the number carries by scale alone, and orange on
+   paper sits under the 3:1 large-text contrast line, which is a
+   bad trade for the one thing the slide exists to say.
+
+   Proportional figures on purpose. tabular-nums gives every digit
+   the width of a zero, which reads loose at display sizes; it is
+   for columns that must align, not for a standalone value.
+   One hero figure per slide.
+   ---------------------------------------------------------- */
+.hero {
+  font-size: 250px;
+  line-height: .88;
+  font-weight: 800;
+  letter-spacing: -.05em;
+  font-variant-numeric: proportional-nums;
+}
+
+.hero-label {
+  font-size: 46px;
+  line-height: 1.3;
+  font-weight: 500;
+  letter-spacing: -.02em;
+  color: var(--ink-dim);
+  max-width: 21ch;
+}
+
+.slide--ink .hero-label { color: var(--paper-dim); }
+
+/* ----------------------------------------------------------
+   KPI LIST — a handful of headline numbers, each a stat tile of
+   value plus label. Stacked, not in a row: on a 4:5 canvas three
+   values side by side would get 300px of width each. No deltas
+   or sparklines, because these are separate one-off measures,
+   not a series over time.
+   ---------------------------------------------------------- */
+.kpi {
+  display: flex;
+  flex-direction: column;
+}
+
+.kpi-row {
+  display: flex;
+  align-items: baseline;
+  gap: 40px;
+  padding: 38px 0;
+}
+
+.kpi-row + .kpi-row { border-top: 1px solid var(--ink-line); }
+
+.slide--ink .kpi-row + .kpi-row { border-top-color: var(--paper-line); }
+
+.kpi-value {
+  flex: none;
+  width: 250px;
+  font-size: 92px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -.04em;
+  font-variant-numeric: proportional-nums;
+}
+
+/* Measured a little short of the column so a label breaks into two even
+   lines instead of running to the margin and orphaning a word. */
+.kpi-label {
+  font-size: 31px;
+  line-height: 1.32;
+  color: var(--ink-dim);
+  max-width: 19ch;
+}
+
+.slide--ink .kpi-label { color: var(--paper-dim); }
+
+/* A figure set this large reads as a published claim, so the slide
+   says whose figure it is. */
+.source {
+  font-family: var(--font-mono);
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.slide--ink .source { color: var(--paper-faint); }
+
+/* ----------------------------------------------------------
    STACK — one lead-in, then the nouns it governs, each on its
    own line. Says the repetition once instead of four times.
    ---------------------------------------------------------- */
