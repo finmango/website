@@ -456,18 +456,17 @@
     .mobile-controls { display: none; gap: 1rem; align-items: center; }
 
     /* ----------------------------------------------------------
-       HERO — the instrument is the opening.
-       Ink ground. Mission headline on the left, the live barometer map on
-       the right, four readouts under both. The one thing only FinMango can
-       show a first-time visitor goes on the first screen, not one scroll
-       below it. The old paper billboard and the ink "signature" section
-       each opened with a giant sentence and no picture; this is both of
-       them, once.
+       HERO — billboard with a photograph.
+       The claim on the left, the people it is for on the right. The photo
+       takes the same frame as the "From the field" cards further down, so
+       the opening and that section read as one family. The barometer stays
+       in its own section below, where its caveats can travel with it.
        ---------------------------------------------------------- */
     .hero {
-      background: var(--ink);
-      color: var(--paper);
-      padding: 7.5rem var(--gutter) 0;
+      background: var(--paper);
+      padding: 6.5rem 2rem 0;
+      display: flex;
+      flex-direction: column;
       position: relative;
       overflow: hidden;
     }
@@ -476,66 +475,71 @@
       pointer-events: none;
       z-index: 0;
     }
-    /* Two quiet washes: brand orange behind the headline, the map's LOW teal
-       behind the map. Neither is a blur layer — single radial gradients. */
     .hero-bg::before {
       content: '';
       position: absolute;
-      top: -14%;
-      left: -14%;
-      width: 54vw;
-      height: 54vw;
-      background: radial-gradient(circle, rgba(242, 90, 39, .17) 0%, transparent 60%);
-    }
-    .hero-bg::after {
-      content: '';
-      position: absolute;
-      top: 8%;
-      right: -18%;
-      width: 48vw;
-      height: 48vw;
-      background: radial-gradient(circle, rgba(20, 184, 166, .09) 0%, transparent 60%);
+      top: 18%;
+      left: -10%;
+      width: 46vw;
+      height: 46vw;
+      background: radial-gradient(circle, rgba(242, 90, 39, .13) 0%, transparent 62%);
     }
 
     .hero-container {
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: var(--max-width);
+      max-width: var(--hero-max);
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 3.25rem;
+      gap: 2.75rem;
+      padding-top: 1.5rem;
     }
 
     .hero-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 1rem 2rem;
-      flex-wrap: wrap;
+    }
+    .hb-status {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .hb-pulse {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--orange);
     }
 
-    /* Copy | map. The map column is slightly wider: at 1280 the copy gets
-       ~560px, enough for the headline to set in three lines at 4.5rem. */
+    /* Copy | photo. The copy column is the wider one so the headline can set
+       in three lines at its full size; the photo column still lands near
+       600px at desktop. */
     .hero-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
-      gap: 2.5rem 4.5rem;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+      gap: 2.5rem 5rem;
       align-items: center;
     }
     .hero-copy {
       display: flex;
       flex-direction: column;
-      gap: 1.6rem;
+      gap: 1.75rem;
       min-width: 0;
     }
 
     .hero h1 {
-      font-size: clamp(2.6rem, 4.55vw, 4.6rem);
+      font-size: clamp(2.6rem, 4.9vw, 5.1rem);
       font-weight: 900;
-      line-height: .96;
-      letter-spacing: -.045em;
+      line-height: .94;
+      letter-spacing: -.05em;
     }
     .hero h1 em {
       font-style: normal;
@@ -561,25 +565,86 @@
       opacity: .5;
       stroke-dasharray: 1000;
       stroke-dashoffset: 1000;
-      animation: draw-stroke 1.2s cubic-bezier(.16, 1, .3, 1) 1s forwards;
+      animation: draw-stroke 1.2s cubic-bezier(.16, 1, .3, 1) .9s forwards;
     }
     @keyframes draw-stroke { to { stroke-dashoffset: 0; } }
 
     .hb-sub {
-      font-size: clamp(1.02rem, 1.3vw, 1.2rem);
+      font-size: clamp(1.05rem, 1.4vw, 1.3rem);
       font-weight: 400;
-      line-height: 1.55;
-      color: var(--paper-dim);
-      max-width: 46ch;
-      letter-spacing: -.012em;
+      line-height: 1.5;
+      color: var(--ink-dim);
+      max-width: 44ch;
+      letter-spacing: -.015em;
     }
-    .hb-sub strong { color: var(--paper); font-weight: 600; }
+    .hb-sub strong { color: var(--ink); font-weight: 600; }
 
-    .hb-cta-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; justify-content: flex-start; margin-top: .4rem; }
+    .hb-cta-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; justify-content: flex-start; }
 
-    /* Entry motion — copy rises in four beats, map with the second. One
-       easing, one distance, staggered; prefers-reduced-motion collapses it
-       through the global rule at the top of the sheet. */
+    .hb-stats {
+      display: flex;
+      gap: 3.25rem;
+      align-items: flex-end;
+      padding-top: 1.6rem;
+      border-top: 1px solid var(--ink-line-soft);
+    }
+    .hb-stat { display: flex; flex-direction: column; gap: .4rem; }
+    .hb-stat-num {
+      font-size: clamp(2rem, 3vw, 2.7rem);
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: .95;
+    }
+    .hb-stat-num em { font-style: normal; color: var(--orange); }
+    .hb-stat-label {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-faint);
+    }
+
+    /* The photograph — same frame as .moment, a hair of tilt, straightens on
+       hover like the field cards do. */
+    .hero-photo {
+      margin: 0;
+      min-width: 0;
+      border: 1px solid var(--ink-line);
+      background: var(--paper);
+      padding: .6rem .6rem 0;
+      --rot: -.8deg;
+      transform: rotate(var(--rot));
+      transition: transform .5s cubic-bezier(.16, 1, .3, 1), border-color .25s ease;
+    }
+    .hero-photo:hover { --rot: 0deg; border-color: var(--orange-ink); }
+    .hero-photo-frame { overflow: hidden; }
+    .hero-photo img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 5 / 4;
+      object-fit: cover;
+      object-position: 50% 42%;
+      animation: photo-settle 1.8s cubic-bezier(.16, 1, .3, 1) both;
+    }
+    @keyframes photo-settle { from { transform: scale(1.05); } to { transform: none; } }
+    .hero-photo figcaption {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      padding: .8rem .1rem .85rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .hero-photo figcaption em { font-style: normal; color: var(--orange-ink); }
+
+    /* Entry motion — copy rises in beats, photo settles with the second.
+       prefers-reduced-motion collapses it through the global rule above. */
     .reveal {
       opacity: 0;
       transform: translateY(18px);
@@ -589,39 +654,114 @@
     .reveal.r2 { animation-delay: .2s; }
     .reveal.r3 { animation-delay: .34s; }
     .reveal.r4 { animation-delay: .46s; }
-    .reveal.r5 { animation-delay: .62s; }
     @keyframes hero-rise { to { opacity: 1; transform: none; } }
-
-    /* ---- the live sentence ---- */
-    .barometer-live {
-      display: inline-flex;
+    /* Trust strip — quiet, folded into the hero's bottom edge */
+    .hero-trust {
+      position: relative;
+      z-index: 1;
+      max-width: var(--hero-max);
+      margin: 1.6rem auto 0;
+      width: 100%;
+      padding: 1.6rem 0 1.9rem;
+      border-top: 1px solid var(--ink-line-soft);
+      display: flex;
       align-items: center;
-      gap: .55rem;
+      gap: 3rem;
+    }
+    .hero-trust-label {
       font-family: var(--font-mono);
       font-size: .72rem;
       font-weight: 500;
-      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--signal-good);
+      letter-spacing: 0.12em;
+      color: var(--ink-faint);
+      flex-shrink: 0;
     }
-    .barometer-live-dot {
-      width: 6px; height: 6px;
-      background: var(--signal-good);
-      border-radius: 50%;
-      animation: pulse-live 2s infinite;
+    .hero-trust-logos {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem 2.5rem;
+      min-width: 0;
+      flex-wrap: wrap;
     }
-    @keyframes pulse-live {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: .4; transform: scale(.8); }
+    /* Logo strips have to be normalised by optical weight, never by a shared
+       box. A single max-height/max-width pair sized these five by whichever
+       edge happened to bind first, and because their ink sits in frames of
+       very different proportion the result was Google legible at 120px while
+       SEED and RAZ shrank to smudges. Measured ink box inside each file:
+         google1   499x84  of 500x89   (5.9:1 wordmark, no padding)
+         seed      252x247 of 500x281  (1.0:1 mark, 50% baked-in side padding)
+         iprofile  497x130 of 500x135  (3.8:1)
+         raz       489x218 of 500x281  (2.2:1, vertical padding)
+         financial 493x155 of 500x162  (3.2:1)
+       So each gets its own frame height, back-solved so the *ink* lands on a
+       common optical cap-height — wide wordmarks sit shorter than square
+       marks at equal visual weight, which is how the eye reads them as one
+       row. --h is the frame; the comment on each rule is the ink it yields. */
+    .hero-trust img {
+      --h: 28px;             /* default for any logo not tuned below */
+      height: var(--h);
+      width: auto;
+      max-width: none;
+      object-fit: contain;
+      filter: grayscale(1);
+      mix-blend-mode: multiply;
+      opacity: .72;
+      transition: opacity .25s ease, filter .25s ease;
     }
+    .hero-trust img[src*="google1"]   { --h: 21px; }  /* ink 20px */
+    .hero-trust img[src*="seed"]      { --h: 43px; }  /* ink 38px */
+    .hero-trust img[src*="iprofile"]  { --h: 27px; }  /* ink 26px */
+    .hero-trust img[src*="raz"]       { --h: 39px; }  /* ink 30px */
+    .hero-trust img[src*="financial"] { --h: 27px; }  /* ink 26px */
+    .hero-trust img:hover { opacity: 1; filter: grayscale(0) contrast(1); }
+    .trust-break { display: none; }
+
+    /* ----------------------------------------------------------
+       BAROMETER — the instrument. Signature section.
+       Ink ground, orange as data accent, mono readouts.
+       ---------------------------------------------------------- */
+    .barometer-section {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 7rem var(--gutter) 7.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .barometer-container { max-width: var(--max-width); margin: 0 auto; position: relative; z-index: 1; }
+
+    .barometer-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 3rem;
+      margin-bottom: 3.5rem;
+    }
+    .barometer-head-left { display: flex; flex-direction: column; gap: 1.5rem; }
+    /* "The crisis isn't coming. It's here." reads as one sentence, so it gets
+       one line. The old max-width: 16ch broke it mid-sentence at every desktop
+       width even though the column had room. The headline sits in the 1fr
+       column of .barometer-head, which is (viewport - 384px) wide until the
+       container caps out, and the sentence needs ~12.95x its own font-size to
+       set on one line — so size it off that column and it fits from the 968px
+       breakpoint up, reaching the full 4rem at ~1245px and holding there. */
+    .barometer-headline {
+      font-size: clamp(2.2rem, calc((100vw - 400px) / 13.2), 4rem);
+      font-weight: 900;
+      line-height: 1.02;
+      letter-spacing: -.04em;
+      max-width: none;
+    }
+    .barometer-headline em { font-style: normal; color: var(--orange); }
     .barometer-subline {
-      font-size: clamp(.95rem, 1.15vw, 1.05rem);
+      font-size: clamp(1rem, 1.4vw, 1.15rem);
       font-weight: 400;
-      line-height: 1.6;
+      line-height: 1.55;
       color: var(--paper-dim);
+      max-width: 52ch;
       letter-spacing: -.01em;
-      padding-left: 1rem;
-      border-left: 2px solid var(--orange);
     }
     .barometer-subline .stat-num {
       font-family: var(--font-mono);
@@ -642,99 +782,77 @@
     }
     .barometer-subline .stat-change-pill.up { color: var(--signal-bad); border-color: rgba(248, 113, 113, .3); }
     .barometer-subline .stat-change-pill.down { color: var(--signal-good); border-color: rgba(52, 211, 153, .3); }
-
-    /* ---- the map ---- */
-    .hero-map {
-      position: relative;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 1.1rem;
-    }
-    #home-barometer-map {
-      width: 100%;
-      height: auto;
-      display: block;
-      filter: drop-shadow(0 28px 48px rgba(0, 0, 0, .6));
-    }
-    #home-barometer-map path {
-      stroke: var(--ink);
-      stroke-width: 1;
-      fill: rgba(250, 250, 247, .08);
-      transition: fill .5s ease, filter .2s ease;
-    }
-    #home-barometer-map path:hover { filter: brightness(1.25); cursor: pointer; }
-    /* States light up west to east once the data lands; --d is set per path
-       from its position by the script below. */
-    #home-barometer-map path.lit {
-      animation: state-in .7s ease both;
-      animation-delay: var(--d, 0ms);
-    }
-    @keyframes state-in { from { opacity: 0; } to { opacity: 1; } }
-
-    .hero-map-foot {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: .75rem 2rem;
-      flex-wrap: wrap;
-    }
-    .barometer-legend {
-      display: flex;
-      gap: 1.5rem;
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      letter-spacing: .06em;
-      color: var(--paper-faint);
-      flex-wrap: wrap;
-    }
-    .barometer-legend-item { display: flex; align-items: center; gap: .45rem; }
-    .barometer-legend-color { width: 14px; height: 6px; }
-    /* Choropleth ramp. Four steps monotonic in hue, 2.00 / 1.82 / 2.13:1
-       between neighbours, each at 4:1 or better against the ink ground.
-       Keep in sync with getColor() in the barometer script below. */
-    .barometer-legend-color.low { background: #14B8A6; }
-    .barometer-legend-color.moderate { background: #FDE68A; }
-    .barometer-legend-color.elevated { background: #FB923C; }
-    .barometer-legend-color.high { background: #DC2626; }
+    .barometer-method-link { color: var(--paper); text-decoration: underline; text-underline-offset: .22em; text-decoration-color: var(--orange); white-space: nowrap; }
+    .barometer-method-link:hover { color: var(--orange); }
 
     .barometer-explore-link {
       display: inline-flex;
       align-items: center;
-      gap: .5rem;
+      gap: .65rem;
       color: var(--paper);
       text-decoration: none;
       font-weight: 600;
-      font-size: .88rem;
+      font-size: .92rem;
+      padding: .95rem 1.4rem;
+      border: 1px solid var(--paper-line);
+      transition: border-color .25s ease;
       white-space: nowrap;
-      transition: color .2s ease;
     }
-    .barometer-explore-link:hover { color: var(--orange); }
+    .barometer-explore-link:hover { border-color: var(--paper); }
     .barometer-explore-link svg { width: 13px; height: 13px; transition: transform .3s cubic-bezier(.16,1,.3,1); }
     .barometer-explore-link:hover svg { transform: translateX(3px); }
 
-    /* ---- the readouts: one strip of four under copy and map ---- */
-    .barometer-indicators {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border: 1px solid var(--paper-line);
-      background: rgba(250, 250, 247, .02);
+    .barometer-live {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--paper-faint);
     }
+
+    /* Instrument grid: map | readouts */
+    .barometer-instrument {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      border: 1px solid var(--paper-line);
+    }
+    .barometer-map-wrapper {
+      padding: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-right: 1px solid var(--paper-line);
+      min-height: 320px;
+    }
+    #home-barometer-map { width: 100%; height: auto; max-height: 320px; }
+    #home-barometer-map path {
+      stroke: rgba(10, 10, 10, .7);
+      stroke-width: .75;
+      transition: filter .2s ease;
+    }
+    #home-barometer-map path:hover { filter: brightness(1.25); cursor: pointer; }
+
+    .barometer-indicators { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
     .barometer-indicator {
-      padding: 1.5rem 1.75rem 1.6rem;
+      padding: 1.75rem;
       cursor: pointer;
-      border-top: 2px solid transparent;
+      border-left: 2px solid transparent;
       transition: background .2s ease, border-color .2s ease;
       display: flex;
       flex-direction: column;
-      gap: .45rem;
+      gap: .5rem;
       justify-content: center;
     }
-    .barometer-indicator + .barometer-indicator { box-shadow: inset 1px 0 0 var(--paper-line); }
+    .barometer-indicator:nth-child(1), .barometer-indicator:nth-child(2) { border-bottom: 1px solid var(--paper-line); }
+    .barometer-indicator:nth-child(1), .barometer-indicator:nth-child(3) { box-shadow: inset -1px 0 0 var(--paper-line); }
     .barometer-indicator:hover { background: rgba(250, 250, 247, .04); }
     .barometer-indicator.active {
       background: rgba(242, 90, 39, .08);
-      border-top-color: var(--orange);
+      border-left-color: var(--orange);
     }
     .barometer-indicator-label {
       font-family: var(--font-mono);
@@ -746,11 +864,10 @@
     }
     .barometer-indicator.active .barometer-indicator-label { color: var(--orange); }
     .barometer-indicator-value {
-      font-size: clamp(2rem, 2.8vw, 2.6rem);
+      font-size: clamp(2rem, 3vw, 2.75rem);
       font-weight: 900;
       line-height: 1;
       letter-spacing: -.03em;
-      font-variant-numeric: tabular-nums;
     }
     .barometer-indicator-change {
       font-family: var(--font-mono);
@@ -767,102 +884,38 @@
     .barometer-indicator-change.flat,
     .barometer-indicator-change.none { color: var(--paper-faint); }
 
-    /* ---- foot: impact numbers left, partners right ---- */
-    .hero-foot {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
-      align-items: center;
-      gap: 2rem 4rem;
-      padding: 1.75rem 0 2rem;
-      border-top: 1px solid var(--paper-line);
-    }
-    .hb-stats { display: flex; gap: 2.75rem; align-items: flex-end; }
-    .hb-stat { display: flex; flex-direction: column; gap: .4rem; }
-    .hb-stat-num {
-      font-size: clamp(1.9rem, 2.5vw, 2.35rem);
-      font-weight: 900;
-      letter-spacing: -.04em;
-      line-height: .95;
-    }
-    .hb-stat-num em { font-style: normal; color: var(--orange); }
-    .hb-stat-label {
+    .barometer-legend {
+      display: flex;
+      justify-content: flex-start;
+      gap: 1.75rem;
+      margin-top: 1.25rem;
       font-family: var(--font-mono);
       font-size: .72rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: .06em;
       color: var(--paper-faint);
-    }
-
-    .hero-trust {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 2.5rem;
-      min-width: 0;
-    }
-    .hero-trust-label {
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--paper-faint);
-      flex-shrink: 0;
-    }
-    .hero-trust-logos {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 1.25rem 2.25rem;
-      min-width: 0;
       flex-wrap: wrap;
     }
-    /* Logo strips have to be normalised by optical weight, never by a shared
-       box. Each file gets its own frame height, back-solved so the *ink*
-       lands on a common optical cap-height (see the measured ink boxes in
-       git history for the derivation). Inverted for the ink ground. */
-    .hero-trust img {
-      --h: 23px;
-      height: var(--h);
-      width: auto;
-      max-width: none;
-      object-fit: contain;
-      filter: grayscale(1) invert(1) brightness(1.1);
-      mix-blend-mode: screen;
-      opacity: .55;
-      transition: opacity .25s ease;
-    }
-    .hero-trust img[src*="google1"]   { --h: 18px; }
-    .hero-trust img[src*="seed"]      { --h: 36px; }
-    .hero-trust img[src*="iprofile"]  { --h: 23px; }
-    .hero-trust img[src*="raz"]       { --h: 33px; }
-    .hero-trust img[src*="financial"] { --h: 23px; }
-    .hero-trust img:hover { opacity: .95; }
-    .trust-break { display: none; }
-
-    /* ----------------------------------------------------------
-       PROBLEM — three sourced numbers on paper.
-       The first light section: the crisis line gets the contrast of a
-       paper ground straight after the ink hero.
-       ---------------------------------------------------------- */
-    .problem-section { background: var(--paper); padding: 6.5rem var(--gutter) 5rem; }
-    .problem-container { max-width: var(--max-width); margin: 0 auto; padding-bottom: 5rem; border-bottom: 1px solid var(--ink-line-soft); }
-    .problem-head { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 3.25rem; }
-    .problem-headline {
-      font-size: clamp(2rem, 3.4vw, 3.1rem);
-      font-weight: 900;
-      line-height: 1.02;
-      letter-spacing: -.04em;
-    }
-    .problem-headline em { font-style: normal; color: var(--orange); }
+    .barometer-legend-item { display: flex; align-items: center; gap: .45rem; }
+    .barometer-legend-color { width: 14px; height: 6px; }
+    /* Choropleth ramp. The old bands were #10B981 / #F59E0B / #F97316 /
+       #EF4444 — three adjacent oranges whose adjacent contrast ratios were
+       1.18, 1.31 and 1.34:1, i.e. indistinguishable, so the map read as one
+       flat orange blob and the brand orange doubled as a data value. These
+       four step monotonically in hue and carry 2.00 / 1.82 / 2.13:1 between
+       neighbours, each at 4:1 or better against the ink ground. Keep in sync
+       with getColor() in the barometer script below. */
+    .barometer-legend-color.low { background: #14B8A6; }
+    .barometer-legend-color.moderate { background: #FDE68A; }
+    .barometer-legend-color.elevated { background: #FB923C; }
+    .barometer-legend-color.high { background: #DC2626; }
 
     /* Problem stats — ruled columns, not boxes */
     .problem-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 0;
-      border-top: 1px solid var(--ink-line);
+      margin-top: 5rem;
+      border-top: 1px solid var(--paper-line);
     }
     .problem-stat {
       padding: 2.25rem 2rem 2.25rem 0;
@@ -872,7 +925,7 @@
       position: relative;
       transition: background .25s ease;
     }
-    .problem-stat + .problem-stat { padding-left: 2rem; border-left: 1px solid var(--ink-line); }
+    .problem-stat + .problem-stat { padding-left: 2rem; border-left: 1px solid var(--paper-line); }
     .problem-stat::before {
       content: '';
       position: absolute;
@@ -897,7 +950,7 @@
       font-size: .98rem;
       font-weight: 400;
       line-height: 1.5;
-      color: var(--ink-dim);
+      color: var(--paper-dim);
       max-width: 26ch;
     }
     .problem-stat-source {
@@ -905,25 +958,25 @@
       font-size: .72rem;
       letter-spacing: .12em;
       text-transform: uppercase;
-      color: var(--ink-faint);
+      color: var(--paper-faint);
       margin-top: 1rem;
       display: inline-flex;
       align-items: center;
       gap: .4rem;
       transition: color .2s ease;
     }
-    .problem-stat:hover .problem-stat-source { color: var(--orange-ink); }
+    .problem-stat:hover .problem-stat-source { color: var(--orange); }
 
     .problem-bridge {
       font-size: clamp(1.15rem, 1.8vw, 1.45rem);
       font-weight: 400;
       line-height: 1.55;
       letter-spacing: -.015em;
-      margin-top: 4rem;
+      margin-top: 4.5rem;
       max-width: 56ch;
-      color: var(--ink-dim);
+      color: var(--paper-dim);
     }
-    .problem-bridge strong { color: var(--ink); font-weight: 500; }
+    .problem-bridge strong { color: var(--paper); font-weight: 500; }
 
     /* ----------------------------------------------------------
        SOLUTION — three ruled columns on paper
@@ -1039,7 +1092,7 @@
        FROM THE FIELD — photo plates; tilted, hairline-framed,
        mono captions. Echoes the ambassador-page collage.
        ---------------------------------------------------------- */
-    .moments { padding: 6.5rem var(--gutter) 0; background: var(--paper); }
+    .moments { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
     .moments-container { max-width: var(--max-width); margin: 0 auto; }
     .moments-head {
       display: flex;
@@ -1529,55 +1582,29 @@
         font-size: .74rem !important;
       }
 
-      .hero { padding: 5.75rem var(--gutter) 0; }
+      .hero { padding: 6rem var(--gutter) 0; min-height: auto; }
       .hero-bg::before {
-        top: -6%;
+        top: 4%;
         left: -35%;
         width: 110vw;
         height: 110vw;
-        background: radial-gradient(circle, rgba(242, 90, 39, .13) 0%, transparent 60%);
+        background: radial-gradient(circle, rgba(242, 90, 39, .10) 0%, transparent 60%);
       }
-      .hero-bg::after { display: none; }
-      .hero-container { gap: 2.25rem; }
-      .hero-top .eyebrow { display: none; }
-      /* Map on the first screen: the copy wrapper dissolves so headline, live
-         sentence, map, subhead and buttons can be ordered as one column. */
-      .hero-grid { display: flex; flex-direction: column; gap: 1.4rem; }
+      .hero-container { gap: 1.75rem; padding-top: 0; }
+      .hero-top { flex-wrap: wrap; gap: .5rem 1rem; }
+      .hero-top .eyebrow { font-size: .72rem; }
+      /* Photo directly under the headline on phones: the copy wrapper
+         dissolves so its children can be ordered around the figure. */
+      .hero-grid { display: flex; flex-direction: column; gap: 1.5rem; }
       .hero-copy { display: contents; }
-      .hero h1 { order: 1; }
-      .barometer-subline { order: 2; }
-      .hero-map { order: 3; margin: .6rem 0; }
-      .hb-sub { order: 4; }
-      .hb-cta-row { order: 5; margin-top: 0; }
-      .hero h1 { font-size: clamp(2.1rem, 9.5vw, 3.4rem); line-height: 1; letter-spacing: -.04em; }
-      .hb-cta-row { justify-content: flex-start; width: 100%; gap: .75rem; }
+      .hero h1 { order: 1; font-size: clamp(2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
+      .hero-photo { order: 2; --rot: 0deg; margin: .25rem 0; }
+      .hero-photo img { aspect-ratio: 4 / 3; }
+      .hb-sub { order: 3; }
+      .hb-cta-row { order: 4; justify-content: flex-start; width: 100%; gap: .75rem; }
+      .hb-stats { order: 5; gap: 2rem; flex-wrap: wrap; padding-top: 1.25rem; }
       .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
-      #home-barometer-map { filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .55)); }
-      .hero-map-foot { flex-direction: column; align-items: flex-start; gap: .9rem; }
-
-      /* Readouts as a 2×2 grid; the row separator is an inset shadow so it
-         does not fight the active tile's orange top border. */
-      .barometer-indicators { grid-template-columns: 1fr 1fr; }
-      .barometer-indicator { padding: 1.2rem 1.25rem; }
-      .barometer-indicator + .barometer-indicator { box-shadow: none; }
-      .barometer-indicator:nth-child(even) { box-shadow: inset 1px 0 0 var(--paper-line); }
-      .barometer-indicator:nth-child(n+3) { box-shadow: inset 0 1px 0 var(--paper-line); }
-      .barometer-indicator:nth-child(4) { box-shadow: inset 1px 1px 0 var(--paper-line); }
-
-      /* Legend on one row: shrink the type and swatches, let the four items
-         span the width. Still allowed to wrap as a fallback on tiny screens. */
-      .barometer-legend {
-        width: 100%;
-        justify-content: space-between;
-        gap: .4rem .5rem;
-        letter-spacing: .04em;
-      }
-      .barometer-legend-item { gap: .3rem; white-space: nowrap; }
-      .barometer-legend-color { width: 10px; height: 5px; flex: none; }
-
-      .hero-foot { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.5rem 0 1.75rem; }
-      .hb-stats { gap: 2rem; flex-wrap: wrap; }
-      .hero-trust { flex-direction: column; align-items: flex-start; gap: .85rem; }
+      .hero-trust { flex-direction: column; align-items: flex-start; gap: .85rem; margin-top: 1rem; padding: 1rem 0 1.5rem; }
       .hero-trust-logos {
         width: 100%;
         justify-content: flex-start;
@@ -1593,17 +1620,31 @@
       .hero-trust img[src*="raz"]       { --h: 29px; }
       .hero-trust img[src*="financial"] { --h: 20px; }
 
-      .problem-section { padding: 4.5rem var(--gutter) 4.5rem; }
-      .problem-head { margin-bottom: 2rem; }
+      .barometer-section { padding: 4.5rem var(--gutter) 5rem; }
+      .barometer-head { grid-template-columns: 1fr; gap: 1.75rem; margin-bottom: 2.5rem; }
       /* Size the headline off the viewport so "The crisis isn't coming. It's
          here." stays on a single line down to ~300px instead of breaking
          mid-sentence. No nowrap: if the webfont falls back to wider metrics
          it wraps rather than overflowing the section. */
-      .problem-headline { font-size: min(2.2rem, 5.85vw); letter-spacing: -.045em; }
+      .barometer-headline { font-size: min(2.2rem, 5.85vw); max-width: none; letter-spacing: -.045em; }
+      .barometer-instrument { grid-template-columns: 1fr; }
+      .barometer-map-wrapper { border-right: none; border-bottom: 1px solid var(--paper-line); min-height: 240px; padding: 1.75rem; }
+      .barometer-indicator { padding: 1.35rem 1.5rem; }
+
+      /* Legend on one row: shrink the type and swatches, let the four items
+         span the width. Still allowed to wrap as a fallback on tiny screens. */
+      .barometer-legend {
+        justify-content: space-between;
+        gap: .4rem .5rem;
+        letter-spacing: .04em;
+        margin-top: 1rem;
+      }
+      .barometer-legend-item { gap: .3rem; white-space: nowrap; }
+      .barometer-legend-color { width: 10px; height: 5px; flex: none; }
 
       /* Stats: number beside the copy instead of stacked above it — same
          content, roughly half the height. */
-      .problem-grid { grid-template-columns: 1fr; }
+      .problem-grid { grid-template-columns: 1fr; margin-top: 3rem; }
       .problem-stat {
         display: grid;
         grid-template-columns: auto 1fr;
@@ -1611,7 +1652,7 @@
         row-gap: .15rem;
         align-items: baseline;
         padding: 1.25rem 0;
-        border-bottom: 1px solid var(--ink-line);
+        border-bottom: 1px solid var(--paper-line);
       }
       .problem-stat + .problem-stat { padding-left: 0; border-left: none; }
       .problem-stat:last-child { border-bottom: none; }
@@ -1654,7 +1695,7 @@
       .solution-text { grid-column: 1 / -1; font-size: .92rem; line-height: 1.5; margin: .75rem 0 .65rem; }
       .solution-link { grid-column: 1 / -1; margin-top: 0; font-size: .85rem; }
 
-      .moments { padding: 4.5rem var(--gutter) 0; }
+      .moments { padding: 0 var(--gutter) 5rem; }
       .moments-head { flex-direction: column; align-items: flex-start; gap: 1.25rem; margin-bottom: 2rem; }
       /* Three full-width 3:2 plates is a lot of scroll for photography that
          is setting mood, not carrying information. Flatten the tilt (1px
@@ -1727,13 +1768,11 @@
        from phone sizing so it uses the wider canvas */
     @media (min-width: 600px) and (max-width: 968px) {
       .hero h1 { font-size: clamp(3rem, 7vw, 4rem); }
+      .hero-grid { gap: 2rem; }
       .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
-      .hero-foot { grid-template-columns: auto 1fr; align-items: center; }
-      .hero-trust { flex-direction: row; align-items: center; justify-content: flex-end; }
-      .hero-trust-label { display: none; }
       /* logos fit on one row at tablet width */
       .trust-break { display: none; }
-      .hero-trust-logos { justify-content: flex-end; gap: 1rem 2rem; }
+      .hero-trust-logos { gap: 1rem 2.25rem; }
       .hero-trust img[src*="google1"]   { --h: 18px; }
       .hero-trust img[src*="seed"]      { --h: 36px; }
       .hero-trust img[src*="iprofile"]  { --h: 23px; }
@@ -1883,14 +1922,14 @@
 
   <main id="main">
 
-  <!-- ======================= HERO (mission + live barometer) ======================= -->
-  <section class="hero on-ink" id="barometer-spotlight">
+  <!-- ======================= HERO ======================= -->
+  <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-container">
 
       <div class="hero-top">
         <div class="eyebrow">Economic Mobility</div>
-        <span class="barometer-live"><span class="barometer-live-dot"></span><span class="barometer-eyebrow-text">Live data · updated daily</span></span>
+        <div class="hb-status"><span class="hb-pulse"></span>Since 2017</div>
       </div>
 
       <div class="hero-grid">
@@ -1899,75 +1938,81 @@
           <p class="hb-sub reveal r2">
             Affordability is mobility. We use data and technology to remove the <strong>barriers</strong> holding back young adults and vulnerable communities.
           </p>
-          <p class="barometer-subline reveal r3" id="barometer-headline-text">
-            Right now, national financial anxiety sits at <span class="stat-num" id="headline-stat-value">137</span>. <span class="stat-change-pill" id="headline-stat-change">Tracking now.</span>
-          </p>
-          <div class="hb-cta-row reveal r4">
+          <div class="hb-cta-row reveal r3">
             <a href="get-involved.html" class="btn-primary">
               Get involved
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </a>
             <a href="#solution" class="btn-secondary">See our work</a>
           </div>
-        </div>
-
-        <div class="hero-map reveal r2" id="barometer-preview">
-          <svg id="home-barometer-map" viewBox="0 0 959 593" preserveAspectRatio="xMidYMid meet" role="img" aria-label="United States map colored by financial stress level per state"></svg>
-          <div class="hero-map-foot">
-            <div class="barometer-legend">
-              <div class="barometer-legend-item"><span class="barometer-legend-color low"></span> LOW &lt;90</div>
-              <div class="barometer-legend-item"><span class="barometer-legend-color moderate"></span> MODERATE 90–120</div>
-              <div class="barometer-legend-item"><span class="barometer-legend-color elevated"></span> ELEVATED 120–150</div>
-              <div class="barometer-legend-item"><span class="barometer-legend-color high"></span> HIGH &gt;150</div>
+          <div class="hb-stats reveal r4">
+            <div class="hb-stat">
+              <div class="hb-stat-num">10M<em>+</em></div>
+              <div class="hb-stat-label">Lives reached</div>
             </div>
-            <a href="barometer.html" class="barometer-explore-link">
-              Explore the full dashboard
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
+            <div class="hb-stat">
+              <div class="hb-stat-num">100K<em>+</em></div>
+              <div class="hb-stat-label">Educated</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="barometer-indicators reveal r5" role="group" aria-label="Barometer indicators — select one to color the map">
-        <div class="barometer-indicator active" data-indicator="financial_anxiety" role="button" tabindex="0" aria-pressed="true"><div class="barometer-indicator-label">Financial Anxiety</div><div class="barometer-indicator-value" id="home-val-anxiety">137</div><div class="barometer-indicator-change" id="home-change-anxiety">--</div></div>
-        <div class="barometer-indicator" data-indicator="food_insecurity" role="button" tabindex="0" aria-pressed="false"><div class="barometer-indicator-label">Food Insecurity</div><div class="barometer-indicator-value" id="home-val-food">--</div><div class="barometer-indicator-change" id="home-change-food">--</div></div>
-        <div class="barometer-indicator" data-indicator="housing_stress" role="button" tabindex="0" aria-pressed="false"><div class="barometer-indicator-label">Housing Stress</div><div class="barometer-indicator-value" id="home-val-housing">--</div><div class="barometer-indicator-change" id="home-change-housing">--</div></div>
-        <div class="barometer-indicator" data-indicator="affordability" role="button" tabindex="0" aria-pressed="false"><div class="barometer-indicator-label">Affordability</div><div class="barometer-indicator-value" id="home-val-afford">--</div><div class="barometer-indicator-change" id="home-change-afford">--</div></div>
-      </div>
-
-      <div class="hero-foot">
-        <div class="hb-stats">
-          <div class="hb-stat">
-            <div class="hb-stat-num">10M<em>+</em></div>
-            <div class="hb-stat-label">Lives reached</div>
+        <figure class="hero-photo reveal r2">
+          <div class="hero-photo-frame">
+            <img src="Barrier%20Breakers%202026%20Pics/IMG_3829-1600.jpg" alt="Hundreds of high school students in the Kent State University atrium, two of them holding FinMango flags" width="1600" height="1067" fetchpriority="high" decoding="async">
           </div>
-          <div class="hb-stat">
-            <div class="hb-stat-num">100K<em>+</em></div>
-            <div class="hb-stat-label">Educated</div>
-          </div>
-        </div>
-        <div class="hero-trust">
-          <div class="hero-trust-label">Partners &amp; collaborators</div>
-          <div class="hero-trust-logos">
-            <img src="google1.png" alt="Google" width="500" height="89" decoding="async">
-            <img src="seed.png" alt="SEED Consulting" width="500" height="281" decoding="async">
-            <span class="trust-break" aria-hidden="true"></span>
-            <img src="iprofile.png" alt="iProfile Foundation" width="500" height="135" decoding="async">
-            <img src="raz.png" alt="Raz Capital" width="500" height="281" decoding="async">
-            <img src="financial.png" alt="Financial Inclusion Forum Africa" width="500" height="162" decoding="async">
-          </div>
-        </div>
+          <figcaption><span>Barrier Breakers 2026 · Kent State University</span><em>Northeast Ohio</em></figcaption>
+        </figure>
       </div>
 
     </div>
+    <div class="hero-trust">
+      <div class="hero-trust-label">Partners &amp; collaborators</div>
+      <div class="hero-trust-logos">
+        <img src="google1.png" alt="Google" width="500" height="89" loading="lazy" decoding="async">
+        <img src="seed.png" alt="SEED Consulting" width="500" height="281" loading="lazy" decoding="async">
+        <span class="trust-break" aria-hidden="true"></span>
+        <img src="iprofile.png" alt="iProfile Foundation" width="500" height="135" loading="lazy" decoding="async">
+        <img src="raz.png" alt="Raz Capital" width="500" height="281" loading="lazy" decoding="async">
+        <img src="financial.png" alt="Financial Inclusion Forum Africa" width="500" height="162" loading="lazy" decoding="async">
+      </div>
+    </div>
   </section>
 
-  <!-- ======================= PROBLEM ======================= -->
-  <section class="problem-section" id="problem">
-    <div class="problem-container">
-      <div class="problem-head">
-        <span class="eyebrow">Why it matters</span>
-        <h2 class="problem-headline">The crisis isn't coming. <em>It's here.</em></h2>
+  <!-- ======================= BAROMETER (signature) ======================= -->
+  <section class="barometer-section on-ink" id="barometer-spotlight">
+    <div class="barometer-container">
+
+      <div class="barometer-head">
+        <div class="barometer-head-left">
+          <span class="barometer-live"><span class="barometer-eyebrow-text">Financial Health Barometer · Heuristic Stress Model</span></span>
+          <h2 class="barometer-headline">The crisis isn't coming. <em>It's here.</em></h2>
+          <p class="barometer-subline" id="barometer-headline-text">
+            Our composite Financial Anxiety index reads <span class="stat-num" id="headline-stat-value">137</span> nationally. <span class="stat-change-pill" id="headline-stat-change">Tracking now.</span> It is built from BLS, Census and FRED data with hand-set regional weights, so read state gaps as indicative. <a href="barometer.html#methodology" class="barometer-method-link">How it's built</a>
+          </p>
+        </div>
+        <a href="barometer.html" class="barometer-explore-link">
+          Explore the full dashboard
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div class="barometer-instrument" id="barometer-preview">
+        <div class="barometer-map-wrapper">
+          <svg id="home-barometer-map" viewBox="0 0 959 593" preserveAspectRatio="xMidYMid meet" role="img" aria-label="United States map colored by financial stress level per state"></svg>
+        </div>
+        <div class="barometer-indicators" role="group" aria-label="Barometer indicators — select one to color the map">
+          <div class="barometer-indicator active" data-indicator="financial_anxiety" role="button" tabindex="0" aria-pressed="true"><div class="barometer-indicator-label">Financial Anxiety</div><div class="barometer-indicator-value" id="home-val-anxiety">137</div><div class="barometer-indicator-change" id="home-change-anxiety">--</div></div>
+          <div class="barometer-indicator" data-indicator="food_insecurity" role="button" tabindex="0" aria-pressed="false"><div class="barometer-indicator-label">Food Insecurity</div><div class="barometer-indicator-value" id="home-val-food">--</div><div class="barometer-indicator-change" id="home-change-food">--</div></div>
+          <div class="barometer-indicator" data-indicator="housing_stress" role="button" tabindex="0" aria-pressed="false"><div class="barometer-indicator-label">Housing Stress</div><div class="barometer-indicator-value" id="home-val-housing">--</div><div class="barometer-indicator-change" id="home-change-housing">--</div></div>
+          <div class="barometer-indicator" data-indicator="affordability" role="button" tabindex="0" aria-pressed="false"><div class="barometer-indicator-label">Affordability</div><div class="barometer-indicator-value" id="home-val-afford">--</div><div class="barometer-indicator-change" id="home-change-afford">--</div></div>
+        </div>
+      </div>
+      <div class="barometer-legend">
+        <div class="barometer-legend-item"><span class="barometer-legend-color low"></span> LOW &lt;90</div>
+        <div class="barometer-legend-item"><span class="barometer-legend-color moderate"></span> MODERATE 90–120</div>
+        <div class="barometer-legend-item"><span class="barometer-legend-color elevated"></span> ELEVATED 120–150</div>
+        <div class="barometer-legend-item"><span class="barometer-legend-color high"></span> HIGH &gt;150</div>
       </div>
 
       <div class="problem-grid">
@@ -1990,36 +2035,6 @@
 
       <p class="problem-bridge">Numbers like these are a <strong>cost problem,</strong> not a budgeting problem — so we measure what's driving them.</p>
 
-    </div>
-  </section>
-
-  <!-- ======================= FROM THE FIELD ======================= -->
-  <section class="moments" aria-label="Photos from FinMango programs">
-    <div class="moments-container">
-      <div class="moments-head">
-        <div class="moments-head-text">
-          <span class="eyebrow">From the field</span>
-          <h2>We build for young adults. <em>Here are a few.</em></h2>
-        </div>
-        <a href="education.html" class="moments-link">
-          See the programs
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-      <div class="moments-grid">
-        <figure class="moment moment-1">
-          <img src="Barrier%20Breakers%202026%20Pics/IMG_3792.JPG" alt="The Barrier Breakers 2026 cohort seated on the grand staircase at Kent State University" width="2304" height="1536" loading="lazy" decoding="async">
-          <figcaption><span>Barrier Breakers · Kent State University</span><em>01</em></figcaption>
-        </figure>
-        <figure class="moment moment-2">
-          <img src="education3.jpg" alt="Students holding the FinMango flag at a financial health competition" width="1200" height="800" loading="lazy" decoding="async">
-          <figcaption><span>Financial Health Competition</span><em>02</em></figcaption>
-        </figure>
-        <figure class="moment moment-3">
-          <img src="hero.jpg" alt="The FinMango team holding the FinMango flag" width="1920" height="1080" loading="lazy" decoding="async">
-          <figcaption><span>Team FinMango</span><em>03</em></figcaption>
-        </figure>
-      </div>
     </div>
   </section>
 
@@ -2088,6 +2103,36 @@
           <p class="solution-text">Our global ambassador network carries what we measure to the schools, universities, and agencies that can act on it — and reports back what financial health looks like where they live.</p>
           <a href="ambassadors.html" class="solution-link">Meet the ambassadors <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= FROM THE FIELD ======================= -->
+  <section class="moments" aria-label="Photos from FinMango programs">
+    <div class="moments-container">
+      <div class="moments-head">
+        <div class="moments-head-text">
+          <span class="eyebrow">From the field</span>
+          <h2>We build for young adults. <em>Here are a few.</em></h2>
+        </div>
+        <a href="education.html" class="moments-link">
+          See the programs
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <div class="moments-grid">
+        <figure class="moment moment-1">
+          <img src="Barrier%20Breakers%202026%20Pics/IMG_3792.JPG" alt="The Barrier Breakers 2026 cohort seated on the grand staircase at Kent State University" width="2304" height="1536" loading="lazy" decoding="async">
+          <figcaption><span>Barrier Breakers · Kent State University</span><em>01</em></figcaption>
+        </figure>
+        <figure class="moment moment-2">
+          <img src="education3.jpg" alt="Students holding the FinMango flag at a financial health competition" width="1200" height="800" loading="lazy" decoding="async">
+          <figcaption><span>Financial Health Competition</span><em>02</em></figcaption>
+        </figure>
+        <figure class="moment moment-3">
+          <img src="hero.jpg" alt="The FinMango team holding the FinMango flag" width="1920" height="1080" loading="lazy" decoding="async">
+          <figcaption><span>Team FinMango</span><em>03</em></figcaption>
+        </figure>
       </div>
     </div>
   </section>
@@ -2228,7 +2273,7 @@
   </script>
   <!-- /chrome:script -->
 
-  <script src="data/dashboard-data.js?v=20260909"></script>
+  <script src="data/dashboard-data.js?v=20260910"></script>
   <script src="scripts/us-map-content.js"></script>
   <script>
     // Barometer instrument
@@ -2257,43 +2302,9 @@
                 if (id && id.length === 2) p.id = 'US-' + id.toUpperCase();
               });
               updateMapColors(currentIndicator);
-              lightUp();
             }
           } catch (e) {}
         }
-      }
-
-      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      // States light up west to east on first paint. Delay is set per path
-      // from its horizontal position; .lit carries the keyframe.
-      function lightUp() {
-        const paths = Array.from(mapEl.querySelectorAll('path'));
-        if (!paths.length) return;
-        if (reduceMotion) { paths.forEach(p => p.classList.add('lit')); return; }
-        let xs;
-        try { xs = paths.map(p => { const b = p.getBBox(); return b.x + b.width / 2; }); } catch (e) { xs = paths.map((_, i) => i); }
-        const min = Math.min(...xs), span = Math.max(...xs) - min || 1;
-        paths.forEach((p, i) => {
-          p.style.setProperty('--d', Math.round(350 + ((xs[i] - min) / span) * 700) + 'ms');
-          p.classList.add('lit');
-        });
-      }
-
-      // Readouts count up to their value once, then sit still.
-      function countUp(el, target, delay) {
-        if (!el) return;
-        const final = target.toFixed(0);
-        if (reduceMotion) { el.textContent = final; return; }
-        const dur = 1100, t0 = performance.now() + (delay || 0);
-        el.textContent = '0';
-        function tick(now) {
-          const t = Math.min(1, Math.max(0, (now - t0) / dur));
-          const e = 1 - Math.pow(1 - t, 3);
-          el.textContent = Math.round(target * e).toFixed(0);
-          if (t < 1) requestAnimationFrame(tick); else el.textContent = final;
-        }
-        requestAnimationFrame(tick);
       }
 
       function updateMapColors(ind) {
@@ -2309,7 +2320,7 @@
         const n = DASHBOARD_DATA.national;
         [['anxiety', 'financial_anxiety'], ['food', 'food_insecurity'], ['housing', 'housing_stress'], ['afford', 'affordability']].forEach(([k, ind]) => {
           const d = n[ind];
-          countUp(document.getElementById('home-val-' + k), d.value, 650);
+          document.getElementById('home-val-' + k).textContent = d.value.toFixed(0);
           const el = document.getElementById('home-change-' + k);
           el.textContent = fmtChange(d.change);
           el.className = 'barometer-indicator-change ' + changeTone(d.change);
@@ -2319,19 +2330,19 @@
         const a = n.financial_anxiety;
         const valEl = document.getElementById('headline-stat-value');
         const changeEl = document.getElementById('headline-stat-change');
-        countUp(valEl, a.value, 400);
+        if (valEl) valEl.textContent = a.value.toFixed(0);
         if (changeEl) {
           if (a.change == null) {
             changeEl.textContent = 'Tracking now';
             changeEl.className = 'stat-change-pill flat';
           } else if (a.change > 0.05) {
-            changeEl.textContent = `↑ ${Math.abs(a.change).toFixed(1)} pts vs last month`;
+            changeEl.textContent = `↑ ${Math.abs(a.change).toFixed(1)} pts year over year`;
             changeEl.className = 'stat-change-pill up';
           } else if (a.change < -0.05) {
-            changeEl.textContent = `↓ ${Math.abs(a.change).toFixed(1)} pts vs last month`;
+            changeEl.textContent = `↓ ${Math.abs(a.change).toFixed(1)} pts year over year`;
             changeEl.className = 'stat-change-pill down';
           } else {
-            changeEl.textContent = 'Steady vs last month';
+            changeEl.textContent = 'Steady year over year';
             changeEl.className = 'stat-change-pill flat';
           }
         }
@@ -2342,7 +2353,7 @@
           const [y, m, d] = DASHBOARD_DATA.as_of.split('-').map(Number);
           if (y && m && d) {
             const formatted = new Date(y, m - 1, d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            eyebrowEl.textContent = `Live data · updated ${formatted}`;
+            eyebrowEl.textContent = `Financial Health Barometer · reading from ${formatted}`;
           }
         }
       }
