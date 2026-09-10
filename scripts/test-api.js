@@ -1,5 +1,11 @@
 
-const API_KEY = process.env.GOOGLE_TRENDS_API_KEY || 'AIzaSyDA69jVBXP5ga4op9OC_RK8m64rFNLBrmo';
+// Never hard-code the key here: this repository is public, and a key committed
+// to it is harvested and its quota spent by strangers within hours.
+const API_KEY = process.env.GOOGLE_TRENDS_API_KEY;
+if (!API_KEY) {
+    console.error('Set GOOGLE_TRENDS_API_KEY in the environment before running this script.');
+    process.exit(1);
+}
 const BASE_URL = 'https://www.googleapis.com/trends/v1beta/graph';
 
 async function testFetch() {

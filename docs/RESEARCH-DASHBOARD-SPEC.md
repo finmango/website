@@ -46,7 +46,7 @@
 | Field | Value |
 |-------|-------|
 | Service | `trends.googleapis.com` |
-| API Key | `AIzaSyDA69jVBXP5ga4op9OC_RK8m64rFNLBrmo` |
+| API Key | Stored only in the `GOOGLE_TRENDS_API_KEY` GitHub Actions secret. Never commit it: this repository is public. |
 | Base URL | `https://trends.googleapis.com/v1/health/trends` |
 | Auth Method | API key as query parameter or header |
 
@@ -646,7 +646,7 @@ jobs:
 2. Settings → Secrets and variables → Actions
 3. Click "New repository secret"
 4. Name: `GOOGLE_TRENDS_API_KEY`
-5. Value: `AIzaSyDA69jVBXP5ga4op9OC_RK8m64rFNLBrmo`
+5. Value: the Health Trends API key from the Google Cloud console (never paste it into this file)
 
 ---
 

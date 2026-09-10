@@ -64,14 +64,21 @@ const TRENDS_TERMS = {
     affordability: ["cost of living", "can't afford"]
 };
 
-// Health Trends quota budget for a single daily run. Four national series
-// (one per indicator) plus STATES_PER_RUN x 4 state series.
-const TRENDS_MAX_REQUESTS = 40;
-const TRENDS_STATES_PER_RUN = 9; // 9 states x 4 indicators + 4 national = 40
+// Health Trends request budget for a single daily run.
+//
+// The graph endpoint accepts `terms` more than once, so one request per state
+// carries all four indicator terms. Full coverage of 51 states is therefore
+// 51 requests, not 204 — and a single national request supplies all four
+// 10-year series for the trend chart. The budget below is the same number of
+// HTTP requests the pipeline made before batching (40), so the load on the
+// quota is unchanged while the readings per request go up fourfold. Override
+// with TRENDS_MAX_REQUESTS when the real quota is known.
+const TRENDS_MAX_REQUESTS = Math.max(2, parseInt(process.env.TRENDS_MAX_REQUESTS, 10) || 40);
+const TRENDS_STATES_PER_RUN = TRENDS_MAX_REQUESTS - 1; // 1 national + N states
 
 // A state's cached trends reading is considered usable for this many days.
-// With 9 states per daily run, all 51 states refresh every 6 days, so a
-// 10-day window keeps full coverage even if a run or two fails.
+// At 39 states per run the rotation covers all 51 states in two runs, so a
+// 10-day window survives several failed days without losing coverage.
 const TRENDS_MAX_AGE_DAYS = 10;
 
 // Helper: delay between API calls
@@ -387,17 +394,76 @@ function pruneTrendsCache(cache, today) {
 }
 
 /**
+ * Build a Health Trends graph request. `terms` is a repeated query parameter
+ * on this endpoint, which is what lets one request serve every indicator.
+ */
+function buildTrendsGraphUrl(terms, geo, startDate, apiKey) {
+    const params = new URLSearchParams();
+    for (const term of terms) params.append('terms', term);
+    params.set('restrictions.geo', geo);
+    params.set('restrictions.startDate', startDate);
+    params.set('key', apiKey);
+    return `https://www.googleapis.com/trends/v1beta/graph?${params.toString()}`;
+}
+
+/**
+ * Map a graph response back onto the terms that were asked for. Lines carry
+ * their own `term`; when one does not, fall back to request order. Terms the
+ * API returned nothing for are simply absent from the result.
+ */
+function trendsPointsByTerm(data, terms) {
+    const out = {};
+    const lines = Array.isArray(data?.lines) ? data.lines : [];
+    lines.forEach((line, i) => {
+        const term = typeof line?.term === 'string' ? line.term : terms[i];
+        if (term && Array.isArray(line?.points) && line.points.length > 0) out[term] = line.points;
+    });
+    return out;
+}
+
+/**
+ * Turn a non-OK response into something the run log and the published
+ * metadata can show. Google APIs report an exhausted daily quota as HTTP 403
+ * with a reason such as dailyLimitExceeded or quotaExceeded (429 is the
+ * per-minute form), so a 403 with a quota-shaped reason counts as quota.
+ * The previous loop only checked for 429, so a 403 looked exactly like "the
+ * API returned no data" and the run kept spending requests it did not have.
+ */
+async function describeTrendsFailure(response) {
+    let body = '';
+    try { body = await response.text(); } catch (e) { /* no body */ }
+    let reason = null;
+    let message = null;
+    try {
+        const json = JSON.parse(body);
+        reason = json?.error?.errors?.[0]?.reason || json?.error?.status || null;
+        message = json?.error?.message || null;
+    } catch (e) { /* not JSON */ }
+    const text = `${reason || ''} ${message || ''}`;
+    const quota = response.status === 429
+        || (response.status === 403 && /quota|limit|exhaust|rate/i.test(text));
+    return {
+        status: response.status,
+        reason,
+        message: message ? String(message).slice(0, 200) : null,
+        quota
+    };
+}
+
+/**
  * Fetch data from the Google Health Trends API (exclusive, approved access only).
  * Unlike the public Google Trends website (relative 0-100 scale), this API returns
- * absolute probability values: P(term | time, geography) x 10,000,000.
- * A value of 5 means 5 out of every 10 million search sessions included that term.
- * Values for our financial stress terms typically range from 1-20.
+ * absolute search probabilities, so values are comparable across states and time.
  *
- * Quota forces a rotation rather than a full sweep. Previously this fetched a
- * hardcoded list of 10 states, which handed those 10 a volatility boost the
- * other 41 could never receive and quietly moved them up the rankings. Now the
- * run advances a cursor through all 51 states, merging each slice into a cache
- * that reaches full coverage in six days and refreshes on a rolling basis.
+ * Requests are batched: one national request carries all four indicator terms
+ * for the 10-year chart shape, and one request per state carries all four
+ * terms for the 3-month reading. The daily budget is spent on a rotating slice
+ * of states, merged into a cache that survives across runs, so coverage builds
+ * toward 51/51 without ever exceeding the budget in a single run.
+ *
+ * Every non-OK status is recorded in the run metadata (meta.trends_run) with
+ * its reason, and a quota response stops the run at once without advancing the
+ * cursor, so tomorrow retries the same slice instead of skipping it.
  */
 async function fetchGoogleTrends() {
     const apiKey = process.env.GOOGLE_TRENDS_API_KEY;
@@ -409,11 +475,11 @@ async function fetchGoogleTrends() {
     const cache = pruneTrendsCache(loadTrendsCache(), today);
 
     if (!apiKey) {
-        console.log('\u26A0\uFE0F  GOOGLE_TRENDS_API_KEY not set - skipping trends fetch');
+        console.log('⚠️  GOOGLE_TRENDS_API_KEY not set - skipping trends fetch');
         return summariseTrends(cache, {}, todayISO, cache.cursor, { attempted: false });
     }
 
-    console.log('\u{1F4C8} Fetching Google Trends data (rotating slice)...');
+    console.log('\u{1F4C8} Fetching Google Trends data (rotating slice, all terms per request)...');
     const nationalTimeSeries = {};
 
     const d3 = new Date(); d3.setMonth(d3.getMonth() - 3);
@@ -422,94 +488,112 @@ async function fetchGoogleTrends() {
     const d10y = new Date(); d10y.setFullYear(d10y.getFullYear() - 10);
     const startDate10y = d10y.toISOString().slice(0, 7);
 
+    const indicators = Object.keys(TRENDS_TERMS);
+    const terms = indicators.map(ind => TRENDS_TERMS[ind][0]);
+    const indicatorByTerm = Object.fromEntries(indicators.map(ind => [TRENDS_TERMS[ind][0], ind]));
+    for (const ind of indicators) if (!cache.states[ind]) cache.states[ind] = {};
+
     // The rotating slice: TRENDS_STATES_PER_RUN states starting at the stored
     // cursor, wrapping around the alphabetical state list.
     const allStates = Object.keys(STATE_FIPS);
     const cursor = cache.cursor % allStates.length;
+    const sliceLen = Math.min(TRENDS_STATES_PER_RUN, allStates.length);
     const slice = [];
-    for (let i = 0; i < TRENDS_STATES_PER_RUN; i++) {
+    for (let i = 0; i < sliceLen; i++) {
         slice.push(allStates[(cursor + i) % allStates.length]);
     }
-    console.log(`   Slice ${cursor}-${cursor + TRENDS_STATES_PER_RUN - 1} of ${allStates.length}: ${slice.join(', ')}`);
+    console.log(`   Slice ${cursor}-${cursor + sliceLen - 1} of ${allStates.length}: ${slice.join(', ')}`);
 
     let requestCount = 0;
     let stopped = false;
+    let quotaHit = false;
+    let firstError = null;
+    const statuses = {};
     // Distinguish "the rotation has not reached these states yet" from "every
     // request came back empty". Both leave coverage at 0, but only the second
-    // means the integration is broken.
+    // means the integration is broken. Readings are counted per state and
+    // indicator so the numbers stay comparable with earlier runs.
     let stateRequests = 0;
     let stateReadings = 0;
+    let statesCompleted = 0;
 
-    for (const indicator of Object.keys(TRENDS_TERMS)) {
-        const term = TRENDS_TERMS[indicator][0];
-        if (!cache.states[indicator]) cache.states[indicator] = {};
-
-        // 1. National 10-year series, used only for the shape of the trend chart
-        try {
-            const nationalUrl = `https://www.googleapis.com/trends/v1beta/graph?terms=${encodeURIComponent(term)}&restrictions.geo=US&restrictions.startDate=${startDate10y}&key=${apiKey}`;
-            const natResponse = await fetch(nationalUrl);
-
-            if (natResponse.ok) {
-                const data = await natResponse.json();
-                if (data.lines?.[0]?.points?.length > 0) {
-                    nationalTimeSeries[indicator] = data.lines[0].points;
-                }
-            }
-            requestCount++;
-            await delay(500);
-        } catch (error) {
-            console.warn(`   Could not fetch national trends for ${indicator}`);
+    function recordFailure(where, failure) {
+        statuses[failure.status] = (statuses[failure.status] || 0) + 1;
+        if (!firstError) firstError = { where, ...failure };
+        console.warn(`   HTTP ${failure.status}${failure.reason ? ` ${failure.reason}` : ''} for ${where}`
+            + `${failure.message ? `: ${failure.message}` : ''}`);
+        if (failure.quota) {
+            quotaHit = true;
+            stopped = true;
+            console.log('   ⚡ Quota exhausted - stopping trends fetch; cache keeps prior coverage and the cursor resumes here tomorrow');
         }
-
-        // 2. This run's slice of states
-        for (const abbr of slice) {
-            if (requestCount >= TRENDS_MAX_REQUESTS) { stopped = true; break; }
-            try {
-                const stateUrl = `https://www.googleapis.com/trends/v1beta/graph?terms=${encodeURIComponent(term)}&restrictions.geo=US-${abbr}&restrictions.startDate=${startDate3m}&key=${apiKey}`;
-                const response = await fetch(stateUrl);
-
-                if (response.status === 429) {
-                    console.log('   \u26A1 Rate limited - stopping trends fetch, cache keeps prior coverage');
-                    stopped = true;
-                    break;
-                }
-
-                stateRequests++;
-                if (response.ok) {
-                    const data = await response.json();
-                    const points = data.lines?.[0]?.points;
-                    if (points?.length > 0) {
-                        cache.states[indicator][abbr] = {
-                            value: points[points.length - 1].value,
-                            fetched: todayISO
-                        };
-                        stateReadings++;
-                    }
-                }
-
-                requestCount++;
-                await delay(500);
-            } catch (error) {
-                console.warn(`   Could not fetch trends for ${indicator}/${abbr}`);
-            }
-        }
-        if (stopped) break;
     }
 
-    // Only advance the cursor when the slice actually completed, so a run cut
-    // short by the quota retries the same states tomorrow instead of skipping
-    // them and leaving a permanent hole in coverage.
-    const nextCursor = stopped ? cursor : (cursor + TRENDS_STATES_PER_RUN) % allStates.length;
+    // 1. One national request: all four terms, 10-year window, used only for
+    //    the shape of the trend chart.
+    try {
+        const response = await fetch(buildTrendsGraphUrl(terms, 'US', startDate10y, apiKey));
+        requestCount++;
+        if (response.ok) {
+            statuses[200] = (statuses[200] || 0) + 1;
+            const byTerm = trendsPointsByTerm(await response.json(), terms);
+            for (const [term, points] of Object.entries(byTerm)) {
+                nationalTimeSeries[indicatorByTerm[term]] = points;
+            }
+        } else {
+            recordFailure('national/US', await describeTrendsFailure(response));
+        }
+        await delay(500);
+    } catch (error) {
+        console.warn(`   Could not fetch national trends: ${error.message}`);
+    }
 
-    console.log(`  \u2713 Trends: ${requestCount} requests, ${stateReadings}/${stateRequests} state requests returned data`);
+    // 2. This run's slice of states: one request per state, all four terms.
+    for (const abbr of slice) {
+        if (stopped || requestCount >= TRENDS_MAX_REQUESTS) { stopped = true; break; }
+        try {
+            const response = await fetch(buildTrendsGraphUrl(terms, `US-${abbr}`, startDate3m, apiKey));
+            requestCount++;
+            stateRequests += indicators.length;
+            if (response.ok) {
+                statuses[200] = (statuses[200] || 0) + 1;
+                const byTerm = trendsPointsByTerm(await response.json(), terms);
+                for (const [term, points] of Object.entries(byTerm)) {
+                    cache.states[indicatorByTerm[term]][abbr] = {
+                        value: points[points.length - 1].value,
+                        fetched: todayISO
+                    };
+                    stateReadings++;
+                }
+                statesCompleted++;
+            } else {
+                recordFailure(`state/US-${abbr}`, await describeTrendsFailure(response));
+            }
+            await delay(500);
+        } catch (error) {
+            console.warn(`   Could not fetch trends for US-${abbr}: ${error.message}`);
+        }
+    }
+
+    // Advance the cursor only past the states that actually answered, so a run
+    // cut short by the quota resumes tomorrow exactly where it stopped instead
+    // of skipping the rest of the slice and leaving a hole in coverage.
+    const nextCursor = (cursor + (stopped ? statesCompleted : sliceLen)) % allStates.length;
+
+    console.log(`  ✓ Trends: ${requestCount} requests, ${stateReadings}/${stateRequests} state readings returned data`
+        + ` (HTTP ${Object.entries(statuses).map(([s, n]) => `${s}×${n}`).join(', ') || 'no responses'})`);
     if (stateRequests > 0 && stateReadings === 0) {
-        console.warn('  \u26A0\uFE0F  Health Trends returned no data for any state this run — check API access.');
+        console.warn('  ⚠️  Health Trends returned no data for any state this run — see HTTP statuses above.');
         console.warn('      Coverage cannot complete while this persists, so the volatility boost stays withheld.');
     }
 
     return summariseTrends(cache, nationalTimeSeries, todayISO, nextCursor, {
+        requests: requestCount,
         state_requests: stateRequests,
         state_readings: stateReadings,
+        http_statuses: statuses,
+        quota_hit: quotaHit,
+        first_error: firstError,
         attempted: true
     });
 }
@@ -1746,9 +1830,16 @@ function describeTrendsSource(trends) {
     if (run.attempted === false) {
         return 'Google Health Trends API (not fetched - no API key configured; boost withheld)';
     }
+    if (run.quota_hit) {
+        const err = run.first_error || {};
+        return `Google Health Trends API (QUOTA EXHAUSTED after ${run.requests ?? run.state_requests} requests`
+            + `${err.status ? ` - HTTP ${err.status}${err.reason ? ` ${err.reason}` : ''}` : ''}; boost withheld)`;
+    }
     if (run.state_requests > 0 && run.state_readings === 0) {
         const since = trends.cache?.last_successful_fetch;
+        const err = run.first_error;
         return `Google Health Trends API (NOT WORKING - ${run.state_requests} requests returned no data`
+            + `${err ? `, HTTP ${err.status}${err.reason ? ` ${err.reason}` : ''}` : ''}`
             + `${since ? `, last successful fetch ${since}` : ', no successful fetch on record'}; boost withheld)`;
     }
 
@@ -2099,5 +2190,12 @@ module.exports = {
     clampIndex,
     deriveHousingWage,
     summariseTrends,
+    fetchGoogleTrends,
+    buildTrendsGraphUrl,
+    trendsPointsByTerm,
+    describeTrendsFailure,
+    TRENDS_TERMS,
+    TRENDS_MAX_REQUESTS,
+    TRENDS_STATES_PER_RUN,
     REGIONAL_STRESS
 };
