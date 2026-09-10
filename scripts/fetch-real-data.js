@@ -525,7 +525,7 @@ async function fetchGoogleTrends() {
         if (failure.quota) {
             quotaHit = true;
             stopped = true;
-            console.log('   ⚡ Quota exhausted - stopping trends fetch, cache keeps prior coverage, cursor held');
+            console.log('   ⚡ Quota exhausted - stopping trends fetch; cache keeps prior coverage and the cursor resumes here tomorrow');
         }
     }
 
