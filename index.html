@@ -456,7 +456,11 @@
     .mobile-controls { display: none; gap: 1rem; align-items: center; }
 
     /* ----------------------------------------------------------
-       HERO — billboard
+       HERO — billboard with a photograph.
+       The claim on the left, the people it is for on the right. The photo
+       takes the same frame as the "From the field" cards further down, so
+       the opening and that section read as one family. The barometer stays
+       in its own section below, where its caveats can travel with it.
        ---------------------------------------------------------- */
     .hero {
       background: var(--paper);
@@ -471,10 +475,6 @@
       pointer-events: none;
       z-index: 0;
     }
-    /* Was a 60vw square (864px at desktop) radial gradient at .09 alpha with
-       an additional blur(40px) on top — a large compositing cost for something
-       that did not survive to the screen. Same warmth, no blur layer, and it
-       actually reads now. */
     .hero-bg::before {
       content: '';
       position: absolute;
@@ -493,7 +493,7 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 3rem;
+      gap: 2.75rem;
       padding-top: 1.5rem;
     }
 
@@ -513,21 +513,33 @@
       align-items: center;
       gap: .6rem;
     }
-    /* A static dot. This used to pulse like the barometer's live indicator,
-       so the page carried two pulses with two meanings — "founded 2017" is
-       not a live signal. One pulse on the page, and it means live data. */
     .hb-pulse {
       width: 6px; height: 6px;
       border-radius: 50%;
       background: var(--orange);
     }
 
+    /* Copy | photo. The copy column is the wider one so the headline can set
+       in three lines at its full size; the photo column still lands near
+       600px at desktop. */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+      gap: 2.5rem 5rem;
+      align-items: center;
+    }
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+      min-width: 0;
+    }
+
     .hero h1 {
-      font-size: clamp(2.4rem, 7.8vw, 8.4rem);
+      font-size: clamp(2.6rem, 4.9vw, 5.1rem);
       font-weight: 900;
       line-height: .94;
       letter-spacing: -.05em;
-      max-width: 26ch;
     }
     .hero h1 em {
       font-style: normal;
@@ -553,37 +565,32 @@
       opacity: .5;
       stroke-dasharray: 1000;
       stroke-dashoffset: 1000;
-      animation: draw-stroke 1.2s cubic-bezier(.16, 1, .3, 1) .5s forwards;
+      animation: draw-stroke 1.2s cubic-bezier(.16, 1, .3, 1) .9s forwards;
     }
     @keyframes draw-stroke { to { stroke-dashoffset: 0; } }
 
-    /* Was 1fr auto auto — subhead, stats and both CTAs on a single line, which
-       squeezed 10M+/100K+ (the strongest proof on the page) into the narrowest
-       slot in the row. Two rows instead: the claim and its numbers share the
-       first, the CTAs get the second and stop crowding the right edge. */
-    .hb-bottom {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: end;
-      gap: 2.25rem 3rem;
-      padding-top: 1.75rem;
-      border-top: 1px solid var(--ink-line-soft);
-    }
-    .hb-cta-row { grid-column: 1 / -1; }
     .hb-sub {
-      font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+      font-size: clamp(1.05rem, 1.4vw, 1.3rem);
       font-weight: 400;
       line-height: 1.5;
       color: var(--ink-dim);
-      max-width: 50ch;
+      max-width: 44ch;
       letter-spacing: -.015em;
     }
     .hb-sub strong { color: var(--ink); font-weight: 600; }
 
-    .hb-stats { display: flex; gap: 3.25rem; align-items: flex-end; }
+    .hb-cta-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; justify-content: flex-start; }
+
+    .hb-stats {
+      display: flex;
+      gap: 3.25rem;
+      align-items: flex-end;
+      padding-top: 1.6rem;
+      border-top: 1px solid var(--ink-line-soft);
+    }
     .hb-stat { display: flex; flex-direction: column; gap: .4rem; }
     .hb-stat-num {
-      font-size: clamp(2.25rem, 3.6vw, 3.1rem);
+      font-size: clamp(2rem, 3vw, 2.7rem);
       font-weight: 900;
       letter-spacing: -.04em;
       line-height: .95;
@@ -598,8 +605,56 @@
       color: var(--ink-faint);
     }
 
-    .hb-cta-row { display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; justify-content: flex-start; }
+    /* The photograph — same frame as .moment, a hair of tilt, straightens on
+       hover like the field cards do. */
+    .hero-photo {
+      margin: 0;
+      min-width: 0;
+      border: 1px solid var(--ink-line);
+      background: var(--paper);
+      padding: .6rem .6rem 0;
+      --rot: -.8deg;
+      transform: rotate(var(--rot));
+      transition: transform .5s cubic-bezier(.16, 1, .3, 1), border-color .25s ease;
+    }
+    .hero-photo:hover { --rot: 0deg; border-color: var(--orange-ink); }
+    .hero-photo-frame { overflow: hidden; }
+    .hero-photo img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 5 / 4;
+      object-fit: cover;
+      object-position: 50% 42%;
+      animation: photo-settle 1.8s cubic-bezier(.16, 1, .3, 1) both;
+    }
+    @keyframes photo-settle { from { transform: scale(1.05); } to { transform: none; } }
+    .hero-photo figcaption {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      padding: .8rem .1rem .85rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .hero-photo figcaption em { font-style: normal; color: var(--orange-ink); }
 
+    /* Entry motion — copy rises in beats, photo settles with the second.
+       prefers-reduced-motion collapses it through the global rule above. */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      animation: hero-rise .9s cubic-bezier(.16, 1, .3, 1) forwards;
+    }
+    .reveal.r1 { animation-delay: .05s; }
+    .reveal.r2 { animation-delay: .2s; }
+    .reveal.r3 { animation-delay: .34s; }
+    .reveal.r4 { animation-delay: .46s; }
+    @keyframes hero-rise { to { opacity: 1; transform: none; } }
     /* Trust strip — quiet, folded into the hero's bottom edge */
     .hero-trust {
       position: relative;
@@ -727,6 +782,8 @@
     }
     .barometer-subline .stat-change-pill.up { color: var(--signal-bad); border-color: rgba(248, 113, 113, .3); }
     .barometer-subline .stat-change-pill.down { color: var(--signal-good); border-color: rgba(52, 211, 153, .3); }
+    .barometer-method-link { color: var(--paper); text-decoration: underline; text-underline-offset: .22em; text-decoration-color: var(--orange); white-space: nowrap; }
+    .barometer-method-link:hover { color: var(--orange); }
 
     .barometer-explore-link {
       display: inline-flex;
@@ -754,17 +811,7 @@
       font-weight: 500;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--signal-good);
-    }
-    .barometer-live-dot {
-      width: 6px; height: 6px;
-      background: var(--signal-good);
-      border-radius: 50%;
-      animation: pulse-live 2s infinite;
-    }
-    @keyframes pulse-live {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: .4; transform: scale(.8); }
+      color: var(--paper-faint);
     }
 
     /* Instrument grid: map | readouts */
@@ -1536,8 +1583,6 @@
       }
 
       .hero { padding: 6rem var(--gutter) 0; min-height: auto; }
-      /* At 46vw the glow is a 180px disc behind a single word on a phone
-         and reads as a smudge. Wider and fainter it becomes a wash again. */
       .hero-bg::before {
         top: 4%;
         left: -35%;
@@ -1545,17 +1590,19 @@
         height: 110vw;
         background: radial-gradient(circle, rgba(242, 90, 39, .10) 0%, transparent 60%);
       }
-      .hero-container { gap: 2rem; padding-top: 0; }
-      /* Keep the eyebrow + "Since 2017" rule on phones so the homepage
-         matches about/research/education, but tighten it to the same
-         compact treatment education.html uses so it reads as a quiet
-         dateline rather than a full-weight row above the headline. */
+      .hero-container { gap: 1.75rem; padding-top: 0; }
       .hero-top { flex-wrap: wrap; gap: .5rem 1rem; }
       .hero-top .eyebrow { font-size: .72rem; }
-      .hero h1 { font-size: clamp(2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
-      .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
-      .hb-stats { gap: 2rem; flex-wrap: wrap; }
-      .hb-cta-row { justify-content: flex-start; width: 100%; gap: .75rem; }
+      /* Photo directly under the headline on phones: the copy wrapper
+         dissolves so its children can be ordered around the figure. */
+      .hero-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+      .hero-copy { display: contents; }
+      .hero h1 { order: 1; font-size: clamp(2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
+      .hero-photo { order: 2; --rot: 0deg; margin: .25rem 0; }
+      .hero-photo img { aspect-ratio: 4 / 3; }
+      .hb-sub { order: 3; }
+      .hb-cta-row { order: 4; justify-content: flex-start; width: 100%; gap: .75rem; }
+      .hb-stats { order: 5; gap: 2rem; flex-wrap: wrap; padding-top: 1.25rem; }
       .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
       .hero-trust { flex-direction: column; align-items: flex-start; gap: .85rem; margin-top: 1rem; padding: 1rem 0 1.5rem; }
       .hero-trust-logos {
@@ -1720,14 +1767,8 @@
     /* Tablet tier (iPads in portrait, small landscape) — scale the hero up
        from phone sizing so it uses the wider canvas */
     @media (min-width: 600px) and (max-width: 968px) {
-      .hero h1 { font-size: clamp(3.4rem, 8.8vw, 5rem); }
-      .hb-bottom {
-        grid-template-columns: 1.2fr 1fr;
-        gap: 2rem 3rem;
-        align-items: start;
-      }
-      .hb-stats { justify-content: flex-start; }
-      .hb-cta-row { grid-column: 1 / -1; justify-content: flex-start; }
+      .hero h1 { font-size: clamp(3rem, 7vw, 4rem); }
+      .hero-grid { gap: 2rem; }
       .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
       /* logos fit on one row at tablet width */
       .trust-break { display: none; }
@@ -1891,33 +1932,40 @@
         <div class="hb-status"><span class="hb-pulse"></span>Since 2017</div>
       </div>
 
-      <h1>Financial health should be a right. <em>So we build it.<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em></h1>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <h1 class="reveal r1">Financial health should be a right. <em>So we build it.<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em></h1>
+          <p class="hb-sub reveal r2">
+            Affordability is mobility. We use data and technology to remove the <strong>barriers</strong> holding back young adults and vulnerable communities.
+          </p>
+          <div class="hb-cta-row reveal r3">
+            <a href="get-involved.html" class="btn-primary">
+              Get involved
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#solution" class="btn-secondary">See our work</a>
+          </div>
+          <div class="hb-stats reveal r4">
+            <div class="hb-stat">
+              <div class="hb-stat-num">10M<em>+</em></div>
+              <div class="hb-stat-label">Lives reached</div>
+            </div>
+            <div class="hb-stat">
+              <div class="hb-stat-num">100K<em>+</em></div>
+              <div class="hb-stat-label">Educated</div>
+            </div>
+          </div>
+        </div>
 
-      <div class="hb-bottom">
-        <p class="hb-sub">
-          Affordability is mobility. We use data and technology to remove the <strong>barriers</strong> holding back young adults and vulnerable communities.
-        </p>
-        <div class="hb-stats">
-          <div class="hb-stat">
-            <div class="hb-stat-num">10M<em>+</em></div>
-            <div class="hb-stat-label">Lives reached</div>
+        <figure class="hero-photo reveal r2">
+          <div class="hero-photo-frame">
+            <img src="Barrier%20Breakers%202026%20Pics/IMG_3829-1600.jpg" alt="Hundreds of high school students in the Kent State University atrium, two of them holding FinMango flags" width="1600" height="1067" fetchpriority="high" decoding="async">
           </div>
-          <div class="hb-stat">
-            <div class="hb-stat-num">100K<em>+</em></div>
-            <div class="hb-stat-label">Educated</div>
-          </div>
-        </div>
-        <div class="hb-cta-row">
-          <a href="get-involved.html" class="btn-primary">
-            Get involved
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="#solution" class="btn-secondary">See our work</a>
-        </div>
+          <figcaption><span>Barrier Breakers 2026 · Kent State University</span><em>Northeast Ohio</em></figcaption>
+        </figure>
       </div>
 
     </div>
-
     <div class="hero-trust">
       <div class="hero-trust-label">Partners &amp; collaborators</div>
       <div class="hero-trust-logos">
@@ -1937,10 +1985,10 @@
 
       <div class="barometer-head">
         <div class="barometer-head-left">
-          <span class="barometer-live"><span class="barometer-live-dot"></span><span class="barometer-eyebrow-text">Live data · updated daily</span></span>
+          <span class="barometer-live"><span class="barometer-eyebrow-text">Financial Health Barometer · Heuristic Stress Model</span></span>
           <h2 class="barometer-headline">The crisis isn't coming. <em>It's here.</em></h2>
           <p class="barometer-subline" id="barometer-headline-text">
-            Right now, national financial anxiety sits at <span class="stat-num" id="headline-stat-value">137</span>. <span class="stat-change-pill" id="headline-stat-change">Tracking now.</span>
+            Our composite Financial Anxiety index reads <span class="stat-num" id="headline-stat-value">137</span> nationally. <span class="stat-change-pill" id="headline-stat-change">Tracking now.</span> It is built from BLS, Census and FRED data with hand-set regional weights, so read state gaps as indicative. <a href="barometer.html#methodology" class="barometer-method-link">How it's built</a>
           </p>
         </div>
         <a href="barometer.html" class="barometer-explore-link">
@@ -2288,13 +2336,13 @@
             changeEl.textContent = 'Tracking now';
             changeEl.className = 'stat-change-pill flat';
           } else if (a.change > 0.05) {
-            changeEl.textContent = `↑ ${Math.abs(a.change).toFixed(1)} pts vs last month`;
+            changeEl.textContent = `↑ ${Math.abs(a.change).toFixed(1)} pts year over year`;
             changeEl.className = 'stat-change-pill up';
           } else if (a.change < -0.05) {
-            changeEl.textContent = `↓ ${Math.abs(a.change).toFixed(1)} pts vs last month`;
+            changeEl.textContent = `↓ ${Math.abs(a.change).toFixed(1)} pts year over year`;
             changeEl.className = 'stat-change-pill down';
           } else {
-            changeEl.textContent = 'Steady vs last month';
+            changeEl.textContent = 'Steady year over year';
             changeEl.className = 'stat-change-pill flat';
           }
         }
@@ -2305,7 +2353,7 @@
           const [y, m, d] = DASHBOARD_DATA.as_of.split('-').map(Number);
           if (y && m && d) {
             const formatted = new Date(y, m - 1, d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            eyebrowEl.textContent = `Live data · updated ${formatted}`;
+            eyebrowEl.textContent = `Financial Health Barometer · reading from ${formatted}`;
           }
         }
       }
