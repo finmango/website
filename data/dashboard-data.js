@@ -1,11 +1,11 @@
 // Financial Health Barometer Data
-// Auto-generated: 2026-09-10T05:18:15.397Z
+// Auto-generated: 2026-09-11T05:18:18.410Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
-  "as_of": "2026-09-10",
+  "as_of": "2026-09-11",
   "meta": {
-    "generated": "2026-09-10T05:18:15.357Z",
+    "generated": "2026-09-11T05:18:18.369Z",
     "version": "2.5",
     "source": "BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs",
     "update_frequency": "daily",
@@ -17,10 +17,10 @@ const DASHBOARD_DATA = {
       "fair_market_rent": "NLIHC OOR 2025 (fallback)",
       "housing_wage": "Derived from NLIHC OOR 2025 fallback FMR (NLIHC formula)",
       "jchs_calibration": "Harvard JCHS State of the Nation's Housing 2025",
-      "trends": "Google Health Trends API (NOT WORKING - 36 requests returned no data, no successful fetch on record; boost withheld)"
+      "trends": "Google Health Trends API (NOT WORKING - 156 requests returned no data, HTTP 400 badRequest, no successful fetch on record; boost withheld)"
     },
     "carried_forward": {},
-    "unemployment_observed": "2026-09-10",
+    "unemployment_observed": "2026-09-11",
     "trends_coverage": {
       "financial_anxiety": {
         "states_covered": 0,
@@ -52,8 +52,20 @@ const DASHBOARD_DATA = {
       }
     },
     "trends_run": {
-      "state_requests": 36,
+      "requests": 40,
+      "state_requests": 156,
       "state_readings": 0,
+      "http_statuses": {
+        "400": 40
+      },
+      "quota_hit": false,
+      "first_error": {
+        "where": "national/US",
+        "status": 400,
+        "reason": "badRequest",
+        "message": "API key expired. Please renew the API key.",
+        "quota": false
+      },
       "attempted": true
     },
     "trends_terms": {
@@ -69,8 +81,8 @@ const DASHBOARD_DATA = {
         "housing_stress": {},
         "affordability": {}
       },
-      "cursor": 30,
-      "updated": "2026-09-10",
+      "cursor": 18,
+      "updated": "2026-09-11",
       "last_successful_fetch": null
     },
     "tier_estimates": {
@@ -216,11 +228,11 @@ const DASHBOARD_DATA = {
       ]
     },
     "data_age": {
-      "oldest_observation": "2026-09-10",
+      "oldest_observation": "2026-09-11",
       "oldest_source": "unemployment",
       "age_days": 0
     },
-    "augmented_at": "2026-09-10T05:18:15.397Z"
+    "augmented_at": "2026-09-11T05:18:18.410Z"
   },
   "national": {
     "financial_anxiety": {
@@ -294,7 +306,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 15.2,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -303,7 +315,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 13.970848148379181,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.25,
         "trends_boost": {
           "financial_anxiety": {
@@ -373,7 +385,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10.3,
         "rent_burden_pct": 26.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -382,7 +394,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.1546920482373,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.08,
         "trends_boost": {
           "financial_anxiety": {
@@ -452,7 +464,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 11.9,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -461,7 +473,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 8.215184253366877,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.1,
         "trends_boost": {
           "financial_anxiety": {
@@ -531,7 +543,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 15.3,
         "rent_burden_pct": 28.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -540,7 +552,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 12.67016199186515,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.22,
         "trends_boost": {
           "financial_anxiety": {
@@ -610,7 +622,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 11.8,
         "rent_burden_pct": 33.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -619,7 +631,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 7.6767609833675685,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.12,
         "trends_boost": {
           "financial_anxiety": {
@@ -689,7 +701,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 9.6,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -698,7 +710,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 3.4006762570746503,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
@@ -768,7 +780,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10.1,
         "rent_burden_pct": 32.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -777,7 +789,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 23.62775707523416,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
@@ -847,7 +859,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10.1,
         "rent_burden_pct": 30.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -856,7 +868,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.62293908947258,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1,
         "trends_boost": {
           "financial_anxiety": {
@@ -926,7 +938,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 16.4,
         "rent_burden_pct": 29,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -935,7 +947,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 0.8856612321482514,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.18,
         "trends_boost": {
           "financial_anxiety": {
@@ -1005,7 +1017,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 12.1,
         "rent_burden_pct": 36.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1014,7 +1026,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 6.610716591349264,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.15,
         "trends_boost": {
           "financial_anxiety": {
@@ -1084,7 +1096,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 12.8,
         "rent_burden_pct": 31.6,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1093,7 +1105,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 10.895599886102888,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.1,
         "trends_boost": {
           "financial_anxiety": {
@@ -1164,7 +1176,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10,
         "rent_burden_pct": 32.6,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1173,7 +1185,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 10.56137547681471,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.2,
         "trends_boost": {
           "financial_anxiety": {
@@ -1243,7 +1255,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10.4,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1252,7 +1264,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.49636889949724,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -1322,7 +1334,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 11.5,
         "rent_burden_pct": 29.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1331,7 +1343,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 21.75531457096136,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -1401,7 +1413,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 12.1,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1410,7 +1422,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.226537216828486,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.04,
         "trends_boost": {
           "financial_anxiety": {
@@ -1480,7 +1492,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 11.2,
         "rent_burden_pct": 27.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1489,7 +1501,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 13.143807870370367,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 0.92,
         "trends_boost": {
           "financial_anxiety": {
@@ -1559,7 +1571,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10.9,
         "rent_burden_pct": 27.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1568,7 +1580,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 15.578271722334492,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1,
         "trends_boost": {
           "financial_anxiety": {
@@ -1638,7 +1650,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 15.4,
         "rent_burden_pct": 27.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1647,7 +1659,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.20879663460589,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.18,
         "trends_boost": {
           "financial_anxiety": {
@@ -1718,7 +1730,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 18.6,
         "rent_burden_pct": 32.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1727,7 +1739,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 6.334122892573488,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.3,
         "trends_boost": {
           "financial_anxiety": {
@@ -1797,7 +1809,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10.6,
         "rent_burden_pct": 30.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1806,7 +1818,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.967456449896368,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 0.95,
         "trends_boost": {
           "financial_anxiety": {
@@ -1876,7 +1888,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 9.2,
         "rent_burden_pct": 30.8,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1885,7 +1897,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.236387720838522,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1,
         "trends_boost": {
           "financial_anxiety": {
@@ -1955,7 +1967,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 9.8,
         "rent_burden_pct": 31.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1964,7 +1976,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.05314022337085,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
@@ -2034,7 +2046,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 13.4,
         "rent_burden_pct": 30.7,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2043,7 +2055,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 17.975715034894513,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.08,
         "trends_boost": {
           "financial_anxiety": {
@@ -2113,7 +2125,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 9.3,
         "rent_burden_pct": 29.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2122,7 +2134,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 10.330184435447588,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.12,
         "trends_boost": {
           "financial_anxiety": {
@@ -2193,7 +2205,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 17.8,
         "rent_burden_pct": 30.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2202,7 +2214,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.166401527203295,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.35,
         "trends_boost": {
           "financial_anxiety": {
@@ -2272,7 +2284,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 12.2,
         "rent_burden_pct": 27.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2281,7 +2293,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.83530803311881,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -2351,7 +2363,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10.4,
         "rent_burden_pct": 27,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2360,7 +2372,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.271801538294877,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1,
         "trends_boost": {
           "financial_anxiety": {
@@ -2430,7 +2442,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10.6,
         "rent_burden_pct": 28.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2439,7 +2451,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 12.668287401172648,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 0.95,
         "trends_boost": {
           "financial_anxiety": {
@@ -2509,7 +2521,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 11.8,
         "rent_burden_pct": 34,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2518,7 +2530,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 12.306465315463706,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.12,
         "trends_boost": {
           "financial_anxiety": {
@@ -2588,7 +2600,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 7.3,
         "rent_burden_pct": 29.8,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2597,7 +2609,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 19.265615076536232,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 0.88,
         "trends_boost": {
           "financial_anxiety": {
@@ -2667,7 +2679,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 9.2,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2676,7 +2688,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 24.200960131440468,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -2746,7 +2758,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 15.8,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2755,7 +2767,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 13.496734660969128,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.18,
         "trends_boost": {
           "financial_anxiety": {
@@ -2825,7 +2837,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 14,
         "rent_burden_pct": 30.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2834,7 +2846,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 22.396543883583455,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.15,
         "trends_boost": {
           "financial_anxiety": {
@@ -2904,7 +2916,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 12.6,
         "rent_burden_pct": 30.8,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2913,7 +2925,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 12.32622357646162,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.08,
         "trends_boost": {
           "financial_anxiety": {
@@ -2983,7 +2995,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10.8,
         "rent_burden_pct": 24.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2992,7 +3004,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.842703082126215,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 0.85,
         "trends_boost": {
           "financial_anxiety": {
@@ -3062,7 +3074,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 12.6,
         "rent_burden_pct": 29,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3071,7 +3083,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 18.262110197703656,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.06,
         "trends_boost": {
           "financial_anxiety": {
@@ -3141,7 +3153,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 14.8,
         "rent_burden_pct": 28.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3150,7 +3162,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.586452762923342,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.15,
         "trends_boost": {
           "financial_anxiety": {
@@ -3220,7 +3232,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 11.7,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3229,7 +3241,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 5.985701718519612,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -3299,7 +3311,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 11.6,
         "rent_burden_pct": 29.7,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3308,7 +3320,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 18.06222021835047,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
@@ -3378,7 +3390,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 12,
         "rent_burden_pct": 30.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3387,7 +3399,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 22.076373683064112,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 0.98,
         "trends_boost": {
           "financial_anxiety": {
@@ -3457,7 +3469,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 13.3,
         "rent_burden_pct": 31.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3466,7 +3478,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.57771204424153,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.15,
         "trends_boost": {
           "financial_anxiety": {
@@ -3536,7 +3548,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10.5,
         "rent_burden_pct": 26.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3545,7 +3557,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.36340000693312,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 0.88,
         "trends_boost": {
           "financial_anxiety": {
@@ -3615,7 +3627,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 13.3,
         "rent_burden_pct": 30.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3624,7 +3636,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.851640423068996,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.12,
         "trends_boost": {
           "financial_anxiety": {
@@ -3694,7 +3706,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 13.4,
         "rent_burden_pct": 31.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3703,7 +3715,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 6.204649489275784,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -3773,7 +3785,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 8.4,
         "rent_burden_pct": 29.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3782,7 +3794,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 9.590360224522628,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
@@ -3852,7 +3864,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 9.3,
         "rent_burden_pct": 29.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3861,7 +3873,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 18.079650417353527,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 0.92,
         "trends_boost": {
           "financial_anxiety": {
@@ -3931,7 +3943,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 9.8,
         "rent_burden_pct": 29.7,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3940,7 +3952,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 15.954445566312279,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 0.98,
         "trends_boost": {
           "financial_anxiety": {
@@ -4010,7 +4022,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10,
         "rent_burden_pct": 30.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4019,7 +4031,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 8.238362592701218,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
@@ -4089,7 +4101,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 16.2,
         "rent_burden_pct": 28.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4098,7 +4110,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 21.801153218011542,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 1.28,
         "trends_boost": {
           "financial_anxiety": {
@@ -4168,7 +4180,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10.3,
         "rent_burden_pct": 27.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4177,7 +4189,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 20.920752458955086,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 0.95,
         "trends_boost": {
           "financial_anxiety": {
@@ -4247,7 +4259,7 @@ const DASHBOARD_DATA = {
         "poverty_rate": 10,
         "rent_burden_pct": 26.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-10",
+        "rent_burden_pct_observed": "2026-09-11",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4256,7 +4268,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.335307774089273,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-10",
+        "housing_price_change_observed": "2026-09-11",
         "regional_stress_multiplier": 0.95,
         "trends_boost": {
           "financial_anxiety": {
