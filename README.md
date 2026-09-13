@@ -44,6 +44,7 @@ website/
 ├── advocacy.html          # Advocacy & ambassadors
 ├── resources.html         # Tools and calculators
 ├── barrier-breakers.html  # Innovation challenge
+├── future-proof.html      # Future Proof: AI skills program (+ -apply, -one-pager)
 ├── donate.html            # Donation page
 ├── get-involved.html      # Volunteer opportunities
 ├── privacy.html           # Privacy policy
