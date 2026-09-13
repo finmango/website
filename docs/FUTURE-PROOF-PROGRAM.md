@@ -1,6 +1,8 @@
 # Future Proof — Program Design
 
-**Status:** Draft v1 (September 2026). Pages: `future-proof.html`, `future-proof-apply.html`, `future-proof-one-pager.html`.
+**Status:** Draft v2 (September 2026), lean/stipended model, positioned as a funder pitch. Pages: `future-proof.html`, `future-proof-apply.html` (waitlist), `future-proof-one-pager.html`.
+
+**Visibility:** the pages are deployed but *unlisted*: not in the site nav or footer, `noindex, nofollow`, no homepage tile. Share the URL directly with funders and partners. When the cohort is funded, add the nav item (see "Going public" below).
 
 ## The one-line pitch
 
@@ -20,7 +22,9 @@ A free eight-week, remote program for people aged 16–24 that teaches them to w
 3. **Honest about AI.** No fear-mongering, no hype. Week one is numbers. Week three is "AI as a colleague, not an oracle": verify, edit, catch it when it's wrong.
 4. **Free, always.** No tuition, no paid tier, no charge for the credential. Free tiers of mainstream AI tools only.
 5. **Open by default.** Projects, curriculum, assessments and follow-up results are published.
-6. **Cohort, not course.** Fixed dates, teams of three, weekly live session. Completion rates in cohort models are dramatically higher than self-paced MOOCs.
+6. **Cohort, not course.** Fixed dates and weekly deadlines, teams of three. Completion rates in cohort models are dramatically higher than self-paced MOOCs, even without live sessions.
+7. **Lean by default, human when funded.** The base program must run on a few staff hours a week. Funding buys the human layer, not the existence of the program.
+8. **Pay to finish, never to enroll.** Milestone stipends replace much of the oversight a staffed program would provide: the deadlines enforce themselves.
 
 ## Audience
 
@@ -45,10 +49,23 @@ A free eight-week, remote program for people aged 16–24 that teaches them to w
 
 **Project shapes:** tool/calculator, plain-language guide, data story, campaign, open. Each must address one financial barrier faced by real people the team can reach.
 
-**Weekly rhythm (~5 hrs):** 60–75 min live session (recorded), 45–60 min team meeting, 2.5–3 hrs build time. Weekly mentor check-in from week 3.
+**Weekly rhythm (~5 hrs):** 15–20 min recorded brief + written task (released Monday), team meeting the team schedules, 2.5–3 hrs build time, ~30 min reviewing two other teams' submissions against the rubric. Deadline Sunday. Submissions via form → Sheet.
+
+**Peer review:** from week 3 each team reviews two others weekly (rubric-driven, form-based). This is the primary feedback loop in the lean model and teaches the "taking feedback" skill directly.
+
+## Stipend
+
+| Milestone | Amount | Why |
+|---|---|---|
+| Week 4: five interviews written up | $100 per person | Proves the team exists and is working; first drop-off point |
+| Week 7: project published | $200 per person | The main incentive to finish; second drop-off point |
+| Demo Day: top three teams | $500–1,000 per team | Prize, already in the design |
+
+Rules: nothing paid at enrollment. Keep each individual under $600/year to stay below the 1099 reporting threshold for US recipients. Under-18s paid via guardian or gift card. International: batch payouts (Wise / PayPal Payouts) or restrict to payable countries and say so. For 60 participants at ~65% completion: ~$12–15K stipends + $3–5K prizes ≈ $16–20K per cohort.
 
 ## What participants leave with
 
+0. A stipend paid at two milestones (above).
 1. A published project on finmango.org (permanent URL, open licence, names attached) plus a build story.
 2. A FinMango Future Proof credential, issued only on shipping, linking to the project (self-verifying). Consider Open Badges / verifiable credential format.
 3. Demo Day in front of employer judges, with written feedback from every judge; prizes for top teams.
@@ -56,10 +73,24 @@ A free eight-week, remote program for people aged 16–24 that teaches them to w
 
 ## Delivery model
 
-- **Cohort size:** 60–90 participants (20–30 teams) per cohort to start; two cohorts per year (Spring, Fall).
-- **Staffing per cohort:** 1 program lead (0.5 FTE), 1 curriculum/teaching lead (Bob-style instructor, contract), 8–12 volunteer mentors (employer partners, alumni ambassadors), Demo Day judge panel of 6–10.
-- **Platform:** existing stack. Live sessions on Zoom/Meet; team channels on Discord or Slack; project pages published via the same Cloudflare Pages + Apps Script pattern as Ambassador Notes; applications via Apps Script → Google Sheet (same as Barrier Breakers apply form).
-- **Classroom edition:** 5 × 50-minute sessions, one project per class, taught by FinMango instructors alongside Millionaire Mindset. Teacher one-pager, slides, rubric.
+### Lean (runs with what FinMango has today)
+
+- **Cohort size:** ~60 participants (20 teams). Light selection: age, consent, a completed problem statement. Everyone who qualifies is in; the stipend sorts out who is serious.
+- **Content:** eight recorded briefs (record once, reuse every cohort) + written tasks on the site.
+- **Feedback:** weekly peer review (two teams review each team), rubric-driven, via form.
+- **Hosts:** each Global Ambassador hosts 3–4 teams in a Discord channel and answers questions. No mentors.
+- **Demo Day:** async. Teams submit a 5-minute video; employer judges score on their own time using the existing Barrier Breakers judging tool. Optional 2-hour live showcase.
+- **Publishing:** participants submit through the Ambassador Notes pipeline (`write.html`); one FinMango approval click. **This is the one step that stays human.**
+- **Credential:** auto-generated on publish (PDF + verification link to the project).
+- **Follow-up:** automated 6-month email survey.
+- **Staff time:** ~3–5 hrs/week for one person during the 8 weeks (approvals, inbox, payouts) + a one-time setup weekend. Stipends + prizes ≈ $16–20K; tooling/payout fees ≈ $1–3K.
+
+### Funded (the goal)
+
+Everything above plus: a half-time program lead for four months; an instructor to record/run the curriculum and hold weekly office hours or a live session; an employer mentor per team (1 hr/week, weeks 3–8); a live Demo Day; a proper pre/post assessment and published six-month evaluation.
+
+- **Platform:** existing stack throughout (Cloudflare Pages, Apps Script → Sheets, Discord, the judging tool).
+- **Classroom edition (Tier 3):** 5 × 50-minute sessions, one project per class, taught by FinMango instructors alongside Millionaire Mindset. Teacher one-pager, slides, rubric.
 
 ## Measurement (all published)
 
@@ -81,31 +112,48 @@ Most corporate-foundation youth-employment calls (e.g. Citi Foundation Global In
 
 Plus what funders rarely get: public, auditable outcomes.
 
-## Budget sketch (per cohort, estimates to refine)
+## Funding tiers (what the page pitches)
+
+| Tier | Ask | Buys |
+|---|---|---|
+| 1 · Fund the stipends | ~$20K | One lean cohort of ~60: milestone stipends, prizes, payout/tooling/credential costs. Almost all of it goes to participants. |
+| 2 · Fund the people (the goal) | $50–75K | Tier 1 + half-time program lead (4 months), instructor, employer mentor per team, live Demo Day, published evaluation. |
+| 3 · Fund the year | ~$150K | Two Tier 2 cohorts + classroom edition in 10 schools + employer partner network. |
+
+### Budget sketch, Tier 2 (per cohort, estimates to refine)
 
 | Line | Range |
 |---|---|
+| Stipends (~60 × up to $300 × ~65% completion) | $12–15K |
+| Demo Day prizes | $3–5K |
 | Program lead (0.5 FTE, 4 months) | $18–28K |
 | Instruction / curriculum lead (contract) | $8–15K |
-| Demo Day prizes | $5–15K |
-| Platform, tooling, credentialing | $1–3K |
-| Participant support (data stipends, accessibility) | $2–6K |
+| Platform, payouts, credentialing | $2–4K |
+| Participant support (data, accessibility) | $2–6K |
 | Evaluation & follow-up | $3–6K |
-| **Total per cohort** | **~$40–75K** |
-
-Two cohorts plus classroom edition in 10 schools: roughly $100–160K/year. Scales mostly with staffing, not per-participant cost.
+| **Total per cohort** | **~$50–80K** |
 
 ## Risks and mitigations
 
-- **Completion.** Mitigate with cohort model, teams, fixed dates, weekly mentor contact, and a small, visible deliverable every week.
+- **Completion without live contact.** Expect ~50% in the lean model vs ~65% funded. Mitigate with teams, weekly deadlines, peer review, ambassador hosts, and stipends paid exactly at the two usual drop-off points. Promise "published", not "polished".
+- **Payout admin.** Batch payout service; keep per-person totals under $600; guardian/gift-card path for minors; restrict to payable countries if needed.
 - **AI tool access / cost.** Free tiers only; curriculum is tool-agnostic; classroom edition for those without home access.
 - **Quality of published work.** Editorial pass before publishing (same as Ambassador Notes); rubric shared from week 3.
 - **Employer engagement fades.** Ask for small, bounded commitments (1 hr/week for 6 weeks, or one Demo Day); rotate partners across cohorts.
 - **Brand sprawl.** Future Proof sits across existing programs (Signal → teaching content, Barrier Breakers → Demo Day format, Ambassadors → alumni path). Retire or fold the unlinked `ai-ready/` and `talent/` pages rather than running them in parallel.
 
+## Going public (when funded)
+
+- Add Future Proof to the "Our Work → Build" menu, mobile menu and footer "Initiatives" list (the nav/footer blocks are identical across pages; a scripted insert after the Barrier Breakers item works on all of them and on `templates/nav.html` / `templates/footer.html`).
+- Remove the `noindex, nofollow` meta from the three pages.
+- Change the hero status from "Seeking funders" to "Applications open", flip the primary CTA to the waitlist/apply page, and set dates.
+- Homepage tile + LinkedIn/Instagram posts + ambassador network + Millionaire Mindset classes.
+
 ## Launch checklist (decisions needed)
 
-- [ ] Founding cohort dates (suggest: applications close mid-Jan 2027, cohort runs Feb–Mar 2027, Demo Day early April).
+- [ ] Founding funder secured; tier chosen.
+- [ ] Founding cohort dates (suggest: cohort runs ~8 weeks after funding lands; Demo Day videos due week 8, judging the following week).
+- [ ] Payout rail (Wise / PayPal Payouts / gift cards) and payable-country list.
 - [ ] Deploy Apps Script + Sheet for applications; set `APPLY_URL` in `future-proof-apply.html` (until then the form falls back to a pre-filled email to hello@finmango.org).
 - [ ] Prize amounts for Demo Day and any participant stipends.
 - [ ] Credential format (PDF + verification page vs Open Badges).

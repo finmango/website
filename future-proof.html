@@ -8,6 +8,7 @@
     <meta name="description" content="A free eight-week program for people 16 to 24. Learn what AI is really doing to work, build something real for your community, and leave with a published project, a credential, and employers who watched you present.">
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="canonical" href="https://www.finmango.org/future-proof.html">
+    <meta name="robots" content="noindex, nofollow">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -787,7 +788,7 @@
            or under reduced-motion (handled in JS), everything stays visible */
         .js .section-head, .js .problem-copy, .js .problem-visual, .js .step-item,
         .js .track-row, .js .prizes-head, .js .prize-division, .js .week-row,
-        .js .facts-card, .js .partnership-container, .js .partner-card, .js .faq-item,
+        .js .facts-card, .js .fund-tier, .js .fund-foot, .js .partnership-container, .js .partner-card, .js .faq-item,
         .js .final-cta-container {
             opacity: 0;
             transform: translateY(20px);
@@ -893,7 +894,35 @@
         .outcome-list li::before { content: '→'; color: var(--orange); font-weight: 700; position: absolute; left: 0; top: .85rem; }
         .outcome-list li strong { color: var(--paper); font-weight: 600; }
         .prizes-divisions.outcomes { grid-template-columns: repeat(2, 1fr); }
-        .prizes-divisions.outcomes > .prize-division:first-child { grid-column: auto; }
+        .prizes-divisions.outcomes > .prize-division:first-child { grid-column: 1 / -1; }
+        .prize-division.stipend { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem; align-items: start; border-color: rgba(242, 90, 39, .45); }
+        .prize-division.stipend .prize-division-desc { margin-bottom: 1rem; }
+        .prize-division.stipend .prize-note { margin-top: .5rem; }
+        .stipend-rows .prize-row:first-child { border-top: none; }
+        .stipend-rows .prize-row-place { white-space: normal; }
+
+        /* Funding — three tiers, the middle one is the ask */
+        .fund { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+        .fund-container { max-width: var(--max-width); margin: 0 auto; }
+        .fund .section-sub { max-width: 68ch; }
+        .fund-grid { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 1.25rem; align-items: stretch; }
+        .fund-tier { border: 1px solid var(--ink-line); padding: 2rem 1.85rem; display: flex; flex-direction: column; gap: .9rem; background: var(--paper); }
+        .fund-tier.featured { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+        .fund-tier-label { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
+        .fund-tier.featured .fund-tier-label { color: var(--orange); }
+        .fund-tier-amount { font-size: clamp(2.2rem, 3.4vw, 3rem); font-weight: 900; letter-spacing: -.045em; line-height: 1; }
+        .fund-tier-amount em { font-style: normal; color: var(--orange); font-size: .55em; vertical-align: .45em; }
+        .fund-tier h3 { font-size: 1.15rem; font-weight: 900; letter-spacing: -.02em; }
+        .fund-tier p { font-size: .9rem; color: var(--ink-dim); line-height: 1.6; }
+        .fund-tier.featured p { color: var(--paper-dim); }
+        .fund-tier ul { list-style: none; display: flex; flex-direction: column; margin-top: .25rem; border-top: 1px solid var(--ink-line-soft); }
+        .fund-tier.featured ul { border-top-color: var(--paper-line); }
+        .fund-tier ul li { padding: .6rem 0 .6rem 1.1rem; position: relative; font-size: .88rem; color: var(--ink-dim); border-bottom: 1px solid var(--ink-line-soft); line-height: 1.45; }
+        .fund-tier.featured ul li { color: var(--paper-dim); border-bottom-color: var(--paper-line); }
+        .fund-tier ul li::before { content: ''; position: absolute; left: 0; top: 1.25em; width: 6px; height: 1px; background: var(--orange); }
+        .fund-foot { margin-top: 2rem; display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; padding-top: 1.75rem; border-top: 1px solid var(--ink-line-soft); }
+        .fund-foot p { font-size: .88rem; color: var(--ink-faint); line-height: 1.55; max-width: 62ch; }
+        .fund-foot-actions { display: flex; gap: .9rem; flex-wrap: wrap; }
 
         /* Facts — who it's for, ruled grid */
         .facts { padding: 7.5rem var(--gutter) 0; background: var(--paper); }
@@ -993,6 +1022,10 @@
             .week-row { grid-template-columns: 56px 1fr; }
             .week-skill { grid-column: 2; justify-self: start; margin-top: .2rem; }
             .prizes-divisions.outcomes { grid-template-columns: 1fr; }
+            .prize-division.stipend { grid-template-columns: 1fr; gap: 1.25rem; }
+            .fund { padding: 0 var(--gutter) 5rem; }
+            .fund-grid { grid-template-columns: 1fr; }
+            .fund-foot { grid-template-columns: 1fr; gap: 1.25rem; }
             .facts { padding: 5rem var(--gutter) 0; }
             .facts-grid { grid-template-columns: 1fr 1fr; }
             .classroom-callout { grid-template-columns: 1fr; gap: .9rem; padding: 1.4rem 1.25rem; }
@@ -1607,7 +1640,7 @@
 
                 <div class="hero-top">
                     <div class="eyebrow">FinMango · Future Proof</div>
-                    <div class="hb-status"><span class="hb-pulse"></span>Founding cohort · Applications open</div>
+                    <div class="hb-status"><span class="hb-pulse"></span>Founding cohort · Seeking funders</div>
                 </div>
 
                 <h1>Learn to work with AI. Then <em>prove it.<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em></h1>
@@ -1617,13 +1650,13 @@
                         A free eight-week program for people 16 to 24. Understand what AI is really doing to work, build something real for your community with it, and leave with <strong>a published project, a credential, and a room of employers who watched you present.</strong>
                     </p>
                     <div class="hb-cta-row">
-                        <a href="future-proof-apply.html" class="btn-primary">
-                            Apply for the founding cohort
+                        <a href="#fund" class="btn-primary">
+                            Fund the founding cohort
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </a>
-                        <a href="#how" class="btn-secondary">See how it works</a>
+                        <a href="future-proof-apply.html" class="btn-secondary">Join the waitlist</a>
                     </div>
-                    <div class="hb-facts"><span>8 weeks</span><span>Remote, any country</span><span>Ages 16–24</span><span>Free, always</span></div>
+                    <div class="hb-facts"><span>8 weeks</span><span>Remote, any country</span><span>Ages 16–24</span><span>Free, with a stipend to finish</span></div>
                 </div>
 
             </div>
@@ -1641,6 +1674,9 @@
                         </p>
                         <p class="problem-body">
                             Future Proof is our answer. Not a certificate <em>about</em> AI. A real thing you built <em>with</em> it, published under your name, in front of people who hire.
+                        </p>
+                        <p class="problem-body">
+                            We designed it to run lean, because that's what we can afford today: recorded lessons, teams that review each other's work, and a stipend that pays people to finish. <a href="#fund">Funding adds the human part.</a>
                         </p>
                         <div class="problem-stats">
                             <div class="problem-stat">
@@ -1675,7 +1711,7 @@
                 <div class="section-head">
                     <span class="eyebrow">How it works</span>
                     <h2>Three phases. <em>One&nbsp;shipped&nbsp;project.</em></h2>
-                    <p class="section-sub">About five hours a week, remote, in a cohort of people your age from around the world. Everything you make is yours, and everything you make gets published.</p>
+                    <p class="section-sub">About five hours a week, remote, on your own schedule, in a cohort of people your age from around the world. Every week has a deadline and a deliverable. Everything you make is yours, and everything you make gets published.</p>
                 </div>
                 <div class="steps-grid">
                     <div class="step-item">
@@ -1693,7 +1729,7 @@
                         </div>
                         <div class="step-number">Weeks 1–2 · Read</div>
                         <div class="step-title">Read the economy</div>
-                        <div class="step-desc">What AI is and isn't doing to jobs, in numbers instead of headlines. Map your own field using FinMango's AI Economic Signal. Build a personal money plan for a career that will not be linear.</div>
+                        <div class="step-desc">Two short recorded briefs and two written tasks. What AI is and isn't doing to jobs, in numbers instead of headlines. Map your own field with FinMango's AI Economic Signal and write a money plan for a career that will not be linear.</div>
                     </div>
                     <div class="step-item">
                         <div class="step-icon line-icon" aria-hidden="true">
@@ -1709,7 +1745,7 @@
                         </div>
                         <div class="step-number">Weeks 3–6 · Build</div>
                         <div class="step-title">Build with AI</div>
-                        <div class="step-desc">Teams of three pick a financial barrier in their own community and build a real response: a tool, a guide, a data story, a campaign. AI does the grunt work. You do the thinking, the checking, and the talking to real people.</div>
+                        <div class="step-desc">Teams of three pick a financial barrier in their own community and build a real response: a tool, a guide, a data story, a campaign. Each week you review two other teams' work against a rubric, and they review yours. AI does the grunt work. You do the thinking and the checking.</div>
                     </div>
                     <div class="step-item">
                         <div class="step-icon line-icon" aria-hidden="true">
@@ -1725,7 +1761,7 @@
                         </div>
                         <div class="step-number">Weeks 7–8 · Ship</div>
                         <div class="step-title">Ship and show</div>
-                        <div class="step-desc">Publish the project on finmango.org with your name on it. Present at Demo Day to a panel of employers and mentors. Walk out with a credential, a portfolio piece, and introductions.</div>
+                        <div class="step-desc">Publish the project on finmango.org with your name on it. Submit a five-minute Demo Day video that employer judges score and write feedback on. Collect your stipend, your credential, and introductions.</div>
                     </div>
                 </div>
             </div>
@@ -1738,7 +1774,7 @@
                     <div class="weeks-sticky">
                         <span class="eyebrow">The eight weeks</span>
                         <h2>Every week ends with something <em>you made.</em></h2>
-                        <p>No lectures about the future of work. Each week has one job to finish and one human skill it quietly teaches, because the skills that hold their value are the ones a model cannot do for you.</p>
+                        <p>No lectures about the future of work. Each week is a short recorded brief, one job to finish by Sunday, and one human skill it quietly teaches, because the skills that hold their value are the ones a model cannot do for you.</p>
                         <div class="phase-legend">
                             <div class="phase-legend-item"><strong>Read</strong> · weeks 1–2</div>
                             <div class="phase-legend-item"><strong>Build</strong> · weeks 3–6</div>
@@ -1791,7 +1827,7 @@
                             <div class="week-num">Week<strong>06</strong></div>
                             <div>
                                 <div class="week-title">Test, cut, revise</div>
-                                <div class="week-desc">Put it in front of the people from week four. Watch where they get stuck. Cut what doesn't work, even the parts you love.</div>
+                                <div class="week-desc">Put it in front of the people from week four and the two teams reviewing you. Watch where they get stuck. Cut what doesn't work, even the parts you love.</div>
                             </div>
                             <div class="week-skill">Taking feedback</div>
                         </div>
@@ -1807,7 +1843,7 @@
                             <div class="week-num">Week<strong>08</strong></div>
                             <div>
                                 <div class="week-title">Demo Day</div>
-                                <div class="week-desc">Five minutes to present, five minutes of questions from employers and mentors. Top teams take home prizes. Every graduate leaves with a credential and introductions.</div>
+                                <div class="week-desc">Record a five-minute presentation. Employer judges score it and write you feedback on their own time. Top teams take home prizes. Every graduate leaves with a credential and introductions.</div>
                             </div>
                             <div class="week-skill">Presenting</div>
                         </div>
@@ -1906,10 +1942,22 @@
                 <div class="prizes-head">
                     <span class="eyebrow">What you leave with</span>
                     <div class="prizes-hero-number">A portfolio, not a promise.</div>
-                    <div class="prizes-hero-sub">Most programs end with a PDF. This one ends with four things a hiring manager can check.</div>
+                    <div class="prizes-hero-sub">Most programs end with a PDF. This one ends with money in your account and four things a hiring manager can check.</div>
                 </div>
 
                 <div class="prizes-divisions outcomes">
+                    <div class="prize-division stipend">
+                        <div class="stipend-copy">
+                            <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3.5" y="6" width="17" height="12" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.8" stroke="#F25A27" stroke-width="1.5"/><path d="M6.5 9 V9.01 M17.5 15 V15.01" stroke="#F25A27" stroke-width="2" stroke-linecap="round"/></svg></span>A stipend, paid for finishing</h3>
+                            <div class="prize-division-desc">Nobody is paid to sign up. Everyone is paid to ship. The money lands at the two moments teams usually give up, which is how a lean program keeps people to the end.</div>
+                            <p class="prize-note">Amounts are the founding-cohort plan and depend on funding. Participants under 18 are paid through a guardian or in gift cards. Paid by batch transfer to any country we can reach.</p>
+                        </div>
+                        <div class="stipend-rows">
+                            <div class="prize-row"><span class="prize-row-place">Week 4 · interviews done</span><span><span class="prize-row-amount">$100</span><span class="prize-row-breakdown">per person</span></span></div>
+                            <div class="prize-row"><span class="prize-row-place">Week 7 · project published</span><span><span class="prize-row-amount">$200</span><span class="prize-row-breakdown">per person</span></span></div>
+                            <div class="prize-row"><span class="prize-row-place">Demo Day · top three teams</span><span><span class="prize-row-amount">$500–1,000</span><span class="prize-row-breakdown">per team</span></span></div>
+                        </div>
+                    </div>
                     <div class="prize-division">
                         <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3.5" width="16" height="17" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 8.5 H16 M8 12 H16 M8 15.5 H12" stroke="#F25A27" stroke-width="1.5" stroke-linecap="round"/></svg></span>A published project</h3>
                         <div class="prize-division-desc">Live on finmango.org, a site read by people in 100+ countries, under your name and your teammates' names.</div>
@@ -1927,8 +1975,8 @@
                         </ul>
                     </div>
                     <div class="prize-division">
-                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3.5" y="5" width="17" height="12" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 17 L7 21 M15 17 L17 21 M12 17 V20" stroke="#0A0A0A" stroke-width="1.2" stroke-linecap="round" opacity=".55"/><path d="M7 13 L10 10 L12.5 12 L17 7.5" stroke="#F25A27" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Demo Day in front of employers</h3>
-                        <div class="prize-division-desc">Present to hiring managers and mentors who came specifically to meet people who can do this.</div>
+                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3.5" y="5" width="17" height="12" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 17 L7 21 M15 17 L17 21 M12 17 V20" stroke="#0A0A0A" stroke-width="1.2" stroke-linecap="round" opacity=".55"/><path d="M7 13 L10 10 L12.5 12 L17 7.5" stroke="#F25A27" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Demo Day judged by employers</h3>
+                        <div class="prize-division-desc">A five-minute video, scored by hiring managers who signed up specifically to meet people who can do this. Live showcase when funding allows.</div>
                         <ul class="outcome-list">
                             <li><strong>Written feedback</strong> from every judge, the kind you rarely get after a real interview.</li>
                             <li><strong>Prizes for top teams,</strong> announced with each cohort.</li>
@@ -1964,17 +2012,17 @@
                         <div class="fact">
                             <div class="fact-label">Where</div>
                             <div class="fact-value">Anywhere</div>
-                            <div class="fact-note">Fully remote. Sessions are recorded for time zones we can't reach live.</div>
+                            <div class="fact-note">Fully remote and on your own schedule. Deadlines are weekly, not hourly.</div>
                         </div>
                         <div class="fact">
                             <div class="fact-label">Time</div>
                             <div class="fact-value">~5 hrs <em>/</em> week</div>
-                            <div class="fact-note">One live session, one team meeting, and your own build time.</div>
+                            <div class="fact-note">A recorded brief, a team meeting you schedule, and your own build time.</div>
                         </div>
                         <div class="fact">
                             <div class="fact-label">Cost</div>
                             <div class="fact-value"><em>$</em>0</div>
-                            <div class="fact-note">Free to apply, free to attend, free credential. Always.</div>
+                            <div class="fact-note">Free to apply, free to attend, free credential. You get paid, not the other way round.</div>
                         </div>
                         <div class="fact">
                             <div class="fact-label">Format</div>
@@ -1989,18 +2037,75 @@
                         <div class="fact">
                             <div class="fact-label">Cohorts</div>
                             <div class="fact-value">2 <em>/</em> year</div>
-                            <div class="fact-note">Founding cohort first. Dates announced to everyone who applies.</div>
+                            <div class="fact-note">Founding cohort starts when funded. Dates go to everyone on the waitlist.</div>
                         </div>
                         <div class="fact">
-                            <div class="fact-label">Tools</div>
-                            <div class="fact-value">Whatever you have</div>
-                            <div class="fact-note">We use free tiers of mainstream AI tools. No paid software required.</div>
+                            <div class="fact-label">Support</div>
+                            <div class="fact-value">Peers <em>+</em> hosts</div>
+                            <div class="fact-note">Two teams review your work weekly. A FinMango ambassador hosts your group. Mentors when funded.</div>
                         </div>
                     </div>
                     <div class="classroom-callout">
                         <div class="classroom-callout-label">Classroom edition</div>
                         <p><strong>Teachers:</strong> a five-day version of Future Proof runs inside the school day, taught alongside our Millionaire Mindset class that already reaches 30+ schools a year. Same three phases, one week, one project per class.</p>
                         <a href="mailto:hello@finmango.org?subject=Future Proof classroom edition" class="btn-secondary">Bring it to your school</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= WHAT FUNDING BUYS ======================= -->
+        <section class="fund" id="fund">
+            <div class="fund-container">
+                <div class="section-head">
+                    <span class="eyebrow">For funders</span>
+                    <h2>We can run the lean version now. <em>Funding adds the humans.</em></h2>
+                    <p class="section-sub">Honest picture: FinMango is small. The version above is built to run on recorded lessons, peer review, ambassador hosts and a stipend that makes deadlines enforce themselves. That works. What it lacks is the part that makes programs like this exceptional: a person whose job it is, mentors from real employers, and a live room for Demo Day. That's what we're raising for.</p>
+                </div>
+
+                <div class="fund-grid">
+                    <div class="fund-tier">
+                        <div class="fund-tier-label">Tier 1</div>
+                        <div class="fund-tier-amount"><em>$</em>20K</div>
+                        <h3>Fund the stipends</h3>
+                        <p>Runs one lean cohort of about sixty young people exactly as described above. Almost every dollar goes directly to participants.</p>
+                        <ul>
+                            <li>Milestone stipends for everyone who ships</li>
+                            <li>Demo Day prizes for the top three teams</li>
+                            <li>Payout, tooling and credential costs</li>
+                        </ul>
+                    </div>
+                    <div class="fund-tier featured">
+                        <div class="fund-tier-label">Tier 2 · the goal</div>
+                        <div class="fund-tier-amount"><em>$</em>50–75K</div>
+                        <h3>Fund the people</h3>
+                        <p>One full cohort with the human layer on: a part-time program lead, coordinated employer mentors, a weekly live session, a live Demo Day, and a proper evaluation.</p>
+                        <ul>
+                            <li>Everything in Tier 1</li>
+                            <li>Program lead, half-time for four months</li>
+                            <li>Instructor to record and run the curriculum</li>
+                            <li>Employer mentor for every team</li>
+                            <li>Pre/post assessment and six-month follow-up, published</li>
+                        </ul>
+                    </div>
+                    <div class="fund-tier">
+                        <div class="fund-tier-label">Tier 3</div>
+                        <div class="fund-tier-amount"><em>$</em>150K</div>
+                        <h3>Fund the year</h3>
+                        <p>Two full cohorts plus the five-day classroom edition in ten schools alongside Millionaire Mindset, so the program reaches students who would never find it online.</p>
+                        <ul>
+                            <li>Two Tier 2 cohorts</li>
+                            <li>Classroom edition, ten schools</li>
+                            <li>Employer partner network built and kept</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="fund-foot">
+                    <p>Figures are per cohort estimates from our program design and will be refined with a founding funder. Every project, assessment and follow-up is published, so you will never have to ask what happened to the money.</p>
+                    <div class="fund-foot-actions">
+                        <a href="mailto:hello@finmango.org?subject=Funding Future Proof" class="btn-primary">Talk to us about funding <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                        <a href="future-proof-one-pager.html" class="btn-secondary">Program one-pager</a>
                     </div>
                 </div>
             </div>
@@ -2039,7 +2144,7 @@
                     <div class="partner-card">
                         <span class="partner-kicker">Employers</span>
                         <h3>Meet them before the résumé does.</h3>
-                        <p>Send a mentor for an hour a week. Sit on the Demo Day panel. Watch twenty teams present real work, then talk to the ones you'd hire.</p>
+                        <p>Judge Demo Day videos on your own time. Send a mentor for an hour a week once the program is funded. Then talk to the teams you'd hire.</p>
                         <ul>
                             <li>Mentor a team for six weeks</li>
                             <li>Judge Demo Day</li>
@@ -2061,13 +2166,13 @@
                     <div class="partner-card">
                         <span class="partner-kicker">Funders</span>
                         <h3>Fund the cohort, see every outcome.</h3>
-                        <p>Every project, every pre-and-post assessment, and every six-month follow-up is published. You will never have to ask us what happened to the money.</p>
+                        <p>Fund the stipends and the lean cohort runs. Fund the people and it becomes the program we actually want to run. Either way, every result is public.</p>
                         <ul>
-                            <li>Sponsor a cohort or a region</li>
+                            <li>Sponsor stipends, a cohort or a year</li>
                             <li>Fund Demo Day prizes</li>
                             <li>Public, auditable results</li>
                         </ul>
-                        <a href="mailto:hello@finmango.org?subject=Funding Future Proof" class="btn-secondary">Request the program brief<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                        <a href="#fund" class="btn-secondary">See what funding buys<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
                     </div>
                 </div>
             </div>
@@ -2106,6 +2211,18 @@
                         <div class="faq-answer">We read every application. We're looking for a problem you actually care about and evidence you'll finish what you start, not grades or prior experience. If the cohort fills, everyone who applied is first in line for the next one.</div>
                     </details>
                     <details class="faq-item">
+                        <summary>When does it start?</summary>
+                        <div class="faq-answer">When the founding cohort is funded. We're raising for it now. Join the <a href="future-proof-apply.html">waitlist</a> and you'll be the first to hear the dates, and the size of the waitlist is part of how we make the case to funders, so signing up helps.</div>
+                    </details>
+                    <details class="faq-item">
+                        <summary>Who runs it week to week?</summary>
+                        <div class="faq-answer">In the lean version: the recorded briefs, your team, the two teams reviewing you, and a FinMango ambassador who hosts your group and answers questions. One FinMango staff member approves projects before they publish and reads the inbox. With funding, a dedicated program lead and an employer mentor per team are added. We're upfront about this because the difference is real, and it's what we're raising money for.</div>
+                    </details>
+                    <details class="faq-item">
+                        <summary>How does the stipend work?</summary>
+                        <div class="faq-answer">You're paid at two milestones: when your team completes its five interviews in week four, and when your project is published in week seven. Nobody is paid for signing up. Amounts are set with the founding funder and published before the cohort opens. If you're under 18 we pay a guardian or use gift cards, and we pay by batch transfer to any country we can reach.</div>
+                    </details>
+                    <details class="faq-item">
                         <summary>What happens to my project afterwards?</summary>
                         <div class="faq-answer">It stays published on finmango.org under an open license, with your name on it, for as long as the site exists. You keep the right to build on it, take it further, or turn it into something bigger. Several will end up used by real people, which is the whole idea.</div>
                     </details>
@@ -2119,15 +2236,15 @@
                 <svg class="cta-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#F25A27" stroke-width="2" stroke-linecap="round" fill="none"/>
                 </svg>
-                <h2>Ready to <em>prove&nbsp;it?</em></h2>
+                <h2>Help us <em>prove&nbsp;it.</em></h2>
                 <div class="final-cta-bottom">
-                    <p class="final-cta-sub">Applications for the founding cohort are open. It takes about ten minutes and there are no wrong answers.</p>
+                    <p class="final-cta-sub">The program is designed, the pages are built, and the waitlist is open. What's missing is the first cohort's funding.</p>
                     <div class="final-cta-buttons">
-                        <a href="future-proof-apply.html" class="btn-primary">
-                            Apply now
+                        <a href="mailto:hello@finmango.org?subject=Funding Future Proof" class="btn-primary">
+                            Fund the founding cohort
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </a>
-                        <a href="mailto:hello@finmango.org?subject=Future Proof partnership" class="btn-secondary">Partner with us</a>
+                        <a href="future-proof-apply.html" class="btn-secondary">Join the waitlist</a>
                     </div>
                 </div>
                 <div class="final-cta-contact">Questions? <a href="mailto:hello@finmango.org">hello@finmango.org</a> · <a href="future-proof-one-pager.html">Program one-pager</a></div>
@@ -2233,7 +2350,7 @@
     <!-- Scroll-reveal: fade sections in as they enter the viewport -->
     <script>
         (function () {
-            var sel = '.section-head, .problem-copy, .problem-visual, .step-item, .track-row, .prizes-head, .prize-division, .week-row, .facts-card, .partnership-container, .partner-card, .faq-item, .final-cta-container';
+            var sel = '.section-head, .problem-copy, .problem-visual, .step-item, .track-row, .prizes-head, .prize-division, .week-row, .facts-card, .fund-tier, .fund-foot, .partnership-container, .partner-card, .faq-item, .final-cta-container';
             var els = Array.prototype.slice.call(document.querySelectorAll(sel));
             if (!els.length) return;
             var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
