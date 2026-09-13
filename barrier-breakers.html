@@ -8,15 +8,20 @@
     <meta name="description"
         content="$20,000+ in prizes. Students compete at Kent State to solve systemic barriers to financial health.">
     <link rel="icon" type="image/png" href="favicon.png">
+    <meta name="theme-color" content="#FAFAF7">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" as="style"
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" as="style"
       onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap">
     </noscript>
+
+    <!-- The first photos in the hero river are visible immediately -->
+    <link rel="preload" as="image" href="images/barrier-breakers-2026/img_3829-800.webp">
+    <link rel="preload" as="image" href="images/barrier-breakers-2026/img_9143-800.webp">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -36,59 +41,46 @@
 
     <style>
         /* ==========================================================
-           FINMANGO — EDITORIAL SYSTEM
-           One paper, one ink, one orange. Mono for data, Sans for voice.
+           BARRIER BREAKERS — one paper, one ink, one orange.
+           Big type, lots of air, and the photos do the selling.
            ========================================================== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            /* Palette — the whole page runs on these five */
             --paper: #FAFAF7;
             --ink: #0A0A0A;
             --orange: #F25A27;
             --orange-ink: #C2410C;
             --orange-deep: #E5511B;
-            --signal-good: #34D399;   /* used only on ink */
-            --signal-bad: #F87171;    /* used only on ink */
+            --signal-good: #34D399;
+            --signal-bad: #F87171;
 
-            /* Derived ink opacities */
             --ink-dim: rgba(10, 10, 10, .70);
             --ink-faint: rgba(10, 10, 10, .58);
             --ink-line: rgba(10, 10, 10, .1);
             --ink-line-soft: rgba(10, 10, 10, .06);
+            --surface: #F1F1ED;
 
-            /* Derived paper opacities (for ink sections) */
             --paper-dim: rgba(250, 250, 247, .64);
             --paper-faint: rgba(250, 250, 247, .55);
             --paper-line: rgba(250, 250, 247, .12);
 
-            /* Type */
             --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             --font-mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
 
-            /* Layout */
-            --max-width: 1280px;
-            --hero-max: 1440px;
+            --max-width: 1200px;
             --gutter: 2.5rem;
+            --ease: cubic-bezier(.22, 1, .36, 1);
         }
 
         html { scroll-behavior: smooth; }
         section[id] { scroll-margin-top: 84px; }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-        }
-
         body {
             font-family: var(--font-body);
             background: var(--paper);
             color: var(--ink);
-            line-height: 1.5;
+            line-height: 1.6;
             font-size: 17px;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
@@ -96,14 +88,11 @@
         }
 
         ::selection { background: var(--orange-ink); color: #fff; }
-
-        :focus-visible {
-            outline: 2px solid var(--orange-ink);
-            outline-offset: 3px;
-        }
+        :focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+        img { max-width: 100%; }
 
         /* ----------------------------------------------------------
-           SHARED PRIMITIVES
+           PRIMITIVES
            ---------------------------------------------------------- */
         .container {
             max-width: var(--max-width);
@@ -112,97 +101,673 @@
         }
 
         .eyebrow {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--ink-faint);
             display: inline-flex;
             align-items: center;
-            gap: .75rem;
+            gap: 10px;
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--orange-ink);
         }
         .eyebrow::before {
             content: '';
-            width: 24px;
-            height: 1px;
+            width: 28px;
+            height: 2px;
             background: var(--orange);
             flex-shrink: 0;
         }
-        .on-ink .eyebrow { color: var(--paper-faint); }
+        .eyebrow.muted { color: var(--ink-faint); }
+        .eyebrow.muted::before { background: var(--ink-faint); }
+        .on-ink .eyebrow { color: var(--orange); }
 
-        /* Buttons — ONE system, everywhere */
-        .btn-primary {
+        h1, h2, h3 { line-height: 1.05; letter-spacing: -.03em; font-weight: 800; text-wrap: balance; }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); }
+        h3 { font-size: 1.3rem; letter-spacing: -.02em; }
+        .accent { color: var(--orange); }
+
+        .section { padding: 110px 0; }
+        .section-head { margin-bottom: 56px; }
+        .section-head .eyebrow { margin-bottom: 22px; }
+        .section-head p { color: var(--ink-dim); font-size: 1.15rem; max-width: 640px; margin-top: 18px; text-wrap: pretty; }
+        .rule { border-top: 1px solid var(--ink-line); }
+
+        .btn {
             display: inline-flex;
             align-items: center;
-            gap: .85rem;
-            padding: 1.05rem 1.7rem;
-            background: var(--orange-ink);
-            color: #FFFFFF;
+            gap: 10px;
+            padding: 15px 28px;
+            border-radius: 100px;
             font-weight: 600;
             font-size: .95rem;
-            text-decoration: none;
             letter-spacing: -.01em;
-            border: none;
-            transition: background .3s cubic-bezier(.16, 1, .3, 1), color .3s cubic-bezier(.16, 1, .3, 1);
-            white-space: nowrap;
-            font-family: inherit;
+            text-decoration: none;
+            border: 2px solid transparent;
             cursor: pointer;
+            font-family: inherit;
+            white-space: nowrap;
+            transition: transform .25s var(--ease), background .25s ease, color .25s ease, border-color .25s ease;
         }
-        .btn-primary:hover { background: var(--ink); color: var(--paper); }
-        .on-ink .btn-primary:hover { background: var(--paper); color: var(--ink); }
-        .btn-primary svg {
-            width: 14px; height: 14px;
-            transition: transform .3s cubic-bezier(.16, 1, .3, 1);
-        }
-        .btn-primary:hover svg { transform: translateX(4px); }
+        .btn svg { width: 16px; height: 16px; transition: transform .25s var(--ease); }
+        .btn:hover svg { transform: translateX(4px); }
+        .btn-primary { background: var(--ink); color: #fff; }
+        .btn-primary:hover { background: var(--orange-ink); color: #fff; transform: translateY(-2px); }
+        .btn-outline { background: transparent; color: var(--ink); border-color: var(--ink); }
+        .btn-outline:hover { background: var(--ink); color: #fff; transform: translateY(-2px); }
+        .btn-soft { background: transparent; color: var(--ink); border-color: var(--ink-line); }
+        .btn-soft:hover { border-color: var(--ink); transform: translateY(-2px); }
+        .on-ink .btn-primary { background: var(--orange); color: #fff; }
+        .on-ink .btn-primary:hover { background: #ff8c5a; }
+        .on-ink .btn-outline { color: #fff; border-color: rgba(255, 255, 255, .5); }
+        .on-ink .btn-outline:hover { background: #fff; color: var(--ink); border-color: #fff; }
 
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            gap: .65rem;
-            padding: 1rem 1.5rem;
-            background: transparent;
-            color: var(--ink);
-            font-weight: 600;
-            font-size: .95rem;
-            text-decoration: none;
-            letter-spacing: -.01em;
-            border: 1px solid var(--ink-line);
-            transition: border-color .3s ease;
-            white-space: nowrap;
-            font-family: inherit;
-            cursor: pointer;
+        .on-ink { background: var(--ink); color: #fff; }
+        .on-ink h2, .on-ink h3 { color: #fff; }
+
+        /* Scroll reveal: fade up once, staggered inside a .stagger parent */
+        .reveal {
+            opacity: 0;
+            transform: translateY(26px);
+            transition: opacity .8s var(--ease), transform .8s var(--ease);
         }
-        .btn-secondary:hover { border-color: var(--ink); }
-        .btn-secondary svg { width: 13px; height: 13px; transition: transform .3s cubic-bezier(.16,1,.3,1); }
-        .btn-secondary:hover svg { transform: translateX(3px); }
-        .on-ink .btn-secondary { color: var(--paper); border-color: var(--paper-line); }
-        .on-ink .btn-secondary:hover { border-color: var(--paper); }
+        .reveal.is-visible { opacity: 1; transform: none; }
+        .stagger > .reveal:nth-child(2) { transition-delay: .08s; }
+        .stagger > .reveal:nth-child(3) { transition-delay: .16s; }
+        .stagger > .reveal:nth-child(4) { transition-delay: .24s; }
+        .stagger > .reveal:nth-child(5) { transition-delay: .32s; }
+        .stagger > .reveal:nth-child(6) { transition-delay: .40s; }
+        .stagger > .reveal:nth-child(7) { transition-delay: .48s; }
+        .stagger > .reveal:nth-child(8) { transition-delay: .56s; }
 
         /* ----------------------------------------------------------
-           ICON SYSTEM — hand-drawn line art (mirrors the homepage)
+           HERO — big type on paper, then a river of photos
            ---------------------------------------------------------- */
-        @keyframes drawLine { from { stroke-dashoffset: 200; } to { stroke-dashoffset: 0; } }
-        @keyframes pulsePoint { 0%, 100% { r: 2.6; opacity: .75; } 50% { r: 4; opacity: 1; } }
-        @keyframes floatUp { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        .hero {
+            padding: 168px 0 0;
+            overflow: hidden;
+        }
+        .hero-top {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 34px;
+        }
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            border-radius: 100px;
+            border: 1px solid var(--ink-line);
+            font-size: .82rem;
+            font-weight: 600;
+            color: var(--ink-dim);
+            background: #fff;
+        }
+        .pulse {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--orange);
+            box-shadow: 0 0 0 0 rgba(242, 90, 39, .5);
+            animation: pulse 2s ease-out infinite;
+        }
+        @keyframes pulse {
+            0%   { box-shadow: 0 0 0 0 rgba(242, 90, 39, .55); }
+            70%  { box-shadow: 0 0 0 10px rgba(242, 90, 39, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(242, 90, 39, 0); }
+        }
 
-        .line-icon .draw-in { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawLine 1.5s cubic-bezier(.16, 1, .3, 1) forwards; }
-        .line-icon .draw-in-delay-1 { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawLine 1.5s cubic-bezier(.16, 1, .3, 1) .18s forwards; }
-        .line-icon .draw-in-delay-2 { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawLine 1.5s cubic-bezier(.16, 1, .3, 1) .36s forwards; }
-        .line-icon .pulse-dot { animation: pulsePoint 2.6s ease infinite; }
-        .line-icon .float-element { animation: floatUp 3s ease infinite; }
+        .hero h1 {
+            font-size: clamp(3.2rem, 9.4vw, 8.6rem);
+            font-weight: 900;
+            line-height: .94;
+            letter-spacing: -.045em;
+            max-width: 14ch;
+        }
+        .hero h1 .accent {
+            display: inline-block;
+            position: relative;
+        }
+        .hero h1 .accent::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0;
+            bottom: .06em;
+            height: .08em;
+            background: var(--orange);
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: underline 1s var(--ease) 1.1s forwards;
+        }
+        @keyframes underline { to { transform: scaleX(1); } }
 
-        /* Step icons — the page's animated illustrations */
-        .step-icon { width: 58px; height: 58px; margin-bottom: 1.4rem; transition: transform .35s cubic-bezier(.16, 1, .3, 1); }
-        .step-icon svg { width: 100%; height: 100%; display: block; }
-        .step-item:hover .step-icon { transform: translateY(-3px); }
+        .hero-row {
+            display: grid;
+            grid-template-columns: minmax(0, 620px) auto;
+            justify-content: space-between;
+            align-items: end;
+            gap: 32px 48px;
+            margin-top: 44px;
+        }
+        .lede {
+            font-size: clamp(1.1rem, 1.5vw, 1.3rem);
+            line-height: 1.6;
+            color: var(--ink-dim);
+            text-wrap: pretty;
+        }
+        .lede strong { color: var(--ink); font-weight: 700; }
+        .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
 
-        /* Small inline marks */
-        .prize-icon { width: 24px; height: 24px; flex-shrink: 0; }
-        .sponsor-mark { width: 15px; height: 15px; display: inline-flex; flex-shrink: 0; }
-        .winner-medal { width: 17px; height: 17px; display: inline-flex; flex-shrink: 0; }
-        .prize-icon svg, .sponsor-mark svg, .winner-medal svg { width: 100%; height: 100%; display: block; }
+        /* Load-in choreography */
+        .hero .rise {
+            opacity: 0;
+            transform: translateY(28px);
+            animation: rise 1s var(--ease) forwards;
+        }
+        .hero .rise:nth-child(1) { animation-delay: .05s; }
+        .hero .rise:nth-child(2) { animation-delay: .2s; }
+        .hero .rise:nth-child(3) { animation-delay: .4s; }
+        @keyframes rise { to { opacity: 1; transform: none; } }
+
+        /* Photo river: two rows, opposite directions, edge-faded */
+        .river {
+            margin-top: 72px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            opacity: 0;
+            animation: fadein 1.2s ease .5s forwards;
+        }
+        @keyframes fadein { to { opacity: 1; } }
+        .river-track {
+            display: flex;
+            width: max-content;
+            animation: river 70s linear infinite;
+        }
+        .river-track.reverse { animation-direction: reverse; animation-duration: 82s; }
+        .river:hover .river-track { animation-play-state: paused; }
+        @keyframes river { to { transform: translateX(-50%); } }
+        .river-track img {
+            height: 250px;
+            width: auto;
+            display: block;
+            margin-right: 14px;
+            border-radius: 6px;
+            object-fit: cover;
+            transition: transform .4s var(--ease), box-shadow .4s ease;
+        }
+        .river-track img:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 24px 50px -20px rgba(10, 10, 10, .45);
+        }
+
+        /* ----------------------------------------------------------
+           STAT STRIP — big accent numbers that count up
+           ---------------------------------------------------------- */
+        .stats { padding: 72px 0 0; }
+        .stat-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-top: 1px solid var(--ink-line);
+            border-bottom: 1px solid var(--ink-line);
+        }
+        .stat {
+            padding: 36px 28px;
+            border-left: 1px solid var(--ink-line);
+        }
+        .stat:first-child { border-left: none; padding-left: 0; }
+        .stat-number {
+            font-size: clamp(2.6rem, 4.4vw, 3.8rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -.04em;
+            color: var(--orange);
+            font-variant-numeric: tabular-nums;
+        }
+        .stat-label { margin-top: 10px; font-weight: 700; letter-spacing: -.01em; }
+        .stat-sub { font-size: .92rem; color: var(--ink-faint); margin-top: 2px; }
+
+        /* ----------------------------------------------------------
+           PROBLEM — copy + ruled figures, photo beside
+           ---------------------------------------------------------- */
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1.1fr .9fr;
+            gap: 72px;
+            align-items: center;
+        }
+        .problem-copy h2 { margin: 22px 0 24px; }
+        .problem-copy .body { color: var(--ink-dim); font-size: 1.12rem; line-height: 1.7; text-wrap: pretty; max-width: 560px; }
+        .figures {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 32px;
+            margin-top: 40px;
+        }
+        .figure { padding: 22px 0; border-top: 1px solid var(--ink-line); }
+        .figure-value { font-size: 2.2rem; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+        .figure-value em { font-style: normal; color: var(--orange); }
+        .figure-label { color: var(--ink-faint); font-size: .92rem; margin-top: 8px; line-height: 1.45; }
+
+        .photo-card { position: relative; }
+        .photo-card img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
+        }
+        .photo-card figcaption {
+            margin-top: 14px;
+            font-size: .9rem;
+            color: var(--ink-faint);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .photo-card figcaption::before { content: ''; width: 20px; height: 2px; background: var(--orange); }
+
+        /* ----------------------------------------------------------
+           STEPS — three numbered columns
+           ---------------------------------------------------------- */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+        .step { padding-top: 28px; border-top: 2px solid var(--ink); }
+        .step-num {
+            font-size: .8rem;
+            font-weight: 800;
+            letter-spacing: .12em;
+            color: var(--orange-ink);
+        }
+        .step h3 { font-size: 1.6rem; margin: 14px 0 12px; }
+        .step p { color: var(--ink-dim); line-height: 1.65; text-wrap: pretty; }
+
+        /* ----------------------------------------------------------
+           TRACKS — a ruled list
+           ---------------------------------------------------------- */
+        .tracks-list { border-top: 1px solid var(--ink-line); }
+        .track {
+            display: grid;
+            grid-template-columns: 72px 1fr 1.2fr;
+            gap: 24px;
+            align-items: baseline;
+            padding: 26px 0;
+            border-bottom: 1px solid var(--ink-line);
+            transition: padding-left .3s var(--ease);
+        }
+        .track:hover { padding-left: 12px; }
+        .track-index { font-weight: 800; color: var(--orange); letter-spacing: -.02em; font-size: 1.05rem; }
+        .track-name { font-size: 1.5rem; font-weight: 800; letter-spacing: -.025em; transition: color .2s ease; }
+        .track:hover .track-name { color: var(--orange-ink); }
+        .track-desc { color: var(--ink-dim); font-size: 1.02rem; }
+
+        /* ----------------------------------------------------------
+           GALLERY — the ink moment
+           ---------------------------------------------------------- */
+        .gallery { padding: 120px 0; }
+        .gallery .section-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; }
+        .gallery .section-head p { color: rgba(255, 255, 255, .65); }
+        .gallery-count { font-size: .85rem; font-weight: 600; color: rgba(255, 255, 255, .5); letter-spacing: .04em; white-space: nowrap; }
+        .masonry {
+            columns: 3 300px;
+            column-gap: 18px;
+        }
+        .shot {
+            display: block;
+            width: 100%;
+            break-inside: avoid;
+            margin-bottom: 18px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+            background: #1a1a1a;
+            cursor: zoom-in;
+            border: none;
+            padding: 0;
+            text-align: left;
+            font: inherit;
+            color: inherit;
+        }
+        .shot img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform .6s var(--ease), filter .6s ease;
+        }
+        .shot:hover img { transform: scale(1.04); }
+        .shot-cap {
+            position: absolute;
+            inset: auto 0 0 0;
+            padding: 48px 18px 16px;
+            background: linear-gradient(to top, rgba(0, 0, 0, .75), transparent);
+            color: #fff;
+            font-size: .9rem;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity .3s ease, transform .3s var(--ease);
+        }
+        .shot:hover .shot-cap, .shot:focus-visible .shot-cap { opacity: 1; transform: none; }
+        @media (hover: none) {
+            .shot-cap { opacity: 1; transform: none; }
+            /* No hover on touch screens, so show people in colour */
+            .judge-photo, .year-photo img { filter: none; }
+        }
+        .shot:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(6, 6, 6, .96);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .3s ease, visibility .3s;
+        }
+        .lightbox.active { opacity: 1; visibility: visible; }
+        .lightbox-figure { max-width: min(92vw, 1500px); max-height: 88vh; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+        .lightbox-figure img {
+            max-width: 100%;
+            max-height: 80vh;
+            display: block;
+            border-radius: 6px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .6);
+            animation: lbin .35s var(--ease);
+        }
+        @keyframes lbin { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }
+        .lightbox-meta { display: flex; gap: 18px; align-items: baseline; color: rgba(255, 255, 255, .75); font-size: .92rem; }
+        .lightbox-meta span:last-child { color: rgba(255, 255, 255, .45); font-variant-numeric: tabular-nums; }
+        .lightbox button {
+            position: absolute;
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .15);
+            color: #fff;
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: background .2s ease, transform .2s var(--ease);
+        }
+        .lightbox button:hover { background: var(--orange); border-color: var(--orange); transform: scale(1.06); }
+        .lightbox button svg { width: 20px; height: 20px; }
+        .lb-close { top: 24px; right: 24px; }
+        .lb-prev { left: 24px; top: 50%; transform: translateY(-50%); }
+        .lb-next { right: 24px; top: 50%; transform: translateY(-50%); }
+        .lb-prev:hover, .lb-next:hover { transform: translateY(-50%) scale(1.06); }
+
+        /* ----------------------------------------------------------
+           PRIZES — one giant number, three ruled columns
+           ---------------------------------------------------------- */
+        .prizes-head {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: end;
+            gap: 32px;
+            margin-bottom: 56px;
+        }
+        .prize-total {
+            font-size: clamp(3.6rem, 9vw, 8rem);
+            font-weight: 900;
+            letter-spacing: -.05em;
+            line-height: .95;
+            margin-top: 18px;
+        }
+        .prize-total em { font-style: normal; color: var(--orange); }
+        .prize-sub { color: var(--ink-dim); font-size: 1.15rem; margin-top: 16px; }
+        .sponsored {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: .85rem;
+            font-weight: 600;
+            color: var(--ink-faint);
+            padding-bottom: 10px;
+        }
+        .sponsored img { height: 26px; width: auto; }
+
+        .divisions {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+            gap: 40px;
+        }
+        .division { border-top: 2px solid var(--ink); padding-top: 24px; }
+        .division h3 { font-size: 1.5rem; }
+        .division-desc { color: var(--ink-dim); margin: 10px 0 18px; font-size: .98rem; line-height: 1.55; }
+        .prize-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 16px;
+            padding: 12px 0;
+            border-top: 1px solid var(--ink-line);
+        }
+        .prize-place { font-weight: 600; color: var(--ink-dim); font-size: .95rem; white-space: nowrap; }
+        .prize-amt { font-weight: 800; font-size: 1.15rem; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+        .prize-row:first-of-type .prize-amt { color: var(--orange-ink); font-size: 1.35rem; }
+        .prize-split { display: block; font-size: .78rem; color: var(--ink-faint); font-weight: 500; text-align: right; }
+        .prize-note { font-size: .85rem; color: var(--ink-faint); line-height: 1.55; margin-top: 16px; }
+
+        /* ----------------------------------------------------------
+           RESOURCES & SCORING
+           ---------------------------------------------------------- */
+        .resources-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 64px; }
+        .scoring-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+        .scoring-head span { color: var(--ink-faint); font-size: .92rem; }
+        .scoring-grid .stat-number { color: var(--ink); }
+        .scoring-grid .stat-number em { font-style: normal; color: var(--orange); font-size: .5em; letter-spacing: 0; margin-left: 4px; }
+
+        /* ----------------------------------------------------------
+           JUDGES — grayscale until you look at them
+           ---------------------------------------------------------- */
+        .judges-label {
+            font-size: .8rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            margin: 48px 0 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--ink-line);
+        }
+        .judges-label:first-of-type { margin-top: 0; border-top: none; padding-top: 0; }
+        .judges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 32px 24px;
+        }
+        .judge-photo {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 6px;
+            display: block;
+            filter: grayscale(100%);
+            transition: filter .5s ease, transform .5s var(--ease);
+        }
+        .judge:hover .judge-photo { filter: none; transform: translateY(-4px); }
+        .judge-name { font-weight: 700; margin-top: 14px; letter-spacing: -.01em; }
+        .judge-title { font-size: .88rem; color: var(--ink-dim); line-height: 1.4; margin-top: 2px; }
+        .judge-org { font-size: .8rem; font-weight: 700; color: var(--orange-ink); margin-top: 4px; }
+
+        /* ----------------------------------------------------------
+           WINNERS — a year, a photo, three names
+           ---------------------------------------------------------- */
+        .year-block {
+            display: grid;
+            grid-template-columns: 140px 1fr 1fr;
+            gap: 48px;
+            align-items: start;
+            padding: 48px 0;
+            border-top: 1px solid var(--ink-line);
+        }
+        .year-block:last-child { border-bottom: 1px solid var(--ink-line); }
+        .year {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            letter-spacing: -.05em;
+            line-height: 1;
+        }
+        .year em { font-style: normal; color: var(--orange); }
+        .year-photo img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 5 / 4;
+            object-fit: cover;
+            border-radius: 6px;
+            display: block;
+            filter: grayscale(100%);
+            transition: filter .6s ease;
+        }
+        .year-block:hover .year-photo img { filter: none; }
+        .podium { display: flex; flex-direction: column; }
+        .place {
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 16px;
+            padding: 18px 0;
+            border-bottom: 1px solid var(--ink-line);
+        }
+        .place:first-child { padding-top: 6px; }
+        .place-rank { font-size: .8rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); padding-top: 5px; }
+        .place:first-child .place-rank { color: var(--orange-ink); }
+        .place-name { font-weight: 800; font-size: 1.25rem; letter-spacing: -.02em; }
+        .place-school { color: var(--ink-dim); font-size: .95rem; margin-top: 2px; }
+
+        /* ----------------------------------------------------------
+           PARTNERS & SPONSORS
+           ---------------------------------------------------------- */
+        .partner-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: start;
+        }
+        .partner-copy h2 { margin: 22px 0 18px; font-size: clamp(1.8rem, 3vw, 2.4rem); }
+        .partner-copy p { color: var(--ink-dim); font-size: 1.08rem; line-height: 1.65; text-wrap: pretty; }
+        .logo-row { display: flex; align-items: center; gap: 22px; margin-top: 30px; flex-wrap: wrap; }
+        .logo-row img { height: 44px; width: auto; }
+        .logo-row .times { font-size: 1.5rem; color: var(--ink-faint); font-weight: 300; }
+
+        .sponsor-list { border-top: 1px solid var(--ink-line); }
+        .sponsor {
+            display: grid;
+            grid-template-columns: 110px 1fr auto;
+            gap: 24px;
+            align-items: center;
+            padding: 26px 0;
+            border-bottom: 1px solid var(--ink-line);
+        }
+        .tier { font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); }
+        .tier.platinum { color: var(--orange-ink); }
+        .sponsor-body { display: flex; align-items: center; gap: 18px; min-width: 0; }
+        .sponsor-body img { height: 40px; width: auto; max-width: 180px; object-fit: contain; }
+        .sponsor-body img.portrait { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; }
+        .sponsor-name { font-weight: 800; letter-spacing: -.01em; }
+        .sponsor-sub { color: var(--ink-faint); font-size: .85rem; }
+        .sponsor-amt { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink-dim); white-space: nowrap; font-size: .95rem; }
+
+        /* ----------------------------------------------------------
+           FINAL CTA — dark coda
+           ---------------------------------------------------------- */
+        .cta { padding: 130px 0; }
+        .cta-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 48px;
+            align-items: end;
+        }
+        .cta h2 { font-size: clamp(2.6rem, 6vw, 5rem); letter-spacing: -.04em; line-height: .98; }
+        .cta p { color: rgba(255, 255, 255, .68); font-size: 1.15rem; margin-bottom: 28px; text-wrap: pretty; }
+        .cta-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+        .cta-contact { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--paper-line); color: rgba(255, 255, 255, .5); font-size: .95rem; }
+        .cta-contact a { color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255, 255, 255, .35); transition: border-color .2s ease, color .2s ease; }
+        .cta-contact a:hover { color: var(--orange); border-color: var(--orange); }
+
+        /* ----------------------------------------------------------
+           MOTION PREFERENCES
+           ---------------------------------------------------------- */
+        @media (prefers-reduced-motion: reduce) {
+            .reveal, .stagger > .reveal { opacity: 1; transform: none; transition: none; }
+            .hero .rise { opacity: 1; transform: none; animation: none; }
+            .river { opacity: 1; animation: none; }
+            .river-track { animation: none; }
+            .hero h1 .accent::after { transform: scaleX(1); animation: none; }
+            .pulse { animation: none; }
+            .lightbox-figure img { animation: none; }
+        }
+
+        /* ----------------------------------------------------------
+           RESPONSIVE — page sections
+           ---------------------------------------------------------- */
+        @media (max-width: 1080px) {
+            .problem-grid { gap: 48px; }
+            .divisions { grid-template-columns: 1fr 1fr; }
+            .divisions .division:first-child { grid-column: 1 / -1; }
+        }
+
+        @media (max-width: 900px) {
+            .stat-strip { grid-template-columns: 1fr 1fr; }
+            .stat:nth-child(odd) { border-left: none; padding-left: 0; }
+            .stat:nth-child(n+3) { border-top: 1px solid var(--ink-line); }
+            .problem-grid { grid-template-columns: 1fr; }
+            .photo-card img { aspect-ratio: 4 / 3; }
+            .steps-grid { grid-template-columns: 1fr; gap: 28px; }
+            .track { grid-template-columns: 56px 1fr; }
+            .track-desc { grid-column: 2; }
+            .year-block { grid-template-columns: 1fr; gap: 24px; }
+            .partner-grid { grid-template-columns: 1fr; gap: 48px; }
+            .cta-grid { grid-template-columns: 1fr; gap: 32px; align-items: start; }
+        }
+
+        @media (max-width: 768px) {
+            :root { --gutter: 1.5rem; }
+            body { font-size: 16px; }
+            .section { padding: 72px 0; }
+            .section-head { margin-bottom: 36px; }
+            .hero { padding-top: 120px; }
+            .hero-row { grid-template-columns: 1fr; margin-top: 32px; }
+            .hero-actions .btn { flex: 1 1 auto; justify-content: center; }
+            .river { margin-top: 48px; }
+            .river-track img { height: 170px; margin-right: 10px; }
+            .river { gap: 10px; }
+            .stats { padding-top: 56px; }
+            .stat { padding: 26px 20px; }
+            .figures { grid-template-columns: 1fr; }
+            .gallery { padding: 80px 0; }
+            .masonry { columns: 2 160px; column-gap: 10px; }
+            .shot { margin-bottom: 10px; }
+            .prizes-head { grid-template-columns: 1fr; }
+            .divisions { grid-template-columns: 1fr; gap: 32px; }
+            .resources-row .btn { flex: 1 1 calc(50% - 6px); justify-content: center; }
+            .judges-grid { grid-template-columns: repeat(2, 1fr); gap: 24px 16px; }
+            .sponsor { grid-template-columns: 1fr; gap: 10px; }
+            .cta { padding: 88px 0; }
+            .cta-actions .btn { flex: 1 1 auto; justify-content: center; }
+            .lightbox button { width: 42px; height: 42px; }
+            .lb-close { top: 14px; right: 14px; }
+            .lb-prev { left: 10px; }
+            .lb-next { right: 10px; }
+        }
+
+        @media (max-width: 480px) {
+            .track { grid-template-columns: 1fr; gap: 6px; }
+            .track-desc { grid-column: 1; }
+            .track-index { display: none; }
+            .resources-row .btn { flex-basis: 100%; }
+        }
 
         /* ----------------------------------------------------------
            NAVIGATION
@@ -383,845 +948,6 @@
 
         .mobile-controls { display: none; gap: 1rem; align-items: center; }
 
-        /* ----------------------------------------------------------
-           HERO — top-anchored billboard
-           ---------------------------------------------------------- */
-        .hero {
-            background: var(--paper);
-            padding: 6.5rem 2rem 6.5rem;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero-bg {
-            position: absolute; inset: 0;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .hero-bg::before {
-            content: '';
-            position: absolute;
-            top: 28%;
-            left: -12%;
-            width: 60vw;
-            height: 60vw;
-            background: radial-gradient(circle, rgba(242, 90, 39, .09) 0%, transparent 60%);
-            filter: blur(40px);
-        }
-
-        .hero-container {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-            max-width: var(--hero-max);
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 3rem;
-            padding-top: 1.5rem;
-        }
-
-        .hero-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .hb-status {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--ink-faint);
-            display: inline-flex;
-            align-items: center;
-            gap: .6rem;
-        }
-        .hb-pulse {
-            width: 6px; height: 6px;
-            border-radius: 50%;
-            background: var(--orange);
-            box-shadow: 0 0 0 0 rgba(242, 90, 39, .5);
-            animation: hb-pulse 2.4s ease-out infinite;
-        }
-        @keyframes hb-pulse {
-            0% { box-shadow: 0 0 0 0 rgba(242, 90, 39, .5); }
-            70% { box-shadow: 0 0 0 10px rgba(242, 90, 39, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(242, 90, 39, 0); }
-        }
-
-        .hero h1 {
-            font-size: clamp(3rem, 8.5vw, 8.5rem);
-            font-weight: 900;
-            line-height: .96;
-            letter-spacing: -.05em;
-            max-width: 14ch;
-        }
-        .hero h1 em {
-            font-style: normal;
-            color: var(--orange);
-            position: relative;
-            display: inline-block;
-            white-space: nowrap;
-        }
-        /* hand-drawn accent 1 of 2 */
-        .hero h1 em svg.hand-stroke {
-            position: absolute;
-            left: -1%;
-            bottom: -.08em;
-            width: 102%;
-            height: .14em;
-            pointer-events: none;
-        }
-        .hero h1 em svg.hand-stroke path {
-            stroke: var(--orange);
-            stroke-width: 5;
-            stroke-linecap: round;
-            fill: none;
-            opacity: .5;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: draw-stroke 1.2s cubic-bezier(.16, 1, .3, 1) .5s forwards;
-        }
-        @keyframes draw-stroke { to { stroke-dashoffset: 0; } }
-
-        .hb-bottom {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            align-items: end;
-            gap: 2rem 3rem;
-            padding-top: 1.75rem;
-            border-top: 1px solid var(--ink-line-soft);
-        }
-        .hb-sub {
-            font-size: clamp(1.05rem, 1.5vw, 1.35rem);
-            font-weight: 400;
-            line-height: 1.5;
-            color: var(--ink-dim);
-            max-width: 44ch;
-            letter-spacing: -.015em;
-        }
-        .hb-sub strong { color: var(--ink); font-weight: 500; }
-
-        .hb-stats { display: flex; gap: 2.5rem; align-items: flex-end; }
-        .hb-stat { display: flex; flex-direction: column; gap: .4rem; }
-        .hb-stat-num {
-            font-size: clamp(1.8rem, 2.8vw, 2.4rem);
-            font-weight: 900;
-            letter-spacing: -.04em;
-            line-height: .95;
-        }
-        .hb-stat-num em { font-style: normal; color: var(--orange); }
-        .hb-stat-label {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--ink-faint);
-        }
-
-        .hb-cta-row { grid-column: 1 / -1; display: flex; align-items: center; gap: .9rem; flex-wrap: wrap; }
-
-        /* ----------------------------------------------------------
-           SECTION HEADS
-           ---------------------------------------------------------- */
-        .section-head {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            margin-bottom: 4rem;
-            align-items: flex-start;
-        }
-        .section-head h2 {
-            font-size: clamp(2.2rem, 4.8vw, 3.8rem);
-            font-weight: 900;
-            line-height: 1;
-            letter-spacing: -.045em;
-            max-width: 22ch;
-            text-wrap: balance;
-        }
-        .section-head h2 em { font-style: normal; color: var(--orange); }
-        .section-sub {
-            font-size: clamp(1rem, 1.3vw, 1.15rem);
-            font-weight: 400;
-            line-height: 1.6;
-            color: var(--ink-dim);
-            max-width: 60ch;
-            letter-spacing: -.01em;
-        }
-
-        /* ----------------------------------------------------------
-           PROBLEM — paper, ruled stats
-           ---------------------------------------------------------- */
-        .problem { padding: 7.5rem var(--gutter); background: var(--paper); }
-        .problem-container { max-width: var(--max-width); margin: 0 auto; }
-        .problem-grid {
-            display: grid;
-            grid-template-columns: 1.05fr .95fr;
-            gap: 4.5rem;
-            align-items: center;
-        }
-        .problem-copy { display: flex; flex-direction: column; gap: 1.5rem; align-items: flex-start; }
-        .problem-copy h2 {
-            font-size: clamp(2rem, 3.8vw, 3.2rem);
-            font-weight: 900;
-            line-height: 1.05;
-            letter-spacing: -.04em;
-            max-width: 20ch;
-        }
-        .problem-copy h2 em { font-style: normal; color: var(--orange); }
-        .problem-body {
-            font-size: 1.02rem;
-            font-weight: 400;
-            line-height: 1.65;
-            color: var(--ink-dim);
-            max-width: 56ch;
-            letter-spacing: -.005em;
-        }
-
-        .problem-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1px;
-            background: var(--ink-line);
-            border: 1px solid var(--ink-line);
-            margin-top: 1rem;
-            width: 100%;
-        }
-        .problem-stat { background: var(--paper); padding: 1.5rem 1.4rem; }
-        .problem-stat-value {
-            font-size: clamp(1.7rem, 2.4vw, 2.1rem);
-            font-weight: 900;
-            letter-spacing: -.04em;
-            line-height: 1;
-            margin-bottom: .5rem;
-        }
-        .problem-stat-value em { font-style: normal; color: var(--orange); font-size: .6em; vertical-align: .3em; }
-        .problem-stat-label {
-            font-size: .82rem;
-            font-weight: 300;
-            color: var(--ink-dim);
-            line-height: 1.45;
-        }
-
-        .problem-visual img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border: 1px solid var(--ink-line);
-        }
-        .problem-visual-caption {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--ink-faint);
-            margin-top: .9rem;
-        }
-
-        /* ----------------------------------------------------------
-           STEPS — three ruled columns
-           ---------------------------------------------------------- */
-        .steps { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-        .steps-container { max-width: var(--max-width); margin: 0 auto; }
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            border-top: 1px solid var(--ink-line-soft);
-        }
-        .step-item { padding: 2.5rem 2rem 2.5rem 0; position: relative; }
-        .step-item + .step-item { padding-left: 2rem; border-left: 1px solid var(--ink-line-soft); }
-        .step-item::before {
-            content: '';
-            position: absolute;
-            top: -1px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--orange);
-            transition: width .4s cubic-bezier(.16, 1, .3, 1);
-        }
-        .step-item:hover::before { width: calc(100% - 2rem); }
-        .step-item + .step-item:hover::before { left: 2rem; }
-        .step-number {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--ink-faint);
-            margin-bottom: 1rem;
-        }
-        .step-title { font-size: 1.18rem; font-weight: 900; letter-spacing: -.02em; margin-bottom: .6rem; }
-        .step-desc { font-size: .92rem; font-weight: 400; color: var(--ink-dim); line-height: 1.6; }
-
-        /* ----------------------------------------------------------
-           TRACKS — ruled list
-           ---------------------------------------------------------- */
-        .tracks { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-        .tracks-container { max-width: var(--max-width); margin: 0 auto; }
-        .tracks-list {
-            max-width: 760px;
-            border-top: 1px solid var(--ink-line);
-            border-bottom: 1px solid var(--ink-line);
-        }
-        .track-row {
-            display: grid;
-            grid-template-columns: 40px 1fr 24px;
-            gap: 1.25rem;
-            align-items: center;
-            padding: 1.4rem .85rem 1.4rem .5rem;
-            transition: background .2s ease;
-            position: relative;
-        }
-        .track-row + .track-row { border-top: 1px solid var(--ink-line-soft); }
-        .track-row:hover { background: rgba(242, 90, 39, .05); }
-        .track-row-icon { display: flex; align-items: center; justify-content: center; }
-        .track-row-icon svg { width: 30px; height: 30px; display: block; }
-        .track-row-arrow { color: var(--ink-faint); opacity: 0; transform: translateX(-6px); transition: opacity .25s ease, transform .25s ease, color .25s ease; }
-        .track-row-arrow svg { width: 17px; height: 17px; display: block; }
-        .track-row:hover .track-row-arrow { opacity: 1; transform: translateX(0); color: var(--orange); }
-        .track-row-title { font-size: 1.02rem; font-weight: 700; letter-spacing: -.015em; margin-bottom: .15rem; }
-        .track-row-desc { font-size: .88rem; font-weight: 400; color: var(--ink-dim); line-height: 1.5; }
-
-        /* ----------------------------------------------------------
-           GALLERY — the page's ink moment. Lightbox hooks preserved.
-           ---------------------------------------------------------- */
-        .gallery-section {
-            background: var(--ink);
-            color: var(--paper);
-            padding: 7rem 0 7.5rem;
-            overflow: hidden;
-        }
-        .gallery-header {
-            max-width: var(--max-width);
-            margin: 0 auto 3rem;
-            padding: 0 var(--gutter);
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-            align-items: flex-start;
-        }
-        .gallery-header h2 {
-            font-size: clamp(2.2rem, 4.8vw, 3.8rem);
-            font-weight: 900;
-            line-height: 1;
-            letter-spacing: -.045em;
-        }
-        .gallery-header p {
-            color: var(--paper-dim);
-            font-size: clamp(1rem, 1.3vw, 1.1rem);
-            font-weight: 400;
-            max-width: 52ch;
-            line-height: 1.6;
-        }
-
-        .gallery-masonry {
-            columns: 4;
-            column-gap: 10px;
-            padding: 0 var(--gutter);
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            background: var(--ink);
-            border: 1px solid var(--paper-line);
-            break-inside: avoid;
-            margin-bottom: 10px;
-        }
-        .gallery-item img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: transform .5s cubic-bezier(.16, 1, .3, 1), filter .4s ease;
-            filter: brightness(.88) saturate(.95);
-        }
-        .gallery-item:hover img {
-            transform: scale(1.03);
-            filter: brightness(1) saturate(1.05);
-        }
-        .gallery-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, transparent 55%, rgba(10, 10, 10, .65) 100%);
-            opacity: 0;
-            transition: opacity .35s ease;
-            display: flex;
-            align-items: flex-end;
-            justify-content: flex-end;
-            padding: .75rem;
-        }
-        .gallery-item:hover .gallery-overlay { opacity: 1; }
-        .gallery-expand-icon { color: var(--paper); line-height: 0; display: inline-flex; }
-        .gallery-expand-icon svg { width: 16px; height: 16px; display: block; }
-        .gallery-counter {
-            text-align: left;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem var(--gutter) 0;
-        }
-        .gallery-counter span {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            color: var(--paper-faint);
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-        }
-
-        /* Lightbox — JS hooks preserved */
-        .lightbox {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 2000;
-            background: rgba(10, 10, 10, .96);
-            align-items: center;
-            justify-content: center;
-        }
-        .lightbox.active { display: flex; }
-        .lightbox-content {
-            max-width: min(1100px, 88vw);
-            max-height: 86vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: .9rem;
-        }
-        .lightbox-content img {
-            max-width: 100%;
-            max-height: 72vh;
-            object-fit: contain;
-            border: 1px solid var(--paper-line);
-            animation: lightboxIn .3s cubic-bezier(.16, 1, .3, 1);
-        }
-        @keyframes lightboxIn { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }
-        .lightbox-caption {
-            color: var(--paper-dim);
-            font-size: .92rem;
-            font-weight: 400;
-            text-align: center;
-            letter-spacing: -.005em;
-        }
-        .lightbox-counter {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--paper-faint);
-        }
-        .lightbox-close,
-        .lightbox-prev,
-        .lightbox-next {
-            position: fixed;
-            background: transparent;
-            border: 1px solid var(--paper-line);
-            border-radius: 50%;
-            color: var(--paper);
-            width: 44px;
-            height: 44px;
-            font-size: 1.3rem;
-            line-height: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: border-color .2s ease, color .2s ease;
-            z-index: 2001;
-            font-family: var(--font-body);
-        }
-        .lightbox-close:hover, .lightbox-prev:hover, .lightbox-next:hover { border-color: var(--orange); color: var(--orange); }
-        .lightbox-close { top: 1.25rem; right: 1.25rem; }
-        .lightbox-prev { left: 1.25rem; top: 50%; transform: translateY(-50%); }
-        .lightbox-next { right: 1.25rem; top: 50%; transform: translateY(-50%); }
-
-        /* ----------------------------------------------------------
-           PRIZES — ruled divisions
-           ---------------------------------------------------------- */
-        .prizes { padding: 7.5rem var(--gutter); background: var(--paper); }
-        .prizes-container { max-width: var(--max-width); margin: 0 auto; }
-        .prizes-head { display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-start; margin-bottom: 3.5rem; }
-        .sponsored-note {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--ink-faint);
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-        }
-        .sponsored-note img { height: 14px; opacity: .5; }
-        .prizes-hero-number {
-            font-size: clamp(3.5rem, 9vw, 7.5rem);
-            font-weight: 900;
-            line-height: .95;
-            letter-spacing: -.05em;
-        }
-        .prizes-hero-number em { font-style: normal; color: var(--orange); font-size: .5em; vertical-align: .5em; }
-        .prizes-hero-sub {
-            font-size: clamp(1rem, 1.3vw, 1.15rem);
-            font-weight: 400;
-            color: var(--ink-dim);
-            letter-spacing: -.01em;
-        }
-
-        .prizes-divisions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-        .prizes-divisions > .prize-division:first-child { grid-column: 1 / -1; }
-        .prize-division { border: 1px solid var(--ink-line); padding: 2.25rem 2.25rem 2rem; }
-        .prize-division h3 { font-size: 1.15rem; font-weight: 900; letter-spacing: -.02em; margin-bottom: .35rem; display: flex; align-items: center; gap: .6rem; }
-        .prize-division-desc { font-size: .88rem; font-weight: 400; color: var(--ink-dim); margin-bottom: 1.5rem; }
-        .prize-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            gap: 1rem;
-            padding: .85rem 0;
-            border-top: 1px solid var(--ink-line-soft);
-            font-size: .9rem;
-            flex-wrap: wrap;
-        }
-        .prize-row-place {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--ink-faint);
-            white-space: nowrap;
-        }
-        .prize-row:first-of-type .prize-row-place { color: var(--orange); }
-        .prize-row-amount { font-weight: 900; color: var(--ink); font-size: 1rem; letter-spacing: -.02em; }
-        .prize-row-breakdown {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            letter-spacing: .04em;
-            color: var(--ink-faint);
-            margin-left: .5rem;
-        }
-        .prize-note {
-            font-size: .78rem;
-            font-weight: 300;
-            color: var(--ink-faint);
-            margin-top: 1.25rem;
-            line-height: 1.55;
-        }
-
-        /* Prizes — the page's dark showcase (the $20k+ moment) */
-        .prizes { background: var(--ink); color: var(--paper); }
-        .prizes .prizes-hero-sub { color: var(--paper-dim); }
-        .prizes .sponsored-note { color: var(--paper-faint); }
-        .prizes .sponsored-note img { filter: brightness(0) invert(1); opacity: .7; }
-        .prizes .prize-division { border-color: var(--paper-line); }
-        .prizes .prize-division-desc { color: var(--paper-dim); }
-        .prizes .prize-row { border-top-color: var(--paper-line); }
-        .prizes .prize-row-place { color: var(--paper-faint); }
-        .prizes .prize-row:first-of-type .prize-row-place { color: var(--orange); }
-        .prizes .prize-row-amount { color: var(--paper); }
-        .prizes .prize-row-breakdown { color: var(--paper-faint); }
-        .prizes .prize-note { color: var(--paper-faint); }
-        /* keep the line-art legible on ink: structural strokes flip to paper */
-        .prizes .prize-icon path[stroke="#0A0A0A"],
-        .prizes .prize-icon rect[stroke="#0A0A0A"] { stroke: var(--paper); }
-
-        /* Scroll-reveal — progressive enhancement; without the .js flag (no JS),
-           or under reduced-motion (handled in JS), everything stays visible */
-        .js .section-head, .js .problem-copy, .js .problem-visual, .js .step-item,
-        .js .track-row, .js .prizes-head, .js .prize-division, .js .resources-links,
-        .js .scoring-card, .js .judge-card-bb, .js .winner-year-block-bb,
-        .js .partnership-container, .js .sponsor-tier, .js .sponsor-silver-item,
-        .js .final-cta-container, .js .gallery-header {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity .7s cubic-bezier(.16, 1, .3, 1), transform .7s cubic-bezier(.16, 1, .3, 1);
-        }
-        .js .in-view { opacity: 1; transform: none; }
-
-        /* ----------------------------------------------------------
-           RESOURCES & SCORING
-           ---------------------------------------------------------- */
-        .resources { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-        .resources-container { max-width: var(--max-width); margin: 0 auto; }
-        .resources-links { display: flex; gap: .9rem; flex-wrap: wrap; margin-bottom: 3rem; }
-
-        .scoring-card { border: 1px solid var(--ink-line); padding: 2rem 2.25rem; max-width: 760px; }
-        .scoring-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: .75rem;
-        }
-        .scoring-header h3 { font-size: 1.1rem; font-weight: 900; letter-spacing: -.02em; }
-        .scoring-header span {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--ink-faint);
-        }
-        .scoring-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-            background: var(--ink-line);
-            border: 1px solid var(--ink-line);
-        }
-        .scoring-item { background: var(--paper); padding: 1.1rem .75rem; text-align: center; }
-        .scoring-item-name { font-weight: 700; font-size: .88rem; letter-spacing: -.01em; margin-bottom: .25rem; }
-        .scoring-item-pts {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            color: var(--orange-ink);
-        }
-
-        /* ----------------------------------------------------------
-           JUDGES
-           ---------------------------------------------------------- */
-        .judges { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-        .judges-container { max-width: var(--max-width); margin: 0 auto; }
-        .judges-subsection-label {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--ink-faint);
-            display: inline-flex;
-            align-items: center;
-            gap: .75rem;
-            margin: 3rem 0 0;
-        }
-        .judges-subsection-label::before {
-            content: '';
-            width: 24px;
-            height: 1px;
-            background: var(--orange);
-            flex-shrink: 0;
-        }
-        .judges-grid-bb {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-            gap: 2.25rem 1.75rem;
-            margin-top: 2rem;
-        }
-        .judge-card-bb { display: flex; flex-direction: column; align-items: flex-start; gap: .2rem; }
-        .judge-card-bb img {
-            width: 96px;
-            height: 96px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: .9rem;
-            border: 1px solid var(--ink-line);
-            filter: grayscale(15%);
-            transition: filter .3s ease, border-color .3s ease;
-        }
-        .judge-card-bb:hover img { filter: grayscale(0%); border-color: var(--orange); }
-        .judge-card-bb-name { font-size: .95rem; font-weight: 700; letter-spacing: -.01em; }
-        .judge-card-bb-title { font-size: .8rem; font-weight: 300; color: var(--ink-dim); line-height: 1.4; }
-        .judge-card-bb-org {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            letter-spacing: .12em;
-            text-transform: uppercase;
-            color: var(--ink-faint);
-            margin-top: .3rem;
-            line-height: 1.6;
-        }
-
-        /* ----------------------------------------------------------
-           WINNERS
-           ---------------------------------------------------------- */
-        .winners { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-        .winners-container { max-width: var(--max-width); margin: 0 auto; }
-        .winner-year-block-bb { max-width: 900px; margin: 0 0 5rem; }
-        .winner-year-block-bb:last-child { margin-bottom: 0; }
-        .winner-year-label-bb {
-            font-size: clamp(2rem, 3.6vw, 2.8rem);
-            font-weight: 900;
-            letter-spacing: -.04em;
-            line-height: 1;
-            padding-bottom: 1.1rem;
-            margin-bottom: 1.75rem;
-            border-bottom: 1px solid var(--ink-line);
-        }
-        .winner-year-label-bb em { font-style: normal; color: var(--orange); }
-        .winner-photo-bb { margin-bottom: 1.5rem; }
-        .winner-photo-bb img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border: 1px solid var(--ink-line);
-        }
-        .winners-grid-bb {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--ink-line);
-            border: 1px solid var(--ink-line);
-        }
-        .winner-card-bb { background: var(--paper); padding: 1.4rem 1.5rem; }
-        .winner-card-bb-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: .5rem;
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--ink-faint);
-            margin-bottom: .8rem;
-        }
-        .winner-card-bb.gold .winner-card-bb-header { color: var(--orange-ink); }
-        .winner-card-bb-name { font-size: 1.02rem; font-weight: 700; letter-spacing: -.015em; margin-bottom: .2rem; }
-        .winner-card-bb-school { font-size: .84rem; font-weight: 300; color: var(--ink-dim); }
-
-        /* ----------------------------------------------------------
-           PARTNERSHIP + SPONSORS
-           ---------------------------------------------------------- */
-        .partnership { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-        .partnership-container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            border-top: 1px solid var(--ink-line-soft);
-            padding-top: 4.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1.25rem;
-        }
-        .partnership-logos { display: flex; align-items: center; gap: 1.5rem; }
-        .partnership-logos img { height: 44px; object-fit: contain; display: block; }
-        .partnership-x { font-size: 1.2rem; font-weight: 400; color: var(--ink-faint); }
-        .partnership h2 { font-size: clamp(1.4rem, 2.2vw, 1.8rem); font-weight: 900; letter-spacing: -.025em; }
-        .partnership-body {
-            font-size: .98rem;
-            font-weight: 400;
-            color: var(--ink-dim);
-            line-height: 1.65;
-            max-width: 58ch;
-        }
-
-        .sponsors { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-        .sponsors-container { max-width: var(--max-width); margin: 0 auto; }
-        .sponsors-stack { display: flex; flex-direction: column; gap: 1.5rem; max-width: 860px; }
-        .sponsor-tier {
-            border: 1px solid var(--ink-line);
-            padding: 2.5rem 2.25rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1.1rem;
-        }
-        .sponsor-tier-label {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: var(--ink-faint);
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-        }
-        .sponsor-tier img { max-width: 280px; width: 60%; height: auto; display: block; }
-        .sponsor-tier-amount {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--orange);
-        }
-        .sponsor-silver-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        .sponsor-silver-item {
-            border: 1px solid var(--ink-line);
-            padding: 2rem 1.85rem;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: .8rem;
-        }
-        .sponsor-silver-item img.sponsor-silver-img { max-width: 170px; width: 55%; height: auto; display: block; }
-        .sponsor-portrait { border-radius: 50%; width: 88px; height: 88px; object-fit: cover; border: 1px solid var(--ink-line); }
-        .sponsor-silver-name { font-size: 1rem; font-weight: 700; letter-spacing: -.015em; }
-        .sponsor-silver-sub { font-size: .8rem; font-weight: 300; color: var(--ink-dim); margin-top: -.5rem; }
-
-        /* ----------------------------------------------------------
-           FINAL CTA — ink coda (hand-drawn accent 2 of 2)
-           ---------------------------------------------------------- */
-        .final-cta {
-            padding: 7.5rem var(--gutter) 7rem;
-            background: var(--ink);
-            color: var(--paper);
-            position: relative;
-            overflow: hidden;
-        }
-        .final-cta-container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 2.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        .final-cta h2 {
-            font-size: clamp(2.8rem, 7.5vw, 7rem);
-            font-weight: 900;
-            line-height: .96;
-            letter-spacing: -.05em;
-            max-width: 14ch;
-        }
-        .final-cta h2 em { font-style: normal; color: var(--orange); }
-        .final-cta-bottom {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 3rem;
-            align-items: end;
-            padding-top: 1.75rem;
-            border-top: 1px solid var(--paper-line);
-        }
-        .final-cta-sub {
-            font-size: clamp(1.05rem, 1.5vw, 1.3rem);
-            font-weight: 400;
-            line-height: 1.5;
-            color: var(--paper-dim);
-            max-width: 42ch;
-            letter-spacing: -.01em;
-        }
-        .final-cta-buttons { display: flex; gap: .9rem; flex-wrap: wrap; }
-        .final-cta-contact {
-            font-family: var(--font-mono);
-            font-size: .72rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: var(--paper-faint);
-        }
-        .final-cta-contact a { color: var(--paper-dim); text-decoration: none; transition: color .2s ease; }
-        .final-cta-contact a:hover { color: var(--orange); }
-        .cta-squiggle { width: 110px; height: 12px; opacity: .35; }
 
         /* ----------------------------------------------------------
            FOOTER — continues the ink, separated by hairline
@@ -1442,19 +1168,15 @@
             text-decoration: none;
         }
 
+
         /* ----------------------------------------------------------
-           RESPONSIVE
+           RESPONSIVE — shared chrome (nav, mobile menu, footer)
            ---------------------------------------------------------- */
         @media (max-width: 1080px) {
             .nav-right { gap: 1.5rem; }
             .dropdown-content { min-width: 540px; }
-            .gallery-masonry { columns: 3; }
         }
-
         @media (max-width: 968px) {
-            :root { --gutter: 1.5rem; }
-            body { font-size: 16px; }
-
             .nav-right { display: none; }
             .mobile-controls { display: flex; }
             .mobile-menu-btn { display: block; }
@@ -1463,90 +1185,12 @@
                 padding: .45rem .85rem !important;
                 font-size: .74rem !important;
             }
-
-            .hero { padding: 6rem var(--gutter) 4rem; }
-            .hero-container { gap: 2rem; padding-top: 0; }
-            .hero h1 { font-size: clamp(2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
-            .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
-            .hb-stats { gap: 2rem; flex-wrap: wrap; }
-            .hb-cta-row { justify-content: flex-start; width: 100%; gap: .75rem; }
-            .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
-
-            .section-head { margin-bottom: 2.5rem; }
-
-            .problem { padding: 5rem var(--gutter); }
-            .problem-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-            .problem-stats { grid-template-columns: 1fr 1fr; }
-
-            .steps { padding: 0 var(--gutter) 5rem; }
-            .steps-grid { grid-template-columns: 1fr; }
-            .step-item { padding: 1.9rem 0; border-bottom: 1px solid var(--ink-line-soft); }
-            .step-item + .step-item { padding-left: 0; border-left: none; }
-            .step-item:last-child { border-bottom: none; }
-            .step-item:hover::before, .step-item + .step-item:hover::before { width: 100%; left: 0; }
-
-            .tracks { padding: 0 var(--gutter) 5rem; }
-
-            .gallery-section { padding: 4.5rem 0 5rem; }
-            .gallery-masonry { columns: 2; }
-
-            .prizes { padding: 5rem var(--gutter); }
-            .prizes-divisions { grid-template-columns: 1fr; }
-            .prize-division { padding: 1.6rem 1.5rem; }
-
-            .resources { padding: 0 var(--gutter) 5rem; }
-            .scoring-grid { grid-template-columns: repeat(2, 1fr); }
-
-            .judges { padding: 0 var(--gutter) 5rem; }
-            .judges-grid-bb { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1.75rem 1.25rem; }
-
-            .winners { padding: 0 var(--gutter) 5rem; }
-            .winners-grid-bb { grid-template-columns: 1fr; }
-
-            .partnership { padding: 0 var(--gutter) 5rem; }
-            .partnership-container { padding-top: 3.5rem; }
-            .partnership-logos img { height: 36px; }
-
-            .sponsors { padding: 0 var(--gutter) 5rem; }
-            .sponsor-silver-row { grid-template-columns: 1fr; }
-
-            .final-cta { padding: 5rem var(--gutter); }
-            .final-cta h2 { font-size: clamp(2.2rem, 8.5vw, 3.4rem); }
-            .final-cta-bottom { grid-template-columns: 1fr; gap: 1.75rem; }
-            .final-cta-buttons { width: 100%; }
-            .final-cta-buttons .btn-primary, .final-cta-buttons .btn-secondary { flex: 1; justify-content: center; }
-
             .footer-container { grid-template-columns: 1fr 1fr; gap: 2.25rem; padding: 3rem var(--gutter) 2.5rem; }
             .footer-brand-col { grid-column: 1 / -1; }
             .footer-bottom { flex-direction: column; text-align: center; }
             .footer-bottom a { margin: 0 .6rem; }
         }
 
-        @media (max-width: 560px) {
-            .hb-cta-row, .final-cta-buttons, .resources-links { flex-direction: column; }
-            .hb-cta-row .btn-primary, .hb-cta-row .btn-secondary,
-            .final-cta-buttons .btn-primary, .final-cta-buttons .btn-secondary,
-            .resources-links .btn-secondary { width: 100%; justify-content: center; }
-            .problem-stats { grid-template-columns: 1fr; }
-            .scoring-grid { grid-template-columns: 1fr 1fr; }
-            .lightbox-prev { left: .5rem; }
-            .lightbox-next { right: .5rem; }
-        }
-
-        /* Tablet tier (iPads in portrait, small landscape) — scale the hero up
-           from phone sizing so it uses the wider canvas */
-        @media (min-width: 600px) and (max-width: 968px) {
-            .hero h1 { font-size: clamp(3.2rem, 8.6vw, 4.8rem); }
-            .hb-bottom {
-                grid-template-columns: 1.2fr 1fr;
-                gap: 2rem 3rem;
-                align-items: start;
-            }
-            .hb-stats { justify-content: flex-start; }
-            .hb-cta-row { grid-column: 1 / -1; justify-content: flex-start; }
-            .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
-            .gallery-masonry { columns: 3; }
-        }
     </style>
     <script>document.documentElement.classList.add('js');</script>
 </head>
@@ -1690,642 +1334,476 @@
     <main>
         <!-- ======================= HERO ======================= -->
         <section class="hero">
-            <div class="hero-bg"></div>
-            <div class="hero-container">
-
-                <div class="hero-top">
-                    <div class="eyebrow">FinMango × Kent State University</div>
-                    <div class="hb-status"><span class="hb-pulse"></span>2027 interest open</div>
+            <div class="container">
+                <div class="hero-top rise">
+                    <span class="eyebrow">FinMango × Kent State University</span>
+                    <span class="status"><span class="pulse" aria-hidden="true"></span>2027 interest open</span>
                 </div>
-
-                <h1>Tear down the <em>barriers.<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em></h1>
-
-                <div class="hb-bottom">
-                    <p class="hb-sub">
-                        High school students build real solutions to the systemic forces that keep communities from financial stability. <strong>$20,000+ in prizes.</strong>
-                    </p>
-                    <div class="hb-stats">
-                        <div class="hb-stat">
-                            <div class="hb-stat-num">$20K<em>+</em></div>
-                            <div class="hb-stat-label">In prizes</div>
-                        </div>
-                        <div class="hb-stat">
-                            <div class="hb-stat-num">5</div>
-                            <div class="hb-stat-label">Tracks to compete in</div>
-                        </div>
-                        <div class="hb-stat">
-                            <div class="hb-stat-num">3</div>
-                            <div class="hb-stat-label">Years running strong</div>
-                        </div>
-                    </div>
-                    <div class="hb-cta-row">
-                        <a href="mailto:competition@finmango.org?subject=Barrier Breakers 2027 Interest" class="btn-primary">
+                <h1 class="rise">Tear down the <span class="accent">barriers.</span></h1>
+                <div class="hero-row rise">
+                    <p class="lede">High school students build real solutions to the systemic forces that keep communities from financial stability. One day at Kent State. <strong>$20,000+ in prizes.</strong></p>
+                    <div class="hero-actions">
+                        <a href="mailto:competition@finmango.org?subject=Barrier Breakers 2027 Interest" class="btn btn-primary">
                             Get notified for 2027
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </a>
-                        <a href="#gallery-2026" class="btn-secondary">See the 2026 event</a>
+                        <a href="#gallery" class="btn btn-outline">See the 2026 event</a>
                     </div>
                 </div>
+            </div>
 
+            <div class="river" aria-hidden="true">
+                <div class="river-track">
+                    <img src="images/barrier-breakers-2026/img_3829-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3695-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3777-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3837-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9137-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9151-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9144-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9160-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9165-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9173-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3817-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3845-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3829-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3695-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3777-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3837-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9137-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9151-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9144-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9160-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9165-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9173-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3817-800.webp" alt="" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3845-800.webp" alt="" decoding="async">
+                </div>
+                <div class="river-track reverse">
+                    <img src="images/barrier-breakers-2026/img_9143-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9155-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9133-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3840-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3779-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3788-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3792-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3838-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3834-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3825-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3842-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3780-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9143-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9155-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_9133-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3840-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3779-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3788-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3792-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3838-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3834-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3825-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3842-800.webp" alt="" loading="lazy" decoding="async">
+                    <img src="images/barrier-breakers-2026/img_3780-800.webp" alt="" loading="lazy" decoding="async">
+                </div>
+            </div>
+        </section>
+
+        <!-- ======================= STATS ======================= -->
+        <section class="stats">
+            <div class="container">
+                <div class="stat-strip reveal">
+                    <div class="stat">
+                        <div class="stat-number" data-count="20" data-prefix="$" data-suffix="K+">$20K+</div>
+                        <div class="stat-label">In prizes</div>
+                        <div class="stat-sub">Cash, scholarships, school grants</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" data-count="5">5</div>
+                        <div class="stat-label">Tracks</div>
+                        <div class="stat-sub">Pick a barrier, or bring your own</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" data-count="12">12</div>
+                        <div class="stat-label">Judges</div>
+                        <div class="stat-sub">Banks, planners, founders, professors</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" data-count="3">3</div>
+                        <div class="stat-label">Years running</div>
+                        <div class="stat-sub">2024, 2025, 2026</div>
+                    </div>
+                </div>
             </div>
         </section>
 
         <!-- ======================= THE PROBLEM ======================= -->
-        <section class="problem">
-            <div class="problem-container">
+        <section class="section problem" id="why">
+            <div class="container">
                 <div class="problem-grid">
-                    <div class="problem-copy">
+                    <div class="problem-copy reveal">
                         <span class="eyebrow">The problem</span>
-                        <h2>Financial health isn't about knowing more. It's about facing <em>fewer&nbsp;walls.</em></h2>
-                        <p class="problem-body">
-                            The barriers are systemic: transportation that costs more than the job pays, rent that eats 60% of a paycheck, medical debt from a single ER visit. These aren't problems you budget your way out of. They're problems you have to build your way through.
-                        </p>
-                        <div class="problem-stats">
-                            <div class="problem-stat">
-                                <div class="problem-stat-value">53<em>%</em></div>
-                                <div class="problem-stat-label">of Americans living paycheck to paycheck</div>
+                        <h2>Financial health isn't about knowing more. It's about facing fewer <span class="accent">walls.</span></h2>
+                        <p class="body">The barriers are systemic: transportation that costs more than the job pays, rent that eats 60% of a paycheck, medical debt from a single ER visit. These aren't problems you budget your way out of. They're problems you have to build your way through.</p>
+                        <div class="figures stagger">
+                            <div class="figure reveal">
+                                <div class="figure-value">53<em>%</em></div>
+                                <div class="figure-label">of Americans living paycheck to paycheck</div>
                             </div>
-                            <div class="problem-stat">
-                                <div class="problem-stat-value">36<em>%</em></div>
-                                <div class="problem-stat-label">of US households carry medical debt</div>
+                            <div class="figure reveal">
+                                <div class="figure-value">36<em>%</em></div>
+                                <div class="figure-label">of US households carry medical debt</div>
                             </div>
-                            <div class="problem-stat">
-                                <div class="problem-stat-value">50<em>%</em></div>
-                                <div class="problem-stat-label">of renter households are cost-burdened by housing</div>
+                            <div class="figure reveal">
+                                <div class="figure-value">50<em>%</em></div>
+                                <div class="figure-label">of renter households are cost-burdened by housing</div>
                             </div>
-                            <div class="problem-stat">
-                                <div class="problem-stat-value"><em>$</em>33.63</div>
-                                <div class="problem-stat-label">hourly wage needed to afford a modest 2BR rental</div>
+                            <div class="figure reveal">
+                                <div class="figure-value"><em>$</em>33.63</div>
+                                <div class="figure-label">hourly wage needed to afford a modest 2BR rental</div>
                             </div>
                         </div>
                     </div>
-                    <div class="problem-visual">
-                        <img src="ksu-finmango.jpg" alt="Students at Kent State University" loading="lazy">
-                        <div class="problem-visual-caption">Students solving real problems at Kent State</div>
-                    </div>
+                    <figure class="photo-card reveal">
+                        <img src="images/barrier-breakers-2026/img_9143.webp" alt="A student beside a poster project on unemployment in the Innovation Gallery at Barrier Breakers 2026" loading="lazy" width="1800" height="1350">
+                        <figcaption>Innovation Gallery, Kent State, March 2026</figcaption>
+                    </figure>
                 </div>
             </div>
         </section>
 
         <!-- ======================= HOW IT WORKS ======================= -->
-        <section class="steps">
-            <div class="steps-container">
-                <div class="section-head">
+        <section class="section rule" id="how">
+            <div class="container">
+                <div class="section-head reveal">
                     <span class="eyebrow">How it works</span>
-                    <h2>Three steps. <em>No&nbsp;fluff.</em></h2>
+                    <h2>Three steps. No fluff.</h2>
                 </div>
-                <div class="steps-grid">
-                    <div class="step-item">
-                        <div class="step-icon line-icon" aria-hidden="true">
-                            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="36" cy="42" r="22" stroke="#0A0A0A" stroke-width="1.4"/>
-                                <circle class="draw-in" cx="36" cy="42" r="13" stroke="#F25A27" stroke-width="1.3"/>
-                                <path d="M36 13 L36 21 M36 63 L36 71 M7 42 L15 42 M57 42 L65 42" stroke="#0A0A0A" stroke-width="1.1" stroke-linecap="round" opacity=".45"/>
-                                <circle class="pulse-dot" cx="36" cy="42" r="3" fill="#F25A27"/>
-                                <g class="float-element">
-                                    <path d="M64 16 L43 37" stroke="#F25A27" stroke-width="1.5" stroke-linecap="round"/>
-                                    <path d="M43 37 L43 29 M43 37 L51 37" stroke="#F25A27" stroke-width="1.5" stroke-linecap="round"/>
-                                </g>
-                            </svg>
-                        </div>
-                        <div class="step-number">01</div>
-                        <div class="step-title">Pick a barrier</div>
-                        <div class="step-desc">Choose a track: transportation, housing, healthcare, financial literacy, or bring your own. Research why it exists and who it hurts most.</div>
+                <div class="steps-grid stagger">
+                    <div class="step reveal">
+                        <div class="step-num">01</div>
+                        <h3>Pick a barrier</h3>
+                        <p>Choose a track: transportation, housing, healthcare, financial literacy, or bring your own. Research why it exists and who it hurts most.</p>
                     </div>
-                    <div class="step-item">
-                        <div class="step-icon line-icon" aria-hidden="true">
-                            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M11 64 H69" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
-                                <rect class="draw-in" x="17" y="47" width="14" height="17" stroke="#F25A27" stroke-width="1.3" stroke-linejoin="round"/>
-                                <rect class="draw-in-delay-1" x="33" y="37" width="14" height="27" stroke="#F25A27" stroke-width="1.3" stroke-linejoin="round"/>
-                                <rect class="draw-in-delay-2" x="49" y="27" width="14" height="37" stroke="#F25A27" stroke-width="1.3" stroke-linejoin="round"/>
-                                <g class="float-element">
-                                    <path d="M56 19 L56 9 M51 14 L61 14" stroke="#F25A27" stroke-width="1.5" stroke-linecap="round"/>
-                                </g>
-                            </svg>
-                        </div>
-                        <div class="step-number">02</div>
-                        <div class="step-title">Build a solution</div>
-                        <div class="step-desc">Policy proposal, app prototype, community tool, financial literacy campaign. Use AI tools. Prototype fast. Make it real.</div>
+                    <div class="step reveal">
+                        <div class="step-num">02</div>
+                        <h3>Build a solution</h3>
+                        <p>Policy proposal, app prototype, community tool, financial literacy campaign. Use AI tools. Prototype fast. Make it real.</p>
                     </div>
-                    <div class="step-item">
-                        <div class="step-icon line-icon" aria-hidden="true">
-                            <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="14" y="14" width="44" height="32" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/>
-                                <path d="M28 46 L22 64 M44 46 L50 64 M36 46 L36 56" stroke="#0A0A0A" stroke-width="1.2" stroke-linecap="round" opacity=".55"/>
-                                <path class="draw-in" d="M20 38 L30 30 L38 34 L52 19" stroke="#F25A27" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <circle class="pulse-dot" cx="52" cy="19" r="2.6" fill="#F25A27"/>
-                                <g class="float-element">
-                                    <path d="M62 50 C62.6 55, 63 55.4, 68 56 C63 56.6, 62.6 57, 62 62 C61.4 57, 61 56.6, 56 56 C61 55.4, 61.4 55, 62 50 Z" stroke="#F25A27" stroke-width="1.2" stroke-linejoin="round"/>
-                                </g>
-                            </svg>
-                        </div>
-                        <div class="step-number">03</div>
-                        <div class="step-title">Present and compete</div>
-                        <div class="step-desc">Demo Day for oral presentations. Innovation Gallery for posters. Knowledge Track for financial literacy. Everyone who applies competes.</div>
+                    <div class="step reveal">
+                        <div class="step-num">03</div>
+                        <h3>Present and compete</h3>
+                        <p>Demo Day for oral presentations. Innovation Gallery for posters. Knowledge Track for financial literacy. Everyone who applies competes.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- ======================= TRACKS ======================= -->
-        <section class="tracks">
-            <div class="tracks-container">
-                <div class="section-head">
+        <section class="section" id="tracks" style="padding-top: 0;">
+            <div class="container">
+                <div class="section-head reveal">
                     <span class="eyebrow">Innovation tracks</span>
                     <h2>Pick your barrier.</h2>
-                    <p class="section-sub">Choose one challenge. Research it. Solve it.</p>
+                    <p>Choose one challenge. Research it. Solve it.</p>
                 </div>
-                <div class="tracks-list">
-                    <div class="track-row">
-                        <div class="track-row-icon" aria-hidden="true">
-                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M4 22 V18.5 L7 12.5 C7.4 11.6 8 11.2 9 11.2 H21.5 C22.4 11.2 23.1 11.6 23.6 12.4 L27 18 L28 18.6 V22" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M4 22 H28" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round"/>
-                                <path d="M8 12 H21" stroke="#0A0A0A" stroke-width="1.2" opacity=".4"/>
-                                <circle cx="10" cy="22" r="2.4" stroke="#F25A27" stroke-width="1.5"/>
-                                <circle cx="22" cy="22" r="2.4" stroke="#F25A27" stroke-width="1.5"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="track-row-title">Transportation</div>
-                            <div class="track-row-desc">Car costs, insurance, and transit gaps blocking stable employment.</div>
-                        </div>
-                        <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                <div class="tracks-list stagger">
+                    <div class="track reveal">
+                        <div class="track-index">01</div>
+                        <div class="track-name">Transportation</div>
+                        <div class="track-desc">Car costs, insurance, and transit gaps blocking stable employment.</div>
                     </div>
-                    <div class="track-row">
-                        <div class="track-row-icon" aria-hidden="true">
-                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5 15 L16 6 L27 15" stroke="#F25A27" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M8 13 V26 H24 V13" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M13.5 26 V19 H18.5 V26" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="track-row-title">Housing Affordability</div>
-                            <div class="track-row-desc">Rent burden, deposits, and credit barriers to stable housing.</div>
-                        </div>
-                        <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="track reveal">
+                        <div class="track-index">02</div>
+                        <div class="track-name">Housing Affordability</div>
+                        <div class="track-desc">Rent burden, deposits, and credit barriers to stable housing.</div>
                     </div>
-                    <div class="track-row">
-                        <div class="track-row-icon" aria-hidden="true">
-                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16 25.5 C16 25.5 5.5 19 5.5 12 C5.5 8.7 8 6.5 10.8 6.5 C13.1 6.5 15 8 16 10 C17 8 18.9 6.5 21.2 6.5 C24 6.5 26.5 8.7 26.5 12 C26.5 19 16 25.5 16 25.5 Z" stroke="#0A0A0A" stroke-width="1.5" stroke-linejoin="round"/>
-                                <path d="M7.5 14.5 H12 L13.8 11 L16.4 18 L18 14.5 H24.5" stroke="#F25A27" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="track-row-title">Healthcare Access</div>
-                            <div class="track-row-desc">Medical debt and high costs devastating young adults.</div>
-                        </div>
-                        <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="track reveal">
+                        <div class="track-index">03</div>
+                        <div class="track-name">Healthcare Access</div>
+                        <div class="track-desc">Medical debt and high costs devastating young adults.</div>
                     </div>
-                    <div class="track-row">
-                        <div class="track-row-icon" aria-hidden="true">
-                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16 9.5 C13 7.5 8.5 7.5 5.5 8.5 V24 C8.5 23 13 23 16 25 C19 23 23.5 23 26.5 24 V8.5 C24.5 7.7 21 7.7 18.5 9" stroke="#0A0A0A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M16 9.5 V25" stroke="#0A0A0A" stroke-width="1.2" opacity=".45"/>
-                                <path d="M19.5 19 L22 16.3 L24 18 L26.5 14.8" stroke="#F25A27" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M26.5 14.8 L24 14.9 M26.5 14.8 L26.4 17.3" stroke="#F25A27" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="track-row-title">Literacy &amp; Investment</div>
-                            <div class="track-row-desc">Limited financial education preventing generational wealth.</div>
-                        </div>
-                        <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="track reveal">
+                        <div class="track-index">04</div>
+                        <div class="track-name">Literacy &amp; Investment</div>
+                        <div class="track-desc">Limited financial education preventing generational wealth.</div>
                     </div>
-                    <div class="track-row">
-                        <div class="track-row-icon" aria-hidden="true">
-                            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15 5 C16 13 17.5 14.5 25.5 15.5 C17.5 16.5 16 18 15 26 C14 18 12.5 16.5 4.5 15.5 C12.5 14.5 14 13 15 5 Z" stroke="#F25A27" stroke-width="1.5" stroke-linejoin="round"/>
-                                <circle cx="25" cy="7" r="1.7" stroke="#0A0A0A" stroke-width="1.3"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="track-row-title">Open Track</div>
-                            <div class="track-row-desc">Any financial barrier. Childcare, food insecurity, student debt, or your own idea.</div>
-                        </div>
-                        <div class="track-row-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+                    <div class="track reveal">
+                        <div class="track-index">05</div>
+                        <div class="track-name">Open Track</div>
+                        <div class="track-desc">Any financial barrier. Childcare, food insecurity, student debt, or your own idea.</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ======================= 2026 EVENT GALLERY (ink moment) ======================= -->
-        <section class="gallery-section on-ink" id="gallery-2026">
-            <div class="gallery-header">
-                <span class="eyebrow">March 20, 2026</span>
-                <h2>The day in pictures.</h2>
-                <p>Barrier Breakers 2026 at Kent State University. Students showed up, showed out, and broke through.</p>
-            </div>
-
-            <div class="gallery-masonry">
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 at Kent State University">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3695.jpg" alt="Barrier Breakers 2026 event" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
+        <!-- ======================= 2026 GALLERY ======================= -->
+        <section class="gallery on-ink" id="gallery">
+            <span id="gallery-2026" aria-hidden="true"></span>
+            <div class="container">
+                <div class="section-head reveal">
+                    <div>
+                        <span class="eyebrow">March 20, 2026</span>
+                        <h2>The day in pictures.</h2>
+                        <p>Barrier Breakers 2026 at Kent State University. Students showed up, showed out, and broke through.</p>
+                    </div>
+                    <div class="gallery-count">24 PHOTOS · CLICK TO EXPAND</div>
                 </div>
-                <div class="gallery-item" data-caption="Students competing at Barrier Breakers 2026">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3777.jpg" alt="Students competing" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
+                <div class="masonry" id="masonry">
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3829.webp" data-caption="Students from across Northeast Ohio fill the atrium steps"><img src="images/barrier-breakers-2026/img_3829-800.webp" alt="Students from across Northeast Ohio fill the atrium steps" loading="lazy" decoding="async" width="1800" height="1200"><span class="shot-cap">Students from across Northeast Ohio fill the atrium steps</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_9143.webp" data-caption="Innovation Gallery: a poster project on unemployment, ready to pitch"><img src="images/barrier-breakers-2026/img_9143-800.webp" alt="Innovation Gallery: a poster project on unemployment, ready to pitch" loading="lazy" decoding="async" width="1800" height="1350"><span class="shot-cap">Innovation Gallery: a poster project on unemployment, ready to pitch</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3695.webp" data-caption="Opening session under the big screens"><img src="images/barrier-breakers-2026/img_3695-800.webp" alt="Opening session under the big screens" loading="lazy" decoding="async" width="1536" height="932"><span class="shot-cap">Opening session under the big screens</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_9155.webp" data-caption="One-on-one at the gallery tables"><img src="images/barrier-breakers-2026/img_9155-800.webp" alt="One-on-one at the gallery tables" loading="lazy" decoding="async" width="1350" height="1800"><span class="shot-cap">One-on-one at the gallery tables</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3777.webp" data-caption="FinMango banners out for the group photo"><img src="images/barrier-breakers-2026/img_3777-800.webp" alt="FinMango banners out for the group photo" loading="lazy" decoding="async" width="1800" height="1200"><span class="shot-cap">FinMango banners out for the group photo</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_9133.webp" data-caption="The Innovation Gallery floor, posters and laptops everywhere"><img src="images/barrier-breakers-2026/img_9133-800.webp" alt="The Innovation Gallery floor, posters and laptops everywhere" loading="lazy" decoding="async" width="1800" height="1350"><span class="shot-cap">The Innovation Gallery floor, posters and laptops everywhere</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3837.webp" data-caption="Handshakes on stage at the awards"><img src="images/barrier-breakers-2026/img_3837-800.webp" alt="Handshakes on stage at the awards" loading="lazy" decoding="async" width="1800" height="1037"><span class="shot-cap">Handshakes on stage at the awards</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3840.webp" data-caption="Innovation Gallery award winners"><img src="images/barrier-breakers-2026/img_3840-800.webp" alt="Innovation Gallery award winners" loading="lazy" decoding="async" width="1448" height="1800"><span class="shot-cap">Innovation Gallery award winners</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_9137.webp" data-caption="Conversations across the gallery floor"><img src="images/barrier-breakers-2026/img_9137-800.webp" alt="Conversations across the gallery floor" loading="lazy" decoding="async" width="1800" height="1350"><span class="shot-cap">Conversations across the gallery floor</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3779.webp" data-caption="School groups line the steps for photos"><img src="images/barrier-breakers-2026/img_3779-800.webp" alt="School groups line the steps for photos" loading="lazy" decoding="async" width="1794" height="1196"><span class="shot-cap">School groups line the steps for photos</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_9151.webp" data-caption="Making the case at the table"><img src="images/barrier-breakers-2026/img_9151-800.webp" alt="Making the case at the table" loading="lazy" decoding="async" width="1800" height="1350"><span class="shot-cap">Making the case at the table</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3788.webp" data-caption="Teams pack the steps between sessions"><img src="images/barrier-breakers-2026/img_3788-800.webp" alt="Teams pack the steps between sessions" loading="lazy" decoding="async" width="1800" height="1200"><span class="shot-cap">Teams pack the steps between sessions</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_9144.webp" data-caption="Demo tables ready in the gallery"><img src="images/barrier-breakers-2026/img_9144-800.webp" alt="Demo tables ready in the gallery" loading="lazy" decoding="async" width="1800" height="1350"><span class="shot-cap">Demo tables ready in the gallery</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3792.webp" data-caption="One of the many school delegations"><img src="images/barrier-breakers-2026/img_3792-800.webp" alt="One of the many school delegations" loading="lazy" decoding="async" width="1800" height="1200"><span class="shot-cap">One of the many school delegations</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_9160.webp" data-caption="Between presentations"><img src="images/barrier-breakers-2026/img_9160-800.webp" alt="Between presentations" loading="lazy" decoding="async" width="1800" height="1350"><span class="shot-cap">Between presentations</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3838.webp" data-caption="Welcome, Northeast Ohio high school students"><img src="images/barrier-breakers-2026/img_3838-800.webp" alt="Welcome, Northeast Ohio high school students" loading="lazy" decoding="async" width="1800" height="1200"><span class="shot-cap">Welcome, Northeast Ohio high school students</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_9165.webp" data-caption="Teams waiting their turn to present"><img src="images/barrier-breakers-2026/img_9165-800.webp" alt="Teams waiting their turn to present" loading="lazy" decoding="async" width="1800" height="1350"><span class="shot-cap">Teams waiting their turn to present</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3834.webp" data-caption="A team with the FinMango banner"><img src="images/barrier-breakers-2026/img_3834-800.webp" alt="A team with the FinMango banner" loading="lazy" decoding="async" width="1800" height="1123"><span class="shot-cap">A team with the FinMango banner</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_9173.webp" data-caption="Valmark, the platinum sponsor, on site"><img src="images/barrier-breakers-2026/img_9173-800.webp" alt="Valmark, the platinum sponsor, on site" loading="lazy" decoding="async" width="1800" height="1350"><span class="shot-cap">Valmark, the platinum sponsor, on site</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3825.webp" data-caption="Speaking to a full house"><img src="images/barrier-breakers-2026/img_3825-800.webp" alt="Speaking to a full house" loading="lazy" decoding="async" width="1800" height="1200"><span class="shot-cap">Speaking to a full house</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3817.webp" data-caption="Group photo on the steps"><img src="images/barrier-breakers-2026/img_3817-800.webp" alt="Group photo on the steps" loading="lazy" decoding="async" width="1800" height="1200"><span class="shot-cap">Group photo on the steps</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3842.webp" data-caption="Team photo after presenting"><img src="images/barrier-breakers-2026/img_3842-800.webp" alt="Team photo after presenting" loading="lazy" decoding="async" width="1680" height="1405"><span class="shot-cap">Team photo after presenting</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3845.webp" data-caption="Group photo on the steps"><img src="images/barrier-breakers-2026/img_3845-800.webp" alt="Group photo on the steps" loading="lazy" decoding="async" width="1800" height="1200"><span class="shot-cap">Group photo on the steps</span></button>
+                    <button class="shot reveal" type="button" data-full="images/barrier-breakers-2026/img_3780.webp" data-caption="A speaker addresses the room"><img src="images/barrier-breakers-2026/img_3780-800.webp" alt="A speaker addresses the room" loading="lazy" decoding="async" width="1800" height="1200"><span class="shot-cap">A speaker addresses the room</span></button>
                 </div>
-                <div class="gallery-item" data-caption="Innovation and collaboration on display">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3779.jpg" alt="Innovation on display" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Teams presenting their solutions">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3780.jpg" alt="Teams presenting solutions" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Breaking barriers at Kent State">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3788.JPEG" alt="Breaking barriers at Kent State" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3817.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3825.JPEG" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3829.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3834.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3837.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3838.JPEG" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3840.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3842.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_3845.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9133.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9137.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9143.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9144.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9151.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9155.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9160.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9165.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-                <div class="gallery-item" data-caption="Barrier Breakers 2026 event photo">
-                    <img src="Barrier%20Breakers%202026%20Pics/IMG_9173.jpg" alt="Barrier Breakers 2026" loading="lazy">
-                    <div class="gallery-overlay"><span class="gallery-expand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></span></div>
-                </div>
-            </div>
-
-            <div class="gallery-counter">
-                <span>23 photos from the event</span>
             </div>
         </section>
 
-        <!-- LIGHTBOX -->
-        <div class="lightbox" id="lightbox">
-            <button class="lightbox-close" aria-label="Close">&times;</button>
-            <button class="lightbox-prev" aria-label="Previous">&#8249;</button>
-            <button class="lightbox-next" aria-label="Next">&#8250;</button>
-            <div class="lightbox-content">
-                <img src="" alt="" id="lightbox-img">
-                <div class="lightbox-caption" id="lightbox-caption"></div>
-                <div class="lightbox-counter" id="lightbox-counter"></div>
+        <!-- ======================= PRIZES ======================= -->
+        <section class="section" id="prizes">
+            <div class="container">
+                <div class="prizes-head reveal">
+                    <div>
+                        <span class="eyebrow">Rewards</span>
+                        <div class="prize-total">$20,000<em>+</em></div>
+                        <p class="prize-sub">In cash prizes, scholarships, and school grants.</p>
+                    </div>
+                    <div class="sponsored">Sponsored by <img src="valmark.svg" alt="Valmark Financial Group"></div>
+                </div>
+
+                <div class="divisions stagger">
+                    <div class="division reveal">
+                        <h3>Demo Day</h3>
+                        <p class="division-desc">Top team per track. 5-min pitch + 2-min Q&amp;A. Cash + scholarships + school grants.</p>
+                        <div class="prize-row"><span class="prize-place">1st Place</span><span><span class="prize-amt">$7,500</span><span class="prize-split">$4k cash · $2.5k scholarship · $1k school</span></span></div>
+                        <div class="prize-row"><span class="prize-place">2nd Place</span><span><span class="prize-amt">$4,650</span><span class="prize-split">$2.5k cash · $1.5k scholarship · $650 school</span></span></div>
+                        <div class="prize-row"><span class="prize-place">3rd Place</span><span><span class="prize-amt">$2,750</span><span class="prize-split">$1.25k cash · $1k scholarship · $500 school</span></span></div>
+                        <div class="prize-row"><span class="prize-place">4th Place</span><span><span class="prize-amt">$1,850</span><span class="prize-split">$750 cash · $750 scholarship · $350 school</span></span></div>
+                        <div class="prize-row"><span class="prize-place">5th Place</span><span><span class="prize-amt">$1,250</span><span class="prize-split">$500 cash · $500 scholarship · $250 school</span></span></div>
+                        <p class="prize-note">Cash &amp; scholarships split among team members. Scholarships require attending KSU &amp; selecting an ACCBE major/minor. School grants go directly to the school.</p>
+                    </div>
+                    <div class="division reveal">
+                        <h3>Innovation Gallery</h3>
+                        <p class="division-desc">Poster presentations. 1-on-1 with judges.</p>
+                        <div class="prize-row"><span class="prize-place">1st Place</span><span class="prize-amt">$1,250</span></div>
+                        <div class="prize-row"><span class="prize-place">2nd Place</span><span class="prize-amt">$750</span></div>
+                        <div class="prize-row"><span class="prize-place">3rd Place</span><span class="prize-amt">$250</span></div>
+                    </div>
+                    <div class="division reveal">
+                        <h3>Knowledge Track</h3>
+                        <p class="division-desc">20-30 min financial literacy test. Open to all.</p>
+                        <div class="prize-row"><span class="prize-place">1st Place</span><span class="prize-amt">$250</span></div>
+                        <div class="prize-row"><span class="prize-place">2nd Place</span><span class="prize-amt">$150</span></div>
+                        <div class="prize-row"><span class="prize-place">3rd Place</span><span class="prize-amt">$100</span></div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
 
         <!-- ======================= RESOURCES & SCORING ======================= -->
-        <section class="resources">
-            <div class="resources-container">
-                <div class="section-head">
+        <section class="section rule" id="resources">
+            <div class="container">
+                <div class="section-head reveal">
                     <span class="eyebrow">Prepare to win</span>
                     <h2>Resources &amp; scoring.</h2>
                 </div>
-
-                <div class="resources-links">
-                    <a href="barrier-breakers-schedule.pdf" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-                        Event schedule
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </a>
-                    <a href="barrier-breakers-one-pager-2026.pdf" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-                        Teacher one-pager
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </a>
-                    <a href="barrier-breakers-flyer.pdf" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-                        Class flyer
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </a>
-                    <a href="barrier-breakers-rubric.pdf" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-                        Judging rubric
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </a>
+                <div class="resources-row stagger">
+                    <a href="barrier-breakers-schedule.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-soft reveal">Event schedule</a>
+                    <a href="barrier-breakers-one-pager-2026.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-soft reveal">Teacher one-pager</a>
+                    <a href="barrier-breakers-flyer.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-soft reveal">Class flyer</a>
+                    <a href="barrier-breakers-rubric.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-soft reveal">Judging rubric</a>
                 </div>
-
-                <div class="scoring-card">
-                    <div class="scoring-header">
+                <div class="reveal">
+                    <div class="scoring-head">
                         <h3>How projects are scored</h3>
                         <span>100 pts total · Each criterion 1-5</span>
                     </div>
-                    <div class="scoring-grid">
-                        <div class="scoring-item">
-                            <div class="scoring-item-name">Problem</div>
-                            <div class="scoring-item-pts">25 pts</div>
-                        </div>
-                        <div class="scoring-item">
-                            <div class="scoring-item-name">Solution</div>
-                            <div class="scoring-item-pts">25 pts</div>
-                        </div>
-                        <div class="scoring-item">
-                            <div class="scoring-item-name">Presentation</div>
-                            <div class="scoring-item-pts">25 pts</div>
-                        </div>
-                        <div class="scoring-item">
-                            <div class="scoring-item-name">Impact</div>
-                            <div class="scoring-item-pts">25 pts</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ======================= PRIZES (dark showcase) ======================= -->
-        <section class="prizes on-ink">
-            <div class="prizes-container">
-                <div class="prizes-head">
-                    <span class="eyebrow">Rewards</span>
-                    <span class="sponsored-note">Sponsored by <img src="valmark.svg" alt="Valmark Financial Group"></span>
-                    <div class="prizes-hero-number">$20,000<em>+</em></div>
-                    <div class="prizes-hero-sub">In cash prizes, scholarships, and school grants.</div>
-                </div>
-
-                <div class="prizes-divisions">
-                    <!-- Demo Day -->
-                    <div class="prize-division">
-                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.5 C14.8 5.3 16 9 16 12.5 L8 12.5 C8 9 9.2 5.3 12 2.5 Z" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="1.7" stroke="#F25A27" stroke-width="1.4"/><path d="M8 12.5 L5 15.5 L8.2 14.6 M16 12.5 L19 15.5 L15.8 14.6" stroke="#0A0A0A" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 16 C10.6 18 11 19.2 12 21 C13 19.2 13.4 18 14 16" stroke="#F25A27" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Demo Day</h3>
-                        <div class="prize-division-desc">Top team per track. 5-min pitch + 2-min Q&amp;A. Cash + scholarships + school grants.</div>
-                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span><span class="prize-row-amount">$7,500</span><span class="prize-row-breakdown">($4k cash + $2.5k scholarship + $1k school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span><span class="prize-row-amount">$4,650</span><span class="prize-row-breakdown">($2.5k cash + $1.5k scholarship + $650 school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span><span class="prize-row-amount">$2,750</span><span class="prize-row-breakdown">($1.25k cash + $1k scholarship + $500 school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">4th Place</span><span><span class="prize-row-amount">$1,850</span><span class="prize-row-breakdown">($750 cash + $750 scholarship + $350 school)</span></span></div>
-                        <div class="prize-row"><span class="prize-row-place">5th Place</span><span><span class="prize-row-amount">$1,250</span><span class="prize-row-breakdown">($500 cash + $500 scholarship + $250 school)</span></span></div>
-                        <p class="prize-note">Cash &amp; scholarships split among team members. Scholarships require attending KSU &amp; selecting ACCBE major/minor. School grants go directly to the school.</p>
-                    </div>
-
-                    <!-- Innovation Gallery -->
-                    <div class="prize-division">
-                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3.5" width="16" height="17" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 16.5 V12 M12 16.5 V8.5 M16 16.5 V13.5" stroke="#F25A27" stroke-width="1.6" stroke-linecap="round"/></svg></span>Innovation Gallery</h3>
-                        <div class="prize-division-desc">Poster presentations. 1-on-1 with judges.</div>
-                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span class="prize-row-amount">$1,250</span></div>
-                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span class="prize-row-amount">$750</span></div>
-                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span class="prize-row-amount">$250</span></div>
-                    </div>
-
-                    <!-- Knowledge Track -->
-                    <div class="prize-division">
-                        <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9.2 17 C7 15.6 5.5 13.2 5.5 10.5 C5.5 6.9 8.4 4 12 4 C15.6 4 18.5 6.9 18.5 10.5 C18.5 13.2 17 15.6 14.8 17" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.2 17 V19 H14.8 V17" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><path d="M10 21 H14" stroke="#0A0A0A" stroke-width="1.4" stroke-linecap="round"/><path d="M12 7.5 V12 M12 12 L10 10 M12 12 L14 10" stroke="#F25A27" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Knowledge Track</h3>
-                        <div class="prize-division-desc">20-30 min financial literacy test. Open to all.</div>
-                        <div class="prize-row"><span class="prize-row-place">1st Place</span><span class="prize-row-amount">$250</span></div>
-                        <div class="prize-row"><span class="prize-row-place">2nd Place</span><span class="prize-row-amount">$150</span></div>
-                        <div class="prize-row"><span class="prize-row-place">3rd Place</span><span class="prize-row-amount">$100</span></div>
+                    <div class="stat-strip scoring-grid">
+                        <div class="stat"><div class="stat-number">25<em>PTS</em></div><div class="stat-label">Problem</div></div>
+                        <div class="stat"><div class="stat-number">25<em>PTS</em></div><div class="stat-label">Solution</div></div>
+                        <div class="stat"><div class="stat-number">25<em>PTS</em></div><div class="stat-label">Presentation</div></div>
+                        <div class="stat"><div class="stat-number">25<em>PTS</em></div><div class="stat-label">Impact</div></div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- ======================= JUDGES ======================= -->
-        <section class="judges">
-            <div class="judges-container">
-                <div class="section-head" style="margin-bottom: 0;">
+        <section class="section rule" id="judges">
+            <div class="container">
+                <div class="section-head reveal">
                     <span class="eyebrow">The judges</span>
                     <h2>Who's watching.</h2>
                 </div>
 
-                <div class="judges-subsection-label">Demo Day Judges</div>
-                <div class="judges-grid-bb">
-                    <div class="judge-card-bb">
-                        <img src="Cass Lacey.jpg" alt="Cass Lacey" loading="lazy">
-                        <div class="judge-card-bb-name">Cass Lacey</div>
-                        <div class="judge-card-bb-title">Early Talent Program Mgr</div>
-                        <div class="judge-card-bb-org">Valmark</div>
+                <div class="judges-label reveal">Demo Day judges</div>
+                <div class="judges-grid stagger">
+                    <div class="judge reveal">
+                        <img class="judge-photo" src="Cass%20Lacey.jpg" alt="Cass Lacey" loading="lazy">
+                        <div class="judge-name">Cass Lacey</div>
+                        <div class="judge-title">Early Talent Program Mgr</div>
+                        <div class="judge-org">Valmark</div>
                     </div>
-                    <div class="judge-card-bb">
-                        <img src="Mia Fawls.jpg" alt="Mia Fawls" loading="lazy">
-                        <div class="judge-card-bb-name">Mia Fawls</div>
-                        <div class="judge-card-bb-title">Associate Financial Planner</div>
-                        <div class="judge-card-bb-org">Valmark</div>
+                    <div class="judge reveal">
+                        <img class="judge-photo" src="Mia%20Fawls.jpg" alt="Mia Fawls" loading="lazy">
+                        <div class="judge-name">Mia Fawls</div>
+                        <div class="judge-title">Associate Financial Planner</div>
+                        <div class="judge-org">Valmark</div>
                     </div>
-                    <div class="judge-card-bb">
-                        <img src="Drew Mallott.jpg" alt="Drew Mallott" loading="lazy">
-                        <div class="judge-card-bb-name">Drew Mallott</div>
-                        <div class="judge-card-bb-title">SVP, Platform Strategy</div>
-                        <div class="judge-card-bb-org">Bank of America</div>
+                    <div class="judge reveal">
+                        <img class="judge-photo" src="Drew%20Mallott.jpg" alt="Drew Mallott" loading="lazy">
+                        <div class="judge-name">Drew Mallott</div>
+                        <div class="judge-title">SVP, Platform Strategy</div>
+                        <div class="judge-org">Bank of America</div>
                     </div>
-                    <div class="judge-card-bb">
-                        <img src="Peyton Zachrich.jpeg" alt="Peyton Zachrich" loading="lazy">
-                        <div class="judge-card-bb-name">Peyton Zachrich</div>
-                        <div class="judge-card-bb-title">Owner, Evolve Egress</div>
-                        <div class="judge-card-bb-org">Entrepreneur &amp; Real Estate Investor</div>
+                    <div class="judge reveal">
+                        <img class="judge-photo" src="Peyton%20Zachrich.jpeg" alt="Peyton Zachrich" loading="lazy">
+                        <div class="judge-name">Peyton Zachrich</div>
+                        <div class="judge-title">Owner, Evolve Egress</div>
+                        <div class="judge-org">Entrepreneur &amp; Real Estate Investor</div>
                     </div>
-                    <div class="judge-card-bb">
-                        <img src="Ryan Bayonnet, CFP.jpeg" alt="Ryan Bayonnet, CFP®" loading="lazy">
-                        <div class="judge-card-bb-name">Ryan Bayonnet, CFP®</div>
-                        <div class="judge-card-bb-title">Founder</div>
-                        <div class="judge-card-bb-org">Hyland Wealth Management</div>
+                    <div class="judge reveal">
+                        <img class="judge-photo" src="Ryan%20Bayonnet,%20CFP.jpeg" alt="Ryan Bayonnet, CFP®" loading="lazy">
+                        <div class="judge-name">Ryan Bayonnet, CFP®</div>
+                        <div class="judge-title">Founder</div>
+                        <div class="judge-org">Hyland Wealth Management</div>
                     </div>
-                    <div class="judge-card-bb">
-                        <img src="Ashley Wasielewski.jpeg" alt="Ashley Wasielewski" loading="lazy">
-                        <div class="judge-card-bb-name">Ashley Wasielewski</div>
-                        <div class="judge-card-bb-title">VP, Community Relations</div>
-                        <div class="judge-card-bb-org">Bank of America</div>
+                    <div class="judge reveal">
+                        <img class="judge-photo" src="Ashley%20Wasielewski.jpeg" alt="Ashley Wasielewski" loading="lazy">
+                        <div class="judge-name">Ashley Wasielewski</div>
+                        <div class="judge-title">VP, Community Relations</div>
+                        <div class="judge-org">Bank of America</div>
                     </div>
-                    <div class="judge-card-bb">
-                        <img src="Steved.png" alt="Steven Dennis, PhD" loading="lazy">
-                        <div class="judge-card-bb-name">Steven Dennis, PhD</div>
-                        <div class="judge-card-bb-title">Professor of Finance</div>
-                        <div class="judge-card-bb-org">Kent State University</div>
+                    <div class="judge reveal">
+                        <img class="judge-photo" src="Steved.png" alt="Steven Dennis, PhD" loading="lazy">
+                        <div class="judge-name">Steven Dennis, PhD</div>
+                        <div class="judge-title">Professor of Finance</div>
+                        <div class="judge-org">Kent State University</div>
                     </div>
                 </div>
 
-                <div class="judges-subsection-label">Poster Presentation Judges</div>
-                <div class="judges-grid-bb">
-                    <div class="judge-card-bb">
-                        <img src="Davonta.jpg" alt="Davonta Milbry" loading="lazy" style="object-position: top;">
-                        <div class="judge-card-bb-name">Davonta Milbry</div>
-                        <div class="judge-card-bb-title">Outreach Coordinator</div>
-                        <div class="judge-card-bb-org">Federal Reserve Bank of Cleveland</div>
+                <div class="judges-label reveal">Poster presentation judges</div>
+                <div class="judges-grid stagger">
+                    <div class="judge reveal">
+                        <img class="judge-photo" src="Davonta.jpg" alt="Davonta Milbry" loading="lazy" style="object-position: top;">
+                        <div class="judge-name">Davonta Milbry</div>
+                        <div class="judge-title">Outreach Coordinator</div>
+                        <div class="judge-org">Federal Reserve Bank of Cleveland</div>
                     </div>
-                    <div class="judge-card-bb">
-                        <img src="Bradley.jpeg" alt="Bradley Smith" loading="lazy">
-                        <div class="judge-card-bb-name">Bradley Smith</div>
-                        <div class="judge-card-bb-title">KSU Alumnus</div>
-                        <div class="judge-card-bb-org">Class of '25</div>
+                    <div class="judge reveal">
+                        <img class="judge-photo" src="Bradley.jpeg" alt="Bradley Smith" loading="lazy">
+                        <div class="judge-name">Bradley Smith</div>
+                        <div class="judge-title">KSU Alumnus</div>
+                        <div class="judge-org">Class of '25</div>
                     </div>
-                    <div class="judge-card-bb">
-                        <img src="Nick.jpeg" alt="Nick Widmer" loading="lazy">
-                        <div class="judge-card-bb-name">Nick Widmer</div>
-                        <div class="judge-card-bb-title">KSU Senior</div>
-                        <div class="judge-card-bb-org">Computer Science</div>
+                    <div class="judge reveal">
+                        <img class="judge-photo" src="Nick.jpeg" alt="Nick Widmer" loading="lazy">
+                        <div class="judge-name">Nick Widmer</div>
+                        <div class="judge-title">KSU Senior</div>
+                        <div class="judge-org">Computer Science</div>
                     </div>
-                    <div class="judge-card-bb">
-                        <img src="Anthonyd.jpeg" alt="Anthony Dalayanis" loading="lazy">
-                        <div class="judge-card-bb-name">Anthony Dalayanis</div>
-                        <div class="judge-card-bb-title">KSU Senior</div>
-                        <div class="judge-card-bb-org">Business</div>
+                    <div class="judge reveal">
+                        <img class="judge-photo" src="Anthonyd.jpeg" alt="Anthony Dalayanis" loading="lazy">
+                        <div class="judge-name">Anthony Dalayanis</div>
+                        <div class="judge-title">KSU Senior</div>
+                        <div class="judge-org">Business</div>
                     </div>
-                    <div class="judge-card-bb">
-                        <img src="frank.jpeg" alt="Frank Slemc" loading="lazy">
-                        <div class="judge-card-bb-name">Frank Slemc</div>
-                        <div class="judge-card-bb-title">Retired Finance Professional</div>
-                        <div class="judge-card-bb-org">Part-time Real Estate Agent</div>
+                    <div class="judge reveal">
+                        <img class="judge-photo" src="frank.jpeg" alt="Frank Slemc" loading="lazy">
+                        <div class="judge-name">Frank Slemc</div>
+                        <div class="judge-title">Retired Finance Professional</div>
+                        <div class="judge-org">Part-time Real Estate Agent</div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- ======================= PAST WINNERS ======================= -->
-        <section class="winners">
-            <div class="winners-container">
-                <div class="section-head">
+        <section class="section" id="winners" style="padding-top: 0;">
+            <div class="container">
+                <div class="section-head reveal">
                     <span class="eyebrow">Past champions</span>
                     <h2>They broke through.</h2>
                 </div>
 
-                <div class="winner-year-block-bb">
-                    <div class="winner-year-label-bb"><em>'</em>25</div>
-                    <div class="winner-photo-bb"><img src="2025-winner.jpg" alt="2025 Barrier Breakers Winners" loading="lazy"></div>
-                    <div class="winners-grid-bb">
-                        <div class="winner-card-bb gold">
-                            <div class="winner-card-bb-header"><span>1st Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
-                            <div class="winner-card-bb-body">
-                                <div class="winner-card-bb-name">Dylan Quinones</div>
-                                <div class="winner-card-bb-school">Polaris Career Center</div>
-                            </div>
-                        </div>
-                        <div class="winner-card-bb silver">
-                            <div class="winner-card-bb-header"><span>2nd Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
-                            <div class="winner-card-bb-body">
-                                <div class="winner-card-bb-name">Rogan Allen</div>
-                                <div class="winner-card-bb-school">Stow-Munroe Falls High</div>
-                            </div>
-                        </div>
-                        <div class="winner-card-bb bronze">
-                            <div class="winner-card-bb-header"><span>3rd Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
-                            <div class="winner-card-bb-body">
-                                <div class="winner-card-bb-name">Katherine Rosner</div>
-                                <div class="winner-card-bb-school">Chagrin Falls High School</div>
-                            </div>
-                        </div>
+                <div class="year-block reveal">
+                    <div class="year"><em>'</em>25</div>
+                    <div class="year-photo"><img src="images/barrier-breakers-2026/2025-winner.webp" alt="2025 Barrier Breakers winners" loading="lazy" width="1456" height="1165"></div>
+                    <div class="podium">
+                        <div class="place"><div class="place-rank">1st</div><div><div class="place-name">Dylan Quinones</div><div class="place-school">Polaris Career Center</div></div></div>
+                        <div class="place"><div class="place-rank">2nd</div><div><div class="place-name">Rogan Allen</div><div class="place-school">Stow-Munroe Falls High</div></div></div>
+                        <div class="place"><div class="place-rank">3rd</div><div><div class="place-name">Katherine Rosner</div><div class="place-school">Chagrin Falls High School</div></div></div>
                     </div>
                 </div>
 
-                <div class="winner-year-block-bb">
-                    <div class="winner-year-label-bb"><em>'</em>24</div>
-                    <div class="winner-photo-bb"><img src="2024-winner.jpg" alt="2024 Barrier Breakers Winners" loading="lazy"></div>
-                    <div class="winners-grid-bb">
-                        <div class="winner-card-bb gold">
-                            <div class="winner-card-bb-header"><span>1st Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
-                            <div class="winner-card-bb-body">
-                                <div class="winner-card-bb-name">Brianna Johnson</div>
-                                <div class="winner-card-bb-school">Stow-Munroe Falls High</div>
-                            </div>
-                        </div>
-                        <div class="winner-card-bb silver">
-                            <div class="winner-card-bb-header"><span>2nd Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
-                            <div class="winner-card-bb-body">
-                                <div class="winner-card-bb-name">Samuel Denys</div>
-                                <div class="winner-card-bb-school">Westlake High School</div>
-                            </div>
-                        </div>
-                        <div class="winner-card-bb bronze">
-                            <div class="winner-card-bb-header"><span>3rd Place</span><span class="winner-medal" aria-hidden="true"><svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 1.5 L8 6.5 M12 1.5 L10 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="11.5" r="4.4" stroke="currentColor" stroke-width="1.2"/><circle cx="9" cy="11.5" r="1.6" stroke="currentColor" stroke-width="1.1"/></svg></span></div>
-                            <div class="winner-card-bb-body">
-                                <div class="winner-card-bb-name">Cullen Rooney</div>
-                                <div class="winner-card-bb-school">Normandy High School</div>
-                            </div>
-                        </div>
+                <div class="year-block reveal">
+                    <div class="year"><em>'</em>24</div>
+                    <div class="year-photo"><img src="images/barrier-breakers-2026/2024-winner.webp" alt="2024 Barrier Breakers winners" loading="lazy" width="1456" height="1120"></div>
+                    <div class="podium">
+                        <div class="place"><div class="place-rank">1st</div><div><div class="place-name">Brianna Johnson</div><div class="place-school">Stow-Munroe Falls High</div></div></div>
+                        <div class="place"><div class="place-rank">2nd</div><div><div class="place-name">Samuel Denys</div><div class="place-school">Westlake High School</div></div></div>
+                        <div class="place"><div class="place-rank">3rd</div><div><div class="place-name">Cullen Rooney</div><div class="place-school">Normandy High School</div></div></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ======================= PARTNERSHIP ======================= -->
-        <section class="partnership">
-            <div class="partnership-container">
-                <div class="partnership-logos">
-                    <img src="finmango.png" alt="FinMango">
-                    <span class="partnership-x">×</span>
-                    <img src="kent-state-logo.jpg" alt="Kent State University" style="height: 52px;">
-                </div>
-                <h2>In collaboration with Kent State University.</h2>
-                <p class="partnership-body">FinMango's mission of financial health equity meets KSU's commitment to transformative education and community impact.</p>
-            </div>
-        </section>
-
-        <!-- ======================= SPONSORS ======================= -->
-        <section class="sponsors">
-            <div class="sponsors-container">
-                <div class="section-head">
-                    <span class="eyebrow">2026 sponsors</span>
-                    <h2>Made possible by.</h2>
-                </div>
-
-                <div class="sponsors-stack">
-                    <div class="sponsor-tier">
-                        <div class="sponsor-tier-label"><span class="sponsor-mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 6 L8 1.5 L13.5 6 L8 14.5 Z" stroke="#F25A27" stroke-width="1.2" stroke-linejoin="round"/><path d="M2.5 6 H13.5 M5.6 6 L8 14.5 M10.4 6 L8 14.5 M5.6 6 L8 1.5 L10.4 6" stroke="#F25A27" stroke-width="1" stroke-linejoin="round" opacity=".55"/></svg></span>Platinum Sponsor</div>
-                        <img src="valmark.svg" alt="Valmark Financial Group">
-                        <div class="sponsor-tier-amount">$25,000 Commitment</div>
-                    </div>
-
-                    <div class="sponsor-silver-row">
-                        <div class="sponsor-silver-item">
-                            <div class="sponsor-tier-label"><span class="sponsor-mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="6" r="4" stroke="currentColor" stroke-width="1.2"/><path d="M5.6 9.2 L4.5 14.5 L8 12.3 L11.5 14.5 L10.4 9.2" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></span>Silver Sponsor</div>
-                            <img src="1stday.png" alt="1st Day School Supplies" class="sponsor-silver-img">
-                            <div class="sponsor-tier-amount">$2,500 Commitment</div>
+        <!-- ======================= PARTNERS & SPONSORS ======================= -->
+        <section class="section" id="sponsors" style="padding-top: 0;">
+            <div class="container">
+                <div class="partner-grid">
+                    <div class="partner-copy reveal">
+                        <span class="eyebrow">The partnership</span>
+                        <h2>In collaboration with Kent State University.</h2>
+                        <p>FinMango's mission of financial health equity meets KSU's commitment to transformative education and community impact.</p>
+                        <div class="logo-row">
+                            <img src="finmango.png" alt="FinMango">
+                            <span class="times" aria-hidden="true">×</span>
+                            <img src="kent-state-logo.jpg" alt="Kent State University" style="height: 52px;">
                         </div>
-                        <div class="sponsor-silver-item">
-                            <div class="sponsor-tier-label"><span class="sponsor-mark" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="6" r="4" stroke="currentColor" stroke-width="1.2"/><path d="M5.6 9.2 L4.5 14.5 L8 12.3 L11.5 14.5 L10.4 9.2" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></span>Silver Sponsor</div>
-                            <img src="gilly.jpg" alt="Bob Gillingham" class="sponsor-portrait">
-                            <div class="sponsor-silver-name">Bob Gillingham</div>
-                            <div class="sponsor-silver-sub">Executive Board Member &amp; Lead Instructor</div>
-                            <div class="sponsor-tier-amount">$2,500 Commitment</div>
+                    </div>
+                    <div class="reveal">
+                        <span class="eyebrow muted" style="margin-bottom: 22px;">2026 sponsors</span>
+                        <div class="sponsor-list">
+                            <div class="sponsor">
+                                <div class="tier platinum">Platinum</div>
+                                <div class="sponsor-body"><img src="valmark.svg" alt="Valmark Financial Group"></div>
+                                <div class="sponsor-amt">$25,000</div>
+                            </div>
+                            <div class="sponsor">
+                                <div class="tier">Silver</div>
+                                <div class="sponsor-body"><img src="1stday.png" alt="1st Day School Supplies"></div>
+                                <div class="sponsor-amt">$2,500</div>
+                            </div>
+                            <div class="sponsor">
+                                <div class="tier">Silver</div>
+                                <div class="sponsor-body">
+                                    <img class="portrait" src="gilly.jpg" alt="Bob Gillingham" loading="lazy">
+                                    <div>
+                                        <div class="sponsor-name">Bob Gillingham</div>
+                                        <div class="sponsor-sub">Executive Board Member &amp; Lead Instructor</div>
+                                    </div>
+                                </div>
+                                <div class="sponsor-amt">$2,500</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2333,28 +1811,38 @@
         </section>
 
         <!-- ======================= FINAL CTA ======================= -->
-        <section class="final-cta on-ink">
-            <div class="final-cta-container">
-                <svg class="cta-squiggle" viewBox="0 0 120 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M2 6 C 12 2, 22 10, 32 6 S 52 2, 62 6 S 82 10, 92 6 S 108 2, 118 6" stroke="#F25A27" stroke-width="2" stroke-linecap="round" fill="none"/>
-                </svg>
-                <h2>Ready to break <em>some&nbsp;barriers?</em></h2>
-                <div class="final-cta-bottom">
-                    <p class="final-cta-sub">The 2026 competition has wrapped. Applications for 2027 open soon.</p>
-                    <div class="final-cta-buttons">
-                        <a href="mailto:competition@finmango.org?subject=Barrier Breakers 2027 Interest" class="btn-primary">
-                            Get notified for 2027
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                        </a>
-                        <a href="mailto:competition@finmango.org?subject=Sponsorship Inquiry" class="btn-secondary">Become a sponsor</a>
+        <section class="cta on-ink" id="apply">
+            <div class="container">
+                <div class="cta-grid">
+                    <h2 class="reveal">Ready to break some <span class="accent">barriers?</span></h2>
+                    <div class="reveal">
+                        <p>The 2026 competition has wrapped. Applications for 2027 open soon.</p>
+                        <div class="cta-actions">
+                            <a href="mailto:competition@finmango.org?subject=Barrier Breakers 2027 Interest" class="btn btn-primary">
+                                Get notified for 2027
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
+                            <a href="mailto:competition@finmango.org?subject=Sponsorship Inquiry" class="btn btn-outline">Become a sponsor</a>
+                        </div>
                     </div>
                 </div>
-                <div class="final-cta-contact">Questions? <a href="mailto:competition@finmango.org">competition@finmango.org</a></div>
+                <div class="cta-contact reveal">Questions? <a href="mailto:competition@finmango.org">competition@finmango.org</a></div>
             </div>
         </section>
     </main>
 
-    <!-- ======================= FOOTER ======================= -->
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" aria-hidden="true">
+        <button class="lb-close" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        <button class="lb-prev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button class="lb-next" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+        <figure class="lightbox-figure">
+            <img src="" alt="" id="lightbox-img">
+            <figcaption class="lightbox-meta"><span id="lightbox-caption"></span><span id="lightbox-counter"></span></figcaption>
+        </figure>
+    </div>
+
+
     <!-- chrome:footer -->
   <footer>
     <div class="footer-newsletter">
@@ -2448,106 +1936,110 @@
   </script>
   <!-- /chrome:script -->
 
-    <!-- Gallery Lightbox -->
+    <!-- Scroll reveals, count-up numbers, and the photo lightbox -->
     <script>
         (function () {
+            var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // ---- Reveal on first view + count-up ----
+            var items = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+            function formatNumber(el, value) {
+                var prefix = el.getAttribute('data-prefix') || '';
+                var suffix = el.getAttribute('data-suffix') || '';
+                el.textContent = prefix + value.toLocaleString() + suffix;
+            }
+            function countUp(el) {
+                var target = parseInt(el.getAttribute('data-count'), 10);
+                if (isNaN(target)) return;
+                var start = null, duration = 1300;
+                function frame(ts) {
+                    if (!start) start = ts;
+                    var p = Math.min((ts - start) / duration, 1);
+                    var eased = 1 - Math.pow(1 - p, 3);
+                    formatNumber(el, Math.round(target * eased));
+                    if (p < 1) requestAnimationFrame(frame);
+                }
+                requestAnimationFrame(frame);
+            }
+            function show(el) {
+                el.classList.add('is-visible');
+                if (!reduce) el.querySelectorAll('[data-count]').forEach(countUp);
+            }
+            if (reduce || !('IntersectionObserver' in window)) {
+                items.forEach(function (el) { el.classList.add('is-visible'); });
+            } else {
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (e) {
+                        if (e.isIntersecting) { show(e.target); io.unobserve(e.target); }
+                    });
+                }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+                items.forEach(function (el) { io.observe(el); });
+            }
+
+            // ---- Lightbox ----
             var lightbox = document.getElementById('lightbox');
             var lbImg = document.getElementById('lightbox-img');
             var lbCaption = document.getElementById('lightbox-caption');
             var lbCounter = document.getElementById('lightbox-counter');
-            var items = document.querySelectorAll('.gallery-item');
-            var currentIndex = 0;
-            var total = items.length;
+            var shots = Array.prototype.slice.call(document.querySelectorAll('.shot'));
+            var current = 0, lastFocus = null;
+            if (!lightbox || !shots.length) return;
 
-            function openLightbox(index) {
-                currentIndex = index;
-                updateLightbox();
-                lightbox.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeLightbox() {
-                lightbox.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-
-            function updateLightbox() {
-                var item = items[currentIndex];
-                var img = item.querySelector('img');
-                var caption = item.getAttribute('data-caption') || '';
-                lbImg.src = img.src;
+            function render() {
+                var shot = shots[current];
+                var img = shot.querySelector('img');
+                lbImg.src = shot.getAttribute('data-full') || img.src;
                 lbImg.alt = img.alt;
-                lbCaption.textContent = caption;
-                lbCounter.textContent = (currentIndex + 1) + ' / ' + total;
-                // Re-trigger animation
+                lbCaption.textContent = shot.getAttribute('data-caption') || '';
+                lbCounter.textContent = (current + 1) + ' / ' + shots.length;
+                // restart the entrance animation
                 lbImg.style.animation = 'none';
-                lbImg.offsetHeight;
+                void lbImg.offsetWidth;
                 lbImg.style.animation = '';
+                // warm the neighbours
+                [1, -1].forEach(function (d) {
+                    var n = shots[(current + d + shots.length) % shots.length];
+                    var pre = new Image(); pre.src = n.getAttribute('data-full') || n.querySelector('img').src;
+                });
             }
-
-            function navigate(dir) {
-                currentIndex = (currentIndex + dir + total) % total;
-                updateLightbox();
+            function open(i) {
+                current = i; lastFocus = document.activeElement;
+                render();
+                lightbox.classList.add('active');
+                lightbox.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+                lightbox.querySelector('.lb-close').focus();
             }
+            function close() {
+                lightbox.classList.remove('active');
+                lightbox.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+                if (lastFocus && lastFocus.focus) lastFocus.focus();
+            }
+            function step(d) { current = (current + d + shots.length) % shots.length; render(); }
 
-            items.forEach(function (item, i) {
-                item.addEventListener('click', function () { openLightbox(i); });
-            });
-
-            document.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
-            document.querySelector('.lightbox-prev').addEventListener('click', function () { navigate(-1); });
-            document.querySelector('.lightbox-next').addEventListener('click', function () { navigate(1); });
-
-            lightbox.addEventListener('click', function (e) {
-                if (e.target === lightbox) closeLightbox();
-            });
-
+            shots.forEach(function (shot, i) { shot.addEventListener('click', function () { open(i); }); });
+            lightbox.querySelector('.lb-close').addEventListener('click', close);
+            lightbox.querySelector('.lb-prev').addEventListener('click', function () { step(-1); });
+            lightbox.querySelector('.lb-next').addEventListener('click', function () { step(1); });
+            lightbox.addEventListener('click', function (e) { if (e.target === lightbox) close(); });
             document.addEventListener('keydown', function (e) {
                 if (!lightbox.classList.contains('active')) return;
-                if (e.key === 'Escape') closeLightbox();
-                if (e.key === 'ArrowLeft') navigate(-1);
-                if (e.key === 'ArrowRight') navigate(1);
+                if (e.key === 'Escape') close();
+                else if (e.key === 'ArrowLeft') step(-1);
+                else if (e.key === 'ArrowRight') step(1);
             });
+            // swipe
+            var touchX = null;
+            lightbox.addEventListener('touchstart', function (e) { touchX = e.changedTouches[0].clientX; }, { passive: true });
+            lightbox.addEventListener('touchend', function (e) {
+                if (touchX === null) return;
+                var dx = e.changedTouches[0].clientX - touchX; touchX = null;
+                if (Math.abs(dx) > 40) step(dx < 0 ? 1 : -1);
+            }, { passive: true });
         })();
     </script>
 
-    <!-- Scroll-reveal: fade sections in as they enter the viewport -->
-    <script>
-        (function () {
-            var sel = '.section-head, .problem-copy, .problem-visual, .step-item, .track-row, .prizes-head, .prize-division, .resources-links, .scoring-card, .judge-card-bb, .winner-year-block-bb, .partnership-container, .sponsor-tier, .sponsor-silver-item, .final-cta-container, .gallery-header';
-            var els = Array.prototype.slice.call(document.querySelectorAll(sel));
-            if (!els.length) return;
-            var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (reduce) { els.forEach(function (el) { el.classList.add('in-view'); }); return; }
-            // gentle stagger within sibling groups (cards, rows, steps)
-            els.forEach(function (el) {
-                var i = 0, p = el.previousElementSibling;
-                while (p) { if (p.className === el.className) i++; p = p.previousElementSibling; }
-                if (i > 0) el.style.transitionDelay = Math.min(i * 0.07, 0.28) + 's';
-            });
-            function check() {
-                var vh = window.innerHeight || document.documentElement.clientHeight;
-                for (var i = els.length - 1; i >= 0; i--) {
-                    if (els[i].getBoundingClientRect().top < vh * 0.9) {
-                        els[i].classList.add('in-view');
-                        els.splice(i, 1);
-                    }
-                }
-                if (!els.length) {
-                    window.removeEventListener('scroll', onScroll);
-                    window.removeEventListener('resize', onScroll);
-                }
-            }
-            var ticking = false;
-            function onScroll() {
-                if (!ticking) { ticking = true; requestAnimationFrame(function () { ticking = false; check(); }); }
-            }
-            window.addEventListener('scroll', onScroll, { passive: true });
-            window.addEventListener('resize', onScroll);
-            window.addEventListener('load', check);
-            check();
-        })();
-    </script>
 </body>
 
 </html>
