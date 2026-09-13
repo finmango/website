@@ -6,7 +6,7 @@
 
 ## The one-line pitch
 
-A free eight-week, remote program for people aged 16–24 that teaches them to work with AI by building something real for their community, and ends with a published project, a verifiable credential, and a Demo Day in front of employers.
+A free eight-week, remote program for people aged 18–24 that teaches them to work with AI by building something real for their community, and ends with a published project, a verifiable credential, and a Demo Day in front of employers.
 
 ## Why this program, why FinMango
 
@@ -28,7 +28,7 @@ A free eight-week, remote program for people aged 16–24 that teaches them to w
 
 ## Audience
 
-- Ages 16–24, any country, English-language delivery. Projects may serve communities in any language.
+- Ages 18–24, any country. Adults only, which keeps stipend payouts simple (no guardian or gift-card path)., English-language delivery. Projects may serve communities in any language.
 - Two entry points:
   - **Open cohort** (the core program): apply individually, remote, 8 weeks.
   - **Classroom edition**: 5-day in-school version taught alongside Millionaire Mindset; a funnel into the open cohort.
@@ -61,7 +61,7 @@ A free eight-week, remote program for people aged 16–24 that teaches them to w
 | Week 7: project published | $200 per person | The main incentive to finish; second drop-off point |
 | Demo Day: top three teams | $500–1,000 per team | Prize, already in the design |
 
-Rules: nothing paid at enrollment. Keep each individual under $600/year to stay below the 1099 reporting threshold for US recipients. Under-18s paid via guardian or gift card. International: batch payouts (Wise / PayPal Payouts) or restrict to payable countries and say so. For 60 participants at ~65% completion: ~$12–15K stipends + $3–5K prizes ≈ $16–20K per cohort.
+Rules: nothing paid at enrollment. Keep each individual under $600/year to stay below the 1099 reporting threshold for US recipients. International: batch payouts (Wise / PayPal Payouts) or restrict to payable countries and say so. For 60 participants at ~65% completion: ~$12–15K stipends + $3–5K prizes ≈ $16–20K per cohort.
 
 ## What participants leave with
 
@@ -136,7 +136,7 @@ Plus what funders rarely get: public, auditable outcomes.
 ## Risks and mitigations
 
 - **Completion without live contact.** Expect ~50% in the lean model vs ~65% funded. Mitigate with teams, weekly deadlines, peer review, ambassador hosts, and stipends paid exactly at the two usual drop-off points. Promise "published", not "polished".
-- **Payout admin.** Batch payout service; keep per-person totals under $600; guardian/gift-card path for minors; restrict to payable countries if needed.
+- **Payout admin.** Batch payout service; keep per-person totals under $600; restrict to payable countries if needed.
 - **AI tool access / cost.** Free tiers only; curriculum is tool-agnostic; classroom edition for those without home access.
 - **Quality of published work.** Editorial pass before publishing (same as Ambassador Notes); rubric shared from week 3.
 - **Employer engagement fades.** Ask for small, bounded commitments (1 hr/week for 6 weeks, or one Demo Day); rotate partners across cohorts.
@@ -153,7 +153,7 @@ Plus what funders rarely get: public, auditable outcomes.
 
 - [ ] Founding funder secured; tier chosen.
 - [ ] Founding cohort dates (suggest: cohort runs ~8 weeks after funding lands; Demo Day videos due week 8, judging the following week).
-- [ ] Payout rail (Wise / PayPal Payouts / gift cards) and payable-country list.
+- [ ] Payout rail (Wise / PayPal Payouts) and payable-country list.
 - [ ] Deploy Apps Script + Sheet for applications; set `APPLY_URL` in `future-proof-apply.html` (until then the form falls back to a pre-filled email to hello@finmango.org).
 - [ ] Prize amounts for Demo Day and any participant stipends.
 - [ ] Credential format (PDF + verification page vs Open Badges).

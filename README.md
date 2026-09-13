@@ -44,7 +44,7 @@ website/
 ├── advocacy.html          # Advocacy & ambassadors
 ├── resources.html         # Tools and calculators
 ├── barrier-breakers.html  # Innovation challenge
-├── future-proof.html      # Future Proof: AI skills program, unlisted until funded (+ -apply, -one-pager)
+├── future-proof.html      # Future Proof: AI skills program for ages 18–24, unlisted until funded (+ -apply, -one-pager)
 ├── donate.html            # Donation page
 ├── get-involved.html      # Volunteer opportunities
 ├── privacy.html           # Privacy policy
