@@ -788,7 +788,7 @@
            or under reduced-motion (handled in JS), everything stays visible */
         .js .section-head, .js .problem-copy, .js .problem-visual, .js .step-item,
         .js .track-row, .js .prizes-head, .js .prize-division, .js .week-row,
-        .js .facts-card, .js .fund-tier, .js .fund-foot, .js .partnership-container, .js .partner-card, .js .faq-item,
+        .js .facts-card, .js .stipend-card, .js .fund-tier, .js .fund-foot, .js .partnership-container, .js .partner-card, .js .faq-item,
         .js .final-cta-container {
             opacity: 0;
             transform: translateY(20px);
@@ -894,12 +894,21 @@
         .outcome-list li::before { content: '→'; color: var(--orange); font-weight: 700; position: absolute; left: 0; top: .85rem; }
         .outcome-list li strong { color: var(--paper); font-weight: 600; }
         .prizes-divisions.outcomes { grid-template-columns: repeat(2, 1fr); }
-        .prizes-divisions.outcomes > .prize-division:first-child { grid-column: 1 / -1; }
-        .prize-division.stipend { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem; align-items: start; border-color: rgba(242, 90, 39, .45); }
-        .prize-division.stipend .prize-division-desc { margin-bottom: 1rem; }
-        .prize-division.stipend .prize-note { margin-top: .5rem; }
-        .stipend-rows .prize-row:first-child { border-top: none; }
-        .stipend-rows .prize-row-place { white-space: normal; }
+        .prizes-divisions.outcomes > .prize-division:first-child { grid-column: auto; }
+
+        /* Stipend — conditional on a sponsor, so it lives with the funding ask */
+        .stipend-card { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem; align-items: start; border: 1px solid var(--ink-line); border-left: 3px solid var(--orange); padding: 2rem 2.25rem; margin-bottom: 1.25rem; background: rgba(242, 90, 39, .035); }
+        .stipend-kicker { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--orange-ink); margin-bottom: .75rem; }
+        .stipend-copy h3 { font-size: 1.25rem; font-weight: 900; letter-spacing: -.025em; margin-bottom: .6rem; }
+        .stipend-copy p { font-size: .92rem; color: var(--ink-dim); line-height: 1.6; max-width: 56ch; }
+        .stipend-copy p + p { margin-top: .75rem; }
+        .stipend-note { font-size: .8rem !important; color: var(--ink-faint) !important; }
+        .stipend-rows { display: flex; flex-direction: column; }
+        .stipend-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .85rem 0; border-top: 1px solid var(--ink-line-soft); font-size: .9rem; flex-wrap: wrap; }
+        .stipend-row:first-child { border-top: none; padding-top: .25rem; }
+        .stipend-row-place { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
+        .stipend-row-amount { font-weight: 900; font-size: 1.05rem; letter-spacing: -.02em; }
+        .stipend-row-unit { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .04em; color: var(--ink-faint); margin-left: .5rem; }
 
         /* Funding — three tiers, the middle one is the ask */
         .fund { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
@@ -1022,7 +1031,7 @@
             .week-row { grid-template-columns: 56px 1fr; }
             .week-skill { grid-column: 2; justify-self: start; margin-top: .2rem; }
             .prizes-divisions.outcomes { grid-template-columns: 1fr; }
-            .prize-division.stipend { grid-template-columns: 1fr; gap: 1.25rem; }
+            .stipend-card { grid-template-columns: 1fr; gap: 1.25rem; padding: 1.5rem 1.25rem; }
             .fund { padding: 0 var(--gutter) 5rem; }
             .fund-grid { grid-template-columns: 1fr; }
             .fund-foot { grid-template-columns: 1fr; gap: 1.25rem; }
@@ -1656,7 +1665,7 @@
                         </a>
                         <a href="future-proof-apply.html" class="btn-secondary">Join the waitlist</a>
                     </div>
-                    <div class="hb-facts"><span>8 weeks</span><span>Remote, any country</span><span>Ages 18–24</span><span>Free, with a stipend to finish</span></div>
+                    <div class="hb-facts"><span>8 weeks</span><span>Remote, any country</span><span>Ages 18–24</span><span>Free, always</span></div>
                 </div>
 
             </div>
@@ -1676,7 +1685,7 @@
                             Future Proof is our answer. Not a certificate <em>about</em> AI. A real thing you built <em>with</em> it, published under your name, in front of people who hire.
                         </p>
                         <p class="problem-body">
-                            We designed it to run lean, because that's what we can afford today: recorded lessons, teams that review each other's work, and a stipend that pays people to finish. <a href="#fund">Funding adds the human part.</a>
+                            We designed it to run lean, because that's what we can afford today: recorded lessons and teams that review each other's work. <a href="#fund">A sponsor adds the stipend and the human part.</a>
                         </p>
                         <div class="problem-stats">
                             <div class="problem-stat">
@@ -1761,7 +1770,7 @@
                         </div>
                         <div class="step-number">Weeks 7–8 · Ship</div>
                         <div class="step-title">Ship and show</div>
-                        <div class="step-desc">Publish the project on finmango.org with your name on it. Submit a five-minute Demo Day video that employer judges score and write feedback on. Collect your stipend, your credential, and introductions.</div>
+                        <div class="step-desc">Publish the project on finmango.org with your name on it. Submit a five-minute Demo Day video that employer judges score and write feedback on. Walk away with a credential, written feedback, and introductions.</div>
                     </div>
                 </div>
             </div>
@@ -1843,7 +1852,7 @@
                             <div class="week-num">Week<strong>08</strong></div>
                             <div>
                                 <div class="week-title">Demo Day</div>
-                                <div class="week-desc">Record a five-minute presentation. Employer judges score it and write you feedback on their own time. Top teams take home prizes. Every graduate leaves with a credential and introductions.</div>
+                                <div class="week-desc">Record a five-minute presentation. Employer judges score it and write you feedback on their own time. Every graduate leaves with a credential and introductions. Prizes for the top teams when a sponsor funds them.</div>
                             </div>
                             <div class="week-skill">Presenting</div>
                         </div>
@@ -1942,22 +1951,10 @@
                 <div class="prizes-head">
                     <span class="eyebrow">What you leave with</span>
                     <div class="prizes-hero-number">A portfolio, not a promise.</div>
-                    <div class="prizes-hero-sub">Most programs end with a PDF. This one ends with money in your account and four things a hiring manager can check.</div>
+                    <div class="prizes-hero-sub">Most programs end with a PDF. This one ends with four things a hiring manager can check.</div>
                 </div>
 
                 <div class="prizes-divisions outcomes">
-                    <div class="prize-division stipend">
-                        <div class="stipend-copy">
-                            <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3.5" y="6" width="17" height="12" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.8" stroke="#F25A27" stroke-width="1.5"/><path d="M6.5 9 V9.01 M17.5 15 V15.01" stroke="#F25A27" stroke-width="2" stroke-linecap="round"/></svg></span>A stipend, paid for finishing</h3>
-                            <div class="prize-division-desc">Nobody is paid to sign up. Everyone is paid to ship. The money lands at the two moments teams usually give up, which is how a lean program keeps people to the end.</div>
-                            <p class="prize-note">Amounts are the founding-cohort plan and depend on funding. Paid by batch transfer to any country we can reach.</p>
-                        </div>
-                        <div class="stipend-rows">
-                            <div class="prize-row"><span class="prize-row-place">Week 4 · interviews done</span><span><span class="prize-row-amount">$100</span><span class="prize-row-breakdown">per person</span></span></div>
-                            <div class="prize-row"><span class="prize-row-place">Week 7 · project published</span><span><span class="prize-row-amount">$200</span><span class="prize-row-breakdown">per person</span></span></div>
-                            <div class="prize-row"><span class="prize-row-place">Demo Day · top three teams</span><span><span class="prize-row-amount">$500–1,000</span><span class="prize-row-breakdown">per team</span></span></div>
-                        </div>
-                    </div>
                     <div class="prize-division">
                         <h3><span class="prize-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3.5" width="16" height="17" stroke="#0A0A0A" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 8.5 H16 M8 12 H16 M8 15.5 H12" stroke="#F25A27" stroke-width="1.5" stroke-linecap="round"/></svg></span>A published project</h3>
                         <div class="prize-division-desc">Live on finmango.org, a site read by people in 100+ countries, under your name and your teammates' names.</div>
@@ -1979,7 +1976,7 @@
                         <div class="prize-division-desc">A five-minute video, scored by hiring managers who signed up specifically to meet people who can do this. Live showcase when funding allows.</div>
                         <ul class="outcome-list">
                             <li><strong>Written feedback</strong> from every judge, the kind you rarely get after a real interview.</li>
-                            <li><strong>Prizes for top teams,</strong> announced with each cohort.</li>
+                            <li><strong>Prizes for top teams</strong> when a sponsor funds them, announced before the cohort starts.</li>
                         </ul>
                     </div>
                     <div class="prize-division">
@@ -2022,7 +2019,7 @@
                         <div class="fact">
                             <div class="fact-label">Cost</div>
                             <div class="fact-value"><em>$</em>0</div>
-                            <div class="fact-note">Free to apply, free to attend, free credential. You get paid, not the other way round.</div>
+                            <div class="fact-note">Free to apply, free to attend, free credential. Always.</div>
                         </div>
                         <div class="fact">
                             <div class="fact-label">Format</div>
@@ -2060,7 +2057,21 @@
                 <div class="section-head">
                     <span class="eyebrow">For funders</span>
                     <h2>We can run the lean version now. <em>Funding adds the humans.</em></h2>
-                    <p class="section-sub">Honest picture: FinMango is small. The version above is built to run on recorded lessons, peer review, ambassador hosts and a stipend that makes deadlines enforce themselves. That works. What it lacks is the part that makes programs like this exceptional: a person whose job it is, mentors from real employers, and a live room for Demo Day. That's what we're raising for.</p>
+                    <p class="section-sub">Honest picture: FinMango is small. The version above is built to run on recorded lessons, peer review and ambassador hosts. That works. The first thing a sponsor adds is a stipend that pays people to finish. The next is the part that makes programs like this exceptional: a person whose job it is, mentors from real employers, and a live room for Demo Day. That's what we're raising for.</p>
+                </div>
+
+                <div class="stipend-card">
+                    <div class="stipend-copy">
+                        <div class="stipend-kicker">Only with a sponsor</div>
+                        <h3>A stipend, paid for finishing.</h3>
+                        <p>We won't promise money we don't have, so no stipend is offered until a sponsor commits one. When it is, this is the plan: nobody is paid to sign up, everyone is paid to ship, and the money lands at the two moments teams usually give up. It replaces most of the oversight a staffed program would need.</p>
+                        <p class="stipend-note">Amounts are the founding-cohort plan and are set with the sponsor. Paid by batch transfer to any country we can reach.</p>
+                    </div>
+                    <div class="stipend-rows">
+                        <div class="stipend-row"><span class="stipend-row-place">Week 4 · interviews done</span><span><span class="stipend-row-amount">$100</span><span class="stipend-row-unit">per person</span></span></div>
+                        <div class="stipend-row"><span class="stipend-row-place">Week 7 · project published</span><span><span class="stipend-row-amount">$200</span><span class="stipend-row-unit">per person</span></span></div>
+                        <div class="stipend-row"><span class="stipend-row-place">Demo Day · top three teams</span><span><span class="stipend-row-amount">$500–1,000</span><span class="stipend-row-unit">per team</span></span></div>
+                    </div>
                 </div>
 
                 <div class="fund-grid">
@@ -2068,7 +2079,7 @@
                         <div class="fund-tier-label">Tier 1</div>
                         <div class="fund-tier-amount"><em>$</em>20K</div>
                         <h3>Fund the stipends</h3>
-                        <p>Runs one lean cohort of about sixty young people exactly as described above. Almost every dollar goes directly to participants.</p>
+                        <p>Turns the stipend plan above on for one lean cohort of about sixty young people. Almost every dollar goes directly to participants.</p>
                         <ul>
                             <li>Milestone stipends for everyone who ships</li>
                             <li>Demo Day prizes for the top three teams</li>
@@ -2219,8 +2230,8 @@
                         <div class="faq-answer">In the lean version: the recorded briefs, your team, the two teams reviewing you, and a FinMango ambassador who hosts your group and answers questions. One FinMango staff member approves projects before they publish and reads the inbox. With funding, a dedicated program lead and an employer mentor per team are added. We're upfront about this because the difference is real, and it's what we're raising money for.</div>
                     </details>
                     <details class="faq-item">
-                        <summary>How does the stipend work?</summary>
-                        <div class="faq-answer">You're paid at two milestones: when your team completes its five interviews in week four, and when your project is published in week seven. Nobody is paid for signing up. Amounts are set with the founding funder and published before the cohort opens. We pay by batch transfer to any country we can reach.</div>
+                        <summary>Is there a stipend?</summary>
+                        <div class="faq-answer">Only if a sponsor funds one, and we'll tell you plainly either way before your cohort starts. The plan we're raising for pays at two milestones, when your team finishes its five interviews in week four and when your project is published in week seven, and never for signing up. Until a sponsor commits, there is no stipend and we won't promise one. The program itself is free regardless.</div>
                     </details>
                     <details class="faq-item">
                         <summary>What happens to my project afterwards?</summary>
@@ -2350,7 +2361,7 @@
     <!-- Scroll-reveal: fade sections in as they enter the viewport -->
     <script>
         (function () {
-            var sel = '.section-head, .problem-copy, .problem-visual, .step-item, .track-row, .prizes-head, .prize-division, .week-row, .facts-card, .fund-tier, .fund-foot, .partnership-container, .partner-card, .faq-item, .final-cta-container';
+            var sel = '.section-head, .problem-copy, .problem-visual, .step-item, .track-row, .prizes-head, .prize-division, .week-row, .facts-card, .stipend-card, .fund-tier, .fund-foot, .partnership-container, .partner-card, .faq-item, .final-cta-container';
             var els = Array.prototype.slice.call(document.querySelectorAll(sel));
             if (!els.length) return;
             var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

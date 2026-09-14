@@ -24,7 +24,7 @@ A free eight-week, remote program for people aged 18–24 that teaches them to w
 5. **Open by default.** Projects, curriculum, assessments and follow-up results are published.
 6. **Cohort, not course.** Fixed dates and weekly deadlines, teams of three. Completion rates in cohort models are dramatically higher than self-paced MOOCs, even without live sessions.
 7. **Lean by default, human when funded.** The base program must run on a few staff hours a week. Funding buys the human layer, not the existence of the program.
-8. **Pay to finish, never to enroll.** Milestone stipends replace much of the oversight a staffed program would provide: the deadlines enforce themselves.
+8. **Pay to finish, never to enroll.** When sponsored, milestone stipends replace much of the oversight a staffed program would provide: the deadlines enforce themselves. Until sponsored, nothing is promised.
 
 ## Audience
 
@@ -53,7 +53,9 @@ A free eight-week, remote program for people aged 18–24 that teaches them to w
 
 **Peer review:** from week 3 each team reviews two others weekly (rubric-driven, form-based). This is the primary feedback loop in the lean model and teaches the "taking feedback" skill directly.
 
-## Stipend
+## Stipend (contingent on a sponsor)
+
+**No stipend or prize is offered, advertised as available, or promised to participants until a sponsor has committed the funds.** The pages describe it as the plan a sponsor would fund, and the FAQ says so plainly. The lean program is free and runs without it.
 
 | Milestone | Amount | Why |
 |---|---|---|
@@ -65,7 +67,7 @@ Rules: nothing paid at enrollment. Keep each individual under $600/year to stay 
 
 ## What participants leave with
 
-0. A stipend paid at two milestones (above).
+0. When sponsored: a stipend paid at two milestones (above).
 1. A published project on finmango.org (permanent URL, open licence, names attached) plus a build story.
 2. A FinMango Future Proof credential, issued only on shipping, linking to the project (self-verifying). Consider Open Badges / verifiable credential format.
 3. Demo Day in front of employer judges, with written feedback from every judge; prizes for top teams.
