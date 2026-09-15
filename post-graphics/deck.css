@@ -206,7 +206,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 62% center;
+  object-position: var(--cover-pos, 62% center);
 }
 
 .slide--cover .scrim {
@@ -288,6 +288,11 @@ body {
 
 .qlabel--strong { color: var(--orange); }
 
+.slide--ink .qlabel { color: var(--paper-faint); }
+/* Ties with .qlabel--strong on specificity and would win on order, so the
+   strong variant needs restating at the same depth. */
+.slide--ink .qlabel--strong { color: var(--orange); }
+
 .question-old {
   font-size: 52px;
   line-height: 1.25;
@@ -297,6 +302,11 @@ body {
   text-decoration-thickness: 2px;
   text-decoration-color: rgba(10, 10, 10, .28);
   max-width: 18ch;
+}
+
+.slide--ink .question-old {
+  color: var(--paper-faint);
+  text-decoration-color: rgba(250, 250, 247, .3);
 }
 
 .question-new {
@@ -497,8 +507,91 @@ body {
   font-weight: 500;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--paper-faint);
+  color: var(--ink-faint);
 }
+
+.slide--ink .attrib { color: var(--paper-faint); }
+
+/* ----------------------------------------------------------
+   CHAIN — a causal argument drawn as a sequence: each step is
+   what makes the next one possible. A spine with a node per
+   step, so it reads as a progression rather than a list of
+   equals, which is the whole difference from .list. Top to
+   bottom in normal reading order; the last node is the
+   conclusion and takes the accent.
+   ---------------------------------------------------------- */
+.chain {
+  display: flex;
+  flex-direction: column;
+  gap: 38px;
+  padding-left: 46px;
+}
+
+.chain-step {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 26px;
+  font-size: 46px;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -.02em;
+  word-spacing: .04em;
+  max-width: 19ch;
+}
+
+/* The node, centred on the spine: 18px plus a 2px ring, so it sits 56px
+   back from the step's content edge (44px padding + 2px border + 10px). */
+.chain-step::before {
+  content: "";
+  position: absolute;
+  left: -56px;
+  top: 16px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--ink-line);
+}
+
+.slide--ink .chain-step::before {
+  background: var(--ink);
+  border-color: var(--paper-line);
+}
+
+.chain-step--end::before {
+  background: var(--orange);
+  border-color: var(--orange);
+}
+
+/* The connector: from under this node to just above the next. The node centre
+   sits 25px down (16px top + 9px radius), so the run is this step's height
+   plus the 38px gap, less the two node radii. */
+.chain-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: -48px;
+  top: 38px;
+  height: calc(100% + 16px);
+  width: 2px;
+  background: var(--ink-line);
+}
+
+.slide--ink .chain-step:not(:last-child)::after { background: var(--paper-line); }
+
+.chain-i {
+  flex: none;
+  width: 44px;
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  color: var(--ink-faint);
+}
+
+.slide--ink .chain-i { color: var(--paper-faint); }
+
+.chain-step--end .chain-i { color: var(--orange); }
 
 /* ----------------------------------------------------------
    COMPARE — two stacked claims with one rule between them.
@@ -581,6 +674,8 @@ body {
   text-transform: uppercase;
   color: var(--ink-faint);
 }
+
+.slide--ink .author-role { color: var(--paper-faint); }
 
 .cta {
   font-size: 62px;
