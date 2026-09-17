@@ -264,6 +264,7 @@ function showSlide(index) {
   if (!currentStory || index < 0 || index >= currentStory.slides.length) return;
 
   currentSlideIndex = index;
+  updateStoryNav();
   const slide = currentStory.slides[index];
 
   const emojiEl = document.getElementById('slideEmoji');
@@ -510,64 +511,4 @@ document.addEventListener('keydown', (e) => {
 
 document.addEventListener('DOMContentLoaded', function () {
   initializeStories();
-
-  const viewer = document.getElementById('storyViewer');
-  if (viewer) {
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let swipeHandled = false;
-
-    viewer.addEventListener('touchstart', function(e) {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-      swipeHandled = false;
-    }, { passive: true });
-
-    viewer.addEventListener('touchend', function(e) {
-      if (!currentStory) return;
-      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select') || e.target.closest('a') || e.target.closest('.interactive-drivers') || e.target.closest('.ai-search-tool')) {
-        return;
-      }
-      const deltaX = e.changedTouches[0].clientX - touchStartX;
-      const deltaY = e.changedTouches[0].clientY - touchStartY;
-      // Only count as swipe if horizontal movement > 50px and more horizontal than vertical
-      if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
-        swipeHandled = true;
-        if (deltaX < 0) {
-          nextSlide();
-        } else {
-          previousSlide();
-        }
-      }
-    }, { passive: true });
-
-    viewer.addEventListener('click', function(e) {
-      if (!currentStory) return;
-
-      // Skip if a swipe just navigated
-      if (swipeHandled) {
-        swipeHandled = false;
-        return;
-      }
-
-      // Ignore clicks on interactive elements inside the slide
-      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('select') || e.target.closest('a') || e.target.closest('.interactive-drivers') || e.target.closest('.ai-search-tool')) {
-        return;
-      }
-
-      // Allow closing the story with the close button
-      if (e.target.closest('.close-btn')) {
-        return;
-      }
-
-      const rect = viewer.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-
-      if (x < rect.width * 0.4) {
-        previousSlide();
-      } else if (x > rect.width * 0.6) {
-        nextSlide();
-      }
-    });
-  }
 });
