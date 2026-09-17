@@ -298,11 +298,13 @@
     .mobile-controls { display: none; gap: 1rem; align-items: center; }
 
     /* ----------------------------------------------------------
-       HERO — directory masthead with search + filters
+       HERO — directory masthead
        ---------------------------------------------------------- */
+    :root { --nav-h: 74px; --toolbar-h: 72px; }
+
     .hero {
       background: var(--paper);
-      padding: 6.5rem 2rem 0;
+      padding: 6.5rem var(--gutter) 0;
       position: relative;
       overflow: hidden;
     }
@@ -314,7 +316,7 @@
     .hero-bg::before {
       content: '';
       position: absolute;
-      top: 20%;
+      top: 10%;
       right: -12%;
       width: 55vw;
       height: 55vw;
@@ -367,12 +369,19 @@
       100% { box-shadow: 0 0 0 0 rgba(242, 90, 39, 0); }
     }
 
+    /* Headline and lede sit on one baseline, editorial style */
+    .hero-lede {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: 3rem;
+      align-items: end;
+    }
     .hero h1 {
-      font-size: clamp(3rem, 8.5vw, 8.5rem);
+      font-size: clamp(3rem, 7.6vw, 7.5rem);
       font-weight: 900;
       line-height: .96;
       letter-spacing: -.05em;
-      max-width: 14ch;
+      max-width: 12ch;
     }
     .hero h1 em {
       font-style: normal;
@@ -403,35 +412,77 @@
     @keyframes draw-stroke { to { stroke-dashoffset: 0; } }
 
     .hero-subtitle {
-      font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+      font-size: clamp(1.05rem, 1.4vw, 1.25rem);
       font-weight: 400;
       line-height: 1.5;
       color: var(--ink-dim);
-      max-width: 46ch;
+      max-width: 40ch;
       letter-spacing: -.015em;
+      padding-bottom: .35em;
     }
 
-    /* Search + filters — the directory's instrument panel */
-    .hero-controls {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-      padding: 1.75rem 0 2rem;
-      border-top: 1px solid var(--ink-line-soft);
+    /* Stat rail — the promise of the page in four numbers */
+    .hero-rail {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--ink-line);
     }
+    .hero-rail-item { padding: 1.6rem 1.5rem 2.75rem 0; }
+    .hero-rail-item + .hero-rail-item { padding-left: 1.75rem; border-left: 1px solid var(--ink-line-soft); }
+    .hero-rail-num {
+      font-size: clamp(1.9rem, 3vw, 2.6rem);
+      font-weight: 900;
+      letter-spacing: -.045em;
+      line-height: .95;
+      margin-bottom: .5rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .hero-rail-num em { font-style: normal; color: var(--orange); font-size: .55em; vertical-align: .4em; }
+    .hero-rail-label {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-faint);
+      line-height: 1.6;
+    }
+
+    /* ----------------------------------------------------------
+       TOOLBAR — search + filters, pinned under the nav on scroll
+       ---------------------------------------------------------- */
+    .toolbar {
+      position: sticky;
+      top: var(--nav-h);
+      z-index: 900;
+      background: rgba(250, 250, 247, .92);
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--ink-line-soft);
+      border-bottom: 1px solid var(--ink-line-soft);
+    }
+    .toolbar-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: .9rem var(--gutter);
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
     .search-container {
       position: relative;
-      max-width: 560px;
-      width: 100%;
+      flex: 0 1 280px;
+      min-width: 220px;
     }
     .search-input {
       width: 100%;
-      padding: 1rem 1.25rem 1rem 3rem;
+      padding: .78rem 2.75rem .78rem 2.6rem;
       border: 1px solid var(--ink-line);
       background: var(--paper);
       color: var(--ink);
       font-family: inherit;
-      font-size: .95rem;
+      font-size: .92rem;
       letter-spacing: -.01em;
       transition: border-color .2s ease;
     }
@@ -439,50 +490,123 @@
     .search-input:focus { outline: none; border-color: var(--orange); }
     .search-icon {
       position: absolute;
-      left: 1.1rem;
+      left: .95rem;
       top: 50%;
       transform: translateY(-50%);
-      width: 16px;
-      height: 16px;
+      width: 15px;
+      height: 15px;
       color: var(--ink-faint);
       pointer-events: none;
       display: flex;
     }
     .search-icon svg { width: 100%; height: 100%; }
+    .search-kbd {
+      position: absolute;
+      right: .65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-mono);
+      font-size: .66rem;
+      line-height: 1;
+      color: var(--ink-faint);
+      border: 1px solid var(--ink-line);
+      padding: .28rem .45rem;
+      pointer-events: none;
+    }
+    .search-container:focus-within .search-kbd,
+    .search-container.has-value .search-kbd { display: none; }
+    .search-clear {
+      position: absolute;
+      right: .45rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: none;
+      color: var(--ink-faint);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      line-height: 1;
+      transition: color .2s ease;
+    }
+    .search-container.has-value .search-clear { display: inline-flex; }
+    .search-clear:hover { color: var(--ink); }
 
-    .filters { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .filters {
+      display: flex;
+      gap: .35rem;
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 2px 0;
+    }
+    /* When the chip row overflows, fade its trailing edge so the cut reads as a scroll */
+    .filters.overflowing {
+      -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+      mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+    }
+    .filters.overflowing.at-end { -webkit-mask-image: none; mask-image: none; }
+    .filters::-webkit-scrollbar { display: none; }
     .filter-btn {
       font-family: var(--font-mono);
-      font-size: .72rem;
+      font-size: .68rem;
       font-weight: 500;
-      letter-spacing: .12em;
+      letter-spacing: .08em;
       text-transform: uppercase;
-      padding: .6rem 1rem;
+      padding: .58rem .75rem;
       border: 1px solid var(--ink-line);
       background: transparent;
       color: var(--ink);
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      white-space: nowrap;
+      flex-shrink: 0;
       transition: border-color .2s ease, background .2s ease, color .2s ease;
     }
+    .filter-btn .n { color: var(--ink-faint); font-variant-numeric: tabular-nums; transition: color .2s ease; }
     .filter-btn:hover { border-color: var(--ink); }
-    .filter-btn.active { background: var(--orange-ink); color: #fff; border-color: var(--orange); }
+    .filter-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .filter-btn.active .n { color: var(--orange); }
+
+    .toolbar-readout {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    .toolbar-readout strong { color: var(--ink); font-weight: 500; }
 
     /* ----------------------------------------------------------
-       RESOURCES — hairline card directory
+       SECTIONS — shared header
        ---------------------------------------------------------- */
-    .resources-section { padding: 4rem var(--gutter) 7.5rem; background: var(--paper); }
+    .resources-section { padding: 4.5rem var(--gutter) 6rem; background: var(--paper); }
     .resources-container { max-width: var(--max-width); margin: 0 auto; }
 
     .section-header {
       display: flex;
       align-items: baseline;
-      gap: 1.25rem;
-      margin-bottom: 1.75rem;
+      justify-content: space-between;
+      gap: 1.25rem 2rem;
+      margin-bottom: 2rem;
     }
+    .section-header-left { display: flex; align-items: baseline; gap: 1.25rem; }
     .section-header h2 {
-      font-size: clamp(1.5rem, 2.4vw, 2rem);
+      font-size: clamp(1.6rem, 2.6vw, 2.25rem);
       font-weight: 900;
-      letter-spacing: -.03em;
+      letter-spacing: -.035em;
+      line-height: 1;
     }
     .section-count {
       font-family: var(--font-mono);
@@ -491,36 +615,45 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--ink-faint);
+      white-space: nowrap;
     }
-
-    .section-divider {
-      height: 1px;
-      background: var(--ink-line-soft);
-      margin: 3.5rem 0;
+    .section-note {
+      font-size: .92rem;
+      color: var(--ink-dim);
+      max-width: 40ch;
+      text-align: right;
+      letter-spacing: -.005em;
     }
-
-    .resources-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
-    }
+    .index-header { margin-top: 5.5rem; }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(14px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    .reveal { animation: fadeUp .45s cubic-bezier(.16, 1, .3, 1) both; }
 
-    .resource-card {
-      border: 1px solid var(--ink-line);
-      background: var(--paper);
-      padding: 1.75rem 1.75rem 1.5rem;
-      cursor: pointer;
+    /* ----------------------------------------------------------
+       START HERE — featured bento with one ink lead card
+       ---------------------------------------------------------- */
+    .feat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: minmax(230px, auto);
+      grid-auto-flow: dense;
+      gap: 1rem;
+    }
+    .feat-card {
+      position: relative;
       display: flex;
       flex-direction: column;
-      position: relative;
+      padding: 1.6rem 1.6rem 1.4rem;
+      border: 1px solid var(--ink-line);
+      background: var(--paper);
+      color: inherit;
+      text-decoration: none;
       transition: border-color .25s ease;
     }
-    .resource-card::after {
+    .feat-card::after {
       content: '';
       position: absolute;
       top: -1px;
@@ -530,82 +663,287 @@
       background: var(--orange);
       transition: width .35s cubic-bezier(.16, 1, .3, 1);
     }
-    .resource-card:hover { border-color: var(--ink-faint); }
-    .resource-card:hover::after { width: 100%; }
+    .feat-card:hover { border-color: var(--ink-faint); }
+    .feat-card:hover::after { width: 100%; }
 
-    .card-top-row {
+    .feat-card-top {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 1rem;
-      margin-bottom: 1.25rem;
     }
-    .resource-icon {
-      width: 40px;
-      height: 40px;
-      color: var(--ink);
-      transition: color .25s ease;
-      flex-shrink: 0;
-    }
-    .resource-icon svg { width: 100%; height: 100%; }
-    .resource-card:hover .resource-icon { color: var(--orange); }
-    .resource-tag {
+    .feat-icon { width: 36px; height: 36px; color: var(--ink); flex-shrink: 0; transition: color .25s ease; }
+    .feat-icon svg { width: 100%; height: 100%; }
+    .feat-card:hover .feat-icon { color: var(--orange); }
+    .feat-tag {
       font-family: var(--font-mono);
-      font-size: .72rem;
+      font-size: .68rem;
       font-weight: 500;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--ink-faint);
       border: 1px solid var(--ink-line);
-      padding: .3rem .6rem;
+      padding: .28rem .55rem;
       white-space: nowrap;
     }
-    .resource-title {
-      font-size: 1.12rem;
+    .feat-title {
+      font-size: 1.15rem;
       font-weight: 900;
       letter-spacing: -.02em;
-      line-height: 1.25;
-      margin-bottom: .55rem;
+      line-height: 1.2;
+      margin: 1.1rem 0 .5rem;
     }
-    .resource-description {
+    .feat-desc {
       font-size: .88rem;
-      font-weight: 400;
       color: var(--ink-dim);
       line-height: 1.55;
       letter-spacing: -.005em;
-      margin-bottom: 1.5rem;
       flex: 1;
     }
-    .resource-meta {
+    .feat-meta {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
       border-top: 1px solid var(--ink-line-soft);
-      padding-top: 1.1rem;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
     }
-    .resource-link {
+    .feat-link {
       display: inline-flex;
       align-items: center;
       gap: .5rem;
-      color: var(--ink);
-      text-decoration: none;
       font-weight: 600;
       font-size: .88rem;
       letter-spacing: -.01em;
       transition: color .2s ease;
     }
-    .resource-link svg { width: 13px; height: 13px; transition: transform .3s cubic-bezier(.16,1,.3,1); }
-    .resource-card:hover .resource-link { color: var(--orange); }
-    .resource-card:hover .resource-link svg { transform: translateX(3px); }
-    .badge-featured {
+    .feat-link svg { width: 13px; height: 13px; transition: transform .3s cubic-bezier(.16,1,.3,1); }
+    .feat-card:hover .feat-link { color: var(--orange); }
+    .feat-card:hover .feat-link svg { transform: translateX(3px); }
+    .feat-star {
       font-family: var(--font-mono);
-      font-size: .72rem;
+      font-size: .68rem;
       font-weight: 500;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--orange-ink);
     }
+
+    /* Lead card: the one dark object on the page */
+    .feat-card.lead {
+      grid-column: span 2;
+      grid-row: span 2;
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+      padding: 2.5rem 2.5rem 2.25rem;
+      overflow: hidden;
+    }
+    .feat-card.lead.solo { grid-column: 1 / -1; grid-row: auto; }
+    .feat-card.lead::before {
+      content: '';
+      position: absolute;
+      right: -18%;
+      top: -35%;
+      width: 68%;
+      aspect-ratio: 1;
+      background: radial-gradient(circle, rgba(242, 90, 39, .32) 0%, transparent 62%);
+      filter: blur(28px);
+      pointer-events: none;
+      transition: transform .7s cubic-bezier(.16, 1, .3, 1);
+    }
+    .feat-card.lead:hover { border-color: var(--ink); }
+    .feat-card.lead:hover::before { transform: translate(-8%, 10%); }
+    .feat-card.lead .feat-card-top { position: relative; }
+    .feat-card.lead .feat-icon { width: 88px; height: 88px; color: var(--orange); }
+    .feat-card.lead:hover .feat-icon { color: var(--paper); }
+    .feat-card.lead .feat-tag { color: var(--paper-faint); border-color: var(--paper-line); }
+    .feat-card.lead .feat-title {
+      font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+      letter-spacing: -.035em;
+      line-height: 1.02;
+      margin-top: 2rem;
+      max-width: 16ch;
+    }
+    .feat-card.lead .feat-desc { color: var(--paper-dim); font-size: 1rem; max-width: 48ch; }
+    .feat-card.lead .feat-meta { border-top-color: var(--paper-line); }
+    .feat-card.lead .feat-link { color: var(--paper); }
+    .feat-card.lead:hover .feat-link { color: var(--orange); }
+    .feat-card.lead .feat-star { color: var(--orange); }
+
+    /* ----------------------------------------------------------
+       FULL INDEX — grouped list with sticky group labels
+       ---------------------------------------------------------- */
+    .index-group {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2.6fr);
+      gap: 2rem 4rem;
+      padding: 2.25rem 0;
+      border-top: 1px solid var(--ink-line);
+    }
+    .index-group:first-child { border-top: none; padding-top: 0; }
+    .index-group:last-child { padding-bottom: 0; }
+    .index-label {
+      position: sticky;
+      top: calc(var(--nav-h) + var(--toolbar-h) + 1.5rem);
+      align-self: start;
+    }
+    .index-label h3 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      letter-spacing: -.03em;
+      line-height: 1.05;
+      margin: .75rem 0 .55rem;
+    }
+    .index-label p {
+      font-size: .9rem;
+      color: var(--ink-dim);
+      line-height: 1.55;
+      max-width: 30ch;
+      letter-spacing: -.005em;
+    }
+
+    .index-list { display: flex; flex-direction: column; border-top: 1px solid var(--ink-line-soft); }
+    .index-row {
+      display: grid;
+      grid-template-columns: 2.4rem 32px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1.05rem .75rem 1.05rem .5rem;
+      border-bottom: 1px solid var(--ink-line-soft);
+      text-decoration: none;
+      color: inherit;
+      transition: background .2s ease;
+    }
+    .index-row:hover, .index-row:focus-visible { background: rgba(242, 90, 39, .05); }
+    .index-num {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      color: var(--ink-faint);
+      font-variant-numeric: tabular-nums;
+    }
+    .index-icon { width: 32px; height: 32px; color: var(--ink); transition: color .25s ease; }
+    .index-icon svg { width: 100%; height: 100%; display: block; }
+    .index-row:hover .index-icon { color: var(--orange); }
+    .index-text { display: flex; flex-direction: column; min-width: 0; }
+    .index-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: -.015em;
+      line-height: 1.3;
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      flex-wrap: wrap;
+      transition: color .2s ease;
+    }
+    .index-row:hover .index-title { color: var(--orange-ink); }
+    .index-flag {
+      font-family: var(--font-mono);
+      font-size: .62rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--orange-ink);
+    }
+    .index-desc {
+      font-size: .86rem;
+      color: var(--ink-dim);
+      line-height: 1.5;
+      margin-top: .2rem;
+      letter-spacing: -.005em;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .index-arrow {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--ink-line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-faint);
+      transition: background .2s ease, border-color .2s ease, color .2s ease, transform .3s cubic-bezier(.16,1,.3,1);
+    }
+    .index-arrow svg { width: 13px; height: 13px; }
+    .index-row:hover .index-arrow { background: var(--orange-ink); border-color: var(--orange-ink); color: #fff; transform: translateX(3px); }
+
+    /* Empty state */
+    .empty { display: none; padding: .5rem 0 1rem; }
+    .empty.show { display: block; }
+    .empty h3 {
+      font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+      font-weight: 900;
+      letter-spacing: -.035em;
+      line-height: 1.05;
+      margin-bottom: .75rem;
+    }
+    .empty h3 em { font-style: normal; color: var(--orange); }
+    .empty p { color: var(--ink-dim); max-width: 46ch; margin-bottom: 1.5rem; line-height: 1.55; }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      padding: .8rem 1.3rem;
+      border: 1px solid var(--ink);
+      background: none;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: .88rem;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s ease, color .2s ease;
+    }
+    .btn-ghost:hover { background: var(--ink); color: var(--paper); }
+
+    /* ----------------------------------------------------------
+       SUGGEST — closing prompt before the footer
+       ---------------------------------------------------------- */
+    .suggest { border-top: 1px solid var(--ink-line); padding: 4.5rem var(--gutter) 5.5rem; background: var(--paper); }
+    .suggest-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 3rem 5rem;
+      align-items: start;
+    }
+    .suggest h2 {
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: 1;
+      margin-top: 1.1rem;
+      max-width: 14ch;
+    }
+    .suggest h2 em { font-style: normal; color: var(--orange); }
+    .suggest-links { display: flex; flex-direction: column; border-top: 1px solid var(--ink-line); }
+    .suggest-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--ink-line-soft);
+      text-decoration: none;
+      color: inherit;
+    }
+    .suggest-link strong {
+      display: block;
+      font-weight: 700;
+      font-size: 1.05rem;
+      letter-spacing: -.015em;
+      margin-bottom: .15rem;
+      transition: color .2s ease;
+    }
+    .suggest-link .sub { font-size: .86rem; color: var(--ink-dim); line-height: 1.45; }
+    .suggest-link svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--ink-faint); transition: transform .3s cubic-bezier(.16,1,.3,1), color .2s ease; }
+    .suggest-link:hover strong { color: var(--orange); }
+    .suggest-link:hover svg { transform: translateX(4px); color: var(--orange); }
 
     /* ----------------------------------------------------------
        FOOTER — ink, separated by hairline
@@ -832,11 +1170,14 @@
     @media (max-width: 1080px) {
       .nav-right { gap: 1.5rem; }
       .dropdown-content { min-width: 540px; }
-      .resources-grid { grid-template-columns: repeat(2, 1fr); }
+      .index-group { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 2rem 2.5rem; }
+    }
+    @media (max-width: 1500px) {
+      .toolbar-readout { display: none; }
     }
 
     @media (max-width: 968px) {
-      :root { --gutter: 1.5rem; }
+      :root { --gutter: 1.5rem; --nav-h: 64px; }
       body { font-size: 16px; }
 
       .nav-right { display: none; }
@@ -850,11 +1191,38 @@
 
       .hero { padding: 6rem var(--gutter) 0; }
       .hero-container { gap: 1.75rem; padding-top: 0; }
+      .hero-lede { grid-template-columns: 1fr; gap: 1.25rem; }
       .hero h1 { font-size: clamp(2.2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
-      .hero-controls { padding: 1.5rem 0 1.75rem; }
+      .hero-subtitle { padding-bottom: 0; }
+      .hero-rail { grid-template-columns: repeat(2, 1fr); }
+      .hero-rail-item { padding: 1.25rem 1rem 1.25rem 0; border-bottom: 1px solid var(--ink-line-soft); }
+      .hero-rail-item + .hero-rail-item { padding-left: 1.25rem; }
+      .hero-rail-item:nth-child(odd) { padding-left: 0; border-left: none; }
+      .hero-rail-item:nth-last-child(-n+2) { border-bottom: none; padding-bottom: 1.75rem; }
 
-      .resources-section { padding: 3rem var(--gutter) 5rem; }
-      .section-divider { margin: 2.5rem 0; }
+      .toolbar-inner { flex-wrap: wrap; gap: .75rem; padding: .75rem var(--gutter); }
+      .search-container { flex: 1 1 100%; min-width: 0; }
+      .filters { flex: none; width: calc(100% + 2 * var(--gutter)); margin: 0 calc(-1 * var(--gutter)); padding: 2px var(--gutter); }
+
+      .resources-section { padding: 3rem var(--gutter) 4rem; }
+      .section-header { flex-direction: column; align-items: flex-start; gap: .6rem; margin-bottom: 1.5rem; }
+      .section-note { text-align: left; }
+      .index-header { margin-top: 3.5rem; }
+
+      .feat-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: auto; }
+      .feat-card.lead { grid-column: 1 / -1; grid-row: auto; padding: 2rem 1.6rem 1.75rem; }
+      .feat-card.lead .feat-icon { width: 64px; height: 64px; }
+      .feat-card.lead .feat-title { margin-top: 1.5rem; }
+
+      .index-group { grid-template-columns: 1fr; gap: 1.25rem; padding: 2.25rem 0; }
+      .index-label { position: static; }
+      .index-label p { max-width: none; }
+      .index-row { grid-template-columns: 28px minmax(0, 1fr) auto; gap: 1rem; padding: 1rem .25rem; }
+      .index-num { display: none; }
+      .index-icon { width: 28px; height: 28px; }
+
+      .suggest { padding: 3.5rem var(--gutter) 4rem; }
+      .suggest-inner { grid-template-columns: 1fr; gap: 2rem; }
 
       .footer-container { grid-template-columns: 1fr 1fr; gap: 2.25rem; padding: 3rem var(--gutter) 2.5rem; }
       .footer-brand-col { grid-column: 1 / -1; }
@@ -863,15 +1231,15 @@
     }
 
     @media (max-width: 640px) {
-      .resources-grid { grid-template-columns: 1fr; }
-      .filter-btn { padding: .5rem .8rem; font-size: .72rem; }
+      .feat-grid { grid-template-columns: 1fr; }
+      .filter-btn { padding: .5rem .75rem; }
+      .index-desc { -webkit-line-clamp: 3; }
     }
 
     /* Tablet tier (iPads in portrait, small landscape) — scale the hero up
        from phone sizing so it uses the wider canvas */
     @media (min-width: 600px) and (max-width: 968px) {
       .hero h1 { font-size: clamp(3.2rem, 8.6vw, 4.8rem); }
-      .resources-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -998,56 +1366,116 @@
 
       <div class="hero-top">
         <div class="eyebrow">Resources</div>
-        <div class="hero-count"><span class="dot"></span><span><span class="count" id="resourceCount">27</span> Free Tools</span></div>
+        <div class="hero-count"><span class="dot"></span><span><span class="count" id="resourceCount">25</span> Free Tools</span></div>
       </div>
 
-      <h1>Build <em>better<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em> financial&nbsp;health.</h1>
+      <div class="hero-lede">
+        <h1>Build <em>better<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em> financial&nbsp;health.</h1>
+        <p class="hero-subtitle">
+          Calculators, simulators, and guides for the money decisions that actually come up. Free, no sign-up, and built on our own research.
+        </p>
+      </div>
 
-      <p class="hero-subtitle">
-        Interactive calculators, guides, and tools — all free, all backed by research.
-      </p>
-
-      <div class="hero-controls">
-        <div class="search-container">
-          <input type="text" class="search-input" id="searchInput" placeholder="Search tools and resources..." autocomplete="off">
-          <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span>
+      <div class="hero-rail" aria-label="At a glance">
+        <div class="hero-rail-item">
+          <div class="hero-rail-num" id="railTools">25</div>
+          <div class="hero-rail-label">Interactive tools,<br>all free to use</div>
         </div>
-
-        <div class="filters">
-          <button class="filter-btn active" data-category="all">All</button>
-          <button class="filter-btn" data-category="education">Education</button>
-          <button class="filter-btn" data-category="retirement">Retirement</button>
-          <button class="filter-btn" data-category="income">Income</button>
-          <button class="filter-btn" data-category="lifestyle">Lifestyle</button>
-          <button class="filter-btn" data-category="business">Business</button>
-          <button class="filter-btn" data-category="family">Family</button>
-          <button class="filter-btn" data-category="emergencies">Emergencies</button>
+        <div class="hero-rail-item">
+          <div class="hero-rail-num" id="railCats">7</div>
+          <div class="hero-rail-label">Categories, from<br>income to emergencies</div>
+        </div>
+        <div class="hero-rail-item">
+          <div class="hero-rail-num">$0</div>
+          <div class="hero-rail-label">Cost, forever.<br>No paywalls</div>
+        </div>
+        <div class="hero-rail-item">
+          <div class="hero-rail-num">0</div>
+          <div class="hero-rail-label">Sign-ups required.<br>Open one and start</div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ======================= TOOLBAR ======================= -->
+  <div class="toolbar" id="toolbar">
+    <div class="toolbar-inner">
+      <div class="search-container" id="searchContainer">
+        <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></span>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search tools…" autocomplete="off" aria-label="Search tools and resources">
+        <span class="search-kbd" aria-hidden="true">/</span>
+        <button class="search-clear" id="searchClear" type="button" aria-label="Clear search">&times;</button>
+      </div>
+
+      <div class="filters" role="group" aria-label="Filter by category">
+        <button class="filter-btn active" data-category="all" aria-pressed="true">All <span class="n"></span></button>
+        <button class="filter-btn" data-category="education" aria-pressed="false">Education <span class="n"></span></button>
+        <button class="filter-btn" data-category="retirement" aria-pressed="false">Retirement <span class="n"></span></button>
+        <button class="filter-btn" data-category="income" aria-pressed="false">Income <span class="n"></span></button>
+        <button class="filter-btn" data-category="lifestyle" aria-pressed="false">Lifestyle <span class="n"></span></button>
+        <button class="filter-btn" data-category="business" aria-pressed="false">Business <span class="n"></span></button>
+        <button class="filter-btn" data-category="family" aria-pressed="false">Family <span class="n"></span></button>
+        <button class="filter-btn" data-category="emergencies" aria-pressed="false">Emergencies <span class="n"></span></button>
+      </div>
+
+      <div class="toolbar-readout" id="readout" aria-live="polite"></div>
+    </div>
+  </div>
+
   <!-- ======================= RESOURCES ======================= -->
-  <section class="resources-section">
+  <section class="resources-section" id="tools">
     <div class="resources-container">
 
       <div class="section-header" id="featuredHeader">
-        <h2>Featured</h2>
-        <span class="section-count" id="featuredCount"></span>
+        <div class="section-header-left">
+          <h2>Start here</h2>
+          <span class="section-count" id="featuredCount"></span>
+        </div>
+        <p class="section-note">The tools we would hand a friend first.</p>
       </div>
-      <div class="resources-grid" id="featuredGrid"></div>
+      <div class="feat-grid" id="featuredGrid"></div>
 
-      <div class="section-divider" id="divider1"></div>
-
-      <div class="section-header" id="mainHeader">
-        <h2>All Tools</h2>
-        <span class="section-count" id="mainCount"></span>
+      <div class="section-header index-header" id="indexHeader">
+        <div class="section-header-left">
+          <h2>The full index</h2>
+          <span class="section-count" id="indexCount"></span>
+        </div>
+        <p class="section-note">Every tool, grouped by the question it answers.</p>
       </div>
-      <div class="resources-grid" id="mainGrid"></div>
+      <div id="indexGroups"></div>
+
+      <div class="empty" id="emptyState">
+        <h3>Nothing matches <em id="emptyTerm"></em>.</h3>
+        <p>Try a broader word like “retirement” or “loan”, or clear the search to see every tool again.</p>
+        <button class="btn-ghost" type="button" id="emptyReset">Show all tools</button>
+      </div>
 
     </div>
   </section>
 
+  <!-- ======================= SUGGEST ======================= -->
+  <section class="suggest">
+    <div class="suggest-inner">
+      <div>
+        <div class="eyebrow">Missing something?</div>
+        <h2>Tell us what would <em>actually</em> help.</h2>
+      </div>
+      <div class="suggest-links">
+        <a class="suggest-link" href="/cdn-cgi/l/email-protection#6109040d0d0e2107080f0c000f060e4f0e1306">
+          <div><strong>Suggest a tool</strong><span class="sub">Every tool here started as someone's question.</span></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a class="suggest-link" href="education.html">
+          <div><strong>Browse the lessons</strong><span class="sub">Free lessons on the fundamentals behind these tools.</span></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a class="suggest-link" href="research.html">
+          <div><strong>Read the research</strong><span class="sub">The evidence these tools are built on.</span></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
   <!-- ======================= FOOTER ======================= -->
   <!-- chrome:footer -->
   <footer>
@@ -1212,100 +1640,201 @@
     ];
 
     // ============================================
+    // CATEGORIES — order here is the order on the page
+    // ============================================
+    const categories = {
+      education:   { name: 'Education',   blurb: 'Learn the fundamentals, one story or simulation at a time.' },
+      retirement:  { name: 'Retirement',  blurb: 'Compound, compare, and plan the long game.' },
+      income:      { name: 'Income',      blurb: 'What you actually take home, and what you qualify for.' },
+      lifestyle:   { name: 'Lifestyle',   blurb: 'The everyday decisions that quietly shape your finances.' },
+      business:    { name: 'Business',    blurb: 'Starting, running, and modernizing a small business.' },
+      family:      { name: 'Family',      blurb: 'Planning for the people who depend on you.' },
+      emergencies: { name: 'Emergencies', blurb: 'When things go wrong, find help fast.' },
+    };
+    const categoryOrder = Object.keys(categories);
+
+    const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+    const FALLBACK_ICON = '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="16" cy="16" r="10"/></svg>';
+
+    const state = { category: 'all', term: '' };
+    const pad = (n) => String(n).padStart(2, '0');
+    const iconFor = (r) => sketchIcons[r.iconKey] || FALLBACK_ICON;
+    const catName = (key) => (categories[key] ? categories[key].name : key);
+    const plural = (n) => `${n} ${n === 1 ? 'tool' : 'tools'}`;
+
+    // ============================================
     // RENDER
     // ============================================
     document.addEventListener('DOMContentLoaded', function () {
-      renderResources();
-
-      document.getElementById('resourceCount').textContent = resources.length;
-
       const searchInput = document.getElementById('searchInput');
-      if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-          const activeBtn = document.querySelector('.filter-btn.active');
-          const category = activeBtn ? activeBtn.getAttribute('data-category') : 'all';
-          renderResources(category, e.target.value);
-        });
+      const searchContainer = document.getElementById('searchContainer');
+      const searchClear = document.getElementById('searchClear');
+      const emptyReset = document.getElementById('emptyReset');
+      const toolbar = document.getElementById('toolbar');
+      const filterBtns = Array.from(document.querySelectorAll('.filter-btn'));
+
+      // Hero numbers come from the data so they can't drift
+      document.getElementById('resourceCount').textContent = resources.length;
+      document.getElementById('railTools').textContent = resources.length;
+      document.getElementById('railCats').textContent = categoryOrder.length;
+
+      // Per-category counts on the filter chips
+      filterBtns.forEach(btn => {
+        const cat = btn.getAttribute('data-category');
+        const n = cat === 'all' ? resources.length : resources.filter(r => r.category === cat).length;
+        const el = btn.querySelector('.n');
+        if (el) el.textContent = pad(n);
+      });
+
+      // Keep the sticky group labels clear of the toolbar, whatever its height,
+      // and fade the chip row's edge when it has more chips than room
+      const filters = document.querySelector('.filters');
+      function measure() {
+        document.documentElement.style.setProperty('--toolbar-h', toolbar.offsetHeight + 'px');
+        if (!filters) return;
+        const over = filters.scrollWidth > filters.clientWidth + 1;
+        filters.classList.toggle('overflowing', over);
+        filters.classList.toggle('at-end', over && filters.scrollLeft + filters.clientWidth >= filters.scrollWidth - 1);
+      }
+      if (toolbar) {
+        measure();
+        if ('ResizeObserver' in window) new ResizeObserver(measure).observe(toolbar);
+        else window.addEventListener('resize', measure, { passive: true });
+        if (filters) filters.addEventListener('scroll', measure, { passive: true });
       }
 
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          const searchTerm = searchInput ? searchInput.value : '';
-          renderResources(btn.getAttribute('data-category'), searchTerm);
+      function setTerm(value) {
+        state.term = value;
+        if (searchInput.value !== value) searchInput.value = value;
+        searchContainer.classList.toggle('has-value', value.length > 0);
+        render();
+      }
+      function setCategory(cat) {
+        state.category = cat;
+        filterBtns.forEach(b => {
+          const on = b.getAttribute('data-category') === cat;
+          b.classList.toggle('active', on);
+          b.setAttribute('aria-pressed', on);
         });
+        render();
+      }
+
+      searchInput.addEventListener('input', (e) => setTerm(e.target.value));
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') { setTerm(''); searchInput.blur(); }
       });
+      searchClear.addEventListener('click', () => { setTerm(''); searchInput.focus(); });
+      emptyReset.addEventListener('click', () => { setTerm(''); setCategory('all'); });
+      filterBtns.forEach(btn => btn.addEventListener('click', () => setCategory(btn.getAttribute('data-category'))));
+
+      // "/" jumps to search from anywhere on the page
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+        const tag = (e.target.tagName || '').toLowerCase();
+        if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+        e.preventDefault();
+        searchInput.focus();
+      });
+
+      render();
     });
 
-    function renderResources(category = 'all', searchTerm = '') {
+    function matches(r) {
+      const inCategory = state.category === 'all' || r.category === state.category;
+      if (!inCategory) return false;
+      const term = state.term.trim().toLowerCase();
+      if (!term) return true;
+      return r.title.toLowerCase().includes(term)
+        || r.description.toLowerCase().includes(term)
+        || catName(r.category).toLowerCase().includes(term);
+    }
+
+    function render() {
       const featuredGrid = document.getElementById('featuredGrid');
-      const mainGrid = document.getElementById('mainGrid');
-      if (!featuredGrid || !mainGrid) return;
+      const featuredHeader = document.getElementById('featuredHeader');
+      const indexGroups = document.getElementById('indexGroups');
+      const indexHeader = document.getElementById('indexHeader');
+      const emptyState = document.getElementById('emptyState');
+      const readout = document.getElementById('readout');
+      if (!featuredGrid || !indexGroups) return;
 
-      featuredGrid.innerHTML = '';
-      mainGrid.innerHTML = '';
+      const visible = resources.filter(matches);
+      const featured = visible.filter(r => r.featured);
 
-      const term = searchTerm.toLowerCase();
-      let featuredCount = 0, mainCount = 0;
+      // --- Start here: a bento with one lead card ---
+      const solo = featured.length < 3;
+      featuredGrid.innerHTML = featured.map((r, i) => featCard(r, i, i === 0, solo)).join('');
+      featuredHeader.style.display = featured.length ? '' : 'none';
+      featuredGrid.style.display = featured.length ? '' : 'none';
+      document.getElementById('featuredCount').textContent = plural(featured.length);
 
-      resources.forEach((resource, index) => {
-        const matchesCategory = category === 'all' || resource.category === category;
-        const matchesSearch = resource.title.toLowerCase().includes(term) || resource.description.toLowerCase().includes(term);
+      // --- Full index: grouped by category ---
+      const groups = categoryOrder
+        .map(cat => ({ cat, items: visible.filter(r => r.category === cat) }))
+        .filter(g => g.items.length);
 
-        if (matchesCategory && matchesSearch) {
-          const card = createCardHTML(resource, index);
-          if (resource.featured) { featuredGrid.innerHTML += card; featuredCount++; }
-          else { mainGrid.innerHTML += card; mainCount++; }
-        }
-      });
+      let n = 0;
+      indexGroups.innerHTML = groups.map((g, gi) => {
+        const meta = categories[g.cat];
+        return `
+        <div class="index-group reveal" style="animation-delay:${(0.04 * gi).toFixed(2)}s">
+          <div class="index-label">
+            <div class="eyebrow">${pad(gi + 1)} &middot; ${plural(g.items.length)}</div>
+            <h3>${meta.name}</h3>
+            <p>${meta.blurb}</p>
+          </div>
+          <div class="index-list">
+            ${g.items.map(r => indexRow(r, ++n)).join('')}
+          </div>
+        </div>`;
+      }).join('');
+      indexHeader.style.display = visible.length ? '' : 'none';
+      indexHeader.classList.toggle('index-header', featured.length > 0);
+      document.getElementById('indexCount').textContent = plural(visible.length);
 
-      // Update counts
-      document.getElementById('featuredCount').textContent = featuredCount ? `${featuredCount} tools` : '';
-      document.getElementById('mainCount').textContent = mainCount ? `${mainCount} tools` : '';
-
-      // Toggle section visibility
-      toggleSection(featuredGrid, 'featuredHeader', 'divider1');
-      toggleSection(mainGrid, 'mainHeader', null);
+      // --- Readout + empty state ---
+      if (readout) {
+        readout.innerHTML = visible.length === resources.length
+          ? `<strong>${resources.length}</strong> tools`
+          : `Showing <strong>${visible.length}</strong> of ${resources.length}`;
+      }
+      const empty = visible.length === 0;
+      emptyState.classList.toggle('show', empty);
+      if (empty) {
+        const term = state.term.trim();
+        const scope = state.category === 'all' ? '' : ` in ${catName(state.category)}`;
+        document.getElementById('emptyTerm').textContent = term ? `“${term}”${scope}` : `that${scope}`;
+      }
     }
 
-    function toggleSection(grid, headerId, dividerId) {
-      const header = document.getElementById(headerId);
-      const divider = dividerId ? document.getElementById(dividerId) : null;
-      const empty = grid.innerHTML === '';
-      grid.style.display = empty ? 'none' : 'grid';
-      if (header) header.style.display = empty ? 'none' : 'flex';
-      if (divider) divider.style.display = empty ? 'none' : 'block';
-    }
-
-    function createCardHTML(resource, index) {
-      const badgeHTML = resource.featured
-        ? '<span class="badge-featured">Featured</span>'
-        : '';
-
-      const iconSVG = sketchIcons[resource.iconKey] || `<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="16" cy="16" r="10"/></svg>`;
-
+    function featCard(r, i, lead, solo) {
+      const cls = ['feat-card', 'reveal', lead ? 'lead' : '', lead && solo ? 'solo' : ''].filter(Boolean).join(' ');
       return `
-        <div class="resource-card" onclick="window.location.href='${resource.link}'"
-             data-category="${resource.category}"
-             style="animation: fadeUp 0.4s ease forwards ${0.05 * (index % 6)}s; opacity: 0;">
-          <div class="card-top-row">
-            <div class="resource-icon">${iconSVG}</div>
-            <span class="resource-tag">${resource.category}</span>
+        <a class="${cls}" href="${r.link}" style="animation-delay:${(0.05 * i).toFixed(2)}s">
+          <div class="feat-card-top">
+            <div class="feat-icon">${iconFor(r)}</div>
+            <span class="feat-tag">${catName(r.category)}</span>
           </div>
-          <h3 class="resource-title">${resource.title}</h3>
-          <p class="resource-description">${resource.description}</p>
-          <div class="resource-meta">
-            <a href="${resource.link}" class="resource-link">
-              Open Tool
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </a>
-            ${badgeHTML}
+          <h3 class="feat-title">${r.title}</h3>
+          <p class="feat-desc">${r.description}</p>
+          <div class="feat-meta">
+            <span class="feat-link">Open tool ${ARROW}</span>
+            <span class="feat-star">${lead ? 'Start here' : 'Featured'}</span>
           </div>
-        </div>
-      `;
+        </a>`;
+    }
+
+    function indexRow(r, n) {
+      return `
+        <a class="index-row" href="${r.link}">
+          <span class="index-num">${pad(n)}</span>
+          <span class="index-icon">${iconFor(r)}</span>
+          <span class="index-text">
+            <span class="index-title">${r.title}${r.featured ? '<span class="index-flag">Featured</span>' : ''}</span>
+            <span class="index-desc">${r.description}</span>
+          </span>
+          <span class="index-arrow">${ARROW}</span>
+        </a>`;
     }
   </script>
 
