@@ -106,6 +106,9 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
+      /* Height of the announcement strip above the nav (see .notes-bar) */
+      --bar-h: 36px;
+
       /* Palette — the whole page runs on these five */
       --paper: #FAFAF7;
       --ink: #0A0A0A;
@@ -286,24 +289,78 @@
       -webkit-backdrop-filter: blur(12px);
       backdrop-filter: blur(12px);
       z-index: 1050;
-      padding: 1.4rem 0;
-      transition: padding .3s ease, border-color .3s ease;
+      transition: border-color .3s ease;
       border-bottom: 1px solid transparent;
     }
     nav.scrolled {
-      padding: .9rem 0;
       border-bottom-color: var(--ink-line-soft);
     }
 
     .nav-container {
       max-width: var(--max-width);
       margin: 0 auto;
-      padding: 0 var(--gutter);
+      padding: 1.4rem var(--gutter);
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 2rem;
+      transition: padding .3s ease;
     }
+    nav.scrolled .nav-container { padding: .9rem var(--gutter); }
+
+    /* Announcement strip above the nav: a quiet pointer to Ambassador
+       Notes. It rides in the fixed chrome so the offset is one number
+       (--bar-h), and tucks away once the reader starts scrolling so the
+       header gets back to its usual height. */
+    .notes-bar {
+      display: block;
+      height: var(--bar-h);
+      overflow: hidden;
+      background: rgba(242, 90, 39, .07);
+      border-bottom: 1px solid rgba(242, 90, 39, .14);
+      color: var(--ink-dim);
+      text-decoration: none;
+      font-size: .8rem;
+      line-height: 1;
+      transition: height .3s ease, border-color .3s ease;
+    }
+    .notes-bar:hover { color: var(--ink); }
+    .notes-bar:focus-visible { outline: 2px solid var(--orange-ink); outline-offset: -2px; }
+    nav.scrolled .notes-bar { height: 0; border-bottom-color: transparent; }
+    .notes-bar-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+      height: var(--bar-h);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .85rem;
+      white-space: nowrap;
+    }
+    .notes-bar-tag {
+      font-family: var(--font-mono);
+      font-size: .66rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--orange-ink);
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+    }
+    .notes-bar-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
+    .notes-bar-text { overflow: hidden; text-overflow: ellipsis; }
+    .notes-bar-text strong { color: var(--ink); font-weight: 600; }
+    .notes-bar-cta {
+      color: var(--ink);
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: rgba(10, 10, 10, .25);
+      text-underline-offset: 3px;
+      transition: text-decoration-color .2s ease;
+    }
+    .notes-bar:hover .notes-bar-cta { text-decoration-color: var(--orange-ink); }
 
     .logo { display: flex; align-items: center; text-decoration: none; }
     .logo img { height: 56px; width: auto; transition: height .3s ease; display: block; }
@@ -465,7 +522,7 @@
        ---------------------------------------------------------- */
     .hero {
       background: var(--paper);
-      padding: 6.5rem 2rem 0;
+      padding: calc(6.5rem + var(--bar-h)) 2rem 0;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -1453,7 +1510,7 @@
       height: 100dvh;
       background: var(--paper);
       z-index: 1040;
-      padding: 6rem 1.75rem 2rem;
+      padding: calc(6rem + var(--bar-h)) 1.75rem 2rem;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       flex-direction: column;
@@ -1574,6 +1631,10 @@
       :root { --gutter: 1.5rem; }
       body { font-size: 16px; }
 
+      .notes-bar { font-size: .76rem; }
+      .notes-bar-inner { gap: .65rem; justify-content: space-between; }
+      .notes-bar-desc { display: none; }
+
       .nav-right { display: none; }
       .mobile-controls { display: flex; }
       .mobile-menu-btn { display: block; }
@@ -1583,7 +1644,7 @@
         font-size: .74rem !important;
       }
 
-      .hero { padding: 6rem var(--gutter) 0; min-height: auto; }
+      .hero { padding: calc(6rem + var(--bar-h)) var(--gutter) 0; min-height: auto; }
       .hero-bg::before {
         top: 4%;
         left: -35%;
@@ -1789,6 +1850,13 @@
 
   <!-- chrome:nav -->
   <nav id="nav" aria-label="Main">
+    <a href="posts.html" class="notes-bar">
+      <span class="notes-bar-inner">
+        <span class="notes-bar-tag"><span class="notes-bar-dot" aria-hidden="true"></span>New</span>
+        <span class="notes-bar-text"><strong>Ambassador Notes</strong><span class="notes-bar-desc"> &mdash; notes, briefs &amp; stories from our Ambassadors, published after peer review</span></span>
+        <span class="notes-bar-cta">Read the latest <span aria-hidden="true">&rarr;</span></span>
+      </span>
+    </a>
     <div class="nav-container">
       <a href="index.html" class="logo">
         <img src="finmango.png" alt="FinMango" width="500" height="196" fetchpriority="high">
