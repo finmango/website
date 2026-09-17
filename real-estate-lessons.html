@@ -1319,16 +1319,6 @@ body {
 }
 
 
-.slide-navigation {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 10px;
-  pointer-events: none;
-}
 
 
 .emoji-icon-slide {
@@ -1585,6 +1575,75 @@ select.warning {
   <!-- Shared Navbar Styles -->
 
 
+
+  <style>
+    /* Story viewer: mobile navigation (shared across lesson pages) */
+    .story-viewer { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .story-content { display: flex; flex-direction: column; }
+    .slide-container { flex: 1 1 auto; min-height: 0; height: auto; cursor: pointer; }
+    .story-footer-nav {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+      background: #FAFAF7;
+      border-top: 1px solid #0A0A0A;
+      position: relative;
+      z-index: 10;
+    }
+    .story-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      min-width: 96px;
+      padding: 0 16px;
+      background: #0A0A0A;
+      color: #fff;
+      border: 1px solid #0A0A0A;
+      border-radius: 0;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease, opacity .2s ease;
+    }
+    .story-nav-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .story-nav-btn:hover:not(:disabled) { background: #F25A27; border-color: #F25A27; color: #0A0A0A; }
+    .story-nav-btn:disabled { opacity: .35; cursor: default; }
+    .story-nav-prev { background: transparent; color: #0A0A0A; }
+    .story-nav-next.is-finish { background: #C2410C; border-color: #C2410C; }
+    .story-counter {
+      font-family: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(10, 10, 10, .58);
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+    @media (max-width: 600px) {
+      .story-viewer { align-items: stretch; }
+      .story-content {
+        margin: 0;
+        width: 100%;
+        max-width: none;
+        height: 100vh;
+        height: 100dvh;
+        max-height: none;
+        border: none;
+      }
+      .story-header-viewer { padding: 14px 16px; }
+      .slide-container { padding: 72px 16px 20px; }
+      .slide-title { font-size: 22px; margin-bottom: 16px; }
+      .slide-text { font-size: 15px; padding: 16px; }
+      .emoji-icon-slide { font-size: 56px; min-height: 64px; margin-bottom: 12px; }
+    }
+  </style>
 </head>
 <body>
 
@@ -1746,7 +1805,7 @@ select.warning {
   </div>
 </section>
 
-<div class="story-viewer" id="storyViewer">
+<div class="story-viewer" id="storyViewer" role="dialog" aria-modal="true" aria-label="Story">
   <div class="story-content">
     <div class="story-header-viewer">
       <div class="story-progress" id="storyProgress">
@@ -1765,9 +1824,16 @@ select.warning {
       <div class="slide-text" id="slideText"></div>
     </div>
     
-    <div class="slide-navigation">
-      <div class="nav-area" onclick="previousSlide()"></div>
-      <div class="nav-area" onclick="nextSlide()"></div>
+    <div class="story-footer-nav">
+      <button type="button" class="story-nav-btn story-nav-prev" id="storyPrevBtn" onclick="previousSlide()" aria-label="Previous slide">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 8H3M7 4L3 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="story-nav-label">Back</span>
+      </button>
+      <span class="story-counter" id="storyCounter" aria-live="polite"></span>
+      <button type="button" class="story-nav-btn story-nav-next" id="storyNextBtn" onclick="nextSlide()" aria-label="Next slide">
+        <span class="story-nav-label">Next</span>
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
   </div>
 </div>
@@ -1963,6 +2029,7 @@ function showSlide(index) {
   if (!currentStory || index < 0 || index >= currentStory.slides.length) return;
   
   currentSlideIndex = index;
+  updateStoryNav();
   const slide = currentStory.slides[index];
   
   document.getElementById('slideEmoji').textContent = slide.emoji;
@@ -2095,5 +2162,6 @@ document.addEventListener('DOMContentLoaded', function() {
   </script>
   <!-- /chrome:script -->
 
+  <script src="js/story-nav.js"></script>
 </body>
 </html>
