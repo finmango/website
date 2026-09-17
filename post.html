@@ -598,9 +598,19 @@
     // at a width that fits the slot (see functions/post-image.js). The article
     // cover URL matches the <link rel="preload"> the /post Function injects,
     // so the browser reuses the already-started download.
+    // The cover's Drive file id rides along as &f=… so the proxy can fetch the
+    // file directly instead of looking the post up again on the (slow, flaky)
+    // Apps Script backend — a failed lookup used to paint the default FinMango
+    // card in place of the real cover.
+    function coverFileId(cover) {
+      const m = /^https:\/\/drive\.google\.com\/[^#]*[?&]id=([A-Za-z0-9_-]{10,100})(?:[&#]|$)/.exec(cover || '');
+      return m ? m[1] : '';
+    }
     function coverSrc(p, w) {
       if (!p.cover) return '';
-      return p.id ? '/post-image?id=' + encodeURIComponent(p.id) + '&w=' + w : p.cover;
+      if (!p.id) return p.cover;
+      const f = coverFileId(p.cover);
+      return '/post-image?id=' + encodeURIComponent(p.id) + (f ? '&f=' + f : '') + '&w=' + w;
     }
 
     function render(p) {

@@ -49,6 +49,22 @@ export function jsonForScript(obj) {
     '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0'));
 }
 
+// The Drive file id inside a cover URL (drive.google.com/thumbnail?id=…, the
+// form the HQ board stores), or '' for any other host. Pages pass this to
+// /post-image as ?f=… so the proxy can build the Drive URL itself instead of
+// re-fetching the post from Apps Script for every image — see post-image.js.
+export const DRIVE_FILE_ID_RE = /^[A-Za-z0-9_-]{10,100}$/;
+export function driveFileId(cover) {
+  try {
+    const u = new URL(String(cover || ''));
+    if (u.hostname !== 'drive.google.com') return '';
+    const id = u.searchParams.get('id') || '';
+    return DRIVE_FILE_ID_RE.test(id) ? id : '';
+  } catch (e) {
+    return '';
+  }
+}
+
 // Fetch one published post as a plain object, or null. The subrequest to Apps
 // Script is cached at the Cloudflare edge so this is fast on repeat hits and
 // resilient to Apps Script cold starts.
