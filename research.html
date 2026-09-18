@@ -2111,6 +2111,297 @@
       .signals-grid { grid-template-columns: 1fr; }
       .ya-stats { grid-template-columns: 1fr; }
     }
+
+    /* ==========================================================
+       FRONTIER LAYER
+       Hero instrument (data drawn behind the headline), live wire,
+       state ticker, generation stats, signal-to-solution pipeline.
+       ========================================================== */
+
+    /* Lab-paper dot grid, fading toward the headline */
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(10, 10, 10, .14) 1px, transparent 1.2px);
+      background-size: 28px 28px;
+      mask-image: radial-gradient(ellipse at 85% 65%, #000 0%, transparent 65%);
+      -webkit-mask-image: radial-gradient(ellipse at 85% 65%, #000 0%, transparent 65%);
+      opacity: .9;
+    }
+    /* The instrument: ten years of national housing stress, drawn large */
+    .hero-chart {
+      position: absolute;
+      left: 0; right: 0; bottom: var(--ticker-h, 84px);
+      height: 58%;
+      mask-image: linear-gradient(90deg, transparent, rgba(0,0,0,.35) 30%, #000 55%);
+      -webkit-mask-image: linear-gradient(90deg, transparent, rgba(0,0,0,.35) 30%, #000 55%);
+      width: 100%;
+      overflow: visible;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .hero-chart.on { opacity: 1; }
+    .hero-chart .hc-area { fill: url(#hc-fill); }
+    .hero-chart .hc-line {
+      fill: none;
+      stroke: var(--orange);
+      stroke-width: 2.25;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: .8;
+      transition: stroke-dashoffset 2.6s cubic-bezier(.16, 1, .3, 1) .2s;
+    }
+    .hero-chart .hc-grid { stroke: rgba(10, 10, 10, .07); stroke-width: 1; }
+    .hero-chart .hc-tick {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      fill: rgba(10, 10, 10, .38);
+    }
+    .hero-chart .hc-end { fill: var(--orange); }
+    .hero-chart .hc-halo {
+      fill: none;
+      stroke: var(--orange);
+      stroke-width: 1.5;
+      opacity: 0;
+      animation: hc-halo 2.4s ease-out 2.8s infinite;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    @keyframes hc-halo {
+      0% { transform: scale(.4); opacity: .7; }
+      100% { transform: scale(3.2); opacity: 0; }
+    }
+    .hero-chart-label {
+      position: absolute;
+      right: 0;
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      background: var(--paper);
+      padding: .35rem .6rem;
+      border: 1px solid var(--ink-line);
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity .6s ease 2.4s;
+      pointer-events: none;
+    }
+    .hero-chart-label strong { color: var(--ink); font-weight: 600; }
+    .hero-chart-label em { font-style: normal; color: var(--orange-ink); }
+    .hero-chart.on + .hero-chart-label { opacity: 1; }
+
+    /* Live wire: one rotating fact, top right of the hero */
+    .hero-top { gap: 2rem; flex-wrap: wrap; }
+    .hero-wire {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+      max-width: 100%;
+      min-height: 1.6em;
+    }
+    .hero-wire:hover { color: var(--orange-ink); }
+    .hero-wire .signal-dot { width: 6px; height: 6px; }
+    .hero-wire-text {
+      transition: opacity .45s ease, transform .45s cubic-bezier(.16, 1, .3, 1);
+      display: inline-block;
+    }
+    .hero-wire-text.out { opacity: 0; transform: translateY(6px); }
+    .hero-wire-text strong { color: var(--ink); font-weight: 600; }
+    .hero-wire-text em { font-style: normal; color: var(--orange-ink); }
+
+    /* State ticker replaces the static signal strip */
+    .hero-signals { gap: 0; flex-wrap: nowrap; background: var(--paper); }
+    .ticker-label {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      flex-shrink: 0;
+      padding-right: 1.5rem;
+      margin-right: .25rem;
+      border-right: 1px solid var(--ink-line);
+      white-space: nowrap;
+    }
+    .ticker {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      display: flex;
+      mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+    }
+    .ticker-run {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      gap: 2.25rem;
+      padding-left: 2.25rem;
+      animation: rb-scroll 110s linear infinite;
+    }
+    .ticker:hover .ticker-run { animation-play-state: paused; }
+    .ticker-item {
+      display: inline-flex;
+      align-items: baseline;
+      gap: .5rem;
+      white-space: nowrap;
+      color: var(--ink-faint);
+      text-decoration: none;
+      transition: color .2s ease;
+    }
+    .ticker-item:hover { color: var(--ink); }
+    .ticker-item b { color: var(--ink); font-weight: 600; }
+    .ticker-item .st { color: var(--ink-dim); font-weight: 600; }
+    .ticker-item .up { color: var(--orange-ink); }
+    .ticker-item .dn { color: var(--ink-faint); }
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-run { animation: none; }
+      .ticker-run[aria-hidden="true"] { display: none; }
+      .hero-chart .hc-halo { animation: none; }
+    }
+
+    /* A generation, by the numbers */
+    .gen-head {
+      margin-top: 4.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .gen-head .eyebrow { color: var(--paper-faint); }
+    .gen-note {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--paper-faint);
+    }
+    .premise-grid { margin-top: 1.25rem; }
+    .premise-stat-number small {
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      margin-left: .6rem;
+      vertical-align: .9em;
+      color: var(--paper-faint);
+    }
+    .premise-stat-number small.up { color: var(--signal-bad); }
+    .premise-stat-number small.dn { color: var(--signal-good); }
+    .premise-stat-source.src { text-transform: none; letter-spacing: .02em; font-size: .68rem; }
+
+    /* Signal → solution pipeline */
+    .pipeline { margin-bottom: 5.5rem; }
+    .pipeline-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.25rem;
+    }
+    .pipeline-head h2 {
+      font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -.04em;
+      line-height: 1.02;
+      margin-top: 1rem;
+    }
+    .pipeline-head h2 em { font-style: normal; color: var(--orange); }
+    .pipeline-note { font-size: 1rem; color: var(--ink-dim); max-width: 38ch; line-height: 1.5; letter-spacing: -.01em; }
+    .pipeline-track { position: relative; padding-top: 1.75rem; }
+    .pipeline-wire {
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      width: 100%;
+      height: 12px;
+      overflow: visible;
+    }
+    .pipeline-wire line { stroke: var(--ink-line); stroke-width: 1; }
+    .pipeline-wire .pw-pulse { fill: var(--orange); }
+    @media (prefers-reduced-motion: reduce) { .pipeline-wire circle { display: none; } }
+    .pipeline-wire .pw-glow { fill: rgba(242, 90, 39, .25); }
+    .pipeline-steps {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2rem;
+    }
+    .pipeline-step { position: relative; display: flex; flex-direction: column; gap: .6rem; }
+    .pipeline-step::before {
+      content: '';
+      position: absolute;
+      top: calc(-1.75rem - 6px + 1px);
+      left: 0;
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 1.5px solid var(--ink);
+      transition: background .3s ease, transform .3s cubic-bezier(.16, 1, .3, 1);
+    }
+    .pipeline-step.lit::before { background: var(--orange); border-color: var(--orange); transform: scale(1.25); }
+    .pipeline-num {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .pipeline-step h3 { font-size: 1.2rem; font-weight: 900; letter-spacing: -.025em; transition: color .3s ease; }
+    .pipeline-step.lit h3 { color: var(--orange-ink); }
+    .pipeline-step p { font-size: .92rem; line-height: 1.5; color: var(--ink-dim); letter-spacing: -.005em; }
+    .pipeline-step a { color: inherit; text-decoration: none; }
+    .pipeline-step h3 a:hover { color: var(--orange-ink); }
+
+    /* Org stats ride the closing band */
+    .cta-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--paper-line);
+      margin-top: 1rem;
+    }
+    .cta-stat { padding: 2rem 2rem 0 0; text-decoration: none; color: inherit; }
+    .cta-stat + .cta-stat { padding-left: 2rem; border-left: 1px solid var(--paper-line); }
+    .cta-stat-number { font-size: clamp(2rem, 3.2vw, 2.8rem); font-weight: 900; letter-spacing: -.04em; line-height: 1; font-variant-numeric: tabular-nums; }
+    .cta-stat-number em { font-style: normal; color: var(--orange); font-size: .55em; vertical-align: .35em; }
+    .cta-stat-label {
+      margin-top: .7rem;
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--paper-faint);
+    }
+    a.cta-stat:hover .cta-stat-label { color: var(--orange); }
+
+    @media (max-width: 968px) {
+      .hero-chart { height: 42%; bottom: 0; mask-image: none; -webkit-mask-image: none; }
+      .hero-chart.on { opacity: .42; }          /* texture, not a figure, behind stacked copy */
+      .hero-chart .hc-tick { display: none; }
+      .hero-chart-label { display: none; }
+      .hero-wire { font-size: .66rem; }
+      .hero-signals { flex-wrap: wrap; gap: .75rem; }
+      .ticker-label { border-right: none; padding-right: 0; }
+      .ticker { width: 100%; flex: none; }
+      .pipeline { margin-bottom: 4rem; }
+      .pipeline-track { padding-top: 0; padding-left: 1.5rem; border-left: 1px solid var(--ink-line); }
+      .pipeline-wire { display: none; }
+      .pipeline-steps { grid-template-columns: 1fr; gap: 1.75rem; }
+      .pipeline-step::before { top: .25rem; left: calc(-1.5rem - 6px); }
+      .cta-stats { grid-template-columns: repeat(2, 1fr); }
+      .cta-stat:nth-child(3) { padding-left: 0; border-left: none; }
+    }
   </style>
 </head>
 
@@ -2233,11 +2524,18 @@
 
   <!-- ======================= HERO ======================= -->
   <section class="hero">
-    <div class="hero-bg"></div>
+    <div class="hero-bg">
+      <svg class="hero-chart" id="hero-chart" preserveAspectRatio="none" aria-hidden="true" focusable="false"></svg>
+      <div class="hero-chart-label" id="hero-chart-label" aria-hidden="true"></div>
+    </div>
     <div class="hero-container">
 
       <div class="hero-top reveal r1">
         <div class="eyebrow">FinMango Research · Young adult financial health</div>
+        <a class="hero-wire" id="hero-wire" href="#young-adults" hidden>
+          <span class="signal-dot" aria-hidden="true"></span>
+          <span class="hero-wire-text" id="hero-wire-text"></span>
+        </a>
       </div>
 
       <h1 class="reveal r1">What if the affordability crisis had <em>a forecast<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em>?</h1>
@@ -2258,13 +2556,14 @@
     </div>
 
     <div class="hero-signals reveal r3" role="status" aria-label="Live research signals">
-      <span class="signal"><span class="signal-dot" aria-hidden="true"></span> Live · <span id="hs-asof">data as of today</span></span>
-      <span class="sep">·</span>
-      <span class="signal">50 states + DC</span>
-      <span class="sep">·</span>
-      <span class="signal" id="hs-housing"><a href="#signals">Housing stress <strong>—</strong></a></span>
-      <span class="sep">·</span>
-      <span class="signal" id="hs-anxiety"><a href="#signals">Financial anxiety <strong>—</strong></a></span>
+      <span class="ticker-label"><span class="signal-dot" aria-hidden="true"></span> Live · <span id="hs-asof">data as of today</span></span>
+      <div class="ticker" id="ticker">
+        <div class="ticker-run" id="ticker-run">
+          <span class="ticker-item" id="hs-housing">Housing stress <b>—</b></span>
+          <span class="ticker-item" id="hs-anxiety">Financial anxiety <b>—</b></span>
+          <span class="ticker-item">50 states + DC</span>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -2317,24 +2616,27 @@
       </div>
       <p class="signals-note rise" data-delay="3">Financial Health Barometer composite indices, 0–200 scale, built from BLS, Census, HUD, FRED and Harvard JCHS inputs. Sparklines show the monthly national reading since 2016. Click a signal to see it on the map below.</p>
 
-      <div class="premise-grid rise" data-delay="2">
-        <a href="https://github.com/finmango" target="_blank" rel="noopener noreferrer" class="premise-stat">
-          <div class="premise-stat-number"><span data-count="30">0</span><em>+</em></div>
-          <div class="premise-stat-label">Open-source repositories</div>
-          <div class="premise-stat-source">GitHub ↗</div>
-        </a>
+      <div class="gen-head rise" data-delay="2">
+        <span class="eyebrow">A generation, by the numbers</span>
+        <span class="gen-note">Ages 18–34 · U.S.</span>
+      </div>
+      <div class="premise-grid rise" data-delay="2" id="gen-grid">
+        <!-- Static fallback; JS refreshes from YOUNG_ADULT_DATA.national -->
         <div class="premise-stat">
-          <div class="premise-stat-number"><span data-count="190">0</span><em>+</em></div>
-          <div class="premise-stat-label">Countries covered</div>
+          <div class="premise-stat-number">$<span data-count="39075">0</span></div>
+          <div class="premise-stat-label">Avg. student debt per borrower</div>
         </div>
-        <a href="research-publications.html" class="premise-stat">
-          <div class="premise-stat-number"><span data-count="7">0</span></div>
-          <div class="premise-stat-label">Published &amp; working papers</div>
-          <div class="premise-stat-source">Publications →</div>
-        </a>
         <div class="premise-stat">
-          <div class="premise-stat-number"><span data-count="20">0</span><em>+</em></div>
-          <div class="premise-stat-label">Free tools built</div>
+          <div class="premise-stat-number"><span data-count="58.6" data-decimals="1">0</span><em>%</em></div>
+          <div class="premise-stat-label">Young renters who are cost-burdened</div>
+        </div>
+        <div class="premise-stat">
+          <div class="premise-stat-number"><span data-count="45.2" data-decimals="1">0</span><em>%</em></div>
+          <div class="premise-stat-label">Debt-to-income ratio</div>
+        </div>
+        <div class="premise-stat">
+          <div class="premise-stat-number">$<span data-count="55000">0</span></div>
+          <div class="premise-stat-label">Median income, ages 25–34</div>
         </div>
       </div>
     </div>
@@ -2703,6 +3005,29 @@
        Trends data methodology all live on approach.html. -->
   <section class="handoff-section" id="approach">
     <div class="handoff-container">
+      <div class="pipeline rise" id="pipeline" aria-label="How a signal becomes a solution">
+        <div class="pipeline-head">
+          <div>
+            <span class="eyebrow">From signal to solution</span>
+            <h2>The whole loop, <em>in house.</em></h2>
+          </div>
+          <p class="pipeline-note">Most research stops at the paper. Ours doesn't: the same team that spots the signal builds the tool and carries the evidence to the people who can act on it.</p>
+        </div>
+        <div class="pipeline-track">
+          <svg class="pipeline-wire" viewBox="0 0 1000 12" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="0" y1="6" x2="1000" y2="6" />
+            <circle class="pw-glow" r="9" cy="6" cx="0" />
+            <circle class="pw-pulse" r="4" cy="6" cx="0" />
+          </svg>
+          <ol class="pipeline-steps" id="pipeline-steps">
+            <li class="pipeline-step"><span class="pipeline-num">01</span><h3>Signal</h3><p>Search behavior, rents, wages and prices across all 50 states, refreshed as new data lands.</p></li>
+            <li class="pipeline-step"><span class="pipeline-num">02</span><h3><a href="barometer.html">Measure</a></h3><p>The Barometer turns those signals into a 0–200 stress index for every state, and a young-adult index on top.</p></li>
+            <li class="pipeline-step"><span class="pipeline-num">03</span><h3><a href="research-reports.html">Explain</a></h3><p>Plain-language briefs and peer-reviewed papers. Every method and every limitation published.</p></li>
+            <li class="pipeline-step"><span class="pipeline-num">04</span><h3><a href="resources.html">Build</a></h3><p>Free tools young adults actually use: loan simulators, rent vs. buy, the medical maze, a paycheck calculator.</p></li>
+            <li class="pipeline-step"><span class="pipeline-num">05</span><h3><a href="approach.html">Change</a></h3><p>Evidence in front of the people who set policy, from WHO and the World Bank to city halls and campuses.</p></li>
+          </ol>
+        </div>
+      </div>
       <div class="handoff rise">
         <div class="handoff-lead">
           <span class="eyebrow">07 · Approach &amp; methodology</span>
@@ -2741,6 +3066,24 @@
             Visit the GitHub repository
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
+        </div>
+      </div>
+      <div class="cta-stats rise">
+        <a href="https://github.com/finmango" target="_blank" rel="noopener noreferrer" class="cta-stat">
+          <div class="cta-stat-number"><span data-count="30">0</span><em>+</em></div>
+          <div class="cta-stat-label">Open-source repositories</div>
+        </a>
+        <div class="cta-stat">
+          <div class="cta-stat-number"><span data-count="190">0</span><em>+</em></div>
+          <div class="cta-stat-label">Countries covered</div>
+        </div>
+        <a href="research-publications.html" class="cta-stat">
+          <div class="cta-stat-number"><span data-count="7">0</span></div>
+          <div class="cta-stat-label">Published &amp; working papers</div>
+        </a>
+        <div class="cta-stat">
+          <div class="cta-stat-number"><span data-count="20">0</span><em>+</em></div>
+          <div class="cta-stat-label">Free tools built</div>
         </div>
       </div>
     </div>
@@ -2941,6 +3284,7 @@
           affordability: 'Affordability'
         };
         var ORDER = ['housing_stress', 'financial_anxiety', 'affordability', 'food_insecurity'];
+        var series = (D.timeseries && D.timeseries.national) || {};
 
         function deltaText(ind) {
           if (ind.change === null || ind.change === undefined) return { text: 'n/a', cls: '', title: 'No independent change series for this index' };
@@ -2955,15 +3299,86 @@
           var ind = D.national[pair[1]];
           if (!el || !ind || ind.value == null) return;
           var d = deltaText(ind);
-          var a = el.querySelector('a') || el;
-          a.innerHTML = LABELS[pair[1]] + ' <strong>' + ind.value.toFixed(1) + '</strong>' +
-            (d.cls ? ' <span class="delta ' + d.cls + '">' + d.text + '</span>' : '');
+          el.innerHTML = LABELS[pair[1]] + ' <b>' + ind.value.toFixed(1) + '</b>' +
+            (d.cls ? ' <span class="' + (d.cls === 'up' ? 'up' : 'dn') + '">' + d.text + '</span>' : '');
         });
+
+        // State ticker: every state's housing-stress reading, worst first.
+        var run = document.getElementById('ticker-run');
+        if (run && D.states) {
+          var items = Object.keys(D.states).map(function (k) { return D.states[k]; })
+            .filter(function (s) { return s.housing_stress && s.housing_stress.value != null; })
+            .sort(function (a, b) { return b.housing_stress.value - a.housing_stress.value; })
+            .map(function (s) {
+              var c = s.housing_stress.change;
+              var chg = (c == null || Math.abs(c) < 0.05) ? '' : '<span class="' + (c > 0 ? 'up' : 'dn') + '">' + (c > 0 ? '▲' : '▼') + Math.abs(c).toFixed(1) + '</span>';
+              return '<a class="ticker-item" href="barometer.html" title="' + s.name + ' · housing stress"><span class="st">' + s.abbr + '</span> <b>' + Math.round(s.housing_stress.value) + '</b>' + chg + '</a>';
+            }).join('');
+          run.innerHTML += '<span class="ticker-item"><span class="st">Housing stress by state</span></span>' + items;
+          var copy = run.cloneNode(true);
+          copy.id = '';
+          copy.setAttribute('aria-hidden', 'true');
+          run.parentNode.appendChild(copy);
+        }
+
+        // Hero instrument: the national housing-stress series, drawn large.
+        (function heroChart() {
+          var svg = document.getElementById('hero-chart');
+          var label = document.getElementById('hero-chart-label');
+          var pts = series.housing_stress;
+          if (!svg || !pts || pts.length < 2) return;
+          var W = 1000, H = 400, PADR = 40, PADT = 30, PADB = 28;
+          var vals = pts.map(function (p) { return p.value; });
+          var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals), span = (max - min) || 1;
+          var xs = function (i) { return (i / (vals.length - 1)) * (W - PADR); };
+          var ys = function (v) { return PADT + (1 - (v - min) / span) * (H - PADT - PADB); };
+          var coords = vals.map(function (v, i) { return xs(i).toFixed(1) + ',' + ys(v).toFixed(1); });
+          var line = 'M' + coords.join('L');
+          var area = line + 'L' + xs(vals.length - 1).toFixed(1) + ',' + H + 'L0,' + H + 'Z';
+          var lastX = xs(vals.length - 1), lastY = ys(vals[vals.length - 1]);
+          var ticks = '';
+          pts.forEach(function (p, i) {
+            if (p.date.slice(5, 7) === '01' && (+p.date.slice(0, 4)) % 2 === 0) {
+              ticks += '<line class="hc-grid" x1="' + xs(i).toFixed(1) + '" y1="' + PADT + '" x2="' + xs(i).toFixed(1) + '" y2="' + H + '"/>' +
+                '<text class="hc-tick" x="' + (xs(i) + 6).toFixed(1) + '" y="' + (H - 8) + '">' + p.date.slice(0, 4) + '</text>';
+            }
+          });
+          svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+          svg.innerHTML = '<defs><linearGradient id="hc-fill" x1="0" y1="0" x2="0" y2="1">' +
+            '<stop offset="0" stop-color="#F25A27" stop-opacity=".16"/><stop offset="1" stop-color="#F25A27" stop-opacity="0"/></linearGradient></defs>' +
+            ticks + '<path class="hc-area" d="' + area + '"/><path class="hc-line" d="' + line + '"/>' +
+            '<circle class="hc-halo" cx="' + lastX.toFixed(1) + '" cy="' + lastY.toFixed(1) + '" r="6"/>' +
+            '<circle class="hc-end" cx="' + lastX.toFixed(1) + '" cy="' + lastY.toFixed(1) + '" r="5"/>';
+          var path = svg.querySelector('.hc-line');
+          if (!reduceMotion) {
+            var len = path.getTotalLength();
+            path.style.strokeDasharray = len;
+            path.style.strokeDashoffset = len;
+          }
+          var national = D.national.housing_stress;
+          if (label && national) {
+            label.innerHTML = 'Housing stress · <strong>' + national.value.toFixed(1) + '</strong>' +
+              (national.change != null ? ' <em>' + (national.change > 0 ? '▲ +' : '▼ ') + national.change.toFixed(1) + '</em>' : '') +
+              ' · ' + pts[0].date.slice(0, 4) + '→now';
+            // Sit the label just above the live endpoint (svg is stretched to the hero, so map y by ratio)
+            var place = function () {
+              var r = svg.getBoundingClientRect();
+              var host = svg.parentNode.getBoundingClientRect();   // SVG has no offsetTop
+              label.style.top = ((r.top - host.top) + (lastY / H) * r.height - label.offsetHeight - 14) + 'px';
+              label.style.right = Math.max(0, (PADR / W) * r.width - label.offsetWidth / 2) + 'px';
+            };
+            place();
+            window.addEventListener('resize', place, { passive: true });
+          }
+          requestAnimationFrame(function () {
+            svg.classList.add('on');
+            requestAnimationFrame(function () { path.style.strokeDashoffset = '0'; });
+          });
+        })();
 
         // Cards
         var grid = document.getElementById('signals-grid');
         if (!grid) return;
-        var series = (D.timeseries && D.timeseries.national) || {};
         var W = 240, H = 58, PAD = 3;
 
         function sparkline(pts) {
@@ -3203,6 +3618,81 @@
         var initial = m && Y.states['US-' + m[1].toUpperCase()] ? 'US-' + m[1].toUpperCase()
           : Y.states['US-OH'] ? 'US-OH' : byName[0].key;
         render(initial, false);
+        window.__fmYA = { render: render, states: states, byYaai: byYaai };
+      })();
+
+      /* ---------- 3b. Hero live wire: one rotating fact per state ---------- */
+      (function heroWire() {
+        var api = window.__fmYA;
+        var wire = document.getElementById('hero-wire');
+        var text = document.getElementById('hero-wire-text');
+        if (!api || !wire || !text) return;
+        var pool = api.byYaai.slice().reverse();          // least affordable first
+        var i = 0, cur = null;
+        function fact(s) {
+          var share = Math.round((s.average_rent.value * 12) / s.median_income.value * 100);
+          return 'In <strong>' + s.name + '</strong>, rent takes <em>' + share + '%</em> of a young adult\'s paycheck';
+        }
+        function show() {
+          cur = pool[i % pool.length]; i++;
+          text.classList.add('out');
+          setTimeout(function () { text.innerHTML = fact(cur); text.classList.remove('out'); }, reduceMotion ? 0 : 450);
+        }
+        wire.hidden = false;
+        text.innerHTML = fact(pool[0]); cur = pool[0]; i = 1;
+        if (!reduceMotion) setInterval(show, 4200);
+        wire.addEventListener('click', function () { if (cur) api.render(cur.key, true); });
+      })();
+
+      /* ---------- 3c. Generation stats from the national young-adult record ---------- */
+      (function genStats() {
+        var Y = (typeof YOUNG_ADULT_DATA !== 'undefined') ? YOUNG_ADULT_DATA : window.YOUNG_ADULT_DATA;
+        var grid = document.getElementById('gen-grid');
+        if (!Y || !Y.national || !grid) return;
+        var N = Y.national;
+        var rows = [
+          ['student_debt', 'Avg. student debt per borrower', '$', 0],
+          ['rent_burden', 'Young renters who are cost-burdened', '%', 1],
+          ['debt_to_income', 'Debt-to-income ratio', '%', 1],
+          ['median_income', 'Median income, ages 25–34', '$', 0]
+        ].filter(function (r) { return N[r[0]] && N[r[0]].value != null; });
+        if (rows.length < 4) return;
+        grid.innerHTML = rows.map(function (r) {
+          var ind = N[r[0]];
+          var chg = ind.change != null && Math.abs(ind.change) >= 0.05
+            ? '<small class="' + (ind.change > 0 ? 'up' : 'dn') + '" title="Change vs. prior year">' + (ind.change > 0 ? '▲' : '▼') + Math.abs(ind.change).toFixed(1) + (r[2] === '%' ? ' pts' : '%') + '</small>' : '';
+          var num = r[2] === '$'
+            ? '$<span data-count="' + ind.value + '">0</span>' + chg
+            : '<span data-count="' + ind.value + '" data-decimals="' + r[3] + '">0</span><em>%</em>' + chg;
+          return '<div class="premise-stat"><div class="premise-stat-number">' + num + '</div>' +
+            '<div class="premise-stat-label">' + r[1] + '</div>' +
+            (ind.source_note ? '<div class="premise-stat-source src">' + ind.source_note + '</div>' : '') + '</div>';
+        }).join('');
+        // the grid may already be in view; (re)arm its count-ups
+        if (grid.classList.contains('in')) grid.querySelectorAll('[data-count]').forEach(countUp);
+      })();
+
+      /* ---------- 3d. Pipeline: light each step as the pulse passes ---------- */
+      (function pipeline() {
+        var steps = document.querySelectorAll('#pipeline .pipeline-step');
+        var pulses = document.querySelectorAll('#pipeline .pw-glow, #pipeline .pw-pulse');
+        if (!steps.length) return;
+        if (reduceMotion) { steps[0].classList.add('lit'); return; }
+        var t0 = null, period = 9000, n = steps.length;
+        function tick(ts) {
+          if (t0 === null) t0 = ts;
+          var p = ((ts - t0) % period) / period;
+          // the pulse travels marker to marker; a step lights as the pulse reaches it
+          var x = p * 1000 * (n - 1) / n;
+          pulses.forEach(function (c) { c.setAttribute('cx', x.toFixed(1)); });
+          var idx = Math.min(n - 1, Math.floor(p * n));
+          steps.forEach(function (s, i) { s.classList.toggle('lit', i === idx); });
+          requestAnimationFrame(tick);
+        }
+        var io2 = ('IntersectionObserver' in window) ? new IntersectionObserver(function (e) {
+          if (e[0].isIntersecting) { requestAnimationFrame(tick); io2.disconnect(); }
+        }) : null;
+        if (io2) io2.observe(document.getElementById('pipeline')); else requestAnimationFrame(tick);
       })();
 
       /* ---------- 4. Expandable open questions ---------- */
