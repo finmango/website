@@ -35,7 +35,7 @@
     <meta name="twitter:description"
         content="Track financial anxiety, food insecurity, housing stress, and affordability across all 50 US states and DC, from official government data.">
     <meta name="twitter:image" content="https://finmango.org/og-barometer.png">
-    <meta name="twitter:site" content="@finaboromanga">
+    <meta name="twitter:site" content="@finmango">
 
     <!-- Structured Data / JSON-LD -->
     <script type="application/ld+json">
@@ -66,7 +66,7 @@
         }
       },
       "datePublished": "2025-12-08",
-      "dateModified": "2025-12-08"
+      "dateModified": "2026-09-18"
     }
     </script>
 
@@ -373,13 +373,16 @@
            STALE DATA BANNER — JS toggles display only
            ---------------------------------------------------------- */
         #stale-data-banner {
-            background: var(--ink);
+            background: rgba(248, 113, 113, .08);
             color: var(--signal-bad);
-            border-bottom: 1px solid rgba(248, 113, 113, .4);
-            text-align: center;
-            padding: .75rem 1rem;
+            border: 1px solid rgba(248, 113, 113, .4);
+            border-left: 3px solid var(--signal-bad);
+            text-align: left;
+            padding: .85rem 1.1rem;
+            margin-bottom: 2rem;
             font-weight: 600;
             font-size: .9rem;
+            line-height: 1.5;
             letter-spacing: -.005em;
         }
 
@@ -656,6 +659,14 @@
         /* If Chart.js fails to load, the bare canvas keeps its intrinsic
            300px width — clamp it so it can't overflow narrow screens. */
         .chart-container canvas { max-width: 100%; }
+        .chart-caption {
+            margin-top: .9rem;
+            font-size: .8rem;
+            line-height: 1.6;
+            color: var(--paper-faint);
+            max-width: 76ch;
+        }
+        .chart-caption strong { color: var(--paper-dim); font-weight: 600; }
 
         /* ----------------------------------------------------------
            RANKINGS — ruled table, mono readouts
@@ -700,7 +711,16 @@
             transition: color .2s ease;
             white-space: nowrap;
         }
-        .rankings-table th:hover { color: var(--orange); }
+        .rankings-table th[data-sort]:hover { color: var(--orange); }
+        .rankings-table th:not([data-sort]) { cursor: default; }
+        .rankings-table th[aria-sort="ascending"],
+        .rankings-table th[aria-sort="descending"] { color: var(--paper); }
+        .rankings-table th[aria-sort="ascending"] .sort-arrow,
+        .rankings-table th[aria-sort="descending"] .sort-arrow { color: var(--orange); }
+        .rankings-table tbody tr { cursor: pointer; }
+        .rankings-table tbody tr:focus-visible { outline: 2px solid var(--orange-ink); outline-offset: -2px; }
+        .rankings-table td.value-cell.sorted-col .value-text { color: var(--paper); }
+        .rankings-empty td { text-align: center; color: var(--paper-faint); padding: 1.5rem; }
         .rankings-table td { font-size: .92rem; }
         .rankings-table td strong { font-weight: 600; letter-spacing: -.01em; }
         .rankings-table tbody tr { transition: background .2s ease; }
@@ -1728,11 +1748,13 @@
   </div>
   <!-- /chrome:nav -->
 
-    <!-- Staleness Banner (shown by JS when data is >72h old) -->
-    <div id="stale-data-banner" style="display:none; position:sticky; top:0; z-index:999;"></div>
-
     <!-- Main Dashboard -->
     <main class="dashboard-main">
+
+        <!-- Staleness banner: shown by JS when the pipeline has stalled or the
+             underlying measurements have not refreshed. Lives inside <main> so
+             it sits below the fixed nav instead of behind it. -->
+        <div id="stale-data-banner" role="alert" style="display:none;"></div>
 
         <!-- Header + Indicator Cards -->
         <div class="dashboard-inline-header">
@@ -1747,25 +1769,25 @@
         </div>
 
         <section class="indicator-cards" id="indicator-cards">
-            <div class="indicator-card active" data-indicator="financial_anxiety">
+            <div class="indicator-card active" data-indicator="financial_anxiety" role="button" tabindex="0" aria-pressed="true" aria-label="Show Financial Anxiety on the map and rankings">
                 <div class="indicator-label">Financial Anxiety</div>
                 <div class="indicator-value" id="val-financial_anxiety">--</div>
                 <div class="indicator-change" id="change-financial_anxiety">--</div>
                 <div class="indicator-sparkline" id="spark-financial_anxiety"></div>
             </div>
-            <div class="indicator-card" data-indicator="food_insecurity">
+            <div class="indicator-card" data-indicator="food_insecurity" role="button" tabindex="0" aria-pressed="false" aria-label="Show Food Insecurity on the map and rankings">
                 <div class="indicator-label">Food Insecurity</div>
                 <div class="indicator-value" id="val-food_insecurity">--</div>
                 <div class="indicator-change" id="change-food_insecurity">--</div>
                 <div class="indicator-sparkline" id="spark-food_insecurity"></div>
             </div>
-            <div class="indicator-card" data-indicator="housing_stress">
+            <div class="indicator-card" data-indicator="housing_stress" role="button" tabindex="0" aria-pressed="false" aria-label="Show Housing Stress on the map and rankings">
                 <div class="indicator-label">Housing Stress</div>
                 <div class="indicator-value" id="val-housing_stress">--</div>
                 <div class="indicator-change" id="change-housing_stress">--</div>
                 <div class="indicator-sparkline" id="spark-housing_stress"></div>
             </div>
-            <div class="indicator-card" data-indicator="affordability">
+            <div class="indicator-card" data-indicator="affordability" role="button" tabindex="0" aria-pressed="false" aria-label="Show Affordability on the map and rankings">
                 <div class="indicator-label">Affordability</div>
                 <div class="indicator-value" id="val-affordability">--</div>
                 <div class="indicator-change" id="change-affordability">--</div>
@@ -1777,7 +1799,7 @@
         <section class="map-section">
             <div class="map-container">
                 <div class="map-wrapper">
-                    <svg id="us-map" viewBox="0 0 959 593" preserveAspectRatio="xMidYMid meet"></svg>
+                    <svg id="us-map" viewBox="0 0 959 593" preserveAspectRatio="xMidYMid meet" role="group" aria-label="Choropleth map of the United States. Each state is a button; activate it to open that state's readings."></svg>
                 </div>
                 <div class="state-tooltip" id="state-tooltip">
                     <div class="tooltip-state"></div>
@@ -1795,7 +1817,7 @@
                     <div class="legend-color legend-elevated"></div> Elevated (120-150)
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color legend-high"></div> High (&gt;150)
+                    <div class="legend-color legend-high"></div> High (150+)
                 </div>
             </div>
         </section>
@@ -1821,8 +1843,12 @@
                 </div>
             </div>
             <div class="chart-container">
-                <canvas id="trend-chart"></canvas>
+                <canvas id="trend-chart" role="img" aria-label="Line chart of the selected indicator over the selected period"></canvas>
             </div>
+            <p class="chart-caption" id="chart-caption">Only the most recent point is an actual index
+                value. Earlier points trace Google Health Trends search interest for one representative
+                term, rescaled to today&rsquo;s index and smoothed over three months &mdash; see
+                &ldquo;Trend Chart&rdquo; in the methodology.</p>
         </section>
 
         <!-- State Rankings -->
@@ -1830,26 +1856,26 @@
             <div class="section-header">
                 <h2 class="section-title">State rankings</h2>
                 <div class="rankings-search">
-                    <input type="text" id="rankings-search" placeholder="Search states...">
+                    <input type="text" id="rankings-search" placeholder="Search states..." aria-label="Search states">
                 </div>
             </div>
             <div class="rankings-table-container">
                 <table class="rankings-table" id="rankings-table">
                     <thead>
                         <tr>
-                            <th>Rank</th>
-                            <th>State</th>
-                            <th data-sort="financial_anxiety">Anxiety ↕</th>
-                            <th data-sort="food_insecurity">Food ↕</th>
-                            <th data-sort="housing_stress">Housing ↕</th>
-                            <th data-sort="affordability">Afford ↕</th>
+                            <th scope="col">Rank</th>
+                            <th scope="col" data-sort="name" aria-sort="none" title="Sort by state name">State <span class="sort-arrow" aria-hidden="true">↕</span></th>
+                            <th scope="col" data-sort="financial_anxiety" aria-sort="descending" title="Sort by Financial Anxiety">Anxiety <span class="sort-arrow" aria-hidden="true">↕</span></th>
+                            <th scope="col" data-sort="food_insecurity" aria-sort="none" title="Sort by Food Insecurity">Food <span class="sort-arrow" aria-hidden="true">↕</span></th>
+                            <th scope="col" data-sort="housing_stress" aria-sort="none" title="Sort by Housing Stress">Housing <span class="sort-arrow" aria-hidden="true">↕</span></th>
+                            <th scope="col" data-sort="affordability" aria-sort="none" title="Sort by Affordability">Afford <span class="sort-arrow" aria-hidden="true">↕</span></th>
                         </tr>
                     </thead>
                     <tbody id="rankings-body"></tbody>
                 </table>
                 <div class="table-pagination">
                     <div class="pagination-info">Showing <span id="page-start">1</span>-<span id="page-end">10</span> of
-                        51</div>
+                        <span id="page-total">51</span></div>
                     <div class="pagination-buttons">
                         <button class="pagination-btn" id="prev-btn" disabled>← Prev</button>
                         <button class="pagination-btn" id="next-btn">Next →</button>
@@ -1905,6 +1931,7 @@
                             hand-assigned tier estimate. Held readings expire once a real release has been
                             missed, and nothing is ever replaced with a fabricated value.</p>
                         <div id="provenance-table"></div>
+                        <div id="provenance-terms"></div>
                         <p class="provenance-note" id="provenance-trends"></p>
                         <p class="provenance-note provenance-warn" id="provenance-partial" style="display:none"></p>
                     </div>
@@ -2023,13 +2050,14 @@
 
                         <p>Their effect is large enough that we publish it plainly. If the multipliers were removed
                             and the indices left purely data-driven:</p>
-                        <ul>
-                            <li><strong>42 of 51</strong> Financial Anxiety ranks would change.</li>
-                            <li><strong>Mississippi would move 24 places.</strong></li>
-                            <li>The multiplier range spans about <strong>60 index points</strong> on the 120 base
-                                &mdash; against roughly <strong>72 points</strong> for the entire national spread of
+                        <ul id="multiplier-effect">
+                            <li><strong><span data-stat="ranks-changed">42</span> of 51</strong> Financial Anxiety ranks would change.</li>
+                            <li><strong><span data-stat="biggest-mover">Mississippi would move 27 places</span>.</strong></li>
+                            <li>The multiplier range spans about <strong><span data-stat="mult-span">60</span> index points</strong> on the 120 base
+                                &mdash; against roughly <strong><span data-stat="unemp-span">70</span> points</strong> for the entire national spread of
                                 actual state unemployment rates.</li>
                         </ul>
+                        <p class="provenance-note" id="multiplier-effect-note">These three figures are recomputed in your browser from the published data file each time the page loads, so they describe today&rsquo;s reading rather than the day this text was written.</p>
                         <p>Put plainly: roughly half the variation you see between states on the map comes from this
                             table rather than from the government data. Treat state-to-state gaps as indicative, not as
                             measured differences. Every state&rsquo;s multiplier is published in
@@ -2047,7 +2075,7 @@
                             never fire; the number of states actually scored from a tier in the current
                             reading is published in <code>meta.tier_estimates.states_scored</code>, and any
                             affected state is labelled <code>tier_estimate</code> in its metrics. The full
-                            tables are published alongside them.</p>
+                            tables are published alongside them. <span data-stat="tier-count">In the current reading, no state is scored from a tier.</span></p>
 
                         <p><strong>Index bounds.</strong> Each index is clamped to a fixed range (Financial Anxiety,
                             Housing Stress and Affordability to 80&ndash;200; Food Insecurity to 55&ndash;160). A state
@@ -2082,7 +2110,7 @@
                             <li><strong>&lt; 90 (Green):</strong> Low Stress / Stable</li>
                             <li><strong>90&ndash;120 (Yellow):</strong> Moderate Stress</li>
                             <li><strong>120&ndash;150 (Orange):</strong> Elevated Stress &mdash; Warning Signs</li>
-                            <li><strong>&gt; 150 (Red):</strong> Crisis Level &mdash; Immediate Attention Needed</li>
+                            <li><strong>150 and above (Red):</strong> Crisis Level &mdash; Immediate Attention Needed</li>
                         </ul>
                         <p><strong>These bands are not comparable across indicators.</strong> The four indices are
                             built from different inputs on different base values (120, 85 and 100) and are clamped to
@@ -2090,10 +2118,13 @@
                             not represent the same severity of hardship, and the gap between two indicators for one
                             state is not meaningful. Compare a single indicator across states, or across time &mdash;
                             not across indicators.</p>
+                        <p><strong>The national figure is an unweighted mean of the 51 state indices.</strong> Every
+                            state counts equally, so it is a summary of the map rather than a population-weighted
+                            national statistic. California and Wyoming move it by the same amount.</p>
                         <p><strong>Affordability is not an independent measurement.</strong> It is defined as 60% of
                             Housing Stress plus 40% of Food Insecurity, so it restates the two indices beside it rather
                             than adding new information &mdash; in the current reading it tracks Housing Stress at
-                            r&nbsp;=&nbsp;0.90 by construction. Do not read it as a fourth, corroborating signal.</p>
+                            r&nbsp;=&nbsp;<span data-stat="afford-r">0.90</span> by construction. Do not read it as a fourth, corroborating signal.</p>
                     </div>
                 </div>
             </div>
@@ -2188,7 +2219,7 @@
                                 recomputed.</strong> The last real measurement is carried forward and labelled
                                 in &ldquo;What today&rsquo;s reading actually used&rdquo;. Dropping a term from a
                                 composite would be worse than holding it: the house-price term alone is worth
-                                about 29 index points, so a state that lost it would show a phantom improvement.
+                                about <span data-stat="hpi-term">28</span> index points on average in the current reading, so a state that lost it would show a phantom improvement.
                                 Carried values expire once a real release has been missed; past that the index is
                                 flagged <code>partial</code> and a warning names the affected states.</li>
                             <li><strong>Two housing components have hand-assigned fallback bands.</strong> Where
@@ -2201,6 +2232,14 @@
                                 consecutive days in August 2026. The reading now reports the real reason, and
                                 the freshness badge reflects how old the measurements are rather than how
                                 recently the file was written.</li>
+                            <li><strong>The national number is a mean of states, not of people.</strong> It weights
+                                Wyoming and California equally, so it summarises the map rather than the country&rsquo;s
+                                population.</li>
+                            <li><strong>The search-trends boost depends on a restricted API that is often
+                                unavailable.</strong> When it cannot be reached, the boost is withheld for every state and
+                                the indices are built from the government series alone. The chart&rsquo;s historical
+                                shape then repeats the last published search history, re-pinned to today&rsquo;s value.
+                                &ldquo;What today&rsquo;s reading actually used&rdquo; reports the current status.</li>
                             <li><strong>The index is heuristic.</strong> Its base values, weights and multipliers were
                                 chosen for readability, not derived from a model of household finances. It has no
                                 error bars. For econometric work, use the raw underlying metrics in the CSV export

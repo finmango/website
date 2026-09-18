@@ -35,6 +35,11 @@ function resolveVersion() {
     return new Date().toISOString().slice(0, 10).replace(/-/g, '');
 }
 
+// 20260918 -> 2026-09-18
+function isoDate(version) {
+    return `${version.slice(0, 4)}-${version.slice(4, 6)}-${version.slice(6, 8)}`;
+}
+
 function main() {
     const version = resolveVersion();
     console.log(`🔖 Stamping dashboard-data.js references with ?v=${version}`);
@@ -47,10 +52,20 @@ function main() {
         }
 
         const source = fs.readFileSync(filePath, 'utf8');
-        const updated = source.replace(
+        let updated = source.replace(
             /src="((?:\.\.\/)?data\/dashboard-data\.js)(?:\?v=[^"]*)?"/g,
             (match, file) => `src="${file}?v=${version}"`
         );
+
+        // The Barometer's JSON-LD advertises a dateModified to search engines.
+        // It describes the dataset the page shows, so keep it on the data date
+        // rather than the day the markup was last hand-edited.
+        if (page === 'barometer.html') {
+            updated = updated.replace(
+                /("dateModified":\s*")\d{4}-\d{2}-\d{2}(")/,
+                `$1${isoDate(version)}$2`
+            );
+        }
 
         if (updated === source) {
             console.log(`  = ${page} (already current)`);
