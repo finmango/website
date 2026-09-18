@@ -20,16 +20,16 @@
     // DASHBOARD_DATA uses 'US-XX' keys.
 
     // Helpers
-    // Severity ramp, PAPER variant. The research page draws this map on the
-    // page ground, so it takes the same paper set as the barometer share card
-    // (see getColorForValueOnPaper in dashboard-app.js): the bands darken
-    // monotonically with severity and stay 2.9:1+ against #FAFAF7. Keep in
-    // sync with .map-legend-color in research.html.
+    // Severity ramp. Same four bands as barometer.html (getColorForValue in
+    // scripts/dashboard-app.js) and the homepage map (getColor in index.html),
+    // so the preview reads identically to the pages it links to. The ramp is
+    // tuned for the ink ground, which is why .map-plate in research.html is
+    // ink. Keep in sync with .map-legend-color there.
     function getColorForValue(val) {
-        if (val < 90) return '#12A594';  // teal
-        if (val < 120) return '#A16207'; // dark amber
-        if (val < 150) return '#9A3412'; // dark orange
-        return '#701A1A';                // deep red
+        if (val < 90) return '#14B8A6';  // teal
+        if (val < 120) return '#FDE68A'; // pale amber
+        if (val < 150) return '#FB923C'; // orange
+        return '#DC2626';                // red
     }
 
     async function loadMap() {
@@ -126,9 +126,9 @@
         // Ensure paths have correct base styles and event listeners
         // We select by 'path' to include both SVG paths and fallback paths
         container.querySelectorAll('path').forEach(path => {
-            // Base Styles
-            path.style.stroke = '#fff';
-            path.style.strokeWidth = '1.5';
+            // Base Styles — hairline ink strokes, as on barometer.html
+            path.style.stroke = 'rgba(10, 10, 10, .7)';
+            path.style.strokeWidth = '.75';
             path.style.cursor = 'pointer';
             path.style.transition = 'all 0.25s ease';
 
@@ -139,8 +139,8 @@
                 if (!stateData) return;
 
                 path.style.opacity = '0.85';
-                path.style.strokeWidth = '2';
-                path.style.filter = 'brightness(1.1)';
+                path.style.strokeWidth = '1.25';
+                path.style.filter = 'brightness(1.15)';
 
                 // Update Tooltip
                 if (tooltip && tooltipState && tooltipValue) {
@@ -160,7 +160,7 @@
 
             path.addEventListener('mouseleave', () => {
                 path.style.opacity = '1';
-                path.style.strokeWidth = '1.5';
+                path.style.strokeWidth = '.75';
                 path.style.filter = 'none';
                 if (tooltip) tooltip.style.opacity = '0';
             });
@@ -183,7 +183,7 @@
             if (stateData && stateData[indicator]) {
                 path.style.fill = getColorForValue(stateData[indicator].value);
             } else {
-                path.style.fill = '#e5e7eb'; // Default gray
+                path.style.fill = 'rgba(250, 250, 247, .12)'; // No data — same as barometer.html
             }
         });
     }
@@ -204,16 +204,8 @@
         // Indicator Tabs Setup
         document.querySelectorAll('.indicator-tab').forEach(tab => {
             tab.addEventListener('click', () => {
-                // Reset active state
-                document.querySelectorAll('.indicator-tab').forEach(t => {
-                    t.style.background = 'white';
-                    t.style.color = 'var(--black)';
-                    t.classList.remove('active');
-                });
-
-                // Set new active
-                tab.style.background = 'var(--orange)';
-                tab.style.color = 'white';
+                // Tab state lives in the .active class; research.html styles it.
+                document.querySelectorAll('.indicator-tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
 
                 // Update map
