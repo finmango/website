@@ -15,7 +15,7 @@
 // here by the existing /*.html → clean-URL redirect (crawlers follow 301s).
 // ============================================================================
 
-import { SITE_BASE, DEFAULT_OG_IMAGE, EDGE_TTL, escapeHtml, jsonForScript, fetchPostJson } from './_shared.js';
+import { SITE_BASE, DEFAULT_OG_IMAGE, EDGE_TTL, escapeHtml, jsonForScript, fetchPostJson, driveFileId } from './_shared.js';
 
 export async function onRequestGet(context) {
   const { request, env, waitUntil } = context;
@@ -126,9 +126,14 @@ function buildMeta(post, id, card) {
   // proxy (Google Drive thumbnail URLs are unreliable for crawlers), and a post
   // with no cover falls back to the default FinMango card.
   const hasCover = !!post.cover;
+  // Name the cover's Drive file in the URL so /post-image can serve it without
+  // its own round-trip to Apps Script — see functions/post-image.js. Must build
+  // the same URL as coverSrc() in post.html, or the preload below is wasted.
+  const fileId = hasCover ? driveFileId(post.cover) : '';
+  const coverPath = '/post-image?id=' + encodeURIComponent(post.id) + (fileId ? '&f=' + fileId : '');
   const image = card
     ? SITE_BASE + '/' + encodeURI(card.file)
-    : (hasCover ? SITE_BASE + '/post-image?id=' + encodeURIComponent(post.id) : DEFAULT_OG_IMAGE);
+    : (hasCover ? SITE_BASE + coverPath : DEFAULT_OG_IMAGE);
 
   const og = ogBlock({
     url: canonical,
@@ -148,7 +153,7 @@ function buildMeta(post, id, card) {
   // browser reuses this download) — the LCP image starts fetching from the
   // edge cache before a single line of JS has run.
   const coverPreload = hasCover
-    ? '<link rel="preload" as="image" href="/post-image?id=' + encodeURIComponent(post.id) + '&amp;w=1600" fetchpriority="high">'
+    ? '<link rel="preload" as="image" href="' + escapeHtml(coverPath + '&w=1600') + '" fetchpriority="high">'
     : '';
 
   // Inline the post so post.html renders immediately (no fetch, no "Loading…").
