@@ -1,5 +1,6 @@
 /**
- * Stamp a ?v=<date> cache-buster on every page that loads dashboard-data.js.
+ * Stamp a ?v=<date> cache-buster on every page that loads dashboard-data.js
+ * (and student-map-data.js, which research.html reads alongside it).
  *
  * GitHub Pages ignores the _headers file, so the live Cache-Control on
  * /data/dashboard-data.js is hours long. Browsers and the Cloudflare edge
@@ -53,7 +54,7 @@ function main() {
 
         const source = fs.readFileSync(filePath, 'utf8');
         let updated = source.replace(
-            /src="((?:\.\.\/)?data\/dashboard-data\.js)(?:\?v=[^"]*)?"/g,
+            /src="((?:\.\.\/)?data\/(?:dashboard-data|student-map-data)\.js)(?:\?v=[^"]*)?"/g,
             (match, file) => `src="${file}?v=${version}"`
         );
 
