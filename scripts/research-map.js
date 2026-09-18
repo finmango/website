@@ -20,16 +20,15 @@
     // DASHBOARD_DATA uses 'US-XX' keys.
 
     // Helpers
-    // Severity ramp, PAPER variant. The research page draws this map on the
-    // page ground, so it takes the same paper set as the barometer share card
-    // (see getColorForValueOnPaper in dashboard-app.js): the bands darken
-    // monotonically with severity and stay 2.9:1+ against #FAFAF7. Keep in
+    // Severity ramp. Same four bands as barometer.html (getColorForValue in
+    // scripts/dashboard-app.js) and the homepage map (getColor in index.html),
+    // so the preview reads identically to the pages it links to. Keep in
     // sync with .map-legend-color in research.html.
     function getColorForValue(val) {
-        if (val < 90) return '#12A594';  // teal
-        if (val < 120) return '#A16207'; // dark amber
-        if (val < 150) return '#9A3412'; // dark orange
-        return '#701A1A';                // deep red
+        if (val < 90) return '#14B8A6';  // teal
+        if (val < 120) return '#FDE68A'; // pale amber
+        if (val < 150) return '#FB923C'; // orange
+        return '#DC2626';                // red
     }
 
     async function loadMap() {
