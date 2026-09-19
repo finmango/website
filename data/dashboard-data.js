@@ -1,11 +1,11 @@
 // Financial Health Barometer Data
-// Auto-generated: 2026-09-18T05:18:01.342Z
+// Auto-generated: 2026-09-19T05:17:46.276Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
-  "as_of": "2026-09-18",
+  "as_of": "2026-09-19",
   "meta": {
-    "generated": "2026-09-18T05:18:01.304Z",
+    "generated": "2026-09-19T05:17:46.240Z",
     "version": "2.5",
     "source": "BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs",
     "update_frequency": "daily",
@@ -17,55 +17,49 @@ const DASHBOARD_DATA = {
       "fair_market_rent": "NLIHC OOR 2025 (fallback)",
       "housing_wage": "Derived from NLIHC OOR 2025 fallback FMR (NLIHC formula)",
       "jchs_calibration": "Harvard JCHS State of the Nation's Housing 2025",
-      "trends": "Google Health Trends API (NOT WORKING - 156 requests returned no data, HTTP 400 badRequest, no successful fetch on record; boost withheld)"
+      "trends": "Google Health Trends API (published but NOT applied - coverage building, best 39/51)"
     },
     "carried_forward": {},
-    "unemployment_observed": "2026-09-18",
+    "unemployment_observed": "2026-09-19",
     "trends_coverage": {
       "financial_anxiety": {
-        "states_covered": 0,
+        "states_covered": 39,
         "states_total": 51,
         "complete": false,
-        "oldest_reading": null,
-        "newest_reading": null
+        "oldest_reading": "2026-09-19",
+        "newest_reading": "2026-09-19"
       },
       "food_insecurity": {
-        "states_covered": 0,
+        "states_covered": 39,
         "states_total": 51,
         "complete": false,
-        "oldest_reading": null,
-        "newest_reading": null
+        "oldest_reading": "2026-09-19",
+        "newest_reading": "2026-09-19"
       },
       "housing_stress": {
-        "states_covered": 0,
+        "states_covered": 39,
         "states_total": 51,
         "complete": false,
-        "oldest_reading": null,
-        "newest_reading": null
+        "oldest_reading": "2026-09-19",
+        "newest_reading": "2026-09-19"
       },
       "affordability": {
-        "states_covered": 0,
+        "states_covered": 39,
         "states_total": 51,
         "complete": false,
-        "oldest_reading": null,
-        "newest_reading": null
+        "oldest_reading": "2026-09-19",
+        "newest_reading": "2026-09-19"
       }
     },
     "trends_run": {
       "requests": 40,
       "state_requests": 156,
-      "state_readings": 0,
+      "state_readings": 156,
       "http_statuses": {
-        "400": 40
+        "200": 40
       },
       "quota_hit": false,
-      "first_error": {
-        "where": "national/US",
-        "status": 400,
-        "reason": "badRequest",
-        "message": "API key expired. Please renew the API key.",
-        "quota": false
-      },
+      "first_error": null,
       "attempted": true
     },
     "trends_terms": {
@@ -76,14 +70,642 @@ const DASHBOARD_DATA = {
     },
     "trends_cache": {
       "states": {
-        "financial_anxiety": {},
-        "food_insecurity": {},
-        "housing_stress": {},
-        "affordability": {}
+        "financial_anxiety": {
+          "OK": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "OR": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "PA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "RI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "SC": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "SD": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "TN": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "TX": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "UT": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "VT": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "VA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "WA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "WV": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "WI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "WY": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "AL": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "AK": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "AZ": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "AR": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "CA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "CO": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "CT": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "DE": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "DC": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "FL": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "GA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "HI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "ID": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "IL": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "IN": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "IA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "KS": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "KY": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "LA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "ME": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "MD": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "MA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "MI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "MN": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          }
+        },
+        "food_insecurity": {
+          "OK": {
+            "value": 23,
+            "fetched": "2026-09-19"
+          },
+          "OR": {
+            "value": 26,
+            "fetched": "2026-09-19"
+          },
+          "PA": {
+            "value": 33,
+            "fetched": "2026-09-19"
+          },
+          "RI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "SC": {
+            "value": 41,
+            "fetched": "2026-09-19"
+          },
+          "SD": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "TN": {
+            "value": 42,
+            "fetched": "2026-09-19"
+          },
+          "TX": {
+            "value": 38,
+            "fetched": "2026-09-19"
+          },
+          "UT": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "VT": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "VA": {
+            "value": 18,
+            "fetched": "2026-09-19"
+          },
+          "WA": {
+            "value": 25,
+            "fetched": "2026-09-19"
+          },
+          "WV": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "WI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "WY": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "AL": {
+            "value": 34,
+            "fetched": "2026-09-19"
+          },
+          "AK": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "AZ": {
+            "value": 23,
+            "fetched": "2026-09-19"
+          },
+          "AR": {
+            "value": 21,
+            "fetched": "2026-09-19"
+          },
+          "CA": {
+            "value": 20,
+            "fetched": "2026-09-19"
+          },
+          "CO": {
+            "value": 15,
+            "fetched": "2026-09-19"
+          },
+          "CT": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "DE": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "DC": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "FL": {
+            "value": 43,
+            "fetched": "2026-09-19"
+          },
+          "GA": {
+            "value": 40,
+            "fetched": "2026-09-19"
+          },
+          "HI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "ID": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "IL": {
+            "value": 19,
+            "fetched": "2026-09-19"
+          },
+          "IN": {
+            "value": 18,
+            "fetched": "2026-09-19"
+          },
+          "IA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "KS": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "KY": {
+            "value": 35,
+            "fetched": "2026-09-19"
+          },
+          "LA": {
+            "value": 44,
+            "fetched": "2026-09-19"
+          },
+          "ME": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "MD": {
+            "value": 31,
+            "fetched": "2026-09-19"
+          },
+          "MA": {
+            "value": 20,
+            "fetched": "2026-09-19"
+          },
+          "MI": {
+            "value": 47,
+            "fetched": "2026-09-19"
+          },
+          "MN": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          }
+        },
+        "housing_stress": {
+          "OK": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "OR": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "PA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "RI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "SC": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "SD": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "TN": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "TX": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "UT": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "VT": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "VA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "WA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "WV": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "WI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "WY": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "AL": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "AK": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "AZ": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "AR": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "CA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "CO": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "CT": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "DE": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "DC": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "FL": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "GA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "HI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "ID": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "IL": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "IN": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "IA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "KS": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "KY": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "LA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "ME": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "MD": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "MA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "MI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "MN": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          }
+        },
+        "affordability": {
+          "OK": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "OR": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "PA": {
+            "value": 36,
+            "fetched": "2026-09-19"
+          },
+          "RI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "SC": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "SD": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "TN": {
+            "value": 12,
+            "fetched": "2026-09-19"
+          },
+          "TX": {
+            "value": 26,
+            "fetched": "2026-09-19"
+          },
+          "UT": {
+            "value": 26,
+            "fetched": "2026-09-19"
+          },
+          "VT": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "VA": {
+            "value": 31,
+            "fetched": "2026-09-19"
+          },
+          "WA": {
+            "value": 27,
+            "fetched": "2026-09-19"
+          },
+          "WV": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "WI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "WY": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "AL": {
+            "value": 17,
+            "fetched": "2026-09-19"
+          },
+          "AK": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "AZ": {
+            "value": 27,
+            "fetched": "2026-09-19"
+          },
+          "AR": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "CA": {
+            "value": 25,
+            "fetched": "2026-09-19"
+          },
+          "CO": {
+            "value": 19,
+            "fetched": "2026-09-19"
+          },
+          "CT": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "DE": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "DC": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "FL": {
+            "value": 16,
+            "fetched": "2026-09-19"
+          },
+          "GA": {
+            "value": 23,
+            "fetched": "2026-09-19"
+          },
+          "HI": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "ID": {
+            "value": 23,
+            "fetched": "2026-09-19"
+          },
+          "IL": {
+            "value": 21,
+            "fetched": "2026-09-19"
+          },
+          "IN": {
+            "value": 10,
+            "fetched": "2026-09-19"
+          },
+          "IA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "KS": {
+            "value": 20,
+            "fetched": "2026-09-19"
+          },
+          "KY": {
+            "value": 23,
+            "fetched": "2026-09-19"
+          },
+          "LA": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "ME": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          },
+          "MD": {
+            "value": 27,
+            "fetched": "2026-09-19"
+          },
+          "MA": {
+            "value": 38,
+            "fetched": "2026-09-19"
+          },
+          "MI": {
+            "value": 36,
+            "fetched": "2026-09-19"
+          },
+          "MN": {
+            "value": 0,
+            "fetched": "2026-09-19"
+          }
+        }
       },
-      "cursor": 36,
-      "updated": "2026-09-18",
-      "last_successful_fetch": null
+      "cursor": 24,
+      "updated": "2026-09-19",
+      "last_successful_fetch": "2026-09-19"
     },
     "tier_estimates": {
       "note": "Author-assigned fallback bands, not measurements. Used only when a component has no live read and nothing to carry forward. states_scored counts how many states are affected in this reading.",
@@ -228,21 +850,21 @@ const DASHBOARD_DATA = {
       ]
     },
     "data_age": {
-      "oldest_observation": "2026-09-18",
+      "oldest_observation": "2026-09-19",
       "oldest_source": "unemployment",
       "age_days": 0
     },
-    "augmented_at": "2026-09-18T05:18:01.342Z"
+    "augmented_at": "2026-09-19T05:17:46.276Z"
   },
   "national": {
     "financial_anxiety": {
-      "value": 137.4,
-      "change": 0.9,
+      "value": 134.3,
+      "change": -4.6,
       "change_coverage": {
-        "states_with_change": 51,
+        "states_with_change": 26,
         "states_total": 51
       },
-      "trend": "up"
+      "trend": "down"
     },
     "food_insecurity": {
       "value": 103.4,
@@ -277,10 +899,11 @@ const DASHBOARD_DATA = {
       "name": "Alabama",
       "abbr": "AL",
       "financial_anxiety": {
-        "value": 148,
-        "change": 21.4,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 21
+        "value": 160,
+        "change": null,
+        "rank": 6,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 145,
@@ -301,12 +924,12 @@ const DASHBOARD_DATA = {
         "rank": 6
       },
       "metrics": {
-        "unemployment_rate": 3.4,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 15.2,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -315,23 +938,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 13.970848148379181,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.25,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -356,10 +979,11 @@ const DASHBOARD_DATA = {
       "name": "Alaska",
       "abbr": "AK",
       "financial_anxiety": {
-        "value": 145,
-        "change": -6.5,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 22
+        "value": 138,
+        "change": null,
+        "rank": 23,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 94,
@@ -380,12 +1004,12 @@ const DASHBOARD_DATA = {
         "rank": 30
       },
       "metrics": {
-        "unemployment_rate": 4.3,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 10.3,
         "rent_burden_pct": 26.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -394,23 +1018,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.1546920482373,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.08,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -435,10 +1059,11 @@ const DASHBOARD_DATA = {
       "name": "Arizona",
       "abbr": "AZ",
       "financial_anxiety": {
-        "value": 160,
-        "change": 14,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 10
+        "value": 141,
+        "change": null,
+        "rank": 20,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 106,
@@ -459,12 +1084,12 @@ const DASHBOARD_DATA = {
         "rank": 23
       },
       "metrics": {
-        "unemployment_rate": 4.9,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 11.9,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -473,23 +1098,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 8.215184253366877,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.1,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -514,10 +1139,11 @@ const DASHBOARD_DATA = {
       "name": "Arkansas",
       "abbr": "AR",
       "financial_anxiety": {
-        "value": 157,
-        "change": -2.4,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 12
+        "value": 156,
+        "change": null,
+        "rank": 7,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 142,
@@ -538,12 +1164,12 @@ const DASHBOARD_DATA = {
         "rank": 14
       },
       "metrics": {
-        "unemployment_rate": 4,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 15.3,
         "rent_burden_pct": 28.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -552,23 +1178,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 12.67016199186515,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.22,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -593,10 +1219,11 @@ const DASHBOARD_DATA = {
       "name": "California",
       "abbr": "CA",
       "financial_anxiety": {
-        "value": 167,
-        "change": -7.3,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 4
+        "value": 143,
+        "change": null,
+        "rank": 17,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 107,
@@ -617,12 +1244,12 @@ const DASHBOARD_DATA = {
         "rank": 10
       },
       "metrics": {
-        "unemployment_rate": 5.1,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 11.8,
         "rent_burden_pct": 33.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -631,23 +1258,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 7.6767609833675685,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.12,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -672,10 +1299,11 @@ const DASHBOARD_DATA = {
       "name": "Colorado",
       "abbr": "CO",
       "financial_anxiety": {
-        "value": 130,
-        "change": 0,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 30
+        "value": 131,
+        "change": null,
+        "rank": 29,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 84,
@@ -696,12 +1324,12 @@ const DASHBOARD_DATA = {
         "rank": 39
       },
       "metrics": {
-        "unemployment_rate": 3.9,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 9.6,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -710,23 +1338,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 3.4006762570746503,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -751,10 +1379,11 @@ const DASHBOARD_DATA = {
       "name": "Connecticut",
       "abbr": "CT",
       "financial_anxiety": {
-        "value": 154,
-        "change": 33.3,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 16
+        "value": 131,
+        "change": null,
+        "rank": 30,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 87,
@@ -775,12 +1404,12 @@ const DASHBOARD_DATA = {
         "rank": 16
       },
       "metrics": {
-        "unemployment_rate": 5.2,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 10.1,
         "rent_burden_pct": 32.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -789,23 +1418,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 23.62775707523416,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -830,10 +1459,11 @@ const DASHBOARD_DATA = {
       "name": "Delaware",
       "abbr": "DE",
       "financial_anxiety": {
-        "value": 143,
-        "change": 0,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 24
+        "value": 128,
+        "change": null,
+        "rank": 33,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 86,
@@ -854,12 +1484,12 @@ const DASHBOARD_DATA = {
         "rank": 32
       },
       "metrics": {
-        "unemployment_rate": 4.8,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 10.1,
         "rent_burden_pct": 30.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -868,23 +1498,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.62293908947258,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -909,10 +1539,11 @@ const DASHBOARD_DATA = {
       "name": "District of Columbia",
       "abbr": "DC",
       "financial_anxiety": {
-        "value": 193,
-        "change": -6.3,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 1
+        "value": 151,
+        "change": null,
+        "rank": 12,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 146,
@@ -933,12 +1564,12 @@ const DASHBOARD_DATA = {
         "rank": 8
       },
       "metrics": {
-        "unemployment_rate": 5.9,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 16.4,
         "rent_burden_pct": 29,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -947,23 +1578,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 0.8856612321482514,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.18,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -988,10 +1619,11 @@ const DASHBOARD_DATA = {
       "name": "Florida",
       "abbr": "FL",
       "financial_anxiety": {
-        "value": 161,
-        "change": 17.9,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 9
+        "value": 147,
+        "change": null,
+        "rank": 16,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 112,
@@ -1012,12 +1644,12 @@ const DASHBOARD_DATA = {
         "rank": 7
       },
       "metrics": {
-        "unemployment_rate": 4.6,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 12.1,
         "rent_burden_pct": 36.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1026,23 +1658,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 6.610716591349264,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.15,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -1067,10 +1699,11 @@ const DASHBOARD_DATA = {
       "name": "Georgia",
       "abbr": "GA",
       "financial_anxiety": {
-        "value": 128,
-        "change": 0,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 32
+        "value": 141,
+        "change": null,
+        "rank": 21,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 112,
@@ -1091,12 +1724,12 @@ const DASHBOARD_DATA = {
         "rank": 18
       },
       "metrics": {
-        "unemployment_rate": 3.3,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 12.8,
         "rent_burden_pct": 31.6,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1105,23 +1738,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 10.895599886102888,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.1,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -1146,10 +1779,11 @@ const DASHBOARD_DATA = {
       "name": "Hawaii",
       "abbr": "HI",
       "financial_anxiety": {
-        "value": 127,
-        "change": 22.7,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 35
+        "value": 154,
+        "change": null,
+        "rank": 11,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 102,
@@ -1171,12 +1805,12 @@ const DASHBOARD_DATA = {
         "rank": 5
       },
       "metrics": {
-        "unemployment_rate": 2.7,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 10,
         "rent_burden_pct": 32.6,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1185,23 +1819,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 10.56137547681471,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.2,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -1226,10 +1860,11 @@ const DASHBOARD_DATA = {
       "name": "Idaho",
       "abbr": "ID",
       "financial_anxiety": {
-        "value": 128,
-        "change": 0,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 33
+        "value": 134,
+        "change": null,
+        "rank": 25,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 92,
@@ -1250,12 +1885,12 @@ const DASHBOARD_DATA = {
         "rank": 36
       },
       "metrics": {
-        "unemployment_rate": 3.6,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 10.4,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1264,23 +1899,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.49636889949724,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -1305,10 +1940,11 @@ const DASHBOARD_DATA = {
       "name": "Illinois",
       "abbr": "IL",
       "financial_anxiety": {
-        "value": 152,
-        "change": 14,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 17
+        "value": 134,
+        "change": null,
+        "rank": 26,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 99,
@@ -1329,12 +1965,12 @@ const DASHBOARD_DATA = {
         "rank": 20
       },
       "metrics": {
-        "unemployment_rate": 4.9,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 11.5,
         "rent_burden_pct": 29.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1343,23 +1979,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 21.75531457096136,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -1384,10 +2020,11 @@ const DASHBOARD_DATA = {
       "name": "Indiana",
       "abbr": "IN",
       "financial_anxiety": {
-        "value": 121,
-        "change": -10.8,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 40
+        "value": 133,
+        "change": null,
+        "rank": 27,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 102,
@@ -1408,12 +2045,12 @@ const DASHBOARD_DATA = {
         "rank": 31
       },
       "metrics": {
-        "unemployment_rate": 3.3,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 12.1,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1422,23 +2059,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.226537216828486,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.04,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -1463,10 +2100,11 @@ const DASHBOARD_DATA = {
       "name": "Iowa",
       "abbr": "IA",
       "financial_anxiety": {
-        "value": 105,
-        "change": -8.6,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 45
+        "value": 118,
+        "change": null,
+        "rank": 43,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 85,
@@ -1487,12 +2125,12 @@ const DASHBOARD_DATA = {
         "rank": 49
       },
       "metrics": {
-        "unemployment_rate": 3.2,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 11.2,
         "rent_burden_pct": 27.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1501,23 +2139,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 13.143807870370367,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 0.92,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -1542,10 +2180,11 @@ const DASHBOARD_DATA = {
       "name": "Kansas",
       "abbr": "KS",
       "financial_anxiety": {
-        "value": 125,
-        "change": 2.7,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 36
+        "value": 128,
+        "change": null,
+        "rank": 34,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 90,
@@ -1566,12 +2205,12 @@ const DASHBOARD_DATA = {
         "rank": 44
       },
       "metrics": {
-        "unemployment_rate": 3.8,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 10.9,
         "rent_burden_pct": 27.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1580,23 +2219,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 15.578271722334492,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -1621,10 +2260,11 @@ const DASHBOARD_DATA = {
       "name": "Kentucky",
       "abbr": "KY",
       "financial_anxiety": {
-        "value": 167,
-        "change": 2.2,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 5
+        "value": 151,
+        "change": null,
+        "rank": 13,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 139,
@@ -1645,12 +2285,12 @@ const DASHBOARD_DATA = {
         "rank": 13
       },
       "metrics": {
-        "unemployment_rate": 4.7,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 15.4,
         "rent_burden_pct": 27.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1659,23 +2299,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.20879663460589,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.18,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -1700,10 +2340,11 @@ const DASHBOARD_DATA = {
       "name": "Louisiana",
       "abbr": "LA",
       "financial_anxiety": {
-        "value": 177,
-        "change": 2.3,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 2
+        "value": 166,
+        "change": null,
+        "rank": 3,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 160,
@@ -1725,12 +2366,12 @@ const DASHBOARD_DATA = {
         "rank": 4
       },
       "metrics": {
-        "unemployment_rate": 4.4,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 18.6,
         "rent_burden_pct": 32.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1739,23 +2380,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 6.334122892573488,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.3,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -1780,10 +2421,11 @@ const DASHBOARD_DATA = {
       "name": "Maine",
       "abbr": "ME",
       "financial_anxiety": {
-        "value": 107,
-        "change": -6.1,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 44
+        "value": 122,
+        "change": null,
+        "rank": 39,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 84,
@@ -1804,12 +2446,12 @@ const DASHBOARD_DATA = {
         "rank": 40
       },
       "metrics": {
-        "unemployment_rate": 3.1,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 10.6,
         "rent_burden_pct": 30.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1818,23 +2460,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.967456449896368,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 0.95,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -1859,10 +2501,11 @@ const DASHBOARD_DATA = {
       "name": "Maryland",
       "abbr": "MD",
       "financial_anxiety": {
-        "value": 133,
-        "change": 0,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 27
+        "value": 128,
+        "change": null,
+        "rank": 35,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 80,
@@ -1883,12 +2526,12 @@ const DASHBOARD_DATA = {
         "rank": 34
       },
       "metrics": {
-        "unemployment_rate": 4.2,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 9.2,
         "rent_burden_pct": 30.8,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1897,23 +2540,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.236387720838522,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -1938,10 +2581,11 @@ const DASHBOARD_DATA = {
       "name": "Massachusetts",
       "abbr": "MA",
       "financial_anxiety": {
-        "value": 139,
-        "change": -2.2,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 26
+        "value": 131,
+        "change": null,
+        "rank": 31,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 85,
@@ -1962,12 +2606,12 @@ const DASHBOARD_DATA = {
         "rank": 22
       },
       "metrics": {
-        "unemployment_rate": 4.4,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 9.8,
         "rent_burden_pct": 31.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1976,23 +2620,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.05314022337085,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -2017,10 +2661,11 @@ const DASHBOARD_DATA = {
       "name": "Michigan",
       "abbr": "MI",
       "financial_anxiety": {
-        "value": 157,
-        "change": 0,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 13
+        "value": 138,
+        "change": null,
+        "rank": 24,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 114,
@@ -2041,12 +2686,12 @@ const DASHBOARD_DATA = {
         "rank": 17
       },
       "metrics": {
-        "unemployment_rate": 4.9,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 13.4,
         "rent_burden_pct": 30.7,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2055,23 +2700,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 17.975715034894513,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.08,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -2096,10 +2741,11 @@ const DASHBOARD_DATA = {
       "name": "Minnesota",
       "abbr": "MN",
       "financial_anxiety": {
-        "value": 151,
-        "change": 13.2,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 19
+        "value": 143,
+        "change": null,
+        "rank": 18,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 90,
@@ -2120,12 +2766,12 @@ const DASHBOARD_DATA = {
         "rank": 35
       },
       "metrics": {
-        "unemployment_rate": 4.3,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 9.3,
         "rent_burden_pct": 29.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2134,23 +2780,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 10.330184435447588,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.12,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -2175,10 +2821,11 @@ const DASHBOARD_DATA = {
       "name": "Mississippi",
       "abbr": "MS",
       "financial_anxiety": {
-        "value": 164,
-        "change": -5.3,
-        "change_basis": "year-over-year unemployment rate",
-        "rank": 8
+        "value": 173,
+        "change": null,
+        "rank": 1,
+        "change_basis": "not available - value is a regional estimate",
+        "estimated": true
       },
       "food_insecurity": {
         "value": 160,
@@ -2200,12 +2847,12 @@ const DASHBOARD_DATA = {
         "rank": 1
       },
       "metrics": {
-        "unemployment_rate": 3.6,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": null,
+        "unemployment_period": null,
         "poverty_rate": 17.8,
         "rent_burden_pct": 30.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2214,7 +2861,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.166401527203295,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.35,
         "trends_boost": {
           "financial_anxiety": {
@@ -2255,10 +2902,10 @@ const DASHBOARD_DATA = {
       "name": "Missouri",
       "abbr": "MO",
       "financial_anxiety": {
-        "value": 128,
-        "change": -10,
+        "value": 126,
+        "change": -12.5,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 34
+        "rank": 36
       },
       "food_insecurity": {
         "value": 103,
@@ -2279,12 +2926,12 @@ const DASHBOARD_DATA = {
         "rank": 37
       },
       "metrics": {
-        "unemployment_rate": 3.6,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 3.5,
+        "unemployment_period": "2026-08",
         "poverty_rate": 12.2,
         "rent_burden_pct": 27.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2293,7 +2940,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.83530803311881,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -2335,9 +2982,9 @@ const DASHBOARD_DATA = {
       "abbr": "MT",
       "financial_anxiety": {
         "value": 115,
-        "change": -3,
+        "change": -5.9,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 42
+        "rank": 44
       },
       "food_insecurity": {
         "value": 87,
@@ -2359,11 +3006,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 3.2,
-        "unemployment_period": "2026-07",
+        "unemployment_period": "2026-08",
         "poverty_rate": 10.4,
         "rent_burden_pct": 27,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2372,7 +3019,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.271801538294877,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1,
         "trends_boost": {
           "financial_anxiety": {
@@ -2438,11 +3085,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 2.9,
-        "unemployment_period": "2026-07",
+        "unemployment_period": "2026-08",
         "poverty_rate": 10.6,
         "rent_burden_pct": 28.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2451,7 +3098,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 12.668287401172648,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 0.95,
         "trends_boost": {
           "financial_anxiety": {
@@ -2492,10 +3139,10 @@ const DASHBOARD_DATA = {
       "name": "Nevada",
       "abbr": "NV",
       "financial_anxiety": {
-        "value": 165,
-        "change": -3.8,
+        "value": 161,
+        "change": -7.7,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 7
+        "rank": 5
       },
       "food_insecurity": {
         "value": 107,
@@ -2516,12 +3163,12 @@ const DASHBOARD_DATA = {
         "rank": 12
       },
       "metrics": {
-        "unemployment_rate": 5,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 4.8,
+        "unemployment_period": "2026-08",
         "poverty_rate": 11.8,
         "rent_burden_pct": 34,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2530,7 +3177,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 12.306465315463706,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.12,
         "trends_boost": {
           "financial_anxiety": {
@@ -2596,11 +3243,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 2.8,
-        "unemployment_period": "2026-07",
+        "unemployment_period": "2026-08",
         "poverty_rate": 7.3,
         "rent_burden_pct": 29.8,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2609,7 +3256,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 19.265615076536232,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 0.88,
         "trends_boost": {
           "financial_anxiety": {
@@ -2650,10 +3297,10 @@ const DASHBOARD_DATA = {
       "name": "New Jersey",
       "abbr": "NJ",
       "financial_anxiety": {
-        "value": 143,
-        "change": -20,
+        "value": 141,
+        "change": -21.8,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 25
+        "rank": 22
       },
       "food_insecurity": {
         "value": 84,
@@ -2674,12 +3321,12 @@ const DASHBOARD_DATA = {
         "rank": 15
       },
       "metrics": {
-        "unemployment_rate": 4.4,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 4.3,
+        "unemployment_period": "2026-08",
         "poverty_rate": 9.2,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2688,7 +3335,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 24.200960131440468,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -2729,10 +3376,10 @@ const DASHBOARD_DATA = {
       "name": "New Mexico",
       "abbr": "NM",
       "financial_anxiety": {
-        "value": 169,
-        "change": 20,
+        "value": 167,
+        "change": 14.6,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 3
+        "rank": 2
       },
       "food_insecurity": {
         "value": 141,
@@ -2753,12 +3400,12 @@ const DASHBOARD_DATA = {
         "rank": 11
       },
       "metrics": {
-        "unemployment_rate": 4.8,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 4.7,
+        "unemployment_period": "2026-08",
         "poverty_rate": 15.8,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2767,7 +3414,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 13.496734660969128,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.18,
         "trends_boost": {
           "financial_anxiety": {
@@ -2808,10 +3455,10 @@ const DASHBOARD_DATA = {
       "name": "New York",
       "abbr": "NY",
       "financial_anxiety": {
-        "value": 157,
-        "change": 0,
+        "value": 155,
+        "change": -4.4,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 14
+        "rank": 9
       },
       "food_insecurity": {
         "value": 125,
@@ -2832,12 +3479,12 @@ const DASHBOARD_DATA = {
         "rank": 3
       },
       "metrics": {
-        "unemployment_rate": 4.4,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 4.3,
+        "unemployment_period": "2026-08",
         "poverty_rate": 14,
         "rent_burden_pct": 30.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2846,7 +3493,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 22.396543883583455,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.15,
         "trends_boost": {
           "financial_anxiety": {
@@ -2887,10 +3534,10 @@ const DASHBOARD_DATA = {
       "name": "North Carolina",
       "abbr": "NC",
       "financial_anxiety": {
-        "value": 132,
-        "change": -7.7,
+        "value": 130,
+        "change": -10.3,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 28
+        "rank": 32
       },
       "food_insecurity": {
         "value": 109,
@@ -2911,12 +3558,12 @@ const DASHBOARD_DATA = {
         "rank": 24
       },
       "metrics": {
-        "unemployment_rate": 3.6,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 3.5,
+        "unemployment_period": "2026-08",
         "poverty_rate": 12.6,
         "rent_burden_pct": 30.8,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2925,7 +3572,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 12.32622357646162,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.08,
         "trends_boost": {
           "financial_anxiety": {
@@ -2991,11 +3638,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 2.2,
-        "unemployment_period": "2026-07",
+        "unemployment_period": "2026-08",
         "poverty_rate": 10.8,
         "rent_burden_pct": 24.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3004,7 +3651,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.842703082126215,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 0.85,
         "trends_boost": {
           "financial_anxiety": {
@@ -3045,10 +3692,10 @@ const DASHBOARD_DATA = {
       "name": "Ohio",
       "abbr": "OH",
       "financial_anxiety": {
-        "value": 125,
-        "change": -24.4,
+        "value": 123,
+        "change": -25,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 37
+        "rank": 38
       },
       "food_insecurity": {
         "value": 107,
@@ -3069,12 +3716,12 @@ const DASHBOARD_DATA = {
         "rank": 26
       },
       "metrics": {
-        "unemployment_rate": 3.4,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 3.3,
+        "unemployment_period": "2026-08",
         "poverty_rate": 12.6,
         "rent_burden_pct": 29,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3083,7 +3730,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 18.262110197703656,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.06,
         "trends_boost": {
           "financial_anxiety": {
@@ -3125,9 +3772,9 @@ const DASHBOARD_DATA = {
       "abbr": "OK",
       "financial_anxiety": {
         "value": 155,
-        "change": 30.3,
+        "change": 26.5,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 15
+        "rank": 10
       },
       "food_insecurity": {
         "value": 131,
@@ -3149,11 +3796,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 4.3,
-        "unemployment_period": "2026-07",
+        "unemployment_period": "2026-08",
         "poverty_rate": 14.8,
         "rent_burden_pct": 28.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3162,23 +3809,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.586452762923342,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.15,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -3203,10 +3850,10 @@ const DASHBOARD_DATA = {
       "name": "Oregon",
       "abbr": "OR",
       "financial_anxiety": {
-        "value": 158,
-        "change": -1.9,
+        "value": 156,
+        "change": -3.8,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 11
+        "rank": 8
       },
       "food_insecurity": {
         "value": 100,
@@ -3227,12 +3874,12 @@ const DASHBOARD_DATA = {
         "rank": 29
       },
       "metrics": {
-        "unemployment_rate": 5.2,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 5.1,
+        "unemployment_period": "2026-08",
         "poverty_rate": 11.7,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3241,23 +3888,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 5.985701718519612,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -3282,10 +3929,10 @@ const DASHBOARD_DATA = {
       "name": "Pennsylvania",
       "abbr": "PA",
       "financial_anxiety": {
-        "value": 130,
-        "change": -11.4,
+        "value": 126,
+        "change": -15.9,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 31
+        "rank": 37
       },
       "food_insecurity": {
         "value": 96,
@@ -3306,12 +3953,12 @@ const DASHBOARD_DATA = {
         "rank": 27
       },
       "metrics": {
-        "unemployment_rate": 3.9,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 3.7,
+        "unemployment_period": "2026-08",
         "poverty_rate": 11.6,
         "rent_burden_pct": 29.7,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3320,23 +3967,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 18.06222021835047,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -3361,10 +4008,10 @@ const DASHBOARD_DATA = {
       "name": "Rhode Island",
       "abbr": "RI",
       "financial_anxiety": {
-        "value": 125,
-        "change": -7.1,
+        "value": 121,
+        "change": -14,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 38
+        "rank": 41
       },
       "food_insecurity": {
         "value": 95,
@@ -3385,12 +4032,12 @@ const DASHBOARD_DATA = {
         "rank": 25
       },
       "metrics": {
-        "unemployment_rate": 3.9,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 3.7,
+        "unemployment_period": "2026-08",
         "poverty_rate": 12,
         "rent_burden_pct": 30.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3399,23 +4046,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 22.076373683064112,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 0.98,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -3440,10 +4087,10 @@ const DASHBOARD_DATA = {
       "name": "South Carolina",
       "abbr": "SC",
       "financial_anxiety": {
-        "value": 152,
-        "change": -4.5,
+        "value": 150,
+        "change": -10.9,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 18
+        "rank": 14
       },
       "food_insecurity": {
         "value": 121,
@@ -3464,12 +4111,12 @@ const DASHBOARD_DATA = {
         "rank": 9
       },
       "metrics": {
-        "unemployment_rate": 4.2,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 4.1,
+        "unemployment_period": "2026-08",
         "poverty_rate": 13.3,
         "rent_burden_pct": 31.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3478,23 +4125,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.57771204424153,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.15,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -3520,7 +4167,7 @@ const DASHBOARD_DATA = {
       "abbr": "SD",
       "financial_anxiety": {
         "value": 82,
-        "change": 0,
+        "change": -4.8,
         "change_basis": "year-over-year unemployment rate",
         "rank": 51
       },
@@ -3544,11 +4191,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 2,
-        "unemployment_period": "2026-07",
+        "unemployment_period": "2026-08",
         "poverty_rate": 10.5,
         "rent_burden_pct": 26.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3557,23 +4204,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.36340000693312,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 0.88,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -3601,7 +4248,7 @@ const DASHBOARD_DATA = {
         "value": 132,
         "change": -2.9,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 29
+        "rank": 28
       },
       "food_insecurity": {
         "value": 117,
@@ -3623,11 +4270,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 3.4,
-        "unemployment_period": "2026-07",
+        "unemployment_period": "2026-08",
         "poverty_rate": 13.3,
         "rent_burden_pct": 30.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3636,23 +4283,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.851640423068996,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.12,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -3677,10 +4324,10 @@ const DASHBOARD_DATA = {
       "name": "Texas",
       "abbr": "TX",
       "financial_anxiety": {
-        "value": 145,
-        "change": 7.1,
+        "value": 143,
+        "change": 4.8,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 23
+        "rank": 19
       },
       "food_insecurity": {
         "value": 111,
@@ -3701,12 +4348,12 @@ const DASHBOARD_DATA = {
         "rank": 28
       },
       "metrics": {
-        "unemployment_rate": 4.5,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 4.4,
+        "unemployment_period": "2026-08",
         "poverty_rate": 13.4,
         "rent_burden_pct": 31.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3715,23 +4362,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 6.204649489275784,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -3756,10 +4403,10 @@ const DASHBOARD_DATA = {
       "name": "Utah",
       "abbr": "UT",
       "financial_anxiety": {
-        "value": 124,
-        "change": 2.9,
+        "value": 122,
+        "change": -2.8,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 39
+        "rank": 40
       },
       "food_insecurity": {
         "value": 77,
@@ -3780,12 +4427,12 @@ const DASHBOARD_DATA = {
         "rank": 41
       },
       "metrics": {
-        "unemployment_rate": 3.6,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 3.5,
+        "unemployment_period": "2026-08",
         "poverty_rate": 8.4,
         "rent_burden_pct": 29.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3794,23 +4441,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 9.590360224522628,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -3860,11 +4507,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 2.6,
-        "unemployment_period": "2026-07",
+        "unemployment_period": "2026-08",
         "poverty_rate": 9.3,
         "rent_burden_pct": 29.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3873,23 +4520,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 18.079650417353527,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 0.92,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -3914,10 +4561,10 @@ const DASHBOARD_DATA = {
       "name": "Virginia",
       "abbr": "VA",
       "financial_anxiety": {
-        "value": 121,
-        "change": 12.1,
+        "value": 119,
+        "change": 9.1,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 41
+        "rank": 42
       },
       "food_insecurity": {
         "value": 82,
@@ -3938,12 +4585,12 @@ const DASHBOARD_DATA = {
         "rank": 38
       },
       "metrics": {
-        "unemployment_rate": 3.7,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 3.6,
+        "unemployment_period": "2026-08",
         "poverty_rate": 9.8,
         "rent_burden_pct": 29.7,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3952,23 +4599,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 15.954445566312279,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 0.98,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -3993,10 +4640,10 @@ const DASHBOARD_DATA = {
       "name": "Washington",
       "abbr": "WA",
       "financial_anxiety": {
-        "value": 150,
-        "change": 8.7,
+        "value": 148,
+        "change": 6.5,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 20
+        "rank": 15
       },
       "food_insecurity": {
         "value": 87,
@@ -4017,12 +4664,12 @@ const DASHBOARD_DATA = {
         "rank": 33
       },
       "metrics": {
-        "unemployment_rate": 5,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 4.9,
+        "unemployment_period": "2026-08",
         "poverty_rate": 10,
         "rent_burden_pct": 30.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4031,23 +4678,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 8.238362592701218,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 10,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 10,
             "applied": false
           }
         },
@@ -4072,10 +4719,10 @@ const DASHBOARD_DATA = {
       "name": "West Virginia",
       "abbr": "WV",
       "financial_anxiety": {
-        "value": 167,
-        "change": -2.4,
+        "value": 165,
+        "change": -7,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 6
+        "rank": 4
       },
       "food_insecurity": {
         "value": 156,
@@ -4096,12 +4743,12 @@ const DASHBOARD_DATA = {
         "rank": 2
       },
       "metrics": {
-        "unemployment_rate": 4.1,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 4,
+        "unemployment_period": "2026-08",
         "poverty_rate": 16.2,
         "rent_burden_pct": 28.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4110,23 +4757,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 21.801153218011542,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 1.28,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -4151,10 +4798,10 @@ const DASHBOARD_DATA = {
       "name": "Wisconsin",
       "abbr": "WI",
       "financial_anxiety": {
-        "value": 111,
-        "change": 10,
+        "value": 109,
+        "change": 3.2,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 43
+        "rank": 45
       },
       "food_insecurity": {
         "value": 82,
@@ -4175,12 +4822,12 @@ const DASHBOARD_DATA = {
         "rank": 42
       },
       "metrics": {
-        "unemployment_rate": 3.3,
-        "unemployment_period": "2026-07",
+        "unemployment_rate": 3.2,
+        "unemployment_period": "2026-08",
         "poverty_rate": 10.3,
         "rent_burden_pct": 27.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4189,23 +4836,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 20.920752458955086,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 0.95,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -4255,11 +4902,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 3,
-        "unemployment_period": "2026-07",
+        "unemployment_period": "2026-08",
         "poverty_rate": 10,
         "rent_burden_pct": 26.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-09-18",
+        "rent_burden_pct_observed": "2026-09-19",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4268,23 +4915,23 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.335307774089273,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-09-18",
+        "housing_price_change_observed": "2026-09-19",
         "regional_stress_multiplier": 0.95,
         "trends_boost": {
           "financial_anxiety": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "food_insecurity": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "housing_stress": {
-            "value": null,
+            "value": 0,
             "applied": false
           },
           "affordability": {
-            "value": null,
+            "value": 0,
             "applied": false
           }
         },
@@ -4311,829 +4958,347 @@ const DASHBOARD_DATA = {
       "financial_anxiety": [
         {
           "date": "2016-10-01",
-          "value": 43
+          "value": 58
         },
         {
           "date": "2016-11-01",
-          "value": 45
+          "value": 58
         },
         {
           "date": "2016-12-01",
-          "value": 43
+          "value": 58
         },
         {
           "date": "2017-01-01",
-          "value": 44
+          "value": 58
         },
         {
           "date": "2017-02-01",
-          "value": 45
+          "value": 58
         },
         {
           "date": "2017-03-01",
-          "value": 46
+          "value": 58
         },
         {
           "date": "2017-04-01",
-          "value": 45
+          "value": 58
         },
         {
           "date": "2017-05-01",
-          "value": 45
+          "value": 58
         },
         {
           "date": "2017-06-01",
-          "value": 45
+          "value": 58
         },
         {
           "date": "2017-07-01",
-          "value": 45
+          "value": 58
         },
         {
           "date": "2017-08-01",
-          "value": 44
+          "value": 58
         },
         {
           "date": "2017-09-01",
-          "value": 47
+          "value": 58
         },
         {
           "date": "2017-10-01",
-          "value": 48
+          "value": 58
         },
         {
           "date": "2017-11-01",
-          "value": 47
+          "value": 58
         },
         {
           "date": "2017-12-01",
-          "value": 43
+          "value": 58
         },
         {
           "date": "2018-01-01",
-          "value": 39
+          "value": 58
         },
         {
           "date": "2018-02-01",
-          "value": 41
+          "value": 58
         },
         {
           "date": "2018-03-01",
-          "value": 42
+          "value": 58
         },
         {
           "date": "2018-04-01",
-          "value": 44
+          "value": 58
         },
         {
           "date": "2018-05-01",
-          "value": 43
+          "value": 58
         },
         {
           "date": "2018-06-01",
-          "value": 42
+          "value": 58
         },
         {
           "date": "2018-07-01",
-          "value": 39
+          "value": 58
         },
         {
           "date": "2018-08-01",
-          "value": 39
+          "value": 58
         },
         {
           "date": "2018-09-01",
-          "value": 39
+          "value": 58
         },
         {
           "date": "2018-10-01",
-          "value": 41
+          "value": 58
         },
         {
           "date": "2018-11-01",
-          "value": 43
+          "value": 58
         },
         {
           "date": "2018-12-01",
-          "value": 42
+          "value": 58
         },
         {
           "date": "2019-01-01",
-          "value": 44
+          "value": 58
         },
         {
           "date": "2019-02-01",
-          "value": 44
+          "value": 58
         },
         {
           "date": "2019-03-01",
-          "value": 47
+          "value": 58
         },
         {
           "date": "2019-04-01",
-          "value": 46
+          "value": 58
         },
         {
           "date": "2019-05-01",
-          "value": 45
+          "value": 58
         },
         {
           "date": "2019-06-01",
-          "value": 43
+          "value": 58
         },
         {
           "date": "2019-07-01",
-          "value": 41
+          "value": 58
         },
         {
           "date": "2019-08-01",
-          "value": 41
+          "value": 58
         },
         {
           "date": "2019-09-01",
-          "value": 43
+          "value": 58
         },
         {
           "date": "2019-10-01",
-          "value": 45
+          "value": 58
         },
         {
           "date": "2019-11-01",
-          "value": 46
+          "value": 58
         },
         {
           "date": "2019-12-01",
-          "value": 44
+          "value": 58
         },
         {
           "date": "2020-01-01",
-          "value": 45
+          "value": 58
         },
         {
           "date": "2020-02-01",
-          "value": 48
+          "value": 58
         },
         {
           "date": "2020-03-01",
-          "value": 50
+          "value": 58
         },
         {
           "date": "2020-04-01",
-          "value": 47
+          "value": 58
         },
         {
           "date": "2020-05-01",
-          "value": 43
+          "value": 58
         },
         {
           "date": "2020-06-01",
-          "value": 40
+          "value": 58
         },
         {
           "date": "2020-07-01",
-          "value": 38
+          "value": 58
         },
         {
           "date": "2020-08-01",
-          "value": 36
+          "value": 58
         },
         {
           "date": "2020-09-01",
-          "value": 39
+          "value": 58
         },
         {
           "date": "2020-10-01",
-          "value": 42
+          "value": 58
         },
         {
           "date": "2020-11-01",
-          "value": 44
+          "value": 58
         },
         {
           "date": "2020-12-01",
-          "value": 42
+          "value": 58
         },
         {
           "date": "2021-01-01",
-          "value": 40
+          "value": 58
         },
         {
           "date": "2021-02-01",
-          "value": 41
+          "value": 58
         },
         {
           "date": "2021-03-01",
-          "value": 44
+          "value": 58
         },
         {
           "date": "2021-04-01",
-          "value": 45
+          "value": 58
         },
         {
           "date": "2021-05-01",
-          "value": 45
+          "value": 58
         },
         {
           "date": "2021-06-01",
-          "value": 41
+          "value": 58
         },
         {
           "date": "2021-07-01",
-          "value": 38
+          "value": 58
         },
         {
           "date": "2021-08-01",
-          "value": 34
+          "value": 58
         },
         {
           "date": "2021-09-01",
-          "value": 37
+          "value": 58
         },
         {
           "date": "2021-10-01",
-          "value": 40
+          "value": 58
         },
         {
           "date": "2021-11-01",
-          "value": 44
+          "value": 58
         },
         {
           "date": "2021-12-01",
-          "value": 43
+          "value": 58
         },
         {
           "date": "2022-01-01",
-          "value": 44
+          "value": 58
         },
         {
           "date": "2022-02-01",
-          "value": 48
+          "value": 58
         },
         {
           "date": "2022-03-01",
-          "value": 54
+          "value": 58
         },
         {
           "date": "2022-04-01",
-          "value": 61
-        },
-        {
-          "date": "2022-05-01",
-          "value": 63
-        },
-        {
-          "date": "2022-06-01",
-          "value": 60
-        },
-        {
-          "date": "2022-07-01",
-          "value": 51
-        },
-        {
-          "date": "2022-08-01",
-          "value": 49
-        },
-        {
-          "date": "2022-09-01",
-          "value": 53
-        },
-        {
-          "date": "2022-10-01",
-          "value": 59
-        },
-        {
-          "date": "2022-11-01",
-          "value": 62
-        },
-        {
-          "date": "2022-12-01",
-          "value": 61
-        },
-        {
-          "date": "2023-01-01",
-          "value": 61
-        },
-        {
-          "date": "2023-02-01",
-          "value": 63
-        },
-        {
-          "date": "2023-03-01",
-          "value": 68
-        },
-        {
-          "date": "2023-04-01",
-          "value": 71
-        },
-        {
-          "date": "2023-05-01",
-          "value": 74
-        },
-        {
-          "date": "2023-06-01",
-          "value": 68
-        },
-        {
-          "date": "2023-07-01",
-          "value": 60
-        },
-        {
-          "date": "2023-08-01",
-          "value": 53
-        },
-        {
-          "date": "2023-09-01",
-          "value": 60
-        },
-        {
-          "date": "2023-10-01",
-          "value": 70
-        },
-        {
-          "date": "2023-11-01",
-          "value": 80
-        },
-        {
-          "date": "2023-12-01",
-          "value": 80
-        },
-        {
-          "date": "2024-01-01",
-          "value": 78
-        },
-        {
-          "date": "2024-02-01",
-          "value": 80
-        },
-        {
-          "date": "2024-03-01",
-          "value": 83
-        },
-        {
-          "date": "2024-04-01",
-          "value": 89
-        },
-        {
-          "date": "2024-05-01",
-          "value": 84
-        },
-        {
-          "date": "2024-06-01",
-          "value": 75
-        },
-        {
-          "date": "2024-07-01",
-          "value": 63
-        },
-        {
-          "date": "2024-08-01",
-          "value": 59
-        },
-        {
-          "date": "2024-09-01",
-          "value": 66
-        },
-        {
-          "date": "2024-10-01",
           "value": 77
         },
         {
-          "date": "2024-11-01",
-          "value": 85
-        },
-        {
-          "date": "2024-12-01",
-          "value": 84
-        },
-        {
-          "date": "2025-01-01",
-          "value": 82
-        },
-        {
-          "date": "2025-02-01",
-          "value": 87
-        },
-        {
-          "date": "2025-03-01",
-          "value": 93
-        },
-        {
-          "date": "2025-04-01",
-          "value": 98
-        },
-        {
-          "date": "2025-05-01",
-          "value": 91
-        },
-        {
-          "date": "2025-06-01",
-          "value": 88
-        },
-        {
-          "date": "2025-07-01",
-          "value": 84
-        },
-        {
-          "date": "2025-08-01",
-          "value": 87
-        },
-        {
-          "date": "2025-09-01",
-          "value": 97
-        },
-        {
-          "date": "2025-10-01",
-          "value": 105
-        },
-        {
-          "date": "2025-11-01",
-          "value": 113
-        },
-        {
-          "date": "2025-12-01",
-          "value": 113
-        },
-        {
-          "date": "2026-01-01",
-          "value": 114
-        },
-        {
-          "date": "2026-02-01",
-          "value": 122
-        },
-        {
-          "date": "2026-03-01",
-          "value": 136
-        },
-        {
-          "date": "2026-04-01",
-          "value": 155
-        },
-        {
-          "date": "2026-05-01",
-          "value": 166
-        },
-        {
-          "date": "2026-06-01",
-          "value": 169
-        },
-        {
-          "date": "2026-07-01",
-          "value": 139
-        },
-        {
-          "date": "2026-08-01",
-          "value": 139
-        },
-        {
-          "date": "2026-09-01",
-          "value": 137
-        }
-      ],
-      "food_insecurity": [
-        {
-          "date": "2016-10-01",
-          "value": 100
-        },
-        {
-          "date": "2016-11-01",
-          "value": 96
-        },
-        {
-          "date": "2016-12-01",
-          "value": 92
-        },
-        {
-          "date": "2017-01-01",
-          "value": 91
-        },
-        {
-          "date": "2017-02-01",
-          "value": 90
-        },
-        {
-          "date": "2017-03-01",
-          "value": 90
-        },
-        {
-          "date": "2017-04-01",
-          "value": 82
-        },
-        {
-          "date": "2017-05-01",
-          "value": 81
-        },
-        {
-          "date": "2017-06-01",
-          "value": 87
-        },
-        {
-          "date": "2017-07-01",
-          "value": 94
-        },
-        {
-          "date": "2017-08-01",
-          "value": 99
-        },
-        {
-          "date": "2017-09-01",
-          "value": 110
-        },
-        {
-          "date": "2017-10-01",
-          "value": 122
-        },
-        {
-          "date": "2017-11-01",
-          "value": 120
-        },
-        {
-          "date": "2017-12-01",
-          "value": 103
-        },
-        {
-          "date": "2018-01-01",
-          "value": 93
-        },
-        {
-          "date": "2018-02-01",
-          "value": 96
-        },
-        {
-          "date": "2018-03-01",
-          "value": 96
-        },
-        {
-          "date": "2018-04-01",
-          "value": 91
-        },
-        {
-          "date": "2018-05-01",
-          "value": 83
-        },
-        {
-          "date": "2018-06-01",
-          "value": 86
-        },
-        {
-          "date": "2018-07-01",
-          "value": 91
-        },
-        {
-          "date": "2018-08-01",
-          "value": 99
-        },
-        {
-          "date": "2018-09-01",
-          "value": 100
-        },
-        {
-          "date": "2018-10-01",
-          "value": 98
-        },
-        {
-          "date": "2018-11-01",
-          "value": 91
-        },
-        {
-          "date": "2018-12-01",
-          "value": 88
-        },
-        {
-          "date": "2019-01-01",
-          "value": 121
-        },
-        {
-          "date": "2019-02-01",
-          "value": 128
-        },
-        {
-          "date": "2019-03-01",
-          "value": 128
-        },
-        {
-          "date": "2019-04-01",
-          "value": 91
-        },
-        {
-          "date": "2019-05-01",
-          "value": 83
-        },
-        {
-          "date": "2019-06-01",
-          "value": 85
-        },
-        {
-          "date": "2019-07-01",
-          "value": 94
-        },
-        {
-          "date": "2019-08-01",
-          "value": 100
-        },
-        {
-          "date": "2019-09-01",
-          "value": 100
-        },
-        {
-          "date": "2019-10-01",
-          "value": 93
-        },
-        {
-          "date": "2019-11-01",
-          "value": 86
-        },
-        {
-          "date": "2019-12-01",
-          "value": 85
-        },
-        {
-          "date": "2020-01-01",
-          "value": 87
-        },
-        {
-          "date": "2020-02-01",
-          "value": 89
-        },
-        {
-          "date": "2020-03-01",
-          "value": 124
-        },
-        {
-          "date": "2020-04-01",
-          "value": 194
-        },
-        {
-          "date": "2020-05-01",
-          "value": 221
-        },
-        {
-          "date": "2020-06-01",
-          "value": 207
-        },
-        {
-          "date": "2020-07-01",
-          "value": 152
-        },
-        {
-          "date": "2020-08-01",
-          "value": 142
-        },
-        {
-          "date": "2020-09-01",
-          "value": 135
-        },
-        {
-          "date": "2020-10-01",
-          "value": 136
-        },
-        {
-          "date": "2020-11-01",
-          "value": 134
-        },
-        {
-          "date": "2020-12-01",
-          "value": 136
-        },
-        {
-          "date": "2021-01-01",
-          "value": 140
-        },
-        {
-          "date": "2021-02-01",
-          "value": 145
-        },
-        {
-          "date": "2021-03-01",
-          "value": 140
-        },
-        {
-          "date": "2021-04-01",
-          "value": 127
-        },
-        {
-          "date": "2021-05-01",
-          "value": 121
-        },
-        {
-          "date": "2021-06-01",
-          "value": 128
-        },
-        {
-          "date": "2021-07-01",
-          "value": 138
-        },
-        {
-          "date": "2021-08-01",
-          "value": 153
-        },
-        {
-          "date": "2021-09-01",
-          "value": 162
-        },
-        {
-          "date": "2021-10-01",
-          "value": 162
-        },
-        {
-          "date": "2021-11-01",
-          "value": 150
-        },
-        {
-          "date": "2021-12-01",
-          "value": 137
-        },
-        {
-          "date": "2022-01-01",
-          "value": 142
-        },
-        {
-          "date": "2022-02-01",
-          "value": 146
-        },
-        {
-          "date": "2022-03-01",
-          "value": 148
-        },
-        {
-          "date": "2022-04-01",
-          "value": 138
-        },
-        {
           "date": "2022-05-01",
-          "value": 134
+          "value": 77
         },
         {
           "date": "2022-06-01",
-          "value": 143
+          "value": 77
         },
         {
           "date": "2022-07-01",
-          "value": 156
+          "value": 58
         },
         {
           "date": "2022-08-01",
-          "value": 167
+          "value": 58
         },
         {
           "date": "2022-09-01",
-          "value": 171
+          "value": 58
         },
         {
           "date": "2022-10-01",
-          "value": 172
+          "value": 77
         },
         {
           "date": "2022-11-01",
-          "value": 164
+          "value": 77
         },
         {
           "date": "2022-12-01",
-          "value": 152
+          "value": 77
         },
         {
           "date": "2023-01-01",
-          "value": 144
+          "value": 58
         },
         {
           "date": "2023-02-01",
-          "value": 137
+          "value": 77
         },
         {
           "date": "2023-03-01",
-          "value": 131
+          "value": 96
         },
         {
           "date": "2023-04-01",
-          "value": 119
+          "value": 115
         },
         {
           "date": "2023-05-01",
-          "value": 118
+          "value": 115
         },
         {
           "date": "2023-06-01",
-          "value": 123
+          "value": 96
         },
         {
           "date": "2023-07-01",
-          "value": 131
+          "value": 77
         },
         {
           "date": "2023-08-01",
-          "value": 138
+          "value": 58
         },
         {
           "date": "2023-09-01",
-          "value": 142
+          "value": 77
         },
         {
           "date": "2023-10-01",
-          "value": 137
+          "value": 96
         },
         {
           "date": "2023-11-01",
-          "value": 127
+          "value": 115
         },
         {
           "date": "2023-12-01",
@@ -5141,131 +5306,613 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2024-01-01",
-          "value": 114
+          "value": 115
         },
         {
           "date": "2024-02-01",
-          "value": 113
+          "value": 115
         },
         {
           "date": "2024-03-01",
-          "value": 107
+          "value": 115
         },
         {
           "date": "2024-04-01",
-          "value": 99
+          "value": 115
         },
         {
           "date": "2024-05-01",
-          "value": 96
+          "value": 115
         },
         {
           "date": "2024-06-01",
-          "value": 104
+          "value": 96
         },
         {
           "date": "2024-07-01",
-          "value": 112
+          "value": 77
         },
         {
           "date": "2024-08-01",
-          "value": 119
+          "value": 58
         },
         {
           "date": "2024-09-01",
-          "value": 117
+          "value": 77
         },
         {
           "date": "2024-10-01",
-          "value": 117
+          "value": 96
         },
         {
           "date": "2024-11-01",
-          "value": 112
+          "value": 115
         },
         {
           "date": "2024-12-01",
-          "value": 106
+          "value": 115
         },
         {
           "date": "2025-01-01",
-          "value": 110
+          "value": 115
         },
         {
           "date": "2025-02-01",
-          "value": 112
+          "value": 115
         },
         {
           "date": "2025-03-01",
-          "value": 111
+          "value": 115
         },
         {
           "date": "2025-04-01",
-          "value": 99
+          "value": 134
         },
         {
           "date": "2025-05-01",
-          "value": 94
+          "value": 134
         },
         {
           "date": "2025-06-01",
-          "value": 98
+          "value": 134
         },
         {
           "date": "2025-07-01",
-          "value": 103
+          "value": 115
         },
         {
           "date": "2025-08-01",
-          "value": 109
+          "value": 115
         },
         {
           "date": "2025-09-01",
-          "value": 109
+          "value": 134
         },
         {
           "date": "2025-10-01",
-          "value": 160
+          "value": 154
         },
         {
           "date": "2025-11-01",
-          "value": 198
+          "value": 173
         },
         {
           "date": "2025-12-01",
-          "value": 196
+          "value": 173
         },
         {
           "date": "2026-01-01",
-          "value": 143
+          "value": 173
         },
         {
           "date": "2026-02-01",
-          "value": 100
+          "value": 173
         },
         {
           "date": "2026-03-01",
-          "value": 99
+          "value": 192
         },
         {
           "date": "2026-04-01",
-          "value": 98
+          "value": 211
         },
         {
           "date": "2026-05-01",
-          "value": 99
+          "value": 249
         },
         {
           "date": "2026-06-01",
-          "value": 105
+          "value": 249
         },
         {
           "date": "2026-07-01",
-          "value": 103
+          "value": 230
         },
         {
           "date": "2026-08-01",
+          "value": 173
+        },
+        {
+          "date": "2026-09-01",
+          "value": 134
+        }
+      ],
+      "food_insecurity": [
+        {
+          "date": "2016-10-01",
+          "value": 94
+        },
+        {
+          "date": "2016-11-01",
+          "value": 91
+        },
+        {
+          "date": "2016-12-01",
+          "value": 85
+        },
+        {
+          "date": "2017-01-01",
+          "value": 85
+        },
+        {
+          "date": "2017-02-01",
+          "value": 84
+        },
+        {
+          "date": "2017-03-01",
+          "value": 84
+        },
+        {
+          "date": "2017-04-01",
+          "value": 78
+        },
+        {
+          "date": "2017-05-01",
+          "value": 77
+        },
+        {
+          "date": "2017-06-01",
+          "value": 83
+        },
+        {
+          "date": "2017-07-01",
+          "value": 87
+        },
+        {
+          "date": "2017-08-01",
+          "value": 92
+        },
+        {
+          "date": "2017-09-01",
+          "value": 102
+        },
+        {
+          "date": "2017-10-01",
+          "value": 114
+        },
+        {
+          "date": "2017-11-01",
+          "value": 112
+        },
+        {
+          "date": "2017-12-01",
+          "value": 99
+        },
+        {
+          "date": "2018-01-01",
+          "value": 90
+        },
+        {
+          "date": "2018-02-01",
+          "value": 94
+        },
+        {
+          "date": "2018-03-01",
+          "value": 93
+        },
+        {
+          "date": "2018-04-01",
+          "value": 86
+        },
+        {
+          "date": "2018-05-01",
+          "value": 77
+        },
+        {
+          "date": "2018-06-01",
+          "value": 81
+        },
+        {
+          "date": "2018-07-01",
+          "value": 85
+        },
+        {
+          "date": "2018-08-01",
+          "value": 93
+        },
+        {
+          "date": "2018-09-01",
+          "value": 94
+        },
+        {
+          "date": "2018-10-01",
+          "value": 90
+        },
+        {
+          "date": "2018-11-01",
+          "value": 84
+        },
+        {
+          "date": "2018-12-01",
+          "value": 79
+        },
+        {
+          "date": "2019-01-01",
+          "value": 112
+        },
+        {
+          "date": "2019-02-01",
+          "value": 119
+        },
+        {
+          "date": "2019-03-01",
+          "value": 120
+        },
+        {
+          "date": "2019-04-01",
+          "value": 85
+        },
+        {
+          "date": "2019-05-01",
+          "value": 80
+        },
+        {
+          "date": "2019-06-01",
+          "value": 82
+        },
+        {
+          "date": "2019-07-01",
+          "value": 90
+        },
+        {
+          "date": "2019-08-01",
+          "value": 95
+        },
+        {
+          "date": "2019-09-01",
+          "value": 95
+        },
+        {
+          "date": "2019-10-01",
+          "value": 88
+        },
+        {
+          "date": "2019-11-01",
+          "value": 81
+        },
+        {
+          "date": "2019-12-01",
+          "value": 80
+        },
+        {
+          "date": "2020-01-01",
+          "value": 82
+        },
+        {
+          "date": "2020-02-01",
+          "value": 83
+        },
+        {
+          "date": "2020-03-01",
+          "value": 112
+        },
+        {
+          "date": "2020-04-01",
+          "value": 178
+        },
+        {
+          "date": "2020-05-01",
+          "value": 205
+        },
+        {
+          "date": "2020-06-01",
+          "value": 194
+        },
+        {
+          "date": "2020-07-01",
+          "value": 142
+        },
+        {
+          "date": "2020-08-01",
+          "value": 134
+        },
+        {
+          "date": "2020-09-01",
+          "value": 126
+        },
+        {
+          "date": "2020-10-01",
+          "value": 128
+        },
+        {
+          "date": "2020-11-01",
+          "value": 124
+        },
+        {
+          "date": "2020-12-01",
+          "value": 128
+        },
+        {
+          "date": "2021-01-01",
+          "value": 132
+        },
+        {
+          "date": "2021-02-01",
+          "value": 137
+        },
+        {
+          "date": "2021-03-01",
+          "value": 134
+        },
+        {
+          "date": "2021-04-01",
+          "value": 122
+        },
+        {
+          "date": "2021-05-01",
+          "value": 116
+        },
+        {
+          "date": "2021-06-01",
+          "value": 120
+        },
+        {
+          "date": "2021-07-01",
+          "value": 128
+        },
+        {
+          "date": "2021-08-01",
+          "value": 142
+        },
+        {
+          "date": "2021-09-01",
+          "value": 153
+        },
+        {
+          "date": "2021-10-01",
+          "value": 152
+        },
+        {
+          "date": "2021-11-01",
+          "value": 140
+        },
+        {
+          "date": "2021-12-01",
+          "value": 126
+        },
+        {
+          "date": "2022-01-01",
+          "value": 130
+        },
+        {
+          "date": "2022-02-01",
+          "value": 134
+        },
+        {
+          "date": "2022-03-01",
+          "value": 137
+        },
+        {
+          "date": "2022-04-01",
+          "value": 130
+        },
+        {
+          "date": "2022-05-01",
+          "value": 126
+        },
+        {
+          "date": "2022-06-01",
+          "value": 136
+        },
+        {
+          "date": "2022-07-01",
+          "value": 148
+        },
+        {
+          "date": "2022-08-01",
+          "value": 158
+        },
+        {
+          "date": "2022-09-01",
+          "value": 162
+        },
+        {
+          "date": "2022-10-01",
+          "value": 163
+        },
+        {
+          "date": "2022-11-01",
+          "value": 150
+        },
+        {
+          "date": "2022-12-01",
+          "value": 137
+        },
+        {
+          "date": "2023-01-01",
+          "value": 129
+        },
+        {
+          "date": "2023-02-01",
+          "value": 130
+        },
+        {
+          "date": "2023-03-01",
+          "value": 124
+        },
+        {
+          "date": "2023-04-01",
+          "value": 114
+        },
+        {
+          "date": "2023-05-01",
+          "value": 112
+        },
+        {
+          "date": "2023-06-01",
+          "value": 119
+        },
+        {
+          "date": "2023-07-01",
+          "value": 128
+        },
+        {
+          "date": "2023-08-01",
+          "value": 133
+        },
+        {
+          "date": "2023-09-01",
+          "value": 134
+        },
+        {
+          "date": "2023-10-01",
+          "value": 127
+        },
+        {
+          "date": "2023-11-01",
+          "value": 120
+        },
+        {
+          "date": "2023-12-01",
+          "value": 110
+        },
+        {
+          "date": "2024-01-01",
+          "value": 110
+        },
+        {
+          "date": "2024-02-01",
+          "value": 108
+        },
+        {
+          "date": "2024-03-01",
+          "value": 102
+        },
+        {
+          "date": "2024-04-01",
+          "value": 94
+        },
+        {
+          "date": "2024-05-01",
+          "value": 91
+        },
+        {
+          "date": "2024-06-01",
+          "value": 98
+        },
+        {
+          "date": "2024-07-01",
+          "value": 104
+        },
+        {
+          "date": "2024-08-01",
+          "value": 111
+        },
+        {
+          "date": "2024-09-01",
+          "value": 110
+        },
+        {
+          "date": "2024-10-01",
+          "value": 111
+        },
+        {
+          "date": "2024-11-01",
+          "value": 105
+        },
+        {
+          "date": "2024-12-01",
+          "value": 99
+        },
+        {
+          "date": "2025-01-01",
           "value": 103
+        },
+        {
+          "date": "2025-02-01",
+          "value": 106
+        },
+        {
+          "date": "2025-03-01",
+          "value": 105
+        },
+        {
+          "date": "2025-04-01",
+          "value": 92
+        },
+        {
+          "date": "2025-05-01",
+          "value": 88
+        },
+        {
+          "date": "2025-06-01",
+          "value": 93
+        },
+        {
+          "date": "2025-07-01",
+          "value": 99
+        },
+        {
+          "date": "2025-08-01",
+          "value": 102
+        },
+        {
+          "date": "2025-09-01",
+          "value": 101
+        },
+        {
+          "date": "2025-10-01",
+          "value": 149
+        },
+        {
+          "date": "2025-11-01",
+          "value": 185
+        },
+        {
+          "date": "2025-12-01",
+          "value": 183
+        },
+        {
+          "date": "2026-01-01",
+          "value": 133
+        },
+        {
+          "date": "2026-02-01",
+          "value": 91
+        },
+        {
+          "date": "2026-03-01",
+          "value": 90
+        },
+        {
+          "date": "2026-04-01",
+          "value": 90
+        },
+        {
+          "date": "2026-05-01",
+          "value": 92
+        },
+        {
+          "date": "2026-06-01",
+          "value": 97
+        },
+        {
+          "date": "2026-07-01",
+          "value": 98
+        },
+        {
+          "date": "2026-08-01",
+          "value": 101
         },
         {
           "date": "2026-09-01",
@@ -5275,475 +5922,475 @@ const DASHBOARD_DATA = {
       "housing_stress": [
         {
           "date": "2016-10-01",
-          "value": 44
+          "value": 0
         },
         {
           "date": "2016-11-01",
-          "value": 44
+          "value": 0
         },
         {
           "date": "2016-12-01",
-          "value": 45
+          "value": 0
         },
         {
           "date": "2017-01-01",
-          "value": 46
+          "value": 0
         },
         {
           "date": "2017-02-01",
-          "value": 43
+          "value": 0
         },
         {
           "date": "2017-03-01",
-          "value": 43
+          "value": 0
         },
         {
           "date": "2017-04-01",
-          "value": 40
+          "value": 0
         },
         {
           "date": "2017-05-01",
-          "value": 43
+          "value": 0
         },
         {
           "date": "2017-06-01",
-          "value": 48
+          "value": 0
         },
         {
           "date": "2017-07-01",
-          "value": 54
+          "value": 0
         },
         {
           "date": "2017-08-01",
-          "value": 58
+          "value": 0
         },
         {
           "date": "2017-09-01",
-          "value": 57
+          "value": 0
         },
         {
           "date": "2017-10-01",
-          "value": 54
+          "value": 0
         },
         {
           "date": "2017-11-01",
-          "value": 50
+          "value": 0
         },
         {
           "date": "2017-12-01",
-          "value": 48
+          "value": 0
         },
         {
           "date": "2018-01-01",
-          "value": 48
+          "value": 0
         },
         {
           "date": "2018-02-01",
-          "value": 46
+          "value": 0
         },
         {
           "date": "2018-03-01",
-          "value": 45
+          "value": 0
         },
         {
           "date": "2018-04-01",
-          "value": 42
+          "value": 0
         },
         {
           "date": "2018-05-01",
-          "value": 45
+          "value": 0
         },
         {
           "date": "2018-06-01",
-          "value": 49
+          "value": 0
         },
         {
           "date": "2018-07-01",
-          "value": 54
+          "value": 0
         },
         {
           "date": "2018-08-01",
-          "value": 58
+          "value": 0
         },
         {
           "date": "2018-09-01",
-          "value": 58
+          "value": 0
         },
         {
           "date": "2018-10-01",
-          "value": 56
+          "value": 0
         },
         {
           "date": "2018-11-01",
-          "value": 51
+          "value": 0
         },
         {
           "date": "2018-12-01",
-          "value": 51
+          "value": 0
         },
         {
           "date": "2019-01-01",
-          "value": 50
+          "value": 0
         },
         {
           "date": "2019-02-01",
-          "value": 49
+          "value": 0
         },
         {
           "date": "2019-03-01",
-          "value": 47
+          "value": 0
         },
         {
           "date": "2019-04-01",
-          "value": 46
+          "value": 0
         },
         {
           "date": "2019-05-01",
-          "value": 48
+          "value": 0
         },
         {
           "date": "2019-06-01",
-          "value": 50
+          "value": 0
         },
         {
           "date": "2019-07-01",
-          "value": 53
+          "value": 0
         },
         {
           "date": "2019-08-01",
-          "value": 54
+          "value": 0
         },
         {
           "date": "2019-09-01",
-          "value": 56
+          "value": 0
         },
         {
           "date": "2019-10-01",
-          "value": 55
+          "value": 0
         },
         {
           "date": "2019-11-01",
-          "value": 54
+          "value": 0
         },
         {
           "date": "2019-12-01",
-          "value": 53
+          "value": 0
         },
         {
           "date": "2020-01-01",
-          "value": 53
+          "value": 0
         },
         {
           "date": "2020-02-01",
-          "value": 51
+          "value": 0
         },
         {
           "date": "2020-03-01",
-          "value": 49
+          "value": 0
         },
         {
           "date": "2020-04-01",
-          "value": 42
+          "value": 0
         },
         {
           "date": "2020-05-01",
-          "value": 38
+          "value": 0
         },
         {
           "date": "2020-06-01",
-          "value": 35
+          "value": 0
         },
         {
           "date": "2020-07-01",
-          "value": 41
+          "value": 0
         },
         {
           "date": "2020-08-01",
-          "value": 52
+          "value": 0
         },
         {
           "date": "2020-09-01",
-          "value": 62
+          "value": 0
         },
         {
           "date": "2020-10-01",
-          "value": 65
+          "value": 0
         },
         {
           "date": "2020-11-01",
-          "value": 59
+          "value": 0
         },
         {
           "date": "2020-12-01",
-          "value": 59
+          "value": 0
         },
         {
           "date": "2021-01-01",
-          "value": 62
+          "value": 0
         },
         {
           "date": "2021-02-01",
-          "value": 65
+          "value": 0
         },
         {
           "date": "2021-03-01",
-          "value": 61
+          "value": 0
         },
         {
           "date": "2021-04-01",
-          "value": 52
+          "value": 0
         },
         {
           "date": "2021-05-01",
-          "value": 50
+          "value": 0
         },
         {
           "date": "2021-06-01",
-          "value": 48
+          "value": 0
         },
         {
           "date": "2021-07-01",
-          "value": 53
+          "value": 0
         },
         {
           "date": "2021-08-01",
-          "value": 62
+          "value": 0
         },
         {
           "date": "2021-09-01",
-          "value": 66
+          "value": 0
         },
         {
           "date": "2021-10-01",
-          "value": 65
+          "value": 0
         },
         {
           "date": "2021-11-01",
-          "value": 59
+          "value": 0
         },
         {
           "date": "2021-12-01",
-          "value": 54
+          "value": 0
         },
         {
           "date": "2022-01-01",
-          "value": 59
+          "value": 0
         },
         {
           "date": "2022-02-01",
-          "value": 63
+          "value": 0
         },
         {
           "date": "2022-03-01",
-          "value": 69
+          "value": 0
         },
         {
           "date": "2022-04-01",
-          "value": 67
+          "value": 0
         },
         {
           "date": "2022-05-01",
-          "value": 65
+          "value": 0
         },
         {
           "date": "2022-06-01",
-          "value": 69
+          "value": 0
         },
         {
           "date": "2022-07-01",
-          "value": 78
+          "value": 51
         },
         {
           "date": "2022-08-01",
-          "value": 85
+          "value": 102
         },
         {
           "date": "2022-09-01",
-          "value": 84
+          "value": 102
         },
         {
           "date": "2022-10-01",
-          "value": 81
+          "value": 51
         },
         {
           "date": "2022-11-01",
-          "value": 80
+          "value": 0
         },
         {
           "date": "2022-12-01",
-          "value": 78
+          "value": 0
         },
         {
           "date": "2023-01-01",
-          "value": 77
+          "value": 0
         },
         {
           "date": "2023-02-01",
-          "value": 75
+          "value": 0
         },
         {
           "date": "2023-03-01",
-          "value": 75
+          "value": 0
         },
         {
           "date": "2023-04-01",
-          "value": 75
+          "value": 0
         },
         {
           "date": "2023-05-01",
-          "value": 74
+          "value": 0
         },
         {
           "date": "2023-06-01",
-          "value": 76
+          "value": 0
         },
         {
           "date": "2023-07-01",
-          "value": 79
+          "value": 51
         },
         {
           "date": "2023-08-01",
-          "value": 81
+          "value": 51
         },
         {
           "date": "2023-09-01",
-          "value": 81
+          "value": 51
         },
         {
           "date": "2023-10-01",
-          "value": 83
+          "value": 51
         },
         {
           "date": "2023-11-01",
-          "value": 84
+          "value": 51
         },
         {
           "date": "2023-12-01",
-          "value": 83
+          "value": 51
         },
         {
           "date": "2024-01-01",
-          "value": 81
+          "value": 51
         },
         {
           "date": "2024-02-01",
-          "value": 76
+          "value": 51
         },
         {
           "date": "2024-03-01",
-          "value": 75
+          "value": 51
         },
         {
           "date": "2024-04-01",
-          "value": 71
+          "value": 0
         },
         {
           "date": "2024-05-01",
-          "value": 71
+          "value": 0
         },
         {
           "date": "2024-06-01",
-          "value": 72
+          "value": 0
         },
         {
           "date": "2024-07-01",
-          "value": 77
+          "value": 51
         },
         {
           "date": "2024-08-01",
-          "value": 81
+          "value": 51
         },
         {
           "date": "2024-09-01",
-          "value": 83
+          "value": 51
         },
         {
           "date": "2024-10-01",
-          "value": 82
+          "value": 51
         },
         {
           "date": "2024-11-01",
-          "value": 81
+          "value": 51
         },
         {
           "date": "2024-12-01",
-          "value": 80
+          "value": 51
         },
         {
           "date": "2025-01-01",
-          "value": 79
+          "value": 0
         },
         {
           "date": "2025-02-01",
-          "value": 76
+          "value": 0
         },
         {
           "date": "2025-03-01",
-          "value": 73
+          "value": 0
         },
         {
           "date": "2025-04-01",
-          "value": 69
+          "value": 0
         },
         {
           "date": "2025-05-01",
-          "value": 68
+          "value": 0
         },
         {
           "date": "2025-06-01",
-          "value": 73
+          "value": 51
         },
         {
           "date": "2025-07-01",
-          "value": 81
+          "value": 102
         },
         {
           "date": "2025-08-01",
-          "value": 90
+          "value": 153
         },
         {
           "date": "2025-09-01",
-          "value": 94
+          "value": 153
         },
         {
           "date": "2025-10-01",
-          "value": 94
+          "value": 153
         },
         {
           "date": "2025-11-01",
-          "value": 95
+          "value": 153
         },
         {
           "date": "2025-12-01",
-          "value": 101
+          "value": 153
         },
         {
           "date": "2026-01-01",
-          "value": 111
+          "value": 153
         },
         {
           "date": "2026-02-01",
-          "value": 117
+          "value": 153
         },
         {
           "date": "2026-03-01",
-          "value": 123
+          "value": 153
         },
         {
           "date": "2026-04-01",
-          "value": 131
+          "value": 153
         },
         {
           "date": "2026-05-01",
-          "value": 147
+          "value": 153
         },
         {
           "date": "2026-06-01",
-          "value": 164
+          "value": 153
         },
         {
           "date": "2026-07-01",
-          "value": 157
+          "value": 153
         },
         {
           "date": "2026-08-01",
@@ -5757,479 +6404,479 @@ const DASHBOARD_DATA = {
       "affordability": [
         {
           "date": "2016-10-01",
-          "value": 83
-        },
-        {
-          "date": "2016-11-01",
-          "value": 83
-        },
-        {
-          "date": "2016-12-01",
-          "value": 83
-        },
-        {
-          "date": "2017-01-01",
-          "value": 86
-        },
-        {
-          "date": "2017-02-01",
-          "value": 87
-        },
-        {
-          "date": "2017-03-01",
-          "value": 93
-        },
-        {
-          "date": "2017-04-01",
-          "value": 94
-        },
-        {
-          "date": "2017-05-01",
-          "value": 94
-        },
-        {
-          "date": "2017-06-01",
-          "value": 91
-        },
-        {
-          "date": "2017-07-01",
-          "value": 93
-        },
-        {
-          "date": "2017-08-01",
-          "value": 91
-        },
-        {
-          "date": "2017-09-01",
-          "value": 89
-        },
-        {
-          "date": "2017-10-01",
-          "value": 85
-        },
-        {
-          "date": "2017-11-01",
-          "value": 85
-        },
-        {
-          "date": "2017-12-01",
-          "value": 85
-        },
-        {
-          "date": "2018-01-01",
-          "value": 90
-        },
-        {
-          "date": "2018-02-01",
-          "value": 93
-        },
-        {
-          "date": "2018-03-01",
-          "value": 99
-        },
-        {
-          "date": "2018-04-01",
-          "value": 99
-        },
-        {
-          "date": "2018-05-01",
-          "value": 99
-        },
-        {
-          "date": "2018-06-01",
-          "value": 99
-        },
-        {
-          "date": "2018-07-01",
-          "value": 100
-        },
-        {
-          "date": "2018-08-01",
-          "value": 99
-        },
-        {
-          "date": "2018-09-01",
-          "value": 95
-        },
-        {
-          "date": "2018-10-01",
-          "value": 93
-        },
-        {
-          "date": "2018-11-01",
-          "value": 93
-        },
-        {
-          "date": "2018-12-01",
-          "value": 91
-        },
-        {
-          "date": "2019-01-01",
-          "value": 93
-        },
-        {
-          "date": "2019-02-01",
-          "value": 96
-        },
-        {
-          "date": "2019-03-01",
-          "value": 101
-        },
-        {
-          "date": "2019-04-01",
-          "value": 98
-        },
-        {
-          "date": "2019-05-01",
-          "value": 96
-        },
-        {
-          "date": "2019-06-01",
-          "value": 96
-        },
-        {
-          "date": "2019-07-01",
-          "value": 98
-        },
-        {
-          "date": "2019-08-01",
-          "value": 98
-        },
-        {
-          "date": "2019-09-01",
-          "value": 95
-        },
-        {
-          "date": "2019-10-01",
-          "value": 94
-        },
-        {
-          "date": "2019-11-01",
-          "value": 93
-        },
-        {
-          "date": "2019-12-01",
-          "value": 93
-        },
-        {
-          "date": "2020-01-01",
-          "value": 98
-        },
-        {
-          "date": "2020-02-01",
-          "value": 103
-        },
-        {
-          "date": "2020-03-01",
-          "value": 96
-        },
-        {
-          "date": "2020-04-01",
-          "value": 79
-        },
-        {
-          "date": "2020-05-01",
-          "value": 67
-        },
-        {
-          "date": "2020-06-01",
-          "value": 68
-        },
-        {
-          "date": "2020-07-01",
-          "value": 75
-        },
-        {
-          "date": "2020-08-01",
-          "value": 80
-        },
-        {
-          "date": "2020-09-01",
-          "value": 82
-        },
-        {
-          "date": "2020-10-01",
-          "value": 81
-        },
-        {
-          "date": "2020-11-01",
-          "value": 79
-        },
-        {
-          "date": "2020-12-01",
-          "value": 77
-        },
-        {
-          "date": "2021-01-01",
-          "value": 79
-        },
-        {
-          "date": "2021-02-01",
-          "value": 83
-        },
-        {
-          "date": "2021-03-01",
-          "value": 85
-        },
-        {
-          "date": "2021-04-01",
-          "value": 83
-        },
-        {
-          "date": "2021-05-01",
-          "value": 79
-        },
-        {
-          "date": "2021-06-01",
-          "value": 80
-        },
-        {
-          "date": "2021-07-01",
-          "value": 81
-        },
-        {
-          "date": "2021-08-01",
-          "value": 82
-        },
-        {
-          "date": "2021-09-01",
-          "value": 82
-        },
-        {
-          "date": "2021-10-01",
-          "value": 84
-        },
-        {
-          "date": "2021-11-01",
-          "value": 83
-        },
-        {
-          "date": "2021-12-01",
-          "value": 83
-        },
-        {
-          "date": "2022-01-01",
-          "value": 89
-        },
-        {
-          "date": "2022-02-01",
-          "value": 101
-        },
-        {
-          "date": "2022-03-01",
-          "value": 114
-        },
-        {
-          "date": "2022-04-01",
-          "value": 114
-        },
-        {
-          "date": "2022-05-01",
-          "value": 111
-        },
-        {
-          "date": "2022-06-01",
-          "value": 109
-        },
-        {
-          "date": "2022-07-01",
-          "value": 110
-        },
-        {
-          "date": "2022-08-01",
-          "value": 107
-        },
-        {
-          "date": "2022-09-01",
-          "value": 105
-        },
-        {
-          "date": "2022-10-01",
-          "value": 105
-        },
-        {
-          "date": "2022-11-01",
-          "value": 105
-        },
-        {
-          "date": "2022-12-01",
-          "value": 100
-        },
-        {
-          "date": "2023-01-01",
-          "value": 96
-        },
-        {
-          "date": "2023-02-01",
-          "value": 96
-        },
-        {
-          "date": "2023-03-01",
-          "value": 99
-        },
-        {
-          "date": "2023-04-01",
-          "value": 100
-        },
-        {
-          "date": "2023-05-01",
-          "value": 100
-        },
-        {
-          "date": "2023-06-01",
-          "value": 101
-        },
-        {
-          "date": "2023-07-01",
-          "value": 101
-        },
-        {
-          "date": "2023-08-01",
-          "value": 101
-        },
-        {
-          "date": "2023-09-01",
-          "value": 102
-        },
-        {
-          "date": "2023-10-01",
-          "value": 103
-        },
-        {
-          "date": "2023-11-01",
-          "value": 102
-        },
-        {
-          "date": "2023-12-01",
           "value": 97
         },
         {
-          "date": "2024-01-01",
+          "date": "2016-11-01",
           "value": 99
         },
         {
-          "date": "2024-02-01",
+          "date": "2016-12-01",
+          "value": 97
+        },
+        {
+          "date": "2017-01-01",
           "value": 102
         },
         {
-          "date": "2024-03-01",
-          "value": 106
-        },
-        {
-          "date": "2024-04-01",
-          "value": 105
-        },
-        {
-          "date": "2024-05-01",
+          "date": "2017-02-01",
           "value": 104
         },
         {
-          "date": "2024-06-01",
-          "value": 103
+          "date": "2017-03-01",
+          "value": 109
         },
         {
-          "date": "2024-07-01",
-          "value": 103
+          "date": "2017-04-01",
+          "value": 109
         },
         {
-          "date": "2024-08-01",
-          "value": 103
+          "date": "2017-05-01",
+          "value": 107
         },
         {
-          "date": "2024-09-01",
-          "value": 103
+          "date": "2017-06-01",
+          "value": 107
         },
         {
-          "date": "2024-10-01",
-          "value": 101
+          "date": "2017-07-01",
+          "value": 107
         },
         {
-          "date": "2024-11-01",
-          "value": 103
+          "date": "2017-08-01",
+          "value": 107
         },
         {
-          "date": "2024-12-01",
-          "value": 101
+          "date": "2017-09-01",
+          "value": 102
         },
         {
-          "date": "2025-01-01",
-          "value": 103
-        },
-        {
-          "date": "2025-02-01",
-          "value": 103
-        },
-        {
-          "date": "2025-03-01",
-          "value": 106
-        },
-        {
-          "date": "2025-04-01",
-          "value": 104
-        },
-        {
-          "date": "2025-05-01",
+          "date": "2017-10-01",
           "value": 99
         },
         {
-          "date": "2025-06-01",
-          "value": 101
+          "date": "2017-11-01",
+          "value": 99
         },
         {
-          "date": "2025-07-01",
+          "date": "2017-12-01",
+          "value": 100
+        },
+        {
+          "date": "2018-01-01",
+          "value": 105
+        },
+        {
+          "date": "2018-02-01",
+          "value": 109
+        },
+        {
+          "date": "2018-03-01",
           "value": 114
         },
         {
-          "date": "2025-08-01",
-          "value": 123
-        },
-        {
-          "date": "2025-09-01",
-          "value": 123
-        },
-        {
-          "date": "2025-10-01",
+          "date": "2018-04-01",
           "value": 114
         },
         {
-          "date": "2025-11-01",
+          "date": "2018-05-01",
+          "value": 114
+        },
+        {
+          "date": "2018-06-01",
+          "value": 115
+        },
+        {
+          "date": "2018-07-01",
+          "value": 115
+        },
+        {
+          "date": "2018-08-01",
+          "value": 115
+        },
+        {
+          "date": "2018-09-01",
+          "value": 112
+        },
+        {
+          "date": "2018-10-01",
+          "value": 110
+        },
+        {
+          "date": "2018-11-01",
+          "value": 109
+        },
+        {
+          "date": "2018-12-01",
+          "value": 107
+        },
+        {
+          "date": "2019-01-01",
+          "value": 109
+        },
+        {
+          "date": "2019-02-01",
+          "value": 112
+        },
+        {
+          "date": "2019-03-01",
+          "value": 117
+        },
+        {
+          "date": "2019-04-01",
+          "value": 117
+        },
+        {
+          "date": "2019-05-01",
+          "value": 114
+        },
+        {
+          "date": "2019-06-01",
+          "value": 112
+        },
+        {
+          "date": "2019-07-01",
+          "value": 110
+        },
+        {
+          "date": "2019-08-01",
+          "value": 110
+        },
+        {
+          "date": "2019-09-01",
+          "value": 109
+        },
+        {
+          "date": "2019-10-01",
+          "value": 107
+        },
+        {
+          "date": "2019-11-01",
+          "value": 105
+        },
+        {
+          "date": "2019-12-01",
+          "value": 104
+        },
+        {
+          "date": "2020-01-01",
+          "value": 111
+        },
+        {
+          "date": "2020-02-01",
+          "value": 118
+        },
+        {
+          "date": "2020-03-01",
+          "value": 111
+        },
+        {
+          "date": "2020-04-01",
+          "value": 94
+        },
+        {
+          "date": "2020-05-01",
+          "value": 80
+        },
+        {
+          "date": "2020-06-01",
+          "value": 84
+        },
+        {
+          "date": "2020-07-01",
+          "value": 90
+        },
+        {
+          "date": "2020-08-01",
+          "value": 94
+        },
+        {
+          "date": "2020-09-01",
+          "value": 94
+        },
+        {
+          "date": "2020-10-01",
+          "value": 92
+        },
+        {
+          "date": "2020-11-01",
+          "value": 90
+        },
+        {
+          "date": "2020-12-01",
+          "value": 89
+        },
+        {
+          "date": "2021-01-01",
+          "value": 92
+        },
+        {
+          "date": "2021-02-01",
+          "value": 99
+        },
+        {
+          "date": "2021-03-01",
+          "value": 102
+        },
+        {
+          "date": "2021-04-01",
+          "value": 99
+        },
+        {
+          "date": "2021-05-01",
+          "value": 94
+        },
+        {
+          "date": "2021-06-01",
+          "value": 94
+        },
+        {
+          "date": "2021-07-01",
+          "value": 95
+        },
+        {
+          "date": "2021-08-01",
+          "value": 97
+        },
+        {
+          "date": "2021-09-01",
+          "value": 97
+        },
+        {
+          "date": "2021-10-01",
+          "value": 99
+        },
+        {
+          "date": "2021-11-01",
+          "value": 99
+        },
+        {
+          "date": "2021-12-01",
+          "value": 99
+        },
+        {
+          "date": "2022-01-01",
+          "value": 107
+        },
+        {
+          "date": "2022-02-01",
+          "value": 119
+        },
+        {
+          "date": "2022-03-01",
+          "value": 133
+        },
+        {
+          "date": "2022-04-01",
+          "value": 133
+        },
+        {
+          "date": "2022-05-01",
+          "value": 130
+        },
+        {
+          "date": "2022-06-01",
           "value": 128
         },
         {
-          "date": "2025-12-01",
-          "value": 149
+          "date": "2022-07-01",
+          "value": 128
         },
         {
-          "date": "2026-01-01",
+          "date": "2022-08-01",
+          "value": 128
+        },
+        {
+          "date": "2022-09-01",
+          "value": 123
+        },
+        {
+          "date": "2022-10-01",
+          "value": 124
+        },
+        {
+          "date": "2022-11-01",
+          "value": 119
+        },
+        {
+          "date": "2022-12-01",
+          "value": 114
+        },
+        {
+          "date": "2023-01-01",
+          "value": 109
+        },
+        {
+          "date": "2023-02-01",
+          "value": 112
+        },
+        {
+          "date": "2023-03-01",
+          "value": 117
+        },
+        {
+          "date": "2023-04-01",
+          "value": 119
+        },
+        {
+          "date": "2023-05-01",
+          "value": 117
+        },
+        {
+          "date": "2023-06-01",
+          "value": 119
+        },
+        {
+          "date": "2023-07-01",
+          "value": 119
+        },
+        {
+          "date": "2023-08-01",
+          "value": 121
+        },
+        {
+          "date": "2023-09-01",
+          "value": 123
+        },
+        {
+          "date": "2023-10-01",
+          "value": 121
+        },
+        {
+          "date": "2023-11-01",
+          "value": 121
+        },
+        {
+          "date": "2023-12-01",
+          "value": 115
+        },
+        {
+          "date": "2024-01-01",
+          "value": 119
+        },
+        {
+          "date": "2024-02-01",
+          "value": 121
+        },
+        {
+          "date": "2024-03-01",
+          "value": 125
+        },
+        {
+          "date": "2024-04-01",
+          "value": 123
+        },
+        {
+          "date": "2024-05-01",
+          "value": 123
+        },
+        {
+          "date": "2024-06-01",
+          "value": 121
+        },
+        {
+          "date": "2024-07-01",
+          "value": 119
+        },
+        {
+          "date": "2024-08-01",
+          "value": 117
+        },
+        {
+          "date": "2024-09-01",
+          "value": 117
+        },
+        {
+          "date": "2024-10-01",
+          "value": 115
+        },
+        {
+          "date": "2024-11-01",
+          "value": 121
+        },
+        {
+          "date": "2024-12-01",
+          "value": 119
+        },
+        {
+          "date": "2025-01-01",
+          "value": 124
+        },
+        {
+          "date": "2025-02-01",
+          "value": 123
+        },
+        {
+          "date": "2025-03-01",
+          "value": 124
+        },
+        {
+          "date": "2025-04-01",
+          "value": 121
+        },
+        {
+          "date": "2025-05-01",
+          "value": 114
+        },
+        {
+          "date": "2025-06-01",
+          "value": 116
+        },
+        {
+          "date": "2025-07-01",
+          "value": 131
+        },
+        {
+          "date": "2025-08-01",
+          "value": 141
+        },
+        {
+          "date": "2025-09-01",
+          "value": 143
+        },
+        {
+          "date": "2025-10-01",
+          "value": 131
+        },
+        {
+          "date": "2025-11-01",
+          "value": 150
+        },
+        {
+          "date": "2025-12-01",
           "value": 174
         },
         {
+          "date": "2026-01-01",
+          "value": 206
+        },
+        {
           "date": "2026-02-01",
-          "value": 187
+          "value": 220
         },
         {
           "date": "2026-03-01",
-          "value": 191
+          "value": 228
         },
         {
           "date": "2026-04-01",
-          "value": 185
+          "value": 218
         },
         {
           "date": "2026-05-01",
-          "value": 171
+          "value": 204
         },
         {
           "date": "2026-06-01",
-          "value": 158
+          "value": 196
         },
         {
           "date": "2026-07-01",
-          "value": 135
+          "value": 182
         },
         {
           "date": "2026-08-01",
-          "value": 133
+          "value": 158
         },
         {
           "date": "2026-09-01",
