@@ -1651,26 +1651,32 @@
       .hero-photo img { aspect-ratio: 4 / 3; }
       .hb-sub { order: 3; }
       .hb-cta-row { order: 4; justify-content: flex-start; width: 100%; gap: .75rem; }
-      /* Stats and the partners strip below read as one centered band on
-         phones. Stretch the row so its rule spans the column, then center
-         the two readouts within it. */
-      .hb-stats { order: 5; align-self: stretch; justify-content: center; gap: 2.5rem; flex-wrap: wrap; padding-top: 1.25rem; }
-      .hb-stat { align-items: center; text-align: center; }
+      /* On phones the two readouts become ruled cells split by a hairline,
+         the same instrument language as the barometer readouts and the
+         research stat rail. Left-aligned like everything above them. */
+      .hb-stats { order: 5; align-self: stretch; justify-content: flex-start; gap: 0; flex-wrap: nowrap; padding-top: 0; border-bottom: 1px solid var(--ink-line-soft); }
+      .hb-stat { flex: 1; min-width: 0; align-items: flex-start; text-align: left; padding: 1.1rem 0; }
+      .hb-stat + .hb-stat { border-left: 1px solid var(--ink-line-soft); padding-left: 1.25rem; }
       .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
-      /* On phones the strip sits under the stats, which already carry a rule,
-         so it drops its own: one rule, then stats, then a quiet logo block.
-         The label and marks are centered; the five logos wrap into a
-         centered 3+2 instead of a ragged left-hung 2+3. */
-      .hero-trust { flex-direction: column; align-items: center; text-align: center; gap: 1.1rem; margin-top: 1.75rem; padding: 0 0 2.25rem; border-top: 0; }
+      /* The partners strip drops its own rule (the stat cells carry one) and
+         lays the five marks in a single row that swipes sideways, fading at
+         the right edge, instead of wrapping into ragged rows. */
+      .hero-trust { flex-direction: column; align-items: flex-start; text-align: left; gap: .9rem; margin-top: 1.35rem; padding: 0 0 2.25rem; border-top: 0; }
       .hero-trust-logos {
         width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 1.4rem 2rem;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        gap: 2.25rem;
+        overflow-x: auto;
+        padding: .15rem 0 .35rem;
+        scrollbar-width: none;
+        -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent);
+        mask-image: linear-gradient(90deg, #000 82%, transparent);
       }
+      .hero-trust-logos::-webkit-scrollbar { display: none; }
       .trust-break { display: none; }
       /* Same optical ratios, scaled to ~0.72 of desktop. */
-      .hero-trust img { max-width: 100%; }
+      .hero-trust img { flex: 0 0 auto; }
       .hero-trust img[src*="google1"]   { --h: 16px; }
       .hero-trust img[src*="seed"]      { --h: 32px; }
       .hero-trust img[src*="iprofile"]  { --h: 20px; }
