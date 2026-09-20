@@ -753,15 +753,15 @@
       object-fit: contain;
       filter: grayscale(1);
       mix-blend-mode: multiply;
-      opacity: .72;
+      opacity: .85;
       transition: opacity .25s ease, filter .25s ease;
     }
     .hero-trust img[src*="google1"]   { --h: 21px; }  /* ink 20px */
     .hero-trust img[src*="seed"]      { --h: 43px; }  /* ink 38px */
     .hero-trust img[src*="iprofile"]  { --h: 27px; }  /* ink 26px */
-    .hero-trust img[src*="raz"]       { --h: 39px; }  /* ink 30px */
+    .hero-trust img[src*="raz"]       { --h: 39px; filter: grayscale(1) brightness(.72) contrast(1.25); }  /* ink 30px; source art is pale grey, pull it to the others' weight */
     .hero-trust img[src*="financial"] { --h: 27px; }  /* ink 26px */
-    .hero-trust img:hover { opacity: 1; filter: grayscale(0) contrast(1); }
+    .hero-trust img:hover, .hero-trust img[src*="raz"]:hover { opacity: 1; filter: grayscale(0) contrast(1); }
     .trust-break { display: none; }
 
     /* ----------------------------------------------------------
@@ -1656,16 +1656,22 @@
          flush left with the copy above. */
       .hb-stats { order: 5; align-self: stretch; justify-content: flex-start; gap: 2rem; flex-wrap: wrap; padding-top: 1.25rem; }
       .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
-      .hero-trust { flex-direction: column; align-items: flex-start; gap: .85rem; margin-top: 1rem; padding: 1rem 0 1.5rem; }
+      /* On phones the strip sits under the stats, which already carry a rule,
+         so it drops its own: one rule, then stats, then a quiet logo block.
+         The five marks fall into a 3+2 grid with even gaps instead of a
+         ragged 2+3 wrap. */
+      .hero-trust { flex-direction: column; align-items: flex-start; gap: 1.1rem; margin-top: 1.75rem; padding: 0 0 2.25rem; border-top: 0; }
       .hero-trust-logos {
         width: 100%;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        gap: 1.1rem 2rem;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: center;
+        justify-items: start;
+        gap: 1.4rem 1.25rem;
       }
-      .trust-break { display: block; flex-basis: 100%; height: 0; }
+      .trust-break { display: none; }
       /* Same optical ratios, scaled to ~0.72 of desktop. */
-      .hero-trust img { object-position: left center; }
+      .hero-trust img { object-position: left center; max-width: 100%; }
       .hero-trust img[src*="google1"]   { --h: 16px; }
       .hero-trust img[src*="seed"]      { --h: 32px; }
       .hero-trust img[src*="iprofile"]  { --h: 20px; }
