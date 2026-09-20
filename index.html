@@ -670,7 +670,7 @@
       min-width: 0;
       border: 1px solid var(--ink-line);
       background: var(--paper);
-      padding: .6rem .6rem 0;
+      padding: .6rem;
       --rot: -.8deg;
       transform: rotate(var(--rot));
       transition: transform .5s cubic-bezier(.16, 1, .3, 1), border-color .25s ease;
@@ -687,19 +687,6 @@
       animation: photo-settle 1.8s cubic-bezier(.16, 1, .3, 1) both;
     }
     @keyframes photo-settle { from { transform: scale(1.05); } to { transform: none; } }
-    .hero-photo figcaption {
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      padding: .8rem .1rem .85rem;
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-    .hero-photo figcaption em { font-style: normal; color: var(--orange-ink); }
 
     /* Entry motion — copy rises in beats, photo settles with the second.
        prefers-reduced-motion collapses it through the global rule above. */
@@ -1664,7 +1651,10 @@
       .hero-photo img { aspect-ratio: 4 / 3; }
       .hb-sub { order: 3; }
       .hb-cta-row { order: 4; justify-content: flex-start; width: 100%; gap: .75rem; }
-      .hb-stats { order: 5; gap: 2rem; flex-wrap: wrap; padding-top: 1.25rem; }
+      /* The desktop grid centers its children; in the phone column that
+         would center the stats row too. Stretch it and keep the stats
+         flush left with the copy above. */
+      .hb-stats { order: 5; align-self: stretch; justify-content: flex-start; gap: 2rem; flex-wrap: wrap; padding-top: 1.25rem; }
       .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
       .hero-trust { flex-direction: column; align-items: flex-start; gap: .85rem; margin-top: 1rem; padding: 1rem 0 1.5rem; }
       .hero-trust-logos {
@@ -2009,7 +1999,6 @@
           <div class="hero-photo-frame">
             <img src="Barrier%20Breakers%202026%20Pics/IMG_3829.jpg" alt="Hundreds of high school students in the Kent State University atrium, two of them holding FinMango flags" width="2304" height="1536" fetchpriority="high" decoding="async">
           </div>
-          <figcaption><span>Barrier Breakers 2026 · Kent State University</span><em>Northeast Ohio</em></figcaption>
         </figure>
       </div>
 
