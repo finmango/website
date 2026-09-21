@@ -745,91 +745,8 @@
     }
 
     /* ----------------------------------------------------------
-       BAROMETER PREVIEW — instrument plate on paper.
-       JS hooks preserved: #barometer-map-container, #barometer-preview-map,
-       #preview-tooltip, #tooltip-state, #tooltip-value, #indicator-tabs,
-       .indicator-tab[data-indicator]. Tab state is the .active class;
-       research-map.js toggles it and sets no inline colors.
-       The plate itself is ink: the choropleth ramp is shared with
-       barometer.html and the homepage, and its pale amber band only
-       holds contrast on the ink ground, so the instrument sits on ink
-       here too while the surrounding section stays on paper.
+       FIGURES — caption + link row shared by the state explorer
        ---------------------------------------------------------- */
-    .map-section { padding: 7.5rem var(--gutter); background: var(--paper); }
-    .map-container { max-width: var(--max-width); margin: 0 auto; }
-    .map-plate { background: var(--ink); color: var(--paper); border: 1px solid var(--ink); }
-    #barometer-map-container {
-      width: 100%;
-      margin: 0 auto;
-      position: relative;
-      padding: 2.5rem 2.5rem 1.5rem;
-    }
-    #barometer-preview-map { width: 100%; height: auto; max-height: 60vh; }
-
-    /* Paper chip over the ink instrument, as on barometer.html */
-    #preview-tooltip {
-      position: fixed;
-      background: var(--paper);
-      color: var(--ink);
-      padding: .7rem .9rem;
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      letter-spacing: .04em;
-      pointer-events: none;
-      z-index: 1050;
-      opacity: 0;
-      transition: opacity .15s ease;
-      white-space: nowrap;
-      box-shadow: 0 24px 48px -24px rgba(10, 10, 10, .35);
-    }
-    #tooltip-state { font-weight: 500; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .3rem; }
-    #tooltip-value { color: var(--orange-deep); font-weight: 500; }
-
-    #indicator-tabs {
-      display: flex;
-      justify-content: center;
-      gap: .5rem;
-      flex-wrap: wrap;
-      padding: 0 2rem 1.75rem;
-    }
-    .indicator-tab {
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      font-weight: 500;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      padding: .65rem 1.1rem;
-      border: 1px solid var(--paper-line);
-      background: transparent;
-      color: var(--paper);
-      cursor: pointer;
-      transition: border-color .2s ease, background .2s ease, color .2s ease;
-    }
-    .indicator-tab:hover { border-color: var(--paper); }
-    .indicator-tab.active { background: var(--orange-ink); color: #fff; border-color: var(--orange); }
-
-    .map-legend {
-      display: flex;
-      justify-content: center;
-      gap: 1.75rem;
-      flex-wrap: wrap;
-      padding: 0 2rem 2rem;
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      color: var(--paper-faint);
-    }
-    .map-legend-item { display: flex; align-items: center; gap: .45rem; white-space: nowrap; }
-    .map-legend-color { width: 14px; height: 6px; flex-shrink: 0; }
-    /* Severity ramp — the same four bands as barometer.html and the
-       homepage map, so the preview matches the pages it links to. Keep in
-       sync with getColorForValue() in scripts/research-map.js. */
-    .map-legend-color.low { background: #14B8A6; }
-    .map-legend-color.moderate { background: #FDE68A; }
-    .map-legend-color.elevated { background: #FB923C; }
-    .map-legend-color.high { background: #DC2626; }
-
     .figure-caption {
       max-width: 72ch;
       margin: 1.25rem auto 0;
@@ -916,28 +833,6 @@
 
     /* Data-partnership note under the Barometer plate — absorbs what used
        to be a whole Partnerships section for one Google Health card. */
-    .map-note {
-      max-width: 78ch;
-      margin: 2.5rem auto 0;
-      padding-top: 1.6rem;
-      border-top: 1px solid var(--ink-line-soft);
-      font-size: .88rem;
-      font-weight: 400;
-      line-height: 1.65;
-      color: var(--ink-dim);
-      letter-spacing: -.005em;
-      text-align: center;
-    }
-    .map-note-label {
-      display: block;
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      margin-bottom: .6rem;
-    }
 
     /* "See all" row under a teaser list */
     .teaser-more { display: flex; align-items: center; gap: 1.75rem; flex-wrap: wrap; margin-top: 3rem; }
@@ -1039,121 +934,35 @@
     .referenced-by-orgs span:hover { color: var(--ink); }
 
     /* ----------------------------------------------------------
-       PUBLICATIONS — ruled list, mono apparatus
+       REPORTS & PUBLICATIONS — two ruled rows, one door each.
+       The card treatments live on research-reports.html and
+       research-publications.html.
        ---------------------------------------------------------- */
-    .publications-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-    .publications-container { max-width: var(--max-width); margin: 0 auto; }
-    .pub-list { border-top: 1px solid var(--ink-line); }
-    .pub-row {
-      padding: 2.5rem 0;
+    .work-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+    .work-container { max-width: var(--max-width); margin: 0 auto; }
+    .work-index { border-top: 1px solid var(--ink-line); }
+    .work-row {
+      display: grid;
+      grid-template-columns: 200px 1fr auto;
+      gap: 2.5rem;
+      align-items: baseline;
+      padding: 1.9rem 0;
       border-bottom: 1px solid var(--ink-line);
+      text-decoration: none;
+      color: inherit;
       position: relative;
     }
-    .pub-row::before {
-      content: '';
-      position: absolute;
-      top: -1px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--orange);
-      transition: width .4s cubic-bezier(.16, 1, .3, 1);
-    }
-    .pub-row:hover::before { width: 100%; }
-    .pub-meta {
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-dim);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: .35rem .6rem;
-      margin-bottom: 1.1rem;
-    }
-    .pub-meta > span + span::before { content: '·'; margin-right: .6rem; color: var(--ink-line); }
-    .pub-meta .pub-tag-featured, .pub-meta .pub-tag-progress { color: var(--orange); }
-    .pub-title {
-      font-size: clamp(1.2rem, 1.9vw, 1.6rem);
-      font-weight: 900;
-      letter-spacing: -.025em;
-      line-height: 1.25;
-      max-width: 62ch;
-      margin-bottom: .85rem;
-    }
-    .pub-authors {
-      font-size: .92rem;
-      font-weight: 400;
-      line-height: 1.6;
-      color: var(--ink-dim);
-      max-width: 78ch;
-      margin-bottom: .35rem;
-    }
-    .pub-journal { font-size: .92rem; font-weight: 500; color: var(--ink); margin-bottom: 1.1rem; }
-    .pub-links { display: flex; align-items: center; gap: 1.75rem; flex-wrap: wrap; }
-
-    /* ----------------------------------------------------------
-       REPORTS & BRIEFS — house publications, data-driven.
-       Renders from the REPORTS array near the foot of the page.
-       Featured working papers get a two-column treatment; shorter
-       briefs sit in a 2-up grid. Each card surfaces its source
-       documents and links down to the data/tools it informed.
-       ---------------------------------------------------------- */
-    .reports-section { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
-    .reports-container { max-width: var(--max-width); margin: 0 auto; }
-    .reports-legend { display: flex; flex-wrap: wrap; gap: 1rem 2.5rem; margin-bottom: 3.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--ink-line-soft); }
-    .reports-legend-item { display: flex; align-items: baseline; gap: .7rem; font-size: .82rem; font-weight: 300; line-height: 1.5; color: var(--ink-dim); max-width: 34ch; letter-spacing: -.005em; }
-    .reports-legend-item .report-type { flex-shrink: 0; }
-    .report-type { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: .3rem .65rem; border: 1px solid rgba(242, 90, 39,.4); color: var(--orange-ink); align-self: flex-start; white-space: nowrap; }
-    .report-title { font-weight: 900; letter-spacing: -.025em; line-height: 1.22; }
-    .report-authors { font-size: .9rem; font-weight: 400; line-height: 1.55; color: var(--ink-dim); }
-    .report-authors .aff { color: var(--ink-faint); }
-    .report-meta { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-dim); display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .6rem; }
-    .report-meta > span + span::before { content: '·'; margin-right: .6rem; color: var(--ink-line); }
-    .report-summary { font-size: .98rem; font-weight: 400; line-height: 1.6; color: var(--ink-dim); letter-spacing: -.005em; }
-    .report-tags { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
-    .report-tag { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-dim); }
-    .report-tag::before { content: '#'; color: var(--orange); margin-right: .05rem; }
-    .report-docs { display: flex; flex-direction: column; gap: .55rem; }
-    .report-doc, .report-link { display: inline-flex; align-items: baseline; gap: .55rem; font-family: var(--font-mono); font-size: .72rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--ink); transition: color .2s ease; }
-    .report-doc:hover, .report-link:hover { color: var(--orange); }
-    .report-doc .kind, .report-link .dir { color: var(--orange-ink); flex-shrink: 0; font-size: .72rem; letter-spacing: .1em; }
-    .report-link .dir { font-size: .85rem; line-height: 1; transition: transform .25s cubic-bezier(.16,1,.3,1); }
-    .report-link:hover .dir.down { transform: translateY(2px); }
-    .report-link:hover .dir.up { transform: translateY(-2px); }
-    .reports-featured { display: flex; flex-direction: column; gap: 1.5rem; }
-    .report-featured { border: 1px solid var(--ink-line); display: grid; grid-template-columns: 1.5fr 1fr; position: relative; }
-    .report-featured::before { content: ''; position: absolute; top: -1px; left: -1px; width: 0; height: 2px; background: var(--orange); transition: width .45s cubic-bezier(.16,1,.3,1); }
-    .report-featured:hover::before { width: calc(100% + 2px); }
-    .rf-main { padding: 2.75rem; display: flex; flex-direction: column; gap: 1.15rem; }
-    .rf-main .report-title { font-size: clamp(1.45rem, 2.2vw, 1.95rem); max-width: 26ch; }
-    .rf-side { padding: 2.75rem; border-left: 1px solid var(--ink-line); display: flex; flex-direction: column; gap: 1.75rem; }
-    .rf-block-label { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: .9rem; }
-    .findings-list { list-style: none; }
-    .findings-list li { font-size: .9rem; font-weight: 400; line-height: 1.5; color: var(--ink-dim); padding-left: 1.6rem; position: relative; margin-bottom: .8rem; letter-spacing: -.005em; }
-    .findings-list li:last-child { margin-bottom: 0; }
-    .findings-list li::before { content: ''; position: absolute; left: 0; top: .65em; width: 16px; height: 1px; background: var(--orange); }
-    .rf-links { display: flex; flex-direction: column; gap: .55rem; }
-    .reports-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-    .report-card { border: 1px solid var(--ink-line); padding: 2.25rem; display: flex; flex-direction: column; gap: 1rem; position: relative; transition: border-color .25s ease; }
-    .report-card:hover { border-color: var(--ink-faint); }
-    .report-card::before { content: ''; position: absolute; top: -1px; left: -1px; width: 0; height: 2px; background: var(--orange); transition: width .4s cubic-bezier(.16,1,.3,1); }
-    .report-card:hover::before { width: calc(100% + 2px); }
-    .report-card .report-title { font-size: 1.18rem; max-width: 34ch; }
-    .report-card .report-summary { font-size: .94rem; }
-    .report-card .report-docs { margin-top: auto; padding-top: 1.1rem; border-top: 1px solid var(--ink-line-soft); }
-    .reports-sub-head { margin-top: 5.5rem; }
+    .work-row::before { content: ''; position: absolute; top: -1px; left: 0; width: 0; height: 1px; background: var(--orange); transition: width .4s cubic-bezier(.16, 1, .3, 1); }
+    .work-row:hover::before { width: 100%; }
+    .work-row-kind { font-family: var(--font-mono); font-size: .72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange-ink); }
+    .work-row-text { font-size: 1.05rem; font-weight: 300; line-height: 1.6; color: var(--ink-dim); max-width: 64ch; }
+    .work-row-text strong { font-weight: 700; color: var(--ink); }
+    .work-row-arrow { font-size: 1.2rem; line-height: 1; color: var(--ink-faint); transition: transform .3s cubic-bezier(.16,1,.3,1), color .2s ease; }
+    .work-row:hover .work-row-arrow { transform: translateX(4px); color: var(--orange-ink); }
     @media (max-width: 968px) {
-      .reports-section { padding: 0 var(--gutter) 5rem; }
-      .report-featured { grid-template-columns: 1fr; }
-      .rf-main, .rf-side { padding: 1.75rem; }
-      .rf-side { border-left: none; border-top: 1px solid var(--ink-line); }
-      .reports-grid { grid-template-columns: 1fr; }
-      .report-card { padding: 1.75rem; }
-      .reports-legend { gap: .85rem 1.75rem; margin-bottom: 2.5rem; }
-      .reports-sub-head { margin-top: 4rem; }
+      .work-section { padding: 0 var(--gutter) 5rem; }
+      .work-row { grid-template-columns: 1fr; gap: .6rem; padding: 1.5rem 0; }
+      .work-row-arrow { display: none; }
     }
 
     /* ----------------------------------------------------------
@@ -1470,18 +1279,11 @@
       .recognition-lead { padding: 1.75rem; }
       .recognition-tweet { border-left: none; border-top: 1px solid var(--ink-line); padding: 1.75rem; }
 
-      .map-section { padding: 5rem var(--gutter); }
-      #barometer-map-container { padding: 1.5rem 1.25rem 1rem; }
-      #indicator-tabs { padding: 0 1.25rem 1.25rem; gap: .4rem; }
-      .indicator-tab { padding: .55rem .8rem; font-size: .72rem; }
-      .map-legend { gap: 1rem 1.5rem; padding: 0 1.25rem 1.5rem; }
 
       .focus-section, .handoff-section { padding: 0 var(--gutter) 5rem; }
-      .publications-section { padding: 0 var(--gutter) 5rem; }
 
       .handoff { grid-template-columns: 1fr; gap: 2.25rem; padding-top: 2rem; }
-      .map-note { text-align: left; margin-top: 2rem; }
-
+  
       .questions-grid { grid-template-columns: 1fr; }
       .question-cell { padding: 1.75rem 1.5rem; }
 
@@ -2669,58 +2471,9 @@
     </div>
   </section>
 
-  <!-- ======================= BAROMETER MAP PREVIEW ======================= -->
-  <section class="map-section" id="barometer-preview">
-    <div class="map-container">
-      <div class="section-head rise">
-        <span class="eyebrow">01 · The Barometer</span>
-        <h2>Financial stress, <em>measured live.</em></h2>
-        <p class="section-sub">The Financial Health Barometer distills search behavior and administrative data into a weekly stress reading for all 50 states. This is the live preview — hover a state, or switch indicators below.</p>
-      </div>
-      <div class="map-plate rise" data-delay="1">
-        <div id="barometer-map-container">
-          <svg id="barometer-preview-map" viewBox="0 0 959 593" preserveAspectRatio="xMidYMid meet" role="img" aria-label="United States map colored by financial stress level per state"></svg>
-          <div id="preview-tooltip">
-            <div id="tooltip-state"></div>
-            <div id="tooltip-value"></div>
-          </div>
-        </div>
-
-        <div id="indicator-tabs">
-          <button class="indicator-tab active" data-indicator="financial_anxiety">Financial Anxiety</button>
-          <button class="indicator-tab" data-indicator="food_insecurity">Food Insecurity</button>
-          <button class="indicator-tab" data-indicator="housing_stress">Housing Stress</button>
-          <button class="indicator-tab" data-indicator="affordability">Affordability</button>
-        </div>
-
-        <div class="map-legend">
-          <div class="map-legend-item"><span class="map-legend-color low"></span> Low &lt;90</div>
-          <div class="map-legend-item"><span class="map-legend-color moderate"></span> Moderate 90–120</div>
-          <div class="map-legend-item"><span class="map-legend-color elevated"></span> Elevated 120–150</div>
-          <div class="map-legend-item"><span class="map-legend-color high"></span> High &gt;150</div>
-        </div>
-      </div>
-
-      <p class="figure-caption"><span class="fig-num">Figure 1</span>Financial Health Barometer composite index, by U.S. state. Hover a state for its current reading; switch indicators above. Source: FinMango Research, 2026.</p>
-
-      <div class="map-links">
-        <a href="barometer.html" class="btn-secondary">
-          Explore the full Barometer
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="student-map.html" class="quiet-link">View the young adult financial map <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-      </div>
-
-      <p class="map-note">
-        <span class="map-note-label">Data partnership</span>
-        A working relationship with Google's Health Trends team gives us privileged API access — the data engine behind the Barometer's real-time signals across all 50 states. <a href="approach.html#data-methodology" class="quiet-link">How we use it <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-      </p>
-    </div>
-  </section>
-
+  <!-- Live-signal data for the premise strip and sparkline cards. The map
+       preview that used to sit here lives on barometer.html and the homepage. -->
   <script src="data/dashboard-data.js?v=20260920"></script>
-  <script src="scripts/map-svg.js"></script>
-  <script src="scripts/research-map.js"></script>
 
   <!-- ======================= THE MATH OF BEING 25 ======================= -->
   <!-- Young-adult state explorer. Reads data/student-map-data.js, the same
@@ -2729,7 +2482,7 @@
   <section class="ya-section" id="young-adults">
     <div class="ya-container">
       <div class="section-head rise">
-        <span class="eyebrow">02 · The math of being 25</span>
+        <span class="eyebrow">01 · The math of being 25</span>
         <h2>Pick a state. <em>Do the math.</em></h2>
         <p class="section-sub">What a typical 25-to-34-year-old earns, what rent takes, what the loans cost, and how it stacks up against the rest of the country. Every number below comes from our Young Adult Financial Health dataset.</p>
       </div>
@@ -2800,46 +2553,27 @@
   </section>
 
 
-  <!-- ======================= REPORTS & BRIEFS (teaser) ======================= -->
-  <!-- The full library, with type and topic filters, lives on
-       research-reports.html. Both render from data/reports.js. -->
-  <section class="reports-section" id="reports">
-    <div class="reports-container">
+  <!-- ======================= REPORTS & PUBLICATIONS (index) ======================= -->
+  <!-- Index only. Reports & briefs live on research-reports.html and the
+       bibliography on research-publications.html; both render from data/. -->
+  <section class="work-section" id="reports">
+    <div class="work-container">
       <div class="section-head rise">
-        <span class="eyebrow">03 · Reports &amp; Briefs</span>
-        <h2>Our research, in <em>plain language.</em></h2>
-        <p class="section-sub">House briefs that read our own work so policymakers, journalists, and partners don't have to parse a repository first. Each one links to its source documents — and down to the FinMango tools it informed.</p>
+        <span class="eyebrow">02 · Reports &amp; publications</span>
+        <h2>Read the work.</h2>
+        <p class="section-sub">House briefs that read our own work so policymakers, journalists, and partners don't have to parse a repository first, and the peer-reviewed papers and whitepapers behind them.</p>
       </div>
 
-      <div class="reports-featured rise" data-delay="1" id="reports-featured"></div>
-
-      <div class="teaser-more">
-        <a href="research-reports.html" class="btn-secondary">
-          All <span id="reports-count">—</span> reports &amp; briefs
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      <div class="work-index rise" data-delay="1">
+        <a href="research-reports.html" class="work-row">
+          <span class="work-row-kind">Reports &amp; briefs</span>
+          <span class="work-row-text"><strong><span id="reports-count">—</span> plain-language briefs.</strong> Each one links to its source documents — and down to the FinMango tools it informed.</span>
+          <span class="work-row-arrow" aria-hidden="true">→</span>
         </a>
-        <a href="research-reports.html#library" class="quiet-link">Filter by topic <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======================= PUBLICATIONS (teaser) ======================= -->
-  <!-- Abstracts, working papers, team and collaborators live on
-       research-publications.html. Both render from data/publications.js. -->
-  <section class="publications-section" id="publications">
-    <div class="publications-container">
-      <div class="section-head rise">
-        <span class="eyebrow">04 · Publications</span>
-        <h2>Published <em>research.</em></h2>
-        <p class="section-sub">Peer-reviewed papers and technical whitepapers, plus five working papers in progress with our academic partners.</p>
-      </div>
-
-      <div class="pub-list rise" data-delay="1" id="pub-list-latest"></div>
-
-      <div class="teaser-more">
-        <a href="research-publications.html" class="btn-secondary">
-          Full bibliography &amp; working papers
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <a href="research-publications.html" class="work-row" id="publications">
+          <span class="work-row-kind">Publications</span>
+          <span class="work-row-text"><strong><span id="pub-count">—</span> published papers.</strong> Peer-reviewed research and technical whitepapers, plus five working papers in progress with our academic partners.</span>
+          <span class="work-row-arrow" aria-hidden="true">→</span>
         </a>
       </div>
     </div>
@@ -2850,7 +2584,7 @@
     <div class="recognition-container">
       <div class="recognition-card rise">
         <div class="recognition-lead">
-          <span class="eyebrow">05 · In the spotlight</span>
+          <span class="eyebrow">03 · In the spotlight</span>
           <h2 class="recognition-headline"><em>Google.org</em> spotlighted our open data work among the nonprofits using Google tools to support communities during COVID-19.</h2>
           <div class="recognition-meta">22,579 locations · 190+ countries · Open source</div>
           <a href="covid-19-open-data-project.html" class="quiet-link">Explore the data portal <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
@@ -2886,7 +2620,7 @@
   <section class="focus-section" id="focus">
     <div class="focus-container">
       <div class="section-head rise">
-        <span class="eyebrow">06 · Open questions</span>
+        <span class="eyebrow">04 · Open questions</span>
         <h2>What we're <em>asking.</em></h2>
         <p class="section-sub">A research agenda is really a list of honest questions — the quiet ones, the inconvenient ones, the ones the data keeps hinting at. These are the six we're chasing now. Open one to see why it matters and what it's already feeding.</p>
       </div>
@@ -3030,7 +2764,7 @@
       </div>
       <div class="handoff rise">
         <div class="handoff-lead">
-          <span class="eyebrow">07 · Approach &amp; methodology</span>
+          <span class="eyebrow">05 · Approach &amp; methodology</span>
           <h2 class="handoff-title">Why we do <em>what we do.</em></h2>
           <p class="section-sub">We identify the systemic barriers endangering young adults' financial health — housing, healthcare, debt, predatory lending. We diagnose root causes. We provide the evidence decision-makers need to build solutions that actually work.</p>
           <a href="approach.html" class="btn-secondary">
@@ -3185,7 +2919,6 @@
 
   <script src="data/reports.js"></script>
   <script src="data/publications.js"></script>
-  <script src="scripts/research-cards.js"></script>
   <script>
     /* ============================================================
        LANDING TEASERS — one featured report, three publications.
@@ -3193,23 +2926,13 @@
        report or paper shows up here without touching this file.
        ============================================================ */
     (function () {
-      var CARDS = window.FinMangoResearchCards;
-      if (!CARDS) return;
-
       var R = window.FINMANGO_REPORTS;
-      if (R) {
-        var featured = R.REPORTS.filter(function (r) { return r.featured; })[0];
-        var host = document.getElementById('reports-featured');
-        if (featured && host) host.innerHTML = CARDS.reportFeaturedHtml(featured, R.REPORT_TYPES);
-        var count = document.getElementById('reports-count');
-        if (count) count.textContent = R.REPORTS.length;
-      }
+      var count = document.getElementById('reports-count');
+      if (R && count) count.textContent = R.REPORTS.length;
 
       var P = window.FINMANGO_PUBLICATIONS;
-      var pubHost = document.getElementById('pub-list-latest');
-      if (P && pubHost) {
-        pubHost.innerHTML = P.PUBLISHED.slice(0, 3).map(CARDS.publicationTeaserHtml).join('');
-      }
+      var pubCount = document.getElementById('pub-count');
+      if (P && pubCount) pubCount.textContent = P.PUBLISHED.length;
     })();
   </script>
 
@@ -3413,7 +3136,7 @@
             '<span class="signal-card-delta ' + d.cls + '" title="' + (d.title || 'Change vs. prior reading') + '">' + d.text + '</span></div>' +
             '<div class="signal-card-value"><span data-count="' + ind.value + '" data-decimals="1">0.0</span><small>index</small></div>' +
             sparkline(s) +
-            '<div class="signal-card-foot"><span>' + (firstYear ? firstYear + ' → ' + lastYear : 'national') + '</span><span class="go">Show on map →</span></div>' +
+            '<div class="signal-card-foot"><span>' + (firstYear ? firstYear + ' → ' + lastYear : 'national') + '</span><span class="go">Open the Barometer →</span></div>' +
             '</button>';
         }).join('');
 
@@ -3435,12 +3158,8 @@
           watch(card);
 
           card.addEventListener('click', function () {
-            var k = card.dataset.indicator;
-            var tab = document.querySelector('.indicator-tab[data-indicator="' + k + '"]');
-            if (tab) tab.click();
-            var map = document.getElementById('barometer-preview');
-            if (map) map.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-            setActive(k);
+            setActive(card.dataset.indicator);
+            window.location.href = 'barometer.html';
           });
         });
 
@@ -3448,9 +3167,6 @@
           grid.querySelectorAll('.signal-card').forEach(function (c) { c.classList.toggle('active', c.dataset.indicator === k); });
         }
         setActive('financial_anxiety');
-        document.querySelectorAll('.indicator-tab').forEach(function (tab) {
-          tab.addEventListener('click', function () { setActive(tab.dataset.indicator); });
-        });
       })();
 
       /* ---------- 3. The math of being 25 ---------- */

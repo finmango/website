@@ -950,3 +950,74 @@ overflow, no JS errors.
 exactly 390px (last-line width 9px). Measured identical on `origin/main`
 before this change at 390/420/480px, so it predates the index. Left alone;
 worth a separate fix.
+
+## Design edit pass — length, repetition, consistency (September 2026)
+
+Not a migration. A pass over the finished system to trim what had
+accumulated on top of it.
+
+### Headlines
+The homepage ran four "Sentence. Sentence. <em>orange payoff</em>" h2s
+in a row. Kept the two that carry the argument (hero, Barometer) and
+flattened "How we work" and "From the field" to plain declaratives so the
+orange means something again.
+
+### Stats
+Home, About and Donate all showed the same 10M+ / 5 continents / 100K+
+trio. Each page now carries proof that fits its job: Home adds `$0 cost
+to students` as a third hero cell (the two-cell row sat thin at desktop
+width); Donate leads with `$0 what students pay` and `100% of research
+open-source`; About swaps the weak `5 continents` for `100+ countries
+reached` (README figure). "5 continents" is gone from the site.
+
+### Photo cards
+`.moment-1/2/3` on index.html and donate.html no longer rotate or
+offset; the three figures share a top edge. The staggered version read
+as a broken grid at a glance.
+
+### research.html — 11,513px → 8,045px at 1440
+Removed the Barometer map preview (01): the same instrument is on the
+homepage and barometer.html. The live-signal cards keep
+`data/dashboard-data.js` and now open barometer.html on click.
+Reports (03) and Publications (04) teasers collapsed into one ruled
+two-row index (`.work-index`) with live counts from `data/reports.js`
+and `data/publications.js`; `scripts/research-cards.js` is no longer
+loaded here. Sections renumbered 01–05. `#young-adults` (linked from
+three pages) is untouched. `.figure-caption` and `.map-links` stay:
+the state explorer uses both.
+
+### education.html — 11,792px → ~10,600px at 1440
+Calculators shelf is now a head + lede + door to resources.html (the 18
+rows duplicated the tool index). The Barrier Breakers block is a single
+ruled strip with its two stats and one button; the ten-image mosaic and
+the Drive photo links live on barrier-breakers.html. The
+`#library` anchor from the materials section still resolves.
+
+### barrier-breakers.html
+Reveal-on-scroll (`.reveal`/`.stagger` + IntersectionObserver) and the
+count-up counters (`data-count`) removed per the system's banned list.
+Stats are static text. Lightbox untouched.
+
+### barrier-breakers-quiz.html
+Inter → DM Sans. Page-level palette left as is.
+
+### Files
+Judge photos moved from spaced root names to `images/judges/<slug>`;
+`Barrier Breakers 2026 Pics/` → `images/barrier-breakers-2026/`
+(references updated in index, donate, history, get-involved,
+barrier-breakers). `about_pic.jpg` resized 2400→1200w (1.07MB → 342KB);
+homepage team card now uses `hero-1200.jpg` (219KB) instead of the
+1920px `hero.jpg`, which linkedin-company-banner.html still uses.
+
+### Verified
+Chromium 1440 / 390 on index, donate, about, research, education,
+barrier-breakers, quiz, history, get-involved: no JS errors, no missing
+assets, `npm test` 10/10. The research page's horizontal overflow at
+390px is the `.ticker-run` marquee and predates this pass (identical on
+the stashed tree).
+
+### Not done here
+Moving the shared editorial CSS out of 160 inline `<style>` blocks into
+a real stylesheet or build step. That reverses the README's documented
+self-contained-page decision and is a call for the maintainers, not a
+design edit.

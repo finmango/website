@@ -1047,6 +1047,7 @@
     }
     .shelf-all:hover { color: var(--orange); }
     .shelf-foot { margin-top: 1.75rem; display: flex; gap: .9rem; flex-wrap: wrap; }
+    .shelf-lede { max-width: 62ch; font-size: 1.05rem; font-weight: 300; line-height: 1.65; color: var(--ink-dim); }
 
     /* lesson tracks — cards */
     .track-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
@@ -1103,54 +1104,33 @@
     .track-card:hover .track-card-go { color: var(--orange); gap: .8rem; }
 
     /* calculators & simulators — dense index rows */
-    .link-rows {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      column-gap: 3rem;
-      border-top: 1px solid var(--ink-line);
-    }
-    .link-row {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      padding: 1.05rem 0;
-      border-bottom: 1px solid var(--ink-line-soft);
-      text-decoration: none;
-      color: inherit;
-      transition: padding-left .28s cubic-bezier(.16, 1, .3, 1);
-    }
-    .link-row:hover { padding-left: .7rem; }
-    .link-row-text { min-width: 0; display: block; }
-    .link-row-name {
-      display: block;
-      font-size: .96rem;
-      font-weight: 600;
-      letter-spacing: -.015em;
-      margin-bottom: .16rem;
-      transition: color .2s ease;
-    }
-    .link-row:hover .link-row-name { color: var(--orange); }
-    .link-row-desc { display: block; font-size: .8rem; font-weight: 300; line-height: 1.45; color: var(--ink-dim); }
-    .link-row-desc em { font-style: italic; }
-    .link-row-arrow {
-      margin-left: auto;
-      flex-shrink: 0;
-      color: var(--ink-faint);
-      font-family: var(--font-mono);
-      font-size: .85rem;
-      transition: color .2s ease, transform .25s cubic-bezier(.16, 1, .3, 1);
-    }
-    .link-row:hover .link-row-arrow { color: var(--orange); transform: translateX(4px); }
 
     /* ----------------------------------------------------------
        EVENT — stats + mosaic gallery
        ---------------------------------------------------------- */
-    .event { padding: 6rem var(--gutter) 7rem; background: var(--paper); }
+    .event { padding: 5rem var(--gutter) 6rem; background: var(--paper); }
     .event-container { max-width: var(--max-width); margin: 0 auto; }
+    .event-strip {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 3rem 4rem;
+      align-items: end;
+      padding: 3.5rem 0 0;
+      border-top: 1px solid var(--ink-line);
+    }
+    .event-strip-text { display: flex; flex-direction: column; align-items: flex-start; }
+    .event-strip-text h2 {
+      font-size: clamp(1.7rem, 2.6vw, 2.4rem);
+      font-weight: 900;
+      letter-spacing: -.035em;
+      line-height: 1.08;
+      margin: 1rem 0 1.1rem;
+    }
+    .event-strip-text .section-sub { margin: 0; max-width: 58ch; }
+    .event-strip-side { display: flex; flex-direction: column; gap: 2rem; align-items: flex-start; }
     .event-stats {
       display: flex;
       gap: 3.5rem;
-      margin: -1rem 0 2.5rem;
       flex-wrap: wrap;
     }
     .event-stat-number {
@@ -1170,23 +1150,6 @@
       color: var(--ink-faint);
     }
 
-    .event-gallery {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: 168px;
-      gap: 1rem;
-      grid-auto-flow: dense;
-    }
-    .event-gallery img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border: 1px solid var(--ink-line);
-      display: block;
-    }
-    .event-gallery .g-big { grid-column: span 2; grid-row: span 2; }
-    .event-gallery .g-wide { grid-column: span 2; }
-    .event-gallery .g-tall { grid-row: span 2; }
 
     .resource-links { display: flex; gap: .9rem; flex-wrap: wrap; margin-top: 2rem; }
 
@@ -1726,14 +1689,10 @@
       .shelf-head { gap: .6rem 1.25rem; padding-bottom: .85rem; margin-bottom: 1.35rem; }
       .shelf-head .meta-line { white-space: normal; line-height: 1.6; }
       .track-grid { grid-template-columns: 1fr; }
-      .link-rows { grid-template-columns: 1fr; column-gap: 0; }
 
       .event { padding: 4.5rem var(--gutter) 5rem; }
-      .event-stats { gap: 2.5rem; margin: -.5rem 0 2rem; }
-      .event-gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 150px; gap: .75rem; }
-      .event-gallery .g-big { grid-column: span 2; grid-row: span 2; }
-      .event-gallery .g-wide { grid-column: span 2; }
-      .event-gallery .g-tall { grid-row: span 1; }
+      .event-strip { grid-template-columns: 1fr; gap: 2rem; padding: 2.75rem 0 0; }
+      .event-stats { gap: 2.5rem; }
 
       .founder { padding: 0 var(--gutter) 4.5rem; }
       .founder-container { padding-top: 4rem; }
@@ -1778,11 +1737,9 @@
       .hero-top { gap: .5rem 1rem; margin-bottom: 1.35rem; }
       .hb-status { font-size: .72rem; letter-spacing: 0.12em; }
 
-      .event-gallery { grid-auto-rows: 132px; }
-      .event-gallery .g-wide, .event-gallery .g-tall { grid-column: span 1; grid-row: span 1; }
 
       /* event stats sit side by side — pull them closer so both read as a pair */
-      .event-stats { gap: 1.75rem; margin: -.25rem 0 1.75rem; }
+      .event-stats { gap: 1.75rem; }
       .event-stat-number { font-size: 2rem; }
 
       .proof-number { flex-direction: column; gap: .3rem; padding: 1.15rem 0; }
@@ -1811,8 +1768,6 @@
       .hero-rail-item:first-child { padding-left: 0; border-left: none; }
       .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
       .track-grid { grid-template-columns: repeat(2, 1fr); }
-      .link-rows { grid-template-columns: 1fr 1fr; column-gap: 2rem; }
-      .event-gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 190px; }
     }
   </style>
 </head>
@@ -2292,143 +2247,15 @@
         </div>
       </div>
 
-      <!-- Shelf 2 — calculators & simulators -->
+      <!-- Shelf 2 — calculators & simulators. The tool index itself is
+           resources.html; this shelf is the door. -->
       <div class="shelf">
         <div class="shelf-head">
           <h3>Calculators &amp; simulators</h3>
-          <span class="meta-line">Run your own numbers · Nothing saved, nothing tracked</span>
+          <span class="meta-line">18 tools · Run your own numbers · Nothing saved, nothing tracked</span>
           <a href="resources.html" class="shelf-all">All tools ↗</a>
         </div>
-
-        <div class="link-rows">
-          <a href="compound-interest.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Compound Interest Calculator</span>
-              <span class="link-row-desc">Watch monthly contributions turn into decades of growth.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="rule-of-72.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Rule of 72 Calculator</span>
-              <span class="link-row-desc">How long it takes an investment to double, in one line of math.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="roth-ira.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Roth IRA Calculator</span>
-              <span class="link-row-desc">Build tax-free retirement wealth — see it start at any age.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="ira-battle.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Battle of the IRAs</span>
-              <span class="link-row-desc">Traditional vs. Roth, put head to head on your own numbers.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="portfolio-simulator.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Portfolio Simulator</span>
-              <span class="link-row-desc">Test strategies against real market data going back to 1970.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="student-loan-simulator.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Student Loan Simulator</span>
-              <span class="link-row-desc">See what extra payments do to your interest and payoff date.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="minimum-payment-trap.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">The Minimum Payment Trap</span>
-              <span class="link-row-desc">What paying the minimum on a credit card really costs you.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="inflation-time-machine.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Inflation Time Machine</span>
-              <span class="link-row-desc">What your money was worth then, and what it'll be worth later.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="paycheck-calculator.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Paycheck Calculator</span>
-              <span class="link-row-desc">Estimate take-home pay after taxes in cities across the US.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="whats-money.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">What's Money Calculator</span>
-              <span class="link-row-desc">How rich you'd be if the small stuff got invested instead.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="rent-vs-buy.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Rent vs. Buy Calculator</span>
-              <span class="link-row-desc">Compare the full cost of renting and owning over time.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="housing-calculator.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Housing Calculator</span>
-              <span class="link-row-desc">How much home your income, debts, and down payment support.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="new-vs-used-car-calculator.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">New vs. Used Car Calculator</span>
-              <span class="link-row-desc">Depreciation, insurance, and fuel — the real cost of the car.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="fire-calculator.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">FIRE Calculator</span>
-              <span class="link-row-desc">Map a path to financial independence and early retirement.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="cost-of-living.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Cost of Living Comparison</span>
-              <span class="link-row-desc">Compare two cities and see how far the same salary really goes.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="gig-tax-estimator.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Gig Tax Estimator</span>
-              <span class="link-row-desc">Freelancing? Estimate self-employment tax before it surprises you.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="startup-calculator.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Startup Calculator</span>
-              <span class="link-row-desc">Estimate the capital and runway a new business actually needs.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-          <a href="financial-health-predictor.html" class="link-row">
-            <span class="link-row-text">
-              <span class="link-row-name">Financial Health Predictor</span>
-              <span class="link-row-desc">Talk through your finances with our AI and get a read on where you stand.</span>
-            </span>
-            <span class="link-row-arrow" aria-hidden="true">→</span>
-          </a>
-        </div>
-
+        <p class="shelf-lede">Compound interest, student loans, paychecks, rent vs. buy, IRAs, and a portfolio simulator built on real market data. Every one is free, works on a phone, and is grouped by the question it answers.</p>
         <div class="shelf-foot">
           <a href="resources.html" class="btn-secondary">
             Browse the full tool library
@@ -2441,57 +2268,33 @@
   </section>
 
   <!-- ======================= EVENT ======================= -->
+  <!-- Door only. The gallery, tracks, judges and winners live on barrier-breakers.html. -->
   <section class="event">
     <div class="event-container">
-      <div class="section-head">
-        <span class="eyebrow">Annual event</span>
-        <h2>Barrier Breakers at Kent&nbsp;State.</h2>
-        <p class="section-sub">
-          Once a year, the top students from Northeast Ohio spend a day on campus building, pitching, and competing for cash prizes and scholarships. It's the loudest room we're in all year.
-        </p>
-      </div>
-
-      <div class="event-stats">
-        <div>
-          <div class="event-stat-number">$20K<em>+</em></div>
-          <div class="event-stat-label">In prizes</div>
+      <div class="event-strip">
+        <div class="event-strip-text">
+          <span class="eyebrow">Annual event</span>
+          <h2>Barrier Breakers at Kent&nbsp;State.</h2>
+          <p class="section-sub">
+            Once a year, the top students from Northeast Ohio spend a day on campus building, pitching, and competing for cash prizes and scholarships. It's the loudest room we're in all year.
+          </p>
         </div>
-        <div>
-          <div class="event-stat-number">300<em>+</em></div>
-          <div class="event-stat-label">Students</div>
+        <div class="event-strip-side">
+          <div class="event-stats">
+            <div>
+              <div class="event-stat-number">$20K<em>+</em></div>
+              <div class="event-stat-label">In prizes</div>
+            </div>
+            <div>
+              <div class="event-stat-number">300<em>+</em></div>
+              <div class="event-stat-label">Students</div>
+            </div>
+          </div>
+          <a href="barrier-breakers.html" class="btn-primary">
+            Explore Barrier Breakers
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
-      </div>
-
-      <div class="event-gallery">
-        <img class="g-big" src="Barrier%20Breakers%202026%20Pics/IMG_9151.jpg" alt="Students pitching their Plated Purpose project to a judge at Barrier Breakers 2026" loading="lazy">
-        <img class="g-tall" src="Barrier%20Breakers%202026%20Pics/IMG_3777.jpg" alt="Students competing at Barrier Breakers 2026" loading="lazy">
-        <img src="Barrier%20Breakers%202026%20Pics/IMG_3834.jpg" alt="Students brainstorming at Barrier Breakers 2026" loading="lazy">
-        <img class="g-wide" src="Barrier%20Breakers%202026%20Pics/IMG_9165.jpg" alt="Barrier Breakers 2026 group photo" loading="lazy" style="object-position: center 28%">
-        <img src="Barrier%20Breakers%202026%20Pics/IMG_9173.jpg" alt="Barrier Breakers 2026 event energy" loading="lazy">
-        <img src="Barrier%20Breakers%202026%20Pics/IMG_9143.jpg" alt="Final presentations at Barrier Breakers 2026" loading="lazy">
-        <img src="Barrier%20Breakers%202026%20Pics/IMG_3695.jpg" alt="Barrier Breakers 2026 opening event" loading="lazy">
-        <img class="g-wide" src="FinMangoKent2025-43 (2).JPG" alt="Students competing at Barrier Breakers" loading="lazy" style="object-position: center 30%">
-        <img src="education3.jpg" alt="Financial literacy competition" loading="lazy" style="object-position: center 35%">
-        <img src="education5.jpeg" alt="Kent State University event" loading="lazy" style="object-position: center 30%">
-      </div>
-
-      <div class="resource-links">
-        <a href="barrier-breakers.html" class="btn-primary">
-          Explore Barrier Breakers
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="https://drive.google.com/drive/folders/1m2F0Jn12tfIgyUEp6UqCu6Vs2ZG0xxME?usp=drive_link" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-          2026 photos
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="https://drive.google.com/drive/folders/1VAxMXqdfHKdAknvJAENYSbWYIcyPKzs6?usp=drive_link" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-          2025 photos
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="https://drive.google.com/drive/folders/1ZwCvDhe6wOlBYnfFSluk3wTX5N3ni6NX?usp=drive_link" target="_blank" rel="noopener noreferrer" class="btn-secondary">
-          2024 photos
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
       </div>
     </div>
   </section>
