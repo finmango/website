@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function formatChange(val, higherIsBad = true) {
+        if (val == null || isNaN(val)) return '';
         const isUp = val >= 0;
         const sign = isUp ? '▲' : '▼';
         const cssClass = (isUp && higherIsBad) || (!isUp && !higherIsBad) ? 'up' : 'down';
