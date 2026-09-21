@@ -975,16 +975,20 @@ reached` (README figure). "5 continents" is gone from the site.
 offset; the three figures share a top edge. The staggered version read
 as a broken grid at a glance.
 
-### research.html — 11,513px → 8,045px at 1440
-Removed the Barometer map preview (01): the same instrument is on the
-homepage and barometer.html. The live-signal cards keep
-`data/dashboard-data.js` and now open barometer.html on click.
-Reports (03) and Publications (04) teasers collapsed into one ruled
-two-row index (`.work-index`) with live counts from `data/reports.js`
-and `data/publications.js`; `scripts/research-cards.js` is no longer
-loaded here. Sections renumbered 01–05. `#young-adults` (linked from
-three pages) is untouched. `.figure-caption` and `.map-links` stay:
-the state explorer uses both.
+### research.html — second pass, after review
+The first pass (merged in #590) removed the Barometer map preview and
+collapsed the reports and publications teasers into a two-row index. That
+read as cluttered, and the papers need to be on the page. Reversed:
+the map preview (01), the featured report card (02) and the publication
+list (03) are back exactly as they were. What is gone instead is the
+young-adult state explorer ("Pick a state. Do the math.") and the hero's
+rotating per-state wire: the state-level young-adult map is not ready to
+be live. The national generation stats in the premise still read
+`YOUNG_ADULT_DATA`, so `data/student-map-data.js` stays. Hero CTAs are
+now Open the Barometer (primary) and Read the research (→ `#reports`).
+The "Do the math" link under the student-debt question is removed; its
+Loan Payoff Simulator and Young Adult Map links are untouched. Sections
+renumbered 01–06. 11,513px → ~10,200px at 1440.
 
 ### education.html — 11,792px → ~10,600px at 1440
 Calculators shelf is now a head + lede + door to resources.html (the 18
