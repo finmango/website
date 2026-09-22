@@ -9,10 +9,10 @@ const YOUNG_ADULT_DATA = {
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
         "data_sources": {
-            "student_debt": "Education Data Initiative (Bachelor's Grads 2024)",
-            "auto_debt": "Experian Q3 2024 (Gen Z/Millennial Avg)",
-            "rent_burden": "Census ACS / Harvard JCHS (Young Renters 2024)",
-            "median_income": "BLS Q2 2025 Estimate (Ages 25-34)",
+            "student_debt": "Federal Student Aid portfolio summary, Q2 FY2026 (outstanding federal balance / borrowers)",
+            "auto_debt": "Experian State of Auto Loan Debt 2025 (Gen Z / Millennial average)",
+            "rent_burden": "Harvard JCHS, America's Rental Housing 2026 (2024 ACS; renter households headed by someone under 25)",
+            "median_income": "Census CPS ASEC 2025, PINC-01 (median total money income, people 25-34, 2024 income)",
             "unemployment": "BLS (Ages 20-24) Sept 2025",
             "debt_to_income": "Calculated from student + auto debt vs median income",
             "cost_of_living": "BEA Regional Price Parities",
@@ -23,36 +23,40 @@ const YOUNG_ADULT_DATA = {
     },
     "national": {
         "student_debt": {
-            "value": 39075,
-            "change": 3.2,
+            "value": 40467,
+            "change": 3.8,
             "label": "Avg. Student Debt",
             "unit": "$",
             "trend": "up",
-            "source_note": "Federal Student Loan Debt per Borrower (Oct 2024)"
+            "source_note": "Federal Student Aid portfolio, Q2 FY2026 · avg. federal balance per borrower",
+            "source_url": "https://studentaid.gov/data-center/student/portfolio"
         },
         "auto_debt": {
-            "value": 23800,
-            "change": 2.8,
+            "value": 23483,
+            "change": 2.5,
             "label": "Avg. Auto Loan Balance",
             "unit": "$",
             "trend": "up",
-            "source_note": "Experian Q3 2024 (Gen Z/Millennial Avg)"
+            "source_note": "Experian 2025 · Gen Z / Millennial average balance",
+            "source_url": "https://www.experian.com/blogs/ask-experian/research/auto-loan-debt-study/"
         },
         "rent_burden": {
-            "value": 58.6,
-            "change": 1.4,
+            "value": 60,
+            "change": null,
             "label": "Cost Burdened Renters",
             "unit": "%",
             "trend": "up",
-            "source_note": "Harvard JCHS / Zillow (Renters under 25 paying >30% income)"
+            "source_note": "Harvard JCHS, America's Rental Housing 2026 · renter households under 25 paying >30% of income (2024)",
+            "source_url": "https://www.jchs.harvard.edu/americas-rental-housing-2026"
         },
         "median_income": {
-            "value": 55000,
-            "change": 3.5,
+            "value": 45800,
+            "change": 2.0,
             "label": "Median Income (25-34)",
             "unit": "$",
             "trend": "up",
-            "source_note": "Census ACS 2023 Estimate"
+            "source_note": "Census CPS ASEC 2025 · median personal income, ages 25–34 (2024 income)",
+            "source_url": "https://www.census.gov/data/tables/2025/demo/cps/pinc-01.html"
         },
         "unemployment": {
             "value": 7.1,
@@ -60,7 +64,8 @@ const YOUNG_ADULT_DATA = {
             "label": "Youth Unemployment Rate",
             "unit": "%",
             "trend": "up",
-            "source_note": "BLS (Ages 20-24) August 2026"
+            "source_note": "BLS (Ages 20-24) August 2026",
+            "source_url": "https://data.bls.gov/timeseries/LNS14000036"
         },
         "debt_to_income": {
             "value": 45.2,

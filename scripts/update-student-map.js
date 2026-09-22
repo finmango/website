@@ -66,10 +66,15 @@ async function fetchYouthUnemployment() {
  * Fetch Rent Burden Baseline
  */
 async function fetchRentBurden() {
+    // Harvard JCHS, America's Rental Housing 2026 (JCHS tabulations of 2024 ACS):
+    // "60 percent of renter households headed by an adult under age 25 are burdened."
+    // JCHS does not publish a prior-year figure for this age band, so `change` is
+    // null and the UI hides the year-over-year arrow rather than showing a made-up one.
     return {
-        value: 58.6,
-        change: 1.2,
-        source_note: "Harvard JCHS / Zillow (Renters under 25 paying >30% income)"
+        value: 60,
+        change: null,
+        source_note: "Harvard JCHS, America's Rental Housing 2026 · renter households under 25 paying >30% of income (2024)",
+        source_url: "https://www.jchs.harvard.edu/americas-rental-housing-2026"
     };
 }
 
@@ -174,6 +179,7 @@ async function main() {
         data.national.unemployment.value = unemploymentData.value;
         data.national.unemployment.change = unemploymentData.change;
         data.national.unemployment.source_note = `BLS (Ages 20-24) ${unemploymentData.date}`;
+        data.national.unemployment.source_url = "https://data.bls.gov/timeseries/LNS14000036";
     }
 
     // Update Rent Burden (Switching to "Cost Burdened Rate")
@@ -181,6 +187,7 @@ async function main() {
         data.national.rent_burden.value = rentData.value;
         data.national.rent_burden.label = "Cost Burdened Renters";
         data.national.rent_burden.source_note = rentData.source_note;
+        data.national.rent_burden.source_url = rentData.source_url;
         data.indicators.rent_burden.name = "Cost Burdened Rate";
         data.indicators.rent_burden.description = "% of young renters paying >30% of income on housing";
         // Stricter thresholds: >55% is now Red (High)

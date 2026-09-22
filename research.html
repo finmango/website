@@ -2039,7 +2039,17 @@
     }
     .premise-stat-number small.up { color: var(--signal-bad); }
     .premise-stat-number small.dn { color: var(--signal-good); }
-    .premise-stat-source.src { text-transform: none; letter-spacing: .02em; font-size: .68rem; }
+    .premise-stat-source.src { text-transform: none; letter-spacing: .02em; font-size: .68rem; line-height: 1.5; display: block; }
+    a.premise-stat-source.src {
+      color: var(--paper-faint);
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 255, 255, .25);
+      text-underline-offset: .2em;
+      transition: color .2s ease, text-decoration-color .2s ease;
+    }
+    a.premise-stat-source.src:hover,
+    a.premise-stat-source.src:focus-visible { color: var(--orange); text-decoration-color: var(--orange); }
+    .premise-stat-source .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
     /* Signal → solution pipeline */
     .pipeline { margin-bottom: 5.5rem; }
@@ -2360,20 +2370,24 @@
       <div class="premise-grid rise" data-delay="2" id="gen-grid">
         <!-- Static fallback; JS refreshes from YOUNG_ADULT_DATA.national -->
         <div class="premise-stat">
-          <div class="premise-stat-number">$<span data-count="39075">0</span></div>
-          <div class="premise-stat-label">Avg. student debt per borrower</div>
+          <div class="premise-stat-number">$<span data-count="40467">0</span></div>
+          <div class="premise-stat-label">Avg. federal student debt per borrower</div>
+          <a class="premise-stat-source src" href="https://studentaid.gov/data-center/student/portfolio" target="_blank" rel="noopener">Federal Student Aid portfolio, Q2 FY2026 <span aria-hidden="true">↗</span></a>
         </div>
         <div class="premise-stat">
-          <div class="premise-stat-number"><span data-count="58.6" data-decimals="1">0</span><em>%</em></div>
+          <div class="premise-stat-number"><span data-count="60">0</span><em>%</em></div>
           <div class="premise-stat-label">Young renters who are cost-burdened</div>
+          <a class="premise-stat-source src" href="https://www.jchs.harvard.edu/americas-rental-housing-2026" target="_blank" rel="noopener">Harvard JCHS, America's Rental Housing 2026 · renters under 25 (2024) <span aria-hidden="true">↗</span></a>
         </div>
         <div class="premise-stat">
-          <div class="premise-stat-number"><span data-count="45.2" data-decimals="1">0</span><em>%</em></div>
-          <div class="premise-stat-label">Debt-to-income ratio</div>
+          <div class="premise-stat-number"><span data-count="7.1" data-decimals="1">0</span><em>%</em></div>
+          <div class="premise-stat-label">Unemployment rate, ages 20–24</div>
+          <a class="premise-stat-source src" href="https://data.bls.gov/timeseries/LNS14000036" target="_blank" rel="noopener">BLS, ages 20–24 <span aria-hidden="true">↗</span></a>
         </div>
         <div class="premise-stat">
-          <div class="premise-stat-number">$<span data-count="55000">0</span></div>
+          <div class="premise-stat-number">$<span data-count="45800">0</span></div>
           <div class="premise-stat-label">Median income, ages 25–34</div>
+          <a class="premise-stat-source src" href="https://www.census.gov/data/tables/2025/demo/cps/pinc-01.html" target="_blank" rel="noopener">Census CPS ASEC 2025 · ages 25–34 (2024 income) <span aria-hidden="true">↗</span></a>
         </div>
       </div>
     </div>
@@ -3117,23 +3131,32 @@
         var grid = document.getElementById('gen-grid');
         if (!Y || !Y.national || !grid) return;
         var N = Y.national;
+        // [key, label, unit, decimals, higherIsBad]
         var rows = [
-          ['student_debt', 'Avg. student debt per borrower', '$', 0],
-          ['rent_burden', 'Young renters who are cost-burdened', '%', 1],
-          ['debt_to_income', 'Debt-to-income ratio', '%', 1],
-          ['median_income', 'Median income, ages 25–34', '$', 0]
+          ['student_debt', 'Avg. federal student debt per borrower', '$', 0, true],
+          ['rent_burden', 'Young renters who are cost-burdened', '%', 0, true],
+          ['unemployment', 'Unemployment rate, ages 20–24', '%', 1, true],
+          ['median_income', 'Median income, ages 25–34', '$', 0, false]
         ].filter(function (r) { return N[r[0]] && N[r[0]].value != null; });
         if (rows.length < 4) return;
+        function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); }
         grid.innerHTML = rows.map(function (r) {
           var ind = N[r[0]];
+          var bad = ind.change > 0 ? r[4] : !r[4]; // red when the move is bad news, green when good
           var chg = ind.change != null && Math.abs(ind.change) >= 0.05
-            ? '<small class="' + (ind.change > 0 ? 'up' : 'dn') + '" title="Change vs. prior year">' + (ind.change > 0 ? '▲' : '▼') + Math.abs(ind.change).toFixed(1) + (r[2] === '%' ? ' pts' : '%') + '</small>' : '';
+            ? '<small class="' + (bad ? 'up' : 'dn') + '" title="Change vs. prior year">' + (ind.change > 0 ? '▲' : '▼') + Math.abs(ind.change).toFixed(1) + (r[2] === '%' ? ' pts' : '%') + '</small>' : '';
           var num = r[2] === '$'
             ? '$<span data-count="' + ind.value + '">0</span>' + chg
             : '<span data-count="' + ind.value + '" data-decimals="' + r[3] + '">0</span><em>%</em>' + chg;
+          var src = '';
+          if (ind.source_note) {
+            var url = ind.source_url && /^https:\/\//.test(ind.source_url) ? ind.source_url : null;
+            src = url
+              ? '<a class="premise-stat-source src" href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(ind.source_note) + ' <span aria-hidden="true">↗</span><span class="sr-only"> (opens source in a new tab)</span></a>'
+              : '<div class="premise-stat-source src">' + esc(ind.source_note) + '</div>';
+          }
           return '<div class="premise-stat"><div class="premise-stat-number">' + num + '</div>' +
-            '<div class="premise-stat-label">' + r[1] + '</div>' +
-            (ind.source_note ? '<div class="premise-stat-source src">' + ind.source_note + '</div>' : '') + '</div>';
+            '<div class="premise-stat-label">' + r[1] + '</div>' + src + '</div>';
         }).join('');
         // the grid may already be in view; (re)arm its count-ups
         if (grid.classList.contains('in')) grid.querySelectorAll('[data-count]').forEach(countUp);
