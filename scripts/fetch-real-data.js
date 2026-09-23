@@ -66,19 +66,28 @@ const TRENDS_TERMS = {
 
 // Health Trends request budget for a single daily run.
 //
-// The graph endpoint accepts `terms` more than once, so one request per state
-// carries all four indicator terms. Full coverage of 51 states is therefore
-// 51 requests, not 204 — and a single national request supplies all four
-// 10-year series for the trend chart. The budget below is the same number of
-// HTTP requests the pipeline made before batching (40), so the load on the
-// quota is unchanged while the readings per request go up fourfold. Override
-// with TRENDS_MAX_REQUESTS when the real quota is known.
-const TRENDS_MAX_REQUESTS = Math.max(2, parseInt(process.env.TRENDS_MAX_REQUESTS, 10) || 40);
-const TRENDS_STATES_PER_RUN = TRENDS_MAX_REQUESTS - 1; // 1 national + N states
+// ONE TERM PER REQUEST. The graph endpoint accepts `terms` more than once, and
+// from 2026-09-10 the pipeline sent all four indicator terms in one request.
+// The first run where that request succeeded (2026-09-19) came back scaled
+// across the four terms: the low-volume terms read 0 in almost every state
+// ("eviction help" in 50 of 51, "debt help" in 48) and the national 10-year
+// series collapsed to 4 distinct levels, where one-term requests had given
+// 50-60. So each term gets its own request again: 4 national requests for the
+// trend chart, then 4 per state. At the default budget of 40 that is 9 states
+// per run and a full 51-state rotation every 6 runs. Override with
+// TRENDS_MAX_REQUESTS when the real quota is known.
+const TRENDS_TERM_COUNT = 4; // one headline term per indicator (TRENDS_TERMS)
+const TRENDS_MAX_REQUESTS = Math.max(TRENDS_TERM_COUNT * 2,
+    parseInt(process.env.TRENDS_MAX_REQUESTS, 10) || 40);
+const TRENDS_STATES_PER_RUN = Math.floor((TRENDS_MAX_REQUESTS - TRENDS_TERM_COUNT) / TRENDS_TERM_COUNT);
+
+// Readings in the cache are tagged with how they were requested. Anything
+// without this tag came from a batched multi-term request and is discarded.
+const TRENDS_CACHE_SCHEME = 'per-term';
 
 // A state's cached trends reading is considered usable for this many days.
-// At 39 states per run the rotation covers all 51 states in two runs, so a
-// 10-day window survives several failed days without losing coverage.
+// At 9 states per run the rotation covers all 51 states in 6 runs, so a
+// 10-day window survives a few failed days without losing coverage.
 const TRENDS_MAX_AGE_DAYS = 10;
 
 // Helper: delay between API calls
@@ -383,19 +392,23 @@ function pruneTrendsCache(cache, today) {
     for (const [indicator, byState] of Object.entries(cache.states)) {
         for (const [abbr, entry] of Object.entries(byState)) {
             const fetched = entry && entry.fetched ? new Date(entry.fetched) : null;
-            if (!fetched || fetched < cutoff) {
+            // Batched multi-term readings (no scheme tag) were scaled against
+            // each other, not measured on their own, so they never count.
+            const batched = !entry || entry.scheme !== TRENDS_CACHE_SCHEME;
+            if (!fetched || fetched < cutoff || batched) {
                 delete cache.states[indicator][abbr];
                 dropped++;
             }
         }
     }
-    if (dropped > 0) console.log(`  \u{1F5D1}\uFE0F  Dropped ${dropped} trends readings older than ${TRENDS_MAX_AGE_DAYS} days`);
+    if (dropped > 0) console.log(`  \u{1F5D1}\uFE0F  Dropped ${dropped} trends readings (older than ${TRENDS_MAX_AGE_DAYS} days or from batched requests)`);
     return cache;
 }
 
 /**
  * Build a Health Trends graph request. `terms` is a repeated query parameter
- * on this endpoint, which is what lets one request serve every indicator.
+ * on this endpoint, but the pipeline sends ONE term per request: several terms
+ * in one request come back scaled against each other (see TRENDS_TERM_COUNT).
  */
 function buildTrendsGraphUrl(terms, geo, startDate, apiKey) {
     const params = new URLSearchParams();
@@ -455,11 +468,11 @@ async function describeTrendsFailure(response) {
  * Unlike the public Google Trends website (relative 0-100 scale), this API returns
  * absolute search probabilities, so values are comparable across states and time.
  *
- * Requests are batched: one national request carries all four indicator terms
- * for the 10-year chart shape, and one request per state carries all four
- * terms for the 3-month reading. The daily budget is spent on a rotating slice
- * of states, merged into a cache that survives across runs, so coverage builds
- * toward 51/51 without ever exceeding the budget in a single run.
+ * One term per request: four national requests give the 10-year chart shape,
+ * then four requests per state give the 3-month readings. The daily budget is
+ * spent on a rotating slice of states, merged into a cache that survives
+ * across runs, so coverage builds toward 51/51 without ever exceeding the
+ * budget in a single run.
  *
  * Every non-OK status is recorded in the run metadata (meta.trends_run) with
  * its reason, and a quota response stops the run at once without advancing the
@@ -479,7 +492,7 @@ async function fetchGoogleTrends() {
         return summariseTrends(cache, {}, todayISO, cache.cursor, { attempted: false });
     }
 
-    console.log('\u{1F4C8} Fetching Google Trends data (rotating slice, all terms per request)...');
+    console.log('\u{1F4C8} Fetching Google Trends data (rotating slice, one term per request)...');
     const nationalTimeSeries = {};
 
     const d3 = new Date(); d3.setMonth(d3.getMonth() - 3);
@@ -529,50 +542,56 @@ async function fetchGoogleTrends() {
         }
     }
 
-    // 1. One national request: all four terms, 10-year window, used only for
-    //    the shape of the trend chart.
-    try {
-        const response = await fetch(buildTrendsGraphUrl(terms, 'US', startDate10y, apiKey));
-        requestCount++;
-        if (response.ok) {
-            statuses[200] = (statuses[200] || 0) + 1;
-            const byTerm = trendsPointsByTerm(await response.json(), terms);
-            for (const [term, points] of Object.entries(byTerm)) {
-                nationalTimeSeries[indicatorByTerm[term]] = points;
+    // One request for one term in one place. Returns that term's points, or
+    // null when the request failed or returned nothing.
+    async function fetchTerm(term, geo, startDate, where) {
+        try {
+            const response = await fetch(buildTrendsGraphUrl([term], geo, startDate, apiKey));
+            requestCount++;
+            if (!response.ok) {
+                recordFailure(where, await describeTrendsFailure(response));
+                return null;
             }
-        } else {
-            recordFailure('national/US', await describeTrendsFailure(response));
+            statuses[200] = (statuses[200] || 0) + 1;
+            return trendsPointsByTerm(await response.json(), [term])[term] || null;
+        } catch (error) {
+            console.warn(`   Could not fetch trends for ${where}: ${error.message}`);
+            return null;
+        } finally {
+            await delay(500);
         }
-        await delay(500);
-    } catch (error) {
-        console.warn(`   Could not fetch national trends: ${error.message}`);
     }
 
-    // 2. This run's slice of states: one request per state, all four terms.
+    // 1. National: one request per term, 10-year window, used only for the
+    //    shape of the trend chart.
+    for (const term of terms) {
+        if (stopped) break;
+        const points = await fetchTerm(term, 'US', startDate10y, `national/US "${term}"`);
+        if (points) nationalTimeSeries[indicatorByTerm[term]] = points;
+    }
+
+    // 2. This run's slice of states: one request per state per term. A state
+    //    counts as completed once all its terms were asked for, so a run cut
+    //    short mid-state retries that state tomorrow.
     for (const abbr of slice) {
-        if (stopped || requestCount >= TRENDS_MAX_REQUESTS) { stopped = true; break; }
-        try {
-            const response = await fetch(buildTrendsGraphUrl(terms, `US-${abbr}`, startDate3m, apiKey));
-            requestCount++;
-            stateRequests += indicators.length;
-            if (response.ok) {
-                statuses[200] = (statuses[200] || 0) + 1;
-                const byTerm = trendsPointsByTerm(await response.json(), terms);
-                for (const [term, points] of Object.entries(byTerm)) {
-                    cache.states[indicatorByTerm[term]][abbr] = {
-                        value: points[points.length - 1].value,
-                        fetched: todayISO
-                    };
-                    stateReadings++;
-                }
-                statesCompleted++;
-            } else {
-                recordFailure(`state/US-${abbr}`, await describeTrendsFailure(response));
+        if (stopped || requestCount + terms.length > TRENDS_MAX_REQUESTS) { stopped = true; break; }
+        let asked = 0;
+        for (const term of terms) {
+            if (stopped) break;
+            const points = await fetchTerm(term, `US-${abbr}`, startDate3m, `state/US-${abbr} "${term}"`);
+            stateRequests++;
+            asked++;
+            if (points && points.length > 0) {
+                cache.states[indicatorByTerm[term]][abbr] = {
+                    value: points[points.length - 1].value,
+                    fetched: todayISO,
+                    scheme: TRENDS_CACHE_SCHEME
+                };
+                stateReadings++;
             }
-            await delay(500);
-        } catch (error) {
-            console.warn(`   Could not fetch trends for US-${abbr}: ${error.message}`);
         }
+        // A quota stop mid-state leaves it for tomorrow's run to redo in full
+        if (asked === terms.length && !quotaHit) statesCompleted++;
     }
 
     // Advance the cursor only past the states that actually answered, so a run
@@ -2191,11 +2210,14 @@ module.exports = {
     deriveHousingWage,
     summariseTrends,
     fetchGoogleTrends,
+    pruneTrendsCache,
     buildTrendsGraphUrl,
     trendsPointsByTerm,
     describeTrendsFailure,
     TRENDS_TERMS,
     TRENDS_MAX_REQUESTS,
     TRENDS_STATES_PER_RUN,
+    TRENDS_TERM_COUNT,
+    TRENDS_CACHE_SCHEME,
     REGIONAL_STRESS
 };

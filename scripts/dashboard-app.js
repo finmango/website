@@ -643,6 +643,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderSparklines();
     }
 
+    // A national history is only drawn when it looks like a measurement:
+    // enough months, not pinned to its floor for long stretches (months stuck
+    // at the minimum, zero included, are missing search data rather than calm),
+    // and more than a handful of distinct levels. A history that fails this is
+    // replaced by a note instead of a line that would read as a real trend.
+    function isUsableHistory(points) {
+        if (!points || points.length < 12) return false;
+        const values = points.map(p => Number(p.value));
+        const floor = Math.min(...values);
+        const atFloor = values.filter(v => v === floor).length;
+        return atFloor / values.length < 0.2 && new Set(values).size >= 5;
+    }
+
     // --- Sparklines ---
     function renderSparklines() {
         const indicators = ['financial_anxiety', 'food_insecurity', 'housing_stress', 'affordability'];
@@ -651,6 +664,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!container) return;
 
             const rawPoints = (DASHBOARD_DATA.timeseries && DASHBOARD_DATA.timeseries.national && DASHBOARD_DATA.timeseries.national[indicator]) || [];
+            if (!isUsableHistory(rawPoints)) {
+                container.innerHTML = '<span class="spark-note">History under review</span>';
+                return;
+            }
             // Use last 12 points for sparkline
             const points = rawPoints.slice(-12);
             if (points.length < 2) return;
@@ -1298,6 +1315,29 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Get actual data points from the static dataset
         const rawPoints = (DASHBOARD_DATA.timeseries && DASHBOARD_DATA.timeseries.national && DASHBOARD_DATA.timeseries.national[indicator]) || [];
+
+        // A broken history gets a note in place of the chart, not a false line
+        const usable = isUsableHistory(rawPoints);
+        const container = document.querySelector('.chart-container');
+        if (container) {
+            let note = container.querySelector('.chart-empty');
+            if (!usable && !note) {
+                note = document.createElement('div');
+                note.className = 'chart-empty';
+                note.innerHTML = '<strong>History under review</strong>' +
+                    '<span>The search-interest history for this indicator has gaps, so it is not drawn. ' +
+                    'Today’s index value above is unaffected.</span>';
+                container.appendChild(note);
+            }
+            container.classList.toggle('is-empty', !usable);
+        }
+        if (!usable) {
+            APP_STATE.chartInstance.data.labels = [];
+            APP_STATE.chartInstance.data.datasets[0].data = [];
+            APP_STATE.chartInstance.update();
+            updateChartCaption(indicator);
+            return;
+        }
         
         const now = new Date();
         let cutoffDate = new Date();
