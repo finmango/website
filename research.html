@@ -1518,7 +1518,7 @@
         gap: 2rem 3rem;
         align-items: start;
       }
-      .hb-cta-row { grid-column: 1 / -1; justify-content: flex-start; }
+      .hb-bottom { grid-template-columns: 1fr; }
       .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
       .questions-grid { grid-template-columns: repeat(2, 1fr); }
     }
@@ -1743,6 +1743,17 @@
     .signal-spark .base { stroke: var(--paper-line); stroke-width: 1; }
     .signal-spark .end-dot { fill: var(--orange); opacity: 0; transition: opacity .4s ease 1.4s; }
     .signal-card.drawn .end-dot { opacity: 1; }
+    .signal-spark-empty {
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: .5rem;
+      border-bottom: 1px dashed var(--paper-line);
+      font-family: var(--font-mono);
+      font-size: .64rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--paper-faint);
+    }
     .signal-card-foot {
       display: flex;
       justify-content: space-between;
@@ -1894,35 +1905,34 @@
       -webkit-mask-image: radial-gradient(ellipse at 85% 65%, #000 0%, transparent 65%);
       opacity: .9;
     }
-    /* The instrument: ten years of national housing stress, drawn large */
+    /* The instrument: ten years of the national affordability index, as a
+       figure beside the lede (see .hero-figure) */
     .hero-chart {
-      position: absolute;
-      left: 0; right: 0; bottom: var(--ticker-h, 84px);
-      height: 58%;
-      mask-image: linear-gradient(90deg, transparent, rgba(0,0,0,.35) 30%, #000 55%);
-      -webkit-mask-image: linear-gradient(90deg, transparent, rgba(0,0,0,.35) 30%, #000 55%);
+      display: block;
       width: 100%;
+      height: 150px;
       overflow: visible;
       opacity: 0;
-      transition: opacity 1s ease;
+      transition: opacity .8s ease;
     }
     .hero-chart.on { opacity: 1; }
     .hero-chart .hc-area { fill: url(#hc-fill); }
     .hero-chart .hc-line {
       fill: none;
       stroke: var(--orange);
-      stroke-width: 2.25;
+      stroke-width: 2;
       stroke-linecap: round;
       stroke-linejoin: round;
-      opacity: .8;
       transition: stroke-dashoffset 2.6s cubic-bezier(.16, 1, .3, 1) .2s;
     }
     .hero-chart .hc-grid { stroke: rgba(10, 10, 10, .07); stroke-width: 1; }
+    .hero-chart .hc-base { stroke: var(--ink-line); stroke-width: 1; }
     .hero-chart .hc-tick {
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: .1em;
-      fill: rgba(10, 10, 10, .38);
+      fill: rgba(10, 10, 10, .45);
+      text-anchor: middle;
     }
     .hero-chart .hc-end { fill: var(--orange); }
     .hero-chart .hc-halo {
@@ -1938,26 +1948,28 @@
       0% { transform: scale(.4); opacity: .7; }
       100% { transform: scale(3.2); opacity: 0; }
     }
+    .hero-figure {
+      margin: 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
     .hero-chart-label {
-      position: absolute;
-      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      flex-wrap: wrap;
       font-family: var(--font-mono);
       font-size: .68rem;
       font-weight: 500;
       letter-spacing: .12em;
       text-transform: uppercase;
-      color: var(--ink-dim);
-      background: var(--paper);
-      padding: .35rem .6rem;
-      border: 1px solid var(--ink-line);
-      white-space: nowrap;
-      opacity: 0;
-      transition: opacity .6s ease 2.4s;
-      pointer-events: none;
+      color: var(--ink-faint);
     }
-    .hero-chart-label strong { color: var(--ink); font-weight: 600; }
+    .hero-chart-label strong { color: var(--ink); font-weight: 600; font-size: .85rem; letter-spacing: .04em; }
     .hero-chart-label em { font-style: normal; color: var(--orange-ink); }
-    .hero-chart.on + .hero-chart-label { opacity: 1; }
 
     .hero-top { gap: 2rem; flex-wrap: wrap; }
 
@@ -2138,10 +2150,7 @@
     a.cta-stat:hover .cta-stat-label { color: var(--orange); }
 
     @media (max-width: 968px) {
-      .hero-chart { height: 42%; bottom: 0; mask-image: none; -webkit-mask-image: none; }
-      .hero-chart.on { opacity: .42; }          /* texture, not a figure, behind stacked copy */
-      .hero-chart .hc-tick { display: none; }
-      .hero-chart-label { display: none; }
+      .hero-chart { height: 120px; }
       .hero-signals { flex-wrap: wrap; gap: .75rem; }
       .ticker-label { border-right: none; padding-right: 0; }
       .ticker { width: 100%; flex: none; }
@@ -2153,6 +2162,90 @@
       .cta-stats { grid-template-columns: repeat(2, 1fr); }
       .cta-stat:nth-child(3) { padding-left: 0; border-left: none; }
     }
+
+    /* ==========================================================
+       REFINEMENT PASS
+       One grid edge for every section, hero chart kept clear of
+       the copy, split section heads, and a meta rail for papers.
+       ========================================================== */
+
+    /* Hero shares the page's 1280 grid instead of a wider 1440 one */
+    .hero { padding-left: var(--gutter); padding-right: var(--gutter); }
+    .hero-container, .hero-signals { max-width: var(--max-width); }
+
+    /* Lede + CTAs on the left, the instrument on the right */
+    .hb-copy { display: flex; flex-direction: column; gap: 2rem; align-items: flex-start; min-width: 0; }
+    .hb-copy .hb-cta-row { justify-content: flex-start; }
+    .hb-bottom.no-figure { grid-template-columns: 1fr; }
+
+    @media (min-width: 969px) {
+      .hb-bottom {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+        gap: 5rem;
+        align-items: end;
+        padding-top: 2.25rem;
+      }
+
+      /* Split section head: eyebrow + headline left, sub right */
+      .section-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+        column-gap: 4.5rem;
+        row-gap: 1.25rem;
+        align-items: end;
+        margin-bottom: 3.5rem;
+      }
+      .section-head .eyebrow { grid-column: 1 / -1; }
+      .section-head h2 { grid-column: 1; max-width: 16ch; }
+      .section-head .section-sub { grid-column: 2; max-width: 46ch; font-size: 1.02rem; }
+
+      /* Publications: meta rail on the left, paper on the right */
+      .pub-list .pub-row {
+        display: grid;
+        grid-template-columns: 15rem minmax(0, 1fr);
+        column-gap: 3rem;
+        align-items: start;
+      }
+      .pub-list .pub-row > * { grid-column: 2; }
+      .pub-list .pub-row > .pub-meta {
+        grid-column: 1;
+        grid-row: 1 / span 5;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .55rem;
+        margin: .45rem 0 0;
+      }
+      .pub-list .pub-meta > span + span::before { content: none; }
+      .pub-list .pub-meta > span:first-child:not(.pub-tag-featured),
+      .pub-list .pub-meta > .pub-tag-featured + span {
+        font-size: .95rem;
+        color: var(--ink);
+        letter-spacing: .06em;
+      }
+      .pub-list .pub-title { max-width: 44ch; }
+    }
+
+    /* Premise: less dead ink under the stat row */
+    .premise { padding-bottom: 5.5rem; }
+
+    /* Tweet plate: styled fallback while (or if) the widget doesn't load */
+    .recognition-tweet blockquote.twitter-tweet {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      letter-spacing: -.01em;
+      color: var(--ink-dim);
+      padding-left: 1.25rem;
+      border-left: 2px solid var(--orange);
+    }
+    .recognition-tweet blockquote.twitter-tweet p { color: var(--ink); margin-bottom: .6rem; }
+    .recognition-tweet blockquote.twitter-tweet a {
+      color: var(--orange-ink);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(194, 65, 12, .3);
+      word-break: break-all;
+    }
+    .recognition-tweet blockquote.twitter-tweet a:hover { border-bottom-color: var(--orange-ink); }
+    .recognition-tweet-caption { margin-top: auto; padding-top: 1.25rem; border-top: 1px solid var(--ink-line-soft); }
   </style>
 </head>
 
@@ -2275,10 +2368,7 @@
 
   <!-- ======================= HERO ======================= -->
   <section class="hero">
-    <div class="hero-bg">
-      <svg class="hero-chart" id="hero-chart" preserveAspectRatio="none" aria-hidden="true" focusable="false"></svg>
-      <div class="hero-chart-label" id="hero-chart-label" aria-hidden="true"></div>
-    </div>
+    <div class="hero-bg"></div>
     <div class="hero-container">
 
       <div class="hero-top reveal r1">
@@ -2288,16 +2378,24 @@
       <h1 class="reveal r1">What if the affordability crisis had <em>a forecast<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em>?</h1>
 
       <div class="hb-bottom reveal r2">
-        <p class="hb-sub">
-          Rent, debt, wages, and what people search for at 2 a.m. — the signals show up <strong>long before a young adult's finances break</strong>. We measure them, publish everything, and put the evidence in front of the people who can fix it.
-        </p>
-        <div class="hb-cta-row">
-          <a href="barometer.html" class="btn-primary">
-            Open the Barometer
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="#reports" class="btn-secondary">Read the research</a>
+        <div class="hb-copy">
+          <p class="hb-sub">
+            Rent, debt, wages, and what people search for at 2 a.m. — the signals show up <strong>long before a young adult's finances break</strong>. We measure them, publish everything, and put the evidence in front of the people who can fix it.
+          </p>
+          <div class="hb-cta-row">
+            <a href="barometer.html" class="btn-primary">
+              Open the Barometer
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#reports" class="btn-secondary">Read the research</a>
+          </div>
         </div>
+        <!-- The instrument: ten years of the national affordability index. Its own
+             figure, beside the lede, so it never runs under copy. -->
+        <figure class="hero-figure" aria-hidden="true">
+          <figcaption class="hero-chart-label" id="hero-chart-label">Affordability index · national</figcaption>
+          <svg class="hero-chart" id="hero-chart" focusable="false"></svg>
+        </figure>
       </div>
 
     </div>
@@ -2361,7 +2459,7 @@
       <div class="signals-grid rise" data-delay="2" id="signals-grid" aria-label="National Barometer indicators with ten-year history">
         <!-- filled by JS from DASHBOARD_DATA -->
       </div>
-      <p class="signals-note rise" data-delay="3">Financial Health Barometer composite indices, 0–200 scale, built from BLS, Census, HUD, FRED and Harvard JCHS inputs. Sparklines show the monthly national reading since 2016. Click a signal to see it on the map below.</p>
+      <p class="signals-note rise" data-delay="3">Financial Health Barometer composite indices, 0–200 scale, built from BLS, Census, HUD, FRED and Harvard JCHS inputs. Sparklines show the monthly national reading since 2016 where the search history is complete enough to trust; the others show today's reading only. Click a signal to see it on the map below.</p>
 
       <div class="gen-head rise" data-delay="2">
         <span class="eyebrow">A generation, by the numbers</span>
@@ -2957,6 +3055,20 @@
         };
         var ORDER = ['housing_stress', 'financial_anxiety', 'affordability', 'food_insecurity'];
         var series = (D.timeseries && D.timeseries.national) || {};
+        // A history is only drawn when it looks like a measurement: enough
+        // months, not pinned to its floor for long stretches (months stuck at
+        // the minimum, zero included, are missing search data, not calm), and
+        // more than a handful of distinct levels. Otherwise the card shows the
+        // current reading alone rather than a false line.
+        function usable(pts) {
+          if (!pts || pts.length < 12) return false;
+          var vals = pts.map(function (p) { return p.value; });
+          var floor = Math.min.apply(null, vals);
+          var atFloor = vals.filter(function (v) { return v === floor; }).length;
+          var distinct = {};
+          vals.forEach(function (v) { distinct[v] = 1; });
+          return atFloor / vals.length < 0.2 && Object.keys(distinct).length >= 5;
+        }
 
         function deltaText(ind) {
           if (ind.change === null || ind.change === undefined) return { text: 'n/a', cls: '', title: 'No independent change series for this index' };
@@ -2993,59 +3105,73 @@
           run.parentNode.appendChild(copy);
         }
 
-        // Hero instrument: the national housing-stress series, drawn large.
+        // Hero instrument: the national affordability series (the index the
+        // headline names), drawn as a figure beside the lede.
         (function heroChart() {
           var svg = document.getElementById('hero-chart');
           var label = document.getElementById('hero-chart-label');
-          var pts = series.housing_stress;
-          if (!svg || !pts || pts.length < 2) return;
-          var W = 1000, H = 400, PADR = 40, PADT = 30, PADB = 28;
+          var pts = series.affordability;
+          if (!svg) return;
+          if (!usable(pts)) {
+            // No trustworthy history: drop the figure, let the lede run full width
+            var fig = svg.closest('.hero-figure');
+            if (fig) { fig.hidden = true; fig.parentNode.classList.add('no-figure'); }
+            return;
+          }
           var vals = pts.map(function (p) { return p.value; });
           var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals), span = (max - min) || 1;
-          var xs = function (i) { return (i / (vals.length - 1)) * (W - PADR); };
-          var ys = function (v) { return PADT + (1 - (v - min) / span) * (H - PADT - PADB); };
-          var coords = vals.map(function (v, i) { return xs(i).toFixed(1) + ',' + ys(v).toFixed(1); });
-          var line = 'M' + coords.join('L');
-          var area = line + 'L' + xs(vals.length - 1).toFixed(1) + ',' + H + 'L0,' + H + 'Z';
-          var lastX = xs(vals.length - 1), lastY = ys(vals[vals.length - 1]);
-          var ticks = '';
-          pts.forEach(function (p, i) {
-            if (p.date.slice(5, 7) === '01' && (+p.date.slice(0, 4)) % 2 === 0) {
-              ticks += '<line class="hc-grid" x1="' + xs(i).toFixed(1) + '" y1="' + PADT + '" x2="' + xs(i).toFixed(1) + '" y2="' + H + '"/>' +
-                '<text class="hc-tick" x="' + (xs(i) + 6).toFixed(1) + '" y="' + (H - 8) + '">' + p.date.slice(0, 4) + '</text>';
+          var drawn = false, lastW = 0;
+
+          // Drawn in pixel units at the figure's real size (no stretched
+          // viewBox), so tick labels and strokes stay true on resize.
+          function draw() {
+            var W = Math.round(svg.clientWidth), H = Math.round(svg.clientHeight);
+            if (!W || !H || W === lastW) return;
+            lastW = W;
+            var PADL = 2, PADR = 8, PADT = 10, PADB = 26, base = H - PADB;
+            var xs = function (i) { return PADL + (i / (vals.length - 1)) * (W - PADL - PADR); };
+            var ys = function (v) { return PADT + (1 - (v - min) / span) * (base - PADT); };
+            var line = 'M' + vals.map(function (v, i) { return xs(i).toFixed(1) + ',' + ys(v).toFixed(1); }).join('L');
+            var area = line + 'L' + xs(vals.length - 1).toFixed(1) + ',' + base + 'L' + xs(0).toFixed(1) + ',' + base + 'Z';
+            var lastX = xs(vals.length - 1), lastY = ys(vals[vals.length - 1]);
+            var ticks = '';
+            pts.forEach(function (p, i) {
+              if (p.date.slice(5, 7) === '01' && (+p.date.slice(0, 4)) % 2 === 0) {
+                var x = xs(i).toFixed(1);
+                ticks += '<line class="hc-grid" x1="' + x + '" y1="' + PADT + '" x2="' + x + '" y2="' + (base + 5) + '"/>' +
+                  '<text class="hc-tick" x="' + x + '" y="' + (H - 4) + '">' + p.date.slice(0, 4) + '</text>';
+              }
+            });
+            svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+            svg.innerHTML = '<defs><linearGradient id="hc-fill" x1="0" y1="0" x2="0" y2="1">' +
+              '<stop offset="0" stop-color="#F25A27" stop-opacity=".18"/><stop offset="1" stop-color="#F25A27" stop-opacity="0"/></linearGradient></defs>' +
+              ticks + '<line class="hc-base" x1="0" y1="' + base + '" x2="' + W + '" y2="' + base + '"/>' +
+              '<path class="hc-area" d="' + area + '"/><path class="hc-line" d="' + line + '"/>' +
+              '<circle class="hc-halo" cx="' + lastX.toFixed(1) + '" cy="' + lastY.toFixed(1) + '" r="5"/>' +
+              '<circle class="hc-end" cx="' + lastX.toFixed(1) + '" cy="' + lastY.toFixed(1) + '" r="4"/>';
+            var path = svg.querySelector('.hc-line');
+            if (!drawn && !reduceMotion) {
+              // First draw only: trace the line in
+              var len = path.getTotalLength();
+              path.style.strokeDasharray = len;
+              path.style.strokeDashoffset = len;
+              requestAnimationFrame(function () {
+                requestAnimationFrame(function () { path.style.strokeDashoffset = '0'; });
+              });
             }
-          });
-          svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-          svg.innerHTML = '<defs><linearGradient id="hc-fill" x1="0" y1="0" x2="0" y2="1">' +
-            '<stop offset="0" stop-color="#F25A27" stop-opacity=".16"/><stop offset="1" stop-color="#F25A27" stop-opacity="0"/></linearGradient></defs>' +
-            ticks + '<path class="hc-area" d="' + area + '"/><path class="hc-line" d="' + line + '"/>' +
-            '<circle class="hc-halo" cx="' + lastX.toFixed(1) + '" cy="' + lastY.toFixed(1) + '" r="6"/>' +
-            '<circle class="hc-end" cx="' + lastX.toFixed(1) + '" cy="' + lastY.toFixed(1) + '" r="5"/>';
-          var path = svg.querySelector('.hc-line');
-          if (!reduceMotion) {
-            var len = path.getTotalLength();
-            path.style.strokeDasharray = len;
-            path.style.strokeDashoffset = len;
+            drawn = true;
           }
-          var national = D.national.housing_stress;
+
+          var national = D.national.affordability;
           if (label && national) {
-            label.innerHTML = 'Housing stress · <strong>' + national.value.toFixed(1) + '</strong>' +
+            label.innerHTML = '<span>Affordability index · national</span><span><strong>' + national.value.toFixed(1) + '</strong>' +
               (national.change != null ? ' <em>' + (national.change > 0 ? '▲ +' : '▼ ') + national.change.toFixed(1) + '</em>' : '') +
-              ' · ' + pts[0].date.slice(0, 4) + '→now';
-            // Sit the label just above the live endpoint (svg is stretched to the hero, so map y by ratio)
-            var place = function () {
-              var r = svg.getBoundingClientRect();
-              var host = svg.parentNode.getBoundingClientRect();   // SVG has no offsetTop
-              label.style.top = ((r.top - host.top) + (lastY / H) * r.height - label.offsetHeight - 14) + 'px';
-              label.style.right = Math.max(0, (PADR / W) * r.width - label.offsetWidth / 2) + 'px';
-            };
-            place();
-            window.addEventListener('resize', place, { passive: true });
+              ' · ' + pts[0].date.slice(0, 4) + '→now</span>';
           }
-          requestAnimationFrame(function () {
-            svg.classList.add('on');
-            requestAnimationFrame(function () { path.style.strokeDashoffset = '0'; });
-          });
+          draw();
+          var t;
+          window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(draw, 120); }, { passive: true });
+          requestAnimationFrame(function () { svg.classList.add('on'); });
         })();
 
         // Cards
@@ -3054,7 +3180,9 @@
         var W = 240, H = 58, PAD = 3;
 
         function sparkline(pts) {
-          if (!pts || pts.length < 2) return '';
+          if (!usable(pts)) {
+            return '<div class="signal-spark signal-spark-empty">History under review</div>';
+          }
           var vals = pts.map(function (p) { return p.value; });
           var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
           var span = (max - min) || 1;
@@ -3078,14 +3206,14 @@
           var ind = D.national[k];
           var d = deltaText(ind);
           var s = series[k] || [];
-          var firstYear = s.length ? s[0].date.slice(0, 4) : '';
+          var firstYear = usable(s) ? s[0].date.slice(0, 4) : '';
           var lastYear = s.length ? s[s.length - 1].date.slice(0, 4) : '';
           return '<button type="button" class="signal-card rise" data-indicator="' + k + '" aria-label="' + LABELS[k] + ', national index ' + ind.value.toFixed(1) + '. Show on map.">' +
             '<div class="signal-card-head"><span class="signal-card-label">' + LABELS[k] + '</span>' +
             '<span class="signal-card-delta ' + d.cls + '" title="' + (d.title || 'Change vs. prior reading') + '">' + d.text + '</span></div>' +
             '<div class="signal-card-value"><span data-count="' + ind.value + '" data-decimals="1">0.0</span><small>index</small></div>' +
             sparkline(s) +
-            '<div class="signal-card-foot"><span>' + (firstYear ? firstYear + ' → ' + lastYear : 'national') + '</span><span class="go">Show on map →</span></div>' +
+            '<div class="signal-card-foot"><span>' + (firstYear ? firstYear + ' → ' + lastYear : 'Current reading') + '</span><span class="go">Show on map →</span></div>' +
             '</button>';
         }).join('');
 
