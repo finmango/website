@@ -1,14 +1,20 @@
 /**
- * Tests for the Health Trends request batching and quota handling.
+ * Tests for the Health Trends request shape and quota handling.
  *
  * The daily pipeline gets a small number of Health Trends requests. These
- * tests pin the two things that make that budget go further: one request
- * carries every indicator term, and a quota response is recognised (Google
- * reports it as HTTP 403 with a quota-shaped reason, not only 429) so the run
- * stops instead of spending requests it does not have.
+ * tests pin how that budget is spent: ONE term per request (several terms in
+ * one request come back scaled against each other, which zeroed the
+ * low-volume terms from 2026-09-19), readings from batched requests are
+ * dropped from the cache, and a quota response is recognised (Google reports
+ * it as HTTP 403 with a quota-shaped reason, not only 429) so the run stops
+ * instead of spending requests it does not have.
  *
  * Run: node scripts/test/trends-batching.test.js
  */
+
+// A small budget keeps the fetch test to one state (each request waits 500ms).
+// Set before the require so the pipeline's constants pick it up.
+process.env.TRENDS_MAX_REQUESTS = process.env.TRENDS_MAX_REQUESTS || '8';
 
 const assert = require('assert');
 const {
@@ -18,7 +24,12 @@ const {
     describeTrendsSource,
     TRENDS_TERMS,
     TRENDS_MAX_REQUESTS,
-    TRENDS_STATES_PER_RUN
+    TRENDS_STATES_PER_RUN,
+    TRENDS_TERM_COUNT,
+    TRENDS_CACHE_SCHEME,
+    pruneTrendsCache,
+    fetchGoogleTrends,
+    __setPreviousSnapshot
 } = require('../fetch-real-data.js');
 
 let passed = 0;
@@ -46,7 +57,7 @@ function fakeResponse(status, body) {
 
 const TERMS = Object.values(TRENDS_TERMS).map(v => v[0]);
 
-test('one request carries every indicator term as a repeated `terms` parameter', () => {
+test('the graph URL carries its terms as repeated `terms` parameters', () => {
     const url = new URL(buildTrendsGraphUrl(TERMS, 'US-OH', '2026-06', 'k'));
     assert.deepStrictEqual(url.searchParams.getAll('terms'), TERMS);
     assert.strictEqual(url.searchParams.get('restrictions.geo'), 'US-OH');
@@ -55,9 +66,59 @@ test('one request carries every indicator term as a repeated `terms` parameter',
     assert.strictEqual(url.origin + url.pathname, 'https://www.googleapis.com/trends/v1beta/graph');
 });
 
-test('the budget spends one request on the national series and the rest on states', () => {
-    assert.strictEqual(TRENDS_STATES_PER_RUN, TRENDS_MAX_REQUESTS - 1);
+test('the budget spends one request per term nationally, then one per term per state', () => {
+    assert.strictEqual(TRENDS_TERM_COUNT, TERMS.length);
+    assert.strictEqual(TRENDS_STATES_PER_RUN, Math.floor((TRENDS_MAX_REQUESTS - TERMS.length) / TERMS.length));
     assert.ok(TRENDS_STATES_PER_RUN >= 1);
+    assert.ok(TERMS.length + TRENDS_STATES_PER_RUN * TERMS.length <= TRENDS_MAX_REQUESTS);
+});
+
+test('every request asks for exactly one term, and readings are tagged per-term', async () => {
+    __setPreviousSnapshot(null);
+    const realFetch = global.fetch;
+    const hadKey = 'GOOGLE_TRENDS_API_KEY' in process.env;
+    const realKey = process.env.GOOGLE_TRENDS_API_KEY;
+    process.env.GOOGLE_TRENDS_API_KEY = 'test-key';
+    const seen = [];
+    global.fetch = async (url) => {
+        const u = new URL(url);
+        const terms = u.searchParams.getAll('terms');
+        seen.push({ terms, geo: u.searchParams.get('restrictions.geo') });
+        return {
+            ok: true,
+            status: 200,
+            async json() { return { lines: [{ term: terms[0], points: [{ date: '2026-09-01', value: 42.5 }] }] }; },
+            async text() { return ''; }
+        };
+    };
+    try {
+        const result = await fetchGoogleTrends();
+        assert.ok(seen.length > 0);
+        assert.ok(seen.length <= TRENDS_MAX_REQUESTS);
+        for (const req of seen) assert.strictEqual(req.terms.length, 1, `batched request: ${req.terms.join(', ')}`);
+        assert.strictEqual(seen.filter(r => r.geo === 'US').length, TERMS.length);
+        assert.strictEqual(seen.filter(r => r.geo !== 'US').length, TRENDS_STATES_PER_RUN * TERMS.length);
+        assert.deepStrictEqual(Object.keys(result.nationalTimeSeries).sort(), Object.keys(TRENDS_TERMS).sort());
+        for (const byState of Object.values(result.cache.states)) {
+            for (const entry of Object.values(byState)) assert.strictEqual(entry.scheme, TRENDS_CACHE_SCHEME);
+        }
+        assert.strictEqual(result.cache.cursor, TRENDS_STATES_PER_RUN);
+    } finally {
+        global.fetch = realFetch;
+        if (hadKey) process.env.GOOGLE_TRENDS_API_KEY = realKey; else delete process.env.GOOGLE_TRENDS_API_KEY;
+        __setPreviousSnapshot(undefined);
+    }
+});
+
+test('cached readings from batched requests (no scheme tag) are dropped', () => {
+    const today = new Date('2026-09-23');
+    const cache = { cursor: 0, states: { housing_stress: {
+        OH: { value: 0, fetched: '2026-09-20' },                                   // batched: dropped
+        PA: { value: 31, fetched: '2026-09-20', scheme: TRENDS_CACHE_SCHEME },     // kept
+        TX: { value: 29, fetched: '2026-09-01', scheme: TRENDS_CACHE_SCHEME }      // too old: dropped
+    } } };
+    pruneTrendsCache(cache, today);
+    assert.deepStrictEqual(Object.keys(cache.states.housing_stress), ['PA']);
 });
 
 test('response lines are matched to terms by their own `term` field, in any order', () => {
