@@ -63,24 +63,34 @@ MARK = {
 }
 
 
-# Pages under the Research dropdown. On these the Research trigger carries
-# the active marker, and the page's own entry in the dropdown (desktop item
-# and mobile card) is marked current.
-RESEARCH_SECTION = ('research.html', 'research-reports.html',
-                    'research-publications.html', 'approach.html')
+# Pages grouped under each nav dropdown. On these the section's trigger
+# carries the active marker, and the page's own entry in the dropdown
+# (desktop item and mobile card) is marked current.
+SECTION_TRIGGERS = {
+    'about': '<a href="about.html" class="dropdown-trigger"',
+    'research': '<a href="research.html" class="dropdown-trigger"',
+    'programs': '<button class="dropdown-trigger" data-section="programs"',
+}
+SECTION_PAGES = {
+    'about': ('about.html', 'history.html', 'approach.html', 'posts.html'),
+    'research': ('research.html', 'research-reports.html',
+                 'research-publications.html'),
+    'programs': ('education.html', 'barrier-breakers.html',
+                 'ambassadors.html', 'resources.html'),
+}
 
 
 def apply_active(nav_html, active):
-    """Add aria-current="page" to the top-level links matching `active`."""
+    """Add aria-current="page" to the nav entries matching `active`."""
     if not active:
         return nav_html
-    if active in RESEARCH_SECTION:
-        nav_html = nav_html.replace(
-            '<a href="research.html" class="dropdown-trigger"',
-            '<a href="research.html" class="dropdown-trigger" aria-current="page"')
-        for cls in ('dropdown-item', 'mobile-card'):
-            nav_html = nav_html.replace(f'<a href="{active}" class="{cls}">',
-                                        f'<a href="{active}" class="{cls}" aria-current="page">')
+    for section, pages in SECTION_PAGES.items():
+        if active in pages:
+            trigger = SECTION_TRIGGERS[section]
+            nav_html = nav_html.replace(trigger, trigger + ' aria-current="page"', 1)
+            for cls in ('dropdown-item', 'mobile-card'):
+                nav_html = nav_html.replace(f'<a href="{active}" class="{cls}">',
+                                            f'<a href="{active}" class="{cls}" aria-current="page">')
     if active not in ACTIVE_LINKS:
         return nav_html
     return nav_html.replace(f'<a href="{active}">',
