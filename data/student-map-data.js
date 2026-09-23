@@ -1,10 +1,10 @@
 // Young Adult Financial Health Map Data
-// Auto-generated: 2026-09-22T05:19:18.927Z
+// Auto-generated: 2026-09-23T05:19:17.209Z
 // Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS, Zillow
 
 const YOUNG_ADULT_DATA = {
     "meta": {
-        "generated": "2026-09-22T05:19:18.926Z",
+        "generated": "2026-09-23T05:19:17.208Z",
         "version": "3.2",
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
@@ -51,7 +51,7 @@ const YOUNG_ADULT_DATA = {
         },
         "median_income": {
             "value": 45800,
-            "change": 2.0,
+            "change": 2,
             "label": "Median Income (25-34)",
             "unit": "$",
             "trend": "up",
