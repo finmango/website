@@ -75,8 +75,8 @@ SECTION_PAGES = {
     'about': ('about.html', 'history.html', 'approach.html', 'posts.html'),
     'research': ('research.html', 'research-reports.html',
                  'research-publications.html'),
-    'programs': ('education.html', 'barrier-breakers.html',
-                 'ambassadors.html', 'resources.html'),
+    # ambassadors.html has its own top-level link, which carries its marker
+    'programs': ('education.html', 'barrier-breakers.html', 'resources.html'),
 }
 
 
