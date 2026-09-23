@@ -63,9 +63,25 @@ MARK = {
 }
 
 
+# Pages under the Research dropdown. On these the Research trigger carries
+# the active marker, and the page's own entry in the dropdown (desktop item
+# and mobile card) is marked current.
+RESEARCH_SECTION = ('research.html', 'research-reports.html',
+                    'research-publications.html', 'approach.html')
+
+
 def apply_active(nav_html, active):
     """Add aria-current="page" to the top-level links matching `active`."""
-    if not active or active not in ACTIVE_LINKS:
+    if not active:
+        return nav_html
+    if active in RESEARCH_SECTION:
+        nav_html = nav_html.replace(
+            '<a href="research.html" class="dropdown-trigger"',
+            '<a href="research.html" class="dropdown-trigger" aria-current="page"')
+        for cls in ('dropdown-item', 'mobile-card'):
+            nav_html = nav_html.replace(f'<a href="{active}" class="{cls}">',
+                                        f'<a href="{active}" class="{cls}" aria-current="page">')
+    if active not in ACTIVE_LINKS:
         return nav_html
     return nav_html.replace(f'<a href="{active}">',
                             f'<a href="{active}" aria-current="page">')
