@@ -1743,6 +1743,17 @@
     .signal-spark .base { stroke: var(--paper-line); stroke-width: 1; }
     .signal-spark .end-dot { fill: var(--orange); opacity: 0; transition: opacity .4s ease 1.4s; }
     .signal-card.drawn .end-dot { opacity: 1; }
+    .signal-spark-empty {
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: .5rem;
+      border-bottom: 1px dashed var(--paper-line);
+      font-family: var(--font-mono);
+      font-size: .64rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--paper-faint);
+    }
     .signal-card-foot {
       display: flex;
       justify-content: space-between;
@@ -2165,6 +2176,7 @@
     /* Lede + CTAs on the left, the instrument on the right */
     .hb-copy { display: flex; flex-direction: column; gap: 2rem; align-items: flex-start; min-width: 0; }
     .hb-copy .hb-cta-row { justify-content: flex-start; }
+    .hb-bottom.no-figure { grid-template-columns: 1fr; }
 
     @media (min-width: 969px) {
       .hb-bottom {
@@ -2447,7 +2459,7 @@
       <div class="signals-grid rise" data-delay="2" id="signals-grid" aria-label="National Barometer indicators with ten-year history">
         <!-- filled by JS from DASHBOARD_DATA -->
       </div>
-      <p class="signals-note rise" data-delay="3">Financial Health Barometer composite indices, 0–200 scale, built from BLS, Census, HUD, FRED and Harvard JCHS inputs. Sparklines show the monthly national reading since 2016. Click a signal to see it on the map below.</p>
+      <p class="signals-note rise" data-delay="3">Financial Health Barometer composite indices, 0–200 scale, built from BLS, Census, HUD, FRED and Harvard JCHS inputs. Sparklines show the monthly national reading since 2016 where the search history is complete enough to trust; the others show today's reading only. Click a signal to see it on the map below.</p>
 
       <div class="gen-head rise" data-delay="2">
         <span class="eyebrow">A generation, by the numbers</span>
@@ -3043,6 +3055,20 @@
         };
         var ORDER = ['housing_stress', 'financial_anxiety', 'affordability', 'food_insecurity'];
         var series = (D.timeseries && D.timeseries.national) || {};
+        // A history is only drawn when it looks like a measurement: enough
+        // months, not pinned to its floor for long stretches (months stuck at
+        // the minimum, zero included, are missing search data, not calm), and
+        // more than a handful of distinct levels. Otherwise the card shows the
+        // current reading alone rather than a false line.
+        function usable(pts) {
+          if (!pts || pts.length < 12) return false;
+          var vals = pts.map(function (p) { return p.value; });
+          var floor = Math.min.apply(null, vals);
+          var atFloor = vals.filter(function (v) { return v === floor; }).length;
+          var distinct = {};
+          vals.forEach(function (v) { distinct[v] = 1; });
+          return atFloor / vals.length < 0.2 && Object.keys(distinct).length >= 5;
+        }
 
         function deltaText(ind) {
           if (ind.change === null || ind.change === undefined) return { text: 'n/a', cls: '', title: 'No independent change series for this index' };
@@ -3085,7 +3111,13 @@
           var svg = document.getElementById('hero-chart');
           var label = document.getElementById('hero-chart-label');
           var pts = series.affordability;
-          if (!svg || !pts || pts.length < 2) return;
+          if (!svg) return;
+          if (!usable(pts)) {
+            // No trustworthy history: drop the figure, let the lede run full width
+            var fig = svg.closest('.hero-figure');
+            if (fig) { fig.hidden = true; fig.parentNode.classList.add('no-figure'); }
+            return;
+          }
           var vals = pts.map(function (p) { return p.value; });
           var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals), span = (max - min) || 1;
           var drawn = false, lastW = 0;
@@ -3148,7 +3180,9 @@
         var W = 240, H = 58, PAD = 3;
 
         function sparkline(pts) {
-          if (!pts || pts.length < 2) return '';
+          if (!usable(pts)) {
+            return '<div class="signal-spark signal-spark-empty">History under review</div>';
+          }
           var vals = pts.map(function (p) { return p.value; });
           var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
           var span = (max - min) || 1;
@@ -3172,14 +3206,14 @@
           var ind = D.national[k];
           var d = deltaText(ind);
           var s = series[k] || [];
-          var firstYear = s.length ? s[0].date.slice(0, 4) : '';
+          var firstYear = usable(s) ? s[0].date.slice(0, 4) : '';
           var lastYear = s.length ? s[s.length - 1].date.slice(0, 4) : '';
           return '<button type="button" class="signal-card rise" data-indicator="' + k + '" aria-label="' + LABELS[k] + ', national index ' + ind.value.toFixed(1) + '. Show on map.">' +
             '<div class="signal-card-head"><span class="signal-card-label">' + LABELS[k] + '</span>' +
             '<span class="signal-card-delta ' + d.cls + '" title="' + (d.title || 'Change vs. prior reading') + '">' + d.text + '</span></div>' +
             '<div class="signal-card-value"><span data-count="' + ind.value + '" data-decimals="1">0.0</span><small>index</small></div>' +
             sparkline(s) +
-            '<div class="signal-card-foot"><span>' + (firstYear ? firstYear + ' → ' + lastYear : 'national') + '</span><span class="go">Show on map →</span></div>' +
+            '<div class="signal-card-foot"><span>' + (firstYear ? firstYear + ' → ' + lastYear : 'Current reading') + '</span><span class="go">Show on map →</span></div>' +
             '</button>';
         }).join('');
 
