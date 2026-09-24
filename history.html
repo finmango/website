@@ -83,7 +83,6 @@
 
       /* Layout */
       --max-width: 1280px;
-      --hero-max: 1440px;
       --gutter: 2.5rem;
     }
 
@@ -397,7 +396,7 @@
        ---------------------------------------------------------- */
     .hero {
       background: var(--paper);
-      padding: 6.5rem 2rem 6.5rem;
+      padding: 6.5rem var(--gutter) 4.5rem;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -423,7 +422,7 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: var(--hero-max);
+      max-width: var(--max-width);   /* same grid as every section below */
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -767,16 +766,82 @@
     /* ----------------------------------------------------------
        TIMELINE — ruled entries, mono years, hairline media
        ---------------------------------------------------------- */
-    .timeline { padding: 6.5rem var(--gutter) 7.5rem; background: var(--paper); }
+    /* ----------------------------------------------------------
+       YEAR INDEX — one ruled row of mono jump links
+       ---------------------------------------------------------- */
+    .year-index { background: var(--paper); padding: 0 var(--gutter); }
+    .year-index-container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      border-top: 1px solid var(--ink-line);
+      border-bottom: 1px solid var(--ink-line);
+    }
+    .yi-label {
+      font-family: var(--font-mono);
+      font-size: .72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--ink-faint);
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding: 1rem 0;
+    }
+    .yi-links {
+      display: flex;
+      gap: .25rem;
+      min-width: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      margin-left: auto;
+    }
+    .yi-links::-webkit-scrollbar { display: none; }
+    .yi-link {
+      font-family: var(--font-mono);
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      color: var(--ink-dim);
+      text-decoration: none;
+      padding: 1rem .7rem;
+      position: relative;
+      white-space: nowrap;
+      transition: color .2s ease;
+    }
+    .yi-link::after {
+      content: '';
+      position: absolute;
+      left: .7rem; right: .7rem; bottom: -1px;
+      height: 2px;
+      background: var(--orange);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .25s cubic-bezier(.16, 1, .3, 1);
+    }
+    .yi-link:hover, .yi-link.is-active { color: var(--ink); }
+    .yi-link:hover::after, .yi-link.is-active::after { transform: scaleX(1); }
+    .yi-link-today { color: var(--orange-ink); text-transform: uppercase; }
+
+    /* ----------------------------------------------------------
+       TIMELINE — year + title on the left, story on the right,
+       media as a justified strip below. Every entry gets the same
+       frame so the eye can run down the left edge.
+       ---------------------------------------------------------- */
+    .timeline { padding: 4.5rem var(--gutter) 6rem; background: var(--paper); }
     .timeline-container { max-width: var(--max-width); margin: 0 auto; }
 
     .tl-item {
       display: grid;
-      grid-template-columns: 170px 1fr;
-      gap: 3rem;
-      padding: 2.75rem 0 3.5rem;
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      gap: 2rem 4rem;
+      padding: 3rem 0 3.5rem;
       border-top: 1px solid var(--ink-line);
       position: relative;
+      scroll-margin-top: 96px;
     }
     .tl-item::before {
       content: '';
@@ -788,12 +853,13 @@
       background: var(--orange);
       transition: width .4s cubic-bezier(.16, 1, .3, 1);
     }
-    .tl-item:hover::before { width: 100%; }
+    .tl-item:hover::before, .tl-item:target::before { width: 100%; }
     .tl-item:last-child { padding-bottom: 0; }
 
+    .tl-head { display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
     .tl-year {
       font-family: var(--font-mono);
-      font-size: .8rem;
+      font-size: .78rem;
       font-weight: 500;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -801,7 +867,6 @@
       display: inline-flex;
       align-items: center;
       gap: .75rem;
-      padding-top: .5rem;
     }
     .tl-year::before {
       content: '';
@@ -813,46 +878,82 @@
     .tl-item-today .tl-year { color: var(--orange-ink); }
 
     .tl-title {
-      font-size: clamp(1.5rem, 2.4vw, 2rem);
+      font-size: clamp(1.6rem, 2.6vw, 2.3rem);
       font-weight: 900;
       letter-spacing: -.03em;
-      line-height: 1.1;
-      margin-bottom: 1rem;
+      line-height: 1.05;
+      max-width: 15ch;
     }
+    .tl-content { padding-top: .35rem; }   /* optical align with the title cap */
     .tl-text {
       font-size: 1rem;
       font-weight: 400;
       line-height: 1.7;
       color: var(--ink-dim);
-      max-width: 72ch;
+      max-width: 68ch;
     }
     .tl-text strong { color: var(--ink); font-weight: 600; }
 
+    /* Media strip: each tile carries its own --ar (width / height) so a
+       row of mixed photos and videos shares one height with no cropping.
+       flex-grow and flex-basis both scale with --ar, which is what keeps
+       the heights equal; max-width stops a lone last tile ballooning. */
     .tl-media {
-      margin-top: 1.75rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.25rem;
-      align-items: start;
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: .5rem;
     }
-    .tl-image {
-      width: 100%;
-      height: auto;
+    .tl-media > * {
+      --ar: 1.5;
+      flex: var(--ar) 1 calc(var(--ar) * 230px);
+      max-width: calc(var(--ar) * 520px);
+      min-width: 0;
+      aspect-ratio: var(--ar);
       display: block;
       border: 1px solid var(--ink-line);
+      background: var(--ink-line-soft);
     }
+    .tl-media > .tl-image { height: auto; object-fit: cover; }
+
+    /* Video facade: poster + play mark; the iframe is created on click */
     .tl-video {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border: 1px solid var(--ink-line);
-      display: block;
-      background: var(--ink);
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      background-color: var(--ink);
+      background-size: cover;       /* hqdefault is 4:3 letterboxed; cover trims the bars */
+      background-position: center;
+      transition: background-size .5s cubic-bezier(.16, 1, .3, 1);
     }
+    .tl-video::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(10, 10, 10, .12);
+      transition: background .3s ease;
+    }
+    .tl-video:hover::after { background: rgba(10, 10, 10, 0); }
+    .tl-play {
+      position: absolute;
+      z-index: 1;
+      left: 50%; top: 50%;
+      width: 56px; height: 56px;
+      transform: translate(-50%, -50%);
+      background: var(--orange-ink);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .25s ease, transform .25s cubic-bezier(.16, 1, .3, 1);
+    }
+    .tl-play svg { width: 22px; height: 22px; margin-left: 2px; }
+    .tl-video:hover .tl-play { background: var(--orange); transform: translate(-50%, -50%) scale(1.06); }
+    .tl-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; z-index: 2; }
+    .tl-video.is-playing::after { display: none; }
 
     /* ----------------------------------------------------------
        IMPACT — ruled stats strip on paper
        ---------------------------------------------------------- */
-    .impact { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
+    .impact { padding: 0 var(--gutter) 7rem; background: var(--paper); }
     .impact-container { max-width: var(--max-width); margin: 0 auto; }
     .impact .section-head { margin-bottom: 0; }
     .impact-strip {
@@ -955,15 +1056,28 @@
 
       .section-head { margin-bottom: 2.5rem; }
 
-      .timeline { padding: 5rem var(--gutter); }
-      .tl-item { grid-template-columns: 1fr; gap: 1.25rem; padding: 2.25rem 0 2.75rem; }
-      .tl-year { padding-top: 0; }
-      .tl-media { grid-template-columns: 1fr; }
+      .hero { padding: 6rem var(--gutter) 3rem; }
 
-      .impact { padding: 0 var(--gutter) 5rem; }
-      .impact-strip { grid-template-columns: 1fr; border-top: none; margin-top: 2.5rem; }
-      .impact-stat { padding: 1.5rem 0; border-top: 1px solid var(--ink-line); }
-      .impact-stat + .impact-stat { padding-left: 0; border-left: none; }
+      .year-index-container { gap: 1rem; }
+      .yi-label { display: none; }
+      .yi-links { margin-left: 0; margin-right: calc(-1 * var(--gutter)); padding-right: var(--gutter); }
+      .yi-link { padding: .9rem .6rem; }
+      .yi-link:first-child { padding-left: 0; }
+      .yi-link:first-child::after { left: 0; }
+
+      .timeline { padding: 3.5rem var(--gutter) 4.5rem; }
+      .tl-item { grid-template-columns: minmax(0, 1fr); gap: 1.1rem; padding: 2.25rem 0 2.75rem; }
+      .tl-title { max-width: none; }
+      .tl-content { padding-top: 0; }
+      .tl-media { margin-top: .25rem; gap: .75rem; }
+      .tl-media > * { flex-basis: calc(var(--ar) * 170px); max-width: none; }
+
+      .impact { padding: 0 var(--gutter) 4.5rem; }
+      .impact-strip { margin-top: 2rem; }
+      .impact-stat { padding: 1.5rem .5rem 0 0; }
+      .impact-stat + .impact-stat { padding-left: .75rem; }
+      .impact-num { font-size: clamp(1.7rem, 7.5vw, 2.6rem); }
+      .impact-label { font-size: .6rem; letter-spacing: .08em; line-height: 1.35; }
 
       .cta { padding: 5rem var(--gutter); }
       .cta h2 { font-size: clamp(2.2rem, 8vw, 3.2rem); }
@@ -977,11 +1091,18 @@
       .footer-bottom a { margin: 0 .6rem; }
     }
 
-    @media (max-width: 560px) {
+    @media (max-width: 599px) {
       /* CTAs: full-width stack instead of ragged wrap */
       .hb-cta-row, .cta-actions { flex-direction: column; }
       .hb-cta-row .btn-primary, .hb-cta-row .btn-secondary,
       .cta-actions .btn-primary, .cta-actions .btn-secondary { width: 100%; justify-content: center; }
+
+      /* Media: one tile per row at full width, so every face stays legible */
+      .tl-media { display: grid; grid-template-columns: 1fr; }
+      .tl-media > * { width: 100%; max-width: none; }
+      .tl-play { width: 48px; height: 48px; }
+      .tl-title { font-size: 1.6rem; }
+      .tl-item { padding: 2rem 0 2.5rem; }
     }
 
     /* Tablet tier (iPads in portrait, small landscape) — scale the hero up
@@ -995,10 +1116,9 @@
       }
       .hb-cta-row { grid-column: 1 / -1; justify-content: flex-start; }
       .btn-primary, .btn-secondary { padding: 1rem 1.5rem; font-size: .92rem; }
-      .tl-media { grid-template-columns: repeat(2, 1fr); }
-      .impact-strip { grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink-line); }
-      .impact-stat { padding: 1.75rem 1.5rem 0 0; border-top: none; }
-      .impact-stat + .impact-stat { padding-left: 1.5rem; border-left: 1px solid var(--ink-line-soft); }
+      .impact-stat { padding: 1.75rem 1.5rem 0 0; }
+      .impact-stat + .impact-stat { padding-left: 1.5rem; }
+      .impact-num { font-size: clamp(2.2rem, 5vw, 3rem); }
     }
   </style>
 </head>
@@ -1259,186 +1379,253 @@
     </div>
   </section>
 
+  <!-- ======================= YEAR INDEX ======================= -->
+  <!-- Jump links for a long page. Page content, not chrome: it sits in
+       normal flow. Wrapper is a div with role="navigation", NOT a <nav>
+       (the system CSS styles bare `nav` as position: fixed). -->
+  <div class="year-index" role="navigation" aria-label="Jump to a year">
+    <div class="year-index-container">
+      <span class="yi-label">Jump to</span>
+      <div class="yi-links">
+        <a href="#y2015" class="yi-link">2015</a>
+        <a href="#y2016" class="yi-link">2016</a>
+        <a href="#y2017" class="yi-link">2017</a>
+        <a href="#y2018" class="yi-link">2018</a>
+        <a href="#y2019" class="yi-link">2019</a>
+        <a href="#y2020" class="yi-link">2020</a>
+        <a href="#y2021" class="yi-link">2021</a>
+        <a href="#y2022" class="yi-link">2022</a>
+        <a href="#y2023" class="yi-link">2023</a>
+        <a href="#y2024" class="yi-link">2024</a>
+        <a href="#y2025" class="yi-link">2025</a>
+        <a href="#y2026" class="yi-link">2026</a>
+        <a href="#today" class="yi-link yi-link-today">Today</a>
+      </div>
+    </div>
+  </div>
+
   <!-- ======================= TIMELINE ======================= -->
   <section class="timeline">
     <div class="timeline-container">
 
-      <article class="tl-item">
-        <div class="tl-year">2015</div>
-        <div class="tl-content">
+      <article class="tl-item" id="y2015">
+        <div class="tl-head">
+          <span class="tl-year">2015</span>
           <h3 class="tl-title">The Spark</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             It began with class discussions at Kent State University. At the time, it was just that—an idea inspired by two professors: <strong>Dr. Via and Dr. Thornton</strong>. Ideas often come and go, but <strong>Scott Glasgow</strong> knew this one was different. He knew it could be something more. Something bigger.
           </p>
-          <div class="tl-media">
-            <img src="history1.jpeg" alt="2015 - The beginning at Kent State University" class="tl-image" loading="lazy">
-          </div>
+        </div>
+        <div class="tl-media">
+          <img class="tl-image" style="--ar: 1.7778" src="history1.jpeg" alt="2015 - The beginning at Kent State University" loading="lazy">
         </div>
       </article>
 
-      <article class="tl-item">
-        <div class="tl-year">2016</div>
-        <div class="tl-content">
+      <article class="tl-item" id="y2016">
+        <div class="tl-head">
+          <span class="tl-year">2016</span>
           <h3 class="tl-title">The Foundation</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             Scott's passion for finance and mangoes led him to launch <strong>FinMango (FinMan + Mango)</strong>, an energy bar company with a charitable foundation. The name FinMan originated from a Financial Management class, while Mango was chosen to bring brightness and color into the darkness. Though the business failed, the foundation thrived. During a visit to San Francisco, Scott and his friend <strong>Oscar</strong> envisioned FinMango as a force for improving financial health worldwide. They partnered with <strong>Steffan Dwarkasignh and Jeff Jensen</strong> to build the nonprofit, launching their first program in <strong>Canton, Ohio</strong>. The organization quickly expanded globally, reaching <strong>13 countries</strong> with their Money Cycle curriculum. <strong>Soham Patel</strong> and Scott's trip to Mexico to explore a partnership reinforced their commitment to making financial well-being accessible to all.
           </p>
-          <div class="tl-media">
-            <img src="history2.jpeg" alt="2016 - FinMango foundation" class="tl-image" loading="lazy">
-            <img src="history3.jpg" alt="2016 - Early team" class="tl-image" loading="lazy">
-          </div>
+        </div>
+        <div class="tl-media">
+          <img class="tl-image" style="--ar: 2.9189" src="history2.jpeg" alt="2016 - FinMango foundation" loading="lazy">
+          <img class="tl-image" style="--ar: 1.2500" src="history3.jpg" alt="2016 - Early team" loading="lazy">
         </div>
       </article>
 
-      <article class="tl-item">
-        <div class="tl-year">2017</div>
-        <div class="tl-content">
+      <article class="tl-item" id="y2017">
+        <div class="tl-head">
+          <span class="tl-year">2017</span>
           <h3 class="tl-title">Building Momentum</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             In May, Scott addressed <strong>500 students</strong> at the University of Akron Finance Day, where he met <strong>Bob Gillingham</strong>. Their shared passion led to Bob, now known as <strong>Mango Bob</strong>, joining FinMango to launch an investment education program that later expanded to schools across the United States, reaching over <strong>50,000 students</strong>. Soham relocated to Ohio, and <strong>Maci Woyat</strong> became a leader, officially kick-starting FinMango. The team held meetings on kayaks, worked late nights at Starbucks, and onboarded new volunteers like <strong>Taylor Fair, Jeff Shafer, and Aditya Maitra</strong>. The kick-off was marked by the launch of the Bob Gillingham Investment class in schools. <strong>Brandyn Neal and Rich Hoag</strong> joined the organization, and during a visit to Harvard's campus, Brandyn and Scott had a memorable 15-minute conversation with <strong>Steve Ballmer</strong>, further solidifying their commitment to FinMango's mission.
           </p>
-          <div class="tl-media">
-            <iframe src="https://www.youtube.com/embed/lYxaXgHKQqw" class="tl-video" title="FinMango 2017 Video 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-            <iframe src="https://www.youtube.com/embed/aI-etYrLn14" class="tl-video" title="FinMango 2017 Video 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-            <img src="history4.jpg" alt="2017 - Team meetings and growth" class="tl-image" loading="lazy">
-          </div>
+        </div>
+        <div class="tl-media">
+          <a class="tl-video" href="https://www.youtube.com/watch?v=lYxaXgHKQqw" data-yt="lYxaXgHKQqw" style="--ar: 1.7778; background-image: url(https://i.ytimg.com/vi/lYxaXgHKQqw/hqdefault.jpg)" target="_blank" rel="noopener noreferrer" aria-label="Play video: FinMango 2017 Video 1">
+            <span class="tl-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </a>
+          <a class="tl-video" href="https://www.youtube.com/watch?v=aI-etYrLn14" data-yt="aI-etYrLn14" style="--ar: 1.7778; background-image: url(https://i.ytimg.com/vi/aI-etYrLn14/hqdefault.jpg)" target="_blank" rel="noopener noreferrer" aria-label="Play video: FinMango 2017 Video 2">
+            <span class="tl-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </a>
+          <img class="tl-image" style="--ar: 1.3333" src="history4.jpg" alt="2017 - Team meetings and growth" loading="lazy">
         </div>
       </article>
 
-      <article class="tl-item">
-        <div class="tl-year">2018</div>
-        <div class="tl-content">
+      <article class="tl-item" id="y2018">
+        <div class="tl-head">
+          <span class="tl-year">2018</span>
           <h3 class="tl-title">Going Global</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             FinMango received an invitation to a networking event hosted by the <strong>JP Morgan Chase Foundation</strong> in San Francisco. The organization seized the opportunity to reward its founding members, including <strong>Soham Patel, Bob Gillingham, Maci Woyat, Jon Li, Steffan Dwarkasingh, and Scott Glasgow</strong>, with a trip to attend the event. During this time, <strong>FinMango India</strong> was officially formed with <strong>Harish Sharma and Gautham Kannan</strong> at the helm. Harish and Gautham later joined FinMango's global leadership team to assist the organization with operations, bringing their expertise and regional insights to drive the mission of promoting financial health and well-being worldwide.
           </p>
-          <div class="tl-media">
-            <iframe src="https://www.youtube.com/embed/NB0UiYPlUkE" class="tl-video" title="FinMango 2018 Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-            <img src="history5.jpg" alt="2018 - JP Morgan Chase Foundation event in San Francisco" class="tl-image" loading="lazy">
-          </div>
+        </div>
+        <div class="tl-media">
+          <a class="tl-video" href="https://www.youtube.com/watch?v=NB0UiYPlUkE" data-yt="NB0UiYPlUkE" style="--ar: 1.7778; background-image: url(https://i.ytimg.com/vi/NB0UiYPlUkE/hqdefault.jpg)" target="_blank" rel="noopener noreferrer" aria-label="Play video: FinMango 2018 Video">
+            <span class="tl-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </a>
+          <img class="tl-image" style="--ar: 1.0000" src="history5.jpg" alt="2018 - JP Morgan Chase Foundation event in San Francisco" loading="lazy">
         </div>
       </article>
 
-      <article class="tl-item">
-        <div class="tl-year">2019</div>
-        <div class="tl-content">
+      <article class="tl-item" id="y2019">
+        <div class="tl-head">
+          <span class="tl-year">2019</span>
           <h3 class="tl-title">The Fincubator</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             FinMango launched the <strong>Fincubator</strong>, a youth accelerator program focused on financial literacy and entrepreneurship, with <strong>Stephen Nzishura and Fern Morrison</strong> in Uganda. The program created <strong>12 businesses and 211 bank accounts</strong> through 2020, demonstrating the power of financial empowerment at the grassroots level.
           </p>
-          <div class="tl-media">
-            <iframe src="https://www.youtube.com/embed/YbTfZ71xAc4" class="tl-video" title="FinMango 2019 Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-            <img src="history6.jpg" alt="2019 - Fincubator program in Uganda" class="tl-image" loading="lazy">
-          </div>
+        </div>
+        <div class="tl-media">
+          <a class="tl-video" href="https://www.youtube.com/watch?v=YbTfZ71xAc4" data-yt="YbTfZ71xAc4" style="--ar: 1.7778; background-image: url(https://i.ytimg.com/vi/YbTfZ71xAc4/hqdefault.jpg)" target="_blank" rel="noopener noreferrer" aria-label="Play video: FinMango 2019 Video">
+            <span class="tl-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </a>
+          <img class="tl-image" style="--ar: 1.0000" src="history6.jpg" alt="2019 - Fincubator program in Uganda" loading="lazy">
         </div>
       </article>
 
-      <article class="tl-item">
-        <div class="tl-year">2020</div>
-        <div class="tl-content">
+      <article class="tl-item" id="y2020">
+        <div class="tl-head">
+          <span class="tl-year">2020</span>
           <h3 class="tl-title">Record-Breaking Impact</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             In May, <strong>EXTRAVAGANZA</strong> launched as the world's most unique financial inclusion conference, setting a <strong>WORLD RECORD on ZOOM</strong> with 24 hours of live content, reaching over <strong>1,600 attendees and 300,000+ on social media</strong>. July saw the launch of the <strong>FinMango Advocacy Alliance</strong>, accepting 300+ people from 70+ countries, and a collaboration with <strong>Google on the COVID Open Data Project</strong>, providing insights used by the WHO, World Bank, IMF, Harvard Research, USAID, and Verily. In September, FinMango and Florida's COVID Action created the nation's most comprehensive COVID-19 dataset for U.S. K-12 schools, with Scott and <strong>Oscar Wahltinez's</strong> co-authored Op-Ed trending on U.S. News and World Report and featured on CNN, The New York Times, The Daily Beast, Fortune, and NBC. Throughout this period, FinMango grew to a record number of active contributors, their passion driving remarkable results.
           </p>
-          <div class="tl-media">
-            <iframe src="https://www.youtube.com/embed/IAEHMgnrJ1g" class="tl-video" title="FinMango 2020 Video 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-            <iframe src="https://www.youtube.com/embed/ZfwDob4R7j8" class="tl-video" title="FinMango 2020 Video 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-            <iframe src="https://www.youtube.com/embed/X2Sz8wBf-z8" class="tl-video" title="FinMango 2020 Video 3" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-            <img src="history7.jpg" alt="2020 - EXTRAVAGANZA conference" class="tl-image" loading="lazy">
-            <img src="history8.jpg" alt="2020 - COVID Open Data Project" class="tl-image" loading="lazy">
-          </div>
+        </div>
+        <div class="tl-media">
+          <a class="tl-video" href="https://www.youtube.com/watch?v=IAEHMgnrJ1g" data-yt="IAEHMgnrJ1g" style="--ar: 1.7778; background-image: url(https://i.ytimg.com/vi/IAEHMgnrJ1g/hqdefault.jpg)" target="_blank" rel="noopener noreferrer" aria-label="Play video: FinMango 2020 Video 1">
+            <span class="tl-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </a>
+          <a class="tl-video" href="https://www.youtube.com/watch?v=ZfwDob4R7j8" data-yt="ZfwDob4R7j8" style="--ar: 1.7778; background-image: url(https://i.ytimg.com/vi/ZfwDob4R7j8/hqdefault.jpg)" target="_blank" rel="noopener noreferrer" aria-label="Play video: FinMango 2020 Video 2">
+            <span class="tl-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </a>
+          <a class="tl-video" href="https://www.youtube.com/watch?v=X2Sz8wBf-z8" data-yt="X2Sz8wBf-z8" style="--ar: 1.7778; background-image: url(https://i.ytimg.com/vi/X2Sz8wBf-z8/hqdefault.jpg)" target="_blank" rel="noopener noreferrer" aria-label="Play video: FinMango 2020 Video 3">
+            <span class="tl-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </a>
+          <img class="tl-image" style="--ar: 1.2500" src="history7.jpg" alt="2020 - EXTRAVAGANZA conference" loading="lazy">
+          <img class="tl-image" style="--ar: 1.7778" src="history8.jpg" alt="2020 - COVID Open Data Project" loading="lazy">
         </div>
       </article>
 
-      <article class="tl-item">
-        <div class="tl-year">2021</div>
-        <div class="tl-content">
+      <article class="tl-item" id="y2021">
+        <div class="tl-head">
+          <span class="tl-year">2021</span>
           <h3 class="tl-title">Innovation &amp; Recognition</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             In March, <strong>Mango X</strong>, FinMango's semi-secret moonshot factory, was born with the goal of creating radical new technologies to address major obstacles to financial inclusion. The team developed a series of powerful tools and calculators that are now used by thousands of teachers nationwide. In August, FinMango was awarded a <strong>$50,000 grant from Google Health</strong> for their collaboration on the COVID-19 Open Data Project, which began in July 2020 and provided valuable insights into the pandemic's impact on local economies and communities.
           </p>
-          <div class="tl-media">
-            <img src="history9.jpeg" alt="2021 - Mango X innovation lab" class="tl-image" loading="lazy">
-            <img src="history10.jpeg" alt="2021 - Google Health grant recognition" class="tl-image" loading="lazy">
-          </div>
+        </div>
+        <div class="tl-media">
+          <img class="tl-image" style="--ar: 1.7763" src="history9.jpeg" alt="2021 - Mango X innovation lab" loading="lazy">
+          <img class="tl-image" style="--ar: 1.0000" src="history10.jpeg" alt="2021 - Google Health grant recognition" loading="lazy">
         </div>
       </article>
 
-      <article class="tl-item">
-        <div class="tl-year">2022</div>
-        <div class="tl-content">
+      <article class="tl-item" id="y2022">
+        <div class="tl-head">
+          <span class="tl-year">2022</span>
           <h3 class="tl-title">Strategic Evolution</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             FinMango assembled a strategic planning team of eight carefully selected Mangoes and facilitator <strong>Chris Shannon</strong> to assess the organization's current state, envision its future, and formulate a plan to achieve its goals. Through surveys, ecosystem mapping, empathy maps, and research, the team identified <strong>young adults worldwide and their financial stability</strong> as the target population and problem to address, aligning FinMango's work with the "complex," or systems, context. Based on community feedback, FinMango shifted its focus from financial education to supporting the financial stability of young adults in transition, recognizing the diverse factors influencing financial health. On <strong>National Mango Day</strong>, FinMango announced its new mission, believing in a world with economic equality, with <strong>Katherine Lordi, Bruna Chixaro, Soham Patel, and Scott Glasgow</strong> meeting in NYC for the relaunch. The strategic planning team's efforts drastically altered FinMango's direction for the better in just 15 weeks.
           </p>
-          <div class="tl-media">
-            <img src="history11.jpeg" alt="2022 - Strategic planning session" class="tl-image" loading="lazy">
-            <img src="history12.jpg" alt="2022 - NYC relaunch on National Mango Day" class="tl-image" loading="lazy">
-          </div>
+        </div>
+        <div class="tl-media">
+          <img class="tl-image" style="--ar: 1.7763" src="history11.jpeg" alt="2022 - Strategic planning session" loading="lazy">
+          <img class="tl-image" style="--ar: 1.2500" src="history12.jpg" alt="2022 - NYC relaunch on National Mango Day" loading="lazy">
         </div>
       </article>
 
-      <article class="tl-item">
-        <div class="tl-year">2023</div>
-        <div class="tl-content">
+      <article class="tl-item" id="y2023">
+        <div class="tl-head">
+          <span class="tl-year">2023</span>
           <h3 class="tl-title">The Ambassador Era</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             FinMango officially resumed work, kicking off a new era in the organization's history, with exciting updates on the horizon. The <strong>FinMango Ambassador Program</strong> launched, selecting <strong>10 exceptional individuals</strong> who are making a difference, challenging stereotypes, and breaking barriers. In a spontaneous display of enthusiasm, Mangoes took over NYC, showcasing their passion for FinMango's mission and the positive change they aim to create in the world.
           </p>
-          <div class="tl-media">
-            <iframe src="https://www.youtube.com/embed/ayA53LctQXI" class="tl-video" title="FinMango 2023 Video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-            <img src="history13.png" alt="2023 - Ambassador Program launch" class="tl-image" loading="lazy">
-            <img src="history14.jpg" alt="2023 - Mangoes in NYC" class="tl-image" loading="lazy">
-            <img src="history15.jpg" alt="2023 - New era begins" class="tl-image" loading="lazy">
-          </div>
+        </div>
+        <div class="tl-media">
+          <a class="tl-video" href="https://www.youtube.com/watch?v=ayA53LctQXI" data-yt="ayA53LctQXI" style="--ar: 1.7778; background-image: url(https://i.ytimg.com/vi/ayA53LctQXI/hqdefault.jpg)" target="_blank" rel="noopener noreferrer" aria-label="Play video: FinMango 2023 Video">
+            <span class="tl-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+          </a>
+          <img class="tl-image" style="--ar: 2.4270" src="history13.png" alt="2023 - Ambassador Program launch" loading="lazy">
+          <img class="tl-image" style="--ar: 1.2500" src="history14.jpg" alt="2023 - Mangoes in NYC" loading="lazy">
+          <img class="tl-image" style="--ar: 1.7291" src="history15.jpg" alt="2023 - New era begins" loading="lazy">
         </div>
       </article>
 
-      <article class="tl-item">
-        <div class="tl-year">2024</div>
-        <div class="tl-content">
+      <article class="tl-item" id="y2024">
+        <div class="tl-head">
+          <span class="tl-year">2024</span>
           <h3 class="tl-title">Data-Driven Research</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             The 2024 FinMango ambassadors were selected, with only <strong>20 individuals chosen from an impressive pool of over 270 applicants</strong> since 2023. FinMango launched the <strong>"FinTrends for Good"</strong> initiative, which harnesses Google search data to identify trends in financial hardship. By analyzing searches for terms such as "food banks" or "renting costs," the initiative provides real-time insights that enable faster policy and aid responses, surpassing the capabilities of traditional economic measures. This innovative approach demonstrates FinMango's commitment to leveraging data and technology to address pressing financial health issues and support those in need.
           </p>
-          <div class="tl-media">
-            <img src="history16.png" alt="2024 - FinTrends for Good initiative" class="tl-image" loading="lazy">
-          </div>
+        </div>
+        <div class="tl-media">
+          <img class="tl-image" style="--ar: 1.0000" src="history16.png" alt="2024 - FinTrends for Good initiative" loading="lazy">
         </div>
       </article>
 
-      <article class="tl-item">
-        <div class="tl-year">2025</div>
-        <div class="tl-content">
+      <article class="tl-item" id="y2025">
+        <div class="tl-head">
+          <span class="tl-year">2025</span>
           <h3 class="tl-title">Building the Instrument</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             FinMango Research turned method into machinery. The team published the <strong>Financial Health Barometer whitepaper (v2.4)</strong> and released it open source, documenting the full data architecture behind a composite stress index: Google Health Trends conditional probabilities combined with BLS and Census administrative data and state-level housing and credit signals. In the fall, a research partnership with <strong>SEED Consulting at the University of Virginia</strong> produced a five-community study of food insecurity and SNAP access across Atlanta, Chicago, Kansas City, Twin Falls, and Wolfe County. Its finding: hunger is driven less by a shortage of food than by transportation gaps, the uneven spread of SNAP retailers stocking fresh produce, and benefits that haven&rsquo;t kept pace with rent and groceries &mdash; while every <strong>$1 in SNAP benefits generates roughly $1.54 in GDP</strong>. The <strong>2025 ambassador cohort</strong> welcomed 12 new ambassadors across four continents, bringing the program to <strong>32 ambassadors since 2023</strong>, and <strong>Barrier Breakers</strong> returned to Kent State, where <strong>Dylan Quinones</strong> of Polaris Career Center took first place.
           </p>
-          <div class="tl-media">
-            <img src="kent2025.jpg" alt="2025 - Barrier Breakers competitors at Kent State University" class="tl-image" loading="lazy">
-            <img src="2025-winner.jpg" alt="2025 - Barrier Breakers champion Dylan Quinones with his trophy at Polaris Career Center" class="tl-image" loading="lazy">
-          </div>
+        </div>
+        <div class="tl-media">
+          <img class="tl-image" style="--ar: 1.7778" src="kent2025.jpg" alt="2025 - Barrier Breakers competitors at Kent State University" loading="lazy">
+          <img class="tl-image" style="--ar: 1.2498" src="2025-winner.jpg" alt="2025 - Barrier Breakers champion Dylan Quinones with his trophy at Polaris Career Center" loading="lazy">
         </div>
       </article>
 
-      <article class="tl-item">
-        <div class="tl-year">2026</div>
-        <div class="tl-content">
+      <article class="tl-item" id="y2026">
+        <div class="tl-head">
+          <span class="tl-year">2026</span>
           <h3 class="tl-title">The Barometer Goes Live</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             The <strong>Financial Health Barometer</strong> launched publicly &mdash; a live instrument reading financial stress across <strong>all 50 states</strong> on four indicators: financial anxiety, food insecurity, housing stress, and affordability. Every state carries a weekly composite score sorted into four tiers, from Low to High, so pressure shows up as it builds rather than months later in a quarterly report. The engine behind it is a working relationship with <strong>Google&rsquo;s Health Trends team</strong>, whose privileged API access supplies the real-time search signal, layered onto administrative data. Alongside the launch, the <strong>2026 ambassador cohort</strong> grew to 13, and on <strong>March 20</strong>, <strong>Barrier Breakers</strong> filled Kent State University again, with students competing for more than <strong>$20,000 in prizes</strong> to solve systemic barriers to financial health.
           </p>
-          <div class="tl-media">
-            <img src="og-barometer.png" alt="2026 - The Financial Health Barometer, tracking real-time US economic stress indicators" class="tl-image" loading="lazy">
-            <img src="images/barrier-breakers-2026/IMG_3792.JPG" alt="2026 - The Barrier Breakers cohort on the grand staircase at Kent State University" class="tl-image" loading="lazy">
-          </div>
+        </div>
+        <div class="tl-media">
+          <img class="tl-image" style="--ar: 1.9048" src="og-barometer.png" alt="2026 - The Financial Health Barometer, tracking real-time US economic stress indicators" loading="lazy">
+          <img class="tl-image" style="--ar: 1.5000" src="images/barrier-breakers-2026/IMG_3792.JPG" alt="2026 - The Barrier Breakers cohort on the grand staircase at Kent State University" loading="lazy">
         </div>
       </article>
 
-      <article class="tl-item tl-item-today">
-        <div class="tl-year">Today</div>
-        <div class="tl-content">
+      <article class="tl-item tl-item-today" id="today">
+        <div class="tl-head">
+          <span class="tl-year">Today</span>
           <h3 class="tl-title">A Global Movement</h3>
+        </div>
+        <div class="tl-content">
           <p class="tl-text">
             Today, FinMango is a team run by a collective of passionate professionals all with the same mission in life: <strong>to create a future where all people are more healthy financially</strong>. What started as a campus conversation has evolved into a global force leveraging research, education, and technology to improve financial health for young adults and vulnerable communities worldwide.
           </p>
@@ -1583,6 +1770,45 @@
     });
   </script>
   <!-- /chrome:script -->
+
+  <script>
+    // Video facades: the poster is a plain link to YouTube; with JS we swap
+    // it for the player in place so the page never loads eight iframes.
+    document.querySelectorAll('.tl-video[data-yt]').forEach(tile => {
+      tile.addEventListener('click', function (e) {
+        e.preventDefault();
+        const id = this.dataset.yt;
+        const frame = document.createElement('iframe');
+        frame.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+        frame.title = this.getAttribute('aria-label') || 'FinMango video';
+        frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        frame.allowFullscreen = true;
+        this.replaceChildren(frame);
+        this.classList.add('is-playing');
+      });
+    });
+
+    // Year index: mark the entry currently in view
+    const yiLinks = Array.from(document.querySelectorAll('.yi-link'));
+    if ('IntersectionObserver' in window && yiLinks.length) {
+      const byId = new Map(yiLinks.map(a => [a.getAttribute('href').slice(1), a]));
+      const setActive = id => yiLinks.forEach(a => a.classList.toggle('is-active', a === byId.get(id)));
+      const io = new IntersectionObserver(entries => {
+        const hit = entries.filter(en => en.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (hit) {
+          setActive(hit.target.id);
+          // keep the active link visible in the strip on phones; scroll the
+          // strip itself, never the window (scrollIntoView would move the page)
+          const link = byId.get(hit.target.id);
+          const strip = link && link.parentElement;
+          if (strip && strip.scrollWidth > strip.clientWidth) {
+            strip.scrollTo({ left: link.offsetLeft - (strip.clientWidth - link.offsetWidth) / 2, behavior: 'smooth' });
+          }
+        }
+      }, { rootMargin: '-40% 0px -50% 0px' });
+      document.querySelectorAll('.tl-item[id]').forEach(el => io.observe(el));
+    }
+  </script>
 
 </body>
 </html>
