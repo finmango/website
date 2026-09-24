@@ -253,10 +253,13 @@
     .nav-right > a:not(.btn-donate):not(.btn-get-involved):hover::after,
     .dropdown:hover .dropdown-trigger::after,
     .dropdown:focus-within .dropdown-trigger::after { width: 100%; }
-    /* Research dropdown: opens from its left edge; its trigger and the
-       current page's entry carry the active marker */
+    /* Nav dropdowns open centred under their trigger, so each fits at every
+       desktop width; the active section's trigger and the current page's
+       entry carry the marker */
     .dropdown-trigger[aria-current="page"]::after { width: 100%; }
-    .dropdown-research .dropdown-content { right: auto; left: -1.4rem; }
+    .nav-right > a[aria-current="page"]:not(.btn-donate):not(.btn-get-involved)::after { width: 100%; }
+    .nav-right .dropdown-content { left: 50%; right: auto; transform: translate(-50%, 8px); }
+    .nav-right .dropdown:hover .dropdown-content, .nav-right .dropdown:focus-within .dropdown-content { transform: translate(-50%, 0); }
     .dropdown-item[aria-current="page"] .dropdown-item-name { color: var(--orange); }
     .mobile-card[aria-current="page"] .mobile-card-name { color: var(--orange); }
     /* active page marker */
@@ -1222,7 +1225,50 @@
       </a>
 
       <div class="nav-right">
-        <a href="about.html">About</a>
+        <div class="dropdown dropdown-about">
+          <a href="about.html" class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">About <span class="chev">▾</span></a>
+          <div class="dropdown-content">
+            <div class="dropdown-mega-grid">
+              <div class="dropdown-mega-col">
+                <div class="dropdown-mega-col-label">Who we are</div>
+                <a href="about.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">About FinMango</span>
+                    <span class="dropdown-item-desc">Our mission &amp; the team behind it</span>
+                  </span>
+                </a>
+                <a href="history.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Our history</span>
+                    <span class="dropdown-item-desc">From campus idea to global movement</span>
+                  </span>
+                </a>
+                <a href="approach.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Approach &amp; methodology</span>
+                    <span class="dropdown-item-desc">How we identify, diagnose and measure</span>
+                  </span>
+                </a>
+              </div>
+              <div class="dropdown-mega-col">
+                <div class="dropdown-mega-col-label">Writing</div>
+                <a href="https://blogs.finmango.org/" class="dropdown-item" target="_blank" rel="noopener noreferrer">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Mango Ink: Blogs</span>
+                    <span class="dropdown-item-desc">Long-form writing from the FinMango team</span>
+                  </span>
+                  <span class="dropdown-external">↗</span>
+                </a>
+                <a href="posts.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Ambassador Notes</span>
+                    <span class="dropdown-item-desc">Notes &amp; briefs from our Ambassadors</span>
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="dropdown dropdown-research">
           <a href="research.html" class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">Research <span class="chev">▾</span></a>
           <div class="dropdown-content">
@@ -1247,25 +1293,26 @@
                     <span class="dropdown-item-desc">Peer-reviewed papers &amp; work in progress</span>
                   </span>
                 </a>
-                <a href="approach.html" class="dropdown-item">
+                <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer">
                   <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Approach &amp; methods</span>
-                    <span class="dropdown-item-desc">How we identify, diagnose and measure</span>
+                    <span class="dropdown-item-name">GitHub</span>
+                    <span class="dropdown-item-desc">Open data, code &amp; methods</span>
                   </span>
+                  <span class="dropdown-external">↗</span>
                 </a>
               </div>
               <div class="dropdown-mega-col">
                 <div class="dropdown-mega-col-label">Featured work</div>
+                <a href="barometer.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Financial Health Barometer</span>
+                    <span class="dropdown-item-desc">Economic pulse · 50 states + DC</span>
+                  </span>
+                </a>
                 <a href="research-reports.html#housing-affordability-seed-s26" class="dropdown-item">
                   <span class="dropdown-item-text">
                     <span class="dropdown-item-name">Housing affordability in five places</span>
                     <span class="dropdown-item-desc">SEED Consulting × UVA · Spring 2026</span>
-                  </span>
-                </a>
-                <a href="research-reports.html#food-insecurity-snap-seed-f25" class="dropdown-item">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">SNAP access: five city case studies</span>
-                    <span class="dropdown-item-desc">SEED Consulting × UVA · Fall 2025</span>
                   </span>
                 </a>
                 <a href="https://www.tandfonline.com/doi/abs/10.1080/19325037.2023.2209620" class="dropdown-item" target="_blank" rel="noopener noreferrer">
@@ -1279,60 +1326,50 @@
             </div>
           </div>
         </div>
-        <a href="education.html">Education</a>
-        <a href="ambassadors.html">Ambassadors</a>
-
-        <div class="dropdown">
-          <button class="dropdown-trigger" aria-haspopup="true" aria-expanded="false">Our Work <span class="chev">▾</span></button>
+        <div class="dropdown dropdown-programs">
+          <button class="dropdown-trigger" data-section="programs" aria-haspopup="true" aria-expanded="false">Programs <span class="chev">▾</span></button>
           <div class="dropdown-content">
             <div class="dropdown-mega-grid">
               <div class="dropdown-mega-col">
-                <div class="dropdown-mega-col-label">Build</div>
+                <div class="dropdown-mega-col-label">Programs</div>
+                <a href="education.html" class="dropdown-item">
+                  <span class="dropdown-item-text">
+                    <span class="dropdown-item-name">Millionaire Mindset</span>
+                    <span class="dropdown-item-desc">Our flagship financial literacy program</span>
+                  </span>
+                </a>
                 <a href="barrier-breakers.html" class="dropdown-item">
                   <span class="dropdown-item-text">
                     <span class="dropdown-item-name">Barrier Breakers</span>
                     <span class="dropdown-item-desc">Powered by Valmark · $20k+ in prizes</span>
                   </span>
                 </a>
-                <a href="resources.html" class="dropdown-item">
+                <a href="ambassadors.html" class="dropdown-item">
                   <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Resources</span>
-                    <span class="dropdown-item-desc">Guides, tools &amp; worksheets</span>
+                    <span class="dropdown-item-name">Ambassadors</span>
+                    <span class="dropdown-item-desc">Our global ambassador program</span>
                   </span>
-                </a>
-                <a href="https://github.com/finmango/research" class="dropdown-item" target="_blank" rel="noopener noreferrer">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">GitHub</span>
-                    <span class="dropdown-item-desc">Research to reality</span>
-                  </span>
-                  <span class="dropdown-external">↗</span>
                 </a>
               </div>
               <div class="dropdown-mega-col">
-                <div class="dropdown-mega-col-label">Insights</div>
-                <a href="barometer.html" class="dropdown-item">
+                <div class="dropdown-mega-col-label">Get started</div>
+                <a href="resources.html" class="dropdown-item">
                   <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Financial Health Barometer</span>
-                    <span class="dropdown-item-desc">Economic pulse · 50 states + DC</span>
+                    <span class="dropdown-item-name">Resources</span>
+                    <span class="dropdown-item-desc">Guides, tools &amp; calculators</span>
                   </span>
                 </a>
-                <a href="posts.html" class="dropdown-item">
+                <a href="ambassador-apply.html" class="dropdown-item">
                   <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Ambassador Notes</span>
-                    <span class="dropdown-item-desc">Notes &amp; briefs from our Ambassadors</span>
+                    <span class="dropdown-item-name">Become an Ambassador</span>
+                    <span class="dropdown-item-desc">Apply to join the program</span>
                   </span>
-                </a>
-                <a href="https://blogs.finmango.org/" class="dropdown-item" target="_blank" rel="noopener noreferrer">
-                  <span class="dropdown-item-text">
-                    <span class="dropdown-item-name">Mango Ink: Blogs</span>
-                    <span class="dropdown-item-desc">Long-form writing from the FinMango team</span>
-                  </span>
-                  <span class="dropdown-external">↗</span>
                 </a>
               </div>
             </div>
           </div>
         </div>
+        <a href="ambassadors.html">Ambassadors</a>
 
         <a href="get-involved.html" class="btn-get-involved">Get Involved</a>
         <a href="donate.html" class="btn-donate">Donate</a>
@@ -1349,7 +1386,22 @@
 
   <div class="mobile-menu" id="mobileMenu">
     <div class="mobile-menu-nav">
-      <a href="about.html">About</a>
+      <div class="mobile-dropdown">
+        <button class="mobile-dropdown-toggle" aria-expanded="false">About <span class="arrow">▾</span></button>
+        <div class="mobile-dropdown-content">
+          <div class="mobile-cards-group">
+            <div class="mobile-cards-label">Who we are</div>
+            <a href="about.html" class="mobile-card"><span class="mobile-card-name">About FinMango</span><span class="mobile-card-desc">Our mission &amp; the team behind it</span></a>
+            <a href="history.html" class="mobile-card"><span class="mobile-card-name">Our history</span><span class="mobile-card-desc">From campus idea to global movement</span></a>
+            <a href="approach.html" class="mobile-card"><span class="mobile-card-name">Approach &amp; methodology</span><span class="mobile-card-desc">How we identify, diagnose and measure</span></a>
+          </div>
+          <div class="mobile-cards-group">
+            <div class="mobile-cards-label">Writing</div>
+            <a href="https://blogs.finmango.org/" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">Mango Ink: Blogs <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Long-form writing from the FinMango team</span></a>
+            <a href="posts.html" class="mobile-card"><span class="mobile-card-name">Ambassador Notes</span><span class="mobile-card-desc">Notes &amp; briefs from our Ambassadors</span></a>
+          </div>
+        </div>
+      </div>
       <div class="mobile-dropdown">
         <button class="mobile-dropdown-toggle" aria-expanded="false">Research <span class="arrow">▾</span></button>
         <div class="mobile-dropdown-content">
@@ -1358,35 +1410,33 @@
             <a href="research.html" class="mobile-card"><span class="mobile-card-name">Overview</span><span class="mobile-card-desc">The premise, live signals &amp; open questions</span></a>
             <a href="research-reports.html" class="mobile-card"><span class="mobile-card-name">Case studies &amp; briefs</span><span class="mobile-card-desc">Plain-language reports, filterable by topic</span></a>
             <a href="research-publications.html" class="mobile-card"><span class="mobile-card-name">Publications</span><span class="mobile-card-desc">Peer-reviewed papers &amp; work in progress</span></a>
-            <a href="approach.html" class="mobile-card"><span class="mobile-card-name">Approach &amp; methods</span><span class="mobile-card-desc">How we identify, diagnose and measure</span></a>
+            <a href="https://github.com/finmango/research" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">GitHub <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Open data, code &amp; methods</span></a>
           </div>
           <div class="mobile-cards-group">
             <div class="mobile-cards-label">Featured work</div>
+            <a href="barometer.html" class="mobile-card"><span class="mobile-card-name">Financial Health Barometer</span><span class="mobile-card-desc">Economic pulse · 50 states + DC</span></a>
             <a href="research-reports.html#housing-affordability-seed-s26" class="mobile-card"><span class="mobile-card-name">Housing affordability in five places</span><span class="mobile-card-desc">SEED Consulting × UVA · Spring 2026</span></a>
-            <a href="research-reports.html#food-insecurity-snap-seed-f25" class="mobile-card"><span class="mobile-card-name">SNAP access: five city case studies</span><span class="mobile-card-desc">SEED Consulting × UVA · Fall 2025</span></a>
             <a href="https://www.tandfonline.com/doi/abs/10.1080/19325037.2023.2209620" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">The Mango Model <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Am. J. of Health Education · 2023</span></a>
           </div>
         </div>
       </div>
-      <a href="education.html">Education</a>
-      <a href="ambassadors.html">Ambassadors</a>
       <div class="mobile-dropdown">
-        <button class="mobile-dropdown-toggle" aria-expanded="false">Our Work <span class="arrow">▾</span></button>
+        <button class="mobile-dropdown-toggle" aria-expanded="false">Programs <span class="arrow">▾</span></button>
         <div class="mobile-dropdown-content">
           <div class="mobile-cards-group">
-            <div class="mobile-cards-label">Build</div>
+            <div class="mobile-cards-label">Programs</div>
+            <a href="education.html" class="mobile-card"><span class="mobile-card-name">Millionaire Mindset</span><span class="mobile-card-desc">Our flagship financial literacy program</span></a>
             <a href="barrier-breakers.html" class="mobile-card"><span class="mobile-card-name">Barrier Breakers</span><span class="mobile-card-desc">Powered by Valmark · $20k+ in prizes</span></a>
-            <a href="resources.html" class="mobile-card"><span class="mobile-card-name">Resources</span><span class="mobile-card-desc">Guides, tools &amp; worksheets</span></a>
-            <a href="https://github.com/finmango/research" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">GitHub <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Research to reality</span></a>
+            <a href="ambassadors.html" class="mobile-card"><span class="mobile-card-name">Ambassadors</span><span class="mobile-card-desc">Our global ambassador program</span></a>
           </div>
           <div class="mobile-cards-group">
-            <div class="mobile-cards-label">Insights</div>
-            <a href="barometer.html" class="mobile-card"><span class="mobile-card-name">Financial Health Barometer</span><span class="mobile-card-desc">Economic pulse · 50 states + DC</span></a>
-            <a href="posts.html" class="mobile-card"><span class="mobile-card-name">Ambassador Notes</span><span class="mobile-card-desc">Notes &amp; briefs from our Ambassadors</span></a>
-            <a href="https://blogs.finmango.org/" class="mobile-card" target="_blank" rel="noopener noreferrer"><span class="mobile-card-name">Mango Ink: Blogs <span class="mobile-card-external">↗</span></span><span class="mobile-card-desc">Long-form writing from the FinMango team</span></a>
+            <div class="mobile-cards-label">Get started</div>
+            <a href="resources.html" class="mobile-card"><span class="mobile-card-name">Resources</span><span class="mobile-card-desc">Guides, tools &amp; calculators</span></a>
+            <a href="ambassador-apply.html" class="mobile-card"><span class="mobile-card-name">Become an Ambassador</span><span class="mobile-card-desc">Apply to join the program</span></a>
           </div>
         </div>
       </div>
+      <a href="ambassadors.html">Ambassadors</a>
     </div>
     <div class="mobile-menu-footer">
       <a href="https://www.every.org/finmango?theme_color=ff8f00&utm_campaign=donate-mobile#/donate" target="_blank" rel="noopener noreferrer" class="btn-mobile-cta">Donate</a>
