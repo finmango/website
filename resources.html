@@ -341,41 +341,8 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 2.5rem;
+      gap: 2.25rem;
       padding-top: 1.5rem;
-    }
-
-    .hero-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-    .hero-count {
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      display: inline-flex;
-      align-items: center;
-      gap: .6rem;
-      white-space: nowrap;
-    }
-    .hero-count .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--orange);
-      box-shadow: 0 0 0 0 rgba(242, 90, 39, .5);
-      animation: pulse 2.4s ease-out infinite;
-      flex-shrink: 0;
-    }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(242, 90, 39, .5); }
-      70% { box-shadow: 0 0 0 10px rgba(242, 90, 39, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(242, 90, 39, 0); }
     }
 
     /* Headline and lede sit on one baseline, editorial style */
@@ -430,32 +397,17 @@
       padding-bottom: .35em;
     }
 
-    /* Stat rail — the promise of the page in four numbers */
-    .hero-rail {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border-top: 1px solid var(--ink-line);
-    }
-    .hero-rail-item { padding: 1.6rem 1.5rem 2.75rem 0; }
-    .hero-rail-item + .hero-rail-item { padding-left: 1.75rem; border-left: 1px solid var(--ink-line-soft); }
-    .hero-rail-num {
-      font-size: clamp(1.9rem, 3vw, 2.6rem);
-      font-weight: 900;
-      letter-spacing: -.045em;
-      line-height: .95;
-      margin-bottom: .5rem;
-      font-variant-numeric: tabular-nums;
-    }
-    .hero-rail-num em { font-style: normal; color: var(--orange); font-size: .55em; vertical-align: .4em; }
-    .hero-rail-label {
+    .hero-meta {
       font-family: var(--font-mono);
       font-size: .72rem;
       font-weight: 500;
-      text-transform: uppercase;
       letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: var(--ink-faint);
-      line-height: 1.6;
+      padding: .25rem 0 2.25rem;
+      font-variant-numeric: tabular-nums;
     }
+    .hero-meta span { color: var(--ink); }
 
     /* ----------------------------------------------------------
        TOOLBAR — search + filters, pinned under the nav on scroll
@@ -602,6 +554,14 @@
        ---------------------------------------------------------- */
     .resources-section { padding: 4.5rem var(--gutter) 6rem; background: var(--paper); }
     .resources-container { max-width: var(--max-width); margin: 0 auto; }
+    /* "Start here" sits on the site's warm band so the featured cards read as a
+       separate object from the index below */
+    .featured-section {
+      padding: 4rem var(--gutter) 4.5rem;
+      background: rgba(242, 90, 39, .05);
+      border-bottom: 1px solid rgba(242, 90, 39, .22);
+    }
+    .featured-section[hidden] { display: none; }
 
     .section-header {
       display: flex;
@@ -633,7 +593,6 @@
       text-align: right;
       letter-spacing: -.005em;
     }
-    .index-header { margin-top: 5.5rem; }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(14px); }
@@ -691,8 +650,6 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--ink-faint);
-      border: 1px solid var(--ink-line);
-      padding: .28rem .55rem;
       white-space: nowrap;
     }
     .feat-title {
@@ -730,14 +687,6 @@
     .feat-link svg { width: 13px; height: 13px; transition: transform .3s cubic-bezier(.16,1,.3,1); }
     .feat-card:hover .feat-link { color: var(--orange); }
     .feat-card:hover .feat-link svg { transform: translateX(3px); }
-    .feat-star {
-      font-family: var(--font-mono);
-      font-size: .68rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--orange-ink);
-    }
 
     /* Lead card: the one dark object on the page */
     .feat-card.lead {
@@ -767,19 +716,19 @@
     .feat-card.lead .feat-card-top { position: relative; }
     .feat-card.lead .feat-icon { width: 88px; height: 88px; color: var(--orange); }
     .feat-card.lead:hover .feat-icon { color: var(--paper); }
-    .feat-card.lead .feat-tag { color: var(--paper-faint); border-color: var(--paper-line); }
+    .feat-card.lead .feat-tag { color: var(--orange); }
     .feat-card.lead .feat-title {
-      font-size: clamp(1.8rem, 2.8vw, 2.6rem);
-      letter-spacing: -.035em;
-      line-height: 1.02;
-      margin-top: 2rem;
-      max-width: 16ch;
+      font-size: clamp(2.2rem, 3.4vw, 3.3rem);
+      letter-spacing: -.04em;
+      line-height: .98;
+      margin-top: auto;
+      padding-top: 2.5rem;
+      max-width: 14ch;
     }
-    .feat-card.lead .feat-desc { color: var(--paper-dim); font-size: 1rem; max-width: 48ch; }
+    .feat-card.lead .feat-desc { color: var(--paper-dim); font-size: 1.02rem; max-width: 46ch; flex: 0 0 auto; }
     .feat-card.lead .feat-meta { border-top-color: var(--paper-line); }
     .feat-card.lead .feat-link { color: var(--paper); }
     .feat-card.lead:hover .feat-link { color: var(--orange); }
-    .feat-card.lead .feat-star { color: var(--orange); }
 
     /* ----------------------------------------------------------
        FULL INDEX — grouped list with sticky group labels
@@ -1203,23 +1152,22 @@
       .hero-lede { grid-template-columns: 1fr; gap: 1.25rem; }
       .hero h1 { font-size: clamp(2.2rem, 9.5vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
       .hero-subtitle { padding-bottom: 0; }
-      .hero-rail { grid-template-columns: repeat(2, 1fr); }
-      .hero-rail-item { padding: 1.25rem 1rem 1.25rem 0; border-bottom: 1px solid var(--ink-line-soft); }
-      .hero-rail-item + .hero-rail-item { padding-left: 1.25rem; }
-      .hero-rail-item:nth-child(odd) { padding-left: 0; border-left: none; }
-      .hero-rail-item:nth-last-child(-n+2) { border-bottom: none; padding-bottom: 1.75rem; }
+      .hero-meta { padding: 0 0 1.5rem; }
 
       .toolbar-inner { flex-wrap: wrap; gap: .75rem; padding: .75rem var(--gutter); }
       .search-container { flex: 1 1 100%; min-width: 0; }
       .filters { flex: none; width: calc(100% + 2 * var(--gutter)); margin: 0 calc(-1 * var(--gutter)); padding: 2px var(--gutter); }
 
       .resources-section { padding: 3rem var(--gutter) 4rem; }
+      .featured-section { padding: 2.75rem var(--gutter) 3rem; }
       .section-header { flex-direction: column; align-items: flex-start; gap: .6rem; margin-bottom: 1.5rem; }
       .section-note { text-align: left; }
-      .index-header { margin-top: 3.5rem; }
 
       .feat-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: auto; }
       .feat-card.lead { grid-column: 1 / -1; grid-row: auto; padding: 2rem 1.6rem 1.75rem; }
+      /* with the lead full-width, an even count leaves one card alone on the
+         last row; stretch it so the grid closes cleanly */
+      .feat-card:last-child:nth-child(even) { grid-column: 1 / -1; }
       .feat-card.lead .feat-icon { width: 64px; height: 64px; }
       .feat-card.lead .feat-title { margin-top: 1.5rem; }
 
@@ -1506,24 +1454,7 @@
         </p>
       </div>
 
-      <div class="hero-rail" aria-label="At a glance">
-        <div class="hero-rail-item">
-          <div class="hero-rail-num" id="railTools">25</div>
-          <div class="hero-rail-label">Interactive tools,<br>all free to use</div>
-        </div>
-        <div class="hero-rail-item">
-          <div class="hero-rail-num" id="railCats">7</div>
-          <div class="hero-rail-label">Categories, from<br>income to emergencies</div>
-        </div>
-        <div class="hero-rail-item">
-          <div class="hero-rail-num">$0</div>
-          <div class="hero-rail-label">Cost, forever.<br>No paywalls</div>
-        </div>
-        <div class="hero-rail-item">
-          <div class="hero-rail-num">0</div>
-          <div class="hero-rail-label">Sign-ups required.<br>Open one and start</div>
-        </div>
-      </div>
+      <p class="hero-meta"><span id="railTools">25</span> tools &middot; <span id="railCats">7</span> categories &middot; all free</p>
     </div>
   </section>
 
@@ -1552,22 +1483,26 @@
     </div>
   </div>
 
-  <!-- ======================= RESOURCES ======================= -->
-  <section class="resources-section" id="tools">
+  <!-- ======================= START HERE ======================= -->
+  <section class="featured-section" id="tools" aria-labelledby="featuredTitle">
     <div class="resources-container">
-
       <div class="section-header" id="featuredHeader">
         <div class="section-header-left">
-          <h2>Start here</h2>
+          <h2 id="featuredTitle">Start here</h2>
           <span class="section-count" id="featuredCount"></span>
         </div>
         <p class="section-note">The tools we would hand a friend first.</p>
       </div>
       <div class="feat-grid" id="featuredGrid"></div>
+    </div>
+  </section>
 
-      <div class="section-header index-header" id="indexHeader">
+  <!-- ======================= FULL INDEX ======================= -->
+  <section class="resources-section" id="index" aria-labelledby="indexTitle">
+    <div class="resources-container">
+      <div class="section-header" id="indexHeader">
         <div class="section-header-left">
-          <h2>The full index</h2>
+          <h2 id="indexTitle">The full index</h2>
           <span class="section-count" id="indexCount"></span>
         </div>
         <p class="section-note">Every tool, grouped by the question it answers.</p>
@@ -1579,7 +1514,6 @@
         <p>Try a broader word like “retirement” or “loan”, or clear the search to see every tool again.</p>
         <button class="btn-ghost" type="button" id="emptyReset">Show all tools</button>
       </div>
-
     </div>
   </section>
 
@@ -1880,7 +1814,7 @@
 
     function render() {
       const featuredGrid = document.getElementById('featuredGrid');
-      const featuredHeader = document.getElementById('featuredHeader');
+      const featuredSection = document.querySelector('.featured-section');
       const indexGroups = document.getElementById('indexGroups');
       const indexHeader = document.getElementById('indexHeader');
       const emptyState = document.getElementById('emptyState');
@@ -1893,8 +1827,7 @@
       // --- Start here: a bento with one lead card ---
       const solo = featured.length < 3;
       featuredGrid.innerHTML = featured.map((r, i) => featCard(r, i, i === 0, solo)).join('');
-      featuredHeader.style.display = featured.length ? '' : 'none';
-      featuredGrid.style.display = featured.length ? '' : 'none';
+      featuredSection.hidden = featured.length === 0;
       document.getElementById('featuredCount').textContent = plural(featured.length);
 
       // --- Full index: grouped by category ---
@@ -1918,7 +1851,6 @@
         </div>`;
       }).join('');
       indexHeader.style.display = visible.length ? '' : 'none';
-      indexHeader.classList.toggle('index-header', featured.length > 0);
       document.getElementById('indexCount').textContent = plural(visible.length);
 
       // --- Readout + empty state ---
@@ -1942,13 +1874,12 @@
         <a class="${cls}" href="${r.link}" style="animation-delay:${(0.05 * i).toFixed(2)}s">
           <div class="feat-card-top">
             <div class="feat-icon">${iconFor(r)}</div>
-            <span class="feat-tag">${catName(r.category)}</span>
           </div>
           <h3 class="feat-title">${r.title}</h3>
           <p class="feat-desc">${r.description}</p>
           <div class="feat-meta">
             <span class="feat-link">Open tool ${ARROW}</span>
-            <span class="feat-star">${lead ? 'Start here' : 'Featured'}</span>
+            <span class="feat-tag">${catName(r.category)}</span>
           </div>
         </a>`;
     }
