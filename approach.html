@@ -80,7 +80,6 @@
 
       /* Layout */
       --max-width: 1280px;
-      --hero-max: 1440px;
       --gutter: 2.5rem;
     }
 
@@ -390,7 +389,7 @@
        ---------------------------------------------------------- */
     .data-methodology { padding: 0 var(--gutter) 7.5rem; background: var(--paper); }
     .data-methodology-container { max-width: var(--max-width); margin: 0 auto; }
-    .data-box { border: 1px solid var(--ink-line); padding: 3rem; }
+    .data-box { border: 1px solid var(--ink-line); padding: 2.5rem; }
     .data-title { font-size: 1.35rem; font-weight: 900; letter-spacing: -.025em; margin-bottom: 1.75rem; }
     .data-list { list-style: none; padding: 0; max-width: 72ch; }
     .data-list li {
@@ -419,7 +418,7 @@
        ---------------------------------------------------------- */
     .hero {
       background: var(--paper);
-      padding: 6.5rem 2rem 6.5rem;
+      padding: 6.5rem var(--gutter) 5.5rem;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -445,11 +444,11 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: var(--hero-max);
+      max-width: var(--max-width);   /* same grid as every section below */
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 3rem;
+      gap: 2.5rem;
       padding-top: 1.5rem;
     }
 
@@ -518,13 +517,15 @@
     @keyframes draw-stroke { to { stroke-dashoffset: 0; } }
 
     .hb-bottom {
+      /* standfirst sits in the right-hand column, editorial style */
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
       align-items: end;
       gap: 3rem;
       padding-top: 1.75rem;
       border-top: 1px solid var(--ink-line-soft);
     }
+    .hb-bottom .hb-sub { grid-column: 2; }
     .hb-sub {
       font-size: clamp(1.05rem, 1.5vw, 1.35rem);
       font-weight: 400;
@@ -786,6 +787,23 @@
       letter-spacing: -.01em;
     }
 
+    /* Split editorial sections: the section head takes the left column,
+       the body the right, so long-form prose stops leaving half the
+       screen empty. Collapses to one column on tablet and below. */
+    .split-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 3rem 5rem;
+      align-items: start;
+    }
+    .split-grid > .section-head { margin-bottom: 0; }
+    .section-head--split h2 {
+      font-size: clamp(2.2rem, 3.6vw, 3.4rem);
+      line-height: 1.02;
+      letter-spacing: -.04em;
+      max-width: 16ch;
+    }
+
     /* Hero adjustments — long two-line headline, wrapping accent */
     .hero h1 { font-size: clamp(2.3rem, 5vw, 4.6rem); max-width: none; line-height: 1.02; }
     /* inline (not inline-block) so "We Transform" can share a line and only
@@ -799,7 +817,7 @@
     .hero-figure { margin: .25rem 0 0; border: 1px solid var(--ink-line); }
     .hero-figure img {
       width: 100%;
-      aspect-ratio: 16 / 9;
+      aspect-ratio: 21 / 9;   /* a wide billboard strip on desktop */
       object-fit: cover;
       display: block;
     }
@@ -807,20 +825,21 @@
     /* ----------------------------------------------------------
        HOW WE WORK — narrative + ruled callout
        ---------------------------------------------------------- */
-    .approach { padding: 7rem var(--gutter) 6.5rem; background: var(--paper); }
+    .approach { padding: 5rem var(--gutter) 6.5rem; background: var(--paper); }
     .approach-container { max-width: var(--max-width); margin: 0 auto; }
     .approach .section-head { margin-bottom: 2.5rem; }
     .approach-intro {
-      font-size: clamp(1.02rem, 1.4vw, 1.2rem);
+      font-size: clamp(1.02rem, 1.3vw, 1.15rem);
       font-weight: 400;
       line-height: 1.7;
       color: var(--ink-dim);
-      max-width: 68ch;
+      max-width: 62ch;
       letter-spacing: -.01em;
       margin-bottom: 1.5rem;
     }
+    .approach-intro:first-child { margin-top: .35rem; }  /* optical align with the h2 cap */
     .approach-callout {
-      margin-top: 3rem;
+      margin-top: 2.5rem;
       padding: .4rem 0 .4rem 2.25rem;
       border-left: 1px solid var(--orange);
       max-width: 760px;
@@ -1072,7 +1091,7 @@
       margin-top: 2.25rem;
     }
     .closer-content h2 {
-      font-size: clamp(2.3rem, 4.8vw, 4.2rem);
+      font-size: clamp(2.3rem, 3.9vw, 3.5rem);
       font-weight: 900;
       line-height: 1.02;
       letter-spacing: -.04em;
@@ -1096,7 +1115,7 @@
       border-top: 1px solid var(--paper-line);
       border-bottom: 1px solid var(--paper-line);
     }
-    .closer-figure { min-width: 0; }
+    .closer-figure { min-width: 0; position: sticky; top: 108px; }
     .closer-figure img {
       width: 100%;
       height: auto;
@@ -1130,6 +1149,14 @@
       .hero-container { gap: 2rem; padding-top: 0; }
       .hero h1 { font-size: clamp(2.2rem, 10vw, 3.2rem); line-height: 1; letter-spacing: -.04em; }
       .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; align-items: start; padding-top: 1.5rem; }
+      .hb-bottom .hb-sub { grid-column: auto; }
+      .hero-figure img { aspect-ratio: 16 / 9; }
+
+      .split-grid { grid-template-columns: 1fr; gap: 0; }
+      .split-grid > .section-head { margin-bottom: 2.5rem; }
+      .section-head--split h2 { font-size: clamp(2.4rem, 5.5vw, 4.5rem); max-width: 20ch; }
+      .approach-intro:first-child { margin-top: 0; }
+      .closer-figure { position: static; }
       .hb-cta-row { justify-content: flex-start; width: 100%; gap: .75rem; }
       .btn-primary, .btn-secondary { padding: .9rem 1.2rem; font-size: .88rem; }
 
@@ -1174,7 +1201,9 @@
       .section-head h2 { font-size: clamp(2.1rem, 9vw, 2.6rem); }
 
       .approach { padding: 3.5rem var(--gutter) 3.5rem; }
-      .approach .section-head { margin-bottom: 1.75rem; }
+      .approach .split-grid > .section-head { margin-bottom: 1.75rem; }
+      .split-grid > .section-head { margin-bottom: 2rem; }
+      .section-head--split h2 { font-size: clamp(2.1rem, 9vw, 2.6rem); }
       .approach-intro { font-size: 1.02rem; line-height: 1.65; margin-bottom: 1.25rem; }
       .approach-callout { margin-top: 2.25rem; padding-left: 1.25rem; }
       .approach-callout h3 { font-size: 1.2rem; }
@@ -1663,22 +1692,26 @@
   <!-- ======================= HOW WE WORK ======================= -->
   <section class="approach">
     <div class="approach-container">
-      <div class="section-head">
-        <span class="eyebrow">how we work</span>
-        <h2>Financial inclusion isn't the same as financial health.</h2>
-      </div>
-      <p class="approach-intro">
-        Despite real progress in recent decades, being financially included does not mean being financially healthy. Public and market systems operate sub-optimally, produce poor outcomes, and fail to provide equitable opportunity. Structural inequalities are pervasive.
-      </p>
-      <p class="approach-intro">
-        In response, we work with leaders and decision-makers — in public, government, and private sectors — to help make systems more effective, inclusive, and just. Our approach draws from both experience and evidence; it evolves as we learn from our partners and practice.
-      </p>
+      <div class="split-grid">
+        <div class="section-head section-head--split">
+          <span class="eyebrow">how we work</span>
+          <h2>Financial inclusion isn't the same as financial health.</h2>
+        </div>
+        <div class="approach-body">
+          <p class="approach-intro">
+            Despite real progress in recent decades, being financially included does not mean being financially healthy. Public and market systems operate sub-optimally, produce poor outcomes, and fail to provide equitable opportunity. Structural inequalities are pervasive.
+          </p>
+          <p class="approach-intro">
+            In response, we work with leaders and decision-makers — in public, government, and private sectors — to help make systems more effective, inclusive, and just. Our approach draws from both experience and evidence; it evolves as we learn from our partners and practice.
+          </p>
 
-      <div class="approach-callout">
-        <h3>Systems change through evidence &amp; collaboration</h3>
-        <p>
-          We strive to address the root causes of economic inequality and transform systems to achieve equitable outcomes for millions — not through one-off programs, but through rigorous, iterative, evidence-based work done alongside the communities affected.
-        </p>
+          <div class="approach-callout">
+            <h3>Systems change through evidence &amp; collaboration</h3>
+            <p>
+              We strive to address the root causes of economic inequality and transform systems to achieve equitable outcomes for millions — not through one-off programs, but through rigorous, iterative, evidence-based work done alongside the communities affected.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1952,7 +1985,8 @@
        on the approach page rather than on the research landing page. -->
   <section class="data-methodology" id="data-methodology">
     <div class="data-methodology-container">
-      <div class="section-head">
+      <div class="split-grid">
+      <div class="section-head section-head--split">
         <span class="eyebrow">the data</span>
         <h2>Our data approach.</h2>
         <p class="section-sub">Most studies using Google Trends rely on normalized Relative Search Volume (RSV) indices. Our unique approach employs the Google Health Trends API to access actual conditional probability values.</p>
@@ -1976,6 +2010,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>
         </div>
+      </div>
       </div>
     </div>
   </section>
