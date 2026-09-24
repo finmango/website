@@ -1302,7 +1302,321 @@
       .cta-bottom-actions { flex-direction: column; }
       .cta-bottom-actions .btn-primary, .cta-bottom-actions .btn-secondary { width: 100%; justify-content: center; }
     }
+
+    /* ==========================================================
+       PROFILE v2 — "pf-" system
+       Same paper / ink / orange, pushed louder: a flippable member
+       card, a ticker, a /now block, lore cards and a year rail.
+       Every section is optional so other profiles can reuse a subset.
+       ========================================================== */
+    .pf-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 100%;
+      background: var(--orange); transform-origin: 0 50%; transform: scaleX(0);
+      z-index: 1100; pointer-events: none;
+    }
+
+    .pf-wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--gutter); }
+    .pf-section { padding: 7rem 0; }
+    .pf-section + .pf-section { padding-top: 0; }
+    .pf-head { display: flex; justify-content: space-between; align-items: end; gap: 2rem; margin-bottom: 3rem; flex-wrap: wrap; }
+    .pf-h2 {
+      font-size: clamp(2.2rem, 4.6vw, 3.8rem); font-weight: 900; line-height: 1;
+      letter-spacing: -.04em; margin-top: 1rem; max-width: 18ch;
+    }
+    .pf-h2 em { font-style: normal; color: var(--orange-ink); }
+    .pf-link {
+      font-family: var(--font-mono); font-size: .78rem; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--orange); padding-bottom: .2rem;
+      white-space: nowrap;
+    }
+    .pf-link:hover { color: var(--orange-ink); }
+
+    /* Reveal on scroll — only when JS is running, so content never hides without it */
+    .js .pf-reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+    .js .pf-reveal.is-in { opacity: 1; transform: none; }
+
+    /* ---------------- HERO ---------------- */
+    .pf-hero {
+      position: relative; padding: 9.5rem 0 5rem; overflow: hidden;
+      background:
+        radial-gradient(900px 500px at var(--mx, 80%) var(--my, 30%), rgba(242, 90, 39, .13), transparent 60%),
+        var(--paper);
+    }
+    .pf-hero::before {
+      /* faint graph-paper grid — FinMango is a data shop */
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(var(--ink-line-soft) 1px, transparent 1px), linear-gradient(90deg, var(--ink-line-soft) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(180deg, #000 0%, transparent 85%);
+      -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 85%);
+    }
+    .pf-hero-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 3.5rem; position: relative; }
+    .pf-back { display: inline-flex; align-items: center; gap: .55rem; color: var(--ink-dim); text-decoration: none; font-size: .9rem; font-weight: 500; }
+    .pf-back svg { width: 15px; height: 15px; transition: transform .3s ease; }
+    .pf-back:hover { color: var(--ink); }
+    .pf-back:hover svg { transform: translateX(-3px); }
+    .pf-status {
+      display: inline-flex; align-items: center; gap: .6rem; padding: .45rem .85rem .45rem .7rem;
+      border: 1px solid var(--ink-line); background: rgba(255,255,255,.6); border-radius: 999px;
+      font-family: var(--font-mono); font-size: .72rem; letter-spacing: .04em; color: var(--ink-dim); text-decoration: none;
+    }
+    .pf-status:hover { border-color: var(--ink); color: var(--ink); }
+    .pf-dot { width: 8px; height: 8px; border-radius: 50%; background: #16A34A; box-shadow: 0 0 0 0 rgba(22,163,74,.5); animation: pf-pulse 2s infinite; flex-shrink: 0; }
+    @keyframes pf-pulse { 0% { box-shadow: 0 0 0 0 rgba(22,163,74,.45); } 70% { box-shadow: 0 0 0 9px rgba(22,163,74,0); } 100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); } }
+
+    .pf-hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 5rem; align-items: center; position: relative; }
+    .pf-name {
+      font-size: clamp(4.4rem, 10vw, 9.2rem); font-weight: 900; line-height: .86; letter-spacing: -.06em;
+      margin: 1.4rem 0 2rem;
+    }
+    .pf-name span { display: block; }
+    .pf-name .pf-last { color: var(--orange); position: relative; width: fit-content; }
+    .pf-name .pf-last svg { position: absolute; left: 0; bottom: -.08em; width: 100%; height: .14em; overflow: visible; }
+    .pf-name .pf-last path { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 320; stroke-dashoffset: 320; animation: pf-draw 1.2s .5s cubic-bezier(.65,0,.35,1) forwards; }
+    @keyframes pf-draw { to { stroke-dashoffset: 0; } }
+    .pf-lede { font-size: clamp(1.1rem, 1.6vw, 1.35rem); line-height: 1.5; color: var(--ink-dim); max-width: 40ch; letter-spacing: -.01em; }
+    .pf-lede strong { color: var(--ink); font-weight: 600; }
+    .pf-actions { display: flex; gap: .9rem; flex-wrap: wrap; margin-top: 2.25rem; }
+
+    /* Member card — tilts with the pointer, flips on click */
+    .pf-card-wrap { perspective: 1400px; justify-self: end; width: 100%; }
+    .pf-card {
+      position: relative; aspect-ratio: 5 / 7; width: 100%;
+      transform-style: preserve-3d;
+      transform: rotateX(var(--rx, 0deg)) rotateY(calc(var(--ry, 0deg) + var(--flip, 0deg)));
+      transition: transform .8s cubic-bezier(.16,1,.3,1);
+    }
+    .pf-card.is-tilting { transition: transform .12s linear; }
+    .pf-card.is-flipped { --flip: 180deg; }
+    .pf-face {
+      position: absolute; inset: 0; border-radius: 22px; overflow: hidden;
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
+      box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 30px 60px -20px rgba(10,10,10,.35), 0 12px 24px -12px rgba(10,10,10,.25);
+    }
+    .pf-front { background: var(--ink); color: #fff; }
+    .pf-front img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; display: block; }
+    .pf-front::after {
+      /* holographic sheen that follows the tilt */
+      content: ''; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: soft-light;
+      background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,.55) var(--shine, 45%), transparent 60%);
+      opacity: .7;
+    }
+    .pf-card-bar {
+      position: absolute; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 1.15rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; z-index: 1;
+    }
+    .pf-card-bar.top { top: 0; padding-bottom: 2.5rem; background: linear-gradient(180deg, rgba(10,10,10,.75), transparent); }
+    .pf-card-bar.bottom { bottom: 0; padding-top: 3rem; align-items: end; background: linear-gradient(0deg, rgba(10,10,10,.8), transparent); }
+    .pf-card-name { font-family: var(--font-body); font-size: 1.35rem; font-weight: 700; letter-spacing: -.03em; text-transform: none; line-height: 1.1; }
+    .pf-card-role { opacity: .75; margin-top: .3rem; display: block; }
+    .pf-card-no { color: var(--orange); font-weight: 500; }
+    .pf-barcode { width: 64px; height: 26px; background: repeating-linear-gradient(90deg, #fff 0 2px, transparent 2px 4px, #fff 4px 5px, transparent 5px 8px, #fff 8px 11px, transparent 11px 12px); opacity: .85; }
+
+    .pf-back-face {
+      transform: rotateY(180deg); background: var(--ink); color: var(--paper);
+      padding: 1.6rem 1.5rem; display: flex; flex-direction: column;
+      background-image: radial-gradient(circle at 100% 0%, rgba(242,90,39,.35), transparent 55%);
+    }
+    .pf-back-face h3 { font-family: var(--font-mono); font-size: .7rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--orange); margin-bottom: 1.2rem; }
+    .pf-stats { list-style: none; display: grid; gap: 0; flex: 1; }
+    .pf-stats li { display: flex; justify-content: space-between; gap: 1rem; padding: .72rem 0; border-bottom: 1px dashed var(--paper-line); font-size: .92rem; }
+    .pf-stats li span:first-child { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--paper-faint); padding-top: .15rem; }
+    .pf-stats li span:last-child { text-align: right; font-weight: 600; }
+    .pf-back-foot { font-family: var(--font-mono); font-size: .66rem; letter-spacing: .08em; color: var(--paper-faint); margin-top: 1rem; text-transform: uppercase; }
+
+    .pf-flip {
+      margin: 1.1rem auto 0; display: flex; align-items: center; gap: .5rem; background: none; border: none; cursor: pointer;
+      font-family: var(--font-mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint);
+    }
+    .pf-flip:hover { color: var(--ink); }
+    .pf-flip svg { width: 14px; height: 14px; transition: transform .6s cubic-bezier(.16,1,.3,1); }
+    .pf-flip[aria-pressed="true"] svg { transform: rotate(180deg); }
+
+    /* ---------------- TICKER ---------------- */
+    .pf-ticker-clip { overflow: hidden; padding: 1.5rem 0; margin-top: -1.5rem; }
+    .pf-ticker { background: var(--ink); color: var(--paper); overflow: hidden; border-block: 1px solid var(--ink); transform: rotate(-1.2deg) scale(1.02); margin: 1rem 0 0; }
+    .pf-ticker-track { display: flex; width: max-content; animation: pf-marquee 38s linear infinite; }
+    .pf-ticker:hover .pf-ticker-track { animation-play-state: paused; }
+    .pf-ticker-group { display: flex; align-items: center; flex-shrink: 0; }
+    .pf-ticker-item { display: inline-flex; align-items: center; gap: 1.6rem; padding: 1.15rem 0 1.15rem 1.6rem; font-size: clamp(1rem, 1.6vw, 1.3rem); font-weight: 700; letter-spacing: -.02em; white-space: nowrap; }
+    .pf-ticker-item b { color: var(--orange); font-weight: 900; }
+    .pf-ticker-item::after { content: '✦'; color: var(--orange); font-size: .8em; }
+    @keyframes pf-marquee { to { transform: translateX(-50%); } }
+
+    /* ---------------- NOW ---------------- */
+    .pf-now-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .pf-now {
+      position: relative; display: flex; flex-direction: column; gap: 1rem; padding: 1.75rem; min-height: 280px;
+      border: 1px solid var(--ink-line); background: #fff; color: var(--ink); text-decoration: none; border-radius: 18px;
+      transition: transform .5s cubic-bezier(.16,1,.3,1), border-color .3s ease, box-shadow .5s ease;
+      overflow: hidden;
+    }
+    .pf-now:hover { transform: translateY(-6px); border-color: var(--ink); box-shadow: 0 24px 40px -24px rgba(10,10,10,.35); }
+    .pf-now-tag { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); display: flex; justify-content: space-between; }
+    .pf-now-tag b { color: var(--orange-ink); font-weight: 500; }
+    .pf-now h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -.035em; line-height: 1.05; }
+    .pf-now p { color: var(--ink-dim); font-size: .98rem; line-height: 1.55; }
+    .pf-now-arrow { margin-top: auto; width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--ink-line); display: grid; place-items: center; transition: background .3s ease, color .3s ease, transform .5s cubic-bezier(.16,1,.3,1); }
+    .pf-now-arrow svg { width: 16px; height: 16px; }
+    .pf-now:hover .pf-now-arrow { background: var(--orange-ink); color: #fff; border-color: var(--orange-ink); transform: rotate(-45deg); }
+    .pf-now.feature { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .pf-now.feature p { color: var(--paper-dim); }
+    .pf-now.feature .pf-now-tag { color: var(--paper-faint); }
+    .pf-now.feature .pf-now-tag b { color: var(--orange); }
+    .pf-now.feature .pf-now-arrow { border-color: var(--paper-line); }
+    .pf-spark { position: absolute; right: 1.75rem; bottom: 1.9rem; width: calc(100% - 7rem); height: 44px; opacity: .9; pointer-events: none; }
+    .pf-spark path { fill: none; stroke: var(--orange); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .pf-spark .area { fill: url(#pfSparkFill); stroke: none; }
+
+    /* ---------------- ORIGIN ---------------- */
+    .pf-origin { display: grid; grid-template-columns: 5fr 7fr; gap: 5rem; align-items: start; }
+    .pf-equation { position: sticky; top: 110px; border: 1px solid var(--ink-line); border-radius: 22px; padding: 2rem; background: #fff; }
+    .pf-eq-row { display: grid; grid-template-columns: auto 1fr; gap: .2rem 1.2rem; align-items: baseline; padding: 1.1rem 0; border-bottom: 1px dashed var(--ink-line); }
+    .pf-eq-row:last-child { border-bottom: none; }
+    .pf-eq-op { font-family: var(--font-mono); color: var(--orange-ink); font-size: 1.1rem; width: 1.2rem; }
+    .pf-eq-word { font-size: clamp(2rem, 3.4vw, 2.8rem); font-weight: 900; letter-spacing: -.05em; line-height: 1; }
+    .pf-eq-word.mango { color: var(--orange); }
+    .pf-eq-note { grid-column: 2; font-size: .9rem; color: var(--ink-faint); margin-top: .35rem; }
+    .pf-story p { font-size: 1.12rem; line-height: 1.7; color: var(--ink-dim); margin-bottom: 1.4rem; max-width: 60ch; }
+    .pf-story p:first-child::first-letter { float: left; font-size: 4.6rem; line-height: .82; font-weight: 900; padding: .35rem .6rem 0 0; color: var(--orange); }
+    .pf-story strong { color: var(--ink); font-weight: 600; }
+    .pf-numbers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2.5rem; border-top: 1px solid var(--ink); padding-top: 1.5rem; }
+    .pf-num { font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 900; letter-spacing: -.05em; line-height: 1; font-variant-numeric: tabular-nums; }
+    .pf-num-label { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); margin-top: .5rem; }
+
+    /* ---------------- LORE ---------------- */
+    .pf-lore-sec { background: var(--ink); color: var(--paper); padding: 7rem 0; }
+    .pf-lore-sec .pf-h2 em { color: var(--orange); }
+    .pf-lore-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--paper-line); border: 1px solid var(--paper-line); border-radius: 20px; overflow: hidden; }
+    .pf-lore { background: var(--ink); padding: 2rem 1.75rem 2.25rem; position: relative; transition: background .4s ease; min-height: 240px; display: flex; flex-direction: column; gap: 1rem; }
+    .pf-lore:hover { background: #151515; }
+    .pf-lore-no { font-family: var(--font-mono); font-size: .72rem; color: var(--orange); letter-spacing: .1em; }
+    .pf-lore h3 { font-size: 1.3rem; font-weight: 700; letter-spacing: -.025em; line-height: 1.2; }
+    .pf-lore p { font-size: .95rem; line-height: 1.6; color: var(--paper-dim); }
+    .pf-lore-emoji { position: absolute; top: 1.6rem; right: 1.6rem; font-size: 1.6rem; filter: grayscale(1); opacity: .5; transition: filter .4s ease, opacity .4s ease, transform .5s cubic-bezier(.16,1,.3,1); }
+    .pf-lore:hover .pf-lore-emoji { filter: none; opacity: 1; transform: rotate(-12deg) scale(1.2); }
+
+    /* ---------------- YEAR RAIL ---------------- */
+    .pf-rail-ctrl { display: flex; gap: .5rem; }
+    .pf-rail-btn { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--ink-line); background: #fff; cursor: pointer; display: grid; place-items: center; color: var(--ink); transition: border-color .3s ease, background .3s ease, color .3s ease; }
+    .pf-rail-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .pf-rail-btn svg { width: 16px; height: 16px; }
+    .pf-rail {
+      display: grid; grid-auto-flow: column; grid-auto-columns: min(78vw, 330px); gap: 1.25rem;
+      overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: .5rem var(--gutter) 1.5rem;
+      margin: 0 calc(50% - 50vw) 0 calc(-1 * var(--gutter));
+      scroll-padding-inline: var(--gutter);
+    }
+    .pf-rail::-webkit-scrollbar { display: none; }
+    .pf-yr { scroll-snap-align: start; display: flex; flex-direction: column; }
+    .pf-yr-img { aspect-ratio: 4 / 3; border-radius: 16px; overflow: hidden; background: var(--ink-line-soft); position: relative; }
+    .pf-yr-img img { width: 100%; height: 100%; object-fit: cover; display: block; filter: grayscale(.85) contrast(1.05); transition: filter .6s ease, transform .8s cubic-bezier(.16,1,.3,1); }
+    .pf-yr:hover .pf-yr-img img { filter: none; transform: scale(1.04); }
+    .pf-yr-img.solid { background: var(--orange); display: grid; place-items: center; }
+    .pf-yr-img.solid span { font-size: 3.2rem; font-weight: 900; color: var(--ink); letter-spacing: -.05em; }
+    .pf-yr-year { font-family: var(--font-mono); font-size: .78rem; color: var(--orange-ink); letter-spacing: .08em; margin: 1.1rem 0 .4rem; display: flex; align-items: center; gap: .6rem; }
+    .pf-yr-year::after { content: ''; flex: 1; height: 1px; background: var(--ink-line); }
+    .pf-yr h3 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.025em; }
+    .pf-yr p { font-size: .92rem; line-height: 1.5; color: var(--ink-faint); margin-top: .35rem; }
+
+    /* ---------------- PROOF ---------------- */
+    .pf-proof { display: grid; grid-template-columns: 7fr 5fr; gap: 1.25rem; }
+    .pf-marks { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--ink-line); border-radius: 20px; overflow: hidden; background: #fff; }
+    .pf-mark { display: grid; place-items: center; padding: 2rem 1rem; font-weight: 800; font-size: 1.15rem; letter-spacing: -.03em; color: var(--ink-faint); border-right: 1px solid var(--ink-line-soft); border-bottom: 1px solid var(--ink-line-soft); transition: color .3s ease, background .3s ease; text-align: center; }
+    .pf-mark:nth-child(3n) { border-right: none; }
+    .pf-mark:nth-last-child(-n+3) { border-bottom: none; }
+    .pf-mark:hover { color: var(--ink); background: rgba(242,90,39,.06); }
+    .pf-quote { border-radius: 20px; padding: 2rem; background: var(--orange); color: var(--ink); display: flex; flex-direction: column; justify-content: space-between; gap: 2rem; text-decoration: none; transition: transform .5s cubic-bezier(.16,1,.3,1); }
+    .pf-quote:hover { transform: rotate(-1deg) translateY(-4px); }
+    .pf-quote blockquote { font-size: clamp(1.15rem, 1.8vw, 1.45rem); font-weight: 600; line-height: 1.35; letter-spacing: -.02em; }
+    .pf-quote blockquote b { background: var(--ink); color: var(--orange); padding: 0 .3rem; font-weight: 700; }
+    .pf-quote-by { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; display: flex; justify-content: space-between; gap: 1rem; }
+
+    /* ---------------- TALK ---------------- */
+    .pf-talk { position: relative; border-radius: 24px; overflow: hidden; aspect-ratio: 16 / 9; background: var(--ink); }
+    .pf-talk iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .pf-talk-poster { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; cursor: pointer; background: radial-gradient(700px 400px at 85% 20%, rgba(242,90,39,.4), transparent 60%), var(--ink); color: var(--paper); text-align: left; font-family: inherit; }
+    .pf-talk-poster img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .55; transition: opacity .5s ease, transform 1s cubic-bezier(.16,1,.3,1); }
+    .pf-talk-poster:hover img { opacity: .4; transform: scale(1.03); }
+    .pf-talk-copy { position: absolute; left: clamp(1.25rem, 4vw, 3rem); bottom: clamp(1.25rem, 4vw, 3rem); right: clamp(1.25rem, 4vw, 3rem); display: flex; align-items: end; justify-content: space-between; gap: 1.5rem; }
+    .pf-talk-title { font-size: clamp(1.5rem, 4vw, 3.4rem); font-weight: 900; letter-spacing: -.045em; line-height: 1; max-width: 16ch; }
+    .pf-talk-title small { display: block; font-family: var(--font-mono); font-size: .72rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--orange); margin-bottom: 1rem; }
+    .pf-play { flex-shrink: 0; width: clamp(64px, 9vw, 96px); aspect-ratio: 1; border-radius: 50%; background: var(--orange); display: grid; place-items: center; transition: transform .5s cubic-bezier(.16,1,.3,1); }
+    .pf-play svg { width: 34%; height: 34%; margin-left: 8%; fill: var(--ink); }
+    .pf-talk-poster:hover .pf-play { transform: scale(1.1); }
+
+    /* ---------------- OFF THE CLOCK ---------------- */
+    .pf-off { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: minmax(150px, auto); gap: 1.25rem; }
+    .pf-tile-sub { display: block; font-weight: 700; font-size: 1.05rem; letter-spacing: -.02em; margin-top: .5rem; }
+    .pf-off > * { border-radius: 20px; overflow: hidden; position: relative; }
+    .pf-off img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .8s cubic-bezier(.16,1,.3,1); }
+    .pf-off figure:hover img { transform: scale(1.04); }
+    .pf-off figcaption { position: absolute; left: 1rem; bottom: 1rem; background: var(--paper); color: var(--ink); font-family: var(--font-mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; padding: .4rem .65rem; border-radius: 999px; }
+    .pf-off-a { grid-column: span 5; grid-row: span 3; }
+    .pf-off-b { grid-column: span 4; grid-row: span 2; }
+    .pf-off-c { grid-column: span 3; grid-row: span 2; }
+    .pf-off-d { grid-column: span 7; grid-row: span 1; }
+    .pf-tile { padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--ink-line); background: #fff; }
+    .pf-tile-k { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); }
+    .pf-tile-v { font-size: clamp(2.4rem, 5vw, 4.2rem); font-weight: 900; letter-spacing: -.05em; line-height: .9; }
+    .pf-tile-v em { font-style: normal; color: var(--orange); }
+    .pf-tile.stamp { background: var(--orange); border-color: var(--orange); }
+    .pf-tile.stamp .pf-tile-k { color: var(--ink); opacity: .7; }
+    .pf-tile.row { flex-direction: row; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+    .pf-chips { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .pf-chip { padding: .5rem .9rem; border-radius: 999px; border: 1px solid var(--ink-line); font-size: .9rem; font-weight: 500; background: var(--paper); }
+
+    /* ---------------- CTA additions ---------------- */
+    .pf-ask { font-size: clamp(1.2rem, 2.2vw, 1.8rem); color: var(--paper-dim); font-weight: 500; letter-spacing: -.02em; min-height: 1.4em; }
+    .pf-ask span { color: var(--paper); border-bottom: 2px solid var(--orange); }
+    .pf-ask span::after { content: '▍'; color: var(--orange); margin-left: 2px; animation: pf-blink 1s steps(1) infinite; border: none; }
+    @keyframes pf-blink { 50% { opacity: 0; } }
+    .pf-copy[data-copied="true"] { border-color: var(--orange) !important; color: var(--orange) !important; }
+
+    /* ---------------- RESPONSIVE ---------------- */
+    @media (max-width: 1100px) {
+      .pf-hero-grid { grid-template-columns: minmax(0, 1fr) 320px; gap: 3rem; }
+      .pf-origin { grid-template-columns: 1fr; gap: 3rem; }
+      .pf-equation { position: static; }
+      .pf-lore-grid { grid-template-columns: repeat(2, 1fr); }
+      .pf-proof { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 860px) {
+      .pf-hero { padding: 7.5rem 0 3.5rem; }
+      .pf-hero-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .pf-card-wrap { justify-self: center; max-width: 340px; }
+      .pf-now-grid { grid-template-columns: 1fr; }
+      .pf-now { min-height: 0; }
+      .pf-spark { display: none; }
+      .pf-section, .pf-lore-sec { padding: 4.5rem 0; }
+      .pf-off { grid-template-columns: repeat(2, 1fr); grid-auto-rows: minmax(170px, auto); }
+      .pf-off-a { grid-column: span 2; grid-row: span 2; }
+      .pf-off-b, .pf-off-c { grid-column: span 1; grid-row: span 1; }
+      .pf-off-d { grid-column: span 2; grid-row: auto; }
+      .pf-tile.row { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 600px) {
+      .pf-lore-grid { grid-template-columns: 1fr; }
+      .pf-lore { min-height: 0; }
+      .pf-marks { grid-template-columns: repeat(2, 1fr); }
+      .pf-mark:nth-child(3n) { border-right: 1px solid var(--ink-line-soft); }
+      .pf-mark:nth-child(2n) { border-right: none; }
+      .pf-mark:nth-last-child(-n+3) { border-bottom: 1px solid var(--ink-line-soft); }
+      .pf-mark:nth-last-child(-n+2) { border-bottom: none; }
+      .pf-numbers { grid-template-columns: 1fr 1fr; }
+      .pf-talk { aspect-ratio: 4 / 5; }
+      .pf-talk-copy { flex-direction: column; align-items: flex-start; }
+      .pf-rail-ctrl { display: none; }
+      .pf-status { font-size: .66rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pf-ticker-track { animation: none; flex-wrap: wrap; }
+      .pf-ticker-group[aria-hidden="true"] { display: none; }
+      .js .pf-reveal { opacity: 1; transform: none; }
+      .pf-name .pf-last path { stroke-dashoffset: 0; }
+    }
   </style>
+  <script>document.documentElement.classList.add('js');</script>
 </head>
 
 <body>
@@ -1539,119 +1853,328 @@
   </div>
   <!-- /chrome:nav -->
 
-  <!-- ======================= HERO ======================= -->
-  <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-container">
+  <div class="pf-progress" id="pfProgress" aria-hidden="true"></div>
 
-      <div class="hero-top">
-        <a href="about.html#team" class="hero-back">
+  <!-- ======================= HERO ======================= -->
+  <section class="pf-hero" id="pfHero">
+    <div class="pf-wrap">
+      <div class="pf-hero-top">
+        <a href="about.html#team" class="pf-back">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           Meet the team
         </a>
+        <a href="barometer.html" class="pf-status"><span class="pf-dot" aria-hidden="true"></span>Now: tracking financial stress, live</a>
       </div>
 
-      <div class="hero-grid">
-        <div class="hero-text">
-          <span class="eyebrow">Founder & Executive Director</span>
-          <h1>Scott <em>Glasgow<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em></h1>
-          <p class="hero-bio">
-            Building products that improve human well-being at scale. Leading FinMango's mission to transform financial health globally, with work featured by Google Health, WHO, and World Bank.
+      <div class="pf-hero-grid">
+        <div>
+          <span class="eyebrow">Founder &amp; Executive Director · Since 2016</span>
+          <h1 class="pf-name">
+            <span>Scott</span>
+            <span class="pf-last">Glasgow<svg viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></span>
+          </h1>
+          <p class="pf-lede">
+            I build things that make people's financial lives <strong>less fragile</strong>. What began as an energy bar company out of Kent State became curriculum in 13 countries, data used by the <strong>WHO and World Bank</strong>, and a live instrument that reads financial stress across America.
           </p>
-          <div class="hero-actions">
-          <a href="https://www.linkedin.com/in/sglasgow/" target="_blank" rel="noopener noreferrer" class="btn-primary">
-            Connect on LinkedIn
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
-          <a href="mailto:scott@finmango.org" class="btn-secondary">
-            Get in touch
-          </a>
+          <div class="pf-actions">
+            <a href="https://www.linkedin.com/in/sglasgow/" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              Connect on LinkedIn
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#talk" class="btn-secondary">Watch the TEDx talk</a>
           </div>
         </div>
 
-        <figure class="hero-portrait">
-          <img src="scott_new_pic.jpeg" alt="Scott Glasgow, Founder & Executive Director, FinMango">
-          <figcaption><span>Scott Glasgow</span><span>FinMango team</span></figcaption>
-        </figure>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="team-section">
-    <div class="team-section-container">
-      <div class="section-head-sm" style="margin-bottom:2.5rem"><span class="eyebrow">The journey</span></div>
-      <div class="rail-grid">
-        <span class="eyebrow" style="margin-top:.2rem">Kent State → the world</span>
-        <div class="rail-body">
-        <p>It began with a simple idea during discussions at <strong>Kent State University</strong>, sparked by two inspiring professors. While ideas often come and go, this one felt different—it could be something bigger.</p>
-        <p>My passion for finance and, yes, <strong>mangoes</strong> led to the birth of FinMango. What started as an energy bar company with a charitable foundation evolved into something extraordinary when the business failed but the foundation thrived. Sometimes our greatest successes emerge from unexpected places.</p>
-        <p>During a transformative visit to <strong>San Francisco</strong> with my friend Oscar, we reimagined FinMango as a force for improving financial health worldwide. Together with partners Steffan Dwarkasignh and Jeff Jensen, we built the non-profit and launched our first program in Canton, Ohio. From there, we expanded rapidly—reaching <strong>13 countries</strong> with our Money Cycle curriculum, making financial well-being accessible to all.</p>
-        <p>Today, FinMango has impacted over <strong>10 million people</strong> across <strong>100+ countries</strong>, educating <strong>100,000+ students</strong> about investing and retirement planning. Our research and data are now used by organizations like <strong>WHO</strong>, <strong>World Bank</strong>, and <strong>IMF</strong> to inform global financial health policy.</p>
+        <div class="pf-card-wrap">
+          <div class="pf-card" id="pfCard">
+            <div class="pf-face pf-front">
+              <div class="pf-card-bar top"><span>FinMango</span><span class="pf-card-no">Member № 001</span></div>
+              <img src="scott_new_pic.jpeg" alt="Scott Glasgow, Founder & Executive Director, FinMango" width="890" height="1113">
+              <div class="pf-card-bar bottom">
+                <div><span class="pf-card-name">Scott Glasgow</span><span class="pf-card-role">Founder · Est. 2016</span></div>
+                <span class="pf-barcode" aria-hidden="true"></span>
+              </div>
+            </div>
+            <div class="pf-face pf-back-face" aria-hidden="true">
+              <h3>Player stats</h3>
+              <ul class="pf-stats">
+                <li><span>Position</span><span>Founder &amp; ED</span></li>
+                <li><span>Alma mater</span><span>Kent State</span></li>
+                <li><span>First program</span><span>Canton, Ohio</span></li>
+                <li><span>Countries visited</span><span>39+</span></li>
+                <li><span>Sport</span><span>Tennis (NCAA)</span></li>
+                <li><span>Off-court</span><span>Pickup basketball</span></li>
+                <li><span>Fruit of choice</span><span>Obviously 🥭</span></li>
+              </ul>
+              <div class="pf-back-foot">Ask me about the energy bar →</div>
+            </div>
+          </div>
+          <button type="button" class="pf-flip" id="pfFlip" aria-pressed="false" aria-controls="pfCard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+            <span>Flip the card</span>
+          </button>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="team-section">
-    <div class="team-section-container">
-      <div class="section-head-sm" style="margin-bottom:2.5rem"><span class="eyebrow">Driving impact</span></div>
-      <div class="impact-strip" style="margin-top:0">
-        <div class="impact-item">
-          <div class="impact-num">01</div>
-          <div class="impact-title">Research Pioneer</div>
+  <!-- ======================= TICKER ======================= -->
+  <div class="pf-ticker-clip">
+  <div class="pf-ticker" role="region" aria-label="Highlights">
+    <div class="pf-ticker-track">
+      <div class="pf-ticker-group">
+        <span class="pf-ticker-item"><b>10M+</b> lives impacted</span>
+        <span class="pf-ticker-item"><b>100+</b> countries</span>
+        <span class="pf-ticker-item"><b>100K+</b> students taught to invest</span>
+        <span class="pf-ticker-item">Data used by <b>WHO · World Bank · IMF</b></span>
+        <span class="pf-ticker-item"><b>TEDx</b> speaker</span>
+        <span class="pf-ticker-item">Former <b>NCAA</b> athlete</span>
+        <span class="pf-ticker-item"><b>24 hrs</b> live on Zoom — a world record</span>
+      </div>
+      <div class="pf-ticker-group" aria-hidden="true">
+        <span class="pf-ticker-item"><b>10M+</b> lives impacted</span>
+        <span class="pf-ticker-item"><b>100+</b> countries</span>
+        <span class="pf-ticker-item"><b>100K+</b> students taught to invest</span>
+        <span class="pf-ticker-item">Data used by <b>WHO · World Bank · IMF</b></span>
+        <span class="pf-ticker-item"><b>TEDx</b> speaker</span>
+        <span class="pf-ticker-item">Former <b>NCAA</b> athlete</span>
+        <span class="pf-ticker-item"><b>24 hrs</b> live on Zoom — a world record</span>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ======================= NOW ======================= -->
+  <section class="pf-section" style="padding-top:8rem">
+    <div class="pf-wrap">
+      <div class="pf-head pf-reveal">
+        <div>
+          <span class="eyebrow">/now · September 2026</span>
+          <h2 class="pf-h2">What I'm <em>building</em> right now.</h2>
         </div>
-        <div class="impact-item">
-          <div class="impact-num">02</div>
-          <div class="impact-title">Education Innovator</div>
+      </div>
+      <div class="pf-now-grid">
+        <a href="barometer.html" class="pf-now feature pf-reveal">
+          <div class="pf-now-tag"><span>01 · Research</span><b>● Live</b></div>
+          <h3>Financial Health Barometer</h3>
+          <p>A weekly read of financial stress in all 50 states, built on real-time search signal from Google's Health Trends team plus BLS and Census data.</p>
+          <svg class="pf-spark" viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true">
+            <defs><linearGradient id="pfSparkFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F25A27" stop-opacity=".35"/><stop offset="1" stop-color="#F25A27" stop-opacity="0"/></linearGradient></defs>
+            <path class="area" d="M0 48 L20 44 L40 46 L60 36 L80 40 L100 28 L120 32 L140 20 L160 24 L180 12 L200 16 L200 60 L0 60 Z"/>
+            <path d="M0 48 L20 44 L40 46 L60 36 L80 40 L100 28 L120 32 L140 20 L160 24 L180 12 L200 16"/>
+          </svg>
+          <span class="pf-now-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </a>
+        <a href="barrier-breakers.html" class="pf-now pf-reveal">
+          <div class="pf-now-tag"><span>02 · Competition</span><b>Kent State</b></div>
+          <h3>Barrier Breakers</h3>
+          <p>Every spring, students pack Kent State to compete for $20,000+ in prizes solving the systemic barriers to financial health.</p>
+          <span class="pf-now-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </a>
+        <a href="ambassadors.html" class="pf-now pf-reveal">
+          <div class="pf-now-tag"><span>03 · Community</span><b>4 continents</b></div>
+          <h3>Ambassadors</h3>
+          <p>A global cohort of young leaders, now in its fourth year, carrying financial health work into their own communities.</p>
+          <span class="pf-now-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= ORIGIN ======================= -->
+  <section class="pf-section">
+    <div class="pf-wrap">
+      <div class="pf-head pf-reveal">
+        <div>
+          <span class="eyebrow">The origin story</span>
+          <h2 class="pf-h2">A failed energy bar. A foundation that <em>didn't</em>.</h2>
         </div>
-        <div class="impact-item">
-          <div class="impact-num">03</div>
-          <div class="impact-title">Global Speaker</div>
+      </div>
+      <div class="pf-origin">
+        <div class="pf-equation pf-reveal" aria-label="How FinMango got its name">
+          <div class="pf-eq-row">
+            <span class="pf-eq-op"></span>
+            <div><div class="pf-eq-word">FinMan</div></div>
+            <div class="pf-eq-note">From a Financial Management class at Kent State.</div>
+          </div>
+          <div class="pf-eq-row">
+            <span class="pf-eq-op">+</span>
+            <div><div class="pf-eq-word mango">Mango</div></div>
+            <div class="pf-eq-note">To bring brightness and color into the darkness.</div>
+          </div>
+          <div class="pf-eq-row">
+            <span class="pf-eq-op">=</span>
+            <div><div class="pf-eq-word">Fin<span style="color:var(--orange)">Mango</span></div></div>
+            <div class="pf-eq-note">A 501(c)(3) since 2016.</div>
+          </div>
         </div>
-        <div class="impact-item">
-          <div class="impact-num">04</div>
-          <div class="impact-title">Movement Builder</div>
+        <div class="pf-story pf-reveal">
+          <p>The spark came from class discussions at <strong>Kent State University</strong>, led by two professors, Dr. Via and Dr. Thornton. Ideas come and go. This one felt different.</p>
+          <p>My passion for finance and, yes, <strong>mangoes</strong> led to FinMango: an energy bar company with a charitable foundation attached. The business failed. The foundation thrived. Sometimes the thing you didn't plan is the thing that works.</p>
+          <p>On a trip to <strong>San Francisco</strong> with my friend Oscar, we reimagined FinMango as a force for financial health worldwide. With Steffan Dwarkasingh and Jeff Jensen we built the nonprofit and launched our first program in <strong>Canton, Ohio</strong>. The Money Cycle curriculum reached 13 countries soon after.</p>
+          <p>Ten years on, our research and data inform the <strong>WHO</strong>, <strong>World Bank</strong>, and <strong>IMF</strong>, and the mission hasn't changed: financial health is a right, not a privilege.</p>
+          <div class="pf-numbers">
+            <div><div class="pf-num" data-count="10" data-suffix="M+">10M+</div><div class="pf-num-label">Lives impacted</div></div>
+            <div><div class="pf-num" data-count="100" data-suffix="+">100+</div><div class="pf-num-label">Countries</div></div>
+            <div><div class="pf-num" data-count="100" data-suffix="K+">100K+</div><div class="pf-num-label">Students</div></div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="team-section">
-    <div class="team-section-container">
-      <div class="section-head-sm" style="margin-bottom:2.5rem"><span class="eyebrow">Work featured &amp; used by</span></div>
-      <div class="featured-grid" style="border-top:none;padding-top:0">
-        <div class="featured-copy">
-          <p>Our research and tools have been featured and used by <strong>Google Health</strong>, <strong>WHO</strong>, <strong>World Bank</strong>, <strong>Harvard Research</strong>, <strong>USAID</strong>, and <strong>Verily</strong>.</p>
+  <!-- ======================= LORE ======================= -->
+  <section class="pf-lore-sec on-ink">
+    <div class="pf-wrap">
+      <div class="pf-head pf-reveal">
+        <div>
+          <span class="eyebrow">Deep cuts</span>
+          <h2 class="pf-h2">Things that <em>aren't</em> on my LinkedIn.</h2>
         </div>
-        <div class="featured-tweet">
-          <blockquote class="twitter-tweet" data-theme="light" data-align="center"><p lang="en" dir="ltr">We're supporting the <a href="https://twitter.com/WHO?ref_src=twsrc%5Etfw">@WHO</a> COVID-19 Solidarity Response Fund and nonprofits like <a href="https://twitter.com/GiveDirectly?ref_src=twsrc%5Etfw">@GiveDirectly</a>, <a href="https://twitter.com/Finmango?ref_src=twsrc%5Etfw">@Finmango</a> and <a href="https://twitter.com/Kiva?ref_src=twsrc%5Etfw">@Kiva</a> helping people with urgent financial needs during the crisis. Learn more about how we&#39;re responding → <a href="https://t.co/MIoKTZNnTz">https://t.co/MIoKTZNnTz</a></p>&mdash; Google.org (@Googleorg) <a href="https://twitter.com/Googleorg/status/1299104929743765505?ref_src=twsrc%5Etfw">August 27, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        </div>
+      </div>
+      <div class="pf-lore-grid pf-reveal">
+        <article class="pf-lore">
+          <span class="pf-lore-emoji" aria-hidden="true">🛶</span>
+          <span class="pf-lore-no">01</span>
+          <h3>Team meetings on kayaks.</h3>
+          <p>The early team met on the water and worked late nights at Starbucks. Office space was optional. Momentum wasn't.</p>
+        </article>
+        <article class="pf-lore">
+          <span class="pf-lore-emoji" aria-hidden="true">🎤</span>
+          <span class="pf-lore-no">02</span>
+          <h3>One talk, 50,000 students.</h3>
+          <p>Speaking to 500 students at University of Akron Finance Day, I met Bob Gillingham. As "Mango Bob," his investing class went on to reach 50,000+ students.</p>
+        </article>
+        <article class="pf-lore">
+          <span class="pf-lore-emoji" aria-hidden="true">🎓</span>
+          <span class="pf-lore-no">03</span>
+          <h3>15 minutes with Steve Ballmer.</h3>
+          <p>A chance conversation on Harvard's campus with teammate Brandyn Neal that doubled down our commitment to the mission.</p>
+        </article>
+        <article class="pf-lore">
+          <span class="pf-lore-emoji" aria-hidden="true">⏱️</span>
+          <span class="pf-lore-no">04</span>
+          <h3>A 24-hour world record on Zoom.</h3>
+          <p>EXTRAVAGANZA, 2020: 24 straight hours of live content, 1,600+ attendees, and 300,000+ people reached on social.</p>
+        </article>
+        <article class="pf-lore">
+          <span class="pf-lore-emoji" aria-hidden="true">📰</span>
+          <span class="pf-lore-no">05</span>
+          <h3>An op-ed that trended.</h3>
+          <p>Co-written with Oscar Wahltinez on COVID-19 data for K-12 schools, then picked up by CNN, The New York Times, Fortune, and NBC.</p>
+        </article>
+        <article class="pf-lore">
+          <span class="pf-lore-emoji" aria-hidden="true">🧪</span>
+          <span class="pf-lore-no">06</span>
+          <h3>A "semi-secret moonshot factory."</h3>
+          <p>Mango X, founded in 2021, builds tools and calculators now used by thousands of teachers nationwide.</p>
+        </article>
       </div>
     </div>
   </section>
 
-  <section class="team-section">
-    <div class="team-section-container">
-      <div class="section-head-sm" style="margin-bottom:2.5rem"><span class="eyebrow">TEDx talk</span></div>
-      <p class="video-lede" style="margin-top:0">Watch Scott discuss financial health equity and the urgent need for systemic change in how we approach financial wellness globally.</p>
-      <div class="video-frame">
-        <iframe src="https://www.youtube.com/embed/dyPGGwcF3mE" title="Scott Glasgow TEDx Talk" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <!-- ======================= YEAR RAIL ======================= -->
+  <section class="pf-section" style="padding-top:7rem">
+    <div class="pf-wrap">
+      <div class="pf-head pf-reveal">
+        <div>
+          <span class="eyebrow">2015 → 2026</span>
+          <h2 class="pf-h2">A decade, <em>one frame</em> at a time.</h2>
+        </div>
+        <div style="display:flex;gap:1.25rem;align-items:center">
+          <a href="history.html" class="pf-link">Full history</a>
+          <div class="pf-rail-ctrl">
+            <button type="button" class="pf-rail-btn" data-dir="-1" aria-label="Previous years"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+            <button type="button" class="pf-rail-btn" data-dir="1" aria-label="Next years"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="pf-rail" id="pfRail" tabindex="0" aria-label="FinMango timeline, scroll horizontally">
+        <article class="pf-yr"><div class="pf-yr-img"><img src="history1.jpeg" alt="Kent State University, 2015" loading="lazy"></div><div class="pf-yr-year">2015</div><h3>The spark</h3><p>Class discussions at Kent State turn into an idea that won't go away.</p></article>
+        <article class="pf-yr"><div class="pf-yr-img"><img src="history3.jpg" alt="FinMango's early team, 2016" loading="lazy"></div><div class="pf-yr-year">2016</div><h3>The foundation</h3><p>The bar company folds. The nonprofit launches in Canton, Ohio.</p></article>
+        <article class="pf-yr"><div class="pf-yr-img"><img src="history4.jpg" alt="Team meetings, 2017" loading="lazy"></div><div class="pf-yr-year">2017</div><h3>Building momentum</h3><p>Mango Bob's investing class hits schools across the U.S.</p></article>
+        <article class="pf-yr"><div class="pf-yr-img"><img src="history5.jpg" alt="JP Morgan Chase Foundation event in San Francisco, 2018" loading="lazy"></div><div class="pf-yr-year">2018</div><h3>Going global</h3><p>FinMango India forms; the founding team heads to San Francisco.</p></article>
+        <article class="pf-yr"><div class="pf-yr-img"><img src="history6.jpg" alt="Fincubator program in Uganda, 2019" loading="lazy"></div><div class="pf-yr-year">2019</div><h3>The Fincubator</h3><p>12 businesses and 211 bank accounts opened with partners in Uganda.</p></article>
+        <article class="pf-yr"><div class="pf-yr-img"><img src="history7.jpg" alt="EXTRAVAGANZA conference, 2020" loading="lazy"></div><div class="pf-yr-year">2020</div><h3>Record-breaking</h3><p>A 24-hour Zoom world record and the COVID-19 Open Data Project with Google.</p></article>
+        <article class="pf-yr"><div class="pf-yr-img"><img src="history10.jpeg" alt="Google Health grant recognition, 2021" loading="lazy"></div><div class="pf-yr-year">2021</div><h3>Mango X</h3><p>The moonshot factory opens; a $50K Google Health grant follows.</p></article>
+        <article class="pf-yr"><div class="pf-yr-img"><img src="history12.jpg" alt="NYC relaunch on National Mango Day, 2022" loading="lazy"></div><div class="pf-yr-year">2022</div><h3>The relaunch</h3><p>A new chapter kicks off in NYC on National Mango Day.</p></article>
+        <article class="pf-yr"><div class="pf-yr-img"><img src="history13.png" alt="Ambassador Program launch, 2023" loading="lazy"></div><div class="pf-yr-year">2023</div><h3>Ambassadors</h3><p>The first ambassador cohort is selected.</p></article>
+        <article class="pf-yr"><div class="pf-yr-img"><img src="history16.png" alt="FinTrends for Good initiative, 2024" loading="lazy"></div><div class="pf-yr-year">2024</div><h3>FinTrends for Good</h3><p>Using search data to spot financial hardship as it happens.</p></article>
+        <article class="pf-yr"><div class="pf-yr-img"><img src="kent2025.jpg" alt="Barrier Breakers competitors at Kent State University, 2025" loading="lazy"></div><div class="pf-yr-year">2025</div><h3>Back to Kent State</h3><p>Barrier Breakers returns home; the Barometer goes open source.</p></article>
+        <article class="pf-yr"><div class="pf-yr-img solid"><span>Live.</span></div><div class="pf-yr-year">2026</div><h3>The Barometer goes live</h3><p>Financial stress, read weekly, across all 50 states.</p></article>
       </div>
     </div>
   </section>
 
-  <section class="team-section">
-    <div class="team-section-container">
-      <div class="section-head-sm" style="margin-bottom:2.5rem"><span class="eyebrow">Beyond the work</span></div>
-      <p class="video-lede" style="margin-top:0;max-width:62ch">When not working on improving financial health globally, you'll find me on the tennis court (former NCAA athlete), playing basketball, or exploring new countries as a budget traveler. I've visited 39+ countries and continue to explore how technology can scale human well-being.</p>
-      <div class="interest-chips">
-        <span class="interest-chip">Tennis</span>
-        <span class="interest-chip">Basketball</span>
-        <span class="interest-chip">Travel</span>
-        <span class="interest-chip">Research</span>
-        <span class="interest-chip">Innovation</span>
-        <span class="interest-chip">Global Impact</span>
+  <!-- ======================= PROOF ======================= -->
+  <section class="pf-section">
+    <div class="pf-wrap">
+      <div class="pf-head pf-reveal">
+        <div>
+          <span class="eyebrow">Featured &amp; used by</span>
+          <h2 class="pf-h2">Work that ended up in <em>serious</em> places.</h2>
+        </div>
+      </div>
+      <div class="pf-proof pf-reveal">
+        <div class="pf-marks">
+          <div class="pf-mark">Google Health</div>
+          <div class="pf-mark">WHO</div>
+          <div class="pf-mark">World Bank</div>
+          <div class="pf-mark">IMF</div>
+          <div class="pf-mark">Harvard Research</div>
+          <div class="pf-mark">USAID</div>
+          <div class="pf-mark">Verily</div>
+          <div class="pf-mark">CNN</div>
+          <div class="pf-mark">U.S. News</div>
+        </div>
+        <a class="pf-quote" href="https://twitter.com/Googleorg/status/1299104929743765505" target="_blank" rel="noopener noreferrer">
+          <blockquote>"We're supporting the @WHO COVID-19 Solidarity Response Fund and nonprofits like @GiveDirectly, <b>@Finmango</b> and @Kiva helping people with urgent financial needs during the crisis."</blockquote>
+          <div class="pf-quote-by"><span>— Google.org</span><span>Aug 27, 2020 ↗</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= TALK ======================= -->
+  <section class="pf-section" id="talk">
+    <div class="pf-wrap">
+      <div class="pf-talk pf-reveal" id="pfTalk">
+        <button type="button" class="pf-talk-poster" id="pfTalkBtn" aria-label="Play Scott Glasgow's TEDx talk">
+          <img src="https://i.ytimg.com/vi/dyPGGwcF3mE/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()">
+          <span class="pf-talk-copy">
+            <span class="pf-talk-title"><small>TEDx talk</small>Financial health equity, and why it needs systemic change.</span>
+            <span class="pf-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= OFF THE CLOCK ======================= -->
+  <section class="pf-section">
+    <div class="pf-wrap">
+      <div class="pf-head pf-reveal">
+        <div>
+          <span class="eyebrow">Off the clock</span>
+          <h2 class="pf-h2">Budget traveler. Tennis lifer. <em>Mango</em> enthusiast.</h2>
+        </div>
+      </div>
+      <div class="pf-off pf-reveal">
+        <figure class="pf-off-a"><img src="scott.jpg" alt="Scott in a FinMango t-shirt in front of a waterfall" loading="lazy"><figcaption>Field office</figcaption></figure>
+        <div class="pf-off-b pf-tile stamp">
+          <span class="pf-tile-k">Passport stamps</span>
+          <div><span class="pf-tile-v" data-count="39" data-suffix="+">39+</span><span class="pf-tile-sub">countries and counting</span></div>
+        </div>
+        <figure class="pf-off-c"><img src="scott1.jpg" alt="Scott in an infinity mirror room" loading="lazy"><figcaption>Always exploring</figcaption></figure>
+        <div class="pf-off-d pf-tile row">
+          <span class="pf-tile-k">Find me</span>
+          <div class="pf-chips">
+            <span class="pf-chip">🎾 On a tennis court (ex-NCAA)</span>
+            <span class="pf-chip">🏀 Playing pickup</span>
+            <span class="pf-chip">✈️ Hunting cheap flights</span>
+            <span class="pf-chip">🔬 Reading research</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -1659,13 +2182,15 @@
   <!-- ======================= CTA ======================= -->
   <section class="cta on-ink">
     <div class="cta-container">
-      <span class="eyebrow">Work with us</span>
+      <span class="eyebrow">Say hello</span>
       <h2>Let's build the future of <em>financial&nbsp;health.</em></h2>
+      <p class="pf-ask" aria-live="polite">Ask me about <span id="pfAsk">partnering with FinMango</span></p>
       <div class="cta-bottom-actions">
         <a href="mailto:scott@finmango.org" class="btn-primary">
-          Get in touch
+          scott@finmango.org
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
+        <button type="button" class="btn-secondary pf-copy" id="pfCopy" data-email="scott@finmango.org">Copy email</button>
         <a href="about.html#team" class="btn-secondary">Meet the team</a>
       </div>
     </div>
@@ -1764,6 +2289,151 @@
     });
   </script>
   <!-- /chrome:script -->
+
+  <!-- profile v2 interactions -->
+  <script>
+    (function () {
+      document.documentElement.classList.add('js');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+      // Scroll progress bar
+      const bar = document.getElementById('pfProgress');
+      if (bar) {
+        const onScroll = () => {
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          bar.style.transform = 'scaleX(' + (max > 0 ? window.scrollY / max : 0) + ')';
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+
+      // Hero glow follows the pointer
+      const hero = document.getElementById('pfHero');
+      if (hero && finePointer && !reduce) {
+        hero.addEventListener('pointermove', (e) => {
+          const r = hero.getBoundingClientRect();
+          hero.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+          hero.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
+        });
+      }
+
+      // Member card: tilt + flip
+      const card = document.getElementById('pfCard');
+      const flip = document.getElementById('pfFlip');
+      if (card && flip) {
+        const back = card.querySelector('.pf-back-face');
+        const toggle = () => {
+          const on = card.classList.toggle('is-flipped');
+          flip.setAttribute('aria-pressed', on);
+          back.setAttribute('aria-hidden', !on);
+        };
+        flip.addEventListener('click', toggle);
+        card.addEventListener('click', toggle);
+        card.style.cursor = 'pointer';
+
+        if (finePointer && !reduce) {
+          card.addEventListener('pointermove', (e) => {
+            const r = card.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width - .5;
+            const y = (e.clientY - r.top) / r.height - .5;
+            card.classList.add('is-tilting');
+            card.style.setProperty('--ry', (x * 14) + 'deg');
+            card.style.setProperty('--rx', (-y * 14) + 'deg');
+            card.style.setProperty('--shine', (30 + (x + .5) * 40) + '%');
+          });
+          card.addEventListener('pointerleave', () => {
+            card.classList.remove('is-tilting');
+            card.style.setProperty('--ry', '0deg');
+            card.style.setProperty('--rx', '0deg');
+          });
+        }
+      }
+
+      // Reveal + count-up on scroll
+      const counters = document.querySelectorAll('[data-count]');
+      const countUp = (el) => {
+        const target = +el.dataset.count, suffix = el.dataset.suffix || '';
+        if (reduce) { el.textContent = target + suffix; return; }
+        const t0 = performance.now(), dur = 1400;
+        const step = (t) => {
+          const p = Math.min(1, (t - t0) / dur);
+          el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      };
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((en) => {
+            if (!en.isIntersecting) return;
+            en.target.classList.add('is-in');
+            en.target.querySelectorAll('[data-count]').forEach(countUp);
+            io.unobserve(en.target);
+          });
+        }, { threshold: .15 });
+        document.querySelectorAll('.pf-reveal').forEach((el) => io.observe(el));
+      } else {
+        document.querySelectorAll('.pf-reveal').forEach((el) => el.classList.add('is-in'));
+      }
+
+      // Year rail arrows
+      const rail = document.getElementById('pfRail');
+      document.querySelectorAll('.pf-rail-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const item = rail.querySelector('.pf-yr');
+          const w = item ? item.getBoundingClientRect().width + 20 : 340;
+          rail.scrollBy({ left: +btn.dataset.dir * w * 2, behavior: reduce ? 'auto' : 'smooth' });
+        });
+      });
+
+      // TEDx: load the iframe only on click (keeps the page fast)
+      const talkBtn = document.getElementById('pfTalkBtn');
+      if (talkBtn) {
+        talkBtn.addEventListener('click', () => {
+          const f = document.createElement('iframe');
+          f.src = 'https://www.youtube.com/embed/dyPGGwcF3mE?autoplay=1';
+          f.title = 'Scott Glasgow TEDx Talk';
+          f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+          f.allowFullscreen = true;
+          talkBtn.replaceWith(f);
+        });
+      }
+
+      // "Ask me about ___" typewriter
+      const ask = document.getElementById('pfAsk');
+      if (ask && !reduce) {
+        const topics = ['partnering with FinMango', 'financial health data', 'the energy bar that failed', 'Barrier Breakers', 'cheap flights to anywhere', 'your best tennis serve'];
+        let i = 0;
+        const type = (text, n = 0) => {
+          ask.textContent = text.slice(0, n);
+          if (n < text.length) return setTimeout(() => type(text, n + 1), 45);
+          setTimeout(erase, 2200);
+        };
+        const erase = () => {
+          const t = ask.textContent;
+          if (t.length) { ask.textContent = t.slice(0, -1); return setTimeout(erase, 22); }
+          i = (i + 1) % topics.length;
+          type(topics[i]);
+        };
+        setTimeout(erase, 2500);
+      }
+
+      // Copy email
+      const copy = document.getElementById('pfCopy');
+      if (copy && navigator.clipboard) {
+        copy.addEventListener('click', () => {
+          navigator.clipboard.writeText(copy.dataset.email).then(() => {
+            copy.textContent = 'Copied ✓';
+            copy.dataset.copied = 'true';
+            setTimeout(() => { copy.textContent = 'Copy email'; copy.dataset.copied = 'false'; }, 1800);
+          });
+        });
+      } else if (copy) {
+        copy.remove();
+      }
+    })();
+  </script>
 
 </body>
 </html>
