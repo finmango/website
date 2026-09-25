@@ -659,7 +659,7 @@
        ---------------------------------------------------------- */
     .hero {
       background: var(--paper);
-      padding: 8.5rem 0 3.5rem;
+      padding: 8rem 0 3rem;
       position: relative;
       overflow: hidden;
     }
@@ -713,7 +713,7 @@
     }
 
     .hero h1 {
-      font-size: clamp(2.6rem, 6.4vw, 5.6rem);
+      font-size: clamp(2.5rem, 5.8vw, 5rem);
       font-weight: 900;
       line-height: .98;
       letter-spacing: -.045em;
@@ -799,32 +799,112 @@
     /* ----------------------------------------------------------
        CALCULATOR
        ---------------------------------------------------------- */
-    .calc-section { padding: 1.5rem 0 5.5rem; }
-    .calc-grid {
-      display: grid;
-      grid-template-columns: 360px minmax(0, 1fr);
-      gap: 1.5rem;
-      align-items: start;
-    }
+    .stage-section { padding: 1rem 0 5rem; }
+    .stage { background: var(--panel); border: 1px solid var(--ink-line); display: flex; flex-direction: column; }
 
-    /* Controls */
-    .controls-panel {
-      background: var(--panel);
-      border: 1px solid var(--ink-line);
-      position: sticky;
-      top: 92px;
+    /* Stepper */
+    .stepper { display: flex; border-bottom: 1px solid var(--ink-line); overflow-x: auto; scrollbar-width: none; }
+    .stepper::-webkit-scrollbar { display: none; }
+    .step-tab {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: .35rem;
+      padding: 1rem 1.25rem .95rem;
+      background: none;
+      border: none;
+      border-right: 1px solid var(--ink-line-soft);
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      color: var(--ink-faint);
+      position: relative;
       min-width: 0;
+      transition: color .2s ease, background .2s ease;
     }
-    .panel-head {
+    .step-tab:last-child { border-right: none; }
+    .step-tab::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -1px;
+      height: 2px;
+      background: var(--orange);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .35s cubic-bezier(.16, 1, .3, 1);
+    }
+    .step-tab:hover { color: var(--ink); background: rgba(10, 10, 10, .025); }
+    .step-tab.is-active { color: var(--ink); }
+    .step-tab.is-active::after { transform: scaleX(1); }
+    .step-tab.is-done .step-n { color: var(--orange-ink); }
+    .step-tab:focus-visible { outline-offset: -3px; }
+    .step-n { font-family: var(--font-mono); font-size: .66rem; letter-spacing: .12em; }
+    .step-name { font-size: .86rem; font-weight: 600; letter-spacing: -.01em; line-height: 1.2; }
+
+    /* Recap of the inputs, shown on every step after the first */
+    .recap {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      width: 100%;
+      padding: .8rem 1.5rem;
+      background: var(--paper);
+      border: none;
+      border-bottom: 1px solid var(--ink-line);
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      color: var(--ink);
+    }
+    .recap[hidden] { display: none; }
+    .recap-label { font-family: var(--font-mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-faint); white-space: nowrap; }
+    .recap-chips { display: flex; flex-wrap: wrap; gap: .35rem 0; flex: 1; font-family: var(--font-mono); font-size: .78rem; font-variant-numeric: tabular-nums; }
+    .recap-chip { white-space: nowrap; }
+    .recap-chip + .recap-chip::before { content: '·'; margin: 0 .75rem; color: var(--ink-faint); }
+    .recap-edit { font-size: .82rem; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; transition: color .2s ease; }
+    .recap:hover .recap-edit { color: var(--orange-ink); }
+
+    /* Steps */
+    .stage-body { padding: 2rem 2rem 2.25rem; min-height: 560px; }
+    .step { display: none; }
+    .step:focus { outline: none; }
+    .step.is-active { display: flex; flex-direction: column; gap: 1.5rem; animation: stepIn .4s cubic-bezier(.16, 1, .3, 1); }
+    @keyframes stepIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+    .step-head {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      gap: 2rem;
+      align-items: end;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--ink-line-soft);
+    }
+    .step-head h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 900; letter-spacing: -.04em; line-height: 1; margin-top: .75rem; }
+    .step-head p { font-size: 1.02rem; color: var(--ink-dim); line-height: 1.55; max-width: 48ch; }
+
+    .inputs-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border: 1px solid var(--ink-line); }
+    .inputs-grid .controls-section { border-bottom: none; border-right: 1px solid var(--ink-line); padding: 1.5rem; }
+    .inputs-grid .controls-section:last-child { border-right: none; }
+
+    .live-line { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--ink-line-soft); font-size: .88rem; color: var(--ink-dim); display: flex; align-items: center; gap: .6rem; line-height: 1.4; }
+    .live-line strong { color: var(--ink); font-weight: 700; }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); flex-shrink: 0; box-shadow: 0 0 0 0 rgba(242, 90, 39, .5); animation: hb-pulse 2.4s ease-out infinite; }
+
+    .stage-foot {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 1rem;
-      padding: 1.1rem 1.5rem;
-      border-bottom: 1px solid var(--ink-line);
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--ink-line);
+      background: var(--paper);
     }
-    .panel-head .eyebrow { color: var(--ink); }
-    .panel-hint { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+    .stage-count { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em; color: var(--ink-faint); }
+    .stage-prev svg, .stage-next svg { width: 14px; height: 14px; }
+    .stage-prev svg { transition: transform .3s cubic-bezier(.16, 1, .3, 1); }
+    .stage-prev:hover svg { transform: translateX(-4px); }
+    .stage-prev[disabled] { opacity: .35; pointer-events: none; }
 
     .controls-section { padding: 1.35rem 1.5rem; border-bottom: 1px solid var(--ink-line-soft); }
     .controls-section:last-child { border-bottom: none; }
@@ -992,9 +1072,6 @@
     .derived-row-value.roth-partial { color: var(--ink-dim); }
     .derived-row-value.roth-out { color: var(--ink-faint); text-decoration: line-through; text-decoration-thickness: 1px; }
 
-    /* Results column */
-    .results-col { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
-
     /* The verdict — the one ink block in the calculator */
     .verdict {
       background: var(--ink);
@@ -1122,7 +1199,7 @@
     .chart-legend-item.roth .chart-legend-line { border-color: var(--s-roth); }
     .chart-legend-item.trad .chart-legend-line { border-color: var(--s-trad); }
     .chart-legend-item.brok .chart-legend-line { border-top-style: dashed; border-color: var(--s-brok); }
-    .chart-container { position: relative; width: 100%; height: 320px; }
+    .chart-container { position: relative; width: 100%; height: 380px; }
     .chart-container canvas { max-width: 100% !important; height: 100% !important; }
 
     /* Rule of thumb */
@@ -1162,18 +1239,7 @@
     /* ----------------------------------------------------------
        THE BATTLE EXPLAINED
        ---------------------------------------------------------- */
-    .edu-section { padding: 5rem 0 5.5rem; border-top: 1px solid var(--ink-line); background: var(--paper); }
-    .edu-header {
-      display: grid;
-      grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
-      gap: 3rem;
-      align-items: end;
-      margin-bottom: 3rem;
-    }
-    .edu-header h2 { font-size: clamp(2rem, 3.6vw, 3rem); font-weight: 900; letter-spacing: -.04em; line-height: 1; margin-top: 1rem; }
-    .edu-header p { font-size: 1.1rem; color: var(--ink-dim); line-height: 1.55; max-width: 44ch; }
-
-    .edu-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+    .edu-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
     .edu-fighter { background: var(--panel); border: 1px solid var(--ink-line); padding: 2rem; position: relative; }
     .edu-fighter::before { content: ''; position: absolute; top: -1px; left: -1px; right: -1px; height: 3px; background: var(--fighter-color); }
     .edu-fighter.traditional { --fighter-color: var(--s-trad); --fighter-text: var(--s-trad); }
@@ -1191,14 +1257,13 @@
     .edu-point-marker { flex-shrink: 0; width: 20px; height: 20px; border: 1px solid var(--ink); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: .72rem; margin-top: 2px; }
     .edu-point-marker.minus { border-color: var(--ink-line); color: var(--ink-faint); }
 
-    .edu-third { background: var(--panel); border: 1px solid var(--ink-line); padding: 1.75rem 2rem; margin-bottom: 3.5rem; position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: start; }
+    .edu-third { background: var(--panel); border: 1px solid var(--ink-line); padding: 1.75rem 2rem; position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: start; }
     .edu-third::before { content: ''; position: absolute; top: -1px; left: -1px; right: -1px; height: 3px; background: var(--s-brok); }
     .edu-third-eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--font-mono); font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--s-brok-text); margin-bottom: .6rem; }
     .edu-third-eyebrow .swatch { background: var(--s-brok); width: 10px; height: 10px; }
     .edu-third h3 { font-size: 1.35rem; font-weight: 800; letter-spacing: -.03em; margin-bottom: .5rem; }
     .edu-third p { font-size: .95rem; color: var(--ink-dim); line-height: 1.6; max-width: 70ch; }
 
-    .choose-head { margin-bottom: 1.5rem; }
     .choose-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--ink-line); background: var(--panel); }
     .choose-card { padding: 1.75rem; border-right: 1px solid var(--ink-line); }
     .choose-card:last-child { border-right: none; }
@@ -1209,7 +1274,7 @@
     .choose-card h4 { font-size: 1.15rem; font-weight: 700; letter-spacing: -.02em; margin-bottom: .5rem; line-height: 1.2; }
     .choose-card p { font-size: .88rem; color: var(--ink-dim); line-height: 1.55; }
 
-    .limits-strip { margin-top: 1.25rem; background: var(--ink); color: var(--paper); padding: 1.75rem 2rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .limits-strip { background: var(--ink); color: var(--paper); padding: 1.75rem 2rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
     .limits-item { border-left: 1px solid var(--paper-line); padding-left: 1.25rem; }
     .limits-label { font-family: var(--font-mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .12em; color: var(--paper-faint); margin-bottom: .5rem; }
     .limits-value { font-size: 1.6rem; font-weight: 800; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; margin-bottom: .35rem; }
@@ -1219,7 +1284,7 @@
        RESPONSIVE
        ---------------------------------------------------------- */
     @media (max-width: 1080px) {
-      .calc-grid { grid-template-columns: 320px minmax(0, 1fr); gap: 1.25rem; }
+      .stage-body { padding: 1.5rem; }
       .standing { grid-template-columns: 1.5rem 8rem minmax(0, 1fr) auto; }
       .fighter-card { padding: 1.1rem; }
       .limits-strip { grid-template-columns: repeat(2, 1fr); }
@@ -1230,15 +1295,17 @@
       .hero h1 { max-width: none; }
       .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; }
       .contestants { order: 2; }
-      .calc-section { padding: 1rem 0 4rem; }
-      .calc-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-      .controls-panel { position: static; }
-      .results-col { gap: 1.25rem; }
+      .stage-section { padding: .5rem 0 4rem; }
+      .stage-body { min-height: 0; padding: 1.25rem; }
+      .step.is-active { gap: 1.25rem; }
+      .step-head { grid-template-columns: 1fr; gap: .75rem; padding-bottom: 1.25rem; }
+      .inputs-grid { grid-template-columns: 1fr; }
+      .inputs-grid .controls-section { border-right: none; border-bottom: 1px solid var(--ink-line); }
+      .inputs-grid .controls-section:last-child { border-bottom: none; }
+      .live-line { margin-top: 1.25rem; }
       .showdown { gap: .75rem; }
       .fighter-card { padding: 1.1rem 1rem; }
       .fighter-value { font-size: 1.5rem; }
-      .edu-section { padding: 4rem 0 4.5rem; }
-      .edu-header { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2.25rem; }
       .choose-grid { grid-template-columns: 1fr; }
       .choose-card { border-right: none; border-bottom: 1px solid var(--ink-line); }
       .choose-card:last-child { border-bottom: none; }
@@ -1256,8 +1323,19 @@
       .contestant { grid-template-columns: 1.75rem 10px 1fr; }
       .contestant-tag { display: none; }
       .hb-status { display: none; }
-      .controls-section { padding: 1.2rem 1.15rem; }
-      .panel-head { padding: 1rem 1.15rem; }
+      .inputs-grid .controls-section { padding: 1.2rem 1.1rem; }
+      .step-tab { flex: 0 0 auto; padding: .85rem 1rem; }
+      .step-name { white-space: nowrap; }
+      .step-tab:not(.is-active) .step-name { display: none; }
+      .recap { padding: .7rem 1.1rem; gap: .85rem; }
+      .recap-label { display: none; }
+      .recap-chips { font-size: .72rem; }
+      .recap-chip + .recap-chip::before { margin: 0 .5rem; }
+      .stage-body { padding: 1.1rem; }
+      .stage-foot { padding: .85rem 1.1rem; }
+      .stage-count { display: none; }
+      .step-head h2 { font-size: 1.75rem; }
+      .step-head p { font-size: .95rem; }
       .filing-grid { grid-template-columns: repeat(2, 1fr); }
       .filing-btn:nth-child(2) { border-right: none; }
       .filing-btn:nth-child(1), .filing-btn:nth-child(2) { border-bottom: 1px solid var(--ink-line); }
@@ -1274,7 +1352,7 @@
       .fighter-strategy { min-height: 0; }
       .fighter-value { font-size: 1.75rem; }
       .chart-card { padding: 1.25rem 1rem 1rem; }
-      .chart-container { height: 260px; }
+      .chart-container { height: 280px; }
       .rule-strip { padding-left: 1.1rem; }
       .rule-text { font-size: .98rem; }
       .methodology summary, .methodology-body { padding-left: 1.15rem; padding-right: 1.15rem; }
@@ -1561,320 +1639,374 @@
   </div>
 </section>
 
-<section class="calc-section" id="calculator">
+<section class="stage-section" id="calculator">
   <div class="container">
-    <div class="calc-grid">
+    <div class="stage" id="stage">
 
-      <aside class="controls-panel" aria-label="Your inputs">
-        <div class="panel-head">
-          <span class="eyebrow">Your inputs</span>
-          <span class="panel-hint">Live</span>
-        </div>
+      <div class="stepper" role="navigation" aria-label="Calculator steps">
+        <button type="button" class="step-tab is-active" data-go="1" aria-current="step"><span class="step-n">01</span><span class="step-name">Your numbers</span></button>
+        <button type="button" class="step-tab" data-go="2"><span class="step-n">02</span><span class="step-name">The verdict</span></button>
+        <button type="button" class="step-tab" data-go="3"><span class="step-n">03</span><span class="step-name">The breakdown</span></button>
+        <button type="button" class="step-tab" data-go="4"><span class="step-n">04</span><span class="step-name">Over time</span></button>
+        <button type="button" class="step-tab" data-go="5"><span class="step-n">05</span><span class="step-name">The battle explained</span></button>
+        <button type="button" class="step-tab" data-go="6"><span class="step-n">06</span><span class="step-name">Which one is for you</span></button>
+      </div>
 
-        <div class="controls-section">
-          <div class="controls-section-title">You</div>
-          <div class="input-row">
-            <div class="input-label">
-              <label class="input-label-text" for="age">Current age</label>
-              <span class="input-value" id="ageDisplay">25</span>
-            </div>
-            <input type="range" id="age" min="18" max="65" step="1" value="25">
-            <div class="range-meta"><span>18</span><span>65</span></div>
-          </div>
-          <div class="input-row">
-            <div class="input-label">
-              <label class="input-label-text" for="years">Years until retirement</label>
-              <span class="input-value" id="yearsDisplay">40</span>
-            </div>
-            <input type="range" id="years" min="5" max="50" step="1" value="40">
-            <div class="range-meta"><span>5</span><span>50</span></div>
-          </div>
-        </div>
+      <button type="button" class="recap" id="recap" aria-label="Edit your numbers" hidden>
+        <span class="recap-label">Your numbers</span>
+        <span class="recap-chips" id="recapChips"></span>
+        <span class="recap-edit">Edit</span>
+      </button>
 
-        <div class="controls-section">
-          <div class="controls-section-title">Income &amp; filing</div>
-          <div class="input-row">
-            <div class="input-label">
-              <label class="input-label-text" for="income">
-                Annual earned income
-                <button type="button" class="tip" aria-label="About annual earned income">i<span class="tip-text" role="tooltip">Your pre-tax W-2 or self-employment income. Used to find your federal marginal tax bracket and check Roth IRA eligibility.</span></button>
-              </label>
-            </div>
-            <div class="input-field-prefix">
-              <input type="number" class="input-field" id="income" value="65000" min="0" step="1000" inputmode="numeric">
-            </div>
-          </div>
-          <div class="input-row">
-            <div class="input-label">
-              <span class="input-label-text" id="filingLabel">Filing status</span>
-            </div>
-            <div class="filing-grid" id="filingGrid" role="group" aria-labelledby="filingLabel">
-              <button type="button" class="filing-btn active" data-status="single" aria-pressed="true"><span class="filing-abbr">Single</span><span class="filing-label">Unmarried</span></button>
-              <button type="button" class="filing-btn" data-status="mfj" aria-pressed="false"><span class="filing-abbr">MFJ</span><span class="filing-label">Married · joint</span></button>
-              <button type="button" class="filing-btn" data-status="hoh" aria-pressed="false"><span class="filing-abbr">HoH</span><span class="filing-label">Head of household</span></button>
-              <button type="button" class="filing-btn" data-status="mfs" aria-pressed="false"><span class="filing-abbr">MFS</span><span class="filing-label">Married · separate</span></button>
-            </div>
-          </div>
-          <div class="derived" aria-live="polite">
-            <div class="derived-title">From the 2026 brackets</div>
-            <div class="derived-row">
-              <span class="derived-row-label">Marginal rate today</span>
-              <span class="derived-row-value" id="marginalDisplay">22%</span>
-            </div>
-            <div class="derived-row">
-              <span class="derived-row-label">Est. retirement rate
-                <button type="button" class="tip" aria-label="About the estimated retirement rate">i<span class="tip-text" role="tooltip">Rule of thumb: most people land about 2 percentage points below their peak working bracket in retirement. Real retirement tax rates depend on your income sources.</span></button>
-              </span>
-              <span class="derived-row-value" id="retirementDisplay">20%</span>
-            </div>
-            <div class="derived-row">
-              <span class="derived-row-label">Roth eligibility</span>
-              <span class="derived-row-value roth-ok" id="rothEligibility">Full</span>
-            </div>
-          </div>
-        </div>
+      <div class="stage-body">
 
-        <div class="controls-section">
-          <div class="controls-section-title">Contribution</div>
-          <div class="input-row">
-            <div class="input-label">
-              <label class="input-label-text" for="contribution">
-                Annual contribution
-                <button type="button" class="tip" aria-label="About the annual contribution">i<span class="tip-text" role="tooltip">The 2026 IRA limit is $7,500 under 50 and $8,600 at 50+, combined across all your IRAs. The same dollar amount goes into the brokerage account for comparison.</span></button>
-              </label>
+        <!-- 01 · Your numbers -->
+        <section class="step is-active" data-step="1" aria-label="Your numbers">
+          <div class="step-head">
+            <div>
+<span class="eyebrow">Step 01</span>
+            <h2>Your numbers.</h2>
             </div>
-            <div class="input-field-prefix">
-              <input type="number" class="input-field" id="contribution" value="6000" min="0" max="8600" step="500" inputmode="numeric">
+            <p>Six inputs. Everything downstream updates the moment you change one.</p>
+          </div>
+          <div class="inputs-grid">
+            <div class="controls-section">
+              <div class="controls-section-title">You</div>
+              <div class="input-row">
+                <div class="input-label">
+                  <label class="input-label-text" for="age">Current age</label>
+                  <span class="input-value" id="ageDisplay">25</span>
+                </div>
+                <input type="range" id="age" min="18" max="65" step="1" value="25">
+                <div class="range-meta"><span>18</span><span>65</span></div>
+              </div>
+              <div class="input-row">
+                <div class="input-label">
+                  <label class="input-label-text" for="years">Years until retirement</label>
+                  <span class="input-value" id="yearsDisplay">40</span>
+                </div>
+                <input type="range" id="years" min="5" max="50" step="1" value="40">
+                <div class="range-meta"><span>5</span><span>50</span></div>
+              </div>
+            </div>
+
+            <div class="controls-section">
+              <div class="controls-section-title">Income &amp; filing</div>
+              <div class="input-row">
+                <div class="input-label">
+                  <label class="input-label-text" for="income">
+                    Annual earned income
+                    <button type="button" class="tip" aria-label="About annual earned income">i<span class="tip-text" role="tooltip">Your pre-tax W-2 or self-employment income. Used to find your federal marginal tax bracket and check Roth IRA eligibility.</span></button>
+                  </label>
+                </div>
+                <div class="input-field-prefix">
+                  <input type="number" class="input-field" id="income" value="65000" min="0" step="1000" inputmode="numeric">
+                </div>
+              </div>
+              <div class="input-row">
+                <div class="input-label">
+                  <span class="input-label-text" id="filingLabel">Filing status</span>
+                </div>
+                <div class="filing-grid" id="filingGrid" role="group" aria-labelledby="filingLabel">
+                  <button type="button" class="filing-btn active" data-status="single" aria-pressed="true"><span class="filing-abbr">Single</span><span class="filing-label">Unmarried</span></button>
+                  <button type="button" class="filing-btn" data-status="mfj" aria-pressed="false"><span class="filing-abbr">MFJ</span><span class="filing-label">Married · joint</span></button>
+                  <button type="button" class="filing-btn" data-status="hoh" aria-pressed="false"><span class="filing-abbr">HoH</span><span class="filing-label">Head of household</span></button>
+                  <button type="button" class="filing-btn" data-status="mfs" aria-pressed="false"><span class="filing-abbr">MFS</span><span class="filing-label">Married · separate</span></button>
+                </div>
+              </div>
+              <div class="derived" aria-live="polite">
+                <div class="derived-title">From the 2026 brackets</div>
+                <div class="derived-row">
+                  <span class="derived-row-label">Marginal rate today</span>
+                  <span class="derived-row-value" id="marginalDisplay">22%</span>
+                </div>
+                <div class="derived-row">
+                  <span class="derived-row-label">Est. retirement rate
+                    <button type="button" class="tip" aria-label="About the estimated retirement rate">i<span class="tip-text" role="tooltip">Rule of thumb: most people land about 2 percentage points below their peak working bracket in retirement. Real retirement tax rates depend on your income sources.</span></button>
+                  </span>
+                  <span class="derived-row-value" id="retirementDisplay">20%</span>
+                </div>
+                <div class="derived-row">
+                  <span class="derived-row-label">Roth eligibility</span>
+                  <span class="derived-row-value roth-ok" id="rothEligibility">Full</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="controls-section">
+              <div class="controls-section-title">Contribution</div>
+              <div class="input-row">
+                <div class="input-label">
+                  <label class="input-label-text" for="contribution">
+                    Annual contribution
+                    <button type="button" class="tip" aria-label="About the annual contribution">i<span class="tip-text" role="tooltip">The 2026 IRA limit is $7,500 under 50 and $8,600 at 50+, combined across all your IRAs. The same dollar amount goes into the brokerage account for comparison.</span></button>
+                  </label>
+                </div>
+                <div class="input-field-prefix">
+                  <input type="number" class="input-field" id="contribution" value="6000" min="0" max="8600" step="500" inputmode="numeric">
+                </div>
+              </div>
+              <div class="input-row">
+                <div class="input-label">
+                  <label class="input-label-text" for="returnRate">Expected annual return</label>
+                  <span class="input-value" id="returnDisplay">7%</span>
+                </div>
+                <input type="range" id="returnRate" min="3" max="12" step="0.5" value="7">
+                <div class="range-meta"><span>3% · cautious</span><span>12% · aggressive</span></div>
+              </div>
+              <div class="live-line" aria-live="polite">
+                <span class="live-dot" aria-hidden="true"></span>
+                <span id="liveLine">Right now: <strong>Roth IRA wins</strong></span>
+              </div>
             </div>
           </div>
-          <div class="input-row">
-            <div class="input-label">
-              <label class="input-label-text" for="returnRate">Expected annual return</label>
-              <span class="input-value" id="returnDisplay">7%</span>
-            </div>
-            <input type="range" id="returnRate" min="3" max="12" step="0.5" value="7">
-            <div class="range-meta"><span>3% · cautious</span><span>12% · aggressive</span></div>
-          </div>
-        </div>
-      </aside>
+        </section>
 
-      <div class="results-col">
-
-        <article class="verdict on-ink" id="verdictCard" aria-live="polite">
-          <div class="verdict-top">
-            <span class="eyebrow">The verdict</span>
-            <span class="verdict-horizon" id="verdictHorizon">After <strong>40 years</strong> at <strong>7%</strong></span>
-          </div>
-          <h2 class="verdict-winner" id="verdictWinner">Roth IRA wins</h2>
-          <p class="verdict-diff" id="verdictDiff">$0 more after taxes</p>
-          <ol class="standings" aria-label="After-tax balance at retirement">
-            <li class="standing s-roth" id="standRoth">
-              <span class="standing-rank">01</span>
-              <span class="standing-name"><span class="swatch" aria-hidden="true"></span>Roth IRA</span>
-              <span class="standing-bar" aria-hidden="true"><i></i></span>
-              <span class="standing-value" id="statRoth">$0</span>
-            </li>
-            <li class="standing s-trad" id="standTrad">
-              <span class="standing-rank">02</span>
-              <span class="standing-name"><span class="swatch" aria-hidden="true"></span>Traditional IRA</span>
-              <span class="standing-bar" aria-hidden="true"><i></i></span>
-              <span class="standing-value" id="statTrad">$0</span>
-            </li>
-            <li class="standing s-brok" id="standTaxable">
-              <span class="standing-rank">03</span>
-              <span class="standing-name"><span class="swatch" aria-hidden="true"></span>Brokerage</span>
-              <span class="standing-bar" aria-hidden="true"><i></i></span>
-              <span class="standing-value" id="statTaxable">$0</span>
-            </li>
-          </ol>
-          <p class="verdict-insight" id="insightText">Adjust the controls to see how your tax bracket and timeline change the winner.</p>
-        </article>
-
-        <div class="showdown">
-          <div class="fighter-card traditional" id="cardTrad">
-            <div class="fighter-header">
-              <div class="fighter-name"><span class="swatch" aria-hidden="true"></span>Traditional</div>
-              <span class="winner-tag">Winner</span>
+        <!-- 02 · The verdict -->
+        <section class="step" data-step="2" aria-label="The verdict">
+          <article class="verdict on-ink" id="verdictCard" aria-live="polite">
+            <div class="verdict-top">
+              <span class="eyebrow">The verdict</span>
+              <span class="verdict-horizon" id="verdictHorizon">After <strong>40 years</strong> at <strong>7%</strong></span>
             </div>
-            <div class="fighter-strategy">Tax break now, taxes due at withdrawal.</div>
-            <div class="fighter-value" id="tradValue">$0</div>
-            <div class="fighter-value-label">After-tax balance</div>
-            <div class="fighter-details">
-              <div class="fighter-row"><span class="fighter-row-label">Contributed</span><span class="fighter-row-value" id="tradContrib">$0</span></div>
-              <div class="fighter-row"><span class="fighter-row-label">Grows to (pre-tax)</span><span class="fighter-row-value" id="tradGross">$0</span></div>
-              <div class="fighter-row"><span class="fighter-row-label">Tax savings pocketed</span><span class="fighter-row-value positive" id="tradSavings">$0</span></div>
-              <div class="fighter-row"><span class="fighter-row-label">Taxes at withdrawal</span><span class="fighter-row-value negative" id="tradTaxes">−$0</span></div>
-            </div>
-          </div>
-
-          <div class="fighter-card roth" id="cardRoth">
-            <div class="fighter-header">
-              <div class="fighter-name"><span class="swatch" aria-hidden="true"></span>Roth</div>
-              <span class="winner-tag">Winner</span>
-            </div>
-            <div class="fighter-strategy">Pay tax now, withdraw 100% tax-free.</div>
-            <div class="fighter-value" id="rothValue">$0</div>
-            <div class="fighter-value-label">After-tax balance</div>
-            <div class="fighter-details">
-              <div class="fighter-row"><span class="fighter-row-label">Contributed</span><span class="fighter-row-value" id="rothContrib">$0</span></div>
-              <div class="fighter-row"><span class="fighter-row-label">Grows to</span><span class="fighter-row-value" id="rothGross">$0</span></div>
-              <div class="fighter-row"><span class="fighter-row-label">Taxes at withdrawal</span><span class="fighter-row-value neutral">$0</span></div>
-              <div class="fighter-row"><span class="fighter-row-label">Roth eligibility</span><span class="fighter-row-value" id="rothPhaseStatus">Full</span></div>
-            </div>
-          </div>
-
-          <div class="fighter-card taxable" id="cardTaxable">
-            <div class="fighter-header">
-              <div class="fighter-name"><span class="swatch" aria-hidden="true"></span>Brokerage</div>
-              <span class="winner-tag">Winner</span>
-            </div>
-            <div class="fighter-strategy">No tax shelter. Gains taxed as you go.</div>
-            <div class="fighter-value" id="taxableValue">$0</div>
-            <div class="fighter-value-label">After-tax balance</div>
-            <div class="fighter-details">
-              <div class="fighter-row"><span class="fighter-row-label">Contributed</span><span class="fighter-row-value" id="taxableContrib">$0</span></div>
-              <div class="fighter-row"><span class="fighter-row-label">Gross return</span><span class="fighter-row-value" id="taxableReturn">7%</span></div>
-              <div class="fighter-row"><span class="fighter-row-label">Effective yield</span><span class="fighter-row-value" id="taxableYield">5.5%</span></div>
-              <div class="fighter-row"><span class="fighter-row-label">Lost to tax drag</span><span class="fighter-row-value negative" id="taxableDrag">−$0</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="chart-card">
-          <div class="chart-card-header">
-            <div class="chart-card-title">Growth over time <small>After-tax balance, year by year</small></div>
-            <div class="chart-legend" aria-hidden="true">
-              <span class="chart-legend-item roth"><span class="chart-legend-line"></span>Roth</span>
-              <span class="chart-legend-item trad"><span class="chart-legend-line"></span>Traditional</span>
-              <span class="chart-legend-item brok"><span class="chart-legend-line"></span>Brokerage</span>
-            </div>
-          </div>
-          <div class="chart-container">
-            <canvas id="comparisonChart" role="img" aria-label="Line chart of after-tax balance over time for the Roth IRA, Traditional IRA and brokerage account"></canvas>
-          </div>
-        </div>
-
-        <div class="rule-strip">
-          <span class="eyebrow">Rule of thumb</span>
-          <p class="rule-text" id="strategyText">
-            Both IRAs almost always beat a taxable brokerage because tax drag compounds against you for decades. Between the two IRAs: if your retirement tax bracket will be <strong>higher</strong> than today, Roth wins. <strong>Lower</strong>, Traditional wins.
-          </p>
-        </div>
-
-        <details class="methodology">
-          <summary>How this is calculated</summary>
-          <div class="methodology-body">
-            <p>
-              <strong>All three accounts get the same annual dollar contribution.</strong> Traditional and Roth compound at your expected return. The taxable brokerage compounds at an <em>effective after-tax yield</em> of <code>return × (1 − marginal rate)</code>, a simplification of ongoing taxes on dividends and realized gains.
-            </p>
-            <p>
-              At retirement, Traditional is taxed at your estimated retirement rate, then the cumulative tax savings you pocketed from each year's deduction are added back uncompounded (matching the original FinMango model). Roth withdraws tax-free. Brokerage keeps what it has.
-            </p>
-            <p>
-              Your marginal rate comes from the 2026 IRS brackets. Your retirement rate is estimated as your current marginal rate minus 2 percentage points, a common rule of thumb rather than a prediction. Income grows 3% per year; once it crosses the 2026 Roth MAGI phase-out ($153K–$168K single / HoH, $242K–$252K joint), Roth contributions phase down proportionally while Traditional and Brokerage keep going. The model assumes constant contribution limits and doesn't model state tax, ACA subsidies, or required minimum distributions on Traditional at age 73.
+            <h2 class="verdict-winner" id="verdictWinner">Roth IRA wins</h2>
+            <p class="verdict-diff" id="verdictDiff">$0 more after taxes</p>
+            <ol class="standings" aria-label="After-tax balance at retirement">
+              <li class="standing s-roth" id="standRoth">
+                <span class="standing-rank">01</span>
+                <span class="standing-name"><span class="swatch" aria-hidden="true"></span>Roth IRA</span>
+                <span class="standing-bar" aria-hidden="true"><i></i></span>
+                <span class="standing-value" id="statRoth">$0</span>
+              </li>
+              <li class="standing s-trad" id="standTrad">
+                <span class="standing-rank">02</span>
+                <span class="standing-name"><span class="swatch" aria-hidden="true"></span>Traditional IRA</span>
+                <span class="standing-bar" aria-hidden="true"><i></i></span>
+                <span class="standing-value" id="statTrad">$0</span>
+              </li>
+              <li class="standing s-brok" id="standTaxable">
+                <span class="standing-rank">03</span>
+                <span class="standing-name"><span class="swatch" aria-hidden="true"></span>Brokerage</span>
+                <span class="standing-bar" aria-hidden="true"><i></i></span>
+                <span class="standing-value" id="statTaxable">$0</span>
+              </li>
+            </ol>
+            <p class="verdict-insight" id="insightText">Adjust the controls to see how your tax bracket and timeline change the winner.</p>
+          </article>
+          <div class="rule-strip">
+            <span class="eyebrow">Rule of thumb</span>
+            <p class="rule-text" id="strategyText">
+              Both IRAs almost always beat a taxable brokerage because tax drag compounds against you for decades. Between the two IRAs: if your retirement tax bracket will be <strong>higher</strong> than today, Roth wins. <strong>Lower</strong>, Traditional wins.
             </p>
           </div>
-        </details>
+        </section>
+
+        <!-- 03 · The breakdown -->
+        <section class="step" data-step="3" aria-label="The breakdown">
+          <div class="step-head">
+            <div>
+<span class="eyebrow">Step 03</span>
+            <h2>The breakdown.</h2>
+            </div>
+            <p>Where every dollar goes in each account, from what you put in to what the IRS takes out.</p>
+          </div>
+          <div class="showdown">
+            <div class="fighter-card traditional" id="cardTrad">
+              <div class="fighter-header">
+                <div class="fighter-name"><span class="swatch" aria-hidden="true"></span>Traditional</div>
+                <span class="winner-tag">Winner</span>
+              </div>
+              <div class="fighter-strategy">Tax break now, taxes due at withdrawal.</div>
+              <div class="fighter-value" id="tradValue">$0</div>
+              <div class="fighter-value-label">After-tax balance</div>
+              <div class="fighter-details">
+                <div class="fighter-row"><span class="fighter-row-label">Contributed</span><span class="fighter-row-value" id="tradContrib">$0</span></div>
+                <div class="fighter-row"><span class="fighter-row-label">Grows to (pre-tax)</span><span class="fighter-row-value" id="tradGross">$0</span></div>
+                <div class="fighter-row"><span class="fighter-row-label">Tax savings pocketed</span><span class="fighter-row-value positive" id="tradSavings">$0</span></div>
+                <div class="fighter-row"><span class="fighter-row-label">Taxes at withdrawal</span><span class="fighter-row-value negative" id="tradTaxes">−$0</span></div>
+              </div>
+            </div>
+
+            <div class="fighter-card roth" id="cardRoth">
+              <div class="fighter-header">
+                <div class="fighter-name"><span class="swatch" aria-hidden="true"></span>Roth</div>
+                <span class="winner-tag">Winner</span>
+              </div>
+              <div class="fighter-strategy">Pay tax now, withdraw 100% tax-free.</div>
+              <div class="fighter-value" id="rothValue">$0</div>
+              <div class="fighter-value-label">After-tax balance</div>
+              <div class="fighter-details">
+                <div class="fighter-row"><span class="fighter-row-label">Contributed</span><span class="fighter-row-value" id="rothContrib">$0</span></div>
+                <div class="fighter-row"><span class="fighter-row-label">Grows to</span><span class="fighter-row-value" id="rothGross">$0</span></div>
+                <div class="fighter-row"><span class="fighter-row-label">Taxes at withdrawal</span><span class="fighter-row-value neutral">$0</span></div>
+                <div class="fighter-row"><span class="fighter-row-label">Roth eligibility</span><span class="fighter-row-value" id="rothPhaseStatus">Full</span></div>
+              </div>
+            </div>
+
+            <div class="fighter-card taxable" id="cardTaxable">
+              <div class="fighter-header">
+                <div class="fighter-name"><span class="swatch" aria-hidden="true"></span>Brokerage</div>
+                <span class="winner-tag">Winner</span>
+              </div>
+              <div class="fighter-strategy">No tax shelter. Gains taxed as you go.</div>
+              <div class="fighter-value" id="taxableValue">$0</div>
+              <div class="fighter-value-label">After-tax balance</div>
+              <div class="fighter-details">
+                <div class="fighter-row"><span class="fighter-row-label">Contributed</span><span class="fighter-row-value" id="taxableContrib">$0</span></div>
+                <div class="fighter-row"><span class="fighter-row-label">Gross return</span><span class="fighter-row-value" id="taxableReturn">7%</span></div>
+                <div class="fighter-row"><span class="fighter-row-label">Effective yield</span><span class="fighter-row-value" id="taxableYield">5.5%</span></div>
+                <div class="fighter-row"><span class="fighter-row-label">Lost to tax drag</span><span class="fighter-row-value negative" id="taxableDrag">−$0</span></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 04 · Over time -->
+        <section class="step" data-step="4" aria-label="Over time">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div class="chart-card-title">Growth over time <small>After-tax balance, year by year</small></div>
+              <div class="chart-legend" aria-hidden="true">
+                <span class="chart-legend-item roth"><span class="chart-legend-line"></span>Roth</span>
+                <span class="chart-legend-item trad"><span class="chart-legend-line"></span>Traditional</span>
+                <span class="chart-legend-item brok"><span class="chart-legend-line"></span>Brokerage</span>
+              </div>
+            </div>
+            <div class="chart-container">
+              <canvas id="comparisonChart" role="img" aria-label="Line chart of after-tax balance over time for the Roth IRA, Traditional IRA and brokerage account"></canvas>
+            </div>
+          </div>
+          <details class="methodology">
+            <summary>How this is calculated</summary>
+            <div class="methodology-body">
+              <p>
+                <strong>All three accounts get the same annual dollar contribution.</strong> Traditional and Roth compound at your expected return. The taxable brokerage compounds at an <em>effective after-tax yield</em> of <code>return × (1 − marginal rate)</code>, a simplification of ongoing taxes on dividends and realized gains.
+              </p>
+              <p>
+                At retirement, Traditional is taxed at your estimated retirement rate, then the cumulative tax savings you pocketed from each year's deduction are added back uncompounded (matching the original FinMango model). Roth withdraws tax-free. Brokerage keeps what it has.
+              </p>
+              <p>
+                Your marginal rate comes from the 2026 IRS brackets. Your retirement rate is estimated as your current marginal rate minus 2 percentage points, a common rule of thumb rather than a prediction. Income grows 3% per year; once it crosses the 2026 Roth MAGI phase-out ($153K–$168K single / HoH, $242K–$252K joint), Roth contributions phase down proportionally while Traditional and Brokerage keep going. The model assumes constant contribution limits and doesn't model state tax, ACA subsidies, or required minimum distributions on Traditional at age 73.
+              </p>
+            </div>
+          </details>
+        </section>
+
+        <!-- 05 · The battle explained -->
+        <section class="step" data-step="5" aria-label="The battle explained">
+          <div class="step-head">
+            <div>
+<span class="eyebrow">The battle explained</span>
+            <h2>Same goal, different timing.</h2>
+            </div>
+            <p>Both IRAs let your money grow without paying tax on the gains every year. A regular brokerage doesn't, and that drag compounds against you for decades.</p>
+          </div>
+          <div class="edu-pair">
+            <div class="edu-fighter traditional">
+              <div class="edu-fighter-top">
+                <span class="edu-fighter-eyebrow"><span class="swatch" aria-hidden="true"></span>Traditional IRA</span>
+                <span class="edu-tagline">Pay later</span>
+              </div>
+              <h3>Tax break today</h3>
+              <p>Contribute pre-tax dollars and lower this year's tax bill. The money grows untouched by the IRS for decades, but every dollar you withdraw in retirement is taxed as income.</p>
+              <div class="edu-points">
+                <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>Lower taxable income now.</strong> A $7,500 contribution at the 22% bracket saves you $1,650 this April.</span></div>
+                <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>No income limit.</strong> Anyone with earned income can contribute, regardless of how much they make.</span></div>
+                <div class="edu-point"><span class="edu-point-marker minus">−</span><span><strong>Required withdrawals at 73.</strong> The IRS forces you to start drawing down (and paying taxes) whether you need the money or not.</span></div>
+              </div>
+            </div>
+
+            <div class="edu-fighter roth">
+              <div class="edu-fighter-top">
+                <span class="edu-fighter-eyebrow"><span class="swatch" aria-hidden="true"></span>Roth IRA</span>
+                <span class="edu-tagline">Pay now</span>
+              </div>
+              <h3>Tax-free forever</h3>
+              <p>Contribute money you've already paid taxes on. It grows tax-free, and every dollar you withdraw in retirement, including decades of investment gains, is yours, untouched by the IRS.</p>
+              <div class="edu-points">
+                <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>Zero taxes in retirement.</strong> What you see in the account is what you spend. No surprises, no bracket math.</span></div>
+                <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>Pull contributions anytime.</strong> Your contributions (not gains) come out penalty-free, a built-in safety net.</span></div>
+                <div class="edu-point"><span class="edu-point-marker minus">−</span><span><strong>Income limits apply.</strong> In 2026, single filers earning over $168,000 are phased out (MAGI). Joint filers cap at $252,000.</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="edu-third">
+            <div>
+              <span class="edu-third-eyebrow"><span class="swatch" aria-hidden="true"></span>The third option · Taxable brokerage</span>
+              <h3>No shelter, but total flexibility.</h3>
+              <p>A regular brokerage account (Fidelity, Vanguard, Schwab, Robinhood) has no income limits, no contribution limits, and no withdrawal restrictions. But the IRS taxes your dividends every year and your capital gains every time you sell. Over 30+ years, that drag typically costs you tens of thousands compared to an IRA.</p>
+            </div>
+            <span class="edu-tagline">Pay every year</span>
+          </div>
+        </section>
+
+        <!-- 06 · Which one is for you -->
+        <section class="step" data-step="6" aria-label="Which one is for you">
+          <div class="step-head">
+            <div>
+<span class="eyebrow">Which one is for you</span>
+            <h2>Three ways to pick.</h2>
+            </div>
+            <p>The math above is one input. Your career stage and your read on future tax rates are the others.</p>
+          </div>
+          <div class="choose-grid">
+            <div class="choose-card roth">
+              <div class="choose-card-n">01</div>
+              <div class="choose-card-pick">Choose Roth if</div>
+              <h4>You're early in your career</h4>
+              <p>You're in a low bracket today and your income (and tax rate) will probably climb. Locking in today's lower rate is a steal.</p>
+            </div>
+            <div class="choose-card trad">
+              <div class="choose-card-n">02</div>
+              <div class="choose-card-pick">Choose Traditional if</div>
+              <h4>You're at peak earning years</h4>
+              <p>You're in a high bracket now and expect to spend less in retirement. The deduction today is worth more than the future tax bill.</p>
+            </div>
+            <div class="choose-card roth">
+              <div class="choose-card-n">03</div>
+              <div class="choose-card-pick">Choose Roth if</div>
+              <h4>You think tax rates will rise</h4>
+              <p>National debt, demographics: there's a reasonable case future rates climb. Roth locks in today's rate and never owes more.</p>
+            </div>
+          </div>
+          <div class="limits-strip">
+            <div class="limits-item">
+              <div class="limits-label">2026 limit</div>
+              <div class="limits-value">$7,500</div>
+              <div class="limits-meta">Under age 50</div>
+            </div>
+            <div class="limits-item">
+              <div class="limits-label">2026 limit · 50+</div>
+              <div class="limits-value">$8,600</div>
+              <div class="limits-meta">Includes $1,100 catch-up</div>
+            </div>
+            <div class="limits-item">
+              <div class="limits-label">Roth cap · Single</div>
+              <div class="limits-value">$168K</div>
+              <div class="limits-meta">Phase-out begins at $153K</div>
+            </div>
+            <div class="limits-item">
+              <div class="limits-label">Roth cap · Joint</div>
+              <div class="limits-value">$252K</div>
+              <div class="limits-meta">Phase-out begins at $242K</div>
+            </div>
+          </div>
+        </section>
 
       </div>
-    </div>
-  </div>
-</section>
 
-<section class="edu-section">
-  <div class="container">
-    <div class="edu-header">
-      <div>
-        <span class="eyebrow">The battle explained</span>
-        <h2>Same goal, different timing.</h2>
-      </div>
-      <p>Both IRAs let your money grow without paying tax on the gains every year. A regular brokerage doesn't, and that drag compounds against you for decades.</p>
-    </div>
-
-    <div class="edu-pair">
-      <div class="edu-fighter traditional">
-        <div class="edu-fighter-top">
-          <span class="edu-fighter-eyebrow"><span class="swatch" aria-hidden="true"></span>Traditional IRA</span>
-          <span class="edu-tagline">Pay later</span>
-        </div>
-        <h3>Tax break today</h3>
-        <p>Contribute pre-tax dollars and lower this year's tax bill. The money grows untouched by the IRS for decades, but every dollar you withdraw in retirement is taxed as income.</p>
-        <div class="edu-points">
-          <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>Lower taxable income now.</strong> A $7,500 contribution at the 22% bracket saves you $1,650 this April.</span></div>
-          <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>No income limit.</strong> Anyone with earned income can contribute, regardless of how much they make.</span></div>
-          <div class="edu-point"><span class="edu-point-marker minus">−</span><span><strong>Required withdrawals at 73.</strong> The IRS forces you to start drawing down (and paying taxes) whether you need the money or not.</span></div>
-        </div>
+      <div class="stage-foot">
+        <button type="button" class="btn-secondary stage-prev" id="prevStep">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8.5 2.5 4 7l4.5 4.5"/></svg>
+          Back
+        </button>
+        <span class="stage-count"><span id="stepNow">01</span> / 06</span>
+        <button type="button" class="btn-primary stage-next" id="nextStep">
+          <span id="nextLabel">See the verdict</span>
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5.5 2.5 10 7l-4.5 4.5"/></svg>
+        </button>
       </div>
 
-      <div class="edu-fighter roth">
-        <div class="edu-fighter-top">
-          <span class="edu-fighter-eyebrow"><span class="swatch" aria-hidden="true"></span>Roth IRA</span>
-          <span class="edu-tagline">Pay now</span>
-        </div>
-        <h3>Tax-free forever</h3>
-        <p>Contribute money you've already paid taxes on. It grows tax-free, and every dollar you withdraw in retirement, including decades of investment gains, is yours, untouched by the IRS.</p>
-        <div class="edu-points">
-          <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>Zero taxes in retirement.</strong> What you see in the account is what you spend. No surprises, no bracket math.</span></div>
-          <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>Pull contributions anytime.</strong> Your contributions (not gains) come out penalty-free, a built-in safety net.</span></div>
-          <div class="edu-point"><span class="edu-point-marker minus">−</span><span><strong>Income limits apply.</strong> In 2026, single filers earning over $168,000 are phased out (MAGI). Joint filers cap at $252,000.</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="edu-third">
-      <div>
-        <span class="edu-third-eyebrow"><span class="swatch" aria-hidden="true"></span>The third option · Taxable brokerage</span>
-        <h3>No shelter, but total flexibility.</h3>
-        <p>A regular brokerage account (Fidelity, Vanguard, Schwab, Robinhood) has no income limits, no contribution limits, and no withdrawal restrictions. But the IRS taxes your dividends every year and your capital gains every time you sell. Over 30+ years, that drag typically costs you tens of thousands compared to an IRA.</p>
-      </div>
-      <span class="edu-tagline">Pay every year</span>
-    </div>
-
-    <div class="choose-head">
-      <span class="eyebrow">Which one is for you</span>
-    </div>
-    <div class="choose-grid">
-      <div class="choose-card roth">
-        <div class="choose-card-n">01</div>
-        <div class="choose-card-pick">Choose Roth if</div>
-        <h4>You're early in your career</h4>
-        <p>You're in a low bracket today and your income (and tax rate) will probably climb. Locking in today's lower rate is a steal.</p>
-      </div>
-      <div class="choose-card trad">
-        <div class="choose-card-n">02</div>
-        <div class="choose-card-pick">Choose Traditional if</div>
-        <h4>You're at peak earning years</h4>
-        <p>You're in a high bracket now and expect to spend less in retirement. The deduction today is worth more than the future tax bill.</p>
-      </div>
-      <div class="choose-card roth">
-        <div class="choose-card-n">03</div>
-        <div class="choose-card-pick">Choose Roth if</div>
-        <h4>You think tax rates will rise</h4>
-        <p>National debt, demographics: there's a reasonable case future rates climb. Roth locks in today's rate and never owes more.</p>
-      </div>
-    </div>
-
-    <div class="limits-strip">
-      <div class="limits-item">
-        <div class="limits-label">2026 limit</div>
-        <div class="limits-value">$7,500</div>
-        <div class="limits-meta">Under age 50</div>
-      </div>
-      <div class="limits-item">
-        <div class="limits-label">2026 limit · 50+</div>
-        <div class="limits-value">$8,600</div>
-        <div class="limits-meta">Includes $1,100 catch-up</div>
-      </div>
-      <div class="limits-item">
-        <div class="limits-label">Roth cap · Single</div>
-        <div class="limits-value">$168K</div>
-        <div class="limits-meta">Phase-out begins at $153K</div>
-      </div>
-      <div class="limits-item">
-        <div class="limits-label">Roth cap · Joint</div>
-        <div class="limits-value">$252K</div>
-        <div class="limits-meta">Phase-out begins at $242K</div>
-      </div>
     </div>
   </div>
 </section>
@@ -1937,6 +2069,45 @@ const STATUS_LABEL = {
   mfs: 'Married Filing Separately',
   hoh: 'Head of Household'
 };
+const STATUS_SHORT = { single: 'Single', mfj: 'MFJ', mfs: 'MFS', hoh: 'HoH' };
+// ============================================================
+// Steps: the calculator is paged, one panel at a time
+// ============================================================
+const STEP_COUNT = 6;
+const NEXT_LABELS = ['See the verdict', 'See the breakdown', 'See it over time', 'Why it works this way', 'Which one is for you', 'Back to your numbers'];
+let currentStep = 1;
+const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function goToStep(n, opts) {
+  opts = opts || {};
+  n = Math.min(Math.max(1, n), STEP_COUNT);
+  const changed = n !== currentStep;
+  currentStep = n;
+  document.querySelectorAll('.step').forEach(s => s.classList.toggle('is-active', Number(s.dataset.step) === n));
+  const stepper = document.querySelector('.stepper');
+  document.querySelectorAll('.step-tab').forEach(tab => {
+    const k = Number(tab.dataset.go);
+    tab.classList.toggle('is-active', k === n);
+    tab.classList.toggle('is-done', k < n);
+    if (k === n) {
+      tab.setAttribute('aria-current', 'step');
+      if (stepper) stepper.scrollTo({ left: tab.offsetLeft - (stepper.clientWidth - tab.clientWidth) / 2, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    } else {
+      tab.removeAttribute('aria-current');
+    }
+  });
+  $('recap').hidden = n === 1;
+  $('stepNow').textContent = '0' + n;
+  $('prevStep').disabled = n === 1;
+  $('nextLabel').textContent = NEXT_LABELS[n - 1];
+  if (n === 4 && chart) chart.resize();
+  if (opts.updateHash !== false && history.replaceState) history.replaceState(null, '', '#step-' + n);
+  if (changed && opts.scroll !== false) {
+    const top = $('stage').getBoundingClientRect().top + window.scrollY - 84;
+    if (window.scrollY > top + 8) window.scrollTo({ top: top, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+    const active = document.querySelector('.step.is-active');
+    if (active) { active.setAttribute('tabindex', '-1'); active.focus({ preventScroll: true }); }
+  }
+}
 
 let chart = null;
 let currentStatus = 'single';
@@ -2210,6 +2381,19 @@ function calculate() {
     insight = 'Brokerage edges out at these numbers — usually means a very short timeline or the Roth is fully phased out and your retirement rate is high.';
   }
   $('insightText').innerHTML = insight;
+  // Live line on the inputs step + recap chips on every other step
+  let live;
+  if (noContributions) live = 'Set a contribution to start the battle.';
+  else if (isVeryClose) live = 'Right now: <strong>essentially a tie</strong> between ' + winner.label + ' and ' + runnerUp.label + '.';
+  else live = 'Right now: <strong>' + winner.label + ' wins</strong> by ' + fmt(diff) + ' after taxes.';
+  $('liveLine').innerHTML = live;
+  $('recapChips').innerHTML = [
+    'Age ' + age,
+    years + ' yrs',
+    '$' + income.toLocaleString() + ' · ' + STATUS_SHORT[status],
+    '$' + contribution.toLocaleString() + '/yr',
+    retPctLabel + ' return'
+  ].map(c => '<span class="recap-chip">' + c + '</span>').join('');
 
   // Strategy text (broader rule of thumb based on your situation)
   let strategy = '';
@@ -2360,8 +2544,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const el = $(id);
     if (el) el.addEventListener('input', calculate);
   });
-  // Initial render
+  // Step navigation
+  document.querySelectorAll('.step-tab').forEach(tab => tab.addEventListener('click', () => goToStep(Number(tab.dataset.go))));
+  $('prevStep').addEventListener('click', () => goToStep(currentStep - 1));
+  $('nextStep').addEventListener('click', () => goToStep(currentStep === STEP_COUNT ? 1 : currentStep + 1));
+  $('recap').addEventListener('click', () => goToStep(1));
+  document.addEventListener('keydown', (e) => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.target.closest('input, textarea, select, [contenteditable]')) return;
+    if (e.key === 'ArrowRight' && currentStep < STEP_COUNT) { e.preventDefault(); goToStep(currentStep + 1); }
+    if (e.key === 'ArrowLeft' && currentStep > 1) { e.preventDefault(); goToStep(currentStep - 1); }
+  });
+  // Initial render, honouring a #step-N deep link
   calculate();
+  const hashStep = (location.hash.match(/^#step-([1-6])$/) || [])[1];
+  goToStep(hashStep ? Number(hashStep) : 1, { scroll: false, updateHash: false });
 });
 </script>
 
