@@ -1,6 +1,6 @@
 # We Already Have Socialism in America. It's Just for the Rich. And It's Costing Us the Future.
 
-*Draft 2 — September 29, 2026. Every number is linked to a primary or major-outlet source, with a preference for data released in the last 12 months. Fact-check table and editorial notes at the bottom.*
+*Draft 3 — September 29, 2026. Every number is linked to a primary or major-outlet source, with a preference for data released in the last 12 months. Fact-check table and editorial notes at the bottom.*
 
 ---
 
@@ -64,31 +64,51 @@ And in October 2025, the Treasury used its Exchange Stabilization Fund to hand A
 
 Here's the thing. Every one of these had a defensible argument in the moment. I'm not saying let the planes fall out of the sky. I'm saying notice how fast the money moved, and who it landed on. And notice that record buybacks are the sequel to every one of them.
 
-## 2. Long-Term Care: The Quietest Wealth Transfer in America
+## 2. Long-Term Care: The Owners Get Paid Either Way
 
-This is the one almost nobody talks about, and it's the one that hits working and middle-class families hardest.
+This is the one almost nobody talks about, and it's the one that hits working and middle-class families hardest. It's also the clearest case of the whole pattern, so I'm going to slow down on it.
 
-More than half of Americans turning 65 today, [56%](https://rooseveltinstitute.org/publications/how-long-term-care-costs-drain-the-middle-class/), will need long-term care. One in five will need it for five years or more. A private nursing home room now costs a median of [$129,575 a year](https://investor.genworth.com/news-events/press-releases/detail/1054/carescout-releases-2025-cost-of-care-survey-results). Median household income for Americans over 65 is about $57,000.
+Start with a fact most Americans don't learn until it's too late: [Medicare does not cover long-term care](https://www.medicare.gov/coverage/nursing-home-care). It pays for up to 100 days of skilled nursing after a hospital stay. It pays nothing for the help with bathing, eating and dressing that most nursing home residents actually need. Zero.
 
-So here's what actually happens. Families pay privately until the money runs out. Then they qualify for Medicaid, which in most states requires [no more than $2,000 in countable assets](https://www.medicaidlongtermcare.org/eligibility/spend-down/). A 2025 study found that among residents who entered paying privately, [one in six spent down to Medicaid during their stay, in an average of just 6.1 months](https://pmc.ncbi.nlm.nih.gov/articles/PMC12679321/). The Roosevelt Institute found that [more than four out of five middle-class adults who need five-plus years of care end up on Medicaid](https://rooseveltinstitute.org/publications/how-long-term-care-costs-drain-the-middle-class/). After care begins, middle-class families keep about 42% of their wealth. The top quarter keeps 94%.
+And most of us will need it. [56% of Americans turning 65 today](https://rooseveltinstitute.org/publications/how-long-term-care-costs-drain-the-middle-class/) will need long-term care. One in five will need it for five years or more. A private nursing home room now costs a median of [$129,575 a year](https://investor.genworth.com/news-events/press-releases/detail/1054/carescout-releases-2025-cost-of-care-survey-results). Median household income for Americans over 65 is about $57,000.
 
-Then, when you die, federal law [requires states to recover what Medicaid spent from your estate](https://www.medicaid.gov/medicaid/eligibility-policy/estate-recovery). For most working-class families, the estate is the house. The one asset they had to pass down.
+So here's the ladder a middle-class family climbs down.
 
-Who's on the other end of that transfer?
+**Step one: pay until you're broke.** You write checks from a lifetime of savings. A 2025 study found that among residents who entered paying privately, [one in six spent down to Medicaid during their stay, in an average of just 6.1 months](https://pmc.ncbi.nlm.nih.gov/articles/PMC12679321/). Six months to burn through what took forty years to build.
 
-Medicaid is the primary payer for [63% of nursing home residents](https://www.kff.org/medicaid/5-key-facts-about-nursing-facilities-and-medicaid/). It paid 61% of the $459 billion the country spent on long-term care in 2023. Public money, flowing to mostly private operators. And a lot of it doesn't stay in the building.
+**Step two: qualify as poor.** In most states, Medicaid won't pay until you have [no more than $2,000 in countable assets](https://www.medicaidlongtermcare.org/eligibility/spend-down/). The Roosevelt Institute found that [more than four out of five middle-class adults who need five-plus years of care end up on Medicaid](https://rooseveltinstitute.org/publications/how-long-term-care-costs-drain-the-middle-class/). After care begins, middle-class families keep about 42% of their wealth. The top quarter keeps 94%.
 
-Nearly three-quarters of U.S. nursing homes, more than 11,000, do business with [companies owned by the same people who own the nursing home](https://kffhealthnews.org/aging/care-suffers-as-more-nursing-homes-feed-money-into-corporate-webs/). The home pays "rent" to its owner's real estate company and "management fees" to its owner's management company. Homes that do this have fewer nurses per patient, higher injury rates, and almost twice the complaints. A 2024 NBER paper found that nursing homes hide [at least 63% of their profits](https://www.nber.org/system/files/working_papers/w32258/w32258.pdf) this way. The books say the home is barely breaking even. The owner's other companies say otherwise.
+**Step three: the state takes the house.** When you die, federal law [requires states to recover what Medicaid spent from your estate](https://www.medicaid.gov/medicaid/eligibility-policy/estate-recovery). For most working families, the estate is the house. The one asset they had to pass down. Gone.
 
-It gets worse with private equity. A landmark study of more than 7 million Medicare patients found that when a PE firm buys a nursing home, [short-term mortality goes up 10%](https://www.nber.org/papers/w28474). About 21,000 lives over the study period. At the same time, spending per patient went up 19%, "the vast majority of which is billed to taxpayers."
+Now here's the part that should make you angry. The rich don't climb that ladder.
+
+If you have money and foresight, you hire an elder-law attorney, move your assets into an irrevocable trust, wait out Medicaid's [five-year lookback](https://www.elderlawanswers.com/medicaid-and-trusts-12004), and qualify for Medicaid with your wealth intact. It's legal. It's routine. It costs [$3,000 to $15,000 in legal fees](https://www.payingforseniorcare.com/find_medicaid_planning_help), which the industry's own marketing describes as "less than one month of nursing home care." An elder-care lawyer put it plainly on his own blog: [funding long-term care "is really a problem for the middle and working classes, not the rich."](https://www.eldercarelawyer.com/blog/medicaid-planning-for-the-rich/)
+
+Read that again. The public program for the poor is available to the wealthy through a lawyer, and unavailable to the middle class until they've been stripped to $2,000.
+
+So who's on the other end of all that money?
+
+Medicaid is the primary payer for [63% of nursing home residents](https://www.kff.org/medicaid/5-key-facts-about-nursing-facilities-and-medicaid/). It paid 61% of the $459 billion the country spent on long-term care in 2023. And [73% of nursing homes are for-profit](https://www.kff.org/medicaid/a-look-at-nursing-facility-characteristics/). Public money, flowing to private owners. And a lot of it doesn't stay in the building.
+
+**The related-party game.** Nearly three-quarters of U.S. nursing homes, more than 11,000, do business with [companies owned by the same people who own the nursing home](https://kffhealthnews.org/aging/care-suffers-as-more-nursing-homes-feed-money-into-corporate-webs/). The home pays "rent" to its owner's real estate company and "management fees" to its owner's management company. Homes that do this have fewer nurses per patient, higher injury rates, and almost twice the complaints. A 2024 NBER paper found that nursing homes hide [at least 63% of their profits](https://www.nber.org/system/files/working_papers/w32258/w32258.pdf) this way. The books say the home is barely breaking even. The owner's other companies say otherwise.
+
+**The landlords.** Wall Street figured this out. Real estate investment trusts now hold stakes in [one in six U.S. nursing homes](https://kffhealthnews.org/health-industry/real-estate-investment-trusts-senior-housing-nursing-homes-profit/), and healthcare REITs paid out more than $7 billion in dividends in 2024. One of the biggest, CareTrust, booked a 67% profit margin: $320 million in net income on $476 million in revenue. KFF Health News found one of its nursing homes paying the REIT more than $1 million a year in rent while the home itself ran at a deficit, and found that homes in these portfolios delivered a half hour to more than an hour *less* nursing care per resident per day than the national average. The REITs' lawyers say they're "the property owners, not the operators." The residents' lawyers say "the REITs are in charge." The residents in that story died of bedsores.
+
+**The funds.** A landmark study of more than 7 million Medicare patients found that when a private equity firm buys a nursing home, [short-term mortality goes up 10%](https://www.nber.org/papers/w28474). About 21,000 lives over the study period. At the same time, spending per patient went up 19%, "the vast majority of which is billed to taxpayers."
 
 Let that sink in. They got paid more. The patients died more. And the check came from the public.
 
-In 2024, the federal government finally set a minimum staffing standard. The industry's lobby, the American Health Care Association, [spent nearly $17 million lobbying since 2020](https://www.warren.senate.gov/newsroom/press-releases/warren-schakowsky-slam-largest-nursing-home-lobbying-groups-for-sabotaging-biden-administrations-minimum-nurse-staffing-rules-that-improve-quality-of-care-for-seniors). In December 2025, [the rule was repealed](https://www.federalregister.gov/documents/2025/12/03/2025-21792/medicare-and-medicaid-programs-repeal-of-minimum-staffing-standards-for-long-term-care-facilities).
+**The rulebook.** In 2024, the federal government finally set a minimum staffing standard. The owners' lobby, the American Health Care Association, [spent nearly $17 million lobbying since 2020](https://www.warren.senate.gov/newsroom/press-releases/warren-schakowsky-slam-largest-nursing-home-lobbying-groups-for-sabotaging-biden-administrations-minimum-nurse-staffing-rules-that-improve-quality-of-care-for-seniors). In December 2025, [the rule was repealed](https://www.federalregister.gov/documents/2025/12/03/2025-21792/medicare-and-medicaid-programs-repeal-of-minimum-staffing-standards-for-long-term-care-facilities).
 
-Follow the money one more time. Grandma's house becomes Medicaid's reimbursement. Medicaid's reimbursement becomes the operator's revenue. The operator's revenue becomes rent to the owner's real estate company. The real estate company is owned by a fund. The fund's investors are, overwhelmingly, the top of the K.
+I want to be precise about who I'm describing. The nursing assistant turning your mother every two hours makes a median of [$20 an hour](https://www.bls.gov/ooh/healthcare/nursing-assistants.htm). Turnover in that job runs [close to 100% a year](https://www.phinational.org/policy-research/key-facts-faq/). She is not the problem. She's getting squeezed by the same structure the residents are. I'm talking about the people above her: the operator who pays rent to himself, the REIT booking a 67% margin on a building where residents get an hour less care, the fund that raised billing 19% while mortality rose 10%.
 
-They get paid whether the care is good or not. Actually, the data says they get paid *more* when it isn't.
+A landlord who collects rent from a nursing home that's running a deficit, with Medicaid covering the gap and the residents getting less care, isn't running a business. He's running a toll booth on the last years of someone's life. And the toll is paid twice: first by the family, then by the taxpayer.
+
+Follow the money one more time. Grandma's house becomes Medicaid's reimbursement. Medicaid's reimbursement becomes the operator's revenue. The operator's revenue becomes rent to the owner's real estate company. The real estate company is owned by a fund or a REIT. The fund's investors are, overwhelmingly, the top of the K. And the one family that could have protected the house was the one rich enough to hire the lawyer.
+
+None of this is inevitable, by the way. The United States is [one of the few wealthy countries without universal long-term care insurance](https://harkininstitute.drake.edu/wp-content/uploads/sites/103/2025/05/LTC-2025-Policy-Brief_v4.pdf). Germany and Japan run mandatory public programs that everyone pays into and everyone can use, no spend-down required. We passed one in 2010, the CLASS Act. Congress [repealed it in January 2013](https://www.everycrsreport.com/reports/R40842.html) before it ever enrolled a single person. The "go broke first" rule is a policy choice, and we already chose against the alternative.
+
+The owners get paid whether the care is good or not. Actually, the data says they get paid *more* when it isn't.
 
 ## 3. Grocery Stores and SNAP: Subsidized at Both Ends
 
@@ -233,6 +253,8 @@ Until we change that, we're not fixing the K. We're funding it.
 - "A 9/11 every two years": 1,500 deaths a year over two years is about 3,000. It's arithmetically right at the low end of the estimates, but it's a hot line. Your call.
 - SVB: the $16.3B special assessment hit ~114 large banks. Pass-through to customers is an inference, which is why this draft says "charged to the banking system" and stops there.
 
+**Long-term care section (Draft 3 sharpening):** Rewritten around the owners, per your note. Three additions carry the argument: (1) the rich opt out via irrevocable trusts and the five-year lookback, sourced to elder-law firms' own marketing; (2) the April 2026 KFF Health News / NPR investigation into REIT landlords (1 in 6 nursing homes, $7B in dividends, CareTrust's 67% margin, homes paying rent while running deficits); (3) the CLASS Act repeal and the Germany/Japan comparison, which turns "go broke first" from a fact of life into a policy choice. The workers paragraph is there on purpose: it inoculates you against the "you're attacking CNAs" reply and makes the "toll booth" line land on the owners only. If you want the section even harder, the three named cases in the KFF story (bedsore deaths, a $12M verdict and a $110M verdict) are in the fact-check table and could go in.
+
 **Tone check:** Kept your rhythm (short paragraphs, "Let that sink in," "Read those side by side," "Here's the thing," Quick Background, Why I Care, Bottom Line). Did not reuse "swimming in a riptide." The spine line is "The bailout goes up. The bill comes down." The new closer adds "with interest," which ties the debt section to the ending.
 
 ---
@@ -313,3 +335,13 @@ Until we change that, we're not fixing the K. We're funding it.
 | 70 | Non-owners expecting to buy | 25% | [Gallup](https://news.gallup.com/poll/708995/homebuying-intentions-decline-further.aspx) | May 2026 |
 | 71 | Fertility record low | 2025, second straight | [CNN](https://www.cnn.com/2026/04/09/health/fertility-rate-record-low-2025) | Apr 2026 |
 | 72 | Intel stake | $8.9B for 9.9%; 433.3M shares at $20.47 | [CNBC](https://www.cnbc.com/2025/08/22/intel-goverment-equity-stake.html) | Aug 22, 2025 |
+| 73 | Medicare covers no custodial care; 100 days skilled max | Medicare.gov | [Medicare.gov](https://www.medicare.gov/coverage/nursing-home-care) | Current |
+| 74 | Medicaid planning: irrevocable trusts, 5-year lookback | Legal, routine | [ElderLawAnswers](https://www.elderlawanswers.com/medicaid-and-trusts-12004) | Current |
+| 75 | Medicaid planning cost | $3,000–$15,000; "less than one month of care" | [PayingForSeniorCare](https://www.payingforseniorcare.com/find_medicaid_planning_help) | 2025 |
+| 76 | "A problem for the middle and working classes, not the rich" | Elder-care lawyer's blog | [EldercareLawyer.com](https://www.eldercarelawyer.com/blog/medicaid-planning-for-the-rich/) | n.d. |
+| 77 | Nursing homes for-profit share | 73% (20% nonprofit, 7% gov't) | [KFF](https://www.kff.org/medicaid/a-look-at-nursing-facility-characteristics/) | 2025 |
+| 78 | REITs in nursing homes | 1 in 6 homes; ~$250B sector; $7B+ dividends 2024; CareTrust 67% margin ($320M on $476M); 0.5–1.25 fewer care hrs/day; home paying $1M+ rent at a deficit; bedsore deaths, $12M and $110M verdicts | [KFF Health News](https://kffhealthnews.org/health-industry/real-estate-investment-trusts-senior-housing-nursing-homes-profit/) / [NPR](https://www.npr.org/2026/04/19/nx-s1-5786242/profit-landlord-real-estate-investment-trust-nursing-homes-safety) | Apr 19–21, 2026 |
+| 79 | Nursing assistant median pay | $20.13/hr, $41,870/yr | [BLS OOH](https://www.bls.gov/ooh/healthcare/nursing-assistants.htm) | May 2025 |
+| 80 | Nursing home aide turnover | ~100%/yr median (PHI) | [PHI](https://www.phinational.org/policy-research/key-facts-faq/) | 2017–18 data |
+| 81 | U.S. lacks universal LTC insurance; Germany/Japan mandatory | Comparative brief | [Harkin Institute](https://harkininstitute.drake.edu/wp-content/uploads/sites/103/2025/05/LTC-2025-Policy-Brief_v4.pdf) / [Health Affairs](https://www.healthaffairs.org/doi/10.1377/hlthaff.2009.0548) | 2025 / 2010 |
+| 82 | CLASS Act repealed before launch | Sec. 642, American Taxpayer Relief Act | [CRS](https://www.everycrsreport.com/reports/R40842.html) | Jan 3, 2013 |
