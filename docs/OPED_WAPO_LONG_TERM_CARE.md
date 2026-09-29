@@ -4,7 +4,7 @@
 
 ---
 
-Going broke in America is rarely loud. It happens in a hospital discharge office, where a social worker explains that [Medicare will cover your mother's rehab for a few weeks, never more than 100 days, and then stop](https://www.medicare.gov/coverage/nursing-home-care). After that, the daily help with bathing, eating and dressing is on you.
+Going broke in America is rarely loud. It happens in a discharge office, where a social worker explains that [Medicare will cover your mother's rehab for a few weeks, never more than 100 days, and then stop](https://www.medicare.gov/coverage/nursing-home-care). After that, the daily help with bathing, eating and dressing is on you.
 
 More than half of Americans turning 65 in recent years [will need long-term care](https://rooseveltinstitute.org/publications/how-long-term-care-costs-drain-the-middle-class/). A private nursing home room costs a median of [$129,575 a year](https://investor.genworth.com/news-events/press-releases/detail/1054/carescout-releases-2025-cost-of-care-survey-results), and the median household headed by someone over 65 earns [$56,680](https://www2.census.gov/library/publications/2025/demo/p60-286.pdf). The arithmetic ends only one way.
 
@@ -30,7 +30,7 @@ I watched this happen to my grandmother. Her savings and everything she owned we
 
 ## NOTES FOR SCOTT (delete before submitting)
 
-**Word count:** 751 for the body, under the Post's practical ceiling of 750.
+**Word count:** 750 for the body, under the Post's practical ceiling of 750.
 
 **What changed in v2 and why.**
 - Every number now links to its source in the text. Editors at the Post check links, not footnotes.
