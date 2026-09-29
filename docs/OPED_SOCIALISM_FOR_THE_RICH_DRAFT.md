@@ -201,7 +201,7 @@ The bailout goes up. The bill comes down. Until we change that, we're not fixing
 
 ## EDITORIAL NOTES (delete before publishing)
 
-**Word count:** about 2,900 words for the piece itself. Your K-shaped post ran about 1,900. If you want it tighter for LinkedIn, the SVB paragraph, the "What This Does to the Future" section and the prison-labor line are the easiest cuts. For a newspaper op-ed (700–900 words) I'd keep the intro, one case study (long-term care is the freshest), the "afford" paragraph and the bottom line.
+**Word count:** about 3,100 words for the piece itself. Your K-shaped post ran about 1,900. If you want it tighter for LinkedIn, the SVB paragraph, the "What This Does to the Future" section and the prison-labor line are the easiest cuts. For a newspaper op-ed (700–900 words) I'd keep the intro, one case study (long-term care is the freshest), the "afford" paragraph and the bottom line.
 
 **Alternate titles:**
 - "Socialism for the Rich Is Alive and Well. Just Look at the Back Pages."
