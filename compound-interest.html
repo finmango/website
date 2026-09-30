@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Free Compound Interest Calculator | See Your Money Grow — FinMango</title>
-<meta name="description" content="See exactly how your savings grow with compound interest. Adjust contributions, rate, and time to watch your future wealth take shape.">
+<title>Compound Interest Calculator | FinMango</title>
+<meta name="description" content="Put in what you have and what you can add each month, and see what compound interest does with it over time. Free, no account, from FinMango.">
 <link rel="icon" type="image/png" href="favicon.png">
   <!-- Performance: Preconnect to external domains -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -623,149 +623,109 @@
       pre, code { white-space: pre-wrap; word-break: break-word; }
     }
 
-    /* ---- reskinned legacy component css ---- */
-:root{--bg:var(--paper);--white:#fff;--black:#0A0A0A;--orange:#F25A27;--ol:rgba(242, 90, 39,.08);--muted:#6b655b;--bdr:rgba(0,0,0,.07);--green:#16a34a;--yellow:#d97706;--red:#dc2626;--fb:'DM Sans',-apple-system,sans-serif}
-
-*{margin:0;padding:0;box-sizing:border-box}
-
+    /* ---- compound interest: page styles ---- */
+:root{--white:#fff;--muted:var(--ink-dim);--bdr:var(--ink-line)}
 a{color:inherit;text-decoration:none}
-
 input[type=number]{-moz-appearance:textfield}
-
 input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 
-.hero{position:relative;padding:120px 32px 32px;text-align:center;overflow:hidden}
+/* Hero: left-set, one eyebrow, one plain headline */
+.tool-hero{max-width:var(--max-width);margin:0 auto;padding:150px var(--gutter) 44px}
+.tool-hero-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem 2rem;flex-wrap:wrap;margin-bottom:1.75rem}
+.tool-meta{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;color:var(--ink-faint)}
+.tool-hero h1{font-size:clamp(2.4rem,4.8vw,4rem);font-weight:900;line-height:.98;letter-spacing:-.045em;max-width:16ch;margin-bottom:1.25rem}
+.tool-lede{font-size:1.15rem;line-height:1.55;color:var(--ink-dim);max-width:60ch;font-weight:300}
+.tool-lede strong{font-weight:600;color:var(--ink)}
 
-.hero::before{content:'';position:absolute;top:-200px;right:-300px;width:700px;height:700px;background:radial-gradient(circle,rgba(242, 90, 39,.10) 0%,transparent 65%);filter:blur(60px);pointer-events:none;z-index:-1}
-
-.hero::after{content:'';position:absolute;bottom:-120px;left:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(58,111,160,.06) 0%,transparent 65%);filter:blur(60px);pointer-events:none;z-index:-1}
-
-.hero-content{max-width:820px;margin:0 auto}
-
-.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.14em;padding:.4rem .85rem;background:rgba(242, 90, 39,.08);border:1px solid rgba(242, 90, 39,.2);border-radius: 0;margin-bottom:1.25rem}
-
-.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);flex-shrink:0}
-
-.hero h1{font-size:clamp(2.1rem,4.6vw,3.4rem);font-weight:900;line-height:1.05;letter-spacing:-.035em;margin-bottom:1rem}
-
-.hero h1 em{font-style:normal;color:var(--orange);position:relative}
-
-.hero h1 em::after{content:'';position:absolute;bottom:.05em;left:-3px;right:-3px;height:.18em;background:rgba(242, 90, 39,.22);border-radius: 0;z-index:-1}
-
-.hero-sub{font-size:1.1rem;color:var(--muted);max-width:660px;margin:0 auto;line-height:1.6}
-
-.calc-section{max-width:1200px;margin:0 auto;padding:24px 32px 80px}
-
-.calc-grid{display:grid;grid-template-columns:380px 1fr;gap:24px;align-items:start}
-
+/* Layout */
+.calc-section{max-width:var(--max-width);margin:0 auto;padding:0 var(--gutter) 72px}
+.calc-grid{display:grid;grid-template-columns:400px 1fr;gap:24px;align-items:start}
 .controls-panel{position:sticky;top:100px;min-width:0}
+.results-panel{min-width:0;display:flex;flex-direction:column;gap:20px}
 
-.results-panel{min-width:0;display:flex;flex-direction:column;gap:14px}
-
-.ccard{background:var(--white);border:1px solid var(--bdr);border-radius: 0;padding:32px;margin-bottom:14px}
-
-.eyebrow{font-size: .72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:4px}
-
-.ccard h2{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;line-height:1.15;margin-bottom:8px}
-
-.cdesc{font-size:.85rem;color:var(--muted);padding-bottom:18px;border-bottom:1px solid var(--bdr);margin-bottom:22px;line-height:1.55}
-
+/* Inputs */
+.ccard{background:var(--white);border:1px solid var(--bdr);padding:28px}
+.starts{padding-bottom:22px;border-bottom:1px solid var(--bdr);margin-bottom:22px}
+.starts-label{font-size:.85rem;color:var(--ink-dim);margin-bottom:.7rem}
+.starts-row{display:flex;flex-wrap:wrap;gap:8px}
+.start-btn{font-family:inherit;font-size:.82rem;font-weight:600;letter-spacing:-.01em;padding:.5rem .8rem;border:1px solid var(--bdr);background:transparent;color:var(--ink);cursor:pointer;transition:border-color .2s,background .2s,color .2s}
+.start-btn:hover{border-color:var(--ink)}
+.start-btn.is-on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .fg{margin-bottom:18px}
-
-.fl{display:block;font-size:.67rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px}
-
-.fh{display:block;font-size:.71rem;color:#b0a99e;margin-top:4px}
-
+.fg:last-child{margin-bottom:0}
+.fl{display:block;font-size:.88rem;font-weight:600;letter-spacing:-.01em;margin-bottom:6px}
+.fh{display:block;font-size:.78rem;color:var(--ink-faint);margin-top:6px;line-height:1.45}
 .iw{position:relative}
-
-.ip,.is{position:absolute;top:50%;transform:translateY(-50%);font-weight:600;font-size:.95rem;color:#c0b9af;pointer-events:none}
-
+.ip,.is{position:absolute;top:50%;transform:translateY(-50%);font-family:var(--font-mono);font-size:.9rem;color:var(--ink-faint);pointer-events:none}
 .ip{left:14px}
 .is{right:14px}
-
-.fi{width:100%;padding:13px 16px;border:1.5px solid rgba(0,0,0,.1);background:var(--bg);font-size:1rem;font-weight:600;color:var(--black);outline:none;transition:all .2s;font-family:inherit;border-radius:10px}
-
-.fi:focus{border-color:var(--orange);background:var(--white)}
-
-.fi.px{padding-left:28px}
-.fi.sx{padding-right:50px}
-
+.fi{width:100%;padding:12px 14px;border:1px solid var(--bdr);background:var(--paper);font-family:var(--font-mono);font-size:1.05rem;font-weight:500;color:var(--ink);outline:none;transition:border-color .2s,background .2s;font-variant-numeric:tabular-nums}
+.fi:focus{border-color:var(--ink);background:var(--white)}
+.fi.px{padding-left:30px}
+.fi.sx{padding-right:52px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
-.hero-result{background:linear-gradient(135deg,#fff7ed 0%,#fff 100%);border:1px solid var(--bdr);border-left: 1px solid var(--orange);border-radius: 0;padding:24px;margin-bottom:14px;text-align:center}
+/* Result: a sentence, with the numbers inside it */
+.result{background:var(--white);border:1px solid var(--bdr);padding:36px 36px 30px}
+.result-sentence{font-size:clamp(1.45rem,2.3vw,2.05rem);font-weight:400;line-height:1.32;letter-spacing:-.025em;color:var(--ink);text-wrap:pretty}
+.result-sentence b{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.result-sentence .grow{color:var(--orange-ink)}
+.result-note{margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--bdr);font-size:.98rem;line-height:1.5;color:var(--ink-dim)}
+.result-note b{font-weight:600;color:var(--ink)}
 
-.hero-result-label{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-
-.hero-result-num{font-size:3rem;font-weight:900;letter-spacing:-.04em;color:var(--orange);line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums}
-
-.hero-result-sub{font-size:.85rem;color:var(--muted)}
-
-.bk-strip{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
-
-.bk-card{background:var(--bg);border-radius: 0;padding:14px;text-align:left}
-
-.bk-card .bk-lbl{font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-
-.bk-card .bk-val{font-size:1.2rem;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-
-.bk-card.hl .bk-val{color:var(--green)}
-
-.chart-card{background:var(--white);border:1px solid var(--bdr);border-radius: 0;padding:24px;margin-bottom:14px;box-shadow:0 2px 16px rgba(0,0,0,.03)}
-
-.chart-card .stit{font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center}
-
-.chart-legend{display:flex;gap:14px;font-size:.65rem;font-weight:600;text-transform:none;letter-spacing:0;color:var(--muted)}
-
+/* Chart */
+.chart-card{background:var(--white);border:1px solid var(--bdr);padding:24px}
+.chart-card .stit{font-size:.9rem;font-weight:600;letter-spacing:-.01em;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.chart-legend{display:flex;gap:14px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.04em;color:var(--ink-faint)}
 .chart-legend span{display:flex;align-items:center;gap:6px}
-
-.chart-legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
-
+.chart-legend i{width:14px;height:2px;display:inline-block}
+.chart-legend i.dash{background:repeating-linear-gradient(90deg,var(--ink-faint) 0 3px,transparent 3px 6px)}
 .chart-wrap{position:relative;height:300px}
 
-.disc{font-size:.66rem;color:#c0b9af;text-align:center;margin-top:18px;padding:10px;border:1px dashed var(--bdr);border-radius: 0;line-height:1.5}
+/* How it works */
+.how{padding:0 4px}
+.how p{font-size:.95rem;line-height:1.6;color:var(--ink-dim);max-width:62ch;margin-top:.75rem}
 
-.related-tools{background:var(--black);padding:48px 32px;border-top: 1px solid var(--orange)}
+/* A note from a person */
+.note{border-top:1px solid var(--bdr)}
+.note-inner{max-width:var(--max-width);margin:0 auto;padding:56px var(--gutter);display:grid;grid-template-columns:88px minmax(0,640px);gap:2rem;align-items:start}
+.note-photo{width:88px;height:88px;border-radius:50%;object-fit:cover;object-position:50% 20%;border:1px solid var(--bdr);padding:3px;background:var(--paper)}
+.note-body p{font-size:1.12rem;line-height:1.55;color:var(--ink);margin-top:1rem;text-wrap:pretty}
+.note-sign{font-size:.92rem;color:var(--ink-dim);margin-top:1.1rem !important;line-height:1.6 !important}
+.note-sign a{border-bottom:1px solid var(--ink-line);transition:border-color .2s}
+.note-sign a:hover{border-color:var(--ink)}
+.note-draft{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.04em;color:var(--orange-ink);margin-top:.5rem !important}
 
-.related-inner{max-width:960px;margin:0 auto}
+/* Keep going: ruled rows, not a card grid */
+.next{border-top:1px solid var(--bdr)}
+.next-inner{max-width:var(--max-width);margin:0 auto;padding:56px var(--gutter) 64px}
+.next-list{margin-top:1.25rem;border-top:1px solid var(--bdr)}
+.next-row{display:grid;grid-template-columns:220px 1fr auto;gap:1.5rem;align-items:baseline;padding:1.1rem 0;border-bottom:1px solid var(--bdr);color:var(--ink)}
+.next-title{font-weight:600;letter-spacing:-.01em}
+.next-desc{color:var(--ink-dim);font-size:.98rem}
+.next-arrow{font-family:var(--font-mono);color:var(--ink-faint);transition:transform .25s cubic-bezier(.16,1,.3,1),color .2s}
+.next-row:hover .next-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.next-row:hover .next-arrow{transform:translateX(4px);color:var(--ink)}
+.disc{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.04em;color:var(--ink-faint);margin-top:1.75rem;line-height:1.6}
 
-.related-header{text-align:center;margin-bottom:28px}
+@media(max-width:968px){
+.tool-hero{padding:120px var(--gutter) 32px}
+.calc-grid{grid-template-columns:1fr;gap:16px}
+.controls-panel{position:static}
+.note-inner{grid-template-columns:72px 1fr;gap:1.25rem;padding:44px var(--gutter)}
+.note-photo{width:72px;height:72px}
+.next-row{grid-template-columns:1fr auto;row-gap:.2rem}
+.next-desc{grid-column:1/-1}
+.next-arrow{grid-row:1;grid-column:2}}
 
-.related-tag{display:inline-block;background:var(--orange-ink);color:#fff;font-size:.58rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:4px 11px;border-radius: 0;margin-bottom:10px}
-
-.related-header h2{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;color:#fff;margin-bottom:5px}
-
-.related-header p{font-size:.88rem;color:rgba(255,255,255,.4)}
-
-.related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
-
-.related-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:18px;text-decoration:none;transition:all .25s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;gap:5px;border-radius:12px}
-
-.related-card:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
-
-.rc-icon{font-size:1.3rem}
-.rc-title{font-size:.85rem;font-weight:700;color:#fff}
-.rc-desc{font-size:.7rem;color:rgba(255,255,255,.38);line-height:1.4}
-
-::-webkit-scrollbar{width:8px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:4px}
-::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.2)}
-
-@media(max-width:968px){.hero{padding:100px 20px 24px}
-.calc-section{padding:0 20px 60px}
-.calc-grid{grid-template-columns:1fr;gap:14px}
-.controls-panel{position:static}}
-
-@media(max-width:600px){.hero{padding:90px 16px 16px}
-.calc-section{padding:0 16px 48px}
-.ccard,.chart-card{padding:22px 18px;border-radius:12px}
+@media(max-width:600px){
+.tool-hero{padding:104px var(--gutter) 24px}
+.ccard{padding:22px 18px}
+.result{padding:24px 20px 22px}
 .frow{grid-template-columns:1fr}
-.related-grid{grid-template-columns:1fr 1fr}
-.hero-result-num{font-size:2.4rem}
 .chart-wrap{height:240px}
-.bk-strip{grid-template-columns:1fr}}
-
-@media(max-width:480px){.related-grid{grid-template-columns:1fr}}
+.note-inner{grid-template-columns:1fr}
+.note-photo{width:64px;height:64px}}
 
 
   </style>
@@ -1009,46 +969,73 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
     </div>
   </div>
   <!-- /chrome:nav -->
-<section class="hero">
-<div class="hero-content">
-<div class="hero-eyebrow"><span class="dot"></span> Compound Interest · Free Tool</div>
-<h1>Watch your money <em>multiply itself.</em></h1>
-<p class="hero-sub">Compound interest is how small contributions grow into real wealth. Adjust the inputs to see exactly what's possible with your numbers.</p>
+<section class="tool-hero">
+<div class="tool-hero-top">
+<div class="eyebrow">Calculator · Compound interest</div>
+<div class="tool-meta">Last checked September 2026</div>
 </div>
+<h1>Compound interest calculator</h1>
+<p class="tool-lede">Put in what you have, what you can add each month, and how long you can leave it alone. Then change one number at a time and watch which one moves the result most. <strong>It's the years.</strong></p>
 </section>
 <section class="calc-section">
 <div class="calc-grid">
 <aside class="controls-panel">
 <div class="ccard">
-<div class="eyebrow">The Calculator</div><h2>Your Inputs</h2><p class="cdesc">Enter what you have and what you'll add. Future value updates instantly.</p>
-<div class="fg"><label class="fl" for="principal">Initial Investment</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="principal" value="1000" min="0" step="100"></div><span class="fh">What you start with today</span></div>
-<div class="fg"><label class="fl" for="monthly">Monthly Contribution</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="monthly" value="100" min="0" step="10"></div><span class="fh">What you add each month</span></div>
+<div class="starts">
+<div class="starts-label">Start from someone like you, then make it yours.</div>
+<div class="starts-row" id="starts">
+<button type="button" class="start-btn" data-p="500" data-m="50" data-r="7" data-y="45">Still in school</button>
+<button type="button" class="start-btn is-on" data-p="500" data-m="100" data-r="7" data-y="40">First real paycheck</button>
+<button type="button" class="start-btn" data-p="10000" data-m="400" data-r="7" data-y="25">Starting at 40</button>
+</div>
+</div>
+<div class="fg"><label class="fl" for="principal">What you have today</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="principal" value="500" min="0" step="100"></div><span class="fh">Even $0 works. The monthly number matters more than this one.</span></div>
+<div class="fg"><label class="fl" for="monthly">What you can add each month</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="monthly" value="100" min="0" step="10"></div><span class="fh">Pick a number you could keep up in a bad month.</span></div>
 <div class="frow">
-<div class="fg"><label class="fl" for="rate">Annual Return</label><div class="iw"><input class="fi sx" type="number" id="rate" value="7" min="0" max="30" step="0.1"><span class="is">%</span></div><span class="fh">S&amp;P avg ≈ 9%</span></div>
-<div class="fg"><label class="fl" for="years">Time Period</label><div class="iw"><input class="fi sx" type="number" id="years" value="10" min="1" max="50" step="1"><span class="is">yrs</span></div><span class="fh">Years to grow</span></div>
+<div class="fg"><label class="fl" for="rate">Yearly return</label><div class="iw"><input class="fi sx" type="number" id="rate" value="7" min="0" max="30" step="0.1"><span class="is">%</span></div><span class="fh">7% is close to the stock market's long-run average after inflation.</span></div>
+<div class="fg"><label class="fl" for="years">Years you'll leave it alone</label><div class="iw"><input class="fi sx" type="number" id="years" value="40" min="1" max="60" step="1"><span class="is">yrs</span></div><span class="fh">Try adding five and see what happens.</span></div>
 </div>
 </div>
 </aside>
 <div class="results-panel">
-<div class="hero-result">
-<div class="hero-result-label">Future Value</div>
-<div class="hero-result-num" id="futureValue">$0</div>
-<div class="hero-result-sub">After <span id="yearsInline" style="font-weight:700;color:var(--black)">10</span> years of compounding</div>
-<div class="bk-strip">
-<div class="bk-card"><div class="bk-lbl">Total Contributions</div><div class="bk-val" id="totalContributions">$0</div></div>
-<div class="bk-card hl"><div class="bk-lbl">Interest Earned</div><div class="bk-val" id="interestEarned">$0</div></div>
-</div>
+<div class="result" aria-live="polite">
+<p class="result-sentence">In <b id="rYears">40 years</b> you'd have about <b id="rTotal">$270,000</b>. <b id="rPutIn">$48,500</b> of that is money you put in. The other <b class="grow" id="rGrowth">$221,500</b> is growth.</p>
+<p class="result-note" id="rNote"></p>
 </div>
 <div class="chart-card">
-<div class="stit"><span>Growth Curve</span><span class="chart-legend"><span><i style="background:#F25A27"></i>Total Value</span><span><i style="background:#9CA3AF"></i>Contributions</span></span></div>
-<div class="chart-wrap"><canvas id="growthChart"></canvas></div>
+<div class="stit"><span>How it grows, year by year</span><span class="chart-legend"><span><i style="background:var(--orange)"></i>What you'd have</span><span><i class="dash"></i>What you put in</span></span></div>
+<div class="chart-wrap"><canvas id="growthChart" aria-label="Line chart of total value and contributions by year" role="img"></canvas></div>
 </div>
-<div class="disc">Estimates for educational purposes only. Actual returns vary. <strong>FinMango</strong> · 501(c)(3) · <a href="index.html" style="color:var(--orange)">finmango.org</a></div>
+<div class="how">
+<div class="eyebrow">How this is worked out</div>
+<p>We compound monthly and add your contribution at the end of each month. The return is held steady every year, which real markets never do, so read the result as a direction rather than a promise. Nothing you type leaves this page.</p>
+</div>
 </div>
 </div>
 </section>
 
-<section class="related-tools"><div class="related-inner"><div class="related-header"><div class="related-tag">More Free Tools</div><h2>Keep Building Your Financial Future</h2><p>Free calculators and lessons from FinMango.</p></div><div class="related-grid"><a href="rule-of-72.html" class="related-card"><div class="rc-icon">⏱️</div><div class="rc-title">Rule of 72</div><div class="rc-desc">Doubling-time math</div></a><a href="roth-ira.html" class="related-card"><div class="rc-icon">🌱</div><div class="rc-title">Roth IRA</div><div class="rc-desc">Tax-free retirement</div></a><a href="portfolio-simulator.html" class="related-card"><div class="rc-icon">📊</div><div class="rc-title">Portfolio Simulator</div><div class="rc-desc">Test asset allocations</div></a><a href="ira-battle.html" class="related-card"><div class="rc-icon">⚔️</div><div class="rc-title">IRA Battle</div><div class="rc-desc">Roth vs. Traditional vs. taxable</div></a></div></div></section>
+<section class="note">
+<div class="note-inner">
+<img class="note-photo" src="scott_new_pic.jpeg" alt="Scott Glasgow" width="88" height="88" loading="lazy">
+<div class="note-body">
+<div class="eyebrow">A note from Scott</div>
+<p>Nobody sat me down and explained this when I was a student, and most of what FinMango does is try to get it in front of people before their first credit card rather than after. The rate gets all the attention. The years do the work. Run it yourself: $100 a month from age 20 ends up ahead of $300 a month from age 40, on about half the money put in. Start with whatever you have.</p>
+<p class="note-sign">Scott Glasgow, founder, FinMango &middot; <a href="scott-glasgow.html">More about Scott</a></p>
+</div>
+</div>
+</section>
+
+<section class="next">
+<div class="next-inner">
+<div class="eyebrow">Keep going</div>
+<div class="next-list">
+<a class="next-row" href="rule-of-72.html"><span class="next-title">Rule of 72</span><span class="next-desc">How long until your money doubles, worked out in your head.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="roth-ira.html"><span class="next-title">Roth IRA</span><span class="next-desc">Where to keep this money so the growth is never taxed.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="ira-battle.html"><span class="next-title">Battle of the IRAs</span><span class="next-desc">Roth, Traditional, or a plain brokerage account, side by side.</span><span class="next-arrow">&rarr;</span></a>
+</div>
+<p class="disc">Estimates for learning, not financial advice. FinMango is a 501(c)(3) nonprofit. No account, no ads, nothing stored.</p>
+</div>
+</section>
 
 <!-- chrome:footer -->
   <footer>
@@ -1083,31 +1070,67 @@ input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-
 
 <script>
 let chart=null;
-function fmt(v){if(!isFinite(v))return'$0';if(v>=1e6)return'$'+(v/1e6).toFixed(2)+'M';if(v>=1e3)return'$'+(v/1e3).toFixed(1)+'K';return'$'+Math.round(v).toLocaleString()}
+const $=id=>document.getElementById(id);
+const money=v=>'$'+Math.round(v).toLocaleString('en-US');
+function about(v){ // round the headline number so the sentence reads like a person said it
+  if(v>=1e6)return Math.round(v/1e4)*1e4;
+  if(v>=1e5)return Math.round(v/1e3)*1e3;
+  if(v>=1e4)return Math.round(v/100)*100;
+  return Math.round(v);
+}
 function calculate(){
-  const principal=parseFloat(document.getElementById('principal').value)||0;
-  const monthly=parseFloat(document.getElementById('monthly').value)||0;
-  const rate=parseFloat(document.getElementById('rate').value)||0;
-  const years=parseInt(document.getElementById('years').value)||0;
-  const mr=rate/100/12;const months=years*12;
-  let bal=principal;let totalC=principal;
-  const balData=[principal];const conData=[principal];
-  for(let i=1;i<=months;i++){bal=bal*(1+mr)+monthly;totalC+=monthly;if(i%12===0){balData.push(bal);conData.push(totalC)}}
-  const interest=bal-totalC;
-  document.getElementById('futureValue').textContent=fmt(bal);
-  document.getElementById('totalContributions').textContent=fmt(totalC);
-  document.getElementById('interestEarned').textContent=fmt(interest);
-  document.getElementById('yearsInline').textContent=years;
+  const principal=parseFloat($('principal').value)||0;
+  const monthly=parseFloat($('monthly').value)||0;
+  const rate=parseFloat($('rate').value)||0;
+  const years=Math.max(1,parseInt($('years').value)||0);
+  const mr=rate/100/12;
+  let bal=principal,totalC=principal;
+  const balData=[principal],conData=[principal];
+  let flipYear=null;
+  for(let y=1;y<=years;y++){
+    const before=bal;
+    for(let m=0;m<12;m++){bal=bal*(1+mr)+monthly;totalC+=monthly}
+    balData.push(bal);conData.push(totalC);
+    const growthThisYear=bal-before-monthly*12;
+    if(flipYear===null&&monthly>0&&growthThisYear>monthly*12)flipYear=y;
+  }
+  const total=about(bal);
+  const growth=Math.max(0,total-totalC);
+  $('rYears').textContent=years+(years===1?' year':' years');
+  $('rTotal').textContent=money(total);
+  $('rPutIn').textContent=money(totalC);
+  $('rGrowth').textContent=money(growth);
+  let note;
+  if(monthly===0&&principal===0){
+    note='Put a number in either box and the sentence above will change.';
+  }else if(monthly===0){
+    const dbl=rate>0?Math.round(72/rate):null;
+    note=dbl?'With nothing added, every dollar after the first '+money(principal)+' is growth. At '+rate+'% it doubles roughly every <b>'+dbl+' years</b>.':'With no return, the money just sits there. Try a rate above zero.';
+  }else if(rate===0){
+    note='At 0% there is no compounding, only saving. Even 3% changes this a lot.';
+  }else if(flipYear===null){
+    note='Across these '+years+' years you are still adding more each year than the growth does. <b>Add a few years</b> and watch that flip.';
+  }else if(flipYear<=years){
+    note='From about <b>year '+flipYear+'</b>, the growth adds more each year than you do. That is the part that feels like a trick, and it is not one.';
+  }
+  $('rNote').innerHTML=note;
   updateChart(years,balData,conData);
 }
 function updateChart(years,balData,conData){
+  if(typeof Chart==='undefined')return; // page still works without the chart library
   const labels=[];for(let i=0;i<=years;i++)labels.push(i===0?'Start':'Yr '+i);
-  const ctx=document.getElementById('growthChart').getContext('2d');
+  const ctx=$('growthChart').getContext('2d');
   if(chart)chart.destroy();
-  chart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{label:'Total Value',data:balData,borderColor:'#F25A27',backgroundColor:'rgba(242, 90, 39,0.12)',borderWidth:3,tension:0.4,fill:true,pointRadius:0,pointHoverRadius:5},{label:'Contributions',data:conData,borderColor:'#9CA3AF',backgroundColor:'transparent',borderWidth:2,borderDash:[4,4],tension:0,pointRadius:0,pointHoverRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.parsed.y)},backgroundColor:'#1a1a1a',padding:12,titleFont:{family:'DM Sans',weight:'700'},bodyFont:{family:'DM Sans',weight:'600'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{family:'DM Sans',size:11},callback:v=>fmt(v),color:'#6b655b'}},x:{grid:{display:false},ticks:{font:{family:'DM Sans',size:11},color:'#6b655b',maxTicksLimit:11}}}}});
+  chart=new Chart(ctx,{type:'line',data:{labels:labels,datasets:[{label:'What you\'d have',data:balData,borderColor:'#F25A27',backgroundColor:'rgba(242,90,39,.08)',borderWidth:2,tension:.3,fill:true,pointRadius:0,pointHoverRadius:4},{label:'What you put in',data:conData,borderColor:'rgba(10,10,10,.45)',backgroundColor:'transparent',borderWidth:1.5,borderDash:[3,4],tension:0,pointRadius:0,pointHoverRadius:4}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label+': '+money(c.parsed.y)},backgroundColor:'#0A0A0A',padding:12,titleFont:{family:'JetBrains Mono',weight:'500'},bodyFont:{family:'DM Sans',weight:'500'}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(10,10,10,.06)',drawBorder:false},ticks:{font:{family:'JetBrains Mono',size:11},callback:v=>v>=1e6?'$'+(v/1e6).toFixed(1)+'M':v>=1e3?'$'+Math.round(v/1e3)+'K':'$'+v,color:'rgba(10,10,10,.55)'}},x:{grid:{display:false},ticks:{font:{family:'JetBrains Mono',size:11},color:'rgba(10,10,10,.55)',maxTicksLimit:9}}}}});
 }
 document.addEventListener('DOMContentLoaded',function(){
-  ['principal','monthly','rate','years'].forEach(id=>document.getElementById(id).addEventListener('input',calculate));
+  const fields=['principal','monthly','rate','years'];
+  fields.forEach(id=>$(id).addEventListener('input',()=>{document.querySelectorAll('.start-btn').forEach(b=>b.classList.remove('is-on'));calculate()}));
+  document.querySelectorAll('.start-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    $('principal').value=btn.dataset.p;$('monthly').value=btn.dataset.m;$('rate').value=btn.dataset.r;$('years').value=btn.dataset.y;
+    document.querySelectorAll('.start-btn').forEach(b=>b.classList.remove('is-on'));btn.classList.add('is-on');
+    calculate();
+  }));
   calculate();
 });
 </script>

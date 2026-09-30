@@ -1025,3 +1025,90 @@ Moving the shared editorial CSS out of 160 inline `<style>` blocks into
 a real stylesheet or build step. That reverses the README's documented
 self-contained-page decision and is a call for the maintainers, not a
 design edit.
+
+---
+
+## Tool pages — humanizing pass, pilot + template siblings (September 2026)
+
+Six calculators that share the "reskinned tool" template: compound-interest
+(pilot, fully recomposed), paycheck-calculator, rule-of-72,
+portfolio-simulator, startup-calculator, and housing-calculator (lighter
+touch, its own step layout kept). The brief was that the tools read as
+machine-made. What that turned out to mean, and what changed:
+
+### Removed
+- The one-formula hero on every tool: pill eyebrow "X · FREE TOOL", a
+  rhetorical question with an orange `<em>` and marker underline, centred
+  grey lede, radial-gradient glows in the corners. Heroes are now the
+  system's left-set hero: hairline eyebrow ("Calculator · Compound
+  interest"), a plain headline, a lede that talks to the reader, and a
+  mono meta line stating what the tool is built on ("Last checked
+  September 2026", "Uses 2024 federal brackets, simplified", "Uses
+  long-run average returns"). Housing keeps its orange `<em>` as the one
+  featured tool in the set.
+- The black "MORE FREE TOOLS / Keep Building Your Financial Future" block
+  with emoji cards (⏱️ 🌱 📊 ⚔️ …) on all six. Replaced by a ruled
+  "Keep going" list on paper: tool name, one plain sentence on why you'd
+  go there next, arrow. Same links.
+- The result-as-dashboard: giant orange/green number under a tracked mono
+  label ("FUTURE VALUE"), plus a strip of tiles. Results are now a
+  sentence with the numbers inside it ("In 40 years you'd have about
+  $271,000. $48,500 of that is money you put in. The other $222,500 is
+  growth.") plus one note that says something a person would say (the
+  year growth starts out-adding your deposits; that 72 ÷ 7 is off the
+  exact answer by a few weeks). Headline totals are rounded so the
+  sentence reads as speech; contributions are exact. `aria-live="polite"`.
+- Uppercase tracked labels on every form field and table row. Labels are
+  sentence case DM Sans; mono uppercase is back to section eyebrows only.
+- Self-description copy: "Real math. Clear results. No jargon." (housing),
+  "Results update instantly", "Plan startup capital like a founder".
+  Em-dashes in visible copy: 0 on all six pages (chrome/meta untouched).
+- Reskin leftovers off-system: 10px input radius, 12px card radius at
+  phone width, gradient result panel, dashed-border disclaimer box, orange
+  slider value, emoji milestone icons on rule-of-72 (now ×2 ×4 ×8 ×16).
+
+### Added
+- compound-interest: three starting points ("Still in school", "First real
+  paycheck", "Starting at 40") as archetypes, not named people, so nothing
+  is attributed to a real person's finances. Default is now $500 + $100 a
+  month for 40 years instead of $1,000 + $100 for 10, because the reader
+  is a student and the point of the tool is the years.
+- compound-interest: "A note from Scott" block, first person, signed, with
+  the existing scott_new_pic.jpeg. **DRAFT COPY — Scott to edit or cut.**
+  The one factual claim in it ($100/month from 20 beats $300/month from 40
+  on about half the money in) was checked against the calculator's own
+  math at 7%: ~$379K vs ~$243K, $54K vs $90K put in.
+- "How this is worked out" paragraph on compound-interest stating the
+  assumptions in plain words (monthly compounding, constant return,
+  nothing leaves the page).
+- `typeof Chart==='undefined'` guard in every `updateChart`: the sentence,
+  table and milestones now render even when the Chart.js CDN is slow or
+  blocked (previously the whole calculate() threw before the numbers were
+  written on rule-of-72).
+
+### Preserved
+- All calculation logic and inputs, IDs and defaults (except the
+  compound-interest defaults above); breakdown table, doubling milestones,
+  allocation bar, cost chart; every link the old related-tools blocks
+  carried; `<title>`/meta except compound-interest (em-dash removed,
+  description rewritten in the same voice); GA, nav, footer, JSON-LD.
+- The scrolling sticky sidebar (`max-height:calc(100vh - 120px);
+  overflow-y:auto`) on paycheck/portfolio/startup is gone: with a
+  one-sentence result the right column is shorter than the inputs, so the
+  inner scroll hid half the form. Inputs now show in full.
+
+### Verified
+Chromium 1440 / 390 on all six: no JS errors (Chart CDN blocked in the
+sandbox, guarded), no horizontal overflow, presets and edge cases (no
+monthly amount, 0% return, one month of runway) produce sensible copy.
+`npm test` passes.
+
+### Not done here
+- The other tool generations: rent-vs-buy, fire-calculator, ira-battle
+  (numbered "01 · MAINTENANCE" card grids, 22–35 em-dashes each, "The
+  honest math", "The shockingly simple chart") and the plain-h1 legacy set
+  (budget-balancer, debt-destroyer, credit-score-simulator, roth-ira,
+  cost-of-living, student-loan-simulator…). Same recipe applies; each is a
+  page-by-page recomposition, not a script.
+- Real people's numbers as starting points (Mango Stories / ambassadors)
+  would need their say-so first; archetypes used instead.
