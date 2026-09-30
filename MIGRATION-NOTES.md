@@ -1112,3 +1112,127 @@ monthly amount, 0% return, one month of runway) produce sensible copy.
   page-by-page recomposition, not a script.
 - Real people's numbers as starting points (Mango Stories / ambassadors)
   would need their say-so first; archetypes used instead.
+
+---
+
+## Tool pages — humanizing pass, rollout to the remaining 19 (September 2026)
+
+Same recipe as the compound-interest pilot above, applied to every other
+calculator, simulator and game on the tools index. Three generations were
+left: the heavy editorial pages (rent-vs-buy, fire-calculator, ira-battle,
+sports-betting, family-planning), the legacy title-headline pages with grey
+backgrounds and black result boxes (debt-destroyer, student-loan-simulator,
+minimum-payment-trap, credit-score-simulator, new-vs-used-car-calculator,
+cost-of-living, commute-calc, gig-tax-estimator, food-assistance-calculator,
+roth-ira-calculator), and a few one-offs (roth-ira, budget-balancer). One
+verified commit per group; this entry covers them together.
+
+### What changed on every page
+- Hero → the system's left-set `.tool-hero`: hairline eyebrow, plain
+  headline written as the question the reader actually has ("How fast can
+  you be out of debt?", "Is the cheaper place further out really cheaper?"),
+  a lede to the reader, and a mono meta line that states what the tool is
+  built on. Where the code uses stale constants the meta says so instead of
+  hiding it: "Uses 2024 IRS limits, single filer" (roth-ira), "2024 federal
+  brackets · 15.3% self-employment tax" (gig-tax), "Simplified 2024 SNAP
+  limits" (food-assistance), "2024 IRS rate of 67¢ a mile" (commute),
+  "Simplified: $7,000 yearly cap, $140,000 income cutoff" (roth-ira-
+  calculator), "Uses 2024 standard deduction amounts and a $10,000 SALT cap"
+  (rent-vs-buy). **Updating those constants is a separate job; see Flags.**
+- Result → a sentence with the numbers inside it, built in JS from the
+  variables each page already computes, plus one note that says what a
+  person would say (a crossover year, what +$50 a month does, which order
+  saves more, how far under a limit you are). Rounded headline totals,
+  exact components, `aria-live="polite"`. Dark verdict panels stay as the
+  page's one ink moment where they existed (rent-vs-buy, ira-battle,
+  commute-calc, new-vs-used-car) but read as sentences.
+- Numbered "01 · TAG" card grids and pill-tagged explainer cards → ruled
+  lists or short prose, every fact kept.
+- Black emoji "More Free Tools" blocks → paper `.next` "Keep going" lists
+  with one plain sentence per link; pages that had no related block got one.
+- Sentence-case labels, hints as full sentences, mono tabular numbers,
+  hairlines, radius 0, no gradients or shadows, paper background, no
+  serif headline fonts (budget-balancer, gig-tax, cost-of-living,
+  food-assistance were still on Fraunces/DejaVu fallbacks).
+- Emoji removed from every visible UI (bucket icons, milestone icons,
+  toggles, notification toasts). Em-dashes in visible copy: 0 on all 19.
+- Every Chart.js call guarded with `typeof Chart === 'undefined'` so
+  numbers render when the CDN is slow or blocked.
+- No signed note anywhere but the pilot.
+
+### Behaviour fixes made along the way (all verified in Playwright)
+- fire-calculator, sports-betting: the mobile menu never opened because the
+  page script and the chrome script both toggled it on one tap. Duplicate
+  handlers removed.
+- rule-of-72: `updateTimeline()` ran after the chart call, so with the CDN
+  blocked the milestones never rendered. Guard fixes it.
+- budget-balancer: the "unexpected expense" modal was `position:absolute`
+  with no positioned ancestor and could land off-screen; now fixed and
+  centred. The paycheck pile wraps into three columns instead of a
+  1,900px single column.
+- family-planning: removed a second, unpinned Chart.js v4 load stacked on
+  the head's 3.9.1; the page no longer scroll-jumps past the hero on load.
+- student-loan-simulator, minimum-payment-trap, debt-destroyer,
+  new-vs-used-car: input listeners scoped to the calculator, so the footer
+  newsletter field no longer triggers recalculation.
+- ira-battle: `0.07*100` float noise showed "7.000000000000001%"; now "7%".
+- new-vs-used-car: the one-time-payment field and the term select now
+  recalculate on change (previously only when another field changed).
+
+### Dropped content (say the word to restore any of it)
+- fire-calculator: the savings-rate tier labels (Rookie … Mustachian …
+  Elite) and the six-colour rate scale; the "Progress to goal / Monthly
+  passive" tiles (both numbers live in the result note now).
+- sports-betting: the fake "FinBet · LIVE ODDS" ticker card (the four lines
+  still appear in the bet-type select).
+- credit-score-simulator: per-band gauge colours (blue/green/amber/red);
+  the band is now the label and the sentence. Two FICO factors (New credit
+  10%, Credit mix 10%) were added to complete the breakdown.
+
+### Flags — a human should look at these
+- **Stale constants, now stated on the page rather than fixed:** rent-vs-buy
+  (2024 standard deduction, $10,000 SALT cap; the $750k mortgage-interest
+  limit is described in copy but never applied in the JS), roth-ira (2024
+  $7,000/$8,000 caps and $146k–$161k phase-out), roth-ira-calculator (flat
+  $7,000 cap, hard $140,000 cutoff), gig-tax (2024 brackets), paycheck
+  (2024 brackets, from the first batch), food-assistance (2024 SNAP limits),
+  commute-calc (2024 IRS 67¢). Each meta/disc line names the year; update
+  the constants and the copy together.
+- **food-assistance-calculator `renderMockPlaces()` fabricates store
+  listings** by ZIP parity ("Giant Eagle · 0.4 mi"). Kept (brief said
+  preserve functionality) but the card is now labelled "Shops that usually
+  take SNAP" with a hint that they are examples. Recommend removing the
+  fake listings. New Spanish strings for the result sentences need a
+  Spanish speaker's read.
+- **new-vs-used-car-calculator** charges the loan payment for all 60 months
+  even on a 36- or 48-month term (pre-existing), so shorter terms look
+  worse than they are. Worth a separate fix.
+- **sports-betting** simulation probabilities imply a 9–13% house edge, while
+  the fact list quotes the real 4.5% vig. Logic untouched; the meta says
+  "Odds modelled on typical sportsbook lines" and does not claim 4.5%.
+  Several figures ($150B in 2024, 3–5% profitable, 1 in 3 hide debts, 9%
+  called a hotline) are carried over unsourced.
+- **commute-calc** `#gasPrice` was never read by the calculation
+  (pre-existing; the 67¢ rate includes fuel). Kept with an honest hint.
+- **budget-balancer** always ends at "Still to place: −$200" because the
+  event fires unconditionally and blocks cannot return to the paycheck
+  (pre-existing). The final note now turns that into a question ("Which
+  bucket would you take it from?"). Check that framing is wanted.
+- **roth-ira.html and roth-ira-calculator.html** are two pages doing nearly
+  the same job with different constants; each now links to the other.
+  Consider retiring one.
+- New copy claims to spot-check: "Credit cards run 18 to 28%", "Federal
+  undergraduate loans have run between about 3% and 7%", "By law, US card
+  statements include a box showing how long the minimum would take"
+  (CARD Act), "US stocks have averaged close to 7% real", "a few states run
+  into double digits" on income tax, credit-score scenario texts, the
+  ira-battle "Traditional is ahead for the first N years" note (true within
+  the model, which adds tax savings back uncompounded).
+- Head `<title>`/`og:description` on several pages still carry the old
+  voice and em-dashes; left untouched per the brief.
+
+### Verified
+Chromium 1440 / 390 on all 19: no JS errors (Chart CDN blocked in the
+sandbox, guarded), no horizontal overflow, interactions exercised with
+Playwright (steps, tabs, sliders, presets, drag-and-drop, auto-play, reset,
+language switch), body em-dash and emoji counts 0. `npm test` 12/12.

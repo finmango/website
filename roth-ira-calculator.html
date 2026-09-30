@@ -634,721 +634,123 @@
     }
 
 
-    /* ---- reskinned legacy component css ---- */
-/* Font loaded asynchronously via preload link in <head> */
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-
-:root {
-  /* Colors */
-  --black: #000000;
-  --white: #ffffff;
-  --orange: #F25A27;
-  --orange-dark: var(--orange-deep);
-  --orange-soft: var(--orange-deep);
-  --orange-light: rgba(242, 90, 39, 0.1);
-  --gray: var(--ink-dim);
-  --gray-medium: var(--ink-dim);
-  --light-gray: var(--ink-line);
-
-  /* Semantic Colors */
-  --success: #10B981;
-  --error: #EF4444;
-  --warning: #F59E0B;
-  --info: #3B82F6;
-
-  /* Layout */
-  --max-width: 1200px;
-  --hero-max-width: 1400px;
-  --nav-max-width: 1280px;
-
-  --green: #10B981;
-
-  /* Spacing Scale (8px base) */
-  --space-1: 0.25rem;   /* 4px */
-  --space-2: 0.5rem;    /* 8px */
-  --space-3: 0.75rem;   /* 12px */
-  --space-4: 1rem;      /* 16px */
-  --space-6: 1.5rem;    /* 24px */
-  --space-8: 2rem;      /* 32px */
-  --space-10: 2.5rem;   /* 40px */
-  --space-12: 3rem;     /* 48px */
-  --space-16: 4rem;     /* 64px */
-  --space-20: 5rem;     /* 80px */
-  --space-24: 6rem;     /* 96px */
-  --space-32: 8rem;     /* 128px */
-  --space-40: 10rem;    /* 160px */
-
-  /* Typography Scale */
-  --text-xs: 0.75rem;   /* 12px */
-  --text-sm: 0.875rem;  /* 14px */
-  --text-base: 1rem;    /* 16px */
-  --text-lg: 1.125rem;  /* 18px */
-  --text-xl: 1.25rem;   /* 20px */
-  --text-2xl: 1.5rem;   /* 24px */
-  --text-3xl: 2rem;     /* 32px */
-  --text-4xl: 3rem;     /* 48px */
-  --text-5xl: 4rem;     /* 64px */
-
-  /* Font Weights */
-  --font-normal: 400;
-  --font-medium: 500;
-  --font-semibold: 600;
-  --font-bold: 700;
-  --font-black: 900;
-
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-
-  /* Shadows */
-  --shadow-sm: 4px 4px 0 var(--black);
-  --shadow-md: 8px 8px 0 var(--black);
-  --shadow-lg: 12px 12px 0 var(--black);
-  --shadow-xl: 16px 16px 0 var(--black);
-
-  /* Transitions */
-  --transition-fast: 0.15s ease;
-  --transition-base: 0.3s ease;
-  --transition-slow: 0.5s ease;
-
-  /* Borders */
-  --border-width-thin: 1px;
-  --border-width-base: 2px;
-  --border-width-thick: 3px;
-  --border-width-heavy: 4px;
-}
-
-/* Accessibility: Reduced Motion Support */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-
-
-body {
-  font-family: var(--font-body);
-  background: var(--white);
-  color: var(--black);
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-
-/* Calculator Sections - Card Based */
-.calc-section {
-  display: none;
-  border: 1px solid var(--black);
-  background: var(--white);
-  
-  transition: all 0.3s ease;
-  position: relative;
-  margin-bottom: 2rem;
-  animation: slideIn 0.4s ease;
-}
-
-
-.calc-section.active {
-  display: block;
-}
-
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-.calc-section-header {
-  background: var(--orange);
-  color: var(--white);
-  padding: 1.5rem 2rem;
-  border-bottom: 1px solid var(--black);
-}
-
-
-.calc-section-title {
-  font-size: 1.5rem;
-  font-weight: 900;
-  margin: 0;
-}
-
-
-.calc-section-content {
-  padding: 2rem;
-}
-
-
-/* Step Navigator */
-.step-navigator {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-
-.step-card {
-  background: var(--white);
-  border: 1px solid var(--black);
-  padding: 1.25rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-
-.step-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: var(--purple);
-  transition: left 0.3s ease;
-  z-index: 0;
-}
-
-
-.step-card:hover::before {
-  left: 0;
-}
-
-
-.step-card:hover {
-  transform: translateY(-3px) scale(1.02);
-  
-}
-
-
-.step-card:active {
-  transform: translateY(-1px) scale(0.98);
-  
-}
-
-
-.step-card.active {
-  background: var(--purple);
-  color: var(--white);
-  transform: scale(1.05);
-  
-}
-
-
-.step-card.active::before {
-  display: none;
-}
-
-
-.step-card.completed {
-  background: var(--green);
-  color: var(--white);
-}
-
-
-.step-card.completed::before {
-  display: none;
-}
-
-
-.step-number {
-  font-size: 1.5rem;
-  font-weight: 900;
-  display: block;
-  margin-bottom: 0.5rem;
-  position: relative;
-  z-index: 1;
-}
-
-
-.step-label {
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  position: relative;
-  z-index: 1;
-}
-
-
-.step-card:hover .step-number,
-.step-card:hover .step-label {
-  color: var(--white);
-}
-
-
-/* Hero */
-.hero {
-  min-height: 40vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 9rem 2rem 2rem;
-  text-align: center;
-  background: linear-gradient(135deg, var(--purple) 0%, var(--blue) 100%);
-  color: var(--white);
-  position: relative;
-  overflow: hidden;
-}
-
-
-.hero::before {
-  content: '💲📈';
-  position: absolute;
-  font-size: 15rem;
-  opacity: 0.05;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-
-.hero-container {
-  max-width: 900px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
-
-.hero-title {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 900;
-  margin-bottom: 1rem;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-
-.hero-subtitle {
-  font-size: clamp(1.1rem, 3vw, 1.5rem);
-  font-weight: 600;
-  max-width: 700px;
-  margin: 0 auto;
-  opacity: 0.95;
-}
-
-
-/* Main Content */
-.main-content {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 3rem 2rem;
-}
-
-
-.content-section {
-  background: var(--white);
-  border: 1px solid var(--black);
-  padding: 2rem;
-  margin-bottom: 2rem;
-}
-
-
-.section-title {
-  font-size: 2rem;
-  font-weight: 900;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.02em;
-}
-
-
-.section-text {
-  font-size: 1.1rem;
-  color: var(--gray);
-  margin-bottom: 1rem;
-  line-height: 1.7;
-}
-
-
-/* Calculator Box */
-.calculator-box {
-  background: var(--light-gray);
-  border: 1px solid var(--black);
-  padding: 2rem;
-  margin: 2rem 0;
-}
-
-
-.input-grid {
-  display: grid;
-  gap: 2rem;
-}
-
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-}
-
-
-.input-label {
-  font-weight: 700;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  color: var(--black);
-}
-
-
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-
-.input-prefix {
-  position: absolute;
-  left: 1rem;
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--gray);
-}
-
-
-input[type="number"] {
-  width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2rem;
-  font-size: 1rem;
-  border: 1px solid var(--black);
-  font-family: var(--font-body);
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-
-input[type="number"]:focus {
-  outline: none;
-  border-color: var(--orange);
-  
-}
-
-
-input[type="range"] {
-  width: 100%;
-  height: 8px;
-  border-radius: 0;
-  background: #ddd;
-  outline: none;
-  -webkit-appearance: none;
-}
-
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 0;
-  background: var(--orange);
-  cursor: pointer;
-  border: 1px solid var(--black);
-}
-
-
-input[type="range"]::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  border-radius: 0;
-  background: var(--orange);
-  cursor: pointer;
-  border: 1px solid var(--black);
-}
-
-
-.slider-info {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--gray);
-}
-
-
-.result-box {
-  background: var(--white);
-  border: 1px solid var(--black);
-  padding: 2rem;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-
-.result-label {
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--gray);
-  margin-bottom: 0.5rem;
-}
-
-
-.result-value {
-  font-size: 3rem;
-  font-weight: 900;
-  color: var(--green);
-  letter-spacing: -0.03em;
-}
-
-
-/* Chart Box */
-.chart-box {
-  background: var(--white);
-  border: 1px solid var(--black);
-  padding: 2rem;
-  margin: 2rem 0;
-}
-
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .footer-container {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-
-@media (max-width: 768px) {
-  
-  .hero {
-    padding: 7rem 1.5rem 2rem;
-  }
-
-  
-  .result-value {
-    font-size: 2rem;
-  }
-
-
-  .step-navigator {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
-  }
-
-
-  .step-number {
-    font-size: 1.2rem;
-  }
-
-
-  .step-label {
-    font-size: 0.75rem;
-  }
-
-
-  .main-content {
-    padding: 2rem 1rem;
-  }
-
-
-  .calculator-box {
-    padding: 1.25rem;
-  }
-
-
-  .calc-section-content {
-    padding: 1.25rem;
-  }
-
-
-  .calc-section-header {
-    padding: 1.25rem;
-  }
-
-
-  .input-grid {
-    gap: 1.25rem;
-  }
-
-
-  .result-box {
-    padding: 1.25rem;
-  }
-
-
-  .chart-box {
-    padding: 1.25rem;
-  }
-
-}
-
-
-/* ============================================
-   BASE COMPONENT CLASSES
-   ============================================ */
-
-/* Base Input Styles with Validation States */
-input[type="text"],
-input[type="email"],
-input[type="number"],
-textarea,
-select {
-  font-family: var(--font-body);
-  transition: var(--transition-base);
-}
-
-
-/* Input Validation States */
-input.error,
-textarea.error,
-select.error {
-  border-color: var(--error) !important;
-  
-}
-
-
-input.success,
-textarea.success,
-select.success {
-  border-color: var(--success) !important;
-  
-}
-
-
-input.warning,
-textarea.warning,
-select.warning {
-  border-color: var(--warning) !important;
-  
-}
-
-
-/* Base Card Component */
-.card {
-  padding: var(--space-12);
-  background: var(--white);
-  transition: var(--transition-base);
-}
-
-
-.card--bordered {
-  border: var(--border-width-thick) solid var(--black);
-}
-
-
-.card--shadow {
-  
-}
-
-
-.card--hover-lift:hover {
-  transform: translateY(-8px);
-  
-}
-
-
-/* Utility Classes for Spacing */
-.mb-1 { margin-bottom: var(--space-1); }
-
-.mb-2 { margin-bottom: var(--space-2); }
-
-.mb-3 { margin-bottom: var(--space-3); }
-
-.mb-4 { margin-bottom: var(--space-4); }
-
-.mb-6 { margin-bottom: var(--space-6); }
-
-.mb-8 { margin-bottom: var(--space-8); }
-
-
-.mt-1 { margin-top: var(--space-1); }
-
-.mt-2 { margin-top: var(--space-2); }
-
-.mt-3 { margin-top: var(--space-3); }
-
-.mt-4 { margin-top: var(--space-4); }
-
-.mt-6 { margin-top: var(--space-6); }
-
-.mt-8 { margin-top: var(--space-8); }
-
-
-/* Typography Utility Classes */
-.text-xs { font-size: var(--text-xs); }
-
-.text-sm { font-size: var(--text-sm); }
-
-.text-base { font-size: var(--text-base); }
-
-.text-lg { font-size: var(--text-lg); }
-
-.text-xl { font-size: var(--text-xl); }
-
-.text-2xl { font-size: var(--text-2xl); }
-
-
-.font-medium { font-weight: var(--font-medium); }
-
-.font-semibold { font-weight: var(--font-semibold); }
-
-.font-bold { font-weight: var(--font-bold); }
-
-.font-black { font-weight: var(--font-black); }
-
-
-/* Alert/Message Components */
-.alert {
-  padding: var(--space-4) var(--space-6);
-  border: var(--border-width-base) solid;
-  margin-bottom: var(--space-4);
-  border-radius: 0;
-}
-
-
-.alert--success {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: var(--success);
-  color: #065f46;
-}
-
-
-.alert--error {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: var(--error);
-  color: #991b1b;
-}
-
-
-.alert--warning {
-  background: rgba(245, 158, 11, 0.1);
-  border-color: var(--warning);
-  color: #92400e;
-}
-
-
-.alert--info {
-  background: rgba(59, 130, 246, 0.1);
-  border-color: var(--info);
-  color: #1e40af;
-}
-
-
+    /* ---- roth ira calculator: page styles (humanized tool pass, September 2026) ---- */
+:root{--white:#fff;--bdr:var(--ink-line)}
+a{color:inherit;text-decoration:none}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+body{background:var(--paper);color:var(--ink)}
+
+/* Hero: left-set, one eyebrow, one plain headline */
+.tool-hero{max-width:var(--max-width);margin:0 auto;padding:150px var(--gutter) 44px}
+.tool-hero-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem 2rem;flex-wrap:wrap;margin-bottom:1.75rem}
+.tool-meta{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;color:var(--ink-faint)}
+.tool-hero h1{font-size:clamp(2.4rem,4.8vw,4rem);font-weight:900;line-height:.98;letter-spacing:-.045em;max-width:18ch;margin-bottom:1.25rem}
+.tool-lede{font-size:1.15rem;line-height:1.55;color:var(--ink-dim);max-width:60ch;font-weight:300}
+.tool-lede strong{font-weight:600;color:var(--ink)}
+
+/* Layout */
+.main-content{max-width:var(--max-width);margin:0 auto;padding:0 var(--gutter) 72px}
+.step-navigator,.calc-section{max-width:920px}
+
+/* Steps: one ruled strip, the current step marked in orange */
+.step-navigator{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);margin-bottom:2rem}
+.step-card{position:relative;display:flex;flex-direction:column;gap:.3rem;padding:1rem 1rem 1rem 0;margin-left:1.25rem;cursor:pointer;color:var(--ink-dim);transition:color .2s}
+.step-card:first-child{margin-left:0}
+.step-card::before{content:'';position:absolute;top:-1px;left:0;right:0;height:2px;background:transparent;transition:background .2s}
+.step-card:hover{color:var(--ink)}
+.step-card.active{color:var(--ink)}
+.step-card.active::before{background:var(--orange)}
+.step-card.completed::before{background:var(--ink)}
+.step-number{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint)}
+.step-card.active .step-number{color:var(--orange-ink)}
+.step-label{font-size:.92rem;font-weight:600;letter-spacing:-.01em}
+
+/* One card per step */
+.calc-section{display:none;background:var(--white);border:1px solid var(--bdr);margin-bottom:2rem}
+.calc-section.active{display:block}
+.calc-section-header{padding:2rem 2.25rem 1.25rem;border-bottom:1px solid var(--bdr)}
+.calc-section-header .eyebrow{margin-bottom:.6rem}
+.calc-section-title{font-size:1.65rem;font-weight:900;letter-spacing:-.03em;line-height:1.1;margin:0}
+.calc-section-content{padding:1.75rem 2.25rem 2rem}
+.section-text{font-size:1.02rem;color:var(--ink-dim);line-height:1.65;max-width:68ch;margin-bottom:1rem}
+.section-text strong{color:var(--ink);font-weight:600}
+
+/* Inputs */
+.calculator-box{border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr);padding:1.6rem 0;margin:1.75rem 0}
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.input-group{display:flex;flex-direction:column;min-width:0}
+.input-label{display:block;font-size:.88rem;font-weight:600;letter-spacing:-.01em;margin-bottom:6px}
+.input-label .range-val{font-family:var(--font-mono);font-weight:500;color:var(--orange-ink);font-size:.85rem;margin-left:.4rem}
+.fh{display:block;font-size:.78rem;color:var(--ink-faint);margin-top:6px;line-height:1.45}
+.input-wrapper{position:relative;display:flex;align-items:center}
+.input-prefix{position:absolute;left:14px;font-family:var(--font-mono);font-size:.9rem;color:var(--ink-faint);pointer-events:none}
+input[type="number"]{width:100%;padding:12px 14px;border:1px solid var(--bdr);background:var(--paper);font-family:var(--font-mono);font-size:1.05rem;font-weight:500;color:var(--ink);outline:none;transition:border-color .2s,background .2s;font-variant-numeric:tabular-nums}
+.input-wrapper input[type="number"]{padding-left:30px}
+input[type="number"]:focus{border-color:var(--ink);background:var(--white)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2px;background:var(--bdr);outline:none;cursor:pointer;margin:14px 0 6px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--orange);cursor:pointer;border:0}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--orange);cursor:pointer;border:0}
+.slider-info{display:flex;justify-content:space-between;gap:1rem;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.04em;color:var(--ink-faint);margin-top:6px}
+
+/* Previous / next */
+.nav-buttons{display:flex;justify-content:space-between;gap:1rem;margin-top:1.5rem}
+.nav-btn{font-family:inherit;font-size:.88rem;font-weight:600;letter-spacing:-.01em;padding:.7rem 1.1rem;border:1px solid var(--bdr);background:transparent;color:var(--ink);cursor:pointer;transition:border-color .2s,background .2s,color .2s}
+.nav-btn:hover{border-color:var(--ink)}
+.nav-btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.nav-btn.primary:hover{background:var(--orange-deep);border-color:var(--orange-deep)}
+.nav-btn:disabled{opacity:.35;cursor:default}
+.nav-btn:disabled:hover{border-color:var(--bdr)}
+
+/* Result: a sentence, with the numbers inside it */
+.result{background:var(--white);border:1px solid var(--bdr);padding:36px 36px 30px;margin:1.5rem 0}
+.result-sentence{font-size:clamp(1.45rem,2.3vw,2.05rem);font-weight:400;line-height:1.32;letter-spacing:-.025em;color:var(--ink);text-wrap:pretty}
+.result-sentence b{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.result-sentence .grow{color:var(--orange-ink)}
+.result-note{margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--bdr);font-size:.98rem;line-height:1.5;color:var(--ink-dim)}
+.result-note b{font-weight:600;color:var(--ink)}
+
+/* Chart */
+.chart-card{background:var(--white);border:1px solid var(--bdr);padding:24px;margin:1.5rem 0}
+.chart-card .stit{font-size:.9rem;font-weight:600;letter-spacing:-.01em;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.chart-legend{display:flex;gap:14px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.04em;color:var(--ink-faint)}
+.chart-legend span{display:flex;align-items:center;gap:6px}
+.chart-legend i{width:14px;height:2px;display:inline-block}
+.chart-legend i.dash{background:repeating-linear-gradient(90deg,var(--ink-faint) 0 3px,transparent 3px 6px)}
+.chart-wrap{position:relative;height:300px}
+
+/* Keep going: ruled rows, not a card grid */
+.next{border-top:1px solid var(--bdr)}
+.next-inner{max-width:var(--max-width);margin:0 auto;padding:56px var(--gutter) 64px}
+.next-list{margin-top:1.25rem;border-top:1px solid var(--bdr)}
+.next-row{display:grid;grid-template-columns:220px 1fr auto;gap:1.5rem;align-items:baseline;padding:1.1rem 0;border-bottom:1px solid var(--bdr);color:var(--ink)}
+.next-title{font-weight:600;letter-spacing:-.01em}
+.next-desc{color:var(--ink-dim);font-size:.98rem}
+.next-arrow{font-family:var(--font-mono);color:var(--ink-faint);transition:transform .25s cubic-bezier(.16,1,.3,1),color .2s}
+.next-row:hover .next-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.next-row:hover .next-arrow{transform:translateX(4px);color:var(--ink)}
+.disc{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.04em;color:var(--ink-faint);margin-top:1.75rem;line-height:1.6}
+
+@media(max-width:968px){
+.tool-hero{padding:120px var(--gutter) 32px}
+.next-row{grid-template-columns:1fr auto;row-gap:.2rem}
+.next-desc{grid-column:1/-1}
+.next-arrow{grid-row:1;grid-column:2}}
+
+@media(max-width:768px){
+.step-navigator{grid-template-columns:1fr 1fr;border-bottom:0}
+.step-card{margin-left:0;padding-left:0;padding-right:1rem;border-bottom:1px solid var(--bdr)}
+.step-card:nth-child(even){margin-left:1rem}
+.input-grid{grid-template-columns:1fr}
+.calc-section-header{padding:1.5rem 1.25rem 1rem}
+.calc-section-content{padding:1.25rem 1.25rem 1.5rem}}
+
+@media(max-width:600px){
+.tool-hero{padding:104px var(--gutter) 24px}
+.result{padding:24px 20px 22px}
+.chart-card{padding:18px}
+.chart-wrap{height:240px}
+.nav-buttons{flex-wrap:wrap}}
     @keyframes fadeInMega {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -1641,32 +1043,32 @@ select.warning {
   </div>
   <!-- /chrome:nav -->
 
-<section class="hero">
-  <div class="hero-container">
-    <h1 class="hero-title">Roth IRA Calculator</h1>
-    <p class="hero-subtitle">
-      Want to become a millionaire someday? See how your Roth IRA can grow tax-free! 💲📈
-    </p>
-  </div>
+<section class="tool-hero">
+<div class="tool-hero-top">
+<div class="eyebrow">Calculator · Roth IRA, step by step</div>
+<div class="tool-meta">Simplified: $7,000 yearly cap, $140,000 income cutoff</div>
+</div>
+<h1>How much could a Roth IRA grow by 65?</h1>
+<p class="tool-lede">Four short steps. We ask how old you are, what you earn, what you can put in and how much risk you can live with, then show what that adds up to by the time you are 65. <strong>Built for someone opening their first account, at any age.</strong></p>
 </section>
 
 <div class="main-content">
   <!-- Step Navigator -->
   <div class="step-navigator">
     <div class="step-card active" data-step="1">
-      <span class="step-number">1</span>
-      <span class="step-label">Age & Income</span>
+      <span class="step-number">Step 1</span>
+      <span class="step-label">Age and income</span>
     </div>
     <div class="step-card" data-step="2">
-      <span class="step-number">2</span>
+      <span class="step-number">Step 2</span>
       <span class="step-label">Contributions</span>
     </div>
     <div class="step-card" data-step="3">
-      <span class="step-number">3</span>
-      <span class="step-label">Risk Tolerance</span>
+      <span class="step-number">Step 3</span>
+      <span class="step-label">Risk tolerance</span>
     </div>
     <div class="step-card" data-step="4">
-      <span class="step-number">4</span>
+      <span class="step-number">Step 4</span>
       <span class="step-label">Results</span>
     </div>
   </div>
@@ -1674,45 +1076,39 @@ select.warning {
   <!-- Section 1: Age & Income -->
   <div class="calc-section active" data-section="1">
     <div class="calc-section-header">
-      <h2 class="calc-section-title">1. Your Age and Income</h2>
+      <div class="eyebrow">Step 1 of 4</div>
+      <h2 class="calc-section-title">Your age and income</h2>
     </div>
     <div class="calc-section-content">
       <p class="section-text">
-        Two major ways to build wealth for your future and retirement are opening investment accounts such as a <strong>ROTH IRA</strong> or Brokerage Account.
+        There are two common ways to invest for the long run: a <strong>Roth IRA</strong> or a regular brokerage account. The Roth has one big advantage. You pay tax on the money before it goes in, and after that it <strong>grows tax-free</strong> and comes out tax-free in retirement.
       </p>
       <p class="section-text">
-        Unlike other types of accounts, your Roth IRA balance <strong>GROWS TAX-FREE</strong> and you can start at any age.
+        You can open one at any age, as long as you earn money from a job or from working for yourself. Babysitting counts, and so does a small business. If you are under 18 you will need a parent or guardian to open it with you.
       </p>
-      <p class="section-text">
-        Let's see how much your savings can grow in a Roth IRA!
-      </p>
-      <p class="section-text">
-        You can open a Roth IRA at any age as long as you make money from a job or self-employment (examples: Baby-Sitting, running your own business). If you are below 18, you may need your parent or guardian's help.
-      </p>
-      
+
       <div class="calculator-box">
         <div class="input-grid">
           <div class="input-group">
-            <label class="input-label">How old are you?</label>
+            <label class="input-label" for="age">How old are you?</label>
             <input type="number" id="age" value="16" min="0" max="100">
+            <span class="fh">Everything between now and 65 is time for the money to grow.</span>
           </div>
-          
+
           <div class="input-group">
-            <label class="input-label">How Much $ Do You Make Per Year?</label>
-            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-              Sources of earned income are having a job or self-employment. To qualify for a Roth IRA, you must make less than $140,000 per year before taxes.
-            </p>
+            <label class="input-label" for="income">How much do you make a year?</label>
             <div class="input-wrapper">
               <span class="input-prefix">$</span>
               <input type="number" id="income" value="20000" min="0" step="1000">
             </div>
+            <span class="fh">Earned income means money from a job or self-employment. To use a Roth IRA you need to make less than $140,000 a year before tax.</span>
           </div>
         </div>
       </div>
 
       <div class="nav-buttons">
-        <button class="nav-btn" disabled><span>← Previous</span></button>
-        <button class="nav-btn primary" onclick="goToStep(2)"><span>Next →</span></button>
+        <button class="nav-btn" disabled><span>&larr; Previous</span></button>
+        <button class="nav-btn primary" onclick="goToStep(2)"><span>Next &rarr;</span></button>
       </div>
     </div>
   </div>
@@ -1720,45 +1116,42 @@ select.warning {
   <!-- Section 2: Contributions -->
   <div class="calc-section" data-section="2">
     <div class="calc-section-header">
-      <h2 class="calc-section-title">2. How Much Will You Contribute?</h2>
+      <div class="eyebrow">Step 2 of 4</div>
+      <h2 class="calc-section-title">How much will you put in?</h2>
     </div>
     <div class="calc-section-content">
       <p class="section-text">
-        If you are under the age of 50, you can contribute up to about $7,000 per year and can add money anytime.
+        If you are under 50 you can put in up to about $7,000 a year, and you can add money whenever you like.
       </p>
       <p class="section-text">
-        However if you withdraw money early (before the age of 59.5), you may have to pay some taxes on your earnings. Whether or not you have to pay depends on what you use the money for. Set this money aside to grow more wealth in the long-run!
+        If you take money out early, before age 59 and a half, you may owe tax on the earnings, depending on what you use it for. The account works best when you leave it alone for a long time.
       </p>
-      
+
       <div class="calculator-box">
         <div class="input-grid">
           <div class="input-group">
-            <label class="input-label">Current Roth IRA Balance</label>
-            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-              Set to $0 if you do not have one yet!
-            </p>
+            <label class="input-label" for="currentBalance">Current Roth IRA balance</label>
             <div class="input-wrapper">
               <span class="input-prefix">$</span>
               <input type="number" id="currentBalance" value="0" min="0" step="100">
             </div>
+            <span class="fh">Put $0 if you do not have one yet.</span>
           </div>
-          
+
           <div class="input-group">
-            <label class="input-label">Your Annual Contribution</label>
-            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 0.5rem;">
-              The max you can contribute if you are less than 50 years old is about $7000 per year.
-            </p>
+            <label class="input-label" for="contribution">Your annual contribution</label>
             <div class="input-wrapper">
               <span class="input-prefix">$</span>
               <input type="number" id="contribution" value="2000" min="0" max="7000" step="100">
             </div>
+            <span class="fh">The most you can put in under 50 is about $7,000 a year.</span>
           </div>
         </div>
       </div>
 
       <div class="nav-buttons">
-        <button class="nav-btn" onclick="goToStep(1)"><span>← Previous</span></button>
-        <button class="nav-btn primary" onclick="goToStep(3)"><span>Next →</span></button>
+        <button class="nav-btn" onclick="goToStep(1)"><span>&larr; Previous</span></button>
+        <button class="nav-btn primary" onclick="goToStep(3)"><span>Next &rarr;</span></button>
       </div>
     </div>
   </div>
@@ -1766,37 +1159,38 @@ select.warning {
   <!-- Section 3: Risk Tolerance -->
   <div class="calc-section" data-section="3">
     <div class="calc-section-header">
-      <h2 class="calc-section-title">3. What Is Your Risk Tolerance?</h2>
+      <div class="eyebrow">Step 3 of 4</div>
+      <h2 class="calc-section-title">How much risk can you live with?</h2>
     </div>
     <div class="calc-section-content">
       <p class="section-text">
-        In addition to growing tax-free, money in a Roth IRA earns interest and grows quickly over time by <strong>COMPOUNDING 📈</strong>, especially when you start early.
+        Besides growing tax-free, money in a Roth IRA <strong>compounds</strong>: the growth earns its own growth. The earlier you start, the more that matters.
       </p>
       <p class="section-text">
-        How you invest your money (examples: stocks of companies, bonds, mutual funds, ETFs) and your risk tolerance impacts how much your money grows.
+        How you invest it (stocks, bonds, mutual funds, ETFs) and how much risk you can stomach decide how fast it grows.
       </p>
       <p class="section-text">
-        The <strong>RISK/RETURN TRADE-OFF</strong> is that the more aggressive risk you take on, the greater the reward and your Rate of Return (RoR) if the investment makes money. On the other hand, if you only take a small risk, you will get a smaller reward. Your <strong>RISK TOLERANCE</strong> is a personal choice!
+        The trade-off is simple. Take more risk and you can earn a higher return, but the value will swing more along the way. Take less risk and it grows slower but steadier. How much risk you can live with is a personal choice.
       </p>
       <p class="section-text">
-        For example, if you invest in Tesla stock 🚗, you may see the value of your account take dips at times. This is okay, especially if you do not need the money in the near future and want to see it grow more in the long haul.
+        If you hold a single stock like Tesla, for example, your balance will dip from time to time. That is fine if you do not need the money soon and can leave it to recover.
       </p>
-      
+
       <div class="calculator-box">
         <div class="input-group">
-          <label class="input-label">Expected Annual Return (%)</label>
+          <label class="input-label" for="returnRate">Expected yearly return<span class="range-val" id="returnValue">7%</span></label>
           <input type="range" id="returnRate" min="1" max="15" step="0.5" value="7">
           <div class="slider-info">
-            <span>Conservative (3-5%)</span>
-            <span id="returnValue" style="font-weight: 900; color: var(--purple);">7%</span>
-            <span>Aggressive (10-15%)</span>
+            <span>Cautious, 3 to 5%</span>
+            <span>7% is about the market average</span>
+            <span>Aggressive, 10 to 15%</span>
           </div>
         </div>
       </div>
 
       <div class="nav-buttons">
-        <button class="nav-btn" onclick="goToStep(2)"><span>← Previous</span></button>
-        <button class="nav-btn primary" onclick="goToStep(4)"><span>See Results →</span></button>
+        <button class="nav-btn" onclick="goToStep(2)"><span>&larr; Previous</span></button>
+        <button class="nav-btn primary" onclick="goToStep(4)"><span>See results &rarr;</span></button>
       </div>
     </div>
   </div>
@@ -1804,30 +1198,44 @@ select.warning {
   <!-- Section 4: Results -->
   <div class="calc-section" data-section="4">
     <div class="calc-section-header">
-      <h2 class="calc-section-title">4. Your Roth IRA Growth!</h2>
+      <div class="eyebrow">Step 4 of 4</div>
+      <h2 class="calc-section-title">What it grows to</h2>
     </div>
     <div class="calc-section-content">
-      <p class="section-text">
-        A Roth IRA is one way to build wealth for your future. Now, let's see how its balance grows tax-free over time!
-      </p>
-      
-      <div class="result-box">
-        <div class="result-label">Your Roth IRA at Age 65</div>
-        <div class="result-value" id="finalValue">$0</div>
-      </div>
-      
-      <div class="chart-box">
-        <canvas id="rothChart"></canvas>
+      <div class="result" aria-live="polite">
+        <p class="result-sentence" id="rSentence"></p>
+        <p class="result-note" id="rNote"></p>
       </div>
 
+      <div class="chart-card">
+        <div class="stit"><span>How it grows, age by age</span><span class="chart-legend"><span><i style="background:var(--orange)"></i>What you'd have</span><span><i class="dash"></i>What you put in</span></span></div>
+        <div class="chart-wrap"><canvas id="rothChart" aria-label="Line chart of Roth IRA value and contributions by age" role="img"></canvas></div>
+      </div>
+
+      <p class="section-text">
+        We compound once a year and add your contribution at the end of each year until you turn 65, holding the return steady the whole way. Real markets never do that, so read this as a direction rather than a promise. Nothing you type leaves this page.
+      </p>
+
       <div class="nav-buttons">
-        <button class="nav-btn" onclick="goToStep(3)"><span>← Previous</span></button>
-        <button class="nav-btn primary" onclick="goToStep(1)"><span>🔄 Start Over</span></button>
+        <button class="nav-btn" onclick="goToStep(3)"><span>&larr; Previous</span></button>
+        <button class="nav-btn primary" onclick="goToStep(1)"><span>Start over</span></button>
       </div>
     </div>
   </div>
 </div>
 
+<section class="next">
+<div class="next-inner">
+<div class="eyebrow">Keep going</div>
+<div class="next-list">
+<a class="next-row" href="ira-battle.html"><span class="next-title">Battle of the IRAs</span><span class="next-desc">Roth, Traditional, or a plain brokerage account, side by side, so you can see when the Roth is not the winner.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="compound-interest.html"><span class="next-title">Compound interest</span><span class="next-desc">The same growth without the tax rules, so you can play with the monthly number and the years.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="fire-calculator.html"><span class="next-title">FIRE calculator</span><span class="next-desc">How much you would need saved to stop working, and how long it takes to get there.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="roth-ira.html"><span class="next-title">Roth IRA, one screen</span><span class="next-desc">The same projection on a single page, with the IRS phase-out worked in, once you know the basics.</span><span class="next-arrow">&rarr;</span></a>
+</div>
+<p class="disc">Estimates for learning, not financial advice. This version uses a flat $7,000 cap and a $140,000 income cutoff, both simplified; the real limits change every year and phase out gradually, so check the current numbers with the IRS. FinMango is a 501(c)(3) nonprofit. No account, no ads, nothing stored.</p>
+</div>
+</section>
   <!-- chrome:footer -->
   <footer>
     <div class="footer-newsletter">
@@ -1902,6 +1310,14 @@ function formatCurrency(value) {
   }
   return '$' + Math.round(value).toLocaleString();
 }
+const money = v => '$' + Math.round(v).toLocaleString('en-US');
+function about(v) { // round the headline number so the sentence reads like a person said it
+  if (v >= 1e6) return Math.round(v / 1e4) * 1e4;
+  if (v >= 1e5) return Math.round(v / 1e3) * 1e3;
+  if (v >= 1e4) return Math.round(v / 100) * 100;
+  return Math.round(v);
+}
+function project(start, add, rate, years) { let b = start; for (let i = 1; i <= years; i++) { b = b * (1 + rate) + add; } return b; }
 
 function calculate() {
   const age = parseInt(document.getElementById('age').value) || 16;
@@ -1933,17 +1349,46 @@ function calculate() {
     contributionData.push(totalContributions);
   }
   
-  // Update results
-  document.getElementById('finalValue').textContent = formatCurrency(balance);
+  // The result, as a sentence
+  const total = about(balance);
+  const growth = Math.max(0, total - totalContributions);
+  const adding = canContribute ? contribution : 0;
+  let sentence, note;
+  if (years === 0) {
+    sentence = 'You are already 65. With <b>' + money(currentBalance) + '</b> in the account today, that is what you have, and every dollar of it comes out tax-free.';
+    note = 'Go back to step 1 and lower the age to see how many years of growth you would have had.';
+  } else if (adding === 0 && currentBalance === 0) {
+    sentence = 'Nothing is going in yet, so there is nothing to grow.';
+    note = canContribute
+      ? 'Go back to step 2 and put a number in the contribution box.'
+      : 'At ' + money(income) + ' a year this calculator assumes you cannot contribute to a Roth IRA. The real rule phases out gradually, so check the current IRS numbers.';
+  } else if (adding === 0) {
+    sentence = 'With nothing new going in, the <b>' + money(currentBalance) + '</b> you already have grows to about <b>' + money(total) + '</b> by 65, none of it taxed. The <b class="grow">' + money(growth) + '</b> difference is growth.';
+    note = 'At ' + money(income) + ' a year this calculator assumes you cannot add to a Roth IRA, so only what is already in there is working. The real rule phases out gradually, so check the current IRS numbers.';
+  } else {
+    sentence = 'Starting at <b>' + age + '</b> and adding <b>' + money(adding) + '</b> a year, you\'d have about <b>' + money(total) + '</b> at 65, none of it taxed. <b>' + money(totalContributions) + '</b> of that is money you put in. The other <b class="grow">' + money(growth) + '</b> is growth.';
+    if (years > 10) {
+      const later = project(currentBalance, adding, returnRate, years - 10);
+      note = 'Start ten years later, at <b>' + (age + 10) + '</b>, with the same numbers and you\'d have about <b>' + money(about(later)) + '</b>. Those ten years are worth about <b>' + money(about(total - about(later))) + '</b> to you.';
+    } else if (adding < 7000) {
+      const maxBal = project(currentBalance, 7000, returnRate, years);
+      note = 'At the full <b>$7,000</b> a year you\'d have about <b>' + money(about(maxBal)) + '</b> instead.';
+    } else {
+      note = 'With only ' + years + ' year' + (years === 1 ? '' : 's') + ' to go, most of this is money you put in. Every extra year of growth helps more than it looks.';
+    }
+  }
+  document.getElementById('rSentence').innerHTML = sentence;
+  document.getElementById('rNote').innerHTML = note;
   
   // Update chart
   updateChart(age, retirementAge, balanceData, contributionData);
 }
 
 function updateChart(startAge, endAge, balanceData, contributionData) {
+  if (typeof Chart === 'undefined') return; // page still works without the chart library
   const labels = [];
   for (let a = startAge; a <= endAge; a++) {
-    labels.push('Age ' + a);
+    labels.push(a);
   }
   
   const ctx = document.getElementById('rothChart').getContext('2d');
@@ -1958,37 +1403,44 @@ function updateChart(startAge, endAge, balanceData, contributionData) {
       labels: labels,
       datasets: [
         {
-          label: 'Roth IRA Value (Tax-Free)',
+          label: 'What you\'d have',
           data: balanceData,
-          borderColor: '#10B981',
-          backgroundColor: 'rgba(16, 185, 129, 0.1)',
-          borderWidth: 3,
-          tension: 0.4,
-          fill: true
+          borderColor: '#F25A27',
+          backgroundColor: 'rgba(242,90,39,.08)',
+          borderWidth: 2,
+          tension: .3,
+          fill: true,
+          pointRadius: 0,
+          pointHoverRadius: 4
         },
         {
-          label: 'Total Contributions',
+          label: 'What you put in',
           data: contributionData,
-          borderColor: '#000000',
+          borderColor: 'rgba(10,10,10,.45)',
           backgroundColor: 'transparent',
-          borderWidth: 2,
-          borderDash: [5, 5],
-          tension: 0
+          borderWidth: 1.5,
+          borderDash: [3, 4],
+          tension: 0,
+          pointRadius: 0,
+          pointHoverRadius: 4
         }
       ]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: {
-          display: true,
-          position: 'top'
-        },
+        legend: { display: false },
         tooltip: {
+          backgroundColor: '#0A0A0A',
+          padding: 12,
+          titleFont: { family: 'JetBrains Mono', weight: '500' },
+          bodyFont: { family: 'DM Sans', weight: '500' },
           callbacks: {
+            title: function(items) { return 'Age ' + items[0].label; },
             label: function(context) {
-              return context.dataset.label + ': ' + formatCurrency(context.parsed.y);
+              return context.dataset.label + ': ' + money(context.parsed.y);
             }
           }
         }
@@ -1996,10 +1448,22 @@ function updateChart(startAge, endAge, balanceData, contributionData) {
       scales: {
         y: {
           beginAtZero: true,
+          grid: { color: 'rgba(10,10,10,.06)', drawBorder: false },
           ticks: {
+            font: { family: 'JetBrains Mono', size: 11 },
+            color: 'rgba(10,10,10,.55)',
             callback: function(value) {
               return formatCurrency(value);
             }
+          }
+        },
+        x: {
+          grid: { display: false },
+          ticks: {
+            font: { family: 'JetBrains Mono', size: 11 },
+            color: 'rgba(10,10,10,.55)',
+            maxTicksLimit: 10,
+            callback: function(v) { return 'Age ' + this.getLabelForValue(v); }
           }
         }
       }
@@ -2010,14 +1474,15 @@ function updateChart(startAge, endAge, balanceData, contributionData) {
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
   const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-    }
-  });
-  
+  if (nav) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+  }
   
   // Step navigation
   document.querySelectorAll('.step-card').forEach(card => {

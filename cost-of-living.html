@@ -641,254 +641,99 @@
       pre, code { white-space: pre-wrap; word-break: break-word; }
     }
 
-    /* ---- reskinned legacy component css ---- */
-        /* ── Design tokens ─────────────────────────── */
-        :root {
-            --cream: var(--paper);
-            --black: #0A0A0A;
-            --white: #ffffff;
-            --orange: #F25A27;
-            --orange-glow: rgba(242, 90, 39, 0.12);
-            --gray: var(--ink-dim);
-            --light-gray: var(--ink-line);
-            --success: #16a34a;
-            --error: #EF4444;
-            --info: #3B82F6;
-            --max-width: 1200px;
-            --light-border: rgba(26,26,26,0.10);
-            --shadow-md: 0 4px 12px rgba(26,26,26,0.08), 0 2px 4px rgba(26,26,26,0.04);
-            --radius-sm: 8px;
-            --radius-md: 14px;
-            --radius-lg: 20px;
-            --font-display: 'Fraunces', Georgia, serif;
-            --font-body: 'DM Sans', system-ui, sans-serif;
-        }
+    /* ---- cost of living: page styles (humanized tool pass, September 2026) ---- */
+:root{--white:#fff;--bdr:var(--ink-line)}
+a{color:inherit;text-decoration:none}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+body{background:var(--paper);color:var(--ink)}
 
+/* Hero: left-set, one eyebrow, one plain headline */
+.tool-hero{max-width:var(--max-width);margin:0 auto;padding:150px var(--gutter) 44px}
+.tool-hero-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem 2rem;flex-wrap:wrap;margin-bottom:1.75rem}
+.tool-meta{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;color:var(--ink-faint)}
+.tool-hero h1{font-size:clamp(2.4rem,4.8vw,4rem);font-weight:900;line-height:.98;letter-spacing:-.045em;max-width:18ch;margin-bottom:1.25rem}
+.tool-lede{font-size:1.15rem;line-height:1.55;color:var(--ink-dim);max-width:60ch;font-weight:300}
+.tool-lede strong{font-weight:600;color:var(--ink)}
 
-        body {
-            font-family: var(--font-body);
-            background: var(--cream);
-            color: var(--black);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
+/* Layout */
+.calc-section{max-width:var(--max-width);margin:0 auto;padding:0 var(--gutter) 72px}
+.calc-grid{display:grid;grid-template-columns:400px 1fr;gap:24px;align-items:start}
+.controls-panel{position:sticky;top:100px;min-width:0}
+.results-panel{min-width:0;display:flex;flex-direction:column;gap:20px}
 
+/* Inputs */
+.ccard{background:var(--white);border:1px solid var(--bdr);padding:28px}
+.ccard h2{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;line-height:1.15;margin:.5rem 0 8px}
+.cdesc{font-size:.92rem;color:var(--ink-dim);padding-bottom:18px;border-bottom:1px solid var(--bdr);margin-bottom:22px;line-height:1.55}
+.input-group{margin-bottom:18px;min-width:0}
+.input-group:last-child{margin-bottom:0}
+.input-group label{display:block;font-size:.88rem;font-weight:600;letter-spacing:-.01em;margin-bottom:6px}
+.fh{display:block;font-size:.78rem;color:var(--ink-faint);margin-top:6px;line-height:1.45}
+.input-wrapper{position:relative}
+.input-wrapper input,.input-wrapper select{width:100%;padding:12px 14px;border:1px solid var(--bdr);background:var(--paper);font-family:var(--font-mono);font-size:1.05rem;font-weight:500;color:var(--ink);outline:none;border-radius:0;transition:border-color .2s,background .2s;font-variant-numeric:tabular-nums}
+.input-wrapper select{font-family:var(--font-body);font-size:1rem;-webkit-appearance:none;appearance:none;padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%230A0A0A' stroke-width='1.2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.input-wrapper input:focus,.input-wrapper select:focus{border-color:var(--ink);background:var(--white)}
+.input-wrapper input.sx{padding-right:56px}
+.input-wrapper .symbol{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:var(--font-mono);font-size:.9rem;color:var(--ink-faint);pointer-events:none}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
-        /* ── Calculator Specific Styles ──────────── */
-        .calculator-section {
-            padding: 10rem 2rem 4rem;
-            background: var(--cream);
-            min-height: 100vh;
-        }
+/* Result: a sentence, with the numbers inside it */
+.result{background:var(--white);border:1px solid var(--bdr);padding:36px 36px 30px}
+.result-sentence{font-size:clamp(1.45rem,2.3vw,2.05rem);font-weight:400;line-height:1.32;letter-spacing:-.025em;color:var(--ink);text-wrap:pretty}
+.result-sentence b{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.result-sentence .grow{color:var(--orange-ink)}
+.result-note{margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--bdr);font-size:.98rem;line-height:1.5;color:var(--ink-dim)}
+.result-note b{font-weight:600;color:var(--ink)}
 
+/* Chart */
+.chart-card{background:var(--white);border:1px solid var(--bdr);padding:24px}
+.chart-card .stit{font-size:.9rem;font-weight:600;letter-spacing:-.01em;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.chart-legend{display:flex;gap:14px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.04em;color:var(--ink-faint)}
+.chart-legend span{display:flex;align-items:center;gap:6px}
+.chart-legend i{width:14px;height:2px;display:inline-block}
+.chart-wrap{position:relative;height:300px}
 
-        .container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-        }
+/* How it works */
+.how{padding:0 4px}
+.how p{font-size:.95rem;line-height:1.6;color:var(--ink-dim);max-width:62ch;margin-top:.75rem}
 
+/* Facts: a ruled list, not cards */
+.facts{max-width:var(--max-width);margin:0 auto;padding:0 var(--gutter) 72px}
+.facts-list{margin-top:1.25rem;border-top:1px solid var(--bdr);max-width:920px}
+.fact-row{display:grid;grid-template-columns:220px 1fr;gap:1.5rem;align-items:baseline;padding:1.1rem 0;border-bottom:1px solid var(--bdr)}
+.fact-title{font-weight:600;letter-spacing:-.01em}
+.fact-desc{color:var(--ink-dim);font-size:.98rem;line-height:1.55}
+.fact-desc strong{color:var(--ink);font-weight:600}
 
-        .header-content {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
+/* Keep going: ruled rows, not a card grid */
+.next{border-top:1px solid var(--bdr)}
+.next-inner{max-width:var(--max-width);margin:0 auto;padding:56px var(--gutter) 64px}
+.next-list{margin-top:1.25rem;border-top:1px solid var(--bdr)}
+.next-row{display:grid;grid-template-columns:220px 1fr auto;gap:1.5rem;align-items:baseline;padding:1.1rem 0;border-bottom:1px solid var(--bdr);color:var(--ink)}
+.next-title{font-weight:600;letter-spacing:-.01em}
+.next-desc{color:var(--ink-dim);font-size:.98rem}
+.next-arrow{font-family:var(--font-mono);color:var(--ink-faint);transition:transform .25s cubic-bezier(.16,1,.3,1),color .2s}
+.next-row:hover .next-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.next-row:hover .next-arrow{transform:translateX(4px);color:var(--ink)}
+.disc{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.04em;color:var(--ink-faint);margin-top:1.75rem;line-height:1.6}
 
+@media(max-width:968px){
+.tool-hero{padding:120px var(--gutter) 32px}
+.calc-grid{grid-template-columns:1fr;gap:16px}
+.controls-panel{position:static}
+.next-row{grid-template-columns:1fr auto;row-gap:.2rem}
+.next-desc{grid-column:1/-1}
+.next-arrow{grid-row:1;grid-column:2}
+.fact-row{grid-template-columns:1fr;row-gap:.25rem}}
 
-        .header-content h1 {
-            font-family: var(--font-display);
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 900;
-            margin-bottom: 1rem;
-        }
-
-
-        .header-content p {
-            color: var(--gray);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-
-        .calc-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-
-
-        .card {
-            background: var(--white);
-            border: 1px solid var(--light-border);
-            padding: 2rem;
-            border-radius: 0;
-            
-        }
-
-
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-
-
-        .input-group label {
-            display: block;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-
-
-        .input-wrapper {
-            position: relative;
-        }
-
-
-        .input-wrapper input,
-        .input-wrapper select {
-            width: 100%;
-            padding: 0.75rem 0.9rem;
-            border: 1.5px solid rgba(26,26,26,0.18);
-            font-family: inherit;
-            font-size: 1rem;
-            border-radius: 0;
-            background: var(--white);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            outline: none;
-        }
-
-
-        .input-wrapper input:focus,
-        .input-wrapper select:focus {
-            border-color: var(--orange);
-            
-        }
-
-
-        .input-wrapper .symbol {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray);
-            font-weight: 600;
-            pointer-events: none;
-        }
-
-
-        /* Results */
-        .results-card {
-            position: sticky;
-            top: 100px;
-        }
-
-
-        .verdict-box {
-            background: var(--orange);
-            color: var(--white);
-            padding: 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-            border-radius: 0;
-        }
-
-
-        .verdict-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-
-        .verdict-winner {
-            font-size: 2.5rem;
-            font-weight: 900;
-            color: var(--success);
-            line-height: 1.1;
-            margin-bottom: 0.5rem;
-        }
-
-
-        .verdict-diff {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-
-        .chart-container {
-            height: 300px;
-            margin-top: 2rem;
-        }
-
-
-        @media (max-width: 968px) {
-            .calc-grid {
-                grid-template-columns: 1fr;
-            }
-
-
-            .results-card {
-                position: static;
-            }
-
-        }
-
-
-        /* Educational Section */
-        .edu-section {
-            margin-top: 4rem;
-            padding-top: 4rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-
-        .edu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-
-        .edu-card {
-            background: var(--white);
-            padding: 2rem;
-            border-left: 1px solid var(--orange);
-        }
-
-
-        .edu-card h3 {
-            font-size: 1.25rem;
-            font-weight: 900;
-            margin-bottom: 1rem;
-        }
-
-
-        .edu-card p {
-            font-size: 0.95rem;
-            color: var(--gray);
-            margin-bottom: 1rem;
-        }
-
-
-        .highlight-badge {
-            display: inline-block;
-            background: rgba(242, 90, 39, 0.1);
-            color: var(--orange-ink);
-            padding: 0.25rem 0.5rem;
-            font-size: 0.8rem;
-            font-weight: 700;
-            border-radius: 0;
-            margin-bottom: 0.5rem;
-        }
-
-
-
-  
+@media(max-width:600px){
+.tool-hero{padding:104px var(--gutter) 24px}
+.ccard{padding:22px 18px}
+.result{padding:24px 20px 22px}
+.frow{grid-template-columns:1fr}
+.chart-card{padding:18px}
+.chart-wrap{height:240px}}
   </style>
 
   <!-- Shared Navbar Styles -->
@@ -1137,93 +982,86 @@
   </div>
   <!-- /chrome:nav -->
 
-    <section class="calculator-section">
-        <div class="container">
-            <div class="header-content">
-                <h1>Cost of Living Comparator</h1>
-                <p>See how far your salary goes in different cities.</p>
-            </div>
+<section class="tool-hero">
+<div class="tool-hero-top">
+<div class="eyebrow">Calculator · Cost of living</div>
+<div class="tool-meta">Rough index for 19 US cities, US average = 100</div>
+</div>
+<h1>What would your salary need to be in another city?</h1>
+<p class="tool-lede">Pick where you live, where you are thinking of going and what you make. We scale your salary by a rough cost-of-living index so you can see what the same life would cost there. <strong>Treat it as a first look, not a quote.</strong></p>
+</section>
 
-            <div class="calc-grid">
-                <!-- Inputs -->
-                <div class="card">
-                    <h3 style="margin-bottom: 1.5rem; font-weight: 900;">Comparison Details</h3>
+<section class="calc-section">
+<div class="calc-grid">
+<aside class="controls-panel">
+<div class="ccard">
+<div class="eyebrow">Your numbers</div><h2>The move</h2><p class="cdesc">Two cities and one salary. Everything else comes from the index.</p>
 
-                    <div class="input-group">
-                        <label>Current City</label>
-                        <div class="input-wrapper">
-                            <select id="currentCity">
-                                <!-- Options populated by JS -->
-                            </select>
-                        </div>
-                    </div>
+<div class="input-group">
+<label for="currentCity">Where you live now</label>
+<div class="input-wrapper">
+<select id="currentCity">
+<!-- Options populated by JS -->
+</select>
+</div>
+</div>
 
-                    <div class="input-group">
-                        <label>New City</label>
-                        <div class="input-wrapper">
-                            <select id="newCity">
-                                <!-- Options populated by JS -->
-                            </select>
-                        </div>
-                    </div>
+<div class="input-group">
+<label for="newCity">Where you are thinking of going</label>
+<div class="input-wrapper">
+<select id="newCity">
+<!-- Options populated by JS -->
+</select>
+</div>
+</div>
 
-                    <div class="input-group">
-                        <label>Current Annual Salary</label>
-                        <div class="input-wrapper">
-                            <input type="number" id="salary" value="60000">
-                            <span class="symbol">$</span>
-                        </div>
-                    </div>
+<div class="input-group">
+<label for="salary">Your salary now, per year</label>
+<div class="input-wrapper"><input type="number" id="salary" value="60000" class="sx"><span class="symbol">$</span></div>
+<span class="fh">Before tax. Use what your job pays today.</span>
+</div>
+</div>
+</aside>
 
-                </div>
+<div class="results-panel">
+<div class="result" aria-live="polite">
+<p class="result-sentence" id="rSentence"></p>
+<p class="result-note" id="rNote"></p>
+</div>
 
-                <!-- Results -->
-                <div class="card results-card">
-                    <div class="verdict-box">
-                        <div class="verdict-label">Equivalent Salary Needed</div>
-                        <div class="verdict-winner" id="neededSalary">$0</div>
-                        <div class="verdict-diff" id="verdictText"></div>
-                    </div>
+<div class="chart-card">
+<div class="stit"><span>The same life, priced in each city</span><span class="chart-legend"><span><i style="background:rgba(10,10,10,.6)"></i>Where you are</span><span><i style="background:var(--orange)"></i>Where you'd go</span></span></div>
+<div class="chart-wrap"><canvas id="costChart" aria-label="Bar chart comparing your current salary with the salary needed in the new city" role="img"></canvas></div>
+</div>
 
-                    <div class="chart-container">
-                        <canvas id="costChart"></canvas>
-                    </div>
-                </div>
-            </div>
+<div class="how">
+<div class="eyebrow">How this is worked out</div>
+<p>Each city has a single number on our index, where 100 is an average US city. We divide the new city's number by your current city's and multiply your salary by that. It is a blunt tool: it does not know your rent, your commute or your tax bracket, and the index numbers are rounded estimates, not live data. Nothing you type leaves this page.</p>
+</div>
+</div>
+</div>
+</section>
 
-            <!-- Educational Section -->
-            <div class="edu-section">
-                <div class="header-content">
-                    <h2>Understanding Cost of Living</h2>
-                    <p>It's not just about rent. Groceries, taxes, and transport add up.</p>
-                </div>
+<section class="facts">
+<div class="eyebrow">What moves the number</div>
+<div class="facts-list">
+<div class="fact-row"><span class="fact-title">Housing</span><span class="fact-desc">The biggest factor by far. Rent and home prices vary wildly: <strong>$1,500 a month</strong> can rent a whole house in parts of Ohio and a small room in New York.</span></div>
+<div class="fact-row"><span class="fact-title">State income tax</span><span class="fact-desc">Some states, like Texas and Florida, have no income tax at all. California and New York can take more than 10% of what you earn.</span></div>
+<div class="fact-row"><span class="fact-title">Everyday costs</span><span class="fact-desc">Commuting, parking, groceries, even the price of a sandwich can double between cities. These are the costs that quietly add up.</span></div>
+</div>
+</section>
 
-                <div class="edu-grid">
-                    <div class="edu-card">
-                        <span class="highlight-badge">Housing</span>
-                        <h3>The Biggest Factor</h3>
-                        <p>Rent and home prices vary wildly. $1,500 might get you a mansion in Ohio but a closet in New
-                            York.</p>
-                    </div>
-
-                    <div class="edu-card">
-                        <span class="highlight-badge">Taxes</span>
-                        <h3>State Income Tax</h3>
-                        <p>Some states like Texas and Florida have 0% income tax, while California and New York can take
-                            over 10%.</p>
-                    </div>
-
-                    <div class="edu-card">
-                        <span class="highlight-badge">Lifestyle</span>
-                        <h3>Hidden Costs</h3>
-                        <p>Commuting, parking, and even the price of a sandwich can double between cities.</p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
+<section class="next">
+<div class="next-inner">
+<div class="eyebrow">Keep going</div>
+<div class="next-list">
+<a class="next-row" href="paycheck-calculator.html"><span class="next-title">Paycheck calculator</span><span class="next-desc">What the new salary would actually leave in your account after tax.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="housing-calculator.html"><span class="next-title">Housing calculator</span><span class="next-desc">How much rent or mortgage that salary can carry, since housing is where most of the difference lives.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="budget-balancer.html"><span class="next-title">Budget balancer</span><span class="next-desc">Lay out the whole month in the new city and see whether it balances.</span><span class="next-arrow">&rarr;</span></a>
+</div>
+<p class="disc">Estimates for learning, not financial advice. The index numbers are rounded approximations for 19 large US cities and are not updated live. FinMango is a 501(c)(3) nonprofit. No account, no ads, nothing stored.</p>
+</div>
+</section>
       <!-- chrome:footer -->
   <footer>
     <div class="footer-newsletter">
@@ -1257,7 +1095,6 @@
 
     <script>
 
-
         // Cost of Living Data (Simplified Indices, Base 100 = Average US City)
         const CITIES = {
             "New York, NY": 220,
@@ -1282,6 +1119,14 @@
         };
 
         let chart;
+
+        function money(v) { return '$' + Math.round(v).toLocaleString('en-US'); }
+        function about(v) { // round the headline number so the sentence reads like a person said it
+            if (v >= 1e6) return Math.round(v / 1e4) * 1e4;
+            if (v >= 1e5) return Math.round(v / 1e3) * 1e3;
+            if (v >= 1e4) return Math.round(v / 100) * 100;
+            return Math.round(v);
+        }
 
         function init() {
             const currentSelect = document.getElementById('currentCity');
@@ -1316,16 +1161,27 @@
 
             const ratio = newIndex / currentIndex;
             const neededSalary = salary * ratio;
-
-            // Update UI
-            document.getElementById('neededSalary').textContent = formatCurrency(neededSalary);
-
             const diff = neededSalary - salary;
-            const diffText = diff > 0
-                ? `You need to earn ${formatCurrency(diff)} more`
-                : `You could save ${formatCurrency(Math.abs(diff))}`;
+            const shortCurrent = currentCity.split(',')[0];
+            const shortNew = newCity.split(',')[0];
 
-            document.getElementById('verdictText').textContent = diffText;
+            let sentence, note;
+            if (salary === 0) {
+                sentence = 'Put in what you make and this sentence will fill in.';
+                note = 'On our index ' + shortCurrent + ' sits at <b>' + currentIndex + '</b> and ' + shortNew + ' at <b>' + newIndex + '</b>, where 100 is an average US city.';
+            } else if (currentCity === newCity) {
+                sentence = 'Same city on both sides, so <b>' + money(salary) + '</b> in ' + shortCurrent + ' is <b>' + money(salary) + '</b> in ' + shortCurrent + '.';
+                note = 'Pick a different city on one side to compare.';
+            } else {
+                sentence = 'To live in <b>' + shortNew + '</b> the way <b>' + money(salary) + '</b> lets you live in <b>' + shortCurrent + '</b>, you\'d need to earn about <b class="grow">' + money(about(neededSalary)) + '</b>.';
+                if (diff > 0) {
+                    note = 'That is about <b>' + money(about(diff)) + '</b> more, or <b>' + ratio.toFixed(1) + ' times</b> what you make now. On our index ' + shortCurrent + ' sits at <b>' + currentIndex + '</b> and ' + shortNew + ' at <b>' + newIndex + '</b>, where 100 is an average US city.';
+                } else {
+                    note = 'That is about <b>' + money(about(Math.abs(diff))) + '</b> less. Keep your current salary and the move would feel like a <b>' + money(about(Math.abs(diff))) + '</b> raise. On our index ' + shortCurrent + ' sits at <b>' + currentIndex + '</b> and ' + shortNew + ' at <b>' + newIndex + '</b>, where 100 is an average US city.';
+                }
+            }
+            document.getElementById('rSentence').innerHTML = sentence;
+            document.getElementById('rNote').innerHTML = note;
 
             updateChart(salary, neededSalary, currentCity, newCity);
         }
@@ -1335,6 +1191,7 @@
         }
 
         function updateChart(currentSalary, neededSalary, currentCity, newCity) {
+            if (typeof Chart === 'undefined') return; // page still works without the chart library
             const ctx = document.getElementById('costChart').getContext('2d');
 
             if (chart) chart.destroy();
@@ -1344,11 +1201,11 @@
                 data: {
                     labels: [currentCity, newCity],
                     datasets: [{
-                        label: 'Salary Value',
+                        label: 'Salary',
                         data: [currentSalary, neededSalary],
-                        backgroundColor: ['#6B6560', '#F25A27'],
-                        borderWidth: 2,
-                        borderColor: '#000'
+                        backgroundColor: ['rgba(10,10,10,.6)', '#F25A27'],
+                        borderWidth: 0,
+                        maxBarThickness: 120
                     }]
                 },
                 options: {
@@ -1357,6 +1214,10 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
+                            backgroundColor: '#0A0A0A',
+                            titleFont: { family: 'JetBrains Mono', weight: '500' },
+                            bodyFont: { family: 'DM Sans', weight: '500' },
+                            padding: 12,
                             callbacks: {
                                 label: function (context) {
                                     return formatCurrency(context.raw);
@@ -1367,11 +1228,18 @@
                     scales: {
                         y: {
                             beginAtZero: true,
+                            grid: { color: 'rgba(10,10,10,.06)', drawBorder: false },
                             ticks: {
+                                font: { family: 'JetBrains Mono', size: 11 },
+                                color: 'rgba(10,10,10,.55)',
                                 callback: function (value) {
                                     return '$' + value / 1000 + 'k';
                                 }
                             }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'JetBrains Mono', size: 11 }, color: 'rgba(10,10,10,.55)' }
                         }
                     }
                 }
