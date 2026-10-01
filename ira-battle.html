@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Battle of the IRAs — Traditional vs. Roth vs. Brokerage — FinMango</title>
-<meta name="description" content="Traditional IRA, Roth IRA, or taxable brokerage? Run the math on your income, tax bracket, and timeline to see which one actually wins.">
+<title>Battle of the IRAs | FinMango</title>
+<meta name="description" content="Traditional IRA, Roth IRA or a plain brokerage account. Put in your age, income and contribution and see which leaves you the most after tax.">
 <link rel="canonical" href="https://finmango.org/ira-battle">
 <link rel="icon" type="image/png" href="favicon.png">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://finmango.org/ira-battle">
-<meta property="og:title" content="Battle of the IRAs — Traditional vs. Roth vs. Brokerage">
-<meta property="og:description" content="Pay taxes now, pay them later, or pay them on every gain? Run the numbers.">
+<meta property="og:title" content="Battle of the IRAs | FinMango">
+<meta property="og:description" content="Traditional IRA, Roth IRA or a plain brokerage account. Put in your age, income and contribution and see which leaves you the most after tax.">
 <meta property="og:image" content="https://www.finmango.org/og-image.png?v=20260924">
 
   <!-- Performance: Preconnect to external domains -->
@@ -652,129 +652,32 @@
       --s-brok: #8A8680;
       --s-brok-text: #6B6762;
       --panel: #FFFFFF;
+      --bdr: var(--ink-line);
+      --white: #FFFFFF;
     }
 
     /* ----------------------------------------------------------
-       HERO — editorial, left-aligned, with the contestants as the key
+       HERO: left-set, one eyebrow, one plain headline. The three
+       contestants sit under it as a ruled list that doubles as the
+       colour key for everything below.
        ---------------------------------------------------------- */
-    .hero {
-      background: var(--paper);
-      padding: 8rem 0 3rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-    .hero-bg::before {
-      content: '';
-      position: absolute;
-      top: 10%;
-      right: -14%;
-      width: 56vw;
-      height: 56vw;
-      background: radial-gradient(circle, rgba(242, 90, 39, .09) 0%, transparent 60%);
-      filter: blur(40px);
-    }
-    .hero-container {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 2.25rem;
-    }
-    .hero-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .hb-status {
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      font-weight: 500;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: var(--ink-faint);
-      display: inline-flex;
-      align-items: center;
-      gap: .6rem;
-    }
-    .hb-pulse {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--orange);
-      box-shadow: 0 0 0 0 rgba(242, 90, 39, .5);
-      animation: hb-pulse 2.4s ease-out infinite;
-    }
-    @keyframes hb-pulse {
-      0% { box-shadow: 0 0 0 0 rgba(242, 90, 39, .5); }
-      70% { box-shadow: 0 0 0 10px rgba(242, 90, 39, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(242, 90, 39, 0); }
-    }
+    .tool-hero{max-width:var(--max-width);margin:0 auto;padding:150px var(--gutter) 44px}
+    .tool-hero-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem 2rem;flex-wrap:wrap;margin-bottom:1.75rem}
+    .tool-meta{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;color:var(--ink-faint)}
+    .tool-hero h1{font-size:clamp(2.4rem,4.8vw,4rem);font-weight:900;line-height:.98;letter-spacing:-.045em;max-width:22ch;margin-bottom:1.25rem}
+    .tool-lede{font-size:1.15rem;line-height:1.55;color:var(--ink-dim);max-width:60ch;font-weight:300}
+    .tool-lede strong{font-weight:600;color:var(--ink)}
 
-    .hero h1 {
-      font-size: clamp(2.5rem, 5.8vw, 5rem);
-      font-weight: 900;
-      line-height: .98;
-      letter-spacing: -.045em;
-      max-width: 16ch;
-    }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--orange);
-      position: relative;
-      display: inline-block;
-      white-space: nowrap;
-    }
-    .hero h1 em svg.hand-stroke {
-      position: absolute;
-      left: -1%;
-      bottom: -.1em;
-      width: 102%;
-      height: .16em;
-      pointer-events: none;
-    }
-    .hero h1 em svg.hand-stroke path {
-      stroke: var(--orange);
-      stroke-width: 5;
-      stroke-linecap: round;
-      fill: none;
-      opacity: .5;
-      stroke-dasharray: 1000;
-      stroke-dashoffset: 1000;
-      animation: draw-stroke 1.2s cubic-bezier(.16, 1, .3, 1) .5s forwards;
-    }
-    @keyframes draw-stroke { to { stroke-dashoffset: 0; } }
-
-    .hb-bottom {
-      display: grid;
-      grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
-      align-items: start;
-      gap: 3rem;
-      padding-top: 1.75rem;
-      border-top: 1px solid var(--ink-line-soft);
-    }
-    .hb-sub {
-      font-size: clamp(1.02rem, 1.4vw, 1.25rem);
-      line-height: 1.55;
-      color: var(--ink-dim);
-      font-weight: 400;
-      max-width: 44ch;
-      letter-spacing: -.005em;
-    }
-    .hb-sub strong { color: var(--ink); font-weight: 600; }
-
-    /* the contestants list doubles as the colour key for everything below */
-    .contestants { list-style: none; display: flex; flex-direction: column; }
+    .contestants { list-style: none; display: flex; flex-direction: column; max-width: 720px; margin-top: 2.25rem; }
     .contestant {
       display: grid;
       grid-template-columns: 2.25rem 12px 1fr auto;
       align-items: center;
       gap: .85rem;
       padding: .8rem 0;
-      border-bottom: 1px solid var(--ink-line-soft);
+      border-bottom: 1px solid var(--ink-line);
     }
-    .contestant:first-child { border-top: 1px solid var(--ink-line-soft); }
+    .contestant:first-child { border-top: 1px solid var(--ink-line); }
     .contestant-n {
       font-family: var(--font-mono);
       font-size: .72rem;
@@ -887,9 +790,8 @@
     .inputs-grid .controls-section { border-bottom: none; border-right: 1px solid var(--ink-line); padding: 1.5rem; }
     .inputs-grid .controls-section:last-child { border-right: none; }
 
-    .live-line { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--ink-line-soft); font-size: .88rem; color: var(--ink-dim); display: flex; align-items: center; gap: .6rem; line-height: 1.4; }
-    .live-line strong { color: var(--ink); font-weight: 700; }
-    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); flex-shrink: 0; box-shadow: 0 0 0 0 rgba(242, 90, 39, .5); animation: hb-pulse 2.4s ease-out infinite; }
+    .live-line { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--ink-line-soft); font-size: .92rem; color: var(--ink-dim); line-height: 1.45; }
+    .live-line strong { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
 
     .stage-foot {
       display: flex;
@@ -1059,7 +961,7 @@
     .filing-btn.active { background: var(--ink); color: var(--paper); }
     .filing-btn:focus-visible { outline-offset: -3px; }
     .filing-abbr { font-family: var(--font-mono); font-size: .78rem; font-weight: 600; line-height: 1; letter-spacing: .02em; }
-    .filing-label { font-size: .58rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-faint); line-height: 1.2; text-align: center; }
+    .filing-label { font-size: .66rem; color: var(--ink-faint); line-height: 1.2; text-align: center; }
     .filing-btn.active .filing-label { color: var(--paper-dim); }
 
     /* Derived figures */
@@ -1072,38 +974,17 @@
     .derived-row-value.roth-partial { color: var(--ink-dim); }
     .derived-row-value.roth-out { color: var(--ink-faint); text-decoration: line-through; text-decoration-thickness: 1px; }
 
-    /* The verdict — the one ink block in the calculator */
+    /* The verdict: the page's one ink moment. A sentence, not a dashboard. */
     .verdict {
       background: var(--ink);
       color: var(--paper);
       padding: 2rem 2.25rem 2.25rem;
-      position: relative;
-      overflow: hidden;
     }
-    .verdict::after {
-      content: '';
-      position: absolute;
-      top: -30%; right: -10%;
-      width: 55%; height: 160%;
-      background: radial-gradient(circle, rgba(242, 90, 39, .16) 0%, transparent 60%);
-      filter: blur(30px);
-      pointer-events: none;
-    }
-    .verdict > * { position: relative; z-index: 1; }
-    .verdict-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
-    .verdict-horizon { font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--paper-faint); }
-    .verdict-horizon strong { color: var(--paper); font-weight: 600; }
-    .verdict-winner {
-      font-size: clamp(2.1rem, 3.6vw, 3.2rem);
-      font-weight: 900;
-      line-height: 1;
-      letter-spacing: -.04em;
-      color: var(--orange);
-      margin-bottom: .6rem;
-    }
-    .verdict.tie .verdict-winner { color: var(--paper); }
-    .verdict-diff { font-size: 1.05rem; color: var(--paper-dim); font-weight: 400; letter-spacing: -.01em; }
-    .verdict-diff strong { color: var(--paper); font-weight: 600; }
+    .verdict .eyebrow { margin-bottom: 1.25rem; }
+    .verdict-sentence { font-size: clamp(1.45rem, 2.3vw, 2.05rem); font-weight: 400; line-height: 1.32; letter-spacing: -.025em; color: var(--paper); text-wrap: pretty; max-width: 38ch; }
+    .verdict-sentence b { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .verdict-sentence .win { color: var(--orange); }
+    .verdict.tie .verdict-sentence .win { color: var(--paper); }
 
     /* Standings: the whole comparison in one glance */
     .standings { list-style: none; display: flex; flex-direction: column; margin-top: 1.75rem; border-top: 1px solid var(--paper-line); }
@@ -1129,7 +1010,7 @@
     .standing-value { font-family: var(--font-mono); font-size: .95rem; font-weight: 600; font-variant-numeric: tabular-nums; min-width: 4.5rem; text-align: right; color: var(--paper); }
     .standing.is-first .standing-value { color: var(--orange); }
     .standing:not(.is-first) { opacity: .78; }
-    .verdict-insight { margin-top: 1.4rem; font-size: .92rem; line-height: 1.55; color: var(--paper-dim); max-width: 60ch; }
+    .verdict-insight { margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid var(--paper-line); font-size: .98rem; line-height: 1.5; color: var(--paper-dim); max-width: 60ch; }
     .verdict-insight strong { color: var(--paper); font-weight: 600; }
 
     /* Three ledgers */
@@ -1158,17 +1039,14 @@
     .fighter-card.roth { --fighter-color: var(--s-roth); --fighter-text: var(--s-roth-text); }
     .fighter-card.taxable { --fighter-color: var(--s-brok); --fighter-text: var(--s-brok-text); }
     .fighter-header { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .5rem; }
-    .fighter-name { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--font-mono); font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--fighter-text); white-space: nowrap; }
+    .fighter-name { display: inline-flex; align-items: center; gap: .5rem; font-size: .9rem; font-weight: 600; letter-spacing: -.01em; color: var(--ink); white-space: nowrap; }
     .fighter-name .swatch { width: 10px; height: 10px; background: var(--fighter-color); }
     .winner-tag {
       font-family: var(--font-mono);
-      font-size: .62rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: var(--paper);
-      background: var(--ink);
-      padding: .22rem .5rem;
+      font-size: .68rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      color: var(--orange-ink);
       opacity: 0;
       transform: translateY(-4px);
       transition: opacity .3s ease, transform .3s ease;
@@ -1176,8 +1054,8 @@
     }
     .fighter-card.is-winner .winner-tag { opacity: 1; transform: translateY(0); }
     .fighter-strategy { font-size: .8rem; color: var(--ink-dim); line-height: 1.4; min-height: 2.6em; margin-bottom: 1rem; }
-    .fighter-value { font-size: clamp(1.6rem, 2.1vw, 2rem); font-weight: 800; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; color: var(--ink); margin-bottom: .3rem; }
-    .fighter-value-label { font-family: var(--font-mono); font-size: .64rem; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-faint); margin-bottom: 1.1rem; }
+    .fighter-value { font-family: var(--font-mono); font-size: clamp(1.35rem, 1.8vw, 1.7rem); font-weight: 600; letter-spacing: -.02em; line-height: 1; font-variant-numeric: tabular-nums; color: var(--ink); margin-bottom: .35rem; }
+    .fighter-value-label { font-size: .8rem; color: var(--ink-dim); margin-bottom: 1.1rem; }
     .fighter-details { display: flex; flex-direction: column; border-top: 1px solid var(--ink-line-soft); }
     .fighter-row { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; font-size: .78rem; padding: .42rem 0; border-bottom: 1px solid var(--ink-line-soft); }
     .fighter-row:last-child { border-bottom: none; }
@@ -1190,9 +1068,9 @@
     /* Chart */
     .chart-card { background: var(--panel); border: 1px solid var(--ink-line); padding: 1.5rem 1.75rem 1.25rem; min-width: 0; overflow: hidden; }
     .chart-card-header { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
-    .chart-card-title { font-size: 1rem; font-weight: 700; letter-spacing: -.015em; }
-    .chart-card-title small { display: block; font-family: var(--font-mono); font-size: .66rem; font-weight: 500; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-faint); margin-top: .25rem; }
-    .chart-legend { display: flex; gap: 1.1rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-dim); flex-wrap: wrap; }
+    .chart-card-title { font-size: .9rem; font-weight: 600; letter-spacing: -.01em; }
+    .chart-card-title small { display: block; font-size: .8rem; font-weight: 400; color: var(--ink-dim); margin-top: .25rem; }
+    .chart-legend { display: flex; gap: 1.1rem; font-family: var(--font-mono); font-size: .68rem; letter-spacing: .04em; color: var(--ink-dim); flex-wrap: wrap; }
     .chart-legend-item { display: inline-flex; align-items: center; gap: .45rem; }
     .chart-legend-line { width: 18px; height: 0; border-top: 2px solid currentColor; }
     .chart-legend-item.roth { color: var(--s-roth-text); }
@@ -1219,11 +1097,9 @@
       align-items: center;
       gap: 1rem;
       padding: 1rem 1.5rem;
-      font-family: var(--font-mono);
-      font-size: .72rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .12em;
+      font-size: .9rem;
+      font-weight: 600;
+      letter-spacing: -.01em;
       color: var(--ink);
     }
     .methodology summary::-webkit-details-marker { display: none; }
@@ -1237,48 +1113,35 @@
     .methodology-body code { font-family: var(--font-mono); font-size: .78rem; background: rgba(10, 10, 10, .05); padding: .1rem .35rem; color: var(--ink); }
 
     /* ----------------------------------------------------------
-       THE BATTLE EXPLAINED
+       EXPLAINERS: ruled rows, not card grids
        ---------------------------------------------------------- */
-    .edu-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-    .edu-fighter { background: var(--panel); border: 1px solid var(--ink-line); padding: 2rem; position: relative; }
-    .edu-fighter::before { content: ''; position: absolute; top: -1px; left: -1px; right: -1px; height: 3px; background: var(--fighter-color); }
-    .edu-fighter.traditional { --fighter-color: var(--s-trad); --fighter-text: var(--s-trad); }
-    .edu-fighter.roth { --fighter-color: var(--s-roth); --fighter-text: var(--s-roth-text); }
-    .edu-fighter-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-    .edu-fighter-eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--font-mono); font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--fighter-text); }
-    .edu-fighter-eyebrow .swatch { background: var(--fighter-color); width: 10px; height: 10px; }
-    .edu-tagline { font-family: var(--font-mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-faint); border: 1px solid var(--ink-line); padding: .3rem .6rem; white-space: nowrap; }
-    .edu-fighter h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -.03em; line-height: 1.1; margin-bottom: .75rem; }
-    .edu-fighter > p { font-size: .95rem; color: var(--ink-dim); line-height: 1.6; margin-bottom: 1.5rem; }
-    .edu-points { display: flex; flex-direction: column; border-top: 1px solid var(--ink-line-soft); }
-    .edu-point { display: flex; gap: .85rem; font-size: .88rem; color: var(--ink-dim); line-height: 1.5; padding: .8rem 0; border-bottom: 1px solid var(--ink-line-soft); }
-    .edu-point:last-child { border-bottom: none; }
-    .edu-point strong { color: var(--ink); font-weight: 600; }
-    .edu-point-marker { flex-shrink: 0; width: 20px; height: 20px; border: 1px solid var(--ink); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: .72rem; margin-top: 2px; }
-    .edu-point-marker.minus { border-color: var(--ink-line); color: var(--ink-faint); }
+    .explain { display: flex; flex-direction: column; gap: 2.5rem; }
+    .explain-block h3 { display: flex; align-items: center; gap: .6rem; font-size: 1.25rem; font-weight: 800; letter-spacing: -.025em; line-height: 1.15; }
+    .explain-block h3 .swatch { width: 10px; height: 10px; }
+    .explain-block h3 small { font-family: var(--font-mono); font-size: .68rem; font-weight: 500; letter-spacing: .06em; color: var(--ink-faint); margin-left: .35rem; }
+    .explain-block > p { font-size: .98rem; color: var(--ink-dim); line-height: 1.6; max-width: 66ch; margin-top: .6rem; }
+    .ruled { margin-top: 1rem; border-top: 1px solid var(--ink-line); }
+    .step > .ruled { margin-top: 0; border-top: 0; } /* the step head already draws the rule above */
+    .ruled-row { display: grid; grid-template-columns: 1.25rem 240px minmax(0, 1fr); gap: 1.25rem; align-items: baseline; padding: .9rem 0; border-bottom: 1px solid var(--ink-line); }
+    .ruled-row.two { grid-template-columns: 240px minmax(0, 1fr); }
+    .ruled-mark { font-family: var(--font-mono); font-size: .8rem; color: var(--ink-faint); }
+    .ruled-title { font-weight: 600; letter-spacing: -.01em; font-size: .95rem; }
+    .ruled-desc { color: var(--ink-dim); font-size: .95rem; line-height: 1.5; }
+    .ruled-desc strong { color: var(--ink); font-weight: 600; }
+    .limits p { font-size: .98rem; line-height: 1.6; color: var(--ink-dim); max-width: 66ch; margin-top: .75rem; }
+    .limits p b { font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
 
-    .edu-third { background: var(--panel); border: 1px solid var(--ink-line); padding: 1.75rem 2rem; position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2rem; align-items: start; }
-    .edu-third::before { content: ''; position: absolute; top: -1px; left: -1px; right: -1px; height: 3px; background: var(--s-brok); }
-    .edu-third-eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--font-mono); font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--s-brok-text); margin-bottom: .6rem; }
-    .edu-third-eyebrow .swatch { background: var(--s-brok); width: 10px; height: 10px; }
-    .edu-third h3 { font-size: 1.35rem; font-weight: 800; letter-spacing: -.03em; margin-bottom: .5rem; }
-    .edu-third p { font-size: .95rem; color: var(--ink-dim); line-height: 1.6; max-width: 70ch; }
-
-    .choose-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--ink-line); background: var(--panel); }
-    .choose-card { padding: 1.75rem; border-right: 1px solid var(--ink-line); }
-    .choose-card:last-child { border-right: none; }
-    .choose-card-n { font-family: var(--font-mono); font-size: .72rem; color: var(--ink-faint); letter-spacing: .08em; margin-bottom: 1.5rem; }
-    .choose-card-pick { font-family: var(--font-mono); font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; margin-bottom: .5rem; }
-    .choose-card.trad .choose-card-pick { color: var(--s-trad); }
-    .choose-card.roth .choose-card-pick { color: var(--s-roth-text); }
-    .choose-card h4 { font-size: 1.15rem; font-weight: 700; letter-spacing: -.02em; margin-bottom: .5rem; line-height: 1.2; }
-    .choose-card p { font-size: .88rem; color: var(--ink-dim); line-height: 1.55; }
-
-    .limits-strip { background: var(--ink); color: var(--paper); padding: 1.75rem 2rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
-    .limits-item { border-left: 1px solid var(--paper-line); padding-left: 1.25rem; }
-    .limits-label { font-family: var(--font-mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .12em; color: var(--paper-faint); margin-bottom: .5rem; }
-    .limits-value { font-size: 1.6rem; font-weight: 800; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; margin-bottom: .35rem; }
-    .limits-meta { font-size: .78rem; color: var(--paper-dim); }
+    /* Keep going: ruled rows, not a card grid */
+    .next{border-top:1px solid var(--bdr)}
+    .next-inner{max-width:var(--max-width);margin:0 auto;padding:56px var(--gutter) 64px}
+    .next-list{margin-top:1.25rem;border-top:1px solid var(--bdr)}
+    .next-row{display:grid;grid-template-columns:220px 1fr auto;gap:1.5rem;align-items:baseline;padding:1.1rem 0;border-bottom:1px solid var(--bdr);color:var(--ink);text-decoration:none}
+    .next-title{font-weight:600;letter-spacing:-.01em}
+    .next-desc{color:var(--ink-dim);font-size:.98rem}
+    .next-arrow{font-family:var(--font-mono);color:var(--ink-faint);transition:transform .25s cubic-bezier(.16,1,.3,1),color .2s}
+    .next-row:hover .next-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+    .next-row:hover .next-arrow{transform:translateX(4px);color:var(--ink)}
+    .disc{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.04em;color:var(--ink-faint);margin-top:1.75rem;line-height:1.6}
 
     /* ----------------------------------------------------------
        RESPONSIVE
@@ -1287,14 +1150,11 @@
       .stage-body { padding: 1.5rem; }
       .standing { grid-template-columns: 1.5rem 8rem minmax(0, 1fr) auto; }
       .fighter-card { padding: 1.1rem; }
-      .limits-strip { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 968px) {
-      .hero { padding: 7rem 0 2.5rem; }
-      .hero h1 { max-width: none; }
-      .hb-bottom { grid-template-columns: 1fr; gap: 1.75rem; }
-      .contestants { order: 2; }
+      .tool-hero { padding: 120px var(--gutter) 32px; }
+      .contestants { margin-top: 1.75rem; }
       .stage-section { padding: .5rem 0 4rem; }
       .stage-body { min-height: 0; padding: 1.25rem; }
       .step.is-active { gap: 1.25rem; }
@@ -1306,23 +1166,22 @@
       .showdown { gap: .75rem; }
       .fighter-card { padding: 1.1rem 1rem; }
       .fighter-value { font-size: 1.5rem; }
-      .choose-grid { grid-template-columns: 1fr; }
-      .choose-card { border-right: none; border-bottom: 1px solid var(--ink-line); }
-      .choose-card:last-child { border-bottom: none; }
+      .next-row { grid-template-columns: 1fr auto; row-gap: .2rem; }
+      .next-desc { grid-column: 1 / -1; }
+      .next-arrow { grid-row: 1; grid-column: 2; }
     }
 
     @media (max-width: 720px) {
-      .edu-pair { grid-template-columns: 1fr; }
-      .edu-third { grid-template-columns: 1fr; gap: 1rem; }
+      .ruled-row { grid-template-columns: 1.25rem minmax(0, 1fr); row-gap: .25rem; }
+      .ruled-row .ruled-desc { grid-column: 2; }
+      .ruled-row.two { grid-template-columns: 1fr; }
+      .ruled-row.two .ruled-desc { grid-column: 1; }
     }
 
     @media (max-width: 640px) {
-      .hero { padding: 6.25rem 0 2rem; }
-      .hero h1 { font-size: clamp(2.3rem, 10.5vw, 3.2rem); letter-spacing: -.04em; }
-      .hero-container { gap: 1.75rem; }
+      .tool-hero { padding: 104px var(--gutter) 24px; }
       .contestant { grid-template-columns: 1.75rem 10px 1fr; }
       .contestant-tag { display: none; }
-      .hb-status { display: none; }
       .inputs-grid .controls-section { padding: 1.2rem 1.1rem; }
       .step-tab { flex: 0 0 auto; padding: .85rem 1rem; }
       .step-name { white-space: nowrap; }
@@ -1340,8 +1199,6 @@
       .filing-btn:nth-child(2) { border-right: none; }
       .filing-btn:nth-child(1), .filing-btn:nth-child(2) { border-bottom: 1px solid var(--ink-line); }
       .verdict { padding: 1.5rem 1.25rem 1.6rem; }
-      .verdict-winner { font-size: 2rem; }
-      .verdict-diff { font-size: .95rem; }
       .standing { grid-template-columns: 1.25rem minmax(0, 1fr) auto; grid-template-areas: 'rank name value' 'rank bar bar'; row-gap: .45rem; column-gap: .75rem; }
       .standing-rank { grid-area: rank; }
       .standing-name { grid-area: name; }
@@ -1356,13 +1213,8 @@
       .rule-strip { padding-left: 1.1rem; }
       .rule-text { font-size: .98rem; }
       .methodology summary, .methodology-body { padding-left: 1.15rem; padding-right: 1.15rem; }
-      .edu-fighter { padding: 1.5rem 1.25rem; }
-      .edu-fighter h3 { font-size: 1.35rem; }
-      .edu-third { padding: 1.5rem 1.25rem; }
-      .choose-card { padding: 1.35rem 1.25rem; }
-      .limits-strip { grid-template-columns: 1fr 1fr; padding: 1.5rem 1.25rem; gap: 1.25rem 1rem; }
-      .limits-item { padding-left: .9rem; }
-      .limits-value { font-size: 1.3rem; }
+      .explain { gap: 2rem; }
+      .explain-block h3 { font-size: 1.1rem; }
       .tip-text { left: auto; right: -12px; transform: none; width: 210px; }
       .tip-text::after { left: auto; right: 15px; margin-left: 0; }
     }
@@ -1603,40 +1455,33 @@
   </div>
   <!-- /chrome:nav -->
 
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="container hero-container">
-    <div class="hero-top">
-      <span class="eyebrow">Retirement calculator · 2026 limits</span>
-      <span class="hb-status"><span class="hb-pulse"></span>Updates as you type</span>
-    </div>
-    <h1>Pay taxes now, pay them <em>later<svg class="hand-stroke" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C 50 3, 110 10, 160 6 S 260 4, 296 7"/></svg></em>, or pay them on every gain?</h1>
-    <div class="hb-bottom">
-      <ol class="contestants" aria-label="The three contestants">
-        <li class="contestant">
-          <span class="contestant-n">01</span>
-          <span class="swatch trad" aria-hidden="true"></span>
-          <span class="contestant-name">Traditional IRA <small>Deduct now, taxed at withdrawal</small></span>
-          <span class="contestant-tag">Pay later</span>
-        </li>
-        <li class="contestant">
-          <span class="contestant-n">02</span>
-          <span class="swatch roth" aria-hidden="true"></span>
-          <span class="contestant-name">Roth IRA <small>Taxed now, tax-free forever</small></span>
-          <span class="contestant-tag">Pay now</span>
-        </li>
-        <li class="contestant">
-          <span class="contestant-n">03</span>
-          <span class="swatch brok" aria-hidden="true"></span>
-          <span class="contestant-name">Brokerage <small>No shelter, gains taxed as you go</small></span>
-          <span class="contestant-tag">Pay every year</span>
-        </li>
-      </ol>
-      <p class="hb-sub">
-        Both IRAs shield your growth from the IRS. A regular brokerage account doesn't, and that drag compounds against you for decades. <strong>Run your numbers</strong> and see which of the three puts the most after-tax dollars in your pocket at retirement.
-      </p>
-    </div>
+<section class="tool-hero">
+  <div class="tool-hero-top">
+    <div class="eyebrow">Calculator · Battle of the IRAs</div>
+    <div class="tool-meta">Uses 2026 IRS limits</div>
   </div>
+  <h1>Pay taxes now, pay them later, or pay them on every gain?</h1>
+  <p class="tool-lede">Both IRAs keep the IRS away from your growth until you take the money out, or for good. A regular brokerage account doesn't, and the yearly tax bill compounds against you for decades. Put in your age, income and what you can save each year, and see which of the three leaves you with the most after tax.</p>
+  <ol class="contestants" aria-label="The three contestants">
+    <li class="contestant">
+      <span class="contestant-n">01</span>
+      <span class="swatch trad" aria-hidden="true"></span>
+      <span class="contestant-name">Traditional IRA <small>Deduct now, taxed at withdrawal</small></span>
+      <span class="contestant-tag">Pay later</span>
+    </li>
+    <li class="contestant">
+      <span class="contestant-n">02</span>
+      <span class="swatch roth" aria-hidden="true"></span>
+      <span class="contestant-name">Roth IRA <small>Taxed now, tax-free forever</small></span>
+      <span class="contestant-tag">Pay now</span>
+    </li>
+    <li class="contestant">
+      <span class="contestant-n">03</span>
+      <span class="swatch brok" aria-hidden="true"></span>
+      <span class="contestant-name">Brokerage <small>No shelter, gains taxed as you go</small></span>
+      <span class="contestant-tag">Pay every year</span>
+    </li>
+  </ol>
 </section>
 
 <section class="stage-section" id="calculator">
@@ -1667,7 +1512,7 @@
 <span class="eyebrow">Step 01</span>
             <h2>Your numbers.</h2>
             </div>
-            <p>Six inputs. Everything downstream updates the moment you change one.</p>
+            <p>Start with your age, your income and what you can put away each year. The other five steps are worked out from these.</p>
           </div>
           <div class="inputs-grid">
             <div class="controls-section">
@@ -1755,8 +1600,7 @@
                 <div class="range-meta"><span>3% · cautious</span><span>12% · aggressive</span></div>
               </div>
               <div class="live-line" aria-live="polite">
-                <span class="live-dot" aria-hidden="true"></span>
-                <span id="liveLine">Right now: <strong>Roth IRA wins</strong></span>
+                <span id="liveLine">With these numbers the <strong>Roth IRA</strong> ends up ahead after taxes.</span>
               </div>
             </div>
           </div>
@@ -1765,12 +1609,8 @@
         <!-- 02 · The verdict -->
         <section class="step" data-step="2" aria-label="The verdict">
           <article class="verdict on-ink" id="verdictCard" aria-live="polite">
-            <div class="verdict-top">
-              <span class="eyebrow">The verdict</span>
-              <span class="verdict-horizon" id="verdictHorizon">After <strong>40 years</strong> at <strong>7%</strong></span>
-            </div>
-            <h2 class="verdict-winner" id="verdictWinner">Roth IRA wins</h2>
-            <p class="verdict-diff" id="verdictDiff">$0 more after taxes</p>
+            <span class="eyebrow">The verdict</span>
+            <p class="verdict-sentence" id="verdictSentence">After <b>40 years</b> at <b>7%</b>, the <b class="win">Roth IRA</b> leaves you ahead after taxes.</p>
             <ol class="standings" aria-label="After-tax balance at retirement">
               <li class="standing s-roth" id="standRoth">
                 <span class="standing-rank">01</span>
@@ -1791,7 +1631,7 @@
                 <span class="standing-value" id="statTaxable">$0</span>
               </li>
             </ol>
-            <p class="verdict-insight" id="insightText">Adjust the controls to see how your tax bracket and timeline change the winner.</p>
+            <p class="verdict-insight" id="insightText">Change your bracket or your timeline on the first step and watch the order change.</p>
           </article>
           <div class="rule-strip">
             <span class="eyebrow">Rule of thumb</span>
@@ -1813,12 +1653,12 @@
           <div class="showdown">
             <div class="fighter-card traditional" id="cardTrad">
               <div class="fighter-header">
-                <div class="fighter-name"><span class="swatch" aria-hidden="true"></span>Traditional</div>
-                <span class="winner-tag">Winner</span>
+                <div class="fighter-name"><span class="swatch" aria-hidden="true"></span>Traditional IRA</div>
+                <span class="winner-tag">Ahead</span>
               </div>
               <div class="fighter-strategy">Tax break now, taxes due at withdrawal.</div>
               <div class="fighter-value" id="tradValue">$0</div>
-              <div class="fighter-value-label">After-tax balance</div>
+              <div class="fighter-value-label">After tax, at retirement</div>
               <div class="fighter-details">
                 <div class="fighter-row"><span class="fighter-row-label">Contributed</span><span class="fighter-row-value" id="tradContrib">$0</span></div>
                 <div class="fighter-row"><span class="fighter-row-label">Grows to (pre-tax)</span><span class="fighter-row-value" id="tradGross">$0</span></div>
@@ -1829,12 +1669,12 @@
 
             <div class="fighter-card roth" id="cardRoth">
               <div class="fighter-header">
-                <div class="fighter-name"><span class="swatch" aria-hidden="true"></span>Roth</div>
-                <span class="winner-tag">Winner</span>
+                <div class="fighter-name"><span class="swatch" aria-hidden="true"></span>Roth IRA</div>
+                <span class="winner-tag">Ahead</span>
               </div>
               <div class="fighter-strategy">Pay tax now, withdraw 100% tax-free.</div>
               <div class="fighter-value" id="rothValue">$0</div>
-              <div class="fighter-value-label">After-tax balance</div>
+              <div class="fighter-value-label">After tax, at retirement</div>
               <div class="fighter-details">
                 <div class="fighter-row"><span class="fighter-row-label">Contributed</span><span class="fighter-row-value" id="rothContrib">$0</span></div>
                 <div class="fighter-row"><span class="fighter-row-label">Grows to</span><span class="fighter-row-value" id="rothGross">$0</span></div>
@@ -1846,11 +1686,11 @@
             <div class="fighter-card taxable" id="cardTaxable">
               <div class="fighter-header">
                 <div class="fighter-name"><span class="swatch" aria-hidden="true"></span>Brokerage</div>
-                <span class="winner-tag">Winner</span>
+                <span class="winner-tag">Ahead</span>
               </div>
               <div class="fighter-strategy">No tax shelter. Gains taxed as you go.</div>
               <div class="fighter-value" id="taxableValue">$0</div>
-              <div class="fighter-value-label">After-tax balance</div>
+              <div class="fighter-value-label">After tax, at retirement</div>
               <div class="fighter-details">
                 <div class="fighter-row"><span class="fighter-row-label">Contributed</span><span class="fighter-row-value" id="taxableContrib">$0</span></div>
                 <div class="fighter-row"><span class="fighter-row-label">Gross return</span><span class="fighter-row-value" id="taxableReturn">7%</span></div>
@@ -1865,7 +1705,7 @@
         <section class="step" data-step="4" aria-label="Over time">
           <div class="chart-card">
             <div class="chart-card-header">
-              <div class="chart-card-title">Growth over time <small>After-tax balance, year by year</small></div>
+              <div class="chart-card-title">How the three grow <small>After-tax balance, year by year</small></div>
               <div class="chart-legend" aria-hidden="true">
                 <span class="chart-legend-item roth"><span class="chart-legend-line"></span>Roth</span>
                 <span class="chart-legend-item trad"><span class="chart-legend-line"></span>Traditional</span>
@@ -1901,42 +1741,31 @@
             </div>
             <p>Both IRAs let your money grow without paying tax on the gains every year. A regular brokerage doesn't, and that drag compounds against you for decades.</p>
           </div>
-          <div class="edu-pair">
-            <div class="edu-fighter traditional">
-              <div class="edu-fighter-top">
-                <span class="edu-fighter-eyebrow"><span class="swatch" aria-hidden="true"></span>Traditional IRA</span>
-                <span class="edu-tagline">Pay later</span>
-              </div>
-              <h3>Tax break today</h3>
-              <p>Contribute pre-tax dollars and lower this year's tax bill. The money grows untouched by the IRS for decades, but every dollar you withdraw in retirement is taxed as income.</p>
-              <div class="edu-points">
-                <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>Lower taxable income now.</strong> A $7,500 contribution at the 22% bracket saves you $1,650 this April.</span></div>
-                <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>No income limit.</strong> Anyone with earned income can contribute, regardless of how much they make.</span></div>
-                <div class="edu-point"><span class="edu-point-marker minus">−</span><span><strong>Required withdrawals at 73.</strong> The IRS forces you to start drawing down (and paying taxes) whether you need the money or not.</span></div>
+          <div class="explain">
+            <div class="explain-block">
+              <h3><span class="swatch trad" aria-hidden="true"></span>Traditional IRA <small>Pay later</small></h3>
+              <p>You contribute pre-tax dollars and lower this year's tax bill. The money grows untouched by the IRS for decades, but every dollar you withdraw in retirement is taxed as income.</p>
+              <div class="ruled">
+                <div class="ruled-row"><span class="ruled-mark" aria-hidden="true">+</span><span class="ruled-title">Lower taxable income now</span><span class="ruled-desc">A $7,500 contribution at the 22% bracket saves you $1,650 this April.</span></div>
+                <div class="ruled-row"><span class="ruled-mark" aria-hidden="true">+</span><span class="ruled-title">No income limit</span><span class="ruled-desc">Anyone with earned income can contribute, however much they make.</span></div>
+                <div class="ruled-row"><span class="ruled-mark" aria-hidden="true">&minus;</span><span class="ruled-title">Required withdrawals at 73</span><span class="ruled-desc">The IRS makes you start drawing down, and paying tax, whether you need the money or not.</span></div>
               </div>
             </div>
 
-            <div class="edu-fighter roth">
-              <div class="edu-fighter-top">
-                <span class="edu-fighter-eyebrow"><span class="swatch" aria-hidden="true"></span>Roth IRA</span>
-                <span class="edu-tagline">Pay now</span>
-              </div>
-              <h3>Tax-free forever</h3>
-              <p>Contribute money you've already paid taxes on. It grows tax-free, and every dollar you withdraw in retirement, including decades of investment gains, is yours, untouched by the IRS.</p>
-              <div class="edu-points">
-                <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>Zero taxes in retirement.</strong> What you see in the account is what you spend. No surprises, no bracket math.</span></div>
-                <div class="edu-point"><span class="edu-point-marker">+</span><span><strong>Pull contributions anytime.</strong> Your contributions (not gains) come out penalty-free, a built-in safety net.</span></div>
-                <div class="edu-point"><span class="edu-point-marker minus">−</span><span><strong>Income limits apply.</strong> In 2026, single filers earning over $168,000 are phased out (MAGI). Joint filers cap at $252,000.</span></div>
+            <div class="explain-block">
+              <h3><span class="swatch roth" aria-hidden="true"></span>Roth IRA <small>Pay now</small></h3>
+              <p>You contribute money you have already paid tax on. It grows tax-free, and every dollar you withdraw in retirement, including decades of gains, is yours. The IRS does not touch it.</p>
+              <div class="ruled">
+                <div class="ruled-row"><span class="ruled-mark" aria-hidden="true">+</span><span class="ruled-title">No tax in retirement</span><span class="ruled-desc">What you see in the account is what you get to spend. No surprises, no bracket math.</span></div>
+                <div class="ruled-row"><span class="ruled-mark" aria-hidden="true">+</span><span class="ruled-title">Contributions come back out any time</span><span class="ruled-desc">Your contributions, not the gains, can be withdrawn without penalty. It is a built-in safety net.</span></div>
+                <div class="ruled-row"><span class="ruled-mark" aria-hidden="true">&minus;</span><span class="ruled-title">Income limits apply</span><span class="ruled-desc">In 2026, single filers earning over $168,000 (MAGI) are phased out. Joint filers cap at $252,000.</span></div>
               </div>
             </div>
-          </div>
-          <div class="edu-third">
-            <div>
-              <span class="edu-third-eyebrow"><span class="swatch" aria-hidden="true"></span>The third option · Taxable brokerage</span>
-              <h3>No shelter, but total flexibility.</h3>
-              <p>A regular brokerage account (Fidelity, Vanguard, Schwab, Robinhood) has no income limits, no contribution limits, and no withdrawal restrictions. But the IRS taxes your dividends every year and your capital gains every time you sell. Over 30+ years, that drag typically costs you tens of thousands compared to an IRA.</p>
+
+            <div class="explain-block">
+              <h3><span class="swatch brok" aria-hidden="true"></span>Taxable brokerage <small>Pay every year</small></h3>
+              <p>A regular brokerage account (Fidelity, Vanguard, Schwab, Robinhood) has no income limits, no contribution limits and no withdrawal rules. But the IRS taxes your dividends every year and your capital gains every time you sell. Over 30 or more years, that drag usually costs you tens of thousands compared with an IRA.</p>
             </div>
-            <span class="edu-tagline">Pay every year</span>
           </div>
         </section>
 
@@ -1949,47 +1778,14 @@
             </div>
             <p>The math above is one input. Your career stage and your read on future tax rates are the others.</p>
           </div>
-          <div class="choose-grid">
-            <div class="choose-card roth">
-              <div class="choose-card-n">01</div>
-              <div class="choose-card-pick">Choose Roth if</div>
-              <h4>You're early in your career</h4>
-              <p>You're in a low bracket today and your income (and tax rate) will probably climb. Locking in today's lower rate is a steal.</p>
-            </div>
-            <div class="choose-card trad">
-              <div class="choose-card-n">02</div>
-              <div class="choose-card-pick">Choose Traditional if</div>
-              <h4>You're at peak earning years</h4>
-              <p>You're in a high bracket now and expect to spend less in retirement. The deduction today is worth more than the future tax bill.</p>
-            </div>
-            <div class="choose-card roth">
-              <div class="choose-card-n">03</div>
-              <div class="choose-card-pick">Choose Roth if</div>
-              <h4>You think tax rates will rise</h4>
-              <p>National debt, demographics: there's a reasonable case future rates climb. Roth locks in today's rate and never owes more.</p>
-            </div>
+          <div class="ruled">
+            <div class="ruled-row two"><span class="ruled-title">You're early in your career</span><span class="ruled-desc"><strong>Roth.</strong> You're in a low bracket today and your income, and your tax rate, will probably climb. Locking in today's lower rate is worth a lot.</span></div>
+            <div class="ruled-row two"><span class="ruled-title">You're in your peak earning years</span><span class="ruled-desc"><strong>Traditional.</strong> You're in a high bracket now and expect to spend less in retirement. The deduction today is worth more than the tax bill later.</span></div>
+            <div class="ruled-row two"><span class="ruled-title">You think tax rates will rise</span><span class="ruled-desc"><strong>Roth.</strong> National debt and demographics make a reasonable case that rates climb. A Roth locks in today's rate and never owes more.</span></div>
           </div>
-          <div class="limits-strip">
-            <div class="limits-item">
-              <div class="limits-label">2026 limit</div>
-              <div class="limits-value">$7,500</div>
-              <div class="limits-meta">Under age 50</div>
-            </div>
-            <div class="limits-item">
-              <div class="limits-label">2026 limit · 50+</div>
-              <div class="limits-value">$8,600</div>
-              <div class="limits-meta">Includes $1,100 catch-up</div>
-            </div>
-            <div class="limits-item">
-              <div class="limits-label">Roth cap · Single</div>
-              <div class="limits-value">$168K</div>
-              <div class="limits-meta">Phase-out begins at $153K</div>
-            </div>
-            <div class="limits-item">
-              <div class="limits-label">Roth cap · Joint</div>
-              <div class="limits-value">$252K</div>
-              <div class="limits-meta">Phase-out begins at $242K</div>
-            </div>
+          <div class="limits">
+            <span class="eyebrow">The 2026 limits</span>
+            <p>You can put <b>$7,500</b> a year into IRAs, or <b>$8,600</b> once you're 50, which includes a $1,100 catch-up. The limit is shared across all your IRAs. Roth contributions start phasing out at <b>$153,000</b> of income for single and head-of-household filers and end at $168,000. For joint filers the range runs from <b>$242,000</b> to $252,000.</p>
           </div>
         </section>
 
@@ -2009,6 +1805,19 @@
 
     </div>
   </div>
+</section>
+
+<section class="next">
+<div class="next-inner">
+<div class="eyebrow">Keep going</div>
+<div class="next-list">
+<a class="next-row" href="roth-ira.html"><span class="next-title">Roth IRA</span><span class="next-desc">If the Roth won here, this is how the account itself works and how to open one.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="compound-interest.html"><span class="next-title">Compound interest</span><span class="next-desc">The growth behind all three lines, with the years as the number you can change.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="fire-calculator.html"><span class="next-title">FIRE calculator</span><span class="next-desc">How much you would need saved to stop working, and how long it takes to get there.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="paycheck-calculator.html"><span class="next-title">Paycheck calculator</span><span class="next-desc">See what an IRA contribution does to your take-home pay before you commit to it.</span><span class="next-arrow">&rarr;</span></a>
+</div>
+<p class="disc">Estimates for learning, not tax or financial advice. Federal tax only, using 2026 IRS brackets and limits. FinMango is a 501(c)(3) nonprofit. No account, no ads, nothing stored.</p>
+</div>
 </section>
 
 <!-- chrome:footer -->
@@ -2134,6 +1943,14 @@ function fmtNeg(value) {
   if (value === 0) return '$0';
   return '−' + fmt(Math.abs(value));
 }
+// Full dollars for sentences, rounded the way a person would say them
+const money = v => '$' + Math.round(v).toLocaleString('en-US');
+function about(v) {
+  if (v >= 1e6) return Math.round(v / 1e4) * 1e4;
+  if (v >= 1e5) return Math.round(v / 1e3) * 1e3;
+  if (v >= 1e4) return Math.round(v / 100) * 100;
+  return Math.round(v);
+}
 
 function getMarginalRate(income, status) {
   const brackets = TAX_BRACKETS_2026[status] || TAX_BRACKETS_2026.single;
@@ -2161,7 +1978,7 @@ function calculate() {
 
   $('ageDisplay').textContent = age;
   $('yearsDisplay').textContent = years;
-  const retPct = returnRate * 100;
+  const retPct = Math.round(returnRate * 1000) / 10; // avoid 7.000000000000001 from the float maths
   const retPctLabel = (retPct % 1 === 0 ? retPct.toFixed(0) : retPct.toFixed(1)) + '%';
   $('returnDisplay').textContent = retPctLabel;
 
@@ -2260,7 +2077,7 @@ function calculate() {
   const rothAfterTax = rothBalance;
   const taxableAfterTax = taxableBalance;
 
-  // Hypothetical "no tax drag" balance — used to compute lost-to-drag
+  // Hypothetical "no tax drag" balance, used to compute lost-to-drag
   // (what the brokerage WOULD have been if it grew at full returnRate)
   let noDragBalance = 0;
   for (let y = 1; y <= years; y++) {
@@ -2271,8 +2088,6 @@ function calculate() {
   // ============================================================
   // Update DOM
   // ============================================================
-  $('verdictHorizon').innerHTML = 'After <strong>' + years + ' years</strong> at <strong>' + retPctLabel + '</strong>';
-
   // Traditional card
   $('tradValue').textContent = fmt(tradAfterTax);
   $('tradContrib').textContent = fmt(totalTradContrib);
@@ -2325,9 +2140,9 @@ function calculate() {
   // Determine winner
   // ============================================================
   const results = [
-    { key: 'roth', label: 'Roth IRA', value: rothAfterTax, cardId: 'cardRoth', winClass: 'roth-wins' },
-    { key: 'trad', label: 'Traditional IRA', value: tradAfterTax, cardId: 'cardTrad', winClass: 'trad-wins' },
-    { key: 'taxable', label: 'Brokerage', value: taxableAfterTax, cardId: 'cardTaxable', winClass: 'taxable-wins' }
+    { key: 'roth', label: 'Roth IRA', name: 'Roth IRA', value: rothAfterTax, cardId: 'cardRoth', winClass: 'roth-wins' },
+    { key: 'trad', label: 'Traditional IRA', name: 'Traditional IRA', value: tradAfterTax, cardId: 'cardTrad', winClass: 'trad-wins' },
+    { key: 'taxable', label: 'Brokerage', name: 'brokerage account', value: taxableAfterTax, cardId: 'cardTaxable', winClass: 'taxable-wins' }
   ];
   results.sort((a, b) => b.value - a.value);
   const winner = results[0];
@@ -2340,25 +2155,31 @@ function calculate() {
   ['cardRoth', 'cardTrad', 'cardTaxable'].forEach(id => $(id).classList.remove('is-winner'));
   const verdictCard = $('verdictCard');
   verdictCard.classList.remove('roth-wins', 'trad-wins', 'taxable-wins', 'tie');
-  const verdictWinnerEl = $('verdictWinner');
-  verdictWinnerEl.classList.remove('roth-wins', 'trad-wins', 'taxable-wins', 'tie');
 
+  // The verdict, as a sentence with the numbers inside it
+  const horizon = 'After <b>' + years + ' years</b> at <b>' + retPctLabel + '</b>';
+  const gap = about(diff);
+  let sentence;
   if (noContributions) {
     verdictCard.classList.add('tie');
-    verdictWinnerEl.classList.add('tie');
-    verdictWinnerEl.textContent = 'Set a contribution';
-    $('verdictDiff').textContent = 'Pick an annual amount to compare the three accounts';
+    sentence = 'Put in an annual contribution on the first step and the three accounts will line up here.';
   } else if (isVeryClose) {
     verdictCard.classList.add('tie');
-    verdictWinnerEl.classList.add('tie');
-    verdictWinnerEl.textContent = 'It\'s essentially a tie';
-    $('verdictDiff').innerHTML = 'Less than <strong>' + fmt(diff) + '</strong> between the top two';
+    sentence = horizon + ', the ' + winner.name + ' and the ' + runnerUp.name + (gap < 1 ? ' end up equal after taxes.' : ' end up within about <b>' + money(gap) + '</b> of each other after taxes.') + ' Call it a tie.';
   } else {
     $(winner.cardId).classList.add('is-winner');
     verdictCard.classList.add(winner.winClass);
-    verdictWinnerEl.classList.add(winner.winClass);
-    verdictWinnerEl.textContent = winner.label + ' wins';
-    $('verdictDiff').innerHTML = '<strong>' + fmt(diff) + ' more</strong> than ' + runnerUp.label + ' after taxes';
+    sentence = horizon + ', the <b class="win">' + winner.name + '</b> leaves you about <b>' + money(gap) + '</b> ahead of the ' + runnerUp.name + ', after taxes.';
+  }
+  $('verdictSentence').innerHTML = sentence;
+
+  // First year the eventual winner pulls ahead of the runner-up, if it started behind
+  const seriesFor = { roth: rothSeries, trad: tradAfterTaxSeries, taxable: taxableSeries };
+  let crossYear = null;
+  if (!noContributions && !isVeryClose) {
+    const w = seriesFor[winner.key], r = seriesFor[runnerUp.key];
+    for (let y = years; y >= 1; y--) { if (w[y] <= r[y]) { crossYear = y + 1; break; } }
+    if (crossYear !== null && crossYear > years) crossYear = null;
   }
 
   // ============================================================
@@ -2366,26 +2187,28 @@ function calculate() {
   // ============================================================
   let insight = '';
   if (noContributions) {
-    insight = 'Enter an annual contribution amount to see how each account stacks up over your timeline.';
+    insight = 'Once there is a contribution, this line will tell you where the gap comes from.';
   } else if (isVeryClose) {
-    insight = 'At your numbers, the top two are within a rounding error. Pick based on flexibility — Roth gives you penalty-free access to contributions; Traditional gives you a tax break this April.';
+    insight = 'The top two are within a rounding error. Pick on flexibility: the Roth lets you take contributions back out without penalty, the Traditional cuts this year\'s tax bill.';
   } else if (winner.key === 'roth' && runnerUp.key === 'trad') {
-    insight = '<strong>' + fmt(diff) + ' more</strong> in Roth thanks to decades of tax-free growth. The longer the runway, the more this gap compounds in Roth\'s favor.';
+    insight = crossYear
+      ? 'The Traditional IRA is actually ahead for the first <strong>' + (crossYear - 1) + (crossYear - 1 === 1 ? ' year' : ' years') + '</strong>, while the tax it saves each April outweighs what it will owe later. From year ' + crossYear + ' the Roth\'s untaxed growth takes over, and the gap only widens from there.'
+      : 'The gap is ' + years + ' years of growth that never gets taxed. Give it more years and it widens. Take years away and it shrinks.';
   } else if (winner.key === 'trad' && runnerUp.key === 'roth') {
-    insight = '<strong>' + fmt(diff) + ' more</strong> in Traditional because your retirement bracket is lower than today\'s — and the tax savings you pocketed each year add up.';
+    insight = 'The Traditional IRA is ahead because your estimated retirement rate (' + (retirementRate * 100).toFixed(0) + '%) is below today\'s (' + (marginalRate * 100).toFixed(0) + '%), and the tax you save each year adds up to <strong>' + money(cumulativeTradSavings) + '</strong> by the end.';
   } else if (winner.key === 'roth' && runnerUp.key === 'taxable') {
-    insight = '<strong>' + fmt(diff) + ' more</strong> in Roth than a brokerage. Tax drag eats compounding alive over ' + years + ' years.';
+    insight = 'The brokerage account comes second here, ahead of the Traditional IRA. Even so, paying tax on the gains every year costs it about <strong>' + money(about(taxableDrag)) + '</strong> over ' + years + ' years.';
   } else if (winner.key === 'trad' && runnerUp.key === 'taxable') {
-    insight = '<strong>' + fmt(diff) + ' more</strong> in Traditional than a brokerage — and that\'s after paying retirement taxes.';
+    insight = 'The Traditional IRA beats the brokerage account by <strong>' + money(gap) + '</strong>, and that is after paying tax on the way out.';
   } else if (winner.key === 'taxable') {
-    insight = 'Brokerage edges out at these numbers — usually means a very short timeline or the Roth is fully phased out and your retirement rate is high.';
+    insight = 'The brokerage account comes out on top here. That usually means a short timeline, or your income is past the Roth limit and your retirement rate is high.';
   }
   $('insightText').innerHTML = insight;
   // Live line on the inputs step + recap chips on every other step
   let live;
-  if (noContributions) live = 'Set a contribution to start the battle.';
-  else if (isVeryClose) live = 'Right now: <strong>essentially a tie</strong> between ' + winner.label + ' and ' + runnerUp.label + '.';
-  else live = 'Right now: <strong>' + winner.label + ' wins</strong> by ' + fmt(diff) + ' after taxes.';
+  if (noContributions) live = 'Put in an annual contribution and the comparison starts.';
+  else if (isVeryClose) live = 'With these numbers the ' + winner.name + ' and the ' + runnerUp.name + ' come out about even.';
+  else live = 'With these numbers the <strong>' + winner.name + '</strong> ends up about <strong>' + money(gap) + '</strong> ahead after taxes.';
   $('liveLine').innerHTML = live;
   $('recapChips').innerHTML = [
     'Age ' + age,
@@ -2399,26 +2222,30 @@ function calculate() {
   let strategy = '';
   const rateDelta = marginalRate - retirementRate;
   if (initialRothMult <= 0) {
-    strategy = 'Your income is past the Roth limit, so a <strong>Traditional IRA</strong> (or backdoor Roth) is your tax-advantaged play. Either beats a brokerage by ' + fmt(Math.max(tradAfterTax, rothAfterTax) - taxableAfterTax) + ' here.';
+    strategy = 'Your income is past the Roth limit, so a <strong>Traditional IRA</strong> (or a backdoor Roth) is your tax-sheltered option. Either one beats a brokerage account by ' + money(about(Math.max(tradAfterTax, rothAfterTax) - taxableAfterTax)) + ' here.';
   } else if (initialRothMult < 1) {
-    strategy = 'You\'re in the Roth phase-out, contributing <strong>' + Math.round(initialRothMult * 100) + '% of the limit</strong>. As your income grows, this drops further. Traditional has no income limit and might be the simpler bet.';
+    strategy = 'You\'re in the Roth phase-out, so you can put in <strong>' + Math.round(initialRothMult * 100) + '% of the limit</strong>. As your income grows that drops further. The Traditional IRA has no income limit and may be the simpler choice.';
   } else if (rateDelta > 0.04) {
-    strategy = 'Big gap between today\'s bracket and retirement — <strong>Traditional</strong> wins. The deduction now is worth more than future taxes will cost.';
+    strategy = 'There is a big gap between today\'s bracket and your retirement bracket, so <strong>Traditional</strong> wins. The deduction now is worth more than the tax later.';
   } else if (rateDelta < -0.02) {
-    strategy = 'Expect to be in a higher bracket later? <strong>Roth wins easily.</strong> Lock in today\'s lower rate.';
+    strategy = 'If you expect a higher bracket later, <strong>Roth wins.</strong> You lock in today\'s lower rate.';
   } else {
-    strategy = 'Your brackets today and at retirement are similar, so <strong>Roth\'s flexibility</strong> usually wins the tiebreaker — penalty-free access to contributions, no RMDs at 73.';
+    strategy = 'Your brackets today and at retirement are similar, so <strong>Roth\'s flexibility</strong> usually breaks the tie: you can take contributions back out without penalty, and there are no required withdrawals at 73.';
   }
   $('strategyText').innerHTML = strategy;
 
   // ============================================================
   // Chart
   // ============================================================
-  const datasetDefs = [
+  updateChart(labels, [
     { key: 'roth', label: 'Roth', data: rothSeries },
     { key: 'trad', label: 'Traditional', data: tradAfterTaxSeries },
     { key: 'taxable', label: 'Brokerage', data: taxableSeries }
-  ];
+  ]);
+}
+
+function updateChart(labels, datasetDefs) {
+  if (typeof Chart === 'undefined') return; // the numbers still render when the chart library is blocked
   if (chart) {
     chart.data.labels = labels;
     datasetDefs.forEach((d, i) => { chart.data.datasets[i].data = d.data; });

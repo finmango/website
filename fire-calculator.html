@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FIRE Calculator — Financial Independence, Retire Early — FinMango</title>
-<meta name="description" content="How fast can you escape the 9-to-5? Calculate your path to FIRE based on your savings rate, income, and spending — with the math behind Coast, Lean, and Fat FIRE.">
+<title>FIRE Calculator | FinMango</title>
+<meta name="description" content="Put in what you earn, spend and have saved, and see how many years until your investments could cover your spending. Your savings rate decides it.">
 <link rel="canonical" href="https://finmango.org/fire-calculator">
 <link rel="icon" type="image/png" href="favicon.png">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://finmango.org/fire-calculator">
-<meta property="og:title" content="FIRE Calculator — Financial Independence, Retire Early">
-<meta property="og:description" content="Your savings rate decides your retirement date. Run the math.">
+<meta property="og:title" content="FIRE Calculator | FinMango">
+<meta property="og:description" content="Put in what you earn, spend and have saved, and see how many years until your investments could cover your spending. Your savings rate decides it.">
 <meta property="og:image" content="https://www.finmango.org/og-image.png?v=20260924">
 
   <!-- Performance: Preconnect to external domains -->
@@ -640,559 +640,185 @@
     }
 
 
-    /* ---- reskinned legacy component css ---- */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-:root {
-  --black: #0a0a0a; --ink: #0A0A0A; --white: #ffffff;
-  --orange: #F25A27; --orange-dark: var(--orange-deep); --orange-soft: var(--orange-deep);
-  --orange-light: rgba(242, 90, 39, 0.1);
-  --gray: #57534e; --gray-medium: #78716c; --gray-soft: #a8a29e;
-  --light-gray: #f5f5f4; --warm-white: #fafaf7; --cream: #fff7ed;
-  --max-width: 1200px;
-  --green: #2a7d5b; --red: #b04a5a; --amber: #c4882e; --blue: #3a6fa0;
-
-  /* FIRE tier colors — warm progression */
-  --tier-coast: #c4882e;      /* amber */
-  --tier-barista: #d96e3a;    /* warm orange */
-  --tier-lean: #b04a5a;       /* brand red */
-  --tier-fire: #F25A27;       /* brand orange */
-  --tier-fat: #7c3aed;        /* deep purple */
-
-  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
-}
-
-@media (prefers-reduced-motion: reduce) {
-}
-
-html { scroll-behavior: smooth; }
-
-body { font-family: var(--font-body); background: var(--warm-white); color: var(--ink); line-height: 1.5; overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-
-.wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 2rem; }
-
-@keyframes mobileSlideIn { to { opacity: 1; transform: translateX(0); } }
-
-@keyframes mobileSlideUp { to { opacity: 1; transform: translateY(0); } }
-
-
-/* HERO */
-.hero { position: relative; padding: 9rem 0 2.5rem; background: var(--warm-white); overflow: hidden; }
-
-.hero::before { content: ''; position: absolute; top: -200px; right: -300px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(242, 90, 39,0.12) 0%, transparent 65%); filter: blur(60px); pointer-events: none; z-index: -1; }
-
-.hero::after { content: ''; position: absolute; bottom: -100px; left: -200px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(196,136,46,0.09) 0%, transparent 65%); filter: blur(60px); pointer-events: none; z-index: -1; }
-
-.hero-content { text-align: center; max-width: 820px; margin: 0 auto; }
-
-.hero-eyebrow { display: inline-flex; align-items: center; gap: 0.6rem; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--orange); padding: 0.4rem 0.85rem 0.4rem 0.65rem; background: rgba(242, 90, 39,0.08); border: 1px solid rgba(242, 90, 39,0.2); border-radius: 0; margin-bottom: 1.5rem; }
-
-.hero-eyebrow-dot { width: 7px; height: 7px; background: var(--orange); border-radius: 0;  animation: pulse-dot 2s ease-in-out infinite; }
-
-@keyframes pulse-dot { 0%, 100% {  } 50% {  } }
-
-.hero h1 { font-size: clamp(2.25rem, 4.8vw, 3.75rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.035em; margin-bottom: 1.25rem; }
-
-.hero h1 .highlight { color: var(--orange); position: relative; display: inline-block; }
-
-.hero h1 .highlight svg { position: absolute; bottom: -0.05em; left: -2%; width: 104%; height: 0.22em; pointer-events: none; }
-
-.hero-sub { font-size: 1.15rem; color: var(--gray); line-height: 1.6; max-width: 640px; margin: 0 auto; }
-
-.hero-stats { display: inline-flex; gap: 0; margin-top: 1.75rem; padding: 0.5rem 0.75rem; background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 0; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700;  }
-
-.hero-stat { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.25rem 0.9rem; letter-spacing: 0.04em; color: var(--ink); }
-
-.hero-stat + .hero-stat { border-left: 1px solid rgba(0,0,0,0.08); }
-
-.hero-stat-label { color: var(--gray-medium); font-weight: 600; }
-
-.hero-stat-value { color: var(--orange); font-weight: 800; }
-
-
-/* CALCULATOR */
-.calc-section { padding: 3rem 0 5rem; }
-
-.calc-grid { display: grid; grid-template-columns: 380px 1fr; gap: 1.5rem; align-items: start; }
-
-
-/* CONTROLS */
-.controls-panel { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 0; padding: 1.75rem; position: sticky; top: 100px; min-width: 0; }
-
-.controls-section { margin-bottom: 1.75rem; }
-
-.controls-section:last-child { margin-bottom: 0; }
-
-.controls-section-title { font-family: var(--font-mono); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--orange); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; padding-bottom: 0.65rem; border-bottom: 1px solid rgba(0,0,0,0.06); }
-
-.controls-section-title::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(242, 90, 39,0.2), transparent); }
-
-.input-row { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
-
-.input-row:last-child { margin-bottom: 0; }
-
-.input-label { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
-
-.input-label-text { font-size: 0.78rem; font-weight: 600; color: var(--gray); display: flex; align-items: center; gap: 0.4rem; }
-
-.input-info { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 0; background: var(--light-gray); color: var(--gray-medium); font-size: .72rem; font-weight: 700; cursor: help; position: relative; font-family: var(--font-mono); }
-
-.input-info:hover { background: var(--orange-light); color: var(--orange); }
-
-.input-info .tooltip-text { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: 220px; padding: 0.65rem 0.8rem; background: var(--ink); color: var(--white); font-size: 0.72rem; font-weight: 500; line-height: 1.4; border-radius: 0; opacity: 0; visibility: hidden; transition: all 0.2s ease; pointer-events: none; text-align: left; font-family: var(--font-body); letter-spacing: 0; text-transform: none; z-index: 100; }
-
-.input-info .tooltip-text::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--ink) transparent transparent transparent; }
-
-.input-info:hover .tooltip-text { opacity: 1; visibility: visible; }
-
-.input-value { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
-
-.input-field { width: 100%; padding: 0.7rem 0.85rem; font-family: var(--font-mono); font-size: 0.92rem; font-weight: 600; background: var(--warm-white); border: 1px solid rgba(0,0,0,0.08); border-radius: 0; color: var(--ink); font-variant-numeric: tabular-nums; transition: all 0.15s ease; }
-
-.input-field:focus { outline: none; border-color: var(--orange); background: var(--white);  }
-
-.input-field-prefix { position: relative; }
-
-.input-field-prefix::before { content: '$'; position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: 0.92rem; font-weight: 600; color: var(--gray-soft); pointer-events: none; }
-
-.input-field-prefix .input-field { padding-left: 1.85rem; }
-
-
-input[type="range"] { -webkit-appearance: none; width: 100%; height: 4px; background: var(--light-gray); border-radius: 0; outline: none; padding: 0; margin: 0.5rem 0 0.25rem; cursor: pointer; }
-
-input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 0; background: var(--orange); cursor: pointer;  transition: transform 0.15s ease; }
-
-input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
-
-input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 0; background: var(--orange); cursor: pointer; border: none;  }
-
-.range-meta { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: .72rem; color: var(--gray-soft); letter-spacing: 0.04em; margin-top: 0.4rem; }
-
-
-/* Savings rate mini-card inside controls */
-.savings-rate-card { margin-top: 0.75rem; padding: 0.85rem 1rem; background: var(--warm-white); border: 1px solid rgba(0,0,0,0.06); border-radius: 0; }
-
-.savings-rate-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.5rem; }
-
-.savings-rate-label { font-family: var(--font-mono); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gray-medium); }
-
-.savings-rate-value { font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1; color: var(--sr-color, var(--orange)); transition: color 0.3s ease; }
-
-.savings-rate-bar { position: relative; height: 6px; background: var(--light-gray); border-radius: 0; overflow: hidden; margin-bottom: 0.5rem; }
-
-.savings-rate-fill { position: absolute; inset: 0 auto 0 0; background: var(--sr-color, var(--orange)); border-radius: 0; width: var(--sr-pct, 0%); transition: width 0.35s cubic-bezier(.16,1,.3,1), background 0.3s ease; }
-
-.savings-rate-tag { font-size: 0.72rem; color: var(--gray); font-weight: 600; }
-
-.savings-rate-tag strong { color: var(--sr-color, var(--orange)); font-weight: 800; }
-
-
-/* RESULTS */
-.results-col { display: flex; flex-direction: column; gap: 1.5rem; min-width: 0; }
-
-
-/* Verdict card */
-.verdict-card { position: relative; background: var(--ink); color: var(--white); border-radius: 0; padding: 2rem; overflow: hidden; }
-
-.verdict-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 0%, var(--accent-glow, rgba(242, 90, 39,0.35)) 0%, transparent 55%); pointer-events: none; transition: background 0.5s ease; }
-
-.verdict-card.fast { --accent-glow: rgba(42,125,91,0.35); }
-
-.verdict-card.steady { --accent-glow: rgba(242, 90, 39,0.35); }
-
-.verdict-card.slow { --accent-glow: rgba(196,136,46,0.3); }
-
-.verdict-card.never { --accent-glow: rgba(176,74,90,0.35); }
-
-.verdict-card-top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap; }
-
-.verdict-meta { display: flex; flex-direction: column; gap: 0.25rem; }
-
-.verdict-eyebrow { font-family: var(--font-mono); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.5); }
-
-.verdict-horizon { font-size: 0.95rem; color: rgba(255,255,255,0.85); font-weight: 600; }
-
-.verdict-horizon strong { font-weight: 800; color: var(--white); }
-
-
-/* Countdown: giant years number */
-.countdown-block { position: relative; z-index: 1; margin-top: 1.5rem; display: flex; align-items: baseline; gap: 1.25rem; flex-wrap: wrap; }
-
-.countdown-number { font-size: clamp(3.5rem, 9vw, 5.75rem); font-weight: 900; line-height: 0.9; letter-spacing: -0.04em; color: var(--white); font-variant-numeric: tabular-nums; }
-
-.countdown-number.fast { color: #4ade80; }
-
-.countdown-number.steady { color: var(--orange-soft); }
-
-.countdown-number.slow { color: #fbbf24; }
-
-.countdown-number.never { color: #f87171; }
-
-.countdown-unit-block { display: flex; flex-direction: column; gap: 0.25rem; }
-
-.countdown-unit { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.6); }
-
-.countdown-caption { font-size: 1.05rem; color: var(--white); font-weight: 600; }
-
-.countdown-caption strong { font-weight: 800; }
-
-
-.verdict-stats { position: relative; z-index: 1; margin-top: 1.75rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
-
-.verdict-stat { display: flex; flex-direction: column; gap: 0.3rem; }
-
-.verdict-stat-label { font-family: var(--font-mono); font-size: .72rem; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.45); }
-
-.verdict-stat-value { font-size: 1.15rem; font-weight: 800; color: var(--white); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
-
-.verdict-stat-value.muted { color: rgba(255,255,255,0.65); font-size: 0.95rem; }
-
-
-.insight-callout { position: relative; z-index: 1; margin-top: 1.5rem; padding: 0.85rem 1rem; background: rgba(255,255,255,0.05); border-left: 1px solid var(--orange); border-radius: 0; font-size: 0.85rem; line-height: 1.5; color: rgba(255,255,255,0.9); }
-
-.insight-callout strong { color: var(--white); font-weight: 800; }
-
-.insight-callout-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 0; background: var(--orange); color: var(--white); font-size: 0.7rem; font-weight: 800; margin-right: 0.4rem; vertical-align: -3px; }
-
-
-/* TIER PROGRESSION STRIP */
-.tier-progression { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 0; padding: 1.75rem; min-width: 0; }
-
-.tier-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
-
-.tier-header-title { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gray-medium); }
-
-.tier-header-meta { font-family: var(--font-mono); font-size: .72rem; font-weight: 700; color: var(--orange); letter-spacing: 0.04em; }
-
-.tier-track { position: relative; height: 10px; background: var(--light-gray); border-radius: 0; margin: 1.25rem 0 1.75rem; }
-
-.tier-track-fill { position: absolute; inset: 0 auto 0 0; height: 100%; background: linear-gradient(to right, var(--tier-coast) 0%, var(--tier-lean) 40%, var(--tier-fire) 70%, var(--tier-fat) 100%); border-radius: 0; width: var(--progress, 0%); transition: width 0.5s cubic-bezier(.16,1,.3,1); }
-
-.tier-track-marker { position: absolute; top: 50%; transform: translate(-50%, -50%); width: 18px; height: 18px; border-radius: 0; background: var(--white); border: 1px solid var(--ink);  left: var(--marker, 0%); transition: left 0.5s cubic-bezier(.16,1,.3,1); z-index: 2; }
-
-.tier-track-marker::after { content: 'YOU'; position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); font-family: var(--font-mono); font-size: .72rem; font-weight: 800; letter-spacing: 0.12em; color: var(--ink); white-space: nowrap; }
-
-
-.tier-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.65rem; }
-
-.tier-item { position: relative; padding: 0.85rem 0.75rem; background: var(--warm-white); border: 1px solid rgba(0,0,0,0.06); border-radius: 0; transition: all 0.25s ease; }
-
-.tier-item::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--tier-color); border-radius: 0; transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease; }
-
-.tier-item.reached { border-color: transparent; background: var(--white);  }
-
-.tier-item.reached::before { transform: scaleX(1); }
-
-.tier-item.coast { --tier-color: var(--tier-coast); }
-
-.tier-item.barista { --tier-color: var(--tier-barista); }
-
-.tier-item.lean { --tier-color: var(--tier-lean); }
-
-.tier-item.fire { --tier-color: var(--tier-fire); }
-
-.tier-item.fat { --tier-color: var(--tier-fat); }
-
-.tier-name { font-family: var(--font-mono); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--tier-color); display: flex; align-items: center; gap: 0.35rem; margin-bottom: 0.35rem; }
-
-.tier-name-dot { width: 6px; height: 6px; border-radius: 0; background: var(--tier-color); }
-
-.tier-value { font-family: var(--font-mono); font-size: 1rem; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; line-height: 1.1; }
-
-.tier-sub { font-size: 0.68rem; color: var(--gray-medium); margin-top: 0.2rem; line-height: 1.3; }
-
-
-/* CHART */
-.chart-card { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 0; padding: 1.75rem; min-width: 0; overflow: hidden; }
-
-.chart-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
-
-.chart-card-title { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gray-medium); }
-
-.chart-legend { display: flex; gap: 1rem; font-family: var(--font-mono); font-size: .72rem; font-weight: 700; flex-wrap: wrap; }
-
-.chart-legend-item { display: inline-flex; align-items: center; gap: 0.4rem; letter-spacing: 0.04em; }
-
-.chart-legend-dot { width: 10px; height: 10px; border-radius: 0; }
-
-.chart-legend-dot.portfolio { background: var(--orange); }
-
-.chart-legend-dot.contrib { background: var(--ink); }
-
-.chart-legend-dot.target { background: var(--amber); }
-
-.chart-container { position: relative; width: 100%; height: 280px; }
-
-.chart-container canvas { max-width: 100% !important; height: 100% !important; }
-
-
-/* Strategy strip */
-.strategy-strip { background: var(--cream); border: 1px solid rgba(196,136,46,0.15); border-radius: 0; padding: 1.25rem 1.5rem; display: flex; align-items: flex-start; gap: 1rem; }
-
-.strategy-icon { flex-shrink: 0; width: 36px; height: 36px; border-radius: 0; background: var(--white); display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; border: 1px solid rgba(196,136,46,0.2); }
-
-.strategy-content { flex: 1; }
-
-.strategy-label { font-family: var(--font-mono); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--amber); margin-bottom: 0.3rem; }
-
-.strategy-text { font-size: 0.9rem; color: var(--ink); line-height: 1.55; font-weight: 500; }
-
-.strategy-text strong { font-weight: 800; }
-
-
-.methodology { background: transparent; border: 1px dashed rgba(0,0,0,0.1); border-radius: 0; padding: 1.25rem 1.5rem; }
-
-.methodology-title { font-family: var(--font-mono); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gray-medium); margin-bottom: 0.6rem; }
-
-.methodology p { font-size: 0.78rem; color: var(--gray-medium); line-height: 1.55; }
-
-
-/* EDUCATION */
-.edu-section { background: var(--cream); padding: 5rem 0 4.5rem; position: relative; }
-
-.edu-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(to right, transparent, rgba(0,0,0,0.08), transparent); }
-
-.edu-header { text-align: center; max-width: 720px; margin: 0 auto 3rem; }
-
-.edu-eyebrow { font-family: var(--font-mono); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--orange); margin-bottom: 0.75rem; }
-
-.edu-header h2 { font-size: clamp(1.85rem, 3.5vw, 2.5rem); font-weight: 900; letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 1rem; }
-
-.edu-header p { font-size: 1.05rem; color: var(--gray); line-height: 1.6; }
-
-
-/* Savings rate table — the MMM chart */
-.sr-table { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 0; padding: 2rem; margin-bottom: 2.5rem; overflow: hidden; }
-
-.sr-table-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
-
-.sr-table-eyebrow { font-family: var(--font-mono); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--orange); }
-
-.sr-table-title { font-size: 1.35rem; font-weight: 900; letter-spacing: -0.02em; margin-top: 0.3rem; }
-
-.sr-table-credit { font-family: var(--font-mono); font-size: .72rem; font-weight: 600; color: var(--gray-soft); letter-spacing: 0.04em; }
-
-.sr-rows { display: flex; flex-direction: column; gap: 0.4rem; }
-
-.sr-row { display: grid; grid-template-columns: 90px 1fr 85px; align-items: center; gap: 1rem; padding: 0.55rem 0; }
-
-.sr-row-pct { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
-
-.sr-row-bar-container { position: relative; height: 22px; background: var(--light-gray); border-radius: 0; overflow: hidden; }
-
-.sr-row-bar { position: absolute; inset: 0 auto 0 0; height: 100%; border-radius: 0; background: var(--bar-color, var(--orange)); width: var(--bar-pct, 0%); }
-
-.sr-row-years { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--gray); font-variant-numeric: tabular-nums; text-align: right; }
-
-.sr-row.highlight .sr-row-pct, .sr-row.highlight .sr-row-years { color: var(--orange); }
-
-.sr-row.highlight .sr-row-bar { background: var(--orange);  }
-
-
-/* Tier explainers */
-.tiers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-
-.tier-card { background: var(--white); border: 1px solid rgba(0,0,0,0.08); border-radius: 0; padding: 1.75rem; position: relative; overflow: hidden; }
-
-.tier-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--tier-c); }
-
-.tier-card.coast-card { --tier-c: var(--tier-coast); }
-
-.tier-card.barista-card { --tier-c: var(--tier-barista); }
-
-.tier-card.lean-card { --tier-c: var(--tier-lean); }
-
-.tier-card.regular-card { --tier-c: var(--tier-fire); }
-
-.tier-card.fat-card { --tier-c: var(--tier-fat); }
-
-.tier-card-icon { width: 36px; height: 36px; border-radius: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 1.1rem; margin-bottom: 0.85rem; background: var(--tier-c); color: var(--white); }
-
-.tier-card-eyebrow { font-family: var(--font-mono); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--tier-c); margin-bottom: 0.4rem; }
-
-.tier-card h4 { font-size: 1.15rem; font-weight: 900; letter-spacing: -0.015em; margin-bottom: 0.6rem; color: var(--ink); line-height: 1.2; }
-
-.tier-card p { font-size: 0.88rem; color: var(--gray); line-height: 1.55; margin-bottom: 1rem; }
-
-.tier-card-math { font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; color: var(--ink); padding: 0.5rem 0.75rem; background: var(--warm-white); border-radius: 0; letter-spacing: 0.02em; border: 1px solid rgba(0,0,0,0.04); }
-
-
-/* 4% rule callout */
-.rule-callout { margin-top: 2rem; background: var(--ink); color: var(--white); border-radius: 0; padding: 2rem; display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: center; position: relative; overflow: hidden; }
-
-.rule-callout::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 100% 0%, rgba(242, 90, 39,0.18) 0%, transparent 55%); pointer-events: none; }
-
-.rule-big { position: relative; z-index: 1; }
-
-.rule-big-number { font-size: 4.5rem; font-weight: 900; letter-spacing: -0.04em; line-height: 0.9; color: var(--orange); font-variant-numeric: tabular-nums; }
-
-.rule-big-label { font-family: var(--font-mono); font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.6); margin-top: 0.35rem; }
-
-.rule-explanation { position: relative; z-index: 1; }
-
-.rule-explanation h3 { font-size: 1.35rem; font-weight: 900; letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 0.75rem; }
-
-.rule-explanation p { font-size: 0.92rem; color: rgba(255,255,255,0.85); line-height: 1.6; margin-bottom: 0.75rem; }
-
-.rule-explanation p:last-child { margin-bottom: 0; font-size: 0.82rem; color: rgba(255,255,255,0.6); }
-
-
-/* RESPONSIVE */
-@media (max-width: 1200px) { .nav-right { gap: 1.5rem; } .nav-right a { font-size: 0.95rem; } .btn-donate, .btn-get-involved { padding: 0.65rem 1.5rem; font-size: 0.9rem; } }
-
-@media (max-width: 1080px) {
-  .calc-grid { grid-template-columns: 340px 1fr; gap: 1.25rem; }
-
-  .tier-list { grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
-
-}
-
-@media (max-width: 968px) {
-  :root { font-size: 15.5px; }
-
-  .hero { padding: 7rem 0 2rem; }
-
-  .calc-section { padding: 2rem 0 4rem; }
-
-  .calc-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-
-  .controls-panel { position: static; }
-
-  .results-col { gap: 1.25rem; }
-
-  .tiers-grid { grid-template-columns: 1fr 1fr; }
-
-  .rule-callout { grid-template-columns: 1fr; gap: 1.25rem; text-align: left; padding: 1.75rem; }
-
-  .edu-section { padding: 4.5rem 0 4rem; }
-
-}
-
-@media (max-width: 720px) {
-  .tier-list { grid-template-columns: repeat(5, 1fr); gap: 0.35rem; }
-
-  .tier-item { padding: 0.6rem 0.45rem; }
-
-  .tier-name { font-size: .72rem; letter-spacing: 0.08em; }
-
-  .tier-value { font-size: 0.85rem; }
-
-  .tier-sub { display: none; }
-
-  .hero-stats { flex-wrap: wrap; gap: 0; }
-
-}
-
-@media (max-width: 640px) {
-  .wrap { padding: 0 1rem; }
-
-  .hero { padding: 6rem 0 1.5rem; }
-
-  .hero h1 { font-size: 2rem; line-height: 1.1; }
-
-  .hero-sub { font-size: 1rem; }
-
-  .hero-eyebrow { font-size: .72rem; padding: 0.35rem 0.7rem 0.35rem 0.55rem; }
-
-  .hero-stats { font-size: .72rem; padding: 0.4rem 0.5rem; }
-
-  .hero-stat { padding: 0.2rem 0.6rem; }
-
-  .calc-section { padding: 1.5rem 0 3rem; }
-
-  .calc-grid { gap: 1rem; }
-
-  .controls-panel { padding: 1.25rem; border-radius: 0; }
-
-  .verdict-card { padding: 1.5rem 1.25rem; border-radius: 0; }
-
-  .countdown-block { gap: 1rem; margin-top: 1.25rem; }
-
-  .countdown-number { font-size: 4rem; }
-
-  .countdown-caption { font-size: 0.95rem; }
-
-  .verdict-stats { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1.5rem; padding-top: 1.25rem; }
-
-  .verdict-stat-label { font-size: .72rem; letter-spacing: 0.1em; }
-
-  .verdict-stat-value { font-size: 0.95rem; }
-
-  .verdict-stat-value.muted { font-size: 0.85rem; }
-
-  .insight-callout { font-size: 0.8rem; padding: 0.75rem 0.85rem; margin-top: 1.25rem; }
-
-
-  .tier-progression { padding: 1.25rem; border-radius: 0; }
-
-  .tier-list { grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-
-  .tier-sub { display: block; font-size: 0.64rem; }
-
-  .tier-track { margin: 1rem 0 2rem; }
-
-
-  .chart-card { padding: 1.25rem 0.85rem; border-radius: 0; }
-
-  .chart-card-header { padding: 0 0.4rem; }
-
-  .chart-container { height: 220px; }
-
-
-  .strategy-strip { padding: 1.1rem 1.25rem; border-radius: 0; gap: 0.85rem; }
-
-  .strategy-icon { width: 32px; height: 32px; font-size: 1rem; }
-
-  .strategy-text { font-size: 0.85rem; }
-
-  .methodology { padding: 1.1rem 1.25rem; }
-
-  .methodology p { font-size: 0.75rem; }
-
-
-  .edu-section { padding: 3.5rem 0 3rem; }
-
-  .sr-table { padding: 1.5rem 1.25rem; }
-
-  .sr-table-title { font-size: 1.15rem; }
-
-  .sr-row { grid-template-columns: 60px 1fr 70px; gap: 0.75rem; }
-
-  .sr-row-pct, .sr-row-years { font-size: 0.75rem; }
-
-  .sr-row-bar-container { height: 18px; }
-
-  .tiers-grid { grid-template-columns: 1fr; gap: 0.85rem; }
-
-  .tier-card { padding: 1.5rem; }
-
-  .rule-callout { padding: 1.5rem; }
-
-  .rule-big-number { font-size: 3.5rem; }
-
-  .rule-explanation h3 { font-size: 1.15rem; }
-
-  .input-info .tooltip-text { width: 200px; left: auto; right: -10px; transform: none; }
-
-  .input-info .tooltip-text::after { left: auto; right: 15px; margin-left: 0; }
-
-}
-
-@media (max-width: 420px) {
-  .verdict-stats { grid-template-columns: 1fr; gap: 0.6rem; }
-
-  .verdict-stat { flex-direction: row; justify-content: space-between; align-items: baseline; }
-
-  .verdict-stat-label { font-size: .72rem; }
-
-  .verdict-stat-value { font-size: 0.95rem; }
-
-}
-
-@media (max-width: 480px) { }
-
-
+    /* ---- FIRE calculator: page styles (humanized tool pass, September 2026) ---- */
+:root{--white:#fff;--muted:var(--ink-dim);--bdr:var(--ink-line)}
+a{color:inherit;text-decoration:none}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+
+/* Hero: left-set, one eyebrow, one plain headline */
+.tool-hero{max-width:var(--max-width);margin:0 auto;padding:150px var(--gutter) 44px}
+.tool-hero-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem 2rem;flex-wrap:wrap;margin-bottom:1.75rem}
+.tool-meta{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;color:var(--ink-faint)}
+.tool-hero h1{font-size:clamp(2.4rem,4.8vw,4rem);font-weight:900;line-height:.98;letter-spacing:-.045em;max-width:16ch;margin-bottom:1.25rem}
+.tool-lede{font-size:1.15rem;line-height:1.55;color:var(--ink-dim);max-width:60ch;font-weight:300}
+.tool-lede strong{font-weight:600;color:var(--ink)}
+.facts{margin-top:2rem;border-top:1px solid var(--bdr);max-width:760px}
+.fact{display:grid;grid-template-columns:180px 1fr;gap:1.5rem;padding:.8rem 0;border-bottom:1px solid var(--bdr);align-items:baseline}
+.fact-k{font-weight:600;font-size:.92rem;letter-spacing:-.01em}
+.fact-k b{font-family:var(--font-mono);font-weight:500;color:var(--orange-ink);margin-right:.5rem;font-variant-numeric:tabular-nums}
+.fact-v{font-size:.95rem;color:var(--ink-dim);line-height:1.5}
+
+/* Layout */
+.calc-section{max-width:var(--max-width);margin:0 auto;padding:0 var(--gutter) 72px}
+.calc-grid{display:grid;grid-template-columns:400px 1fr;gap:24px;align-items:start}
+.controls-panel{position:sticky;top:100px;min-width:0}
+.results-panel{min-width:0;display:flex;flex-direction:column;gap:20px}
+
+/* Inputs */
+.ccard{background:var(--white);border:1px solid var(--bdr);padding:28px}
+.cs{padding-bottom:22px;border-bottom:1px solid var(--bdr);margin-bottom:22px}
+.cs:last-child{padding-bottom:0;border-bottom:0;margin-bottom:0}
+.cs-title{font-size:.9rem;font-weight:600;letter-spacing:-.01em;margin-bottom:14px}
+.fg{margin-bottom:18px}
+.fg:last-child{margin-bottom:0}
+.fl{display:block;font-size:.88rem;font-weight:600;letter-spacing:-.01em;margin-bottom:6px}
+.fl-row{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:6px}
+.fl-row .fl{margin-bottom:0}
+.fv{font-family:var(--font-mono);font-size:.9rem;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums}
+.fh{display:block;font-size:.78rem;color:var(--ink-faint);margin-top:6px;line-height:1.45}
+.iw{position:relative}
+.ip,.is{position:absolute;top:50%;transform:translateY(-50%);font-family:var(--font-mono);font-size:.9rem;color:var(--ink-faint);pointer-events:none}
+.ip{left:14px}
+.is{right:14px}
+.fi{width:100%;padding:12px 14px;border:1px solid var(--bdr);background:var(--paper);font-family:var(--font-mono);font-size:1.05rem;font-weight:500;color:var(--ink);outline:none;transition:border-color .2s,background .2s;font-variant-numeric:tabular-nums}
+.fi:focus{border-color:var(--ink);background:var(--white)}
+.fi.px{padding-left:30px}
+
+/* Sliders: hairline track, square orange thumb */
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:2px;background:var(--bdr);outline:none;padding:0;margin:10px 0 4px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:0;background:var(--orange);cursor:pointer;border:0}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:0;background:var(--orange);cursor:pointer;border:0}
+input[type=range]:focus-visible{outline:2px solid var(--orange-ink);outline-offset:6px}
+.range-meta{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:.68rem;color:var(--ink-faint);letter-spacing:.04em;margin-top:4px}
+
+/* Savings rate line under the cash-flow inputs */
+.sr{margin-top:18px;padding-top:16px;border-top:1px solid var(--bdr)}
+.sr-line{font-size:.92rem;color:var(--ink-dim);line-height:1.5}
+.sr-line b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.sr-meter{position:relative;height:4px;background:var(--ink-line-soft);margin-top:10px;overflow:hidden}
+.sr-meter i{position:absolute;inset:0 auto 0 0;background:var(--orange);width:var(--sr-pct,0%);transition:width .35s cubic-bezier(.16,1,.3,1)}
+
+/* Result: a sentence, with the numbers inside it */
+.result{background:var(--white);border:1px solid var(--bdr);padding:36px 36px 30px}
+.result-sentence{font-size:clamp(1.45rem,2.3vw,2.05rem);font-weight:400;line-height:1.32;letter-spacing:-.025em;color:var(--ink);text-wrap:pretty}
+.result-sentence b{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.result-sentence .grow{color:var(--orange-ink)}
+.result-note{margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--bdr);font-size:.98rem;line-height:1.5;color:var(--ink-dim)}
+.result-note b{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* Shared card title: sentence case, DM Sans */
+.stit{font-size:.9rem;font-weight:600;letter-spacing:-.01em;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap}
+.stit-meta{font-family:var(--font-mono);font-size:.68rem;font-weight:400;letter-spacing:.04em;color:var(--ink-faint)}
+
+/* FIRE tiers strip */
+.tiers{background:var(--white);border:1px solid var(--bdr);padding:24px;min-width:0}
+.track{position:relative;height:2px;background:var(--ink-line-soft);margin:26px 8px 34px}
+.track-fill{position:absolute;inset:0 auto 0 0;background:var(--orange);width:var(--progress,0%);transition:width .5s cubic-bezier(.16,1,.3,1)}
+.track-marker{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);width:12px;height:12px;background:var(--ink);transition:left .5s cubic-bezier(.16,1,.3,1);z-index:2}
+.track-marker::after{content:'You';position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint);white-space:nowrap}
+.tier-list{display:grid;grid-template-columns:repeat(5,1fr)}
+.tier-item{padding:0 14px;border-left:1px solid var(--bdr);min-width:0}
+.tier-item:first-child{padding-left:0;border-left:0}
+.tier-name{font-size:.82rem;font-weight:600;letter-spacing:-.01em;color:var(--ink-faint);display:flex;align-items:center;gap:.4rem;margin-bottom:.35rem}
+.tier-name::after{content:'';font-family:var(--font-mono);font-size:.7rem;color:var(--orange-ink)}
+.tier-item.reached .tier-name{color:var(--ink)}
+.tier-item.reached .tier-name::after{content:'\2713'}
+.tier-value{font-family:var(--font-mono);font-size:1.02rem;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.1}
+.tier-sub{font-size:.74rem;color:var(--ink-faint);margin-top:.3rem;line-height:1.35}
+
+/* Chart */
+.chart-card{background:var(--white);border:1px solid var(--bdr);padding:24px;min-width:0;overflow:hidden}
+.chart-legend{display:flex;gap:14px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.04em;color:var(--ink-faint);flex-wrap:wrap}
+.chart-legend span{display:flex;align-items:center;gap:6px}
+.chart-legend i{width:14px;height:2px;display:inline-block}
+.chart-legend i.dash{background:repeating-linear-gradient(90deg,var(--ink-faint) 0 3px,transparent 3px 6px)}
+.chart-legend i.thin{height:1px;background:var(--ink-faint)}
+.chart-wrap{position:relative;height:300px}
+.chart-wrap canvas{max-width:100% !important;height:100% !important}
+.chart-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.04em;color:var(--ink-faint);text-align:center;padding:1rem}
+.chart-fallback[hidden]{display:none}
+
+/* Prose blocks under the chart */
+.how{padding:0 4px}
+.how p{font-size:.95rem;line-height:1.6;color:var(--ink-dim);max-width:62ch;margin-top:.75rem}
+.how p b{font-weight:600;color:var(--ink)}
+.how + .how{margin-top:.5rem}
+
+/* The math behind FIRE */
+.edu{border-top:1px solid var(--bdr)}
+.edu-inner{max-width:var(--max-width);margin:0 auto;padding:64px var(--gutter) 72px}
+.edu-head{max-width:640px;margin-bottom:2.5rem}
+.edu-head h2{font-size:clamp(1.85rem,3.5vw,2.5rem);font-weight:900;letter-spacing:-.03em;line-height:1.05;margin:.75rem 0 1rem}
+.edu-head p{font-size:1.05rem;color:var(--ink-dim);line-height:1.6;font-weight:300}
+.sr-table{background:var(--white);border:1px solid var(--bdr);padding:24px;margin-bottom:2.5rem;overflow:hidden}
+.sr-rows{display:flex;flex-direction:column}
+.sr-row{display:grid;grid-template-columns:64px 1fr 88px;align-items:center;gap:1rem;padding:.42rem 0}
+.sr-row-pct{font-family:var(--font-mono);font-size:.85rem;font-weight:500;color:var(--ink-dim);font-variant-numeric:tabular-nums}
+.sr-row-bar-container{position:relative;height:14px;overflow:hidden}
+.sr-row-bar{position:absolute;inset:0 auto 0 0;height:100%;background:rgba(10,10,10,.22);width:var(--bar-pct,0%)}
+.sr-row-years{font-family:var(--font-mono);font-size:.85rem;font-weight:500;color:var(--ink-dim);font-variant-numeric:tabular-nums;text-align:right}
+.sr-row.highlight .sr-row-pct,.sr-row.highlight .sr-row-years{color:var(--orange-ink);font-weight:600}
+.sr-row.highlight .sr-row-bar{background:var(--orange)}
+.sr-you{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.04em;color:var(--ink-faint);margin-top:12px}
+
+/* Kinds of FIRE: a ruled list */
+.def-list{border-top:1px solid var(--bdr);margin-top:1.25rem}
+.def-row{display:grid;grid-template-columns:220px 1fr;gap:1.5rem;padding:1.15rem 0;border-bottom:1px solid var(--bdr);align-items:baseline}
+.def-title{font-weight:600;letter-spacing:-.01em}
+.def-text{color:var(--ink-dim);font-size:.98rem;line-height:1.55;max-width:66ch}
+.def-math{display:block;font-family:var(--font-mono);font-size:.72rem;letter-spacing:.02em;color:var(--ink-faint);margin-top:.5rem;font-variant-numeric:tabular-nums}
+
+/* The 4% rule: the page's one ink moment */
+.rule{margin-top:2.5rem;background:var(--ink);color:var(--paper);padding:2.5rem;display:grid;grid-template-columns:220px 1fr;gap:2.5rem;align-items:center}
+.rule-num{font-size:clamp(4rem,8vw,6rem);font-weight:900;letter-spacing:-.05em;line-height:.9;color:var(--orange);font-variant-numeric:tabular-nums}
+.rule-lbl{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-faint);margin-top:.6rem}
+.rule h3{font-size:1.35rem;font-weight:700;letter-spacing:-.02em;line-height:1.2;margin-bottom:.75rem}
+.rule p{font-size:.95rem;color:var(--paper-dim);line-height:1.6;margin-bottom:.75rem;max-width:64ch}
+.rule p b{color:var(--paper);font-weight:600}
+.rule p:last-child{margin-bottom:0;font-size:.85rem;color:var(--paper-faint)}
+
+/* Keep going: ruled rows, not a card grid */
+.next{border-top:1px solid var(--bdr)}
+.next-inner{max-width:var(--max-width);margin:0 auto;padding:56px var(--gutter) 64px}
+.next-list{margin-top:1.25rem;border-top:1px solid var(--bdr)}
+.next-row{display:grid;grid-template-columns:220px 1fr auto;gap:1.5rem;align-items:baseline;padding:1.1rem 0;border-bottom:1px solid var(--bdr);color:var(--ink)}
+.next-title{font-weight:600;letter-spacing:-.01em}
+.next-desc{color:var(--ink-dim);font-size:.98rem}
+.next-arrow{font-family:var(--font-mono);color:var(--ink-faint);transition:transform .25s cubic-bezier(.16,1,.3,1),color .2s}
+.next-row:hover .next-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.next-row:hover .next-arrow{transform:translateX(4px);color:var(--ink)}
+.disc{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.04em;color:var(--ink-faint);margin-top:1.75rem;line-height:1.6}
+
+@media(max-width:968px){
+.tool-hero{padding:120px var(--gutter) 32px}
+.calc-grid{grid-template-columns:1fr;gap:16px}
+.controls-panel{position:static}
+.fact{grid-template-columns:150px 1fr;gap:1rem}
+.tier-list{grid-template-columns:repeat(5,1fr)}
+.tier-item{padding:0 8px}
+.tier-sub{display:none}
+.rule{grid-template-columns:1fr;gap:1.5rem;padding:2rem}
+.next-row{grid-template-columns:1fr auto;row-gap:.2rem}
+.next-desc{grid-column:1/-1}
+.next-arrow{grid-row:1;grid-column:2}
+.def-row{grid-template-columns:1fr;gap:.35rem}}
+
+@media(max-width:600px){
+.tool-hero{padding:104px var(--gutter) 24px}
+.ccard{padding:22px 18px}
+.result{padding:24px 20px 22px}
+.chart-wrap{height:240px}
+.fact{grid-template-columns:1fr;gap:.2rem}
+.tiers,.chart-card,.sr-table{padding:20px 16px}
+.tier-list{grid-template-columns:1fr;border-top:1px solid var(--bdr)}
+.tier-item{padding:.7rem 0;border-left:0;border-bottom:1px solid var(--bdr);display:grid;grid-template-columns:1fr auto;column-gap:1rem;align-items:baseline}
+.tier-item:first-child{padding-left:0}
+.tier-name{margin-bottom:0}
+.tier-sub{display:block;grid-column:1/-1;margin-top:.15rem}
+.sr-row{grid-template-columns:48px 1fr 76px;gap:.6rem}
+.sr-row-pct,.sr-row-years{font-size:.76rem}
+.rule{padding:1.5rem}}
   </style>
 
 </head>
@@ -1430,323 +1056,206 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
   </div>
   <!-- /chrome:nav -->
 
-<section class="hero">
-  <div class="wrap">
-    <div class="hero-content">
-      <div class="hero-eyebrow">
-        <span class="hero-eyebrow-dot"></span>
-        FIRE Calculator · The 4% Rule
-      </div>
-      <h1>
-        How fast can you
-        <span class="highlight">escape<svg viewBox="0 0 200 14" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M3 9 C 30 3, 60 11, 90 7 S 150 3, 197 8" stroke="#F25A27" stroke-width="3" stroke-linecap="round" fill="none"/></svg></span>
-        the 9-to-5?
-      </h1>
-      <p class="hero-sub">
-        Financial Independence, Retire Early. The math is surprisingly simple: your savings rate decides everything. Run your numbers and see when you can walk away from required work.
-      </p>
-      <div class="hero-stats">
-        <span class="hero-stat"><span class="hero-stat-label">Rule</span> <span class="hero-stat-value">25×</span></span>
-        <span class="hero-stat"><span class="hero-stat-label">Withdrawal</span> <span class="hero-stat-value">4%</span></span>
-        <span class="hero-stat"><span class="hero-stat-label">What matters</span> <span class="hero-stat-value">Savings Rate</span></span>
-      </div>
-    </div>
+<section class="tool-hero">
+  <div class="tool-hero-top">
+    <div class="eyebrow">Calculator · FIRE</div>
+    <div class="tool-meta">Today's dollars · real returns · 4% rule by default</div>
+  </div>
+  <h1>When could you stop working?</h1>
+  <p class="tool-lede">FIRE stands for financial independence, retire early. The idea is simple: once your investments cover your spending, work becomes optional. What decides how soon that happens is not your salary or your stock picks. <strong>It's the share of your take-home pay you keep.</strong></p>
+  <div class="facts">
+    <div class="fact"><div class="fact-k"><b>25&times;</b>The rule</div><div class="fact-v">Save 25 times what you spend in a year and you can stop. That is your FIRE number.</div></div>
+    <div class="fact"><div class="fact-k"><b>4%</b>The withdrawal</div><div class="fact-v">Taking 4% of the pot each year has historically lasted 30 years or more. You can set 3% to 5% below.</div></div>
+    <div class="fact"><div class="fact-k"><b>%</b>What matters</div><div class="fact-v">Your savings rate. Change it below and watch the years move far more than they do for return.</div></div>
   </div>
 </section>
 
 <section class="calc-section">
-  <div class="wrap">
-    <div class="calc-grid">
+  <div class="calc-grid">
 
-      <aside class="controls-panel">
+    <aside class="controls-panel">
+      <div class="ccard">
 
-        <div class="controls-section">
-          <div class="controls-section-title">You</div>
-          <div class="input-row">
-            <div class="input-label">
-              <span class="input-label-text">Current age</span>
-              <span class="input-value" id="ageDisplay">28</span>
-            </div>
+        <div class="cs">
+          <div class="cs-title">About you</div>
+          <div class="fg">
+            <div class="fl-row"><label class="fl" for="age">Your age now</label><span class="fv" id="ageDisplay">28</span></div>
             <input type="range" id="age" min="18" max="65" step="1" value="28">
             <div class="range-meta"><span>18</span><span>65</span></div>
           </div>
-          <div class="input-row">
-            <div class="input-label">
-              <span class="input-label-text">
-                Current savings &amp; investments
-                <span class="input-info">i<span class="tooltip-text">Everything invested for retirement: 401(k), IRAs, brokerage, savings earmarked for future you.</span></span>
-              </span>
-            </div>
-            <div class="input-field-prefix">
-              <input type="number" class="input-field" id="currentSavings" value="25000" min="0" step="1000">
-            </div>
+          <div class="fg">
+            <label class="fl" for="currentSavings">Saved and invested so far</label>
+            <div class="iw"><span class="ip">$</span><input type="number" class="fi px" id="currentSavings" value="25000" min="0" step="1000"></div>
+            <span class="fh">Everything already put away for later: 401(k), IRAs, brokerage, savings you won't touch.</span>
           </div>
         </div>
 
-        <div class="controls-section">
-          <div class="controls-section-title">Cash flow</div>
-          <div class="input-row">
-            <div class="input-label">
-              <span class="input-label-text">
-                Annual take-home income
-                <span class="input-info">i<span class="tooltip-text">After-tax income, not gross. This is what actually hits your bank account.</span></span>
-              </span>
-            </div>
-            <div class="input-field-prefix">
-              <input type="number" class="input-field" id="income" value="65000" min="0" step="1000">
-            </div>
+        <div class="cs">
+          <div class="cs-title">Cash flow</div>
+          <div class="fg">
+            <label class="fl" for="income">Take-home pay per year</label>
+            <div class="iw"><span class="ip">$</span><input type="number" class="fi px" id="income" value="65000" min="0" step="1000"></div>
+            <span class="fh">After tax, not gross. What actually lands in your account over a year.</span>
           </div>
-          <div class="input-row">
-            <div class="input-label">
-              <span class="input-label-text">Annual spending</span>
-            </div>
-            <div class="input-field-prefix">
-              <input type="number" class="input-field" id="spending" value="40000" min="0" step="1000">
-            </div>
+          <div class="fg">
+            <label class="fl" for="spending">Spending per year</label>
+            <div class="iw"><span class="ip">$</span><input type="number" class="fi px" id="spending" value="40000" min="0" step="1000"></div>
+            <span class="fh">Everything that goes out. The gap between this and your pay is what you save.</span>
           </div>
-
-          <div class="savings-rate-card" id="savingsRateCard">
-            <div class="savings-rate-top">
-              <span class="savings-rate-label">Savings rate</span>
-              <span class="savings-rate-value" id="savingsRateValue">38%</span>
-            </div>
-            <div class="savings-rate-bar">
-              <div class="savings-rate-fill"></div>
-            </div>
-            <div class="savings-rate-tag">
-              Saving <strong id="savingsAmount">$25,000</strong> per year
-            </div>
+          <div class="sr" id="savingsRateCard">
+            <div class="sr-line">You're saving <b id="savingsAmount">$25,000</b> a year, a <b id="savingsRateValue">38%</b> savings rate.</div>
+            <div class="sr-meter"><i></i></div>
           </div>
         </div>
 
-        <div class="controls-section">
-          <div class="controls-section-title">Investment assumptions</div>
-          <div class="input-row">
-            <div class="input-label">
-              <span class="input-label-text">
-                Real return
-                <span class="input-info">i<span class="tooltip-text">Expected annual investment return after subtracting inflation. S&amp;P 500 historical average ≈ 7%.</span></span>
-              </span>
-              <span class="input-value" id="returnDisplay">7%</span>
-            </div>
+        <div class="cs">
+          <div class="cs-title">Assumptions</div>
+          <div class="fg">
+            <div class="fl-row"><label class="fl" for="returnRate">Real return</label><span class="fv" id="returnDisplay">7%</span></div>
             <input type="range" id="returnRate" min="3" max="12" step="0.5" value="7">
-            <div class="range-meta"><span>3% safe</span><span>12% aggressive</span></div>
+            <div class="range-meta"><span>3%</span><span>12%</span></div>
+            <span class="fh">After inflation. US stocks have averaged close to 7% real over the long run.</span>
           </div>
-          <div class="input-row">
-            <div class="input-label">
-              <span class="input-label-text">
-                Safe withdrawal rate
-                <span class="input-info">i<span class="tooltip-text">The percentage of your portfolio you withdraw annually in retirement. Bengen's classic 4% rule is the FIRE standard.</span></span>
-              </span>
-              <span class="input-value" id="withdrawalDisplay">4%</span>
-            </div>
+          <div class="fg">
+            <div class="fl-row"><label class="fl" for="withdrawalRate">Withdrawal rate</label><span class="fv" id="withdrawalDisplay">4%</span></div>
             <input type="range" id="withdrawalRate" min="3" max="5" step="0.25" value="4">
-            <div class="range-meta"><span>3% cautious</span><span>5% aggressive</span></div>
+            <div class="range-meta"><span>3%</span><span>5%</span></div>
+            <span class="fh">The share of the pot you take out each year once you stop. 4% is the classic rule.</span>
           </div>
-        </div>
-
-      </aside>
-
-      <div class="results-col">
-
-        <div class="verdict-card" id="verdictCard">
-          <div class="verdict-card-top">
-            <div class="verdict-meta">
-              <span class="verdict-eyebrow">Your Escape Plan</span>
-              <span class="verdict-horizon" id="verdictHorizon">At a <strong>38% savings rate</strong></span>
-            </div>
-          </div>
-          <div class="countdown-block">
-            <div class="countdown-number" id="countdownNumber">23</div>
-            <div class="countdown-unit-block">
-              <span class="countdown-unit">Years to FIRE</span>
-              <span class="countdown-caption" id="countdownCaption">You'd retire at <strong id="retireAge">51</strong></span>
-            </div>
-          </div>
-          <div class="verdict-stats">
-            <div class="verdict-stat">
-              <span class="verdict-stat-label">FIRE Number</span>
-              <span class="verdict-stat-value" id="fireNumber">$1.0M</span>
-            </div>
-            <div class="verdict-stat">
-              <span class="verdict-stat-label">Monthly Passive</span>
-              <span class="verdict-stat-value" id="monthlyIncome">$3,333</span>
-            </div>
-            <div class="verdict-stat">
-              <span class="verdict-stat-label">Progress to goal</span>
-              <span class="verdict-stat-value muted" id="progress">2.5%</span>
-            </div>
-          </div>
-          <div class="insight-callout">
-            <span class="insight-callout-icon">!</span>
-            <span id="insightText">Adjust your savings rate to see how much time you can buy back.</span>
-          </div>
-        </div>
-
-        <div class="tier-progression">
-          <div class="tier-header">
-            <div>
-              <div class="tier-header-title">FIRE Tiers · Where you stand</div>
-            </div>
-            <div class="tier-header-meta" id="tierProgressLabel">Currently: pre-Coast</div>
-          </div>
-          <div class="tier-track">
-            <div class="tier-track-fill"></div>
-            <div class="tier-track-marker"></div>
-          </div>
-          <div class="tier-list">
-            <div class="tier-item coast" id="tierCoast">
-              <div class="tier-name"><span class="tier-name-dot"></span>Coast</div>
-              <div class="tier-value" id="tierCoastValue">$0</div>
-              <div class="tier-sub">Stop saving, still retire at 65</div>
-            </div>
-            <div class="tier-item barista" id="tierBarista">
-              <div class="tier-name"><span class="tier-name-dot"></span>Barista</div>
-              <div class="tier-value" id="tierBaristaValue">$0</div>
-              <div class="tier-sub">Part-time work bridges the gap</div>
-            </div>
-            <div class="tier-item lean" id="tierLean">
-              <div class="tier-name"><span class="tier-name-dot"></span>Lean</div>
-              <div class="tier-value" id="tierLeanValue">$0</div>
-              <div class="tier-sub">Frugal, minimalist retirement</div>
-            </div>
-            <div class="tier-item fire" id="tierFire">
-              <div class="tier-name"><span class="tier-name-dot"></span>FIRE</div>
-              <div class="tier-value" id="tierFireValue">$0</div>
-              <div class="tier-sub">Current lifestyle, permanently</div>
-            </div>
-            <div class="tier-item fat" id="tierFat">
-              <div class="tier-name"><span class="tier-name-dot"></span>Fat</div>
-              <div class="tier-value" id="tierFatValue">$0</div>
-              <div class="tier-sub">Comfortable, no compromises</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="chart-card">
-          <div class="chart-card-header">
-            <div class="chart-card-title">Portfolio growth · Real dollars</div>
-            <div class="chart-legend">
-              <span class="chart-legend-item"><span class="chart-legend-dot portfolio"></span>Portfolio</span>
-              <span class="chart-legend-item"><span class="chart-legend-dot contrib"></span>Contributions</span>
-              <span class="chart-legend-item"><span class="chart-legend-dot target"></span>FIRE target</span>
-            </div>
-          </div>
-          <div class="chart-container">
-            <canvas id="fireChart"></canvas>
-          </div>
-        </div>
-
-        <div class="strategy-strip">
-          <div class="strategy-icon">🔥</div>
-          <div class="strategy-content">
-            <div class="strategy-label">Your leverage</div>
-            <div class="strategy-text" id="strategyText">
-              Your return on investment barely matters compared to your <strong>savings rate</strong>. Bumping from 20% to 40% saved shaves off about <strong>14 years</strong> of working — no market timing required.
-            </div>
-          </div>
-        </div>
-
-        <div class="methodology">
-          <div class="methodology-title">How this is calculated</div>
-          <p>
-            All numbers are in today's dollars — your return rate should be real (inflation-adjusted), and spending is assumed constant. Growth follows the end-of-year formula <em>balance × (1 + return) + annual savings</em>. FIRE number uses your withdrawal rate (4% → 25× spending). Tiers assume steady returns and don't model sequence-of-returns risk or healthcare costs pre-65. For a full Monte Carlo simulation, see FIRECalc or cFIREsim.
-          </p>
         </div>
 
       </div>
+    </aside>
+
+    <div class="results-panel">
+
+      <div class="result" aria-live="polite">
+        <p class="result-sentence" id="rSentence"></p>
+        <p class="result-note" id="rNote"></p>
+      </div>
+
+      <div class="tiers">
+        <div class="stit"><span>Where you stand across the FIRE tiers</span><span class="stit-meta" id="tierProgressLabel">Not yet at Coast</span></div>
+        <div class="track">
+          <div class="track-fill"></div>
+          <div class="track-marker"></div>
+        </div>
+        <div class="tier-list">
+          <div class="tier-item" id="tierCoast">
+            <div class="tier-name">Coast</div>
+            <div class="tier-value" id="tierCoastValue">$0</div>
+            <div class="tier-sub">Stop saving now, still retire at 65</div>
+          </div>
+          <div class="tier-item" id="tierBarista">
+            <div class="tier-name">Barista</div>
+            <div class="tier-value" id="tierBaristaValue">$0</div>
+            <div class="tier-sub">Part-time work covers the gap</div>
+          </div>
+          <div class="tier-item" id="tierLean">
+            <div class="tier-name">Lean</div>
+            <div class="tier-value" id="tierLeanValue">$0</div>
+            <div class="tier-sub">A frugal retirement</div>
+          </div>
+          <div class="tier-item" id="tierFire">
+            <div class="tier-name">FIRE</div>
+            <div class="tier-value" id="tierFireValue">$0</div>
+            <div class="tier-sub">Your current lifestyle, for good</div>
+          </div>
+          <div class="tier-item" id="tierFat">
+            <div class="tier-name">Fat</div>
+            <div class="tier-value" id="tierFatValue">$0</div>
+            <div class="tier-sub">Room to spend more</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="stit"><span>How your portfolio grows, in today's dollars</span><span class="chart-legend"><span><i style="background:var(--orange)"></i>What you'd have</span><span><i class="dash"></i>What you put in</span><span><i class="thin"></i>FIRE number</span></span></div>
+        <div class="chart-wrap"><p class="chart-fallback" id="chartFallback" hidden>The chart could not load. The numbers above still work.</p><canvas id="fireChart" aria-label="Line chart of portfolio value, contributions and FIRE number by year" role="img"></canvas></div>
+      </div>
+
+      <div class="how">
+        <div class="eyebrow">Your biggest lever</div>
+        <p id="strategyText"></p>
+      </div>
+
+      <div class="how">
+        <div class="eyebrow">How this is worked out</div>
+        <p>Everything is in today's dollars, so the return you set should be a real one, after inflation, and spending is held flat. Each year the balance grows by the return and then your annual savings are added. Your FIRE number is spending divided by the withdrawal rate, so 4% means 25 times spending. The tiers assume steady returns and don't model bad early years or health insurance before 65. For a run against real market history, try FIRECalc or cFIREsim. Nothing you type leaves this page.</p>
+      </div>
+
     </div>
   </div>
 </section>
 
-<section class="edu-section">
-  <div class="wrap">
+<section class="edu">
+  <div class="edu-inner">
 
-    <div class="edu-header">
-      <div class="edu-eyebrow">The Math Behind FIRE</div>
-      <h2>Your savings rate <em>is</em> your retirement date.</h2>
-      <p>
-        Not your salary. Not your investment picks. Not luck. The one number that decides when you can stop working is the share of your take-home pay you keep. Here's what that looks like, starting from zero.
-      </p>
+    <div class="edu-head">
+      <div class="eyebrow">The math behind FIRE</div>
+      <h2>Your savings rate is your retirement date.</h2>
+      <p>Not your salary, not your investment picks, not luck. The one number that decides when you can stop working is the share of your take-home pay you keep. Here is what that looks like, starting from zero.</p>
     </div>
 
     <div class="sr-table">
-      <div class="sr-table-header">
-        <div>
-          <div class="sr-table-eyebrow">The shockingly simple chart</div>
-          <div class="sr-table-title">Years of work needed by savings rate</div>
-        </div>
-        <div class="sr-table-credit">5% real return · 4% withdrawal</div>
-      </div>
+      <div class="stit"><span>Years of work needed, by savings rate</span><span class="stit-meta">Starting from zero · 5% real return · 4% withdrawal</span></div>
       <div class="sr-rows" id="srRows"></div>
+      <p class="sr-you" id="srYou"></p>
     </div>
 
-    <div class="tiers-grid">
-      <div class="tier-card coast-card">
-        <div class="tier-card-icon">🌱</div>
-        <div class="tier-card-eyebrow">Coast FIRE</div>
-        <h4>Save hard early, coast forever</h4>
-        <p>Pile up enough in your 20s and 30s that compound interest alone gets you to a traditional retirement at 65 — no further contributions needed. You can drop to a lower-stress job or support a family on one income.</p>
-        <div class="tier-card-math">FIRE ÷ (1 + return)^(65 − age)</div>
+    <div class="eyebrow">Kinds of FIRE</div>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-title">Coast FIRE</div>
+        <div class="def-text">Save hard in your 20s and 30s until compound growth alone will get you to a traditional retirement at 65, with nothing more added. From there you can take a lower-stress job or live on one income.<span class="def-math">FIRE number &divide; (1 + return)^(65 &minus; age)</span></div>
       </div>
-
-      <div class="tier-card barista-card">
-        <div class="tier-card-icon">☕</div>
-        <div class="tier-card-eyebrow">Barista FIRE</div>
-        <h4>Part-time work bridges the gap</h4>
-        <p>Your portfolio covers most expenses. A part-time job — often for health insurance — picks up the rest. Less stress, more freedom, and a defense against sequence-of-returns risk in bad market years.</p>
-        <div class="tier-card-math">~50–75% of full FIRE number</div>
+      <div class="def-row">
+        <div class="def-title">Barista FIRE</div>
+        <div class="def-text">Your portfolio covers most of your expenses. A part-time job, often taken for the health insurance, picks up the rest. It also protects you if the market has a bad run early in retirement.<span class="def-math">About 50 to 75% of the full FIRE number</span></div>
       </div>
-
-      <div class="tier-card lean-card">
-        <div class="tier-card-icon">🏕️</div>
-        <div class="tier-card-eyebrow">Lean FIRE</div>
-        <h4>Minimalist, intentional living</h4>
-        <p>Retire with a smaller number by committing to a lean lifestyle — often $30k–$50k/year. Works best for people who genuinely enjoy simplicity: van life, low cost-of-living towns, homesteading.</p>
-        <div class="tier-card-math">25× lean annual spending</div>
+      <div class="def-row">
+        <div class="def-title">Lean FIRE</div>
+        <div class="def-text">Retire on a smaller number by keeping spending low, often $30k to $50k a year. It suits people who genuinely like a simple life: small towns, van life, homesteading.<span class="def-math">25 &times; lean annual spending</span></div>
       </div>
-
-      <div class="tier-card regular-card">
-        <div class="tier-card-icon">🔥</div>
-        <div class="tier-card-eyebrow">Regular FIRE</div>
-        <h4>Keep your current lifestyle, forever</h4>
-        <p>The classic goal: 25× your current annual spending. Withdraw 4% per year and your portfolio is statistically expected to last 30+ years, even through recessions. The Bengen rule in action.</p>
-        <div class="tier-card-math">25× current annual spending</div>
+      <div class="def-row">
+        <div class="def-title">Regular FIRE</div>
+        <div class="def-text">The classic goal: 25 times your current annual spending. Withdraw 4% a year and the portfolio has historically lasted 30 years or more, recessions included.<span class="def-math">25 &times; current annual spending</span></div>
       </div>
-
-      <div class="tier-card fat-card">
-        <div class="tier-card-icon">💎</div>
-        <div class="tier-card-eyebrow">Fat FIRE</div>
-        <h4>Retire well, no compromises</h4>
-        <p>Retire with room for travel, gifts, a nicer home, and the occasional splurge. Usually means a target of $2.5M–$5M+ and often requires high income plus high savings rate for 15–20 years.</p>
-        <div class="tier-card-math">~1.5× full FIRE (or $100k+/yr spend)</div>
+      <div class="def-row">
+        <div class="def-title">Fat FIRE</div>
+        <div class="def-text">Retire with room for travel, gifts, a nicer home and the occasional splurge. Usually a target of $2.5M to $5M or more, which tends to take a high income and a high savings rate for 15 to 20 years.<span class="def-math">About 1.5 &times; the full FIRE number, or $100k+ a year of spending</span></div>
       </div>
-
-      <div class="tier-card" style="--tier-c: var(--ink);">
-        <div class="tier-card-icon" style="background: var(--ink);">∞</div>
-        <div class="tier-card-eyebrow" style="color: var(--gray);">The one rule</div>
-        <h4>All of them are optional.</h4>
-        <p>FIRE isn't about quitting at 35. It's about having the <em>option</em>. Once your portfolio covers your bills, work becomes a choice — whether you keep going for purpose, downshift to something meaningful, or walk away entirely.</p>
-        <div class="tier-card-math">Your life, your rules</div>
+      <div class="def-row">
+        <div class="def-title">None of it is required</div>
+        <div class="def-text">FIRE isn't about quitting at 35. It's about having the option. Once your portfolio covers your bills, work becomes a choice: keep going because you like it, downshift to something that matters to you, or walk away.</div>
       </div>
     </div>
 
-    <div class="rule-callout">
-      <div class="rule-big">
-        <div class="rule-big-number">4%</div>
-        <div class="rule-big-label">The rule that started FIRE</div>
+    <div class="rule">
+      <div>
+        <div class="rule-num">4%</div>
+        <div class="rule-lbl">The rule behind the 25&times;</div>
       </div>
-      <div class="rule-explanation">
-        <h3>The 4% rule, explained in one paragraph.</h3>
-        <p>
-          In 1994, financial planner William Bengen analyzed every 30-year retirement window in US market history and found that retirees who withdrew <strong>4% of their starting portfolio each year</strong> — adjusted for inflation — never ran out of money. Not even those who retired in 1929 or 1966. Flip that math around and you get the FIRE equation: whatever you spend annually, you need <strong>25× that amount</strong> invested to be done for life.
-        </p>
-        <p>
-          Modern research suggests 3.5–4% is still a solid starting range for early retirees (who face longer horizons than traditional retirees). Variable withdrawal strategies can push this higher in good years.
-        </p>
+      <div>
+        <h3>Where the 4% comes from</h3>
+        <p>In 1994 a financial planner named William Bengen tested every 30-year retirement in US market history and found that people who withdrew <b>4% of their starting portfolio each year</b>, adjusted for inflation, never ran out of money. Not even those who retired in 1929 or 1966. Turn that around and you get the FIRE equation: whatever you spend in a year, you need <b>25 times that</b> invested.</p>
+        <p>Later research puts 3.5 to 4% as a sensible starting range for early retirees, who have longer to cover than someone retiring at 65. Adjusting withdrawals in good and bad years can stretch it further.</p>
       </div>
     </div>
 
+  </div>
+</section>
+
+<section class="next">
+  <div class="next-inner">
+    <div class="eyebrow">Keep going</div>
+    <div class="next-list">
+      <a class="next-row" href="compound-interest.html"><span class="next-title">Compound interest</span><span class="next-desc">See what a steady monthly amount turns into over 20, 30 or 40 years.</span><span class="next-arrow">&rarr;</span></a>
+      <a class="next-row" href="roth-ira.html"><span class="next-title">Roth IRA</span><span class="next-desc">Where to keep this money so the growth is never taxed.</span><span class="next-arrow">&rarr;</span></a>
+      <a class="next-row" href="ira-battle.html"><span class="next-title">Battle of the IRAs</span><span class="next-desc">Roth, Traditional, or a plain brokerage account, side by side.</span><span class="next-arrow">&rarr;</span></a>
+      <a class="next-row" href="portfolio-simulator.html"><span class="next-title">Portfolio simulator</span><span class="next-desc">What a real, bumpy market does to a plan that assumes a steady 7%.</span><span class="next-arrow">&rarr;</span></a>
+    </div>
+    <p class="disc">Estimates for learning, not financial advice. FinMango is a 501(c)(3) nonprofit. No account, no ads, nothing stored.</p>
   </div>
 </section>
 
@@ -1786,13 +1295,21 @@ let chart = null;
 const $ = (id) => document.getElementById(id);
 
 function fmt(value) {
-  if (!isFinite(value) || isNaN(value)) return '—';
+  if (!isFinite(value) || isNaN(value)) return '';
   if (Math.abs(value) >= 1000000) return '$' + (value / 1000000).toFixed(Math.abs(value) >= 10000000 ? 1 : 2) + 'M';
   if (Math.abs(value) >= 1000) return '$' + Math.round(value / 1000) + 'K';
   return '$' + Math.round(value).toLocaleString();
 }
+const money = (v) => '$' + Math.round(v).toLocaleString('en-US');
+function about(v) { // round the headline number so the sentence reads like a person said it
+  if (v >= 1e6) return Math.round(v / 1e4) * 1e4;
+  if (v >= 1e5) return Math.round(v / 1e3) * 1e3;
+  if (v >= 1e4) return Math.round(v / 100) * 100;
+  return Math.round(v);
+}
+function pct(v) { v = Math.round(v * 100) / 100; return (v % 1 === 0 ? v.toFixed(0) : (v * 10) % 1 === 0 ? v.toFixed(1) : v.toFixed(2)) + '%'; }
 
-// MMM's famous savings rate → years table (at 5% real return, 4% withdrawal)
+// The savings rate to years table (at 5% real return, 4% withdrawal), as popularised by Mr. Money Mustache
 const srTable = [
   { pct: 5,  years: 66 },
   { pct: 10, years: 51 },
@@ -1811,34 +1328,37 @@ const srTable = [
 function renderSrTable(userPct) {
   const host = $('srRows');
   const maxYears = 66;
+  const nearest = userPct === null ? null : Math.round(userPct / 5) * 5;
+  let hit = null;
   host.innerHTML = srTable.map(row => {
     const barPct = (row.years / maxYears) * 100;
     const yearLabel = row.years % 1 === 0 ? row.years + ' years' : row.years.toFixed(1) + ' years';
-    const isHighlight = userPct !== null && row.pct === Math.round(userPct / 5) * 5 && userPct >= 5;
+    const isHighlight = userPct !== null && row.pct === nearest && userPct >= 5;
+    if (isHighlight) hit = row;
     return `<div class="sr-row${isHighlight ? ' highlight' : ''}">
       <div class="sr-row-pct">${row.pct}%</div>
       <div class="sr-row-bar-container"><div class="sr-row-bar" style="--bar-pct: ${barPct}%"></div></div>
       <div class="sr-row-years">${yearLabel}</div>
     </div>`;
   }).join('');
+  const you = $('srYou');
+  if (!you) return;
+  const r = userPct === null ? null : Math.round(userPct);
+  if (hit) you.textContent = 'Your ' + r + '% is nearest the ' + hit.pct + '% row.';
+  else if (r !== null && r > 0 && r < 5) you.textContent = 'Your ' + r + '% is below the first row.';
+  else if (r !== null && r > 80) you.textContent = 'Your ' + r + '% is past the last row.';
+  else if (r !== null && r > 0) {
+    const lo = [...srTable].reverse().find(x => x.pct <= r), hi = srTable.find(x => x.pct >= r);
+    you.textContent = lo && hi ? 'Your ' + r + '% falls between the ' + lo.pct + '% and ' + hi.pct + '% rows.' : '';
+  }
+  else you.textContent = '';
 }
 
-function colorForSavingsRate(rate) {
-  if (rate < 10) return '#b04a5a';     // red
-  if (rate < 20) return '#d96e3a';     // warm orange
-  if (rate < 35) return '#c4882e';     // amber
-  if (rate < 50) return '#F25A27';     // brand orange
-  if (rate < 65) return '#2a7d5b';     // green
-  return '#7c3aed';                    // purple
-}
-
-function srLabel(rate) {
-  if (rate < 10) return 'Rookie';
-  if (rate < 20) return 'Building';
-  if (rate < 35) return 'Solid';
-  if (rate < 50) return 'Mustachian';
-  if (rate < 65) return 'Hardcore';
-  return 'Elite';
+// Whole years until a balance reaches a target, or null if it never gets there
+function yearsTo(start, annual, target, r) {
+  let b = start, y = 0;
+  while (b < target && y < 100) { y++; b = b * (1 + r) + annual; }
+  return b >= target ? y : null;
 }
 
 function calculate() {
@@ -1851,21 +1371,16 @@ function calculate() {
 
   const annualSavings = Math.max(0, income - spending);
   const savingsRate = income > 0 ? (annualSavings / income) * 100 : 0;
-  const srColor = colorForSavingsRate(savingsRate);
 
   // Display basic inputs
   $('ageDisplay').textContent = age;
-  const rPct = returnRate * 100;
-  const wPct = withdrawalRate * 100;
-  $('returnDisplay').textContent = (rPct % 1 === 0 ? rPct.toFixed(0) : rPct.toFixed(1)) + '%';
-  $('withdrawalDisplay').textContent = (wPct % 1 === 0 ? wPct.toFixed(0) : wPct.toFixed(2)) + '%';
+  $('returnDisplay').textContent = pct(returnRate * 100);
+  $('withdrawalDisplay').textContent = pct(withdrawalRate * 100);
 
-  // Savings rate card
+  // Savings rate line
   $('savingsRateValue').textContent = savingsRate.toFixed(0) + '%';
-  $('savingsAmount').textContent = fmt(annualSavings);
-  const srCard = $('savingsRateCard');
-  srCard.style.setProperty('--sr-pct', Math.min(100, savingsRate) + '%');
-  srCard.style.setProperty('--sr-color', srColor);
+  $('savingsAmount').textContent = money(annualSavings);
+  $('savingsRateCard').style.setProperty('--sr-pct', Math.min(100, savingsRate) + '%');
 
   // FIRE number
   const fireNumber = withdrawalRate > 0 ? spending / withdrawalRate : 0;
@@ -1876,7 +1391,7 @@ function calculate() {
   const leanFire = fireNumber * 0.6;          // conventional lean multiplier
   const fatFire = fireNumber * 1.5;
 
-  // Compound growth loop — find years to FIRE
+  // Compound growth loop, find years to FIRE
   let balance = currentSavings;
   let years = 0;
   const maxYears = 100;
@@ -1892,7 +1407,7 @@ function calculate() {
     contribData.push(totalContributions);
   }
 
-  // Build projection for chart — always project at least 30 years so user sees trajectory
+  // Build projection for chart, always at least 30 years so the trajectory shows
   const chartYears = Math.max(30, Math.min(maxYears, years + 5));
   while (balanceData.length <= chartYears) {
     const prev = balanceData[balanceData.length - 1];
@@ -1906,71 +1421,60 @@ function calculate() {
   const retireAge = age + years;
   const monthlyIncome = (fireNumber * withdrawalRate) / 12;
   const progressPct = fireNumber > 0 ? Math.min(100, (currentSavings / fireNumber) * 100) : 0;
+  const multiple = 1 / withdrawalRate;
+  const multipleText = (multiple % 1 === 0 ? multiple.toFixed(0) : multiple.toFixed(1)) + ' times';
+  const srText = savingsRate.toFixed(0) + '%';
 
-  // ==== Verdict card ====
-  const verdictCard = $('verdictCard');
-  const countdownNumber = $('countdownNumber');
-  verdictCard.classList.remove('fast', 'steady', 'slow', 'never');
-  countdownNumber.classList.remove('fast', 'steady', 'slow', 'never');
-
-  let tier = 'steady';
-  if (!reachable || annualSavings <= 0) tier = 'never';
-  else if (years <= 12) tier = 'fast';
-  else if (years <= 22) tier = 'steady';
-  else tier = 'slow';
-
-  verdictCard.classList.add(tier);
-  countdownNumber.classList.add(tier);
-
-  if (!reachable || annualSavings <= 0) {
-    countdownNumber.textContent = '∞';
-    $('countdownCaption').innerHTML = spending >= income
-      ? `Spending exceeds income — <strong>no path to FIRE yet</strong>`
-      : `Not reachable — <strong>increase savings rate</strong>`;
-  } else {
-    countdownNumber.textContent = years;
-    $('countdownCaption').innerHTML = `You'd retire at <strong>${retireAge}</strong>`;
+  // What saving ten more points of income would do (same income, lower spending)
+  let altYears = null, altRate = null;
+  if (income > 0 && savingsRate + 10 <= 90) {
+    altRate = savingsRate + 10;
+    const altSavings = income * altRate / 100;
+    const altFire = withdrawalRate > 0 ? (income - altSavings) / withdrawalRate : 0;
+    altYears = yearsTo(currentSavings, altSavings, altFire, returnRate);
   }
 
-  $('verdictHorizon').innerHTML = `At a <strong>${savingsRate.toFixed(0)}% savings rate</strong> · ${srLabel(savingsRate)}`;
-  $('fireNumber').textContent = fmt(fireNumber);
-  $('monthlyIncome').textContent = fmt(monthlyIncome);
-  $('progress').textContent = progressPct.toFixed(progressPct < 10 ? 1 : 0) + '%';
-
-  // Insight
-  let insight = '';
-  if (savingsRate <= 0) {
-    insight = `You're <strong>spending more than you earn</strong>. FIRE isn't mathematically possible without changing this. Start by cutting one recurring expense this month.`;
-  } else if (savingsRate < 10) {
-    insight = `At <strong>${savingsRate.toFixed(0)}%</strong>, FIRE takes 50+ years. Every 5 percentage points you can add to your savings rate saves you roughly <strong>5 years</strong> of work. The jump from 10% → 20% alone cuts your timeline by about 14 years.`;
-  } else if (savingsRate < 25) {
-    insight = `At <strong>${savingsRate.toFixed(0)}%</strong>, you're on a traditional retirement track. Bumping your rate to 40% would cut roughly <strong>${Math.max(5, years - 22)} years</strong> off this number.`;
-  } else if (savingsRate < 50) {
-    insight = `You're saving <strong>${savingsRate.toFixed(0)}%</strong> — on pace for a ${years}-year timeline. Pushing to 50% would put you at about <strong>17 years</strong> to full FIRE, regardless of your salary.`;
-  } else if (savingsRate < 70) {
-    insight = `A <strong>${savingsRate.toFixed(0)}% savings rate</strong> is Mustachian territory. Your timeline is dictated almost entirely by your savings discipline — not market returns, not a raise, not luck.`;
+  // ==== Result sentence and note ====
+  let sentence = '', note = '';
+  if (income > 0 && spending > income) {
+    sentence = `You're spending about <b>${money(spending - income)}</b> more than you take home each year, so there's no path to FIRE yet.`;
+    note = `The gap has to close before the math can start. Change spending or pay above and the sentence will update. Once you're saving even 10% of your pay, FIRE from zero is about <b>51 years</b> off, and every 5 points after that knocks several years off.`;
+  } else if (annualSavings <= 0) {
+    sentence = `At a <b>0%</b> savings rate nothing goes toward FIRE, so there's no date yet.`;
+    note = `Even 10% of your pay changes this. From zero that is about <b>51 years</b>, and 20% is about <b>37</b>. Your FIRE number would be <b>${money(about(fireNumber))}</b>, ${multipleText} what you spend.`;
+  } else if (currentSavings >= fireNumber) {
+    sentence = `At <b>${pct(withdrawalRate * 100)}</b>, your <b>${money(about(currentSavings))}</b> already covers <b>${money(spending)}</b> a year of spending. By this math you're there.`;
+    note = `Your FIRE number is <b>${money(about(fireNumber))}</b>, ${multipleText} what you spend, and it would pay about <b>${money(monthlyIncome)}</b> a month. The question now is whether the withdrawal rate fits how long you plan to be retired.`;
+  } else if (!reachable) {
+    sentence = `At a <b>${srText}</b> savings rate, saving <b>${money(annualSavings)}</b> a year, FIRE is more than <b>100 years</b> away.`;
+    note = `Your FIRE number is <b>${money(about(fireNumber))}</b>, ${multipleText} what you spend, and you have <b>${progressPct.toFixed(progressPct < 10 ? 1 : 0)}%</b> of it.` +
+      (altYears !== null ? ` Save <b>10 more points</b> of your pay, a ${altRate.toFixed(0)}% rate, and it becomes about <b>${altYears} years</b>.` : ` The rate is the lever: at 20% from zero it takes about 37 years.`);
   } else {
-    insight = `At <strong>${savingsRate.toFixed(0)}%</strong>, you're in elite FIRE territory. Even a mediocre market won't significantly delay you — compounding is working overtime.`;
+    sentence = `At a <b>${srText}</b> savings rate you could stop working in about <b>${years} ${years === 1 ? 'year' : 'years'}</b>, at <b>${retireAge}</b>.`;
+    note = `That takes about <b>${money(about(fireNumber))}</b> invested, ${multipleText} your <b>${money(spending)}</b> a year of spending, which pays about <b>${money(monthlyIncome)}</b> a month at ${pct(withdrawalRate * 100)}. You have <b>${progressPct.toFixed(progressPct < 10 ? 1 : 0)}%</b> of it so far.` +
+      (altYears !== null && altYears < years ? ` Save <b>10 more points</b> of your pay, a ${altRate.toFixed(0)}% rate, and it drops to about <b>${altYears} ${altYears === 1 ? 'year' : 'years'}</b>.` : '');
   }
-  $('insightText').innerHTML = insight;
+  $('rSentence').innerHTML = sentence;
+  $('rNote').innerHTML = note;
 
-  // Strategy callout — dynamic
+  // Strategy: your biggest lever
   let strategy = '';
-  if (!reachable || annualSavings <= 0) {
-    strategy = `The only path forward: <strong>spend less than you earn</strong>. Every dollar saved is a dollar that works for you forever — investments don't, can't, and won't fix a negative savings rate.`;
+  if (annualSavings > 0 && currentSavings >= fireNumber) {
+    strategy = `You're past the number, so saving more isn't the lever any more. What matters now is <b>the withdrawal rate</b> you pick and how the money is invested through the first few years after you stop.`;
+  } else if (!reachable || annualSavings <= 0) {
+    strategy = `The only lever that works here is <b>spending less than you take home</b>. Returns can't fix a negative savings rate, because there's nothing for them to work on.`;
   } else if (years > 30) {
-    strategy = `A <strong>${years}-year</strong> timeline means your savings rate is doing most of the work. Doubling your investment return from 5% to 10% only shaves a few years — but doubling your savings rate can cut your timeline in half.`;
+    strategy = `On a <b>${years}-year</b> timeline the savings rate is doing almost all the work. Doubling your return from 5% to 10% takes off a few years. Doubling your savings rate can cut the timeline roughly in half.`;
   } else if (years > 15) {
-    strategy = `You're on a reasonable track. The biggest lever now isn't <em>more</em> savings rate — it's <strong>protecting the one you have</strong>. Avoid lifestyle inflation when you get raises, and you'll accelerate without feeling the squeeze.`;
+    strategy = `You're on a reasonable track. The biggest lever now is <b>protecting the rate you have</b>. When a raise comes, save most of it instead of spending it, and the years fall away without much squeeze.`;
   } else {
-    strategy = `Fast track. At <strong>${years} years</strong> your main risk isn't the math — it's burnout or sequence-of-returns risk. Consider a <strong>Barista FIRE glide path</strong>: a few years of part-time work smooths out bad market years.`;
+    strategy = `At <b>${years} years</b> the math isn't the risk. Burnout is, and so is a bad market in the first years after you stop. A few years of part-time work, the <b>Barista FIRE</b> route, smooths both out.`;
   }
   $('strategyText').innerHTML = strategy;
 
   // ==== Tier progression ====
-  const tierFill = document.querySelector('.tier-progression .tier-track-fill');
-  const tierMarker = document.querySelector('.tier-progression .tier-track-marker');
-  const tierRoot = $('verdictCard').parentElement.querySelector('.tier-progression');
+  const tierFill = document.querySelector('.tiers .track-fill');
+  const tierMarker = document.querySelector('.tiers .track-marker');
 
   const setTierValue = (id, v) => { $(id).textContent = fmt(v); };
   setTierValue('tierCoastValue', coastFire);
@@ -1992,19 +1496,15 @@ function calculate() {
   ].sort((a, b) => a.val - b.val);
 
   // Mark reached tiers
-  let currentTier = null;
-  thresholds.forEach((t, i) => {
-    if (currentSavings >= t.val) {
-      $(t.id).classList.add('reached');
-      currentTier = t;
-    }
+  thresholds.forEach((t) => {
+    if (currentSavings >= t.val) $(t.id).classList.add('reached');
   });
 
-  // Marker position: find progress along tiers
+  // Marker position: progress along the tiers
   let markerPct = 0;
-  let tierLabel = 'pre-Coast';
+  let tierLabel = 'Not yet at Coast';
   if (currentSavings >= fatFire) {
-    markerPct = 100; tierLabel = 'Fat FIRE reached 🎉';
+    markerPct = 100; tierLabel = 'Past Fat FIRE';
   } else if (currentSavings >= fireNumber) {
     markerPct = 75 + 25 * ((currentSavings - fireNumber) / Math.max(1, fatFire - fireNumber));
     tierLabel = 'Between FIRE and Fat';
@@ -2018,14 +1518,12 @@ function calculate() {
     markerPct = 0 + 25 * ((currentSavings - coastFire) / Math.max(1, baristaFire - coastFire));
     tierLabel = 'Between Coast and Barista';
   } else {
-    markerPct = Math.max(0, (currentSavings / Math.max(1, coastFire)) * 0);
-    // Tiny progress within pre-Coast
     markerPct = 0;
-    tierLabel = 'Pre-Coast';
+    tierLabel = 'Not yet at Coast';
   }
   tierFill.style.width = Math.max(0, Math.min(100, markerPct)) + '%';
   tierMarker.style.left = Math.max(0, Math.min(100, markerPct)) + '%';
-  $('tierProgressLabel').textContent = 'Currently: ' + tierLabel;
+  $('tierProgressLabel').textContent = tierLabel;
 
   // Update savings rate table highlighting
   renderSrTable(savingsRate);
@@ -2035,17 +1533,14 @@ function calculate() {
 }
 
 function updateChart(balanceData, contribData, fireNumber, years, reachable) {
+  if (typeof Chart === 'undefined') { const f = $('chartFallback'); if (f) f.hidden = false; return; } // page still works without the chart library
   const labels = [];
   const n = balanceData.length;
-  for (let i = 0; i < n; i++) labels.push(i === 0 ? 'Now' : 'Y' + i);
+  for (let i = 0; i < n; i++) labels.push(i === 0 ? 'Now' : 'Yr ' + i);
   const targetLine = Array(n).fill(fireNumber);
 
   const ctx = $('fireChart').getContext('2d');
   if (chart) chart.destroy();
-
-  const portfolioGradient = ctx.createLinearGradient(0, 0, 0, 280);
-  portfolioGradient.addColorStop(0, 'rgba(242, 90, 39,0.22)');
-  portfolioGradient.addColorStop(1, 'rgba(242, 90, 39,0)');
 
   chart = new Chart(ctx, {
     type: 'line',
@@ -2053,29 +1548,29 @@ function updateChart(balanceData, contribData, fireNumber, years, reachable) {
       labels: labels,
       datasets: [
         {
-          label: 'Portfolio',
+          label: "What you'd have",
           data: balanceData,
           borderColor: '#F25A27',
-          backgroundColor: portfolioGradient,
-          borderWidth: 2.5, tension: 0.35, fill: true,
-          pointRadius: 0, pointHoverRadius: 5,
+          backgroundColor: 'rgba(242,90,39,.08)',
+          borderWidth: 2, tension: 0.3, fill: true,
+          pointRadius: 0, pointHoverRadius: 4,
           pointBackgroundColor: '#F25A27', pointBorderColor: '#ffffff', pointBorderWidth: 2
         },
         {
-          label: 'Contributions',
+          label: 'What you put in',
           data: contribData,
-          borderColor: '#1a1a1a',
+          borderColor: 'rgba(10,10,10,.45)',
           backgroundColor: 'transparent',
-          borderWidth: 1.5, borderDash: [4, 4], tension: 0,
-          pointRadius: 0
+          borderWidth: 1.5, borderDash: [3, 4], tension: 0,
+          pointRadius: 0, pointHoverRadius: 4
         },
         {
-          label: 'FIRE target',
+          label: 'FIRE number',
           data: targetLine,
-          borderColor: '#c4882e',
+          borderColor: 'rgba(10,10,10,.35)',
           backgroundColor: 'transparent',
-          borderWidth: 2, borderDash: [8, 4], tension: 0,
-          pointRadius: 0
+          borderWidth: 1, tension: 0,
+          pointRadius: 0, pointHoverRadius: 0
         }
       ]
     },
@@ -2086,44 +1581,22 @@ function updateChart(balanceData, contribData, fireNumber, years, reachable) {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: '#1a1a1a', titleColor: '#ffffff', bodyColor: '#ffffff',
-          padding: 12, cornerRadius: 8, displayColors: true,
-          titleFont: { family: 'JetBrains Mono', size: 11, weight: '700' },
-          bodyFont: { family: 'DM Sans', size: 13, weight: '600' },
-          callbacks: { label: (ctx) => ' ' + ctx.dataset.label + ': ' + fmt(ctx.parsed.y) }
+          backgroundColor: '#0A0A0A', titleColor: '#ffffff', bodyColor: '#ffffff',
+          padding: 12, cornerRadius: 0, displayColors: false,
+          titleFont: { family: 'JetBrains Mono', size: 11, weight: '500' },
+          bodyFont: { family: 'DM Sans', size: 13, weight: '500' },
+          callbacks: { label: (c) => c.dataset.label + ': ' + money(c.parsed.y) }
         }
       },
       scales: {
-        x: { grid: { display: false }, border: { display: false }, ticks: { color: '#a8a29e', font: { family: 'JetBrains Mono', size: 10 }, maxTicksLimit: 8, autoSkipPadding: 12 } },
-        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false }, border: { display: false }, ticks: { color: '#a8a29e', font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => fmt(v), maxTicksLimit: 6 } }
+        x: { grid: { display: false }, border: { display: false }, ticks: { color: 'rgba(10,10,10,.55)', font: { family: 'JetBrains Mono', size: 11 }, maxTicksLimit: 8, autoSkipPadding: 12 } },
+        y: { beginAtZero: true, grid: { color: 'rgba(10,10,10,.06)', drawBorder: false }, border: { display: false }, ticks: { color: 'rgba(10,10,10,.55)', font: { family: 'JetBrains Mono', size: 11 }, callback: (v) => fmt(v), maxTicksLimit: 6 } }
       }
     }
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const nav = $('nav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-  });
-
-  const mobileMenuBtn = $('mobileMenuBtn');
-  const mobileMenu = $('mobileMenu');
-  if (mobileMenuBtn && mobileMenu) {
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenuBtn.classList.toggle('active');
-      mobileMenu.classList.toggle('active');
-      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
-    });
-  }
-  document.querySelectorAll('.mobile-dropdown-toggle').forEach(toggle => {
-    toggle.addEventListener('click', function() {
-      this.classList.toggle('active');
-      this.nextElementSibling.classList.toggle('open');
-    });
-  });
-
   ['age', 'currentSavings', 'income', 'spending', 'returnRate', 'withdrawalRate'].forEach(id => {
     $(id).addEventListener('input', calculate);
   });
