@@ -1236,3 +1236,73 @@ Chromium 1440 / 390 on all 19: no JS errors (Chart CDN blocked in the
 sandbox, guarded), no horizontal overflow, interactions exercised with
 Playwright (steps, tabs, sliders, presets, drag-and-drop, auto-play, reset,
 language switch), body em-dash and emoji counts 0. `npm test` 12/12.
+
+---
+
+## Tool pages — humanizing pass, final nine (October 2026)
+
+Closes out the tool set after #614 merged: inflation-time-machine,
+whats-money, food-desert-analyzer, table-banking-game,
+mexico-paycheck-calculator, probability-trap, market-rollercoaster,
+medical-maze, inflation-shopping-spree. Same recipe as the two entries
+above; nothing new in the method, so this entry is mostly the flags.
+
+### Honesty fixes made because the old copy did not match the code
+- **food-desert-analyzer** never looked anything up: its three scores are
+  arithmetic on the zip-code digits. The page now calls itself an
+  explainer, says so in the lede, meta and disclaimer, and points to the
+  USDA Food Access Research Atlas for real data. The resources index line
+  was corrected to match. The old "uses established food access research
+  methodologies" line is gone. **A human should decide whether to keep
+  this page at all.**
+- **mexico-paycheck-calculator**: the heading said "Tablas de ISR 2025"
+  but the JS brackets are the 2022/2023 annual tariff limits applied to
+  monthly pay with one flat rate per bracket, IMSS is a flat 2.7%, and UMA
+  and subsidio al empleo are not modelled. The meta line and the ISR
+  section now say exactly that. The two pay-frequency options were
+  mislabelled (value 24 read "Catorcenal", value 26 read "Quincenal");
+  labels swapped, values and maths untouched. `#state` still has no
+  effect; its hint now says so.
+- **probability-trap** showed "Implied probability 14.3%", which does not
+  follow from its own $20 → $119.16 payout (16.8%). It now shows the
+  computed 16.8% beside the true 12.5%.
+- **whats-money** keyed selections by amount, so Impulse shopping and
+  Sports betting (both $500) double-counted whenever either was tapped.
+  The total now sums the selected buttons.
+- **inflation-time-machine** has no CPI series; it compounds one user-set
+  rate. The meta line says so ("One flat yearly rate, compounded").
+
+### Behaviour changes to know about
+- market-rollercoaster: the canvas was reading CSS variables for stroke
+  and fill, which canvas cannot do, so the line drew black. Explicit ink
+  line and orange dot now.
+- table-banking-game: 301 em-dashes removed across all five languages
+  (EN/ES/FR/PT/SW), mechanically where the dash joined clauses; 17 journey
+  emoji removed; saved games from before still load.
+- inflation-shopping-spree: emoji cart replaced by item-name chips; the
+  `icon` fields were removed from `ITEMS` (nothing else read them).
+- medical-maze: "Health 100%" never changed in the JS (pre-existing);
+  kept, could be dropped.
+
+### Flags for a human
+- **Non-English copy**: all new Spanish on mexico-paycheck-calculator and
+  food-assistance-calculator, and the new ES/FR/PT/SW hero and end-screen
+  strings on table-banking-game, were written by the pass and need a native
+  speaker's read. The Keep going rows on table-banking-game are English
+  only because the linked tools are.
+- medical-maze presents an out-of-network anesthesiologist balance bill at
+  an in-network hospital as current practice; the No Surprises Act (2022)
+  generally bars that for emergency care, while ground ambulances (the
+  other path) are still excluded. The lede now says the numbers are
+  invented; the "Surprise billing" row may still want updating.
+- Unsourced carried-over figures: "$1,700 average deductible", "66.5% of
+  bankruptcies" (medical-maze); "missing the 10 best days cuts returns in
+  half" (market-rollercoaster); "~96% since 1913", "S&P roughly 10% a year"
+  (inflation-time-machine); the 24 item prices on inflation-shopping-spree.
+
+### Verified
+Chromium 1440 / 390 on all nine: no JS errors, no horizontal overflow,
+interactions exercised in Playwright (full six-meeting table-banking run
+with save and resume in two languages; parlay reruns; a timed market
+round; both medical-maze paths; three shopping rounds; zip entry; habit
+toggles). Body em-dash and emoji counts 0. `npm test` 12/12.
