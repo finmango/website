@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inflation Time Machine — FinMango</title>
-<meta name="description" content="See how inflation eats your money. Calculate future prices, lost purchasing power, and what your dollar will actually buy decades from now.">
+<title>Inflation Calculator | FinMango</title>
+<meta name="description" content="Put in an amount and a year and see what it would take to buy the same things then, what a dollar shrinks to, and how fast prices double.">
 <link rel="canonical" href="https://finmango.org/inflation-time-machine">
 <link rel="icon" type="image/png" href="favicon.png">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://finmango.org/inflation-time-machine">
-<meta property="og:title" content="Inflation Time Machine — FinMango">
-<meta property="og:description" content="See how inflation eats your money. The honest math on future prices and lost purchasing power.">
+<meta property="og:title" content="Inflation Calculator | FinMango">
+<meta property="og:description" content="Put in an amount and a year and see what it would take to buy the same things then, what a dollar shrinks to, and how fast prices double.">
 <meta property="og:image" content="https://www.finmango.org/og-image.png?v=20260924">
 
   <!-- Performance: Preconnect to external domains -->
@@ -641,861 +641,131 @@
     }
 
 
-    /* ---- reskinned legacy component css ---- */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-
-:root {
-  --black: #0a0a0a;
-  --ink: #0A0A0A;
-  --white: #ffffff;
-  --orange: #F25A27;
-  --orange-dark: var(--orange-deep);
-  --orange-soft: var(--orange-deep);
-  --orange-light: rgba(242, 90, 39, 0.1);
-  --gray: #57534e;
-  --gray-medium: #78716c;
-  --gray-soft: #a8a29e;
-  --light-gray: #f5f5f4;
-  --warm-white: #fafaf7;
-  --cream: #fff7ed;
-  --max-width: 1200px;
-
-  --green: #2a7d5b;
-  --green-bright: #4ade80;
-  --red: #b04a5a;
-  --red-bright: #f87171;
-  --amber: #c4882e;
-  --blue: #3a6fa0;
-  --purple: #7c3aed;
-
-  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
-}
-
-
-@media (prefers-reduced-motion: reduce) {
-}
-
-
-html { scroll-behavior: smooth; }
-
-
-body {
-  font-family: var(--font-body);
-  background: var(--warm-white);
-  color: var(--ink);
-  line-height: 1.5;
-  font-size: 17px;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-
-.wrap { max-width: var(--max-width); margin: 0 auto; padding: 0 2rem; }
-
-
-/* ============================================
-   HERO
-   ============================================ */
-.hero {
-  position: relative;
-  padding: 9rem 0 2.5rem;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: ''; position: absolute;
-  top: -200px; right: -300px; width: 700px; height: 700px;
-  background: radial-gradient(circle, rgba(242, 90, 39,0.12) 0%, transparent 65%);
-  filter: blur(60px); pointer-events: none; z-index: -1;
-}
-
-.hero::after {
-  content: ''; position: absolute;
-  bottom: -100px; left: -200px; width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(124,58,237,0.07) 0%, transparent 65%);
-  filter: blur(60px); pointer-events: none; z-index: -1;
-}
-
-.hero-content { text-align: center; max-width: 760px; margin: 0 auto; }
-
-
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 0.6rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.16em; color: var(--orange-ink);
-  padding: 0.4rem 0.85rem 0.4rem 0.65rem;
-  background: rgba(242, 90, 39, 0.08);
-  border: 1px solid rgba(242, 90, 39, 0.2);
-  border-radius: 0; margin-bottom: 1.5rem;
-}
-
-.hero-eyebrow-dot {
-  width: 7px; height: 7px; background: var(--orange); border-radius: 0;
-  
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-
-@keyframes pulse-dot {
-  0%, 100% {  }
-  50% {  }
-}
-
-
-.hero h1 {
-  font-size: clamp(2.25rem, 4.8vw, 3.75rem);
-  font-weight: 900; line-height: 1.05;
-  letter-spacing: -0.035em; margin-bottom: 1.25rem;
-}
-
-.hero h1 .highlight {
-  color: var(--orange); position: relative; display: inline-block;
-}
-
-.hero h1 .highlight::after {
-  content: ''; position: absolute; left: -2%; right: -2%; bottom: -0.08em; height: 0.16em; background: rgba(242, 90, 39, 0.35); pointer-events: none;
-}
-
-.hero h1 .highlight svg { display: none; }
-
-.hero-sub {
-  font-size: 1.15rem; color: var(--gray); line-height: 1.6;
-  max-width: 600px; margin: 0 auto 1.75rem;
-}
-
-.hero-stats {
-  display: inline-flex; align-items: stretch;
-  background: var(--white);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 0;
-  padding: 0.4rem 0.5rem;
-  
-  flex-wrap: wrap;
-  gap: 0;
-}
-
-.hero-stat {
-  padding: 0.4rem 1rem;
-  display: flex; flex-direction: column; align-items: center;
-  border-right: 1px solid rgba(0,0,0,0.06);
-  min-width: 0;
-}
-
-.hero-stat:last-child { border-right: none; }
-
-.hero-stat-label {
-  font-family: var(--font-mono);
-  font-size: .72rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.12em; color: var(--gray-medium);
-}
-
-.hero-stat-value {
-  font-family: var(--font-mono);
-  font-size: 0.95rem; font-weight: 700;
-  color: var(--orange);
-  font-variant-numeric: tabular-nums;
-  margin-top: 0.15rem;
-}
-
-
-/* ============================================
-   CALCULATOR
-   ============================================ */
-.calc-section { padding: 3rem 0 5rem; scroll-margin-top: 90px; }
-
-.calc-grid {
-  display: grid;
-  grid-template-columns: 380px 1fr;
-  gap: 1.5rem;
-  align-items: start;
-}
-
-
-/* Controls panel */
-.controls-panel {
-  background: var(--white);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 0;
-  padding: 1.75rem;
-  
-}
-
-.panel-title {
-  font-family: var(--font-mono);
-  font-size: 0.72rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.14em;
-  color: var(--gray-medium);
-  margin-bottom: 1.5rem; padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-
-.input-group { margin-bottom: 1.25rem; }
-
-.input-label {
-  display: flex; align-items: center; gap: 0.4rem;
-  font-weight: 700; font-size: 0.85rem;
-  color: var(--ink); margin-bottom: 0.5rem;
-}
-
-.input-wrapper { position: relative; }
-
-.input-wrapper input,
-.input-wrapper select {
-  width: 100%; padding: 0.7rem 0.85rem;
-  border: 1px solid rgba(0,0,0,0.12); border-radius: 0;
-  background: var(--white); font-family: inherit;
-  font-size: 0.95rem; font-weight: 600;
-  color: var(--ink); transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  font-variant-numeric: tabular-nums;
-}
-
-.input-wrapper input:focus,
-.input-wrapper select:focus {
-  outline: none; border-color: var(--orange);
-  
-}
-
-.input-wrapper input.has-symbol { padding-right: 2.4rem; }
-
-.input-wrapper .symbol {
-  position: absolute;
-  right: 0.85rem; top: 50%; transform: translateY(-50%);
-  color: var(--gray-medium); font-weight: 600;
-  font-family: var(--font-mono); font-size: 0.78rem;
-  pointer-events: none;
-}
-
-.input-help {
-  display: block; margin-top: 0.4rem;
-  color: var(--gray-medium); font-size: 0.72rem; line-height: 1.4;
-}
-
-.input-help a { color: var(--orange); text-decoration: none; font-weight: 600; }
-
-.input-help a:hover { text-decoration: underline; }
-
-
-/* Preset rate chips */
-.preset-row {
-  display: flex; gap: 0.4rem; flex-wrap: wrap;
-  margin-top: 0.5rem;
-}
-
-.preset-chip {
-  font-family: var(--font-mono);
-  font-size: .72rem; font-weight: 700;
-  padding: 0.35rem 0.65rem;
-  border-radius: 0;
-  border: 1px solid rgba(0,0,0,0.1);
-  background: var(--white); color: var(--gray);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.preset-chip:hover { border-color: var(--orange); color: var(--orange); }
-
-.preset-chip.active {
-  background: var(--orange); border-color: var(--orange);
-  color: var(--white);
-}
-
-
-/* Quick-jump buttons (years ahead) */
-.quickjump-row {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem;
-  margin-top: 0.5rem;
-}
-
-.quickjump-btn {
-  font-family: var(--font-mono);
-  font-size: .72rem; font-weight: 700;
-  padding: 0.45rem 0;
-  border-radius: 0;
-  border: 1px solid rgba(0,0,0,0.1);
-  background: var(--white); color: var(--gray);
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.quickjump-btn:hover { border-color: var(--orange); color: var(--orange); }
-
-.quickjump-btn.active {
-  background: var(--ink); border-color: var(--ink); color: var(--white);
-}
-
-
-/* ============================================
-   RIGHT COLUMN
-   ============================================ */
-.results-col {
-  display: flex; flex-direction: column; gap: 1.5rem;
-  position: sticky; top: 100px;
-  min-width: 0;
-}
-
-
-/* Verdict card — the headline */
-.verdict-card {
-  position: relative;
-  background: var(--ink); color: var(--white);
-  border-radius: 0; padding: 2rem;
-  overflow: hidden;
-}
-
-.verdict-card::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 80% 0%, var(--accent-glow, rgba(242, 90, 39,0.3)) 0%, transparent 55%);
-  pointer-events: none; transition: background 0.5s ease;
-}
-
-.verdict-card.mild   { --accent-glow: rgba(196,136,46,0.28); }
-
-.verdict-card.normal { --accent-glow: rgba(242, 90, 39,0.32); }
-
-.verdict-card.heavy  { --accent-glow: rgba(176,74,90,0.38); }
-
-
-.verdict-card-top {
-  position: relative; z-index: 1;
-  display: flex; justify-content: space-between; align-items: flex-start;
-  gap: 1.5rem; flex-wrap: wrap;
-}
-
-.verdict-meta { display: flex; flex-direction: column; gap: 0.25rem; }
-
-.verdict-eyebrow {
-  font-family: var(--font-mono);
-  font-size: .72rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.5);
-}
-
-.verdict-horizon {
-  font-size: 0.95rem; color: rgba(255,255,255,0.85);
-  font-weight: 600;
-}
-
-.verdict-horizon strong { font-weight: 800; color: var(--white); }
-
-
-.verdict-headline { position: relative; z-index: 1; margin-top: 1.25rem; }
-
-.verdict-amount {
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 900; line-height: 1;
-  letter-spacing: -0.035em; margin-bottom: 0.5rem;
-  color: var(--orange-soft);
-  font-variant-numeric: tabular-nums;
-}
-
-.verdict-card.mild .verdict-amount { color: #fbbf24; }
-
-.verdict-card.heavy .verdict-amount { color: var(--red-bright); }
-
-
-.verdict-diff {
-  font-family: var(--font-mono);
-  font-size: 0.95rem; font-weight: 600;
-  color: rgba(255,255,255,0.85);
-}
-
-.verdict-diff strong { color: var(--white); font-weight: 800; }
-
-
-.verdict-stats {
-  position: relative; z-index: 1;
-  margin-top: 1.5rem; padding-top: 1.5rem;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
-}
-
-.verdict-stat { display: flex; flex-direction: column; gap: 0.3rem; }
-
-.verdict-stat-label {
-  font-family: var(--font-mono); font-size: .72rem;
-  text-transform: uppercase; letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.45);
-}
-
-.verdict-stat-value {
-  font-size: 1.15rem; font-weight: 800;
-  color: var(--white); letter-spacing: -0.01em;
-  font-variant-numeric: tabular-nums;
-}
-
-
-/* Insight callout */
-.insight-callout {
-  position: relative; z-index: 1;
-  margin-top: 1.5rem;
-  padding: 0.85rem 1rem;
-  background: rgba(255,255,255,0.05);
-  border-left: 1px solid var(--orange);
-  border-radius: 0;
-  font-size: 0.85rem; line-height: 1.5;
-  color: rgba(255,255,255,0.9);
-}
-
-.insight-callout strong { color: var(--white); font-weight: 800; }
-
-.insight-callout-icon {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 18px; height: 18px; border-radius: 0;
-  background: var(--orange); color: var(--white);
-  font-size: 0.7rem; font-weight: 800; margin-right: 0.4rem;
-  vertical-align: -3px;
-  font-family: var(--font-body);
-}
-
-
-/* Future prices grid */
-.prices-card {
-  background: var(--white);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 0; padding: 1.75rem;
-}
-
-.prices-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 1.25rem;
-}
-
-.prices-title {
-  font-family: var(--font-mono);
-  font-size: 0.72rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.14em;
-  color: var(--gray-medium);
-}
-
-.prices-tag {
-  font-family: var(--font-mono);
-  font-size: .72rem; color: var(--gray-medium);
-}
-
-.prices-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem;
-}
-
-.price-item {
-  background: var(--warm-white);
-  border: 1px solid rgba(0,0,0,0.05);
-  border-radius: 0;
-  padding: 1rem 0.75rem;
-  text-align: center;
-  transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.price-item:hover {
-  transform: translateY(-2px);
-  border-color: rgba(242, 90, 39,0.3);
-}
-
-.price-emoji {
-  font-size: 1.4rem; display: block; margin-bottom: 0.4rem;
-}
-
-.price-name {
-  font-size: 0.7rem; font-weight: 600; color: var(--gray-medium);
-  display: block; line-height: 1.3;
-  margin-bottom: 0.4rem;
-}
-
-.price-now {
-  font-family: var(--font-mono);
-  font-size: .72rem; font-weight: 600; color: var(--gray-soft);
-  display: block;
-  text-transform: uppercase; letter-spacing: 0.08em;
-}
-
-.price-future {
-  font-family: var(--font-mono);
-  font-size: 1rem; font-weight: 800; color: var(--ink);
-  display: block; margin-top: 0.15rem;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
-}
-
-
-/* Chart card */
-.chart-card {
-  background: var(--white);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 0; padding: 1.75rem;
-  min-width: 0;
-  overflow: hidden;
-}
-
-.chart-card-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 1.25rem;
-}
-
-.chart-card-title {
-  font-family: var(--font-mono);
-  font-size: 0.72rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.14em;
-  color: var(--gray-medium);
-}
-
-.chart-card-meta {
-  font-family: var(--font-mono);
-  font-size: .72rem; color: var(--gray-medium);
-}
-
-.chart-toggle {
-  display: inline-flex; gap: 0;
-  background: var(--light-gray);
-  border-radius: 0;
-  padding: 3px;
-}
-
-.chart-toggle-btn {
-  font-family: var(--font-mono);
-  font-size: .72rem; font-weight: 700;
-  padding: 0.35rem 0.7rem;
-  border-radius: 0;
-  border: none; background: none; cursor: pointer;
-  color: var(--gray-medium);
-  transition: all 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.chart-toggle-btn.active {
-  background: var(--white);
-  color: var(--ink);
-  
-}
-
-.chart-container {
-  position: relative;
-  width: 100%;
-  height: 280px;
-}
-
-.chart-container canvas {
-  max-width: 100% !important;
-  height: 100% !important;
-}
-
-
-/* Methodology */
-.methodology {
-  background: var(--white);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 0; padding: 1.5rem 1.75rem;
-}
-
-.methodology-title {
-  font-family: var(--font-mono);
-  font-size: .72rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.14em;
-  color: var(--gray-medium); margin-bottom: 0.75rem;
-}
-
-.methodology p {
-  font-size: 0.83rem; color: var(--gray); line-height: 1.55;
-  margin: 0;
-}
-
-.methodology p strong { color: var(--ink); font-weight: 700; }
-
-.methodology p a { color: var(--orange); text-decoration: none; font-weight: 600; }
-
-.methodology p a:hover { text-decoration: underline; }
-
-.methodology ul {
-  list-style: none; padding: 0;
-  margin: 0.5rem 0 0;
-}
-
-.methodology li {
-  font-size: 0.83rem; color: var(--gray); line-height: 1.55;
-  padding: 0.25rem 0 0.25rem 1.1rem;
-  position: relative;
-}
-
-.methodology li::before {
-  content: ''; position: absolute;
-  left: 0; top: 0.7rem;
-  width: 5px; height: 5px;
-  background: var(--orange); border-radius: 0;
-}
-
-.methodology li strong { color: var(--ink); font-weight: 700; }
-
-.methodology li a { color: var(--orange); text-decoration: none; font-weight: 600; }
-
-.methodology li a:hover { text-decoration: underline; }
-
-
-/* ============================================
-   EDUCATION SECTION
-   ============================================ */
-.edu-section {
-  padding: 6rem 0 5rem;
-  background: var(--cream);
-  border-top: 1px solid rgba(0,0,0,0.05);
-  scroll-margin-top: 90px;
-}
-
-.edu-header {
-  text-align: center; max-width: 720px; margin: 0 auto 3rem;
-}
-
-.edu-eyebrow {
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.14em; color: var(--orange-ink);
-  margin-bottom: 0.85rem;
-}
-
-.edu-header h2 {
-  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
-  font-weight: 900; line-height: 1.15;
-  letter-spacing: -0.025em; margin-bottom: 1rem;
-}
-
-.edu-header p {
-  font-size: 1.05rem; color: var(--gray); line-height: 1.6;
-}
-
-
-.edu-featured {
-  max-width: 900px; margin: 0 auto 2.5rem;
-  background: var(--ink); color: var(--white);
-  border-radius: 0; padding: 2.25rem;
-  position: relative; overflow: hidden;
-}
-
-.edu-featured::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at top right, rgba(242, 90, 39,0.2) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-.edu-featured-content {
-  position: relative; z-index: 1;
-  display: grid; grid-template-columns: auto 1fr; gap: 1.75rem;
-  align-items: center;
-}
-
-.edu-featured-stat {
-  font-size: 3.5rem; font-weight: 900;
-  letter-spacing: -0.04em; line-height: 1;
-  color: var(--orange); padding-right: 1.75rem;
-  border-right: 1px solid rgba(255,255,255,0.15);
-  font-variant-numeric: tabular-nums;
-}
-
-.edu-featured-text h3 {
-  font-size: 1.35rem; font-weight: 800;
-  margin-bottom: 0.5rem; letter-spacing: -0.02em;
-}
-
-.edu-featured-text p {
-  font-size: 0.95rem; color: rgba(255,255,255,0.8);
-  line-height: 1.6;
-}
-
-.edu-featured-text p a { color: var(--orange-soft); text-decoration: none; font-weight: 700; }
-
-.edu-featured-text p a:hover { text-decoration: underline; }
-
-
-.edu-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
-  max-width: 1100px; margin: 0 auto;
-}
-
-.edu-card {
-  background: var(--white);
-  border: 1px solid rgba(0,0,0,0.06);
-  border-radius: 0; padding: 1.75rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  position: relative; overflow: hidden;
-}
-
-.edu-card::before {
-  content: ''; position: absolute;
-  top: 0; left: 0; right: 0; height: 3px;
-  background: var(--accent, var(--orange));
-  transform: scaleX(0); transform-origin: left;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.edu-card:hover { transform: translateY(-3px);  }
-
-.edu-card:hover::before { transform: scaleX(1); }
-
-.edu-card.warning { --accent: var(--red); }
-
-.edu-card.upside  { --accent: var(--green); }
-
-
-.edu-badge {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  font-family: var(--font-mono);
-  font-size: .72rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--accent, var(--orange));
-  padding: 0.3rem 0.6rem;
-  background: color-mix(in srgb, var(--accent, var(--orange)) 8%, transparent);
-  border-radius: 0; margin-bottom: 1rem;
-}
-
-.edu-card h3 {
-  font-size: 1.1rem; font-weight: 800;
-  margin-bottom: 0.75rem; letter-spacing: -0.015em;
-}
-
-.edu-card p {
-  font-size: 0.9rem; color: var(--gray); line-height: 1.6;
-  margin-bottom: 0.85rem;
-}
-
-.edu-card p:last-child { margin-bottom: 0; }
-
-.edu-card p strong { color: var(--ink); font-weight: 700; }
-
-.edu-card p a { color: var(--orange); text-decoration: none; font-weight: 600; }
-
-.edu-card p a:hover { text-decoration: underline; }
-
-
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-@media (max-width: 1080px) {
-  .calc-grid { grid-template-columns: 340px 1fr; gap: 1.25rem; }
-}
-
-@media (max-width: 968px) {
-  :root { font-size: 15.5px; }
-
-  .hero { padding: 7rem 0 2rem; }
-
-  .calc-section { padding: 2rem 0 4rem; }
-
-  .calc-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-
-  .results-col { position: static; gap: 1.25rem; }
-
-  .prices-grid { grid-template-columns: repeat(2, 1fr); }
-
-  .edu-grid { grid-template-columns: 1fr 1fr; }
-
-  .edu-featured-content { grid-template-columns: 1fr; gap: 1.25rem; }
-
-  .edu-featured-stat { padding-right: 0; padding-bottom: 1rem; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.15); font-size: 3rem; }
-
-  .edu-section { padding: 4.5rem 0 4rem; }
-
-}
-
-@media (max-width: 640px) {
-  .wrap { padding: 0 1rem; }
-
-  .hero { padding: 6rem 0 1.5rem; }
-
-  .hero h1 { font-size: 2rem; line-height: 1.1; }
-
-  .hero-sub { font-size: 1rem; }
-
-  .hero-eyebrow { font-size: .72rem; padding: 0.35rem 0.7rem 0.35rem 0.55rem; }
-
-  .hero-stat { padding: 0.35rem 0.75rem; }
-
-  .hero-stat-value { font-size: 0.85rem; }
-
-  .hero-stat-label { font-size: .72rem; }
-
-
-  .calc-section { padding: 1.5rem 0 3rem; }
-
-  .calc-grid { gap: 1rem; }
-
-  .controls-panel { padding: 1.25rem; border-radius: 0; }
-
-  .verdict-card, .chart-card, .methodology, .prices-card { padding: 1.25rem; border-radius: 0; }
-
-
-  .verdict-card { padding: 1.5rem 1.25rem; }
-
-  .verdict-headline { margin-top: 1rem; }
-
-  .verdict-amount { font-size: 2.4rem; }
-
-  .verdict-diff { font-size: 0.82rem; }
-
-  .verdict-stats { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1.25rem; padding-top: 1.25rem; }
-
-  .verdict-stat-label { font-size: .72rem; letter-spacing: 0.1em; }
-
-  .verdict-stat-value { font-size: 0.95rem; }
-
-  .insight-callout { font-size: 0.8rem; padding: 0.75rem 0.85rem; margin-top: 1.25rem; }
-
-
-  .chart-container { height: 220px; }
-
-  .chart-card { padding: 1.25rem 0.85rem; }
-
-  .chart-card-header { flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; padding: 0 0.4rem; }
-
-
-  .prices-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
-
-  .price-item { padding: 0.85rem 0.5rem; }
-
-  .price-future { font-size: 0.9rem; }
-
-
-  .methodology { padding: 1.25rem; }
-
-  .methodology li { font-size: 0.78rem; }
-
-
-  .edu-section { padding: 3.5rem 0 3rem; }
-
-  .edu-header h2 { font-size: 1.65rem; }
-
-  .edu-header p { font-size: 0.95rem; }
-
-  .edu-featured { padding: 1.5rem; margin-bottom: 1.5rem; }
-
-  .edu-featured-stat { font-size: 2.5rem; padding-bottom: 0.85rem; }
-
-  .edu-featured-text h3 { font-size: 1.15rem; }
-
-  .edu-featured-text p { font-size: 0.88rem; }
-
-  .edu-grid { grid-template-columns: 1fr; gap: 1rem; }
-
-  .edu-card { padding: 1.5rem; }
-
-}
-
-@media (max-width: 420px) {
-  .verdict-stats { grid-template-columns: 1fr; gap: 0.6rem; }
-
-  .verdict-stat { flex-direction: row; justify-content: space-between; align-items: baseline; }
-
-  .verdict-stat-label { font-size: .72rem; }
-
-  .verdict-stat-value { font-size: 0.95rem; }
-
-  .quickjump-row { grid-template-columns: repeat(2, 1fr); }
-
-}
-
-
+    /* ---- inflation time machine: page styles (humanized tool pass, September 2026) ---- */
+:root{--white:#fff;--bdr:var(--ink-line)}
+a{color:inherit;text-decoration:none}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+
+/* Hero: left-set, one eyebrow, one plain headline */
+.tool-hero{max-width:var(--max-width);margin:0 auto;padding:150px var(--gutter) 44px}
+.tool-hero-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem 2rem;flex-wrap:wrap;margin-bottom:1.75rem}
+.tool-meta{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;color:var(--ink-faint)}
+.tool-hero h1{font-size:clamp(2.4rem,4.8vw,4rem);font-weight:900;line-height:.98;letter-spacing:-.045em;max-width:16ch;margin-bottom:1.25rem}
+.tool-lede{font-size:1.15rem;line-height:1.55;color:var(--ink-dim);max-width:60ch;font-weight:300}
+.tool-lede strong{font-weight:600;color:var(--ink)}
+
+/* Layout */
+.calc-section{max-width:var(--max-width);margin:0 auto;padding:0 var(--gutter) 72px}
+.calc-grid{display:grid;grid-template-columns:400px 1fr;gap:24px;align-items:start}
+.controls-panel{position:sticky;top:100px;min-width:0}
+.results-panel{min-width:0;display:flex;flex-direction:column;gap:20px}
+
+/* Inputs */
+.ccard{background:var(--white);border:1px solid var(--bdr);padding:28px}
+.fg{margin-bottom:18px}
+.fg:last-child{margin-bottom:0}
+.fl{display:block;font-size:.88rem;font-weight:600;letter-spacing:-.01em;margin-bottom:6px}
+.fh{display:block;font-size:.78rem;color:var(--ink-faint);margin-top:8px;line-height:1.45}
+.fh a{color:var(--ink-dim);border-bottom:1px solid var(--ink-line)}
+.fh a:hover{border-color:var(--ink)}
+.iw{position:relative}
+.ip,.is{position:absolute;top:50%;transform:translateY(-50%);font-family:var(--font-mono);font-size:.9rem;color:var(--ink-faint);pointer-events:none}
+.ip{left:14px}
+.is{right:14px}
+.fi{width:100%;padding:12px 14px;border:1px solid var(--bdr);background:var(--paper);font-family:var(--font-mono);font-size:1.05rem;font-weight:500;color:var(--ink);outline:none;transition:border-color .2s,background .2s;font-variant-numeric:tabular-nums}
+.fi:focus{border-color:var(--ink);background:var(--white)}
+.fi.px{padding-left:30px}
+.fi.sx{padding-right:44px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{font-family:inherit;font-size:.8rem;font-weight:600;letter-spacing:-.01em;padding:.45rem .75rem;border:1px solid var(--bdr);background:transparent;color:var(--ink);cursor:pointer;transition:border-color .2s,background .2s,color .2s}
+.chip:hover{border-color:var(--ink)}
+.chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* Result: a sentence, with the numbers inside it */
+.result{background:var(--white);border:1px solid var(--bdr);padding:36px 36px 30px}
+.result-sentence{font-size:clamp(1.45rem,2.3vw,2.05rem);font-weight:400;line-height:1.32;letter-spacing:-.025em;color:var(--ink);text-wrap:pretty}
+.result-sentence b{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.result-sentence .grow{color:var(--orange-ink)}
+.result-note{margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--bdr);font-size:.98rem;line-height:1.5;color:var(--ink-dim)}
+.result-note b{font-weight:600;color:var(--ink)}
+
+/* Cards beneath the sentence */
+.chart-card{background:var(--white);border:1px solid var(--bdr);padding:24px;min-width:0}
+.stit{font-size:.9rem;font-weight:600;letter-spacing:-.01em;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+.stit-meta{font-family:var(--font-mono);font-size:.72rem;font-weight:400;letter-spacing:.04em;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+.chart-toggle{display:inline-flex;gap:8px}
+.chart-wrap{position:relative;height:280px;width:100%}
+.chart-wrap canvas{max-width:100% !important;height:100% !important}
+
+/* Prices: ruled rows, not tiles */
+.price-row{display:grid;grid-template-columns:1fr auto auto;gap:1.5rem;align-items:baseline;padding:.75rem 0;border-bottom:1px solid var(--bdr);font-size:.95rem}
+.price-row:last-child{border-bottom:0;padding-bottom:0}
+.price-now{font-family:var(--font-mono);font-size:.78rem;color:var(--ink-faint);font-variant-numeric:tabular-nums}
+.price-future{font-family:var(--font-mono);font-weight:600;font-size:1rem;color:var(--ink);font-variant-numeric:tabular-nums;min-width:6ch;text-align:right}
+
+/* How it works */
+.how{padding:0 4px}
+.how p{font-size:.95rem;line-height:1.6;color:var(--ink-dim);max-width:62ch;margin-top:.75rem}
+.how p strong{color:var(--ink);font-weight:600}
+.how a{color:var(--ink);border-bottom:1px solid var(--ink-line)}
+.how a:hover{border-color:var(--ink)}
+
+/* Why this matters: one ink fact, then ruled rows */
+.why{border-top:1px solid var(--bdr)}
+.why-inner{max-width:var(--max-width);margin:0 auto;padding:56px var(--gutter) 64px}
+.why h2{font-size:clamp(1.8rem,3.2vw,2.4rem);font-weight:900;line-height:1.08;letter-spacing:-.035em;max-width:20ch;margin-top:.75rem}
+.why-lede{font-size:1.1rem;line-height:1.55;color:var(--ink-dim);max-width:60ch;font-weight:300;margin-top:1rem}
+.ink-fact{background:var(--ink);color:var(--paper);padding:2.25rem;margin-top:2rem;display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center}
+.ink-fig{font-family:var(--font-mono);font-size:clamp(2.6rem,5vw,3.5rem);font-weight:700;letter-spacing:-.04em;line-height:1;color:var(--orange);font-variant-numeric:tabular-nums;padding-right:2rem;border-right:1px solid var(--paper-line)}
+.ink-fact h3{font-size:1.25rem;font-weight:700;letter-spacing:-.02em;margin-bottom:.4rem}
+.ink-fact p{font-size:.95rem;line-height:1.6;color:var(--paper-dim)}
+.ink-fact a{color:var(--paper);border-bottom:1px solid var(--paper-line)}
+.ink-fact a:hover{border-color:var(--paper)}
+.fact-list{margin-top:2rem;border-top:1px solid var(--bdr)}
+.fact-row{display:grid;grid-template-columns:260px 1fr;gap:1.5rem;align-items:baseline;padding:1.1rem 0;border-bottom:1px solid var(--bdr)}
+.fact-title{font-weight:600;letter-spacing:-.01em}
+.fact-desc{color:var(--ink-dim);font-size:.98rem;line-height:1.55}
+.fact-desc p+p{margin-top:.5rem}
+.fact-desc strong{color:var(--ink);font-weight:600}
+.fact-desc a{color:var(--ink);border-bottom:1px solid var(--ink-line)}
+.fact-desc a:hover{border-color:var(--ink)}
+
+/* Keep going: ruled rows, not a card grid */
+.next{border-top:1px solid var(--bdr)}
+.next-inner{max-width:var(--max-width);margin:0 auto;padding:56px var(--gutter) 64px}
+.next-list{margin-top:1.25rem;border-top:1px solid var(--bdr)}
+.next-row{display:grid;grid-template-columns:220px 1fr auto;gap:1.5rem;align-items:baseline;padding:1.1rem 0;border-bottom:1px solid var(--bdr);color:var(--ink)}
+.next-title{font-weight:600;letter-spacing:-.01em}
+.next-desc{color:var(--ink-dim);font-size:.98rem}
+.next-arrow{font-family:var(--font-mono);color:var(--ink-faint);transition:transform .25s cubic-bezier(.16,1,.3,1),color .2s}
+.next-row:hover .next-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.next-row:hover .next-arrow{transform:translateX(4px);color:var(--ink)}
+.disc{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.04em;color:var(--ink-faint);margin-top:1.75rem;line-height:1.6}
+
+@media(max-width:968px){
+.tool-hero{padding:120px var(--gutter) 32px}
+.calc-grid{grid-template-columns:1fr;gap:16px}
+.controls-panel{position:static}
+.ink-fact{grid-template-columns:1fr;gap:1.25rem}
+.ink-fig{padding-right:0;border-right:0;padding-bottom:1rem;border-bottom:1px solid var(--paper-line)}
+.fact-row{grid-template-columns:1fr;row-gap:.3rem}
+.next-row{grid-template-columns:1fr auto;row-gap:.2rem}
+.next-desc{grid-column:1/-1}
+.next-arrow{grid-row:1;grid-column:2}}
+
+@media(max-width:600px){
+.tool-hero{padding:104px var(--gutter) 24px}
+.ccard{padding:22px 18px}
+.result{padding:24px 20px 22px}
+.chart-card{padding:20px 16px}
+.frow{grid-template-columns:1fr}
+.chart-wrap{height:220px}
+.ink-fact{padding:1.5rem}
+.price-row{grid-template-columns:1fr auto;row-gap:.1rem}
+.price-now{grid-column:1}
+.price-future{grid-row:1;grid-column:2}}
   </style>
 </head>
 <body>
@@ -1731,241 +1001,112 @@ body {
     </div>
   </div>
   <!-- /chrome:nav -->
-
-<!-- ============ HERO ============ -->
-<section class="hero">
-  <div class="wrap">
-    <div class="hero-content">
-      <div class="hero-eyebrow">
-        <span class="hero-eyebrow-dot"></span>
-        Inflation Time Machine
-      </div>
-      <h1>
-        Where does your dollar <span class="highlight">go<svg viewBox="0 0 200 12" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 8 C 30 3, 60 11, 90 6 S 140 2, 170 7 S 195 5, 198 6" stroke="#F25A27" stroke-width="3" stroke-linecap="round" opacity="0.7"/><path d="M4 10 C 35 5, 65 12, 95 7 S 145 3, 175 8 S 195 7, 196 8" stroke="#F25A27" stroke-width="2" stroke-linecap="round" opacity="0.4"/></svg></span>?
-      </h1>
-      <p class="hero-sub">
-        A dollar today won't buy a dollar's worth of stuff tomorrow. Travel forward in time and see what your money will actually be worth.
-      </p>
-      <div class="hero-stats" id="heroStats">
-        <div class="hero-stat">
-          <span class="hero-stat-label">Rate</span>
-          <span class="hero-stat-value" id="heroRate">3.0%</span>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-label">Years</span>
-          <span class="hero-stat-value" id="heroYears">30</span>
-        </div>
-        <div class="hero-stat">
-          <span class="hero-stat-label">Multiplier</span>
-          <span class="hero-stat-value" id="heroMultiplier">2.43×</span>
-        </div>
-      </div>
-    </div>
-  </div>
+<section class="tool-hero">
+<div class="tool-hero-top">
+<div class="eyebrow">Calculator · Inflation</div>
+<div class="tool-meta">One flat yearly rate, compounded · Presets 2%, 3% and 4.1%</div>
+</div>
+<h1>What will your money be worth later?</h1>
+<p class="tool-lede">Put in an amount, pick a year, and see what it would take to buy the same things then. The rate is yours to set. <strong>3% is close to the long-run US average.</strong> Try 2% and 4.1% as well, because the gap between them is most of the story.</p>
 </section>
 
-<!-- ============ CALCULATOR ============ -->
 <section class="calc-section">
-  <div class="wrap">
-    <div class="calc-grid">
+<div class="calc-grid">
+<aside class="controls-panel">
+<div class="ccard">
+<div class="fg"><label class="fl" for="amount">Starting amount</label><div class="iw"><span class="ip">$</span><input class="fi px" type="number" id="amount" value="100" min="0"></div><span class="fh">Any amount works. The result scales with it.</span></div>
+<div class="frow">
+<div class="fg"><label class="fl" for="startYear">Starting year</label><div class="iw"><input class="fi" type="number" id="startYear" value="2026" min="1900" max="2200"></div></div>
+<div class="fg"><label class="fl" for="endYear">Target year</label><div class="iw"><input class="fi" type="number" id="endYear" value="2056" min="1900" max="2200"></div></div>
+</div>
+<div class="fg">
+<div class="chips" id="quickjumpRow">
+<button type="button" class="chip quickjump-btn" data-jump="5">+5 years</button>
+<button type="button" class="chip quickjump-btn" data-jump="10">+10 years</button>
+<button type="button" class="chip quickjump-btn active" data-jump="30">+30 years</button>
+<button type="button" class="chip quickjump-btn" data-jump="50">+50 years</button>
+</div>
+</div>
+<div class="fg"><label class="fl" for="inflationRate">Average inflation rate</label><div class="iw"><input class="fi sx" type="number" id="inflationRate" value="3.0" step="0.1" min="0" max="50"><span class="is">%</span></div>
+<div class="chips" id="presetRow">
+<button type="button" class="chip preset-chip" data-rate="2.0">Fed target, 2%</button>
+<button type="button" class="chip preset-chip active" data-rate="3.0">Long-run average, 3%</button>
+<button type="button" class="chip preset-chip" data-rate="4.1">Recent years, 4.1%</button>
+</div>
+<span class="fh">US inflation has averaged about 3% a year over the long run. The Fed aims for 2%. Source: <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener noreferrer">BLS CPI</a> and <a href="https://fred.stlouisfed.org/series/CPIAUCSL" target="_blank" rel="noopener noreferrer">FRED</a>.</span></div>
+</div>
+</aside>
 
-      <!-- LEFT: Controls -->
-      <div class="controls-panel">
-        <div class="panel-title">Your Time Machine</div>
+<div class="results-panel">
+<div class="result" aria-live="polite">
+<p class="result-sentence" id="rSentence">In <b>2056</b> you'd need about <b class="grow">$243</b> to buy what <b>$100</b> buys today. Over those <b>30 years</b> a dollar from today shrinks to about <b>$0.41</b>, and prices double roughly every <b>23 years</b>.</p>
+<p class="result-note" id="insightText"></p>
+</div>
 
-        <div class="input-group">
-          <div class="input-label">Starting amount</div>
-          <div class="input-wrapper">
-            <input type="number" id="amount" value="100" min="0" class="has-symbol">
-            <span class="symbol">$</span>
-          </div>
-        </div>
+<div class="chart-card">
+<div class="stit"><span>What everyday things would cost in <span id="pricesYearTag">2056</span></span><span class="stit-meta" id="heroMultiplier">2.43× today's prices</span></div>
+<div class="price-rows">
+<div class="price-row"><span>Coffee</span><span class="price-now">$5 today</span><span class="price-future" id="priceCoffee">$12</span></div>
+<div class="price-row"><span>Burger</span><span class="price-now">$12 today</span><span class="price-future" id="priceBurger">$29</span></div>
+<div class="price-row"><span>Sneakers</span><span class="price-now">$100 today</span><span class="price-future" id="priceShoes">$243</span></div>
+<div class="price-row"><span>New car</span><span class="price-now">$35,000 today</span><span class="price-future" id="priceCar">$84,955</span></div>
+</div>
+</div>
 
-        <div class="input-group">
-          <div class="input-label">Starting year</div>
-          <div class="input-wrapper">
-            <input type="number" id="startYear" value="2026" min="1900" max="2200">
-          </div>
-        </div>
+<div class="chart-card">
+<div class="stit"><span>Money over time</span>
+<span class="chart-toggle" role="tablist" aria-label="Chart view">
+<button type="button" class="chip chart-toggle-btn active" data-view="cost" role="tab" aria-selected="true">Cost</button>
+<button type="button" class="chip chart-toggle-btn" data-view="power" role="tab" aria-selected="false">Buying power</button>
+</span></div>
+<div class="chart-wrap"><canvas id="inflationChart" aria-label="Line chart of cost or buying power by year" role="img"></canvas></div>
+</div>
 
-        <div class="input-group">
-          <div class="input-label">Target year</div>
-          <div class="input-wrapper">
-            <input type="number" id="endYear" value="2056" min="1900" max="2200">
-          </div>
-          <div class="quickjump-row" id="quickjumpRow">
-            <button type="button" class="quickjump-btn" data-jump="5">+5y</button>
-            <button type="button" class="quickjump-btn" data-jump="10">+10y</button>
-            <button type="button" class="quickjump-btn active" data-jump="30">+30y</button>
-            <button type="button" class="quickjump-btn" data-jump="50">+50y</button>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <div class="input-label">Average inflation rate</div>
-          <div class="input-wrapper">
-            <input type="number" id="inflationRate" value="3.0" step="0.1" min="0" max="50" class="has-symbol">
-            <span class="symbol">%</span>
-          </div>
-          <div class="preset-row" id="presetRow">
-            <button type="button" class="preset-chip" data-rate="2.0">Fed Target 2%</button>
-            <button type="button" class="preset-chip active" data-rate="3.0">100yr Avg 3%</button>
-            <button type="button" class="preset-chip" data-rate="4.1">Recent 4.1%</button>
-          </div>
-          <span class="input-help">Long-run US inflation has averaged about 3%. The Fed targets 2%. Source: <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener noreferrer">BLS CPI</a> &amp; <a href="https://fred.stlouisfed.org/series/CPIAUCSL" target="_blank" rel="noopener noreferrer">FRED</a>.</span>
-        </div>
-
-      </div>
-
-      <!-- RIGHT: Results -->
-      <div class="results-col">
-
-        <!-- Verdict card -->
-        <div class="verdict-card normal" id="verdictCard">
-          <div class="verdict-card-top">
-            <div class="verdict-meta">
-              <span class="verdict-eyebrow">In <span id="targetYearLabel">2056</span>, you'll need</span>
-              <span class="verdict-horizon"><strong id="yearsLabel">30</strong> years from now</span>
-            </div>
-          </div>
-          <div class="verdict-headline">
-            <div class="verdict-amount" id="futureValue">$243</div>
-            <div class="verdict-diff">
-              to buy what <strong id="startAmountLabel">$100</strong> buys today
-            </div>
-          </div>
-          <div class="verdict-stats">
-            <div class="verdict-stat">
-              <span class="verdict-stat-label">Lost value</span>
-              <span class="verdict-stat-value" id="lostValue">$143</span>
-            </div>
-            <div class="verdict-stat">
-              <span class="verdict-stat-label">Today's $1 worth</span>
-              <span class="verdict-stat-value" id="todayDollarValue">$0.41</span>
-            </div>
-            <div class="verdict-stat">
-              <span class="verdict-stat-label">Halves in</span>
-              <span class="verdict-stat-value" id="halvingYears">23 yrs</span>
-            </div>
-          </div>
-          <div class="insight-callout">
-            <span class="insight-callout-icon">i</span>
-            <span id="insightText">Loading insight…</span>
-          </div>
-        </div>
-
-        <!-- Future prices -->
-        <div class="prices-card">
-          <div class="prices-header">
-            <div class="prices-title">What things will cost</div>
-            <div class="prices-tag" id="pricesTag">in <span id="pricesYearTag">2056</span></div>
-          </div>
-          <div class="prices-grid">
-            <div class="price-item">
-              <span class="price-emoji">☕</span>
-              <span class="price-name">Coffee</span>
-              <span class="price-now">now $5</span>
-              <span class="price-future" id="priceCoffee">$12</span>
-            </div>
-            <div class="price-item">
-              <span class="price-emoji">🍔</span>
-              <span class="price-name">Burger</span>
-              <span class="price-now">now $12</span>
-              <span class="price-future" id="priceBurger">$29</span>
-            </div>
-            <div class="price-item">
-              <span class="price-emoji">👟</span>
-              <span class="price-name">Sneakers</span>
-              <span class="price-now">now $100</span>
-              <span class="price-future" id="priceShoes">$243</span>
-            </div>
-            <div class="price-item">
-              <span class="price-emoji">🚗</span>
-              <span class="price-name">New car</span>
-              <span class="price-now">now $35k</span>
-              <span class="price-future" id="priceCar">$84,955</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Chart -->
-        <div class="chart-card">
-          <div class="chart-card-header">
-            <div class="chart-card-title">Money over time</div>
-            <div class="chart-toggle" role="tablist" aria-label="Chart view">
-              <button type="button" class="chart-toggle-btn active" data-view="cost" role="tab" aria-selected="true">Cost</button>
-              <button type="button" class="chart-toggle-btn" data-view="power" role="tab" aria-selected="false">Power</button>
-            </div>
-          </div>
-          <div class="chart-container">
-            <canvas id="inflationChart"></canvas>
-          </div>
-        </div>
-
-        <!-- Methodology -->
-        <div class="methodology">
-          <div class="methodology-title">How this works</div>
-          <p>We use the standard compound inflation formula: <strong>future cost = today's price × (1 + rate)<sup>years</sup></strong>. The "today's $1 worth" stat is the inverse, showing how much purchasing power one of today's dollars holds in the future.</p>
-          <ul>
-            <li><strong>Long-run average:</strong> US inflation has averaged roughly 3% per year since 1925, per <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener noreferrer">BLS CPI data</a>.</li>
-            <li><strong>Fed target:</strong> The Federal Reserve aims for 2% annual inflation as part of its dual mandate.</li>
-            <li><strong>Halving rule:</strong> "Years to halve" uses ln(2)/ln(1+rate), the time it takes for purchasing power to drop by 50%.</li>
-            <li><strong>What it ignores:</strong> Wage growth, investment returns, and category-specific inflation (healthcare, college, and housing typically rise faster than headline CPI).</li>
-          </ul>
-        </div>
-
-      </div>
-    </div>
-  </div>
+<div class="how">
+<div class="eyebrow">How this is worked out</div>
+<p>Future cost is today's price times (1 + rate) to the power of the number of years. That is the ordinary compound formula, run with one flat rate. "What a dollar shrinks to" is the inverse, so it shows how much of today's buying power one dollar keeps.</p>
+<p>The 3% preset is the rough long-run US average since 1925, per <a href="https://www.bls.gov/cpi/" target="_blank" rel="noopener noreferrer">BLS CPI data</a>. The 2% preset is the Federal Reserve's target. "Prices double every" uses ln(2) divided by ln(1 + rate), the time it takes buying power to drop by half.</p>
+<p>This ignores wage growth, investment returns, and the fact that some categories run hotter than the headline rate. Healthcare, college and housing have usually risen faster than CPI. Nothing you type leaves this page.</p>
+</div>
+</div>
+</div>
 </section>
 
-<!-- ============ EDUCATION ============ -->
-<section class="edu-section">
-  <div class="wrap">
-    <div class="edu-header">
-      <div class="edu-eyebrow">Why this matters</div>
-      <h2>Cash isn't a strategy. It's a slow leak.</h2>
-      <p>Inflation isn't loud. It doesn't show up on a bill. But over a working lifetime, it quietly cuts what your money can do, and most people don't plan for it.</p>
-    </div>
+<section class="why">
+<div class="why-inner">
+<div class="eyebrow">Why this matters</div>
+<h2>Cash isn't a strategy. It's a slow leak.</h2>
+<p class="why-lede">Inflation isn't loud. It doesn't show up on a bill. But over a working lifetime it quietly cuts what your money can do, and most people don't plan for it.</p>
 
-    <div class="edu-featured">
-      <div class="edu-featured-content">
-        <div class="edu-featured-stat">~96%</div>
-        <div class="edu-featured-text">
-          <h3>What a 1913 dollar buys today</h3>
-          <p>The US dollar has lost roughly 96% of its purchasing power since the Bureau of Labor Statistics began tracking CPI in 1913. The same dollar that bought a meal then buys a few cents of groceries today. Source: <a href="https://www.bls.gov/data/inflation_calculator.htm" target="_blank" rel="noopener noreferrer">BLS Inflation Calculator</a>.</p>
-        </div>
-      </div>
-    </div>
+<div class="ink-fact">
+<div class="ink-fig">~96%</div>
+<div>
+<h3>What a 1913 dollar buys today</h3>
+<p>The US dollar has lost roughly 96% of its buying power since the Bureau of Labor Statistics began tracking CPI in 1913. The dollar that bought a meal then buys a few cents of groceries today. Source: <a href="https://www.bls.gov/data/inflation_calculator.htm" target="_blank" rel="noopener noreferrer">BLS inflation calculator</a>.</p>
+</div>
+</div>
 
-    <div class="edu-grid">
-
-      <div class="edu-card">
-        <span class="edu-badge">01 · The basics</span>
-        <h3>What inflation actually is</h3>
-        <p>Inflation is the rate at which prices rise across the economy. When inflation runs at 3%, a basket of goods that costs $100 today costs about $103 a year from now.</p>
-        <p>Your salary, your savings, and your investments all have to outrun it just to stay in place.</p>
-      </div>
-
-      <div class="edu-card warning">
-        <span class="edu-badge">02 · The 72 rule</span>
-        <h3>How fast cash halves</h3>
-        <p>Divide 72 by the inflation rate and you get the rough number of years for prices to double, or for cash to lose half its value.</p>
-        <p>At <strong>3%</strong>, that's about 24 years. At <strong>6%</strong>, just 12. A savings account earning 0% interest is steadily melting in the background.</p>
-      </div>
-
-      <div class="edu-card upside">
-        <span class="edu-badge">03 · The fix</span>
-        <h3>Outrun it, don't fight it</h3>
-        <p>The S&amp;P 500 has returned roughly <strong>10% per year</strong> on average over the last century, per <a href="https://www.spglobal.com/spdji/en/indices/equity/sp-500/" target="_blank" rel="noopener noreferrer">S&amp;P data</a>, well above long-run inflation.</p>
-        <p>You can't stop inflation. You just need your money working somewhere that grows faster than prices do.</p>
-      </div>
-
-    </div>
-  </div>
+<div class="fact-list">
+<div class="fact-row"><span class="fact-title">What inflation actually is</span><div class="fact-desc"><p>Inflation is the rate at which prices rise across the economy. When it runs at 3%, a basket of goods that costs $100 today costs about $103 a year from now.</p><p>Your salary, your savings and your investments all have to outrun it just to stay in place.</p></div></div>
+<div class="fact-row"><span class="fact-title">How fast cash halves</span><div class="fact-desc"><p>Divide 72 by the inflation rate and you get the rough number of years for prices to double, or for cash to lose half its value.</p><p>At <strong>3%</strong> that is about 24 years. At <strong>6%</strong>, just 12. A savings account earning 0% is quietly melting in the background.</p></div></div>
+<div class="fact-row"><span class="fact-title">Outrun it, don't fight it</span><div class="fact-desc"><p>The S&amp;P 500 has returned roughly <strong>10% a year</strong> on average over the last century, per <a href="https://www.spglobal.com/spdji/en/indices/equity/sp-500/" target="_blank" rel="noopener noreferrer">S&amp;P data</a>, well above long-run inflation.</p><p>You can't stop inflation. You just need your money somewhere that grows faster than prices do.</p></div></div>
+</div>
+</div>
 </section>
 
-<!-- ============ FOOTER ============ -->
+<section class="next">
+<div class="next-inner">
+<div class="eyebrow">Keep going</div>
+<div class="next-list">
+<a class="next-row" href="inflation-shopping-spree.html"><span class="next-title">Inflation shopping spree</span><span class="next-desc">The same idea with a cart full of real items, year by year.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="compound-interest.html"><span class="next-title">Compound interest</span><span class="next-desc">The same formula working for you instead of against you.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="paycheck-calculator.html"><span class="next-title">Paycheck calculator</span><span class="next-desc">What actually lands in your account, so you know what inflation is eating.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="cost-of-living.html"><span class="next-title">Cost of living</span><span class="next-desc">How far the same salary goes in a different city.</span><span class="next-arrow">&rarr;</span></a>
+</div>
+<p class="disc">Estimates for learning, not financial advice. FinMango is a 501(c)(3) nonprofit. No account, no ads, nothing stored.</p>
+</div>
+</section>
+
 <!-- chrome:footer -->
   <footer>
     <div class="footer-newsletter">
@@ -2010,23 +1151,14 @@ body {
     startYear: $('startYear'),
     endYear: $('endYear'),
     rate: $('inflationRate'),
-    targetYearLabel: $('targetYearLabel'),
-    yearsLabel: $('yearsLabel'),
-    startAmountLabel: $('startAmountLabel'),
-    futureValue: $('futureValue'),
-    lostValue: $('lostValue'),
-    todayDollarValue: $('todayDollarValue'),
-    halvingYears: $('halvingYears'),
+    sentence: $('rSentence'),
     insightText: $('insightText'),
-    verdictCard: $('verdictCard'),
     pricesYearTag: $('pricesYearTag'),
     priceCoffee: $('priceCoffee'),
     priceBurger: $('priceBurger'),
     priceShoes: $('priceShoes'),
     priceCar: $('priceCar'),
-    heroRate: $('heroRate'),
-    heroYears: $('heroYears'),
-    heroMultiplier: $('heroMultiplier'),
+    multiplier: $('heroMultiplier'),
     chart: $('inflationChart'),
   };
 
@@ -2050,6 +1182,15 @@ body {
     if (abs >= 1e3) return '$' + (n / 1e3).toFixed(1).replace(/\.0$/, '') + 'k';
     return '$' + Math.round(n);
   };
+
+  // round the headline number so the sentence reads like a person said it
+  function about(v) {
+    if (v >= 1e6) return Math.round(v / 1e4) * 1e4;
+    if (v >= 1e5) return Math.round(v / 1e3) * 1e3;
+    if (v >= 1e4) return Math.round(v / 100) * 100;
+    if (v >= 10) return Math.round(v);
+    return Math.round(v * 100) / 100;
+  }
 
   let chart;
   let chartView = 'cost';
@@ -2075,63 +1216,64 @@ body {
     if (rate <= 0) halvingYearsVal = Infinity;
     else halvingYearsVal = Math.log(2) / Math.log(1 + rate);
 
-    els.targetYearLabel.textContent = endYear;
-    els.yearsLabel.textContent = years;
-    els.startAmountLabel.textContent = fmt(amount);
-    els.futureValue.textContent = fmt(futureVal);
-    els.lostValue.textContent = fmt(futureVal - amount);
-    els.todayDollarValue.textContent = '$' + todayDollarFutureWorth.toFixed(2);
-    els.halvingYears.textContent = isFinite(halvingYearsVal)
-      ? Math.round(halvingYearsVal) + ' yrs'
-      : '—';
+    setSentence(amount, futureVal, startYear, endYear, years, rate, todayDollarFutureWorth, halvingYearsVal);
 
     els.pricesYearTag.textContent = endYear;
     els.priceCoffee.textContent = fmt(5 * multiplier);
     els.priceBurger.textContent = fmt(12 * multiplier);
     els.priceShoes.textContent = fmt(100 * multiplier);
     els.priceCar.textContent = fmt(35000 * multiplier);
-
-    els.heroRate.textContent = (rate * 100).toFixed(1) + '%';
-    els.heroYears.textContent = years;
-    els.heroMultiplier.textContent = multiplier.toFixed(2) + '×';
-
-    const ratePct = rate * 100;
-    els.verdictCard.classList.remove('mild', 'normal', 'heavy');
-    if (ratePct < 2.5) els.verdictCard.classList.add('mild');
-    else if (ratePct >= 5) els.verdictCard.classList.add('heavy');
-    else els.verdictCard.classList.add('normal');
+    els.multiplier.textContent = multiplier.toFixed(2) + '× today’s prices';
 
     setInsight(amount, futureVal, years, rate, halvingYearsVal);
     updateChart(startYear, endYear, amount, rate);
   }
 
+  function setSentence(amount, futureVal, startYear, endYear, years, rate, dollarWorth, halvingYearsVal) {
+    let s;
+    if (years === 0) {
+      s = 'In <b>' + endYear + '</b> you\'d need exactly what you have now, <b>' + fmt(amount) + '</b>. Pick a target year after ' + startYear + ' and this sentence will change.';
+    } else if (amount === 0) {
+      s = 'Put a starting amount in the box and this sentence will fill in. With <b>$0</b> there is nothing for inflation to shrink.';
+    } else {
+      s = 'In <b>' + endYear + '</b> you\'d need about <b class="grow">' + fmt(about(futureVal)) + '</b> to buy what <b>' + fmt(amount) + '</b> buys today.';
+      if (rate === 0) {
+        s += ' At <b>0%</b> nothing changes over those <b>' + years + ' years</b>, which real life rarely allows.';
+      } else {
+        s += ' Over those <b>' + years + (years === 1 ? ' year' : ' years') + '</b> a dollar from today shrinks to about <b>$' + dollarWorth.toFixed(2) + '</b>, and prices double roughly every <b>' + Math.round(halvingYearsVal) + ' years</b>.';
+      }
+    }
+    els.sentence.innerHTML = s;
+  }
+
   function setInsight(amount, futureVal, years, rate, halvingYearsVal) {
     if (years === 0) {
-      els.insightText.innerHTML = 'Pick a year in the future to see how prices grow.';
+      els.insightText.innerHTML = 'Try the +30 years button to see how far prices move in a working lifetime.';
+      return;
+    }
+    if (amount === 0) {
+      els.insightText.innerHTML = 'The price rows below still work. They start from fixed prices, so they show the rate on its own.';
       return;
     }
     if (rate === 0) {
-      els.insightText.innerHTML = 'At <strong>0%</strong> inflation, prices stay flat. Real life rarely cooperates.';
+      els.insightText.innerHTML = 'Even the Fed\'s <b>2%</b> target, held for ' + years + ' years, would push the number above to <b>' + fmt(about(amount * Math.pow(1.02, years))) + '</b>.';
       return;
     }
-    const lost = futureVal - amount;
-    const halvesTxt = isFinite(halvingYearsVal) ? Math.round(halvingYearsVal) : '—';
+    const halvesTxt = isFinite(halvingYearsVal) ? Math.round(halvingYearsVal) : 'many';
     const investedAt7 = amount * Math.pow(1.07, years);
     const realGain = investedAt7 - futureVal;
 
     let line;
     if (realGain > 0) {
-      line = '<strong>' + fmt(amount) + '</strong> invested at a 7% return would grow to ' +
-        '<strong>' + fmt(investedAt7) + '</strong>, beating inflation by <strong>' +
-        fmt(realGain) + '</strong> in real terms.';
+      line = 'The same <b>' + fmt(amount) + '</b> invested at a 7% return would be about <b>' + fmt(about(investedAt7)) + '</b> by then, roughly <b>' + fmt(about(realGain)) + '</b> ahead of prices. Left as cash, it falls <b>' + fmt(about(futureVal - amount)) + '</b> behind.';
     } else {
-      line = 'At this rate, prices would double in roughly <strong>' + halvesTxt +
-        ' years</strong>. Cash sitting still loses ground every year.';
+      line = 'At this rate prices double in roughly <b>' + halvesTxt + ' years</b>, and even a 7% return would not keep up. Cash sitting still loses ground every year.';
     }
     els.insightText.innerHTML = line;
   }
 
   function updateChart(start, end, amount, rate) {
+    if (typeof Chart === 'undefined') return; // page still works without the chart library
     const ctx = els.chart.getContext('2d');
     const labels = [];
     const costData = [];
@@ -2152,18 +1294,10 @@ body {
     }
 
     const isPower = chartView === 'power';
-    const lineColor = isPower ? '#3a6fa0' : '#F25A27';
+    const lineColor = isPower ? 'rgba(10,10,10,.75)' : '#F25A27';
+    const fillColor = isPower ? 'rgba(10,10,10,.05)' : 'rgba(242,90,39,.08)';
     const data = isPower ? powerData : costData;
-    const label = isPower ? 'Today\'s $ purchasing power' : 'Cost to buy same items';
-
-    const grad = ctx.createLinearGradient(0, 0, 0, 280);
-    if (isPower) {
-      grad.addColorStop(0, 'rgba(58,111,160,0.18)');
-      grad.addColorStop(1, 'rgba(58,111,160,0.01)');
-    } else {
-      grad.addColorStop(0, 'rgba(242, 90, 39,0.18)');
-      grad.addColorStop(1, 'rgba(242, 90, 39,0.01)');
-    }
+    const label = isPower ? 'What today\'s money still buys' : 'Cost to buy the same things';
 
     if (chart) chart.destroy();
     chart = new Chart(ctx, {
@@ -2174,12 +1308,12 @@ body {
           label: label,
           data: data,
           borderColor: lineColor,
-          backgroundColor: grad,
-          borderWidth: 2.5,
+          backgroundColor: fillColor,
+          borderWidth: 2,
           fill: true,
-          tension: 0.35,
+          tension: 0.3,
           pointRadius: 0,
-          pointHoverRadius: 5,
+          pointHoverRadius: 4,
           pointHoverBackgroundColor: lineColor,
           pointHoverBorderColor: '#fff',
           pointHoverBorderWidth: 2,
@@ -2192,19 +1326,17 @@ body {
         plugins: {
           legend: { display: false },
           tooltip: {
-            backgroundColor: 'rgba(26,26,26,0.96)',
+            backgroundColor: '#0A0A0A',
             padding: 12,
-            titleFont: { family: "'JetBrains Mono', monospace", size: 11, weight: '700' },
-            titleColor: '#a8a29e',
+            titleFont: { family: "'JetBrains Mono', monospace", size: 11, weight: '500' },
+            titleColor: 'rgba(250,250,247,.7)',
             titleMarginBottom: 8,
-            bodyFont: { family: "'DM Sans', sans-serif", size: 12, weight: '600' },
+            bodyFont: { family: "'DM Sans', sans-serif", size: 12, weight: '500' },
             bodyColor: '#fff',
-            borderColor: 'rgba(255,255,255,0.1)',
-            borderWidth: 1,
-            cornerRadius: 8,
+            cornerRadius: 0,
             displayColors: false,
             callbacks: {
-              label: (ctx) => '  ' + fmt(ctx.parsed.y),
+              label: (c) => c.dataset.label + ': ' + fmt(c.parsed.y),
             }
           }
         },
@@ -2212,17 +1344,17 @@ body {
           x: {
             grid: { display: false },
             ticks: {
-              color: '#a8a29e',
-              font: { family: "'JetBrains Mono', monospace", size: 10 },
+              color: 'rgba(10,10,10,.55)',
+              font: { family: "'JetBrains Mono', monospace", size: 11 },
               maxRotation: 0, autoSkip: true, maxTicksLimit: 8,
             },
-            border: { color: 'rgba(0,0,0,0.06)' },
+            border: { color: 'rgba(10,10,10,.1)' },
           },
           y: {
-            grid: { color: 'rgba(0,0,0,0.04)', drawTicks: false },
+            grid: { color: 'rgba(10,10,10,.06)', drawTicks: false },
             ticks: {
-              color: '#a8a29e',
-              font: { family: "'JetBrains Mono', monospace", size: 10 },
+              color: 'rgba(10,10,10,.55)',
+              font: { family: "'JetBrains Mono', monospace", size: 11 },
               padding: 8,
               callback: (val) => fmtCompact(val),
             },

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>What's Money? | FinMango</title>
-<meta name="description" content="See what your everyday lifestyle spending is really costing you in long-term wealth. Add up your habits and watch the opportunity cost grow.">
+<title>What Are Your Habits Costing You? | FinMango</title>
+<meta name="description" content="Tap the spending habits that look like you, see the monthly total, and what the same money would grow into if you invested it instead.">
 <link rel="icon" type="image/png" href="favicon.png">
   <!-- Performance: Preconnect to external domains -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -622,132 +622,74 @@
     }
 
 
-    /* ---- reskinned legacy component css ---- */
-:root{--bg:var(--paper);--white:#fff;--black:#0A0A0A;--orange:#F25A27;--ol:rgba(242, 90, 39,.08);--muted:#6b655b;--bdr:rgba(0,0,0,.07);--green:#16a34a;--yellow:#d97706;--red:#dc2626;--fb:'DM Sans',-apple-system,sans-serif}
-
-*{margin:0;padding:0;box-sizing:border-box}
-
+    /* ---- what's money: page styles (humanized tool pass, September 2026) ---- */
+:root{--white:#fff;--bdr:var(--ink-line)}
 a{color:inherit;text-decoration:none}
 
-.hero{position:relative;padding:120px 32px 32px;text-align:center;overflow:hidden}
+/* Hero: left-set, one eyebrow, one plain headline */
+.tool-hero{max-width:var(--max-width);margin:0 auto;padding:150px var(--gutter) 44px}
+.tool-hero-top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem 2rem;flex-wrap:wrap;margin-bottom:1.75rem}
+.tool-meta{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.06em;color:var(--ink-faint)}
+.tool-hero h1{font-size:clamp(2.4rem,4.8vw,4rem);font-weight:900;line-height:.98;letter-spacing:-.045em;max-width:16ch;margin-bottom:1.25rem}
+.tool-lede{font-size:1.15rem;line-height:1.55;color:var(--ink-dim);max-width:60ch;font-weight:300}
+.tool-lede strong{font-weight:600;color:var(--ink)}
 
-.hero::before{content:'';position:absolute;top:-200px;right:-300px;width:700px;height:700px;background:radial-gradient(circle,rgba(242, 90, 39,.10) 0%,transparent 65%);filter:blur(60px);pointer-events:none;z-index:-1}
+/* Layout: one column, the habits then the sentence */
+.calc-section{max-width:var(--max-width);margin:0 auto;padding:0 var(--gutter) 72px}
+.calc-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+.results-panel{min-width:0;display:flex;flex-direction:column;gap:20px;position:sticky;top:100px}
 
-.hero::after{content:'';position:absolute;bottom:-120px;left:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(58,111,160,.06) 0%,transparent 65%);filter:blur(60px);pointer-events:none;z-index:-1}
-
-.hero-content{max-width:820px;margin:0 auto}
-
-.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.14em;padding:.4rem .85rem;background:rgba(242, 90, 39,.08);border:1px solid rgba(242, 90, 39,.2);border-radius: 0;margin-bottom:1.25rem}
-
-.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);flex-shrink:0}
-
-.hero h1{font-size:clamp(2.1rem,4.6vw,3.4rem);font-weight:900;line-height:1.05;letter-spacing:-.035em;margin-bottom:1rem}
-
-.hero h1 em{font-style:normal;color:var(--orange);position:relative}
-
-.hero h1 em::after{content:'';position:absolute;bottom:.05em;left:-3px;right:-3px;height:.18em;background:rgba(242, 90, 39,.22);border-radius: 0;z-index:-1}
-
-.hero-sub{font-size:1.1rem;color:var(--muted);max-width:660px;margin:0 auto;line-height:1.6}
-
-.calc-section{max-width:820px;margin:0 auto;padding:24px 32px 80px}
-
-.ccard{background:var(--white);border:1px solid var(--bdr);border-radius: 0;padding:32px;margin-bottom:14px}
-
-.eyebrow{font-size: .72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:4px}
-
-.ccard h2{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;line-height:1.15;margin-bottom:8px}
-
-.cdesc{font-size:.85rem;color:var(--muted);padding-bottom:18px;border-bottom:1px solid var(--bdr);margin-bottom:22px;line-height:1.55}
-
+/* Habits */
+.ccard{background:var(--white);border:1px solid var(--bdr);padding:28px}
+.ccard h2{font-size:1.35rem;font-weight:900;letter-spacing:-.03em;line-height:1.15;margin-bottom:.4rem}
+.cdesc{font-size:.92rem;color:var(--ink-dim);line-height:1.55;padding-bottom:18px;border-bottom:1px solid var(--bdr);margin-bottom:18px}
 .spending-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.spend-btn{padding:14px 16px;border:1px solid var(--bdr);background:var(--paper);cursor:pointer;text-align:left;font-family:inherit;color:var(--ink);display:flex;flex-direction:column;gap:3px;transition:border-color .15s,background .15s,color .15s}
+.spend-btn:hover{border-color:var(--ink)}
+.spend-btn.active{border-color:var(--ink);background:var(--ink);color:var(--paper)}
+.spend-name{font-size:.92rem;font-weight:600;letter-spacing:-.01em;line-height:1.25}
+.spend-cost{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.02em;color:var(--ink-faint);line-height:1.4;font-variant-numeric:tabular-nums}
+.spend-btn.active .spend-cost{color:var(--paper-dim)}
+.btn-r{display:inline-block;margin-top:16px;padding:.6rem 1rem;background:transparent;border:1px solid var(--bdr);font-size:.82rem;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink);transition:border-color .2s}
+.btn-r:hover{border-color:var(--ink)}
 
-.spend-btn{padding:16px;border:1.5px solid rgba(0,0,0,.1);background:var(--bg);border-radius: 0;cursor:pointer;text-align:left;font-family:inherit;display:flex;gap:12px;align-items:center;transition:all .15s}
+/* Result: a sentence, with the numbers inside it */
+.result{background:var(--white);border:1px solid var(--bdr);padding:36px 36px 30px}
+.result-sentence{font-size:clamp(1.45rem,2.3vw,2.05rem);font-weight:400;line-height:1.32;letter-spacing:-.025em;color:var(--ink);text-wrap:pretty}
+.result-sentence b{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.result-sentence .grow{color:var(--orange-ink)}
+.result-note{margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--bdr);font-size:.98rem;line-height:1.5;color:var(--ink-dim)}
+.result-note b{font-weight:600;color:var(--ink)}
 
-.spend-btn:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.04)}
+/* How it works */
+.how{padding:0 4px}
+.how p{font-size:.95rem;line-height:1.6;color:var(--ink-dim);max-width:62ch;margin-top:.75rem}
 
-.spend-btn.active{border-color:var(--orange);background:var(--ol)}
+/* Keep going: ruled rows, not a card grid */
+.next{border-top:1px solid var(--bdr)}
+.next-inner{max-width:var(--max-width);margin:0 auto;padding:56px var(--gutter) 64px}
+.next-list{margin-top:1.25rem;border-top:1px solid var(--bdr)}
+.next-row{display:grid;grid-template-columns:220px 1fr auto;gap:1.5rem;align-items:baseline;padding:1.1rem 0;border-bottom:1px solid var(--bdr);color:var(--ink)}
+.next-title{font-weight:600;letter-spacing:-.01em}
+.next-desc{color:var(--ink-dim);font-size:.98rem}
+.next-arrow{font-family:var(--font-mono);color:var(--ink-faint);transition:transform .25s cubic-bezier(.16,1,.3,1),color .2s}
+.next-row:hover .next-title{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+.next-row:hover .next-arrow{transform:translateX(4px);color:var(--ink)}
+.disc{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.04em;color:var(--ink-faint);margin-top:1.75rem;line-height:1.6}
 
-.spend-icon{font-size:1.6rem;width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius: 0;flex-shrink:0}
+@media(max-width:968px){
+.tool-hero{padding:120px var(--gutter) 32px}
+.calc-grid{grid-template-columns:1fr;gap:16px}
+.results-panel{position:static}
+.next-row{grid-template-columns:1fr auto;row-gap:.2rem}
+.next-desc{grid-column:1/-1}
+.next-arrow{grid-row:1;grid-column:2}}
 
-.spend-info{flex:1;min-width:0}
-
-.spend-name{font-size:.86rem;font-weight:800;letter-spacing:-.01em;line-height:1.2}
-
-.spend-cost{font-size:.7rem;color:var(--muted);margin-top:2px;line-height:1.3}
-
-.hero-result{background:linear-gradient(135deg,#fff7ed 0%,#fff 100%);border:1px solid var(--bdr);border-left: 1px solid var(--orange);border-radius: 0;padding:24px;margin-bottom:14px;text-align:center}
-
-.hero-result-label{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-
-.hero-result-num{font-size:3rem;font-weight:900;letter-spacing:-.04em;color:var(--orange);line-height:1;margin-bottom:6px;font-variant-numeric:tabular-nums}
-
-.hero-result-sub{font-size:.85rem;color:var(--muted)}
-
-.bk-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:18px}
-
-.bk-card{background:var(--bg);border-radius: 0;padding:14px;text-align:left}
-
-.bk-card .bk-lbl{font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
-
-.bk-card .bk-val{font-size:1.05rem;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-
-.bk-card.hl .bk-val{color:var(--green)}
-
-.insight-card{background:var(--white);border:1px solid var(--bdr);border-left: 1px solid var(--green);border-radius: 0;padding:18px;margin-bottom:14px}
-
-.insight-title{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--green);margin-bottom:6px}
-
-.insight-text{font-size:.92rem;color:var(--black);line-height:1.5}
-
-.insight-text strong{color:var(--green);font-weight:800}
-
-.btn-r{display:block;width:100%;margin-top:14px;padding:13px;background:transparent;border:1.5px solid var(--bdr);font-size:.8rem;font-weight:600;text-align:center;font-family:inherit;cursor:pointer;transition:all .2s;border-radius: 0;color:var(--muted)}
-
-.btn-r:hover{border-color:var(--orange);color:var(--orange)}
-
-.disc{font-size:.66rem;color:#c0b9af;text-align:center;margin-top:18px;padding:10px;border:1px dashed var(--bdr);border-radius: 0;line-height:1.5}
-
-.related-tools{background:var(--black);padding:48px 32px;border-top: 1px solid var(--orange)}
-
-.related-inner{max-width:960px;margin:0 auto}
-
-.related-header{text-align:center;margin-bottom:28px}
-
-.related-tag{display:inline-block;background:var(--orange-ink);color:#fff;font-size:.58rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:4px 11px;border-radius: 0;margin-bottom:10px}
-
-.related-header h2{font-size:1.5rem;font-weight:900;letter-spacing:-.03em;color:#fff;margin-bottom:5px}
-
-.related-header p{font-size:.88rem;color:rgba(255,255,255,.4)}
-
-.related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
-
-.related-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);padding:18px;text-decoration:none;transition:all .25s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;gap:5px;border-radius:12px}
-
-.related-card:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
-
-.rc-icon{font-size:1.3rem}
-.rc-title{font-size:.85rem;font-weight:700;color:#fff}
-.rc-desc{font-size:.7rem;color:rgba(255,255,255,.38);line-height:1.4}
-
-::-webkit-scrollbar{width:8px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:4px}
-::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.2)}
-
-@media(max-width:968px){.hero{padding:100px 20px 24px}
-.calc-section{padding:0 20px 60px}}
-
-@media(max-width:600px){.hero{padding:90px 16px 16px}
-.calc-section{padding:0 16px 48px}
-.ccard{padding:22px 18px;border-radius:12px}
-.spending-grid{grid-template-columns:1fr}
-.related-grid{grid-template-columns:1fr 1fr}
-.hero-result-num{font-size:2.4rem}
-.bk-strip{grid-template-columns:1fr}}
-
-@media(max-width:480px){.related-grid{grid-template-columns:1fr}}
-
-
+@media(max-width:600px){
+.tool-hero{padding:104px var(--gutter) 24px}
+.ccard{padding:22px 18px}
+.result{padding:24px 20px 22px}
+.spending-grid{grid-template-columns:1fr}}
   </style>
   <!-- Social share card (iMessage, Slack, LinkedIn, X) -->
   <meta property="og:image" content="https://www.finmango.org/og-image.png?v=20260924">
@@ -989,46 +931,58 @@ a{color:inherit;text-decoration:none}
     </div>
   </div>
   <!-- /chrome:nav -->
-<section class="hero">
-<div class="hero-content">
-<div class="hero-eyebrow"><span class="dot"></span> What's Money? · Free Tool</div>
-<h1>What's your <em>money really worth?</em></h1>
-<p class="hero-sub">Tap a few of your habits. We'll add up the monthly cost and show what the same money could become if you invested it instead.</p>
+<section class="tool-hero">
+<div class="tool-hero-top">
+<div class="eyebrow">Calculator · Lifestyle spending</div>
+<div class="tool-meta">Assumes a 7% yearly return, compounded monthly</div>
 </div>
-</section>
-<section class="calc-section">
-<div class="ccard">
-<div class="eyebrow">Pick Your Habits</div><h2>Tap what you spend on</h2><p class="cdesc">Tap any habit to add it to your monthly total. Tap again to remove. Real-life prices — your future self is watching.</p>
-<div class="spending-grid" id="spendingGrid">
-<button class="spend-btn" data-amt="600"><div class="spend-icon">🛵</div><div class="spend-info"><div class="spend-name">Daily Food Delivery</div><div class="spend-cost">$600/mo · ~$20/day in fees &amp; tips</div></div></button>
-<button class="spend-btn" data-amt="500"><div class="spend-icon">🛍️</div><div class="spend-info"><div class="spend-name">Impulse Shopping</div><div class="spend-cost">$500/mo · sales &amp; restock-the-cart hauls</div></div></button>
-<button class="spend-btn" data-amt="333"><div class="spend-icon">✈️</div><div class="spend-info"><div class="spend-name">Vacation Fund</div><div class="spend-cost">$333/mo · one $4K trip a year</div></div></button>
-<button class="spend-btn" data-amt="850"><div class="spend-icon">🚗</div><div class="spend-info"><div class="spend-name">Premium Car Payment</div><div class="spend-cost">$850/mo · upgrade beyond your need</div></div></button>
-<button class="spend-btn" data-amt="250"><div class="spend-icon">🍣</div><div class="spend-info"><div class="spend-name">Fancy Dining Out</div><div class="spend-cost">$250/mo · weekend splurges</div></div></button>
-<button class="spend-btn" data-amt="500"><div class="spend-icon">🎲</div><div class="spend-info"><div class="spend-name">Sports Betting</div><div class="spend-cost">$500/mo · "the lock of the week"</div></div></button>
-<button class="spend-btn" data-amt="180"><div class="spend-icon">☕</div><div class="spend-info"><div class="spend-name">Daily Specialty Coffee</div><div class="spend-cost">$180/mo · $6/day on lattes</div></div></button>
-<button class="spend-btn" data-amt="120"><div class="spend-icon">📺</div><div class="spend-info"><div class="spend-name">Streaming Stack</div><div class="spend-cost">$120/mo · 6+ subscriptions</div></div></button>
-</div>
-<button class="btn-r" type="button" onclick="resetCalc()">↻ Reset selections</button>
-</div>
-<div class="hero-result">
-<div class="hero-result-label">Monthly Lifestyle Spending</div>
-<div class="hero-result-num" id="totalAmount">$0</div>
-<div class="hero-result-sub">That's <span id="annualAmount" style="font-weight:700;color:var(--black)">$0</span> a year you could be investing</div>
-<div class="bk-strip">
-<div class="bk-card hl"><div class="bk-lbl">In 10 Years</div><div class="bk-val" id="fv10">$0</div></div>
-<div class="bk-card hl"><div class="bk-lbl">In 20 Years</div><div class="bk-val" id="fv20">$0</div></div>
-<div class="bk-card hl"><div class="bk-lbl">In 30 Years</div><div class="bk-val" id="fv30">$0</div></div>
-</div>
-</div>
-<div class="insight-card" id="insightCard" style="display:none">
-<div class="insight-title">The Real Cost</div>
-<div class="insight-text" id="insightText"></div>
-</div>
-<div class="disc">Future values assume a 7% annual return invested monthly. Past performance doesn't guarantee future results — and not all spending is bad! Use this as a thinking tool, not a verdict. <strong>FinMango</strong> · 501(c)(3) · <a href="index.html" style="color:var(--orange)">finmango.org</a></div>
+<h1>What are your habits really costing you?</h1>
+<p class="tool-lede">Tap the ones that look like you. We add up the monthly total and show what the same money would grow into if you invested it instead. <strong>Not every habit is a mistake.</strong> This is for seeing the trade clearly, then deciding.</p>
 </section>
 
-<section class="related-tools"><div class="related-inner"><div class="related-header"><div class="related-tag">More Free Tools</div><h2>Keep Building Your Financial Future</h2><p>Free calculators and lessons from FinMango.</p></div><div class="related-grid"><a href="compound-interest.html" class="related-card"><div class="rc-icon">📈</div><div class="rc-title">Compound Interest</div><div class="rc-desc">See your savings grow</div></a><a href="rule-of-72.html" class="related-card"><div class="rc-icon">⏱️</div><div class="rc-title">Rule of 72</div><div class="rc-desc">Doubling-time math</div></a><a href="budget-balancer.html" class="related-card"><div class="rc-icon">💰</div><div class="rc-title">Budget Balancer</div><div class="rc-desc">Build a budget that works</div></a><a href="roth-ira.html" class="related-card"><div class="rc-icon">🌱</div><div class="rc-title">Roth IRA</div><div class="rc-desc">Tax-free retirement</div></a></div></div></section>
+<section class="calc-section">
+<div class="calc-grid">
+<div class="ccard">
+<h2>Tap what you spend on</h2>
+<p class="cdesc">Tap a habit to add it to your monthly total. Tap again to take it out. The prices are rough, so adjust in your head if yours run higher or lower.</p>
+<div class="spending-grid" id="spendingGrid">
+<button class="spend-btn" type="button" data-amt="600"><span class="spend-name">Daily food delivery</span><span class="spend-cost">$600 a month, about $20 a day in fees and tips</span></button>
+<button class="spend-btn" type="button" data-amt="500"><span class="spend-name">Impulse shopping</span><span class="spend-cost">$500 a month on sales and restock-the-cart hauls</span></button>
+<button class="spend-btn" type="button" data-amt="333"><span class="spend-name">Vacation fund</span><span class="spend-cost">$333 a month, one $4,000 trip a year</span></button>
+<button class="spend-btn" type="button" data-amt="850"><span class="spend-name">Premium car payment</span><span class="spend-cost">$850 a month for more car than you need</span></button>
+<button class="spend-btn" type="button" data-amt="250"><span class="spend-name">Fancy dining out</span><span class="spend-cost">$250 a month on weekend splurges</span></button>
+<button class="spend-btn" type="button" data-amt="500"><span class="spend-name">Sports betting</span><span class="spend-cost">$500 a month on the lock of the week</span></button>
+<button class="spend-btn" type="button" data-amt="180"><span class="spend-name">Daily specialty coffee</span><span class="spend-cost">$180 a month, $6 a day on lattes</span></button>
+<button class="spend-btn" type="button" data-amt="120"><span class="spend-name">Streaming stack</span><span class="spend-cost">$120 a month across six or more subscriptions</span></button>
+</div>
+<button class="btn-r" type="button" onclick="resetCalc()">Reset selections</button>
+</div>
+
+<div class="results-panel">
+<div class="result" aria-live="polite">
+<p class="result-sentence" id="rSentence">Tap a habit and this sentence will fill in.</p>
+<p class="result-note" id="rNote">Pick two or three that look like you. You can take any of them out again.</p>
+</div>
+<div class="how">
+<div class="eyebrow">How this is worked out</div>
+<p>The monthly costs of the habits you tap are added up and treated as a monthly contribution earning 7% a year, compounded monthly, for 10, 20 and 30 years. 7% is close to the stock market's long-run average after inflation. Real returns bounce around, so read the numbers as a direction, not a promise. Nothing you tap leaves this page.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="next">
+<div class="next-inner">
+<div class="eyebrow">Keep going</div>
+<div class="next-list">
+<a class="next-row" href="compound-interest.html"><span class="next-title">Compound interest</span><span class="next-desc">Put in your own monthly number and years, and change them one at a time.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="budget-balancer.html"><span class="next-title">Budget balancer</span><span class="next-desc">Split a paycheck into needs, wants and savings and see where these habits fit.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="rule-of-72.html"><span class="next-title">Rule of 72</span><span class="next-desc">Why 7% makes money double about every ten years, worked out in your head.</span><span class="next-arrow">&rarr;</span></a>
+<a class="next-row" href="roth-ira.html"><span class="next-title">Roth IRA</span><span class="next-desc">Where to put the money you free up so the growth is never taxed.</span><span class="next-arrow">&rarr;</span></a>
+</div>
+<p class="disc">Estimates for learning, not financial advice. FinMango is a 501(c)(3) nonprofit. No account, no ads, nothing stored.</p>
+</div>
+</section>
 
 <!-- chrome:footer -->
   <footer>
@@ -1063,38 +1017,42 @@ a{color:inherit;text-decoration:none}
 
 <script>
 const selected=new Set();
-function fmt(v){if(!isFinite(v))return'$0';if(v>=1e6)return'$'+(v/1e6).toFixed(2)+'M';if(v>=1e3)return'$'+(v/1e3).toFixed(0)+'K';return'$'+Math.round(v).toLocaleString()}
+const money=v=>'$'+Math.round(v).toLocaleString('en-US');
+function about(v){ // round the headline number so the sentence reads like a person said it
+  if(v>=1e6)return Math.round(v/1e4)*1e4;
+  if(v>=1e5)return Math.round(v/1e3)*1e3;
+  if(v>=1e4)return Math.round(v/100)*100;
+  return Math.round(v);
+}
 function futureValue(monthly,years,rate){
   if(monthly<=0)return 0;
   const mr=rate/12;const n=years*12;
   return monthly*((Math.pow(1+mr,n)-1)/mr);
 }
 function update(){
-  let total=0;
-  document.querySelectorAll('.spend-btn').forEach(b=>{if(selected.has(b.dataset.amt))total+=parseFloat(b.dataset.amt)});
-  document.getElementById('totalAmount').textContent=fmt(total);
-  document.getElementById('annualAmount').textContent=fmt(total*12);
+  let total=0,count=0;
+  // count the tapped buttons themselves: two habits share the same amount, so keying by amount double-counted
+  document.querySelectorAll('.spend-btn.active').forEach(b=>{total+=parseFloat(b.dataset.amt)||0;count++});
   const r=0.07;
   const fv10=futureValue(total,10,r);
   const fv20=futureValue(total,20,r);
   const fv30=futureValue(total,30,r);
-  document.getElementById('fv10').textContent=fmt(fv10);
-  document.getElementById('fv20').textContent=fmt(fv20);
-  document.getElementById('fv30').textContent=fmt(fv30);
-  const ic=document.getElementById('insightCard');
-  const it=document.getElementById('insightText');
+  const s=document.getElementById('rSentence');
+  const n=document.getElementById('rNote');
   if(total>0){
-    ic.style.display='block';
-    it.innerHTML='Investing this <strong>'+fmt(total)+'/month</strong> at a 7% annual return would grow to <strong>'+fmt(fv30)+'</strong> in 30 years. That\'s the trade-off — every habit has an opportunity cost.';
-  }else{ic.style.display='none'}
+    s.innerHTML=(count===1?'That habit comes to':'These '+count+' habits add up to')+' about <b>'+money(total)+' a month</b>, or <b>'+money(total*12)+' a year</b>. Invested at 7%, the same money would be about <b class="grow">'+money(about(fv30))+'</b> in 30 years.';
+    n.innerHTML='After 10 years you\'d have about <b>'+money(about(fv10))+'</b>, after 20 about <b>'+money(about(fv20))+'</b>. More than half of the 30-year total shows up in the last ten years. That is the trade-off: every habit has an opportunity cost, and some are worth it.';
+  }else{
+    s.innerHTML='Tap a habit and this sentence will fill in.';
+    n.innerHTML='Pick two or three that look like you. You can take any of them out again.';
+  }
 }
 function resetCalc(){selected.clear();document.querySelectorAll('.spend-btn').forEach(b=>b.classList.remove('active'));update()}
 document.addEventListener('DOMContentLoaded',function(){
   document.querySelectorAll('.spend-btn').forEach(b=>{
     b.addEventListener('click',function(){
-      const a=this.dataset.amt;
-      if(selected.has(a)){selected.delete(a);this.classList.remove('active')}
-      else{selected.add(a);this.classList.add('active')}
+      if(selected.has(this)){selected.delete(this);this.classList.remove('active')}
+      else{selected.add(this);this.classList.add('active')}
       update();
     });
   });
