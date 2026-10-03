@@ -226,14 +226,14 @@ Always include:
 <img src="hero.png" alt="Students learning about financial health" width="1200" height="800">
 
 <!-- Below-fold image (lazy load) -->
-<img src="team-photo.jpg" alt="FinMango team at Kent State" loading="lazy" width="600" height="400">
+<img src="team-photo.jpg" alt="FinMango team at Barrier Breakers" loading="lazy" width="600" height="400">
 ```
 
 ### Image Naming
 
 - Use descriptive names: `team-photo-2024.jpg` not `IMG_1234.jpg`
 - Use lowercase and hyphens: `barrier-breakers-logo.png`
-- No spaces: `kent state.jpg` ❌ → `kent-state.jpg` ✅
+- No spaces: `team photo.jpg` ❌ → `team-photo.jpg` ✅
 
 ## 🧪 Testing
 
