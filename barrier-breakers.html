@@ -438,6 +438,34 @@
         }
         .shot:hover .shot-cap, .shot:focus-visible .shot-cap { opacity: 1; transform: none; }
         @media (hover: none) { .shot-cap { opacity: 1; transform: none; } }
+        .masonry.is-hidden { display: none; }
+
+        /* Storyboard: the day in six frames */
+        .story { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        .story-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border: none;
+            padding: 0;
+            background: var(--dark-2);
+            border-radius: var(--r);
+            overflow: hidden;
+            cursor: zoom-in;
+            text-align: left;
+            font: inherit;
+            color: inherit;
+        }
+        .story-card img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; transition: transform .6s var(--ease); }
+        .story-card:hover img { transform: scale(1.04); }
+        .story-card:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+        .story-body { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px 18px; }
+        .story-num { font-size: .78rem; font-weight: 700; color: var(--orange); letter-spacing: .04em; padding-top: 3px; font-variant-numeric: tabular-nums; }
+        .story-title { display: block; font-weight: 700; font-size: 1.02rem; color: #fff; line-height: 1.25; letter-spacing: -.01em; }
+        .story-sub { display: block; color: rgba(255, 255, 255, .6); font-size: .88rem; line-height: 1.5; margin-top: 4px; text-wrap: pretty; }
+        .story-foot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px 28px; margin-top: 28px; }
+        .story-stats { display: flex; flex-wrap: wrap; gap: 10px 28px; color: rgba(255, 255, 255, .6); font-size: .9rem; }
+        .story-stats strong { color: #fff; font-size: 1.15rem; margin-right: 6px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 
         /* Lightbox */
         .lightbox {
@@ -677,6 +705,7 @@
         @media (max-width: 1080px) {
             .tracks-grid { grid-template-columns: repeat(3, 1fr); }
             .track { gap: 28px; }
+            .story { grid-template-columns: 1fr 1fr; }
             .hero-grid { grid-template-columns: 1fr .9fr; }
             .wall { height: 600px; }
         }
@@ -715,6 +744,7 @@
             .track { gap: 22px; }
             .track.open { grid-column: 1 / -1; }
             .gallery { padding: 64px 0; }
+            .story { grid-template-columns: 1fr; }
             .masonry { columns: 2 150px; column-gap: 8px; }
             .shot { margin-bottom: 8px; }
             .prizes-head { grid-template-columns: 1fr; }
@@ -1695,12 +1725,50 @@
                 <div class="section-head">
                     <div>
                         <span class="tag">March 20, 2026</span>
-                        <h2>The day in pictures.</h2>
-                        <p>Barrier Breakers 2026. Students showed up, showed out, and broke through.</p>
+                        <h2>What the day looks like.</h2>
+                        <p>Barrier Breakers 2026, in order. The 2027 format keeps the same rhythm: a morning at the tables, an afternoon on stage.</p>
                     </div>
-                    <div class="gallery-count">24 photos · tap to expand</div>
+                    <div class="gallery-count">Tap a photo to expand</div>
                 </div>
-                <div class="masonry" id="masonry">
+
+                <div class="story" id="story">
+                    <button class="story-card" type="button" data-shot="0">
+                        <img src="images/barrier-breakers-2026/img_3829-800.webp" alt="Students from across Northeast Ohio fill the atrium steps" loading="lazy" decoding="async" width="1800" height="1200">
+                        <span class="story-body"><span class="story-num">01</span><span><span class="story-title">The room fills.</span><span class="story-sub">Teams from across Northeast Ohio, checked in and set up before the first pitch.</span></span></span>
+                    </button>
+                    <button class="story-card" type="button" data-shot="5">
+                        <img src="images/barrier-breakers-2026/img_9133-800.webp" alt="The gallery floor, tables and laptops everywhere" loading="lazy" decoding="async" width="1800" height="1350">
+                        <span class="story-body"><span class="story-num">02</span><span><span class="story-title">The gallery round.</span><span class="story-sub">Every team gets a table. Judges work the floor in panels of three.</span></span></span>
+                    </button>
+                    <button class="story-card" type="button" data-shot="10">
+                        <img src="images/barrier-breakers-2026/img_9151-800.webp" alt="A student pitches to a judge at their table" loading="lazy" decoding="async" width="1800" height="1350">
+                        <span class="story-body"><span class="story-num">03</span><span><span class="story-title">Sixty seconds, then questions.</span><span class="story-sub">This is the whole morning: make your case, then hold up under a judge's questions.</span></span></span>
+                    </button>
+                    <button class="story-card" type="button" data-shot="3">
+                        <img src="images/barrier-breakers-2026/img_9155-800.webp" alt="A team shows a judge their prototype at the table" loading="lazy" decoding="async" width="1350" height="1800">
+                        <span class="story-body"><span class="story-num">04</span><span><span class="story-title">Bring the thing.</span><span class="story-sub">A prototype on the table beats a slide about one. Posters, apps, and 3D prints all count.</span></span></span>
+                    </button>
+                    <button class="story-card" type="button" data-shot="19">
+                        <img src="images/barrier-breakers-2026/img_3825-800.webp" alt="A finalist presents on stage to a full room at Demo Day" loading="lazy" decoding="async" width="1800" height="1200">
+                        <span class="story-body"><span class="story-num">05</span><span><span class="story-title">Demo Day.</span><span class="story-sub">Five finalists, five minutes each, in front of the judges and every student in the building.</span></span></span>
+                    </button>
+                    <button class="story-card" type="button" data-shot="6">
+                        <img src="images/barrier-breakers-2026/img_3837-800.webp" alt="Handshakes on stage at the awards" loading="lazy" decoding="async" width="1800" height="1037">
+                        <span class="story-body"><span class="story-num">06</span><span><span class="story-title">Awards.</span><span class="story-sub">Cash to the teams, grants to their schools, and a handshake from the people who judged them.</span></span></span>
+                    </button>
+                </div>
+
+                <div class="story-foot">
+                    <div class="story-stats">
+                        <span><strong>300+</strong>students</span>
+                        <span><strong>~100</strong>teams</span>
+                        <span><strong>12</strong>judges</span>
+                        <span><strong>$20K+</strong>awarded</span>
+                    </div>
+                    <button class="btn btn-ghost" type="button" id="story-all">See all 24 photos</button>
+                </div>
+
+                <div class="masonry is-hidden" id="masonry" aria-hidden="true">
                     <button class="shot" type="button" data-full="images/barrier-breakers-2026/img_3829.webp" data-caption="Students from across Northeast Ohio fill the atrium steps"><img src="images/barrier-breakers-2026/img_3829-800.webp" alt="Students from across Northeast Ohio fill the atrium steps" loading="lazy" decoding="async" width="1800" height="1200"><span class="shot-cap">Students from across Northeast Ohio fill the atrium steps</span></button>
                     <button class="shot" type="button" data-full="images/barrier-breakers-2026/img_9143.webp" data-caption="Innovation Gallery: a poster project on unemployment, ready to pitch"><img src="images/barrier-breakers-2026/img_9143-800.webp" alt="Innovation Gallery: a poster project on unemployment, ready to pitch" loading="lazy" decoding="async" width="1800" height="1350"><span class="shot-cap">Innovation Gallery: a poster project on unemployment, ready to pitch</span></button>
                     <button class="shot" type="button" data-full="images/barrier-breakers-2026/img_3695.webp" data-caption="Opening session under the big screens"><img src="images/barrier-breakers-2026/img_3695-800.webp" alt="Opening session under the big screens" loading="lazy" decoding="async" width="1536" height="932"><span class="shot-cap">Opening session under the big screens</span></button>
@@ -2148,6 +2216,12 @@
             function step(d) { current = (current + d + shots.length) % shots.length; render(); }
 
             shots.forEach(function (shot, i) { shot.addEventListener('click', function () { open(i); }); });
+            // storyboard cards and the "see all" button open the same lightbox
+            Array.prototype.forEach.call(document.querySelectorAll('.story-card'), function (card) {
+                card.addEventListener('click', function () { open(parseInt(card.getAttribute('data-shot'), 10) || 0); });
+            });
+            var all = document.getElementById('story-all');
+            if (all) all.addEventListener('click', function () { open(0); });
             lightbox.querySelector('.lb-close').addEventListener('click', close);
             lightbox.querySelector('.lb-prev').addEventListener('click', function () { step(-1); });
             lightbox.querySelector('.lb-next').addEventListener('click', function () { step(1); });
