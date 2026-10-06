@@ -1,10 +1,10 @@
 // Young Adult Financial Health Map Data
-// Auto-generated: 2026-10-05T05:33:01.765Z
+// Auto-generated: 2026-10-06T05:19:37.234Z
 // Sources: TICAS, Dept. of Education, BLS, Census ACS, Federal Reserve, JCHS, Zillow
 
 const YOUNG_ADULT_DATA = {
     "meta": {
-        "generated": "2026-10-05T05:33:01.763Z",
+        "generated": "2026-10-06T05:19:37.231Z",
         "version": "3.2",
         "source": "Education Data Initiative, Experian, Census ACS, BLS (Young Adult Specific)",
         "update_frequency": "annual",
