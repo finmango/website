@@ -41,9 +41,18 @@ export async function onRequestGet(context) {
     const card = post && post.id ? await ogCardFor(env, url.origin, post.id) : null;
     const meta = buildMeta(post, id, card);
 
+    // The shell ships the site-wide share card as a static og:image so a raw
+    // post.html still previews sensibly. Crawlers (LinkedIn, Facebook, Slack)
+    // take the FIRST og:image they meet, so those static tags must go before
+    // the post's own cover tags are appended — otherwise every Ambassador Note
+    // shares with the generic FinMango card instead of its cover.
+    const drop = { element(el) { el.remove(); } };
     const rewriter = new HTMLRewriter()
       .on('title', { element(el) { el.setInnerContent(meta.title); } })
       .on('meta[name="description"]', { element(el) { el.setAttribute('content', meta.description); } })
+      .on('meta[property^="og:image"]', drop)
+      .on('meta[name^="twitter:image"]', drop)
+      .on('meta[name="twitter:card"]', drop)
       .on('head', { element(el) { el.append(meta.headHtml, { html: true }); } });
 
     const headers = new Headers(templateRes.headers);
