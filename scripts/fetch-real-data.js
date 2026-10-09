@@ -57,11 +57,28 @@ const STATE_NAMES = {
 // Only the FIRST term of each list is actually queried. It is named on the
 // public methodology page so readers know exactly which search phrase drives
 // the trend chart and the volatility boost for each indicator.
+//
+// The first term of each list is the one queried. "debt help" and "eviction
+// help" led until 2026-09-27, but they are too rare for a 3-month state
+// window: in the first 36 state readings after the one-term-per-request fix
+// they read 0 in 32 and 35 states, against 12 and 10 for "food stamps" and
+// "cost of living". The higher-volume alternates now lead.
 const TRENDS_TERMS = {
-    financial_anxiety: ["debt help", "bankruptcy", "can't pay rent"],
+    financial_anxiety: ["bankruptcy", "debt help", "can't pay rent"],
     food_insecurity: ["food stamps", "food bank near me"],
-    housing_stress: ["eviction help", "rent assistance"],
+    housing_stress: ["rent assistance", "eviction help"],
     affordability: ["cost of living", "can't afford"]
+};
+
+// Headline term each cached reading was fetched with, for readings saved
+// before entries recorded their own term. A reading whose term no longer
+// leads its indicator is dropped, so a term swap restarts that indicator's
+// coverage (and withholds its boost) without touching the others.
+const TRENDS_LEGACY_TERMS = {
+    financial_anxiety: "debt help",
+    food_insecurity: "food stamps",
+    housing_stress: "eviction help",
+    affordability: "cost of living"
 };
 
 // Health Trends request budget for a single daily run.
@@ -395,13 +412,17 @@ function pruneTrendsCache(cache, today) {
             // Batched multi-term readings (no scheme tag) were scaled against
             // each other, not measured on their own, so they never count.
             const batched = !entry || entry.scheme !== TRENDS_CACHE_SCHEME;
-            if (!fetched || fetched < cutoff || batched) {
+            // A reading for a term that no longer leads its indicator is
+            // measuring a different search, so it doesn't count either.
+            const term = (entry && entry.term) || TRENDS_LEGACY_TERMS[indicator];
+            const retired = !TRENDS_TERMS[indicator] || term !== TRENDS_TERMS[indicator][0];
+            if (!fetched || fetched < cutoff || batched || retired) {
                 delete cache.states[indicator][abbr];
                 dropped++;
             }
         }
     }
-    if (dropped > 0) console.log(`  \u{1F5D1}\uFE0F  Dropped ${dropped} trends readings (older than ${TRENDS_MAX_AGE_DAYS} days or from batched requests)`);
+    if (dropped > 0) console.log(`  \u{1F5D1}\uFE0F  Dropped ${dropped} trends readings (older than ${TRENDS_MAX_AGE_DAYS} days, from batched requests, or for a retired term)`);
     return cache;
 }
 
@@ -585,7 +606,8 @@ async function fetchGoogleTrends() {
                 cache.states[indicatorByTerm[term]][abbr] = {
                     value: points[points.length - 1].value,
                     fetched: todayISO,
-                    scheme: TRENDS_CACHE_SCHEME
+                    scheme: TRENDS_CACHE_SCHEME,
+                    term
                 };
                 stateReadings++;
             }
