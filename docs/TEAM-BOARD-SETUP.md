@@ -144,14 +144,21 @@ Sheet and HQ always agree and nothing lives only in a browser.
 
 Setup (≈2 minutes, one CONFIG value):
 
-1. Open the Volunteer Application form → **Responses** → the Sheets icon
-   (**Link to Sheets**) if it isn't linked yet. Copy the Sheet's URL.
-2. In the HQ Apps Script, set `VOLUNTEERS_SHEET_URL` to that URL. Leave
-   `VOLUNTEERS_TAB` blank unless you've renamed the responses tab.
+1. The form is already linked to a Sheet: **"Volunteer Application - FinMango
+   (Responses)"** in Scott's Drive, tab `Form Responses 1`, with columns
+   Timestamp / Name / Email / LinkedIn URL / How do you want to help?.
+   `VOLUNTEERS_SHEET_URL` in `tools/team-board-apps-script.js` already points
+   at it. (If the form is ever re-linked, Form → **Responses** → the Sheets
+   icon shows the current Sheet; copy its URL into that CONFIG value.)
+2. Paste the current `tools/team-board-apps-script.js` over the deployed HQ
+   Apps Script (or just set `VOLUNTEERS_SHEET_URL` there to the same URL).
+   Leave `VOLUNTEERS_TAB` blank unless you've renamed the responses tab.
 3. Redeploy a new version. Open HQ → 🙋 Volunteers → ↻ Refresh.
 
 The script runs as its owner, so the Sheet only needs to be readable by that
-account. The sidebar badge counts applications still marked **New**.
+account — keep its sharing restricted, since it holds applicants' names and
+emails. On first load the script adds the four `HQ …` columns after "How do
+you want to help?". The sidebar badge counts applications still marked **New**.
 
 > The Pledge Wall queue that used to sit beside this tab was retired along with
 > the public Pledge Wall. Its bridge (`WALL_MODERATION_KEY`, `wallBridgePost_`)
