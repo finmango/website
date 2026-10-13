@@ -99,9 +99,10 @@ edge-cached ~2 minutes, so public traffic barely touches the backend.
    enter the `ACCESS_KEY`. The first device to connect publishes its local
    workspace as the shared one; everyone after that receives it.
 
-> After **any** change to the Apps Script, redeploy a new version:
-> Deploy → Manage deployments → ✏️ Edit → Version: New version → Deploy.
-> The /exec URL stays the same.
+> After **any** change to `tools/team-board-apps-script.js`, deploy a new
+> version: a Claude session runs `tools/clasp-sync.py` (see
+> `docs/APPS-SCRIPT-DEPLOY.md`). By hand it is Deploy → Manage deployments →
+> ✏️ Edit → Version: New version → Deploy. The /exec URL stays the same.
 
 ## Review queues (Ambassador Notes, Volunteers)
 
@@ -150,10 +151,10 @@ Setup (≈2 minutes, one CONFIG value):
    `VOLUNTEERS_SHEET_URL` in `tools/team-board-apps-script.js` already points
    at it. (If the form is ever re-linked, Form → **Responses** → the Sheets
    icon shows the current Sheet; copy its URL into that CONFIG value.)
-2. Paste the current `tools/team-board-apps-script.js` over the deployed HQ
-   Apps Script (or just set `VOLUNTEERS_SHEET_URL` there to the same URL).
-   Leave `VOLUNTEERS_TAB` blank unless you've renamed the responses tab.
-3. Redeploy a new version. Open HQ → 🙋 Volunteers → ↻ Refresh.
+2. Deploy the repo file to the live script — a Claude session does this with
+   `tools/clasp-sync.py` (see `docs/APPS-SCRIPT-DEPLOY.md`), which carries the
+   deployed keys over automatically. Done on 2026-10-13 (deployment @15).
+3. Open HQ → 🙋 Volunteers → ↻ Refresh.
 
 The script runs as its owner, so the Sheet only needs to be readable by that
 account — keep its sharing restricted, since it holds applicants' names and
