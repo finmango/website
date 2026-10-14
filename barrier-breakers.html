@@ -273,6 +273,28 @@
             background: var(--surface);
         }
         .wall-col img:nth-child(3n + 2) { aspect-ratio: 1; }
+        /* Brick wall over the photo wall: breaks on scroll or click, desktop only */
+        .bricks {
+            position: absolute; inset: 0 -14px; z-index: 3;
+            display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr);
+            pointer-events: none;
+        }
+        .brick {
+            background: #111110; box-shadow: inset 0 0 0 1px #2E2E2A; margin: -1px;
+            cursor: pointer; pointer-events: auto; will-change: transform, opacity;
+            transition: transform .9s var(--ease), opacity .9s;
+        }
+        .brick.gone { pointer-events: none; }
+        .hint { display: flex; align-items: center; gap: 12px; margin-top: 28px; font-family: var(--font-mono); font-size: .8rem; color: var(--ink-faint); transition: opacity .4s; }
+        .hint .bar { width: 96px; height: 2px; background: var(--ink-line); position: relative; overflow: hidden; }
+        .hint .bar i { position: absolute; inset: 0; background: var(--orange); transform-origin: left; transform: scaleX(var(--p, 0)); }
+        .hero.broken .hint { opacity: 0; }
+        .hint { animation: hintin .9s var(--ease) .5s both; }
+        @keyframes hintin { from { opacity: 0; } to { opacity: 1; } }
+        .hero.broken .hint { animation: none; }
+        @media (max-width: 1023px) { .bricks, .hint { display: none; } }
+        @media (prefers-reduced-motion: reduce) { .bricks, .hint { display: none; } }
+
 
         /* Phones get a single horizontal river instead */
         .river {
@@ -595,6 +617,19 @@
         /* ----------------------------------------------------------
            JUDGES
            ---------------------------------------------------------- */
+        /* The room: schematic of the day */
+        .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+        .tab { display: flex; flex-direction: column; gap: 3px; padding: 14px 16px; border: 1px solid var(--ink-line); border-radius: var(--r); background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer; transition: border-color .25s, background .25s; }
+        .tab:hover { border-color: var(--ink-dim); }
+        .tab[aria-pressed="true"] { border-color: var(--orange); background: var(--surface); }
+        .tab .k { font-family: var(--font-mono); font-size: .78rem; color: var(--orange-ink); }
+        .tab .t { font-weight: 600; }
+        @media (max-width: 640px) { .tabs { grid-template-columns: 1fr; } .tab { flex-direction: row; gap: 12px; align-items: baseline; } }
+        .schem { background: var(--surface); border: 1px solid var(--ink-line); border-radius: var(--r); padding: 20px 20px 10px; }
+        .schem svg { width: 100%; height: auto; display: block; }
+        .caption { margin: 18px 0 0; color: var(--muted); min-height: 3.2em; max-width: 60ch; font-size: 1rem; line-height: 1.6; }
+        .caption b { color: var(--ink); font-weight: 600; }
+
         .format-note { max-width: 760px; margin-top: 28px; color: var(--muted); line-height: 1.65; font-size: .98rem; text-wrap: pretty; }
         .judges-label {
             font-size: .8rem;
@@ -704,6 +739,18 @@
         /* ----------------------------------------------------------
            FINAL CTA — dark slab
            ---------------------------------------------------------- */
+        /* Orange closing CTA */
+        .on-orange { background: var(--orange); color: var(--ink); }
+        .on-orange h2 { color: var(--ink); }
+        .on-orange .tag { border-color: rgba(10,10,10,.3); color: rgba(10,10,10,.75); }
+        .on-orange .tag .dot { background: var(--ink); }
+        .on-orange.cta p { color: rgba(10,10,10,.72); }
+        .on-orange .btn-primary { background: var(--ink); color: var(--paper); }
+        .on-orange .btn-primary:hover { background: #222; color: var(--paper); }
+        .on-orange .btn-ghost { color: var(--ink); border-color: rgba(10,10,10,.35); }
+        .on-orange .btn-ghost:hover { border-color: var(--ink); }
+        .on-orange .cta-contact, .on-orange .cta-contact a { color: rgba(10,10,10,.75); }
+
         .cta-wrap { padding: 0; }
         .cta { padding: 96px 0; }
         .cta-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 40px; align-items: end; }
@@ -1483,7 +1530,10 @@
                             </a>
                             <a href="barrier-breakers-judge-apply.html" class="btn btn-ghost">Apply to judge</a>
                         </div>
+                        <div class="hint" id="hint"><span>Scroll to break through</span><span class="bar"><i id="hintbar"></i></span></div>
                     </div>
+
+                    <div class="wall-stage">
 
                     <div class="wall" aria-hidden="true">
                         <div class="wall-col">
@@ -1540,6 +1590,7 @@
                             <img src="images/barrier-breakers-2026/img_3817-800.webp" alt="" decoding="async">
                             <img src="images/barrier-breakers-2026/img_3780-800.webp" alt="" decoding="async">
                         </div>
+                        <div class="bricks" id="bricks" aria-hidden="true"></div>
                     </div>
                 </div>
             </div>
@@ -1724,25 +1775,22 @@
                     <h2>One round. Five finalists. Then Demo Day.</h2>
                     <p>Every team goes through the same morning. No separate divisions, no track brackets, no wondering which judges you'll get.</p>
                 </div>
-                <div class="steps-grid">
-                    <div class="card lift step">
-                        <div class="step-num" aria-hidden="true">AM</div>
-                        <div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
-                        <h3>Gallery round</h3>
-                        <p>Every team gets a table. Bring whatever shows your work best: a poster, a prototype, a demo on a laptop. The room is split into five sections, each with a panel of three judges. Your panel visits every table in your section: a 60-second pitch, two minutes of questions, then they score and move on.</p>
-                    </div>
-                    <div class="card lift step">
-                        <div class="step-num" aria-hidden="true">11</div>
-                        <div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg></div>
-                        <h3>Finalists named</h3>
-                        <p>Each panel sends its top team to Demo Day and names a runner-up for an honorable mention. Five finalists, five honorable mentions, announced before lunch. Nobody knows in advance, so every team should come with a five-minute presentation ready.</p>
-                    </div>
-                    <div class="card lift step">
-                        <div class="step-num" aria-hidden="true">PM</div>
-                        <div class="step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M5 8l2 8h10l2-8M9 22h6M12 16v6"/></svg></div>
-                        <h3>Demo Day</h3>
-                        <p>The five finalists pitch for five minutes each, with Q&amp;A, in front of the Demo Day panel and every student in the room. The panel is the morning judges who can stay, at least five of them, and it ranks the finalists 1st through 5th. Awards follow.</p>
-                    </div>
+                <div class="tabs" role="group" aria-label="Phases of the day">
+                    <button class="tab" type="button" data-phase="0" aria-pressed="true"><span class="k">Morning</span><span class="t">Gallery round</span></button>
+                    <button class="tab" type="button" data-phase="1" aria-pressed="false"><span class="k">11:00</span><span class="t">Finalists named</span></button>
+                    <button class="tab" type="button" data-phase="2" aria-pressed="false"><span class="k">Afternoon</span><span class="t">Demo Day</span></button>
+                </div>
+                <div class="schem">
+                    <svg id="roomsvg" viewBox="0 0 900 470" role="img" aria-label="Schematic of the competition room: five sections of team tables, one panel of three judges per section, and a Demo Day stage">
+                        <g id="room-sections"></g>
+                        <g id="room-stage">
+                            <rect x="40" y="396" width="820" height="56" rx="3" fill="none" stroke="rgba(10,10,10,.28)" stroke-dasharray="4 4"/>
+                            <text x="60" y="429" fill="rgba(10,10,10,.5)" font-family="JetBrains Mono, monospace" font-size="12">Demo Day stage</text>
+                        </g>
+                        <g id="room-panels"></g>
+                        <g id="room-finalists"></g>
+                    </svg>
+                    <p class="caption" id="room-caption"></p>
                 </div>
                 <p class="format-note">Why sections? Three judges can give every team real attention in one morning, and everyone you're competing against for a Demo Day spot saw the exact same three people. Sections are mixed by topic and school, so no panel is comparing six projects from one classroom.</p>
             </div>
@@ -2121,7 +2169,7 @@
 
         <!-- ======================= FINAL CTA ======================= -->
         <div class="cta-wrap">
-            <section class="cta on-dark slab" id="apply">
+            <section class="cta on-orange slab" id="apply">
                 <div class="container">
                     <div class="cta-grid">
                         <div>
@@ -2324,6 +2372,160 @@
         })();
     </script>
 
+    <script>
+    (function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var mq = window.matchMedia('(min-width: 1024px)');
+
+      /* ---------- Bricks over the photo wall ---------- */
+      var hero = document.querySelector('.hero');
+      var wallEl = document.getElementById('bricks');
+      var hintbar = document.getElementById('hintbar');
+      var bricks = [];
+      var seed = 11;
+      function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+      if (!reduce && wallEl && mq.matches) {
+        var cols = 6, rows = 6;
+        for (var i = 0; i < cols * rows; i++) {
+          var b = document.createElement('span'); b.className = 'brick';
+          var col = i % cols;
+          bricks.push({ el: b, t: (col / cols) * 0.6 + rnd() * 0.25, dx: (rnd() - 0.2) * 900, dy: (rnd() - 0.5) * 700, rot: (rnd() - 0.5) * 120, clicked: false });
+          b.addEventListener('click', (function (k) { return function () { breakBrick(k); }; })(i));
+          wallEl.appendChild(b);
+        }
+      }
+      var manual = 0;
+      function breakBrick(k) {
+        var br = bricks[k]; if (br.clicked) return;
+        br.clicked = true; br.el.classList.add('gone');
+        br.el.style.transition = 'transform .9s cubic-bezier(.22,1,.36,1), opacity .9s';
+        br.el.style.transform = 'translate(' + br.dx + 'px,' + br.dy + 'px) rotate(' + br.rot + 'deg)';
+        br.el.style.opacity = '0';
+        if (++manual > bricks.length * 0.4) hero.classList.add('broken');
+      }
+      function render() {
+        if (!bricks.length) return;
+        var range = window.innerHeight * 0.6;
+        var p = Math.min(1, Math.max(0, window.scrollY / range)) * 0.86 + 0.14;
+        if (hintbar) hintbar.style.setProperty('--p', p);
+        for (var i = 0; i < bricks.length; i++) {
+          var br = bricks[i]; if (br.clicked) continue;
+          var k = Math.min(1, Math.max(0, (p - br.t) / 0.25)); var e = k * k * (3 - 2 * k);
+          br.el.style.transition = 'none';
+          if (e === 0) { br.el.style.transform = ''; br.el.style.opacity = ''; br.el.classList.remove('gone'); continue; }
+          br.el.classList.remove('loose');
+          br.el.style.transform = 'translate(' + (br.dx * e) + 'px,' + (br.dy * e) + 'px) rotate(' + (br.rot * e) + 'deg)';
+          br.el.style.opacity = String(1 - e);
+          br.el.classList.toggle('gone', e > 0.4);
+        }
+        if (p > 0.6) hero.classList.add('broken');
+      }
+      if (bricks.length) {
+        // A few bricks come down on their own so the students show through before anyone scrolls.
+        [8, 14, 19, 27, 3].forEach(function (k, i) { setTimeout(function () { breakBrick(k); }, 600 + i * 140); });
+        var ticking = false;
+        window.addEventListener('scroll', function () { if (!ticking) { requestAnimationFrame(function () { render(); ticking = false; }); ticking = true; } }, { passive: true });
+        window.addEventListener('resize', render);
+        render();
+      }
+
+      /* ---------- Room schematic ---------- */
+      var svg = document.getElementById('roomsvg'); if (!svg) return;
+      var NS = 'http://www.w3.org/2000/svg';
+      function el(n, a) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); return e; }
+      var gS = document.getElementById('room-sections'), gP = document.getElementById('room-panels'), gF = document.getElementById('room-finalists');
+      var caption = document.getElementById('room-caption');
+      var secW = 152, secGap = 15, left = 40, top = 30, secH = 330, tablesPerSec = 4, tableW = 84, tableH = 40;
+      var sections = [], panels = [];
+      for (var s = 0; s < 5; s++) {
+        var x = left + s * (secW + secGap);
+        gS.appendChild(el('rect', { x: x, y: top, width: secW, height: secH, rx: 3, fill: 'none', stroke: 'rgba(10,10,10,.2)' }));
+        var lab = el('text', { x: x + 12, y: top + 22, fill: 'rgba(10,10,10,.5)', 'font-family': 'JetBrains Mono, monospace', 'font-size': '12' }); lab.textContent = 'Section ' + (s + 1); gS.appendChild(lab);
+        var tables = [];
+        for (var t = 0; t < tablesPerSec; t++) {
+          var tx = x + 16, ty = top + 44 + t * 68;
+          var r = el('rect', { x: tx, y: ty, width: tableW, height: tableH, rx: 3, fill: 'rgba(10,10,10,.1)', stroke: 'rgba(10,10,10,.35)' });
+          gS.appendChild(r);
+          var tl = el('text', { x: tx + 10, y: ty + 25, fill: 'rgba(10,10,10,.45)', 'font-family': 'JetBrains Mono, monospace', 'font-size': '11' }); tl.textContent = 'team'; gS.appendChild(tl);
+          tables.push({ x: tx, y: ty, cx: tx + tableW / 2, cy: ty + tableH / 2, el: r });
+        }
+        sections.push({ x: x, tables: tables });
+        var g = el('g', {}); var px = x + secW - 30;
+        for (var j = 0; j < 3; j++) g.appendChild(el('circle', { cx: px, cy: j * 12, r: 5, fill: '#0A0A0A' }));
+        gP.appendChild(g);
+        panels.push({ el: g, sec: s, homeY: top + 44 + tableH / 2 - 12 });
+      }
+      var finalistIdx = [2, 0, 3, 1, 2];
+      var finalists = [];
+      for (var f = 0; f < 5; f++) {
+        var tb = sections[f].tables[finalistIdx[f]];
+        var c = el('circle', { cx: tb.cx, cy: tb.cy, r: 0, fill: '#F25A27' }); gF.appendChild(c);
+        var lbl = el('text', { x: tb.cx, y: tb.cy + 4, 'text-anchor': 'middle', fill: '#0A0A0A', 'font-family': 'JetBrains Mono, monospace', 'font-size': '12', 'font-weight': '700', opacity: 0 }); gF.appendChild(lbl);
+        finalists.push({ el: c, lbl: lbl, home: tb });
+      }
+      var stageOrder = [2, 0, 3, 1, 4];
+      var captions = [
+        '<b>Gallery round.</b> Every team gets a table. Your section’s three judges visit every table: a 60-second pitch, two minutes of questions, then they score and move on.',
+        '<b>Finalists named.</b> Each panel sends its top team to Demo Day and names a runner-up for an honorable mention. Five finalists, five honorable mentions, announced before lunch. Nobody knows in advance, so come with a five-minute version ready.',
+        '<b>Demo Day.</b> The five finalists pitch for five minutes each, with Q&amp;A, in front of the Demo Day panel and every student in the room. The panel is the morning judges who can stay, at least five of them. Ranked 1st through 5th. Awards follow.'
+      ];
+      var raf = null, t0 = null;
+      function lerp(a, b, k) { return a + (b - a) * k; }
+      function ease(k) { return k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; }
+      function resetTables() { sections.forEach(function (sec) { sec.tables.forEach(function (tb) { tb.el.setAttribute('fill', 'rgba(10,10,10,.1)'); tb.el.setAttribute('stroke', 'rgba(10,10,10,.35)'); }); }); }
+      function setPhase(n, animate) {
+        document.querySelectorAll('.tab').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.phase == String(n) ? 'true' : 'false'); });
+        caption.innerHTML = captions[n];
+        if (raf) cancelAnimationFrame(raf); t0 = null;
+        resetTables();
+        var still = reduce || !animate;
+        if (n === 0) {
+          finalists.forEach(function (f) { f.el.setAttribute('r', 0); f.lbl.setAttribute('opacity', 0); f.el.setAttribute('cx', f.home.cx); f.el.setAttribute('cy', f.home.cy); });
+          panels.forEach(function (p) { p.el.setAttribute('opacity', 1); });
+          if (still) { panels.forEach(function (p) { p.el.setAttribute('transform', 'translate(0,' + p.homeY + ')'); sections[p.sec].tables[0].el.setAttribute('fill', 'rgba(10,10,10,.28)'); }); return; }
+          var loop = function (ts) {
+            if (!t0) t0 = ts; var tt = (ts - t0) / 1000;
+            panels.forEach(function (p) {
+              var cyc = (tt * 0.18 + p.sec * 0.13) % 1; var pos = cyc * tablesPerSec; var ti = Math.floor(pos); var k = pos - ti; var move = k < 0.75 ? 0 : ease((k - 0.75) / 0.25);
+              var a = sections[p.sec].tables[ti % tablesPerSec], b = sections[p.sec].tables[(ti + 1) % tablesPerSec];
+              var y = lerp(a.cy, b.cy, move) - 12;
+              p.el.setAttribute('transform', 'translate(0,' + y + ')');
+              sections[p.sec].tables.forEach(function (tb, i) { tb.el.setAttribute('fill', i === ti % tablesPerSec ? 'rgba(10,10,10,.28)' : 'rgba(10,10,10,.1)'); });
+            });
+            raf = requestAnimationFrame(loop);
+          };
+          raf = requestAnimationFrame(loop);
+        } else if (n === 1) {
+          panels.forEach(function (p) { p.el.setAttribute('opacity', .3); p.el.setAttribute('transform', 'translate(0,' + p.homeY + ')'); });
+          finalists.forEach(function (f) { f.el.setAttribute('cx', f.home.cx); f.el.setAttribute('cy', f.home.cy); f.lbl.setAttribute('opacity', 0); f.home.el.setAttribute('stroke', '#F25A27'); });
+          if (still) { finalists.forEach(function (f) { f.el.setAttribute('r', 11); }); return; }
+          var grow = function (ts) { if (!t0) t0 = ts; var done = true; finalists.forEach(function (f, i) { var k = Math.min(1, Math.max(0, (ts - t0 - i * 180) / 450)); f.el.setAttribute('r', 11 * ease(k)); if (k < 1) done = false; }); if (!done) raf = requestAnimationFrame(grow); };
+          raf = requestAnimationFrame(grow);
+        } else {
+          panels.forEach(function (p) { p.el.setAttribute('opacity', .18); p.el.setAttribute('transform', 'translate(0,' + p.homeY + ')'); });
+          finalists.forEach(function (f) { f.home.el.setAttribute('stroke', '#F25A27'); });
+          var draw = function (ts) {
+            if (!t0) t0 = ts; var done = true;
+            finalists.forEach(function (f, i) {
+              var slot = stageOrder.indexOf(i); var tx = 330 + slot * 115, ty = 424;
+              var k = still ? 1 : Math.min(1, Math.max(0, (ts - t0 - slot * 140) / 850)); var e = ease(k);
+              f.el.setAttribute('r', 11 + 4 * e); f.el.setAttribute('cx', lerp(f.home.cx, tx, e)); f.el.setAttribute('cy', lerp(f.home.cy, ty, e));
+              f.lbl.setAttribute('x', lerp(f.home.cx, tx, e)); f.lbl.setAttribute('y', lerp(f.home.cy, ty, e) + 4); f.lbl.textContent = String(slot + 1); f.lbl.setAttribute('opacity', k > 0.95 ? 1 : 0);
+              if (k < 1) done = false;
+            });
+            if (!done) raf = requestAnimationFrame(draw);
+          };
+          raf = requestAnimationFrame(draw);
+        }
+      }
+      document.querySelectorAll('.tab').forEach(function (b) { b.addEventListener('click', function () { setPhase(parseInt(b.dataset.phase, 10), true); }); });
+      setPhase(0, false);
+      var seen = false;
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (en) { if (en[0].isIntersecting && !seen) { seen = true; setPhase(0, true); } }, { threshold: 0.3 }).observe(svg);
+      } else setPhase(0, true);
+    })();
+    </script>
 </body>
 
 </html>
