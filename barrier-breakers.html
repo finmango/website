@@ -273,28 +273,6 @@
             background: var(--surface);
         }
         .wall-col img:nth-child(3n + 2) { aspect-ratio: 1; }
-        /* Brick wall over the photo wall: breaks on scroll or click, desktop only */
-        .bricks {
-            position: absolute; inset: 0 -14px; z-index: 3;
-            display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(6, 1fr);
-            pointer-events: none;
-        }
-        .brick {
-            background: #111110; box-shadow: inset 0 0 0 1px #2E2E2A; margin: -1px;
-            cursor: pointer; pointer-events: auto; will-change: transform, opacity;
-            transition: transform .9s var(--ease), opacity .9s;
-        }
-        .brick.gone { pointer-events: none; }
-        .hint { display: flex; align-items: center; gap: 12px; margin-top: 28px; font-family: var(--font-mono); font-size: .8rem; color: var(--ink-faint); transition: opacity .4s; }
-        .hint .bar { width: 96px; height: 2px; background: var(--ink-line); position: relative; overflow: hidden; }
-        .hint .bar i { position: absolute; inset: 0; background: var(--orange); transform-origin: left; transform: scaleX(var(--p, 0)); }
-        .hero.broken .hint { opacity: 0; }
-        .hint { animation: hintin .9s var(--ease) .5s both; }
-        @keyframes hintin { from { opacity: 0; } to { opacity: 1; } }
-        .hero.broken .hint { animation: none; }
-        @media (max-width: 1023px) { .bricks, .hint { display: none; } }
-        @media (prefers-reduced-motion: reduce) { .bricks, .hint { display: none; } }
-
 
         /* Phones get a single horizontal river instead */
         .river {
@@ -1530,7 +1508,6 @@
                             </a>
                             <a href="barrier-breakers-judge-apply.html" class="btn btn-ghost">Apply to judge</a>
                         </div>
-                        <div class="hint" id="hint"><span>Scroll to break through</span><span class="bar"><i id="hintbar"></i></span></div>
                     </div>
 
                     <div class="wall-stage">
@@ -1590,7 +1567,6 @@
                             <img src="images/barrier-breakers-2026/img_3817-800.webp" alt="" decoding="async">
                             <img src="images/barrier-breakers-2026/img_3780-800.webp" alt="" decoding="async">
                         </div>
-                        <div class="bricks" id="bricks" aria-hidden="true"></div>
                     </div>
                 </div>
             </div>
@@ -2375,59 +2351,6 @@
     <script>
     (function () {
       var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var mq = window.matchMedia('(min-width: 1024px)');
-
-      /* ---------- Bricks over the photo wall ---------- */
-      var hero = document.querySelector('.hero');
-      var wallEl = document.getElementById('bricks');
-      var hintbar = document.getElementById('hintbar');
-      var bricks = [];
-      var seed = 11;
-      function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
-      if (!reduce && wallEl && mq.matches) {
-        var cols = 6, rows = 6;
-        for (var i = 0; i < cols * rows; i++) {
-          var b = document.createElement('span'); b.className = 'brick';
-          var col = i % cols;
-          bricks.push({ el: b, t: (col / cols) * 0.6 + rnd() * 0.25, dx: (rnd() - 0.2) * 900, dy: (rnd() - 0.5) * 700, rot: (rnd() - 0.5) * 120, clicked: false });
-          b.addEventListener('click', (function (k) { return function () { breakBrick(k); }; })(i));
-          wallEl.appendChild(b);
-        }
-      }
-      var manual = 0;
-      function breakBrick(k) {
-        var br = bricks[k]; if (br.clicked) return;
-        br.clicked = true; br.el.classList.add('gone');
-        br.el.style.transition = 'transform .9s cubic-bezier(.22,1,.36,1), opacity .9s';
-        br.el.style.transform = 'translate(' + br.dx + 'px,' + br.dy + 'px) rotate(' + br.rot + 'deg)';
-        br.el.style.opacity = '0';
-        if (++manual > bricks.length * 0.4) hero.classList.add('broken');
-      }
-      function render() {
-        if (!bricks.length) return;
-        var range = window.innerHeight * 0.6;
-        var p = Math.min(1, Math.max(0, window.scrollY / range)) * 0.86 + 0.14;
-        if (hintbar) hintbar.style.setProperty('--p', p);
-        for (var i = 0; i < bricks.length; i++) {
-          var br = bricks[i]; if (br.clicked) continue;
-          var k = Math.min(1, Math.max(0, (p - br.t) / 0.25)); var e = k * k * (3 - 2 * k);
-          br.el.style.transition = 'none';
-          if (e === 0) { br.el.style.transform = ''; br.el.style.opacity = ''; br.el.classList.remove('gone'); continue; }
-          br.el.classList.remove('loose');
-          br.el.style.transform = 'translate(' + (br.dx * e) + 'px,' + (br.dy * e) + 'px) rotate(' + (br.rot * e) + 'deg)';
-          br.el.style.opacity = String(1 - e);
-          br.el.classList.toggle('gone', e > 0.4);
-        }
-        if (p > 0.6) hero.classList.add('broken');
-      }
-      if (bricks.length) {
-        // A few bricks come down on their own so the students show through before anyone scrolls.
-        [8, 14, 19, 27, 3].forEach(function (k, i) { setTimeout(function () { breakBrick(k); }, 600 + i * 140); });
-        var ticking = false;
-        window.addEventListener('scroll', function () { if (!ticking) { requestAnimationFrame(function () { render(); ticking = false; }); ticking = true; } }, { passive: true });
-        window.addEventListener('resize', render);
-        render();
-      }
 
       /* ---------- Room schematic ---------- */
       var svg = document.getElementById('roomsvg'); if (!svg) return;
