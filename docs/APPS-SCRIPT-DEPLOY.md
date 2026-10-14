@@ -49,9 +49,15 @@ changes. Secrets stay in Google; the repo keeps its placeholders.
 | Backend | Repo file | Script ID | Live deployment ID |
 | --- | --- | --- | --- |
 | FinMango HQ (team board) | `tools/team-board-apps-script.js` | `1oYyZEunbkwrwGGuN16N1XPqdoepPT9UJN4umm4VXWz1tmXhsJmk9BqXl` | `AKfycbxi0w34MJLnCnHlsBgRiWrMm7o-JxHYbJXEL5X9iLhUC8to0RWshZPkNxNhiyhHU7J3` |
-| Barrier Breakers application | `tools/barrier-breakers-*-apps-script.js` | `1Dcy4DSHgcPmrwOEnKwfZ8oFvmSibFni0qy0MM95sD7n-iAxf_l67dmeL` | (look up with `clasp deployments` in a clone) |
+| Barrier Breakers application + 2027 notify form | `tools/barrier-breakers-apply-apps-script.js` | `1Dcy4DSHgcPmrwOEnKwfZ8oFvmSibFni0qy0MM95sD7n-iAxf_l67dmeL` | `AKfycbwAqIzAGz8YH_xzaTPWhTGTKI5jBRtunrCf7IlWPkkvSjBT9Mae_jOgqbaz_ps76fciSQ` (notify form, `barrier-breakers.html`); the 2026 apply/track-stats deployments in the same project are listed by `clasp deployments` |
+| Barrier Breakers judge sign-ups, projects, quiz | `tools/barrier-breakers-{judge,projects,quiz}-apps-script.js` | Sheet-bound, not recorded yet (see below) | judge: `AKfycbzXD9YpxDFyySYQOntQYGl9Lav-GGZBRim8AZUz4orksyAXiZkch25xmXS01y8TFnFSMg` |
 | Ambassador Notes (posts) | `tools/posts-apps-script.js` | not recorded yet | `AKfycbyw06JczRZVwdf3vw70xeshZ_shp2J1zzvPvPqhR-2_FSqzSBFaq0Yu-OZ7KjKYfCuthQ` |
 | Community Wall | `tools/community-wall-apps-script.js` | not recorded yet | `AKfycbyogpgQ2naRVxs1LK1opqJywYZq0k9JpD7C9dLeKPqMs3BFikOh527QKuOCB6n3q1fHfQ` |
+
+The Barrier Breakers application project is the one standalone project
+`clasp list` shows for this account; it already holds the Sheets and Gmail
+permissions, so new handlers that write to its spreadsheet (the 2027 notify
+form does, on a `2027 Notify` tab) need no new authorization.
 
 Sheet-bound scripts (HQ is one) do not show up in `clasp list` or Drive
 search. To find a missing Script ID: open the bound Sheet → Extensions →
