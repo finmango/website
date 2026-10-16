@@ -328,9 +328,9 @@ Google Trends site. One representative term is queried per indicator:
 
 | Indicator | Term |
 |-----------|------|
-| Financial Anxiety | "debt help" |
+| Financial Anxiety | "bankruptcy" |
 | Food Insecurity | "food stamps" |
-| Housing Stress | "eviction help" |
+| Housing Stress | "rent assistance" |
 | Affordability | "cost of living" |
 
 **Rotating fetch.** The quota allows roughly 40 requests per run, far short of

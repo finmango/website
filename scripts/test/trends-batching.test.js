@@ -100,7 +100,10 @@ test('every request asks for exactly one term, and readings are tagged per-term'
         assert.strictEqual(seen.filter(r => r.geo !== 'US').length, TRENDS_STATES_PER_RUN * TERMS.length);
         assert.deepStrictEqual(Object.keys(result.nationalTimeSeries).sort(), Object.keys(TRENDS_TERMS).sort());
         for (const byState of Object.values(result.cache.states)) {
-            for (const entry of Object.values(byState)) assert.strictEqual(entry.scheme, TRENDS_CACHE_SCHEME);
+            for (const entry of Object.values(byState)) {
+                assert.strictEqual(entry.scheme, TRENDS_CACHE_SCHEME);
+                assert.ok(TERMS.includes(entry.term), `untagged or unknown term: ${entry.term}`);
+            }
         }
         assert.strictEqual(result.cache.cursor, TRENDS_STATES_PER_RUN);
     } finally {
@@ -110,15 +113,31 @@ test('every request asks for exactly one term, and readings are tagged per-term'
     }
 });
 
+test('readings for a retired headline term are dropped; current terms are kept', () => {
+    const today = new Date('2026-09-27');
+    const cache = { cursor: 0, states: {
+        // Saved before entries recorded a term: judged by the legacy headline
+        housing_stress: { OH: { value: 0, fetched: '2026-09-25', scheme: TRENDS_CACHE_SCHEME } },
+        food_insecurity: { OH: { value: 25, fetched: '2026-09-25', scheme: TRENDS_CACHE_SCHEME } },
+        // Tagged with the term that now leads
+        financial_anxiety: { PA: { value: 12, fetched: '2026-09-25', scheme: TRENDS_CACHE_SCHEME,
+                                   term: TRENDS_TERMS.financial_anxiety[0] } }
+    } };
+    pruneTrendsCache(cache, today);
+    assert.deepStrictEqual(Object.keys(cache.states.housing_stress), []);
+    assert.deepStrictEqual(Object.keys(cache.states.food_insecurity), ['OH']);
+    assert.deepStrictEqual(Object.keys(cache.states.financial_anxiety), ['PA']);
+});
+
 test('cached readings from batched requests (no scheme tag) are dropped', () => {
     const today = new Date('2026-09-23');
-    const cache = { cursor: 0, states: { housing_stress: {
+    const cache = { cursor: 0, states: { food_insecurity: {
         OH: { value: 0, fetched: '2026-09-20' },                                   // batched: dropped
         PA: { value: 31, fetched: '2026-09-20', scheme: TRENDS_CACHE_SCHEME },     // kept
         TX: { value: 29, fetched: '2026-09-01', scheme: TRENDS_CACHE_SCHEME }      // too old: dropped
     } } };
     pruneTrendsCache(cache, today);
-    assert.deepStrictEqual(Object.keys(cache.states.housing_stress), ['PA']);
+    assert.deepStrictEqual(Object.keys(cache.states.food_insecurity), ['PA']);
 });
 
 test('response lines are matched to terms by their own `term` field, in any order', () => {
