@@ -46,7 +46,9 @@ public roadmap page (`roadmap.html`) IS meant to be found and linked.
 
 | File | Role | Audience |
 | --- | --- | --- |
-| `team-board.html` | The whole workspace app (boards, wiki, modals, sync client) | Team |
+| `team-board.html` | The workspace shell (sign-in gate + app skeleton). Loads the two files below with a `?v=` cache-buster — bump it on both tags whenever either file changes | Team |
+| `js/team-board.js` | The whole workspace app (boards, wiki, review queues, modals, sync client) | Team |
+| `css/team-board.css` | The app's stylesheet — system fonts, no web-font downloads | Team |
 | `roadmap.html` | Public roadmap — renders only 🌐-flagged items | Everyone |
 | `tools/team-board-apps-script.js` | The backend (deploy to Apps Script) + the bridge to the Ambassador Notes backend | One-time setup |
 | `functions/api/board.js` | Cloudflare edge layer: load/save proxy (never cached) + public subset (cached ~2 min) | Auto (no setup) |
@@ -186,7 +188,8 @@ shared key needed for staff. It's one OAuth client ID, free, created once:
    on preview deploys — origins must be exact, wildcards aren't allowed.)
 4. Copy the **Client ID** (ends in `.apps.googleusercontent.com`). It's public
    by design — safe to commit. Paste it in **two** places:
-   - `team-board.html` → `GOOGLE_CLIENT_ID`
+   - `js/team-board.js` → `GOOGLE_CLIENT_ID` (then bump the `?v=` on the
+     script tag in `team-board.html`)
    - the Apps Script → `CONFIG.GOOGLE_CLIENT_ID` (then redeploy a new version)
 5. Commit/push the site change. Done — the Google button appears in the
    Access & sync modal and the who-are-you dialog.
