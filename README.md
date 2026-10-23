@@ -43,7 +43,7 @@ website/
 ├── education.html         # Education programs
 ├── advocacy.html          # Advocacy & ambassadors
 ├── resources.html         # Tools and calculators
-├── barrier-breakers.html  # Innovation challenge
+├── barrier-breakers.html  # Entrepreneurship competition
 ├── donate.html            # Donation page
 ├── get-involved.html      # Volunteer opportunities
 ├── privacy.html           # Privacy policy
