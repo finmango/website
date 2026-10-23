@@ -738,6 +738,10 @@
         /* Phone folds: long lists collapse behind a button below 640px (JS adds .folded) */
         .fold-btn { display: none; }
         .fold > .judges-label:first-of-type { margin-top: 44px; }
+        /* .fold-all collapses at every width (older winners) */
+        .years .fold-all { display: grid; gap: 16px; }
+        .years .fold-all.folded { display: none; }
+        .fold-all + .fold-btn { display: inline-flex; margin-top: 4px; justify-self: start; }
         .fold [tabindex="-1"]:focus { outline: none; }
         @media (max-width: 640px) {
             .fold.folded { display: none; }
@@ -2057,6 +2061,7 @@
                         </div>
                     </div>
 
+                    <div class="fold fold-all" data-fold="Show the 2025 and 2024 winners">
                     <div class="card year-block">
                         <div class="year"><em>'</em>25</div>
                         <div class="year-photo"><img src="images/barrier-breakers-2026/2025-winner.webp" alt="2025 Barrier Breakers winners" loading="lazy" width="1456" height="1165"></div>
@@ -2075,6 +2080,7 @@
                             <div class="place"><div class="place-rank">2nd</div><div><div class="place-name">Samuel Denys</div><div class="place-school">Westlake High School</div></div></div>
                             <div class="place"><div class="place-rank">3rd</div><div><div class="place-name">Cullen Rooney</div><div class="place-school">Normandy High School</div></div></div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -2563,7 +2569,7 @@
         var b = document.createElement('button');
         b.type = 'button'; b.className = 'btn btn-ghost fold-btn'; b.textContent = fold.getAttribute('data-fold') || 'Show more';
         b.setAttribute('aria-expanded', 'false');
-        b.addEventListener('click', function () { fold.classList.remove('folded'); b.remove(); var first = fold.querySelector('h3, .judges-label, .tier, .sponsor'); if (first) { first.setAttribute('tabindex', '-1'); first.focus({ preventScroll: true }); } });
+        b.addEventListener('click', function () { fold.classList.remove('folded'); b.remove(); var first = fold.querySelector('h3, .judges-label, .tier, .sponsor, .year'); if (first) { first.setAttribute('tabindex', '-1'); first.focus({ preventScroll: true }); } });
         fold.parentNode.insertBefore(b, fold.nextSibling);
       });
     })();
