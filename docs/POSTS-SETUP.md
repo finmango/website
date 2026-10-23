@@ -284,7 +284,7 @@ Edit, commit, done — no re-upload, no change to the Sheet. Keys are post ids
 | `fit` | `"cover"` crops to fill the frame, `"contain"` shows the whole cover letterboxed. Omit for automatic. |
 | `focus` | Which part survives a crop, as a CSS `object-position` — `"50% 20%"`, `"left top"`. This is the "move the crop" knob. |
 | `bg` | Letterbox bar colour. Omit to sample the cover's edge. |
-| `og` | `"card"` forces a social card, `"cover"` forces the raw cover into shares. Omit for automatic. |
+| `og` | `"card"` forces a social card, `"cover"` forces the raw cover into shares, `"custom"` keeps a hand-made card (below). Omit for automatic. |
 
 The file is served with a 1-hour cache, so allow up to an hour for a change to
 reach everyone (or re-scrape with the platform debuggers linked above).
@@ -316,6 +316,24 @@ command above, or trigger the workflow by hand from the Actions tab.
 To re-frame a note *after* publishing, in order of effort: set `focus` (move the
 crop), set `fit` (stop cropping), set `og` and re-run the generator (change the
 share), or ask the author for a new cover and re-run with `--force`.
+
+### 4. Hand-made cards
+
+Sometimes no framing of the cover makes a good share — a screenshot of someone
+else's article, say, which reads as *their* post in the feed. For those, draw
+the card by hand: copy an existing page under `scripts/og-custom/` to
+`scripts/og-custom/<postId>.html` (same fonts and tokens as the automatic
+template; the `#capture` element is what gets captured), then
+
+```bash
+node scripts/render-og-custom.js <postId>
+```
+
+and add `"og": "custom"` for the note in `data/cover-tuning.json`. The render
+writes `og/posts/<postId>.jpg` and its manifest entry; the `custom` flag tells
+the daily generator to leave that card alone, `--force` included. The cover on
+the article page itself is unchanged — only the share image is. To go back to
+automatic, drop the flag and re-run the generator with `--id=<postId>`.
 
 ## Optional upgrade: pre-render to static files (SEO)
 

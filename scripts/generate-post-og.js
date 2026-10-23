@@ -86,7 +86,7 @@ const coverUrl = cover => String(cover).replace(/&amp;/g, '&');
 function tunedMode(tuning, id) {
   const entry = tuning && tuning[id];
   const mode = entry && typeof entry === 'object' ? entry.og : '';
-  return mode === 'card' || mode === 'cover' ? mode : 'auto';
+  return mode === 'card' || mode === 'cover' || mode === 'custom' ? mode : 'auto';
 }
 
 function tunedBg(tuning, id) {
@@ -135,9 +135,31 @@ async function main() {
   const manifest = readJson(MANIFEST, null) || { generated: '', posts: {} };
   if (!manifest.posts || typeof manifest.posts !== 'object') manifest.posts = {};
 
+  // A hand-made card (scripts/render-og-custom.js, marked "og": "custom" in
+  // data/cover-tuning.json) is never rebuilt here, --force included: it was
+  // drawn by a person, not from the cover. Its manifest entry just gets the
+  // current cover noted so a later switch back to automatic starts clean.
+  const custom = rows.filter(row => tunedMode(tuning, row.id) === 'custom');
+  let kept = 0;
+  for (const row of custom) {
+    const rel = 'og/posts/' + safeId(row.id) + '.jpg';
+    if (!fs.existsSync(path.join(ROOT, rel))) {
+      console.warn('::warning::' + row.id + ' is marked "custom" but ' + rel + ' is missing — '
+        + 'run: node scripts/render-og-custom.js ' + row.id);
+      continue;
+    }
+    const prev = manifest.posts[row.id] || {};
+    manifest.posts[row.id] = {
+      card: rel, w: CARD_W, h: CARD_H, cover: coverUrl(row.cover),
+      ratio: prev.ratio == null ? null : prev.ratio, mode: 'custom', renderer: RENDERER
+    };
+    kept++;
+  }
+
   // A post needs looking at when we've never seen it, when its cover changed,
   // when an editor changed its og mode, or when the template moved on.
   const pending = rows.filter(row => {
+    if (tunedMode(tuning, row.id) === 'custom') return false;
     if (FORCE) return true;
     const known = manifest.posts[row.id];
     if (!known) return true;
@@ -149,7 +171,9 @@ async function main() {
   });
 
   if (!pending.length) {
-    console.log('Social cards up to date — ' + rows.length + ' notes checked, nothing to build.');
+    if (kept) writeManifest(manifest);
+    console.log('Social cards up to date — ' + rows.length + ' notes checked, nothing to build'
+      + (kept ? ' (' + kept + ' hand-made card(s) kept)' : '') + '.');
     return;
   }
 
@@ -213,13 +237,18 @@ async function main() {
     await browser.close();
   }
 
+  writeManifest(manifest);
+
+  console.log('Done — ' + built + ' card(s) built, ' + skipped + ' cover(s) left full-bleed, '
+    + kept + ' hand-made card(s) kept, ' + failed + ' failed.');
+}
+
+function writeManifest(manifest) {
   manifest.generated = new Date().toISOString();
   const ordered = {};
   Object.keys(manifest.posts).sort().forEach(k => { ordered[k] = manifest.posts[k]; });
   manifest.posts = ordered;
   fs.writeFileSync(MANIFEST, JSON.stringify(manifest, null, 2) + '\n');
-
-  console.log('Done — ' + built + ' card(s) built, ' + skipped + ' cover(s) left full-bleed, ' + failed + ' failed.');
 }
 
 main().catch(err => {
