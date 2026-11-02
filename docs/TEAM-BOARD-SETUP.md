@@ -141,7 +141,11 @@ Google.
 Application" Google Form, so every application is a row in that form's
 linked Sheet. The 🙋 Volunteers tab reads those rows and lets the team work
 them: **New → Contacted → Placed / Passed**, plus a one-line team note per
-person. Decisions are written back into four columns the script adds to the
+person. The form packs what the Google Form has no question for (extra
+skills, hours a week, where the applicant is based, their note) into the
+"How do you want to help?" answer; the script lifts "Based in: …" out into a
+`location` field and the tab shows it as 📍 next to the hours, so the team
+can see a time zone at a glance when scheduling a first call. Decisions are written back into four columns the script adds to the
 Sheet (`HQ Status`, `HQ Reviewed by`, `HQ Reviewed at`, `HQ Notes`), so the
 Sheet and HQ always agree and nothing lives only in a browser.
 
@@ -155,7 +159,8 @@ Setup (≈2 minutes, one CONFIG value):
    icon shows the current Sheet; copy its URL into that CONFIG value.)
 2. Deploy the repo file to the live script — a Claude session does this with
    `tools/clasp-sync.py` (see `docs/APPS-SCRIPT-DEPLOY.md`), which carries the
-   deployed keys over automatically. Done on 2026-10-13 (deployment @15).
+   deployed keys over automatically. Done on 2026-10-13 (deployment @15);
+   location field added and redeployed 2026-11-02 (@16).
 3. Open HQ → 🙋 Volunteers → ↻ Refresh.
 
 The script runs as its owner, so the Sheet only needs to be readable by that

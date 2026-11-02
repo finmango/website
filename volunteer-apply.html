@@ -1112,6 +1112,11 @@
           </fieldset>
 
           <div class="group">
+            <label for="location">Where are you based? <span class="opt">optional</span></label>
+            <input class="input" type="text" id="location" name="location" autocomplete="address-level2" maxlength="120" placeholder="City, country — helps us find meeting times that work">
+          </div>
+
+          <div class="group">
             <label for="link">LinkedIn, portfolio or GitHub <span class="opt">optional</span></label>
             <input class="input" type="url" id="link" name="link" autocomplete="url" inputmode="url" placeholder="https://">
             <p class="field-error" id="linkError" hidden>Links start with https://</p>
@@ -1162,7 +1167,7 @@
               <div class="vcard-name empty" id="vcardName">Your name</div>
               <div class="vcard-bottom">
                 <div class="vcard-tags" id="vcardTags"><span class="vcard-tag muted">How you'll help</span></div>
-                <div class="vcard-meta"><span id="vcardHours">Hours / week · —</span><span><em>Remote</em> · Worldwide</span></div>
+                <div class="vcard-meta"><span id="vcardHours">Hours / week · —</span><span><em>Remote</em> · <span id="vcardPlace">Worldwide</span></span></div>
               </div>
               <div class="vcard-stamp" aria-hidden="true">Application sent</div>
             </div>
@@ -1216,7 +1221,8 @@
       /* Where applications go: the existing "Volunteer Application" Google
          Form, so responses land in the same Sheet as before. Tiles with a
          data-gform value map to one of its checkboxes; everything else
-         (other skills, hours, the note) rides along in its "Other" answer. */
+         (other skills, hours, location, the note) rides along in its
+         "Other" answer. */
       var GFORM = 'https://docs.google.com/forms/d/e/1FAIpQLSeF7K-2fCriv1NdMQNphZFdvQw-sQXk6NGG7eqeunNnLLfU5w/formResponse';
       var GF = { name: 'entry.1781500597', email: 'entry.1640447617', link: 'entry.1804804959', help: 'entry.1078004677' };
 
@@ -1225,7 +1231,7 @@
       var $ = function (id) { return document.getElementById(id); };
       var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var startedAt = performance.now();
-      var nameEl = $('name'), emailEl = $('email'), linkEl = $('link'), noteEl = $('note');
+      var nameEl = $('name'), emailEl = $('email'), locationEl = $('location'), linkEl = $('link'), noteEl = $('note');
       var skills = Array.prototype.slice.call(form.querySelectorAll('input[name="skill"]'));
       var labelOf = function (input) { return input.parentNode.querySelector('.tile-body span').textContent; };
 
@@ -1281,6 +1287,10 @@
         var h = form.querySelector('input[name="hours"]:checked');
         $('vcardHours').textContent = 'Hours / week · ' + (h ? h.value : '—');
       }
+      function drawPlace() {
+        $('vcardPlace').textContent = locationEl.value.trim() || 'Worldwide';
+      }
+      locationEl.addEventListener('input', drawPlace);
       nameEl.addEventListener('input', function () { drawName(); drawDots(); });
       skills.forEach(function (s) { s.addEventListener('change', function () { drawTags(); drawDots(); if (s.checked) hideError('skillsError'); }); });
       form.querySelectorAll('input[name="hours"]').forEach(function (r) { r.addEventListener('change', drawHours); });
@@ -1291,7 +1301,7 @@
         var want = {}; q.split(',').forEach(function (k) { k = k.trim().toLowerCase(); if (k) want[k] = true; });
         skills.forEach(function (s) { if (want[s.value]) s.checked = true; });
       })();
-      drawName(); drawTags(); drawHours(); drawDots();
+      drawName(); drawTags(); drawHours(); drawPlace(); drawDots();
 
       // a little tilt toward the cursor on devices that have one
       var wrap = $('vcardWrap'), card = $('vcard');
@@ -1335,6 +1345,7 @@
         var extras = [];
         if (other.length) extras.push(other.join(', '));
         if (hours) extras.push(hours.value + ' hrs/week');
+        if (locationEl.value.trim()) extras.push('Based in: ' + locationEl.value.trim());
         if (noteEl.value.trim()) extras.push('Note: ' + noteEl.value.trim());
         if (extras.length) {
           body.append(GF.help, '__other_option__');
