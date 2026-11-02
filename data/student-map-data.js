@@ -12,7 +12,7 @@ const YOUNG_ADULT_DATA = {
             "student_debt": "Federal Student Aid portfolio summary, Q2 FY2026 (outstanding federal balance / borrowers)",
             "auto_debt": "Experian State of Auto Loan Debt 2025 (Gen Z / Millennial average)",
             "rent_burden": "Harvard JCHS, America's Rental Housing 2026 (2024 ACS; renter households headed by someone under 25)",
-            "median_income": "Census CPS ASEC 2025, PINC-01 (median total money income, people 25-34, 2024 income)",
+            "median_income": "Census CPS ASEC 2026, PINC-01 (median total money income, people 25-34 with income, 2025 income)",
             "unemployment": "BLS (Ages 20-24) Sept 2025",
             "debt_to_income": "Calculated from student + auto debt vs median income",
             "cost_of_living": "BEA Regional Price Parities",
@@ -50,13 +50,13 @@ const YOUNG_ADULT_DATA = {
             "source_url": "https://www.jchs.harvard.edu/americas-rental-housing-2026"
         },
         "median_income": {
-            "value": 45800,
-            "change": 2,
+            "value": 52130,
+            "change": 3,
             "label": "Median Income (25-34)",
             "unit": "$",
             "trend": "up",
-            "source_note": "Census CPS ASEC 2025 · median personal income, ages 25–34 (2024 income)",
-            "source_url": "https://www.census.gov/data/tables/2025/demo/cps/pinc-01.html"
+            "source_note": "Census CPS ASEC 2026 · median personal income, ages 25–34 (2025 income)",
+            "source_url": "https://www.census.gov/data/tables/2026/demo/cps/pinc-01.html"
         },
         "unemployment": {
             "value": 8,
