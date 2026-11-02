@@ -250,6 +250,11 @@
       function render(data) {
         var main = document.getElementById('main');
         var boards = (data && data.boards) || [];
+        // One roadmap. If the workspace ever holds two boards by that name, show the first.
+        var roadmap = boards.filter(function (b) { return /roadmap/i.test(b.name || ''); });
+        if (roadmap.length) boards = [roadmap[0]];
+        // Card notes may carry [[wiki links]] that only mean something inside the workspace.
+        function plain(t) { return String(t || '').replace(/\[\[([^\]]+)\]\]/g, '$1'); }
         var pages = (data && data.pages) || [];
         var html = '';
         var totalCards = 0;
@@ -265,7 +270,7 @@
               + '<div class="items">'
               + col.cards.map(function (c) {
                   return '<article class="item"><h3>' + esc(c.title) + '</h3>'
-                    + (c.desc ? '<p>' + esc(c.desc) + '</p>' : '')
+                    + (c.desc ? '<p>' + esc(plain(c.desc)) + '</p>' : '')
                     + (c.tags && c.tags.length ? '<div class="tags">' + c.tags.map(function (t) {
                         return '<span class="tag">' + esc(t) + '</span>'; }).join('') + '</div>' : '')
                     + '</article>';
