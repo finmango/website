@@ -545,11 +545,24 @@ function volunteersLayout_(sheet) {
     email: find(/email/i),
     link: find(/linkedin|portfolio|url/i),
     help: find(/how do you want to help|help/i),
+    // Only present if the Google Form ever gets its own location question;
+    // until then the form packs "Based in: …" into the help answer.
+    location: find(/where are you based|location|time ?zone/i),
     status: head.indexOf('HQ Status') + 1,
     by: head.indexOf('HQ Reviewed by') + 1,
     at: head.indexOf('HQ Reviewed at') + 1,
     notes: head.indexOf('HQ Notes') + 1
   };
+}
+
+// The website form has no Google Form question for hours, location or the
+// note, so it packs them into the "How do you want to help?" answer as
+// " · "-separated extras ("… · 2–5 hrs/week · Based in: Nairobi, Kenya ·
+// Note: …"). Location gets its own field here so the board can show it
+// (time zones for meetings) without every client re-parsing the string.
+function volLocation_(help) {
+  const m = /(?:^|,\s*|\s·\s)Based in:\s*(.*?)(?=\s·\s|$)/i.exec(String(help || ''));
+  return m ? m[1].trim() : '';
 }
 
 function volIso_(v) {
@@ -579,6 +592,7 @@ function volunteersList_() {
         email: String(get(L.email) || '').trim(),
         link: String(get(L.link) || '').trim(),
         help: String(get(L.help) || '').trim(),
+        location: String(get(L.location) || '').trim() || volLocation_(get(L.help)),
         status: VOL_STATUSES.indexOf(status) > -1 ? status : 'new',
         reviewedBy: String(get(L.by) || '').trim(),
         reviewedAt: volIso_(get(L.at)),

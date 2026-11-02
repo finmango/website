@@ -3600,12 +3600,16 @@ function updateVolCount() {
 //   "Tech / Engineering, 2–5 hrs/week"            (no extra skills, no note)
 //   "Academic Research, Note: …"                   (no extra skills, no hours)
 // So hours and the note can follow a comma as easily as a dot, and the
-// note (always last) may itself contain commas and dots.
+// note (always last) may itself contain commas and dots. "Based in: …"
+// sits just before the note and may hold a comma too ("Lagos, Nigeria"),
+// so it is lifted out before the comma split.
 function parseHelp(s) {
-  var out = { skills: [], hours: '', note: '' };
+  var out = { skills: [], hours: '', location: '', note: '' };
   var str = String(s || '');
   var m = /(?:^|,\s*|\s·\s)Note:\s*/i.exec(str);
   if (m) { out.note = str.slice(m.index + m[0].length).trim(); str = str.slice(0, m.index); }
+  m = /(?:^|,\s*|\s·\s)Based in:\s*(.*?)(?=\s·\s|$)/i.exec(str);
+  if (m) { out.location = m[1].trim(); str = str.slice(0, m.index) + str.slice(m.index + m[0].length); }
   str.split(/\s·\s|,\s*/).forEach(function (seg) {
     var t = seg.trim();
     if (!t) return;
@@ -3618,6 +3622,7 @@ function volRow(r) {
   var saving = !!vols.pending[r.id];
   var st = VOL_STATUS[r.status] || VOL_STATUS['new'];
   var h = parseHelp(r.help);
+  var place = String(r.location || h.location || '').trim();
   var when = r.submittedAt ? relTime(Date.parse(r.submittedAt)) : '';
   var link = /^https?:\/\//i.test(r.link || '') ? r.link : '';
   var byLabel = { contacted: ['✉', 'Contacted by'], placed: ['✓', 'Placed by'], passed: ['—', 'Passed by'] }[r.status];
@@ -3635,6 +3640,7 @@ function volRow(r) {
     + '</span></div>'
     + '<div class="pr-meta">' + (r.email ? '<a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a>' : 'no email')
     + (h.hours ? ' · <strong>' + (/not sure/i.test(h.hours) ? 'hours: not sure yet' : esc(h.hours) + ' hrs/week') + '</strong>' : '')
+    + (place ? ' · <span title="Where they said they are based">📍 ' + esc(place) + '</span>' : '')
     + (when ? ' · applied ' + esc(when) : '')
     + (link ? ' · <a href="' + esc(link) + '" target="_blank" rel="noopener noreferrer">profile ↗</a>' : '') + '</div>'
     + (h.skills.length ? '<div class="vol-skills">' + h.skills.map(function (k) { return '<span class="vol-skill">' + esc(k) + '</span>'; }).join('') + '</div>' : '')
