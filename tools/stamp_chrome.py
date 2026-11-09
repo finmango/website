@@ -41,9 +41,9 @@ def read(path):
 
 
 TPL = {
-    'nav': read('templates/nav.html').rstrip('\n'),
-    'footer': read('templates/footer.html').rstrip('\n'),
-    'script': read('templates/chrome-script.html').rstrip('\n'),
+    'nav': read('templates/nav.html').rstrip(),
+    'footer': read('templates/footer.html').rstrip(),
+    'script': read('templates/chrome-script.html').rstrip(),
 }
 
 # Top-level nav links eligible for an active state.
@@ -74,7 +74,8 @@ SECTION_TRIGGERS = {
 SECTION_PAGES = {
     'about': ('about.html', 'history.html', 'approach.html', 'posts.html'),
     'research': ('research.html', 'research-reports.html',
-                 'research-publications.html'),
+                 'research-publications.html',
+                 'covid-19-open-data-project.html'),
     # ambassadors.html has its own top-level link, which carries its marker
     'programs': ('education.html', 'barrier-breakers.html', 'resources.html'),
 }
