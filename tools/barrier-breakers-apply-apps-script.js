@@ -6,9 +6,11 @@ const CONFIG = {
   NOTIFY_EMAIL: 'competition@finmango.org',
 };
 const NOTIFY_SHEET = '2027 Notify';
+const TESTIMONY_SHEET = 'Teacher Testimonies';
 
 function doPost(e) {
   if (e && e.parameter && e.parameter.form === 'notify') return handleNotify(e.parameter);
+  if (e && e.parameter && e.parameter.form === 'testimony') return handleTestimony(e.parameter);
   try {
     var sheet = SpreadsheetApp.openById(CONFIG.SHEET_ID).getActiveSheet();
     var data = JSON.parse(e.postData.contents);
@@ -224,6 +226,134 @@ function handleNotify(p) {
   } finally {
     try { lock.releaseLock(); } catch (err) {}
   }
+}
+
+// ---------------------------------------------------------------------------
+// Teacher testimony form on teacher-testimony.html. Form-encoded POST with
+// form=testimony. One row per teacher on the TESTIMONY_SHEET tab of the same
+// spreadsheet (created on first use), an email to NOTIFY_EMAIL carrying the full
+// text, and a thank-you to the teacher.
+//
+// The optional photo arrives as base64 (the page shrinks it to a JPEG first) and
+// is attached to the NOTIFY_EMAIL message. It is not written to Drive: this
+// project is authorized for Sheets and Gmail only, and adding DriveApp would
+// take the whole web app down until Scott re-authorized it in the editor.
+// ---------------------------------------------------------------------------
+var TESTIMONY_HEADERS = ['Timestamp', 'Name', 'Email', 'School', 'Teaches', 'Worked with FinMango through',
+  'The problem in schools', 'Barrier Breakers', 'Anything else', 'Credit as', 'Permission to share',
+  'Open to follow-up', 'Photo', 'Source page'];
+
+function handleTestimony(p) {
+  var lock = LockService.getScriptLock();
+  lock.tryLock(10000);
+  try {
+    var clean = function (v, max) { return String(v || '').trim().slice(0, max); };
+    var name = clean(p.name, 120), email = clean(p.email, 200), school = clean(p.school, 200);
+    var problem = clean(p.problem, 5000), bb = clean(p.bb, 5000);
+    if (!name || !school) return jsonOut({ result: 'error', error: 'missing name or school' });
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return jsonOut({ result: 'error', error: 'invalid email' });
+    if (!problem && !bb) return jsonOut({ result: 'error', error: 'no testimony' });
+    if (p.consent !== 'yes') return jsonOut({ result: 'error', error: 'no permission to share' });
+    var teaches = clean(p.teaches, 200), programs = clean(p.programs, 300), more = clean(p.more, 5000);
+    var credit = clean(p.credit, 60) || 'Name and school', followup = p.followup === 'yes' ? 'Yes' : 'No';
+    var page = clean(p.page, 200);
+
+    // Photo: JPEG or PNG only, 6 MB decoded at most. A bad photo never costs us the words.
+    var photo = null, photoNote = '';
+    if (p.photo) {
+      try {
+        var type = /^image\/(jpeg|png)$/.test(p.photoType) ? p.photoType : '';
+        var bytes = type ? Utilities.base64Decode(String(p.photo)) : null;
+        if (bytes && bytes.length <= 6 * 1024 * 1024) {
+          var ext = type === 'image/png' ? '.png' : '.jpg';
+          var base = (name + ' ' + school).replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
+          photo = Utilities.newBlob(bytes, type, 'testimony-' + base + ext);
+          photoNote = 'Attached to the notification email (' + photo.getName() + ')';
+        } else {
+          photoNote = 'Sent, but not usable (wrong type or over 6 MB). Ask for it by email.';
+        }
+      } catch (err) {
+        photoNote = 'Sent, but could not be read. Ask for it by email.';
+      }
+    }
+
+    var ss = SpreadsheetApp.openById(CONFIG.SHEET_ID);
+    var sheet = ss.getSheetByName(TESTIMONY_SHEET);
+    if (!sheet) {
+      sheet = ss.insertSheet(TESTIMONY_SHEET);
+      sheet.appendRow(TESTIMONY_HEADERS);
+      sheet.setFrozenRows(1);
+    }
+    // Text typed by the public: keep a leading = + - @ from being read as a formula.
+    var cell = function (v) { return /^[=+\-@]/.test(v) ? "'" + v : v; };
+    sheet.appendRow([new Date(), cell(name), cell(email), cell(school), cell(teaches), cell(programs),
+      cell(problem), cell(bb), cell(more), cell(credit), 'Yes', followup, photoNote, cell(page)]);
+
+    var text = [
+      name + ', ' + school + (teaches ? ' (' + teaches + ')' : ''),
+      email,
+      'Worked with FinMango through: ' + (programs || '(not given)'),
+      'Credit as: ' + credit,
+      'Open to a follow-up call or video: ' + followup,
+      'Photo: ' + (photoNote || 'none'),
+      '',
+      'THE PROBLEM IN SCHOOLS',
+      problem || '(left blank)',
+      '',
+      'BARRIER BREAKERS',
+      bb || '(left blank)',
+      '',
+      'ANYTHING ELSE',
+      more || '(left blank)',
+      '',
+      'Sheet: ' + ss.getUrl(),
+      'Tab: ' + TESTIMONY_SHEET
+    ].join('\n');
+
+    if (CONFIG.NOTIFY_EMAIL) {
+      try {
+        var options = { name: 'FinMango website', replyTo: email };
+        if (photo) options.attachments = [photo];
+        GmailApp.sendEmail(CONFIG.NOTIFY_EMAIL, 'Teacher testimony: ' + name + ', ' + school, text, options);
+      } catch (err) {
+        // The row is saved; say on it that the email (and any photo) did not go out.
+        try { sheet.getRange(sheet.getLastRow(), 13).setValue((photo ? 'Photo lost: ' : '') + 'notification email failed (' + err + ')'); } catch (e2) {}
+      }
+    }
+
+    try { sendTestimonyThanks(name, email, problem, bb, more, credit); } catch (err) { /* never fail the submission over the thank-you */ }
+    return jsonOut({ result: 'success' });
+  } catch (err) {
+    return jsonOut({ result: 'error', error: String(err) });
+  } finally {
+    try { lock.releaseLock(); } catch (err) {}
+  }
+}
+
+function sendTestimonyThanks(name, email, problem, bb, more, credit) {
+  var first = name.split(/\s+/)[0];
+  var copy = [];
+  if (problem) copy.push('What your students are up against:\n' + problem);
+  if (bb) copy.push('Barrier Breakers:\n' + bb);
+  if (more) copy.push('Anything else:\n' + more);
+  var body = [
+    'Hi ' + first + ',',
+    '',
+    'Thank you. We know how full a teacher\'s day is, and you gave some of it to us.',
+    '',
+    'Your words help us show funders and partners what students are facing and why this programming is worth keeping in schools. You asked to be credited as: ' + credit + '. We may trim for length, but we won\'t change what you mean.',
+    '',
+    'If you ever want something edited or taken down, reply to this email and we\'ll take care of it.',
+    '',
+    'For your records, here is what you sent:',
+    '',
+    copy.join('\n\n'),
+    '',
+    'With appreciation,',
+    'The FinMango team'
+  ].join('\n');
+  GmailApp.sendEmail(email, 'Thank you for your testimony', body,
+    { name: 'FinMango', replyTo: CONFIG.NOTIFY_EMAIL || 'competition@finmango.org' });
 }
 
 function jsonOut(obj) {
