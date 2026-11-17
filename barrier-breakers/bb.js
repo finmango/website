@@ -1,14 +1,24 @@
-/* Barrier Breakers event site (draft): shared header, footer, countdown, notify form. */
+/* Barrier Breakers event site: shared header, footer, countdown, notify form. */
 (function () {
   // The mark: a barrier bar, snapped in two.
   var MARK = '<svg class="bb-mark" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="6" fill="#F25A27"/><path d="M5 20.5l9.5-3 1.6 5-9.5 3z" fill="#0B0B0C"/><path d="M18.5 12l9.5-3 1.6 5-9.5 3z" fill="#0B0B0C"/></svg>';
 
   var here = document.body.getAttribute('data-page') || '';
+
+  // Links to sections of the old single page still work: send them to the page that now holds that content.
+  if (here === 'home' && location.hash) {
+    var MOVED = { '#support': 'sponsor.html', '#sponsors': 'sponsor.html', '#winners': 'winners.html', '#judges': 'winners.html#judges',
+      '#gallery': 'winners.html#gallery', '#gallery-2026': 'winners.html#gallery', '#apply': '#notify-me',
+      '#why': 'compete.html', '#how': 'compete.html', '#tracks': 'compete.html', '#format': 'compete.html',
+      '#prizes': 'compete.html', '#resources': 'resources.html' };
+    var to = MOVED[location.hash];
+    if (to) location.replace(to);
+  }
   var LINKS = [
     ['compete', 'compete.html', 'Compete'],
     ['schedule', 'schedule.html', 'Schedule'],
     ['judge', '../barrier-breakers-judge-apply.html', 'Judge'],
-    ['sponsor', '../barrier-breakers.html#support', 'Sponsor'],
+    ['sponsor', 'sponsor.html', 'Sponsor'],
     ['resources', 'resources.html', 'Deck and resources']
   ];
 
@@ -47,7 +57,7 @@
         '<div class="container">' +
           '<a class="by" href="../index.html"><span>Barrier Breakers is a program of</span><img src="../images/finmango-white.png" alt="FinMango"></a>' +
           '<ul>' +
-            '<li><a href="../barrier-breakers.html#winners">Past winners</a></li>' +
+            '<li><a href="winners.html">Past winners</a></li>' +
             '<li><a href="https://www.every.org/finmango/f/barrier-breakers-202" target="_blank" rel="noopener">Give</a></li>' +
             '<li><a href="mailto:competition@finmango.org">competition@finmango.org</a></li>' +
           '</ul>' +
