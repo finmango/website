@@ -1,7 +1,5 @@
 /* Barrier Breakers event site: shared header, footer, countdown, notify form. */
 (function () {
-  // The mark: a barrier bar, snapped in two.
-  var MARK = '<svg class="bb-mark" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="6" fill="#F25A27"/><path d="M5 20.5l9.5-3 1.6 5-9.5 3z" fill="#0B0B0C"/><path d="M18.5 12l9.5-3 1.6 5-9.5 3z" fill="#0B0B0C"/></svg>';
 
   var here = document.body.getAttribute('data-page') || '';
 
@@ -27,7 +25,7 @@
   if (head) {
     head.innerHTML =
       '<nav class="bb-nav" aria-label="Barrier Breakers"><div class="bb-wrap">' +
-        '<a class="bb-logo" href="index.html">' + MARK + '<span>Barrier Breakers</span></a>' +
+        '<a class="bb-logo" href="index.html"><img src="img/logo-line-white.png" alt="Barrier Breakers" width="500" height="96"></a>' +
         '<ul class="bb-links" id="bbLinks">' +
           LINKS.map(function (l) {
             return '<li><a href="' + l[1] + '"' + (l[0] === here ? ' aria-current="page"' : '') + '>' + l[2] + '</a></li>';
