@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="robots" content="noindex">
     <title>Barrier Breakers | FinMango</title>
     <meta name="description" content="Barrier Breakers: FinMango's one-day entrepreneurship competition for Northeast Ohio high school students: how the day works and how to sponsor it.">
@@ -16,7 +16,7 @@
         /* A slide viewer: the 16:9 slide is a card on a quiet backdrop, with the controls outside it. */
         body { background: #E8E7E2; color: #111110; }
         /* Slides are authored on a fixed 1920x1080 canvas; the script scales and places the stage. */
-        #stage { position: absolute; left: 50%; width: 1920px; height: 1080px; transform-origin: center; overflow: hidden;
+        #stage { position: fixed; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; overflow: hidden;
             background: #111110; }
         #stage > section { position: absolute; inset: 0; box-sizing: border-box; overflow: hidden; line-height: 1.4;
             visibility: hidden; opacity: 0; transition: opacity .3s ease, visibility 0s linear .3s; }
@@ -241,15 +241,15 @@
         var root = document.documentElement, cur = -1, idleTimer;
 
         function fit() {
-            var w = window.innerWidth, h = window.innerHeight, fs = !!document.fullscreenElement, tall = w < h * 1.2;
+            var w = window.innerWidth, h = window.innerHeight, fs = isFs(), tall = w < h * 1.2;
             root.classList.toggle('fs', fs);
             full.setAttribute('aria-label', fs ? 'Exit full screen' : 'Full screen');
             /* Wide windows: arrows sit in the gutters beside the card. Tall ones: arrows go under it. Full screen: no gutters. */
             var side = fs ? 0 : tall ? 16 : 84, top = fs ? 0 : tall ? 16 : 28, bottom = fs ? 0 : tall ? 84 : 60;
             var k = Math.min((w - side * 2) / 1920, (h - top - bottom) / 1080);
             var cw = 1920 * k, ch = 1080 * k, cy = top + (h - top - bottom) / 2, left = (w - cw) / 2, foot = cy + ch / 2;
-            stage.style.top = cy + 'px';
-            stage.style.transform = 'translate(-50%, -50%) scale(' + k + ')';
+            /* Fixed and scaled from its top-left corner, so the unscaled 1920px box never widens the page on a phone. */
+            stage.style.transform = 'translate(' + left + 'px, ' + (cy - ch / 2) + 'px) scale(' + k + ')';
             stage.style.borderRadius = fs ? '0' : 14 / k + 'px';
             stage.style.boxShadow = fs ? 'none' : '0 ' + 10 / k + 'px ' + 40 / k + 'px rgba(17,17,16,.16), 0 0 0 ' + 1 / k + 'px rgba(17,17,16,.08)';
             function place(el, x, y) { el.style.left = x + 'px'; el.style.top = y + 'px'; }
@@ -276,20 +276,31 @@
         }
         function fromHash() { var n = parseInt(location.hash.slice(1), 10); return isNaN(n) ? 0 : n - 1; }
 
+        /* Full screen uses the browser's own mode where it exists. Where it does not (iPhone Safari,
+           in-app browsers) or the browser refuses, the slide fills the window instead. */
+        var filled = false;
+        function nativeFs() { return document.fullscreenElement || document.webkitFullscreenElement; }
+        function isFs() { return !!nativeFs() || filled; }
+        function fill(on) { filled = on; fit(); wake(); }
         function toggleFull() {
-            if (document.fullscreenElement) document.exitFullscreen();
-            else if (root.requestFullscreen) root.requestFullscreen();
+            if (nativeFs()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+            if (filled) { fill(false); return; }
+            var req = root.requestFullscreen || root.webkitRequestFullscreen;
+            if (!req) { fill(true); return; }
+            try { var p = req.call(root); if (p && p.catch) p.catch(function () { fill(true); }); }
+            catch (err) { fill(true); }
         }
         /* In full screen the controls fade after the pointer rests, and come back when it moves. */
         function wake() {
             root.classList.remove('idle'); clearTimeout(idleTimer);
-            if (document.fullscreenElement) idleTimer = setTimeout(function () { root.classList.add('idle'); }, 2200);
+            if (isFs()) idleTimer = setTimeout(function () { root.classList.add('idle'); }, 2200);
         }
-        if (!root.requestFullscreen) full.hidden = true;
         full.addEventListener('click', toggleFull);
-        stage.addEventListener('click', function () { if (document.fullscreenElement) show(cur + 1); });
+        stage.addEventListener('click', function () { if (isFs()) show(cur + 1); });
         document.addEventListener('fullscreenchange', function () { fit(); wake(); });
+        document.addEventListener('webkitfullscreenchange', function () { fit(); wake(); });
         document.addEventListener('mousemove', wake);
+        document.addEventListener('touchstart', wake, { passive: true });
         prev.addEventListener('click', function () { show(cur - 1); });
         next.addEventListener('click', function () { show(cur + 1); });
         document.addEventListener('keydown', function (e) {
@@ -299,6 +310,7 @@
             else if (e.key === 'Home') show(0);
             else if (e.key === 'End') show(slides.length - 1);
             else if (e.key === 'f' || e.key === 'F') toggleFull();
+            else if (e.key === 'Escape' && filled) fill(false);
         });
         var touchX = null;
         document.addEventListener('touchstart', function (e) { touchX = e.changedTouches[0].clientX; }, { passive: true });
