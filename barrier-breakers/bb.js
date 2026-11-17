@@ -17,7 +17,7 @@
   var LINKS = [
     ['compete', 'compete.html', 'Compete'],
     ['schedule', 'schedule.html', 'Schedule'],
-    ['judge', '../barrier-breakers-judge-apply.html', 'Judge'],
+    ['judge', 'judge.html', 'Judge'],
     ['sponsor', 'sponsor.html', 'Sponsor'],
     ['resources', 'resources.html', 'Deck and resources']
   ];
@@ -26,7 +26,7 @@
   var head = document.getElementById('bb-header');
   if (head) {
     head.innerHTML =
-      '<nav class="bb-nav" aria-label="Barrier Breakers"><div class="container">' +
+      '<nav class="bb-nav" aria-label="Barrier Breakers"><div class="bb-wrap">' +
         '<a class="bb-logo" href="index.html">' + MARK + '<span>Barrier Breakers</span></a>' +
         '<ul class="bb-links" id="bbLinks">' +
           LINKS.map(function (l) {
@@ -34,7 +34,7 @@
           }).join('') +
         '</ul>' +
         '<div class="bb-right">' +
-          '<a class="btn btn-primary" href="' + (here === 'home' ? '#notify-me' : 'index.html#notify-me') + '">Get notified</a>' +
+          '<a class="bb-cta" href="' + (here === 'home' ? '#notify-me' : 'index.html#notify-me') + '">Get notified</a>' +
           '<button class="bb-burger" id="bbBurger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="bbLinks">' +
             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>' +
           '</button>' +
@@ -54,7 +54,7 @@
     var foot = document.getElementById('bb-footer');
     if (foot) {
       foot.innerHTML =
-        '<div class="container">' +
+        '<div class="bb-wrap">' +
           '<a class="by" href="../index.html"><span>Barrier Breakers is a program of</span><img src="../images/finmango-white.png" alt="FinMango"></a>' +
           '<ul>' +
             '<li><a href="winners.html">Past winners</a></li>' +
