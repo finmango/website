@@ -25,7 +25,7 @@
   if (head) {
     head.innerHTML =
       '<nav class="bb-nav" aria-label="Barrier Breakers"><div class="bb-wrap">' +
-        '<a class="bb-logo" href="index.html"><img src="img/logo-line-white.png" alt="Barrier Breakers" width="500" height="96"></a>' +
+        '<a class="bb-logo" href="index.html"><img src="img/logo-line-white.png?v=2" alt="Barrier Breakers" width="500" height="96"></a>' +
         '<ul class="bb-links" id="bbLinks">' +
           LINKS.map(function (l) {
             return '<li><a href="' + l[1] + '"' + (l[0] === here ? ' aria-current="page"' : '') + '>' + l[2] + '</a></li>';
