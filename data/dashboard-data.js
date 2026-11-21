@@ -1,11 +1,11 @@
 // Financial Health Barometer Data
-// Auto-generated: 2026-11-20T05:12:33.721Z
+// Auto-generated: 2026-11-21T05:11:53.995Z
 // Sources: BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs
 
 const DASHBOARD_DATA = {
-  "as_of": "2026-11-20",
+  "as_of": "2026-11-21",
   "meta": {
-    "generated": "2026-11-20T05:12:33.679Z",
+    "generated": "2026-11-21T05:11:53.963Z",
     "version": "2.5",
     "source": "BLS, FRED, Census Bureau, HUD, Harvard JCHS, Google Trends APIs",
     "update_frequency": "daily",
@@ -20,35 +20,35 @@ const DASHBOARD_DATA = {
       "trends": "Google Health Trends API (boost applied, all 51 states covered)"
     },
     "carried_forward": {},
-    "unemployment_observed": "2026-11-20",
+    "unemployment_observed": "2026-11-21",
     "trends_coverage": {
       "financial_anxiety": {
         "states_covered": 51,
         "states_total": 51,
         "complete": true,
-        "oldest_reading": "2026-11-15",
-        "newest_reading": "2026-11-20"
+        "oldest_reading": "2026-11-16",
+        "newest_reading": "2026-11-21"
       },
       "food_insecurity": {
         "states_covered": 51,
         "states_total": 51,
         "complete": true,
-        "oldest_reading": "2026-11-15",
-        "newest_reading": "2026-11-20"
+        "oldest_reading": "2026-11-16",
+        "newest_reading": "2026-11-21"
       },
       "housing_stress": {
         "states_covered": 51,
         "states_total": 51,
         "complete": true,
-        "oldest_reading": "2026-11-15",
-        "newest_reading": "2026-11-20"
+        "oldest_reading": "2026-11-16",
+        "newest_reading": "2026-11-21"
       },
       "affordability": {
         "states_covered": 51,
         "states_total": 51,
         "complete": true,
-        "oldest_reading": "2026-11-15",
-        "newest_reading": "2026-11-20"
+        "oldest_reading": "2026-11-16",
+        "newest_reading": "2026-11-21"
       }
     },
     "trends_run": {
@@ -133,47 +133,47 @@ const DASHBOARD_DATA = {
           },
           "RI": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "SC": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "SD": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "TN": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "TX": {
-            "value": 18,
-            "fetched": "2026-11-15",
+            "value": 31,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "UT": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "VT": {
             "value": 0,
-            "fetched": "2026-11-16",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "VA": {
-            "value": 47,
-            "fetched": "2026-11-16",
+            "value": 100,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "WA": {
-            "value": 0,
-            "fetched": "2026-11-16",
+            "value": 86,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "WV": {
@@ -390,47 +390,47 @@ const DASHBOARD_DATA = {
           },
           "RI": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "SC": {
-            "value": 22,
-            "fetched": "2026-11-15",
+            "value": 25,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "SD": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "TN": {
-            "value": 22,
-            "fetched": "2026-11-15",
+            "value": 33,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "TX": {
-            "value": 29,
-            "fetched": "2026-11-15",
+            "value": 34,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "UT": {
-            "value": 18,
-            "fetched": "2026-11-15",
+            "value": 21,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "VT": {
             "value": 0,
-            "fetched": "2026-11-16",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "VA": {
-            "value": 24,
-            "fetched": "2026-11-16",
+            "value": 21,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "WA": {
-            "value": 22,
-            "fetched": "2026-11-16",
+            "value": 33,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "WV": {
@@ -647,47 +647,47 @@ const DASHBOARD_DATA = {
           },
           "RI": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "SC": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "SD": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "TN": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "TX": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "UT": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "VT": {
             "value": 0,
-            "fetched": "2026-11-16",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "VA": {
             "value": 0,
-            "fetched": "2026-11-16",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "WA": {
             "value": 0,
-            "fetched": "2026-11-16",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "WV": {
@@ -904,47 +904,47 @@ const DASHBOARD_DATA = {
           },
           "RI": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "SC": {
-            "value": 25,
-            "fetched": "2026-11-15",
+            "value": 13,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "SD": {
             "value": 0,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "TN": {
             "value": 27,
-            "fetched": "2026-11-15",
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "TX": {
-            "value": 20,
-            "fetched": "2026-11-15",
+            "value": 26,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "UT": {
-            "value": 9,
-            "fetched": "2026-11-15",
+            "value": 27,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "VT": {
-            "value": 33,
-            "fetched": "2026-11-16",
+            "value": 0,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "VA": {
-            "value": 26,
-            "fetched": "2026-11-16",
+            "value": 23,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "WA": {
-            "value": 37,
-            "fetched": "2026-11-16",
+            "value": 34,
+            "fetched": "2026-11-21",
             "scheme": "per-term"
           },
           "WV": {
@@ -1099,9 +1099,9 @@ const DASHBOARD_DATA = {
           }
         }
       },
-      "cursor": 39,
-      "updated": "2026-11-20",
-      "last_successful_fetch": "2026-11-20"
+      "cursor": 48,
+      "updated": "2026-11-21",
+      "last_successful_fetch": "2026-11-21"
     },
     "tier_estimates": {
       "note": "Author-assigned fallback bands, not measurements. Used only when a component has no live read and nothing to carry forward. states_scored counts how many states are affected in this reading.",
@@ -1246,21 +1246,21 @@ const DASHBOARD_DATA = {
       ]
     },
     "data_age": {
-      "oldest_observation": "2026-11-20",
+      "oldest_observation": "2026-11-21",
       "oldest_source": "unemployment",
       "age_days": 0
     },
-    "augmented_at": "2026-11-20T05:12:33.721Z"
+    "augmented_at": "2026-11-21T05:11:53.995Z"
   },
   "national": {
     "financial_anxiety": {
-      "value": 137.4,
-      "change": -2.9,
+      "value": 137.3,
+      "change": null,
       "change_coverage": {
         "states_with_change": 51,
         "states_total": 51
       },
-      "trend": "down"
+      "trend": "flat"
     },
     "food_insecurity": {
       "value": 110.9,
@@ -1281,7 +1281,7 @@ const DASHBOARD_DATA = {
       "trend": "up"
     },
     "affordability": {
-      "value": 144.1,
+      "value": 144,
       "change": null,
       "change_coverage": {
         "states_with_change": 0,
@@ -1296,7 +1296,7 @@ const DASHBOARD_DATA = {
       "abbr": "AL",
       "financial_anxiety": {
         "value": 150,
-        "change": 25,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 20
       },
@@ -1320,11 +1320,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 3.5,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 15.2,
         "rent_burden_pct": 29.8,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1333,7 +1333,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 13.970848148379181,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.25,
         "trends_boost": {
           "financial_anxiety": {
@@ -1375,9 +1375,9 @@ const DASHBOARD_DATA = {
       "abbr": "AK",
       "financial_anxiety": {
         "value": 145,
-        "change": -8.5,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 23
+        "rank": 24
       },
       "food_insecurity": {
         "value": 94,
@@ -1399,11 +1399,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 4.3,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 10.3,
         "rent_burden_pct": 27.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1412,7 +1412,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.1546920482373,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.08,
         "trends_boost": {
           "financial_anxiety": {
@@ -1454,7 +1454,7 @@ const DASHBOARD_DATA = {
       "abbr": "AZ",
       "financial_anxiety": {
         "value": 160,
-        "change": 11.4,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 10
       },
@@ -1478,11 +1478,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 4.9,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 11.9,
         "rent_burden_pct": 32.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1491,7 +1491,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 8.215184253366877,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.1,
         "trends_boost": {
           "financial_anxiety": {
@@ -1532,10 +1532,10 @@ const DASHBOARD_DATA = {
       "name": "Arkansas",
       "abbr": "AR",
       "financial_anxiety": {
-        "value": 155,
-        "change": -7.1,
+        "value": 153,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 14
+        "rank": 16
       },
       "food_insecurity": {
         "value": 152,
@@ -1556,12 +1556,12 @@ const DASHBOARD_DATA = {
         "rank": 13
       },
       "metrics": {
-        "unemployment_rate": 3.9,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 3.8,
+        "unemployment_period": "2026-10",
         "poverty_rate": 15.3,
         "rent_burden_pct": 27.8,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1570,7 +1570,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 12.67016199186515,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.22,
         "trends_boost": {
           "financial_anxiety": {
@@ -1611,8 +1611,8 @@ const DASHBOARD_DATA = {
       "name": "California",
       "abbr": "CA",
       "financial_anxiety": {
-        "value": 177,
-        "change": -7.3,
+        "value": 175,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 2
       },
@@ -1635,12 +1635,12 @@ const DASHBOARD_DATA = {
         "rank": 9
       },
       "metrics": {
-        "unemployment_rate": 5.1,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 5,
+        "unemployment_period": "2026-10",
         "poverty_rate": 11.8,
         "rent_burden_pct": 32.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1649,7 +1649,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 7.6767609833675685,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.12,
         "trends_boost": {
           "financial_anxiety": {
@@ -1690,10 +1690,10 @@ const DASHBOARD_DATA = {
       "name": "Colorado",
       "abbr": "CO",
       "financial_anxiety": {
-        "value": 143,
-        "change": 7.9,
+        "value": 149,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 24
+        "rank": 22
       },
       "food_insecurity": {
         "value": 94,
@@ -1714,12 +1714,12 @@ const DASHBOARD_DATA = {
         "rank": 36
       },
       "metrics": {
-        "unemployment_rate": 4.1,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 4.4,
+        "unemployment_period": "2026-10",
         "poverty_rate": 9.6,
         "rent_burden_pct": 30.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1728,7 +1728,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 3.4006762570746503,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
@@ -1770,7 +1770,7 @@ const DASHBOARD_DATA = {
       "abbr": "CT",
       "financial_anxiety": {
         "value": 152,
-        "change": 21.4,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 18
       },
@@ -1794,11 +1794,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 5.1,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 10.1,
         "rent_burden_pct": 32.7,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1807,7 +1807,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 23.62775707523416,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
@@ -1849,7 +1849,7 @@ const DASHBOARD_DATA = {
       "abbr": "DE",
       "financial_anxiety": {
         "value": 140,
-        "change": -11.5,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 25
       },
@@ -1873,11 +1873,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 4.6,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 10.1,
         "rent_burden_pct": 30.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1886,7 +1886,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.62293908947258,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1,
         "trends_boost": {
           "financial_anxiety": {
@@ -1927,8 +1927,8 @@ const DASHBOARD_DATA = {
       "name": "District of Columbia",
       "abbr": "DC",
       "financial_anxiety": {
-        "value": 186,
-        "change": -15.2,
+        "value": 182,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 1
       },
@@ -1951,12 +1951,12 @@ const DASHBOARD_DATA = {
         "rank": 18
       },
       "metrics": {
-        "unemployment_rate": 5.6,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 5.4,
+        "unemployment_period": "2026-10",
         "poverty_rate": 16.4,
         "rent_burden_pct": 29.6,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -1965,7 +1965,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 0.8856612321482514,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.18,
         "trends_boost": {
           "financial_anxiety": {
@@ -2006,8 +2006,8 @@ const DASHBOARD_DATA = {
       "name": "Florida",
       "abbr": "FL",
       "financial_anxiety": {
-        "value": 167,
-        "change": 4.8,
+        "value": 165,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 5
       },
@@ -2030,12 +2030,12 @@ const DASHBOARD_DATA = {
         "rank": 7
       },
       "metrics": {
-        "unemployment_rate": 4.4,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 4.3,
+        "unemployment_period": "2026-10",
         "poverty_rate": 12.1,
         "rent_burden_pct": 35.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2044,7 +2044,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 6.610716591349264,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.15,
         "trends_boost": {
           "financial_anxiety": {
@@ -2086,7 +2086,7 @@ const DASHBOARD_DATA = {
       "abbr": "GA",
       "financial_anxiety": {
         "value": 138,
-        "change": -2.9,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 27
       },
@@ -2110,11 +2110,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 3.3,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 12.8,
         "rent_burden_pct": 31.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2123,7 +2123,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 10.895599886102888,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.1,
         "trends_boost": {
           "financial_anxiety": {
@@ -2165,9 +2165,9 @@ const DASHBOARD_DATA = {
       "abbr": "HI",
       "financial_anxiety": {
         "value": 129,
-        "change": 33.3,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 30
+        "rank": 31
       },
       "food_insecurity": {
         "value": 112,
@@ -2190,11 +2190,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 2.8,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 10,
         "rent_burden_pct": 32.8,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2203,7 +2203,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 10.56137547681471,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.2,
         "trends_boost": {
           "financial_anxiety": {
@@ -2244,10 +2244,10 @@ const DASHBOARD_DATA = {
       "name": "Idaho",
       "abbr": "ID",
       "financial_anxiety": {
-        "value": 128,
-        "change": 0,
+        "value": 130,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 32
+        "rank": 30
       },
       "food_insecurity": {
         "value": 102,
@@ -2268,12 +2268,12 @@ const DASHBOARD_DATA = {
         "rank": 35
       },
       "metrics": {
-        "unemployment_rate": 3.6,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 3.7,
+        "unemployment_period": "2026-10",
         "poverty_rate": 10.4,
         "rent_burden_pct": 29.6,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2282,7 +2282,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.49636889949724,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -2323,10 +2323,10 @@ const DASHBOARD_DATA = {
       "name": "Illinois",
       "abbr": "IL",
       "financial_anxiety": {
-        "value": 157,
-        "change": 2.2,
+        "value": 155,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 12
+        "rank": 14
       },
       "food_insecurity": {
         "value": 109,
@@ -2347,12 +2347,12 @@ const DASHBOARD_DATA = {
         "rank": 19
       },
       "metrics": {
-        "unemployment_rate": 4.6,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 4.5,
+        "unemployment_period": "2026-10",
         "poverty_rate": 11.5,
         "rent_burden_pct": 29.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2361,7 +2361,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 21.75531457096136,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -2403,9 +2403,9 @@ const DASHBOARD_DATA = {
       "abbr": "IN",
       "financial_anxiety": {
         "value": 123,
-        "change": -8.1,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 39
+        "rank": 38
       },
       "food_insecurity": {
         "value": 112,
@@ -2427,11 +2427,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 3.4,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 12.1,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2440,7 +2440,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.226537216828486,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.04,
         "trends_boost": {
           "financial_anxiety": {
@@ -2481,8 +2481,8 @@ const DASHBOARD_DATA = {
       "name": "Iowa",
       "abbr": "IA",
       "financial_anxiety": {
-        "value": 105,
-        "change": -5.9,
+        "value": 107,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 45
       },
@@ -2502,15 +2502,15 @@ const DASHBOARD_DATA = {
         "value": 118,
         "change": null,
         "change_basis": "not available - derived index, no independent change series",
-        "rank": 44
+        "rank": 43
       },
       "metrics": {
-        "unemployment_rate": 3.2,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 3.3,
+        "unemployment_period": "2026-10",
         "poverty_rate": 11.2,
         "rent_burden_pct": 28.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2519,7 +2519,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 13.143807870370367,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 0.92,
         "trends_boost": {
           "financial_anxiety": {
@@ -2560,10 +2560,10 @@ const DASHBOARD_DATA = {
       "name": "Kansas",
       "abbr": "KS",
       "financial_anxiety": {
-        "value": 125,
-        "change": 0,
+        "value": 127,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 36
+        "rank": 35
       },
       "food_insecurity": {
         "value": 100,
@@ -2584,12 +2584,12 @@ const DASHBOARD_DATA = {
         "rank": 41
       },
       "metrics": {
-        "unemployment_rate": 3.8,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 3.9,
+        "unemployment_period": "2026-10",
         "poverty_rate": 10.9,
         "rent_burden_pct": 27.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2598,7 +2598,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 15.578271722334492,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1,
         "trends_boost": {
           "financial_anxiety": {
@@ -2639,8 +2639,8 @@ const DASHBOARD_DATA = {
       "name": "Kentucky",
       "abbr": "KY",
       "financial_anxiety": {
-        "value": 167,
-        "change": 4.4,
+        "value": 165,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 6
       },
@@ -2663,12 +2663,12 @@ const DASHBOARD_DATA = {
         "rank": 11
       },
       "metrics": {
-        "unemployment_rate": 4.7,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 4.6,
+        "unemployment_period": "2026-10",
         "poverty_rate": 15.4,
         "rent_burden_pct": 28.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2677,7 +2677,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.20879663460589,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.18,
         "trends_boost": {
           "financial_anxiety": {
@@ -2718,10 +2718,10 @@ const DASHBOARD_DATA = {
       "name": "Louisiana",
       "abbr": "LA",
       "financial_anxiety": {
-        "value": 168,
-        "change": -4.8,
+        "value": 165,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 4
+        "rank": 7
       },
       "food_insecurity": {
         "value": 160,
@@ -2743,12 +2743,12 @@ const DASHBOARD_DATA = {
         "rank": 6
       },
       "metrics": {
-        "unemployment_rate": 4,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 3.9,
+        "unemployment_period": "2026-10",
         "poverty_rate": 18.6,
         "rent_burden_pct": 31.7,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2757,7 +2757,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 6.334122892573488,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.3,
         "trends_boost": {
           "financial_anxiety": {
@@ -2799,7 +2799,7 @@ const DASHBOARD_DATA = {
       "abbr": "ME",
       "financial_anxiety": {
         "value": 111,
-        "change": 0,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 43
       },
@@ -2819,15 +2819,15 @@ const DASHBOARD_DATA = {
         "value": 118,
         "change": null,
         "change_basis": "not available - derived index, no independent change series",
-        "rank": 45
+        "rank": 44
       },
       "metrics": {
         "unemployment_rate": 3.3,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 10.6,
         "rent_burden_pct": 29.7,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2836,7 +2836,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.967456449896368,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 0.95,
         "trends_boost": {
           "financial_anxiety": {
@@ -2877,10 +2877,10 @@ const DASHBOARD_DATA = {
       "name": "Maryland",
       "abbr": "MD",
       "financial_anxiety": {
-        "value": 127,
-        "change": -9.3,
+        "value": 125,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 35
+        "rank": 36
       },
       "food_insecurity": {
         "value": 90,
@@ -2901,12 +2901,12 @@ const DASHBOARD_DATA = {
         "rank": 33
       },
       "metrics": {
-        "unemployment_rate": 3.9,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 3.8,
+        "unemployment_period": "2026-10",
         "poverty_rate": 9.2,
         "rent_burden_pct": 31,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2915,7 +2915,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.236387720838522,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1,
         "trends_boost": {
           "financial_anxiety": {
@@ -2956,8 +2956,8 @@ const DASHBOARD_DATA = {
       "name": "Massachusetts",
       "abbr": "MA",
       "financial_anxiety": {
-        "value": 137,
-        "change": -6.5,
+        "value": 135,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 28
       },
@@ -2980,12 +2980,12 @@ const DASHBOARD_DATA = {
         "rank": 23
       },
       "metrics": {
-        "unemployment_rate": 4.3,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 4.2,
+        "unemployment_period": "2026-10",
         "poverty_rate": 9.8,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -2994,7 +2994,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.05314022337085,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
@@ -3036,9 +3036,9 @@ const DASHBOARD_DATA = {
       "abbr": "MI",
       "financial_anxiety": {
         "value": 159,
-        "change": 2,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 11
+        "rank": 12
       },
       "food_insecurity": {
         "value": 124,
@@ -3060,11 +3060,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 5,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 13.4,
         "rent_burden_pct": 30.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3073,7 +3073,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 17.975715034894513,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.08,
         "trends_boost": {
           "financial_anxiety": {
@@ -3114,10 +3114,10 @@ const DASHBOARD_DATA = {
       "name": "Minnesota",
       "abbr": "MN",
       "financial_anxiety": {
-        "value": 155,
-        "change": 9.8,
+        "value": 157,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 15
+        "rank": 13
       },
       "food_insecurity": {
         "value": 100,
@@ -3138,12 +3138,12 @@ const DASHBOARD_DATA = {
         "rank": 30
       },
       "metrics": {
-        "unemployment_rate": 4.5,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 4.6,
+        "unemployment_period": "2026-10",
         "poverty_rate": 9.3,
         "rent_burden_pct": 29.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3152,7 +3152,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 10.330184435447588,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.12,
         "trends_boost": {
           "financial_anxiety": {
@@ -3193,10 +3193,10 @@ const DASHBOARD_DATA = {
       "name": "Mississippi",
       "abbr": "MS",
       "financial_anxiety": {
-        "value": 157,
-        "change": -10.8,
+        "value": 160,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 13
+        "rank": 11
       },
       "food_insecurity": {
         "value": 160,
@@ -3218,12 +3218,12 @@ const DASHBOARD_DATA = {
         "rank": 1
       },
       "metrics": {
-        "unemployment_rate": 3.3,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 3.4,
+        "unemployment_period": "2026-10",
         "poverty_rate": 17.8,
         "rent_burden_pct": 31.7,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3232,7 +3232,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.166401527203295,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.35,
         "trends_boost": {
           "financial_anxiety": {
@@ -3274,7 +3274,7 @@ const DASHBOARD_DATA = {
       "abbr": "MO",
       "financial_anxiety": {
         "value": 128,
-        "change": -7.7,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 33
       },
@@ -3298,11 +3298,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 3.6,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 12.2,
         "rent_burden_pct": 28,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3311,7 +3311,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.83530803311881,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -3353,7 +3353,7 @@ const DASHBOARD_DATA = {
       "abbr": "MT",
       "financial_anxiety": {
         "value": 113,
-        "change": -11.4,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 42
       },
@@ -3373,15 +3373,15 @@ const DASHBOARD_DATA = {
         "value": 118,
         "change": null,
         "change_basis": "not available - derived index, no independent change series",
-        "rank": 46
+        "rank": 45
       },
       "metrics": {
         "unemployment_rate": 3.1,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 10.4,
         "rent_burden_pct": 29.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3390,7 +3390,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.271801538294877,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1,
         "trends_boost": {
           "financial_anxiety": {
@@ -3431,8 +3431,8 @@ const DASHBOARD_DATA = {
       "name": "Nebraska",
       "abbr": "NE",
       "financial_anxiety": {
-        "value": 104,
-        "change": 0,
+        "value": 102,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 47
       },
@@ -3452,15 +3452,15 @@ const DASHBOARD_DATA = {
         "value": 115,
         "change": null,
         "change_basis": "not available - derived index, no independent change series",
-        "rank": 48
+        "rank": 47
       },
       "metrics": {
-        "unemployment_rate": 2.9,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 2.8,
+        "unemployment_period": "2026-10",
         "poverty_rate": 10.6,
         "rent_burden_pct": 27.6,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3469,7 +3469,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 12.668287401172648,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 0.95,
         "trends_boost": {
           "financial_anxiety": {
@@ -3511,7 +3511,7 @@ const DASHBOARD_DATA = {
       "abbr": "NV",
       "financial_anxiety": {
         "value": 169,
-        "change": -9.6,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 3
       },
@@ -3535,11 +3535,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 4.7,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 11.8,
         "rent_burden_pct": 31.7,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3548,7 +3548,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 12.306465315463706,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.12,
         "trends_boost": {
           "financial_anxiety": {
@@ -3589,8 +3589,8 @@ const DASHBOARD_DATA = {
       "name": "New Hampshire",
       "abbr": "NH",
       "financial_anxiety": {
-        "value": 91,
-        "change": -18.8,
+        "value": 90,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 49
       },
@@ -3610,15 +3610,15 @@ const DASHBOARD_DATA = {
         "value": 118,
         "change": null,
         "change_basis": "not available - derived index, no independent change series",
-        "rank": 47
+        "rank": 46
       },
       "metrics": {
-        "unemployment_rate": 2.6,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 2.5,
+        "unemployment_period": "2026-10",
         "poverty_rate": 7.3,
         "rent_burden_pct": 29.4,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3627,7 +3627,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 19.265615076536232,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 0.88,
         "trends_boost": {
           "financial_anxiety": {
@@ -3669,7 +3669,7 @@ const DASHBOARD_DATA = {
       "abbr": "NJ",
       "financial_anxiety": {
         "value": 139,
-        "change": -23.6,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 26
       },
@@ -3693,11 +3693,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 4.2,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 9.2,
         "rent_burden_pct": 31.6,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3706,7 +3706,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 24.200960131440468,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -3747,10 +3747,10 @@ const DASHBOARD_DATA = {
       "name": "New Mexico",
       "abbr": "NM",
       "financial_anxiety": {
-        "value": 167,
-        "change": 11.9,
+        "value": 169,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 7
+        "rank": 4
       },
       "food_insecurity": {
         "value": 151,
@@ -3771,12 +3771,12 @@ const DASHBOARD_DATA = {
         "rank": 10
       },
       "metrics": {
-        "unemployment_rate": 4.7,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 4.8,
+        "unemployment_period": "2026-10",
         "poverty_rate": 15.8,
         "rent_burden_pct": 29,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3785,7 +3785,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 13.496734660969128,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.18,
         "trends_boost": {
           "financial_anxiety": {
@@ -3826,10 +3826,10 @@ const DASHBOARD_DATA = {
       "name": "New York",
       "abbr": "NY",
       "financial_anxiety": {
-        "value": 165,
-        "change": -6.5,
+        "value": 162,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 8
+        "rank": 9
       },
       "food_insecurity": {
         "value": 135,
@@ -3850,12 +3850,12 @@ const DASHBOARD_DATA = {
         "rank": 2
       },
       "metrics": {
-        "unemployment_rate": 4.3,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 4.2,
+        "unemployment_period": "2026-10",
         "poverty_rate": 14,
         "rent_burden_pct": 31.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3864,7 +3864,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 22.396543883583455,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.15,
         "trends_boost": {
           "financial_anxiety": {
@@ -3906,7 +3906,7 @@ const DASHBOARD_DATA = {
       "abbr": "NC",
       "financial_anxiety": {
         "value": 128,
-        "change": -12.8,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 34
       },
@@ -3930,11 +3930,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 3.4,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 12.6,
         "rent_burden_pct": 30,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -3943,7 +3943,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 12.32622357646162,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.08,
         "trends_boost": {
           "financial_anxiety": {
@@ -3985,7 +3985,7 @@ const DASHBOARD_DATA = {
       "abbr": "ND",
       "financial_anxiety": {
         "value": 82,
-        "change": -15.4,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 50
       },
@@ -4009,11 +4009,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 2.2,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 10.8,
         "rent_burden_pct": 23.8,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4022,7 +4022,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.842703082126215,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 0.85,
         "trends_boost": {
           "financial_anxiety": {
@@ -4064,7 +4064,7 @@ const DASHBOARD_DATA = {
       "abbr": "OH",
       "financial_anxiety": {
         "value": 125,
-        "change": -20.9,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 37
       },
@@ -4088,11 +4088,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 3.4,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 12.6,
         "rent_burden_pct": 29.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4101,7 +4101,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 18.262110197703656,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.06,
         "trends_boost": {
           "financial_anxiety": {
@@ -4142,10 +4142,10 @@ const DASHBOARD_DATA = {
       "name": "Oklahoma",
       "abbr": "OK",
       "financial_anxiety": {
-        "value": 152,
-        "change": 16.7,
+        "value": 150,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 19
+        "rank": 21
       },
       "food_insecurity": {
         "value": 141,
@@ -4166,12 +4166,12 @@ const DASHBOARD_DATA = {
         "rank": 22
       },
       "metrics": {
-        "unemployment_rate": 4.2,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 4.1,
+        "unemployment_period": "2026-10",
         "poverty_rate": 14.8,
         "rent_burden_pct": 28.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4180,7 +4180,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.586452762923342,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.15,
         "trends_boost": {
           "financial_anxiety": {
@@ -4221,10 +4221,10 @@ const DASHBOARD_DATA = {
       "name": "Oregon",
       "abbr": "OR",
       "financial_anxiety": {
-        "value": 154,
-        "change": -5.7,
+        "value": 152,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 16
+        "rank": 19
       },
       "food_insecurity": {
         "value": 110,
@@ -4245,12 +4245,12 @@ const DASHBOARD_DATA = {
         "rank": 26
       },
       "metrics": {
-        "unemployment_rate": 5,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 4.9,
+        "unemployment_period": "2026-10",
         "poverty_rate": 11.7,
         "rent_burden_pct": 31.6,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4259,7 +4259,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 5.985701718519612,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -4300,10 +4300,10 @@ const DASHBOARD_DATA = {
       "name": "Pennsylvania",
       "abbr": "PA",
       "financial_anxiety": {
-        "value": 124,
-        "change": -18.2,
+        "value": 122,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 38
+        "rank": 39
       },
       "food_insecurity": {
         "value": 106,
@@ -4324,12 +4324,12 @@ const DASHBOARD_DATA = {
         "rank": 27
       },
       "metrics": {
-        "unemployment_rate": 3.6,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 3.5,
+        "unemployment_period": "2026-10",
         "poverty_rate": 11.6,
         "rent_burden_pct": 29.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4338,7 +4338,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 18.06222021835047,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
@@ -4379,8 +4379,8 @@ const DASHBOARD_DATA = {
       "name": "Rhode Island",
       "abbr": "RI",
       "financial_anxiety": {
-        "value": 119,
-        "change": -16.3,
+        "value": 118,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 41
       },
@@ -4403,12 +4403,12 @@ const DASHBOARD_DATA = {
         "rank": 37
       },
       "metrics": {
-        "unemployment_rate": 3.6,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 3.5,
+        "unemployment_period": "2026-10",
         "poverty_rate": 12,
         "rent_burden_pct": 29.8,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4417,7 +4417,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 22.076373683064112,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 0.98,
         "trends_boost": {
           "financial_anxiety": {
@@ -4458,10 +4458,10 @@ const DASHBOARD_DATA = {
       "name": "South Carolina",
       "abbr": "SC",
       "financial_anxiety": {
-        "value": 148,
-        "change": -14.9,
+        "value": 146,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 21
+        "rank": 23
       },
       "food_insecurity": {
         "value": 131,
@@ -4482,12 +4482,12 @@ const DASHBOARD_DATA = {
         "rank": 8
       },
       "metrics": {
-        "unemployment_rate": 4,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 3.9,
+        "unemployment_period": "2026-10",
         "poverty_rate": 13.3,
         "rent_burden_pct": 31.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4496,7 +4496,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 16.57771204424153,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.15,
         "trends_boost": {
           "financial_anxiety": {
@@ -4538,7 +4538,7 @@ const DASHBOARD_DATA = {
       "abbr": "SD",
       "financial_anxiety": {
         "value": 82,
-        "change": -4.8,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 51
       },
@@ -4562,11 +4562,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 2,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 10.5,
         "rent_burden_pct": 28,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4575,7 +4575,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.36340000693312,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 0.88,
         "trends_boost": {
           "financial_anxiety": {
@@ -4617,7 +4617,7 @@ const DASHBOARD_DATA = {
       "abbr": "TN",
       "financial_anxiety": {
         "value": 132,
-        "change": -2.9,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 29
       },
@@ -4641,11 +4641,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 3.4,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 13.3,
         "rent_burden_pct": 30.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4654,7 +4654,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 11.851640423068996,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.12,
         "trends_boost": {
           "financial_anxiety": {
@@ -4696,7 +4696,7 @@ const DASHBOARD_DATA = {
       "abbr": "TX",
       "financial_anxiety": {
         "value": 153,
-        "change": 2.3,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 17
       },
@@ -4720,11 +4720,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 4.4,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 13.4,
         "rent_burden_pct": 30.8,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4733,7 +4733,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 6.204649489275784,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.05,
         "trends_boost": {
           "financial_anxiety": {
@@ -4775,7 +4775,7 @@ const DASHBOARD_DATA = {
       "abbr": "UT",
       "financial_anxiety": {
         "value": 122,
-        "change": -2.8,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 40
       },
@@ -4792,18 +4792,18 @@ const DASHBOARD_DATA = {
         "rank": 38
       },
       "affordability": {
-        "value": 129,
+        "value": 130,
         "change": null,
         "change_basis": "not available - derived index, no independent change series",
-        "rank": 39
+        "rank": 38
       },
       "metrics": {
         "unemployment_rate": 3.5,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 8.4,
         "rent_burden_pct": 30.1,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4812,7 +4812,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 9.590360224522628,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
@@ -4828,7 +4828,7 @@ const DASHBOARD_DATA = {
             "applied": true
           },
           "affordability": {
-            "value": 9,
+            "value": 10,
             "applied": true
           }
         },
@@ -4854,7 +4854,7 @@ const DASHBOARD_DATA = {
       "abbr": "VT",
       "financial_anxiety": {
         "value": 95,
-        "change": 0,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 48
       },
@@ -4871,18 +4871,18 @@ const DASHBOARD_DATA = {
         "rank": 39
       },
       "affordability": {
-        "value": 124,
+        "value": 114,
         "change": null,
         "change_basis": "not available - derived index, no independent change series",
-        "rank": 43
+        "rank": 48
       },
       "metrics": {
         "unemployment_rate": 2.6,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 9.3,
         "rent_burden_pct": 29.9,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4891,7 +4891,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 18.079650417353527,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 0.92,
         "trends_boost": {
           "financial_anxiety": {
@@ -4907,7 +4907,7 @@ const DASHBOARD_DATA = {
             "applied": true
           },
           "affordability": {
-            "value": 10,
+            "value": 0,
             "applied": true
           }
         },
@@ -4933,9 +4933,9 @@ const DASHBOARD_DATA = {
       "abbr": "VA",
       "financial_anxiety": {
         "value": 129,
-        "change": 5.9,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 31
+        "rank": 32
       },
       "food_insecurity": {
         "value": 92,
@@ -4957,11 +4957,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 3.6,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 9.8,
         "rent_burden_pct": 30.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -4970,7 +4970,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 15.954445566312279,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 0.98,
         "trends_boost": {
           "financial_anxiety": {
@@ -5011,10 +5011,10 @@ const DASHBOARD_DATA = {
       "name": "Washington",
       "abbr": "WA",
       "financial_anxiety": {
-        "value": 146,
-        "change": 2.1,
+        "value": 154,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 22
+        "rank": 15
       },
       "food_insecurity": {
         "value": 97,
@@ -5035,12 +5035,12 @@ const DASHBOARD_DATA = {
         "rank": 32
       },
       "metrics": {
-        "unemployment_rate": 4.8,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 4.7,
+        "unemployment_period": "2026-10",
         "poverty_rate": 10,
         "rent_burden_pct": 30.3,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -5049,11 +5049,11 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 8.238362592701218,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.02,
         "trends_boost": {
           "financial_anxiety": {
-            "value": 0,
+            "value": 10,
             "applied": true
           },
           "food_insecurity": {
@@ -5091,9 +5091,9 @@ const DASHBOARD_DATA = {
       "abbr": "WV",
       "financial_anxiety": {
         "value": 165,
-        "change": -11.1,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
-        "rank": 9
+        "rank": 8
       },
       "food_insecurity": {
         "value": 156,
@@ -5115,11 +5115,11 @@ const DASHBOARD_DATA = {
       },
       "metrics": {
         "unemployment_rate": 4,
-        "unemployment_period": "2026-09",
+        "unemployment_period": "2026-10",
         "poverty_rate": 16.2,
         "rent_burden_pct": 29.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -5128,7 +5128,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 21.801153218011542,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 1.28,
         "trends_boost": {
           "financial_anxiety": {
@@ -5169,8 +5169,8 @@ const DASHBOARD_DATA = {
       "name": "Wisconsin",
       "abbr": "WI",
       "financial_anxiety": {
-        "value": 109,
-        "change": 3.2,
+        "value": 111,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 44
       },
@@ -5190,15 +5190,15 @@ const DASHBOARD_DATA = {
         "value": 130,
         "change": null,
         "change_basis": "not available - derived index, no independent change series",
-        "rank": 38
+        "rank": 39
       },
       "metrics": {
-        "unemployment_rate": 3.2,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 3.3,
+        "unemployment_period": "2026-10",
         "poverty_rate": 10.3,
         "rent_burden_pct": 28.2,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -5207,7 +5207,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 20.920752458955086,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 0.95,
         "trends_boost": {
           "financial_anxiety": {
@@ -5248,8 +5248,8 @@ const DASHBOARD_DATA = {
       "name": "Wyoming",
       "abbr": "WY",
       "financial_anxiety": {
-        "value": 105,
-        "change": -11.8,
+        "value": 107,
+        "change": null,
         "change_basis": "year-over-year unemployment rate",
         "rank": 46
       },
@@ -5272,12 +5272,12 @@ const DASHBOARD_DATA = {
         "rank": 49
       },
       "metrics": {
-        "unemployment_rate": 3,
-        "unemployment_period": "2026-09",
+        "unemployment_rate": 3.1,
+        "unemployment_period": "2026-10",
         "poverty_rate": 10,
         "rent_burden_pct": 25.5,
         "rent_burden_source": "census_acs",
-        "rent_burden_pct_observed": "2026-11-20",
+        "rent_burden_pct_observed": "2026-11-21",
         "fair_market_rent_2br": null,
         "fair_market_rent_source": null,
         "fair_market_rent_2br_observed": null,
@@ -5286,7 +5286,7 @@ const DASHBOARD_DATA = {
         "fmr_score_source": "jchs_2025",
         "housing_price_change": 14.335307774089273,
         "housing_price_change_source": "FRED FHFA HPI",
-        "housing_price_change_observed": "2026-11-20",
+        "housing_price_change_observed": "2026-11-21",
         "regional_stress_multiplier": 0.95,
         "trends_boost": {
           "financial_anxiety": {
@@ -5333,15 +5333,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2017-01-01",
-          "value": 48
+          "value": 47
         },
         {
           "date": "2017-02-01",
-          "value": 48
+          "value": 47
         },
         {
           "date": "2017-03-01",
-          "value": 50
+          "value": 49
         },
         {
           "date": "2017-04-01",
@@ -5357,31 +5357,31 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2017-07-01",
-          "value": 49
+          "value": 48
         },
         {
           "date": "2017-08-01",
-          "value": 47
-        },
-        {
-          "date": "2017-09-01",
-          "value": 50
-        },
-        {
-          "date": "2017-10-01",
-          "value": 50
-        },
-        {
-          "date": "2017-11-01",
-          "value": 50
-        },
-        {
-          "date": "2017-12-01",
           "value": 46
         },
         {
+          "date": "2017-09-01",
+          "value": 48
+        },
+        {
+          "date": "2017-10-01",
+          "value": 49
+        },
+        {
+          "date": "2017-11-01",
+          "value": 49
+        },
+        {
+          "date": "2017-12-01",
+          "value": 45
+        },
+        {
           "date": "2018-01-01",
-          "value": 42
+          "value": 43
         },
         {
           "date": "2018-02-01",
@@ -5389,11 +5389,11 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-03-01",
-          "value": 45
+          "value": 46
         },
         {
           "date": "2018-04-01",
-          "value": 48
+          "value": 47
         },
         {
           "date": "2018-05-01",
@@ -5401,7 +5401,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-06-01",
-          "value": 45
+          "value": 44
         },
         {
           "date": "2018-07-01",
@@ -5409,7 +5409,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-08-01",
-          "value": 42
+          "value": 41
         },
         {
           "date": "2018-09-01",
@@ -5417,7 +5417,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-10-01",
-          "value": 45
+          "value": 44
         },
         {
           "date": "2018-11-01",
@@ -5425,27 +5425,27 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-12-01",
-          "value": 46
+          "value": 45
         },
         {
           "date": "2019-01-01",
-          "value": 47
+          "value": 46
         },
         {
           "date": "2019-02-01",
-          "value": 48
+          "value": 47
         },
         {
           "date": "2019-03-01",
-          "value": 51
-        },
-        {
-          "date": "2019-04-01",
           "value": 50
         },
         {
-          "date": "2019-05-01",
+          "date": "2019-04-01",
           "value": 49
+        },
+        {
+          "date": "2019-05-01",
+          "value": 48
         },
         {
           "date": "2019-06-01",
@@ -5473,35 +5473,35 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2019-12-01",
-          "value": 48
-        },
-        {
-          "date": "2020-01-01",
-          "value": 50
-        },
-        {
-          "date": "2020-02-01",
-          "value": 54
-        },
-        {
-          "date": "2020-03-01",
-          "value": 54
-        },
-        {
-          "date": "2020-04-01",
-          "value": 52
-        },
-        {
-          "date": "2020-05-01",
           "value": 47
         },
         {
+          "date": "2020-01-01",
+          "value": 48
+        },
+        {
+          "date": "2020-02-01",
+          "value": 51
+        },
+        {
+          "date": "2020-03-01",
+          "value": 52
+        },
+        {
+          "date": "2020-04-01",
+          "value": 50
+        },
+        {
+          "date": "2020-05-01",
+          "value": 46
+        },
+        {
           "date": "2020-06-01",
-          "value": 44
+          "value": 43
         },
         {
           "date": "2020-07-01",
-          "value": 41
+          "value": 40
         },
         {
           "date": "2020-08-01",
@@ -5521,7 +5521,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2020-12-01",
-          "value": 46
+          "value": 45
         },
         {
           "date": "2021-01-01",
@@ -5545,15 +5545,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2021-06-01",
-          "value": 44
+          "value": 43
         },
         {
           "date": "2021-07-01",
-          "value": 41
+          "value": 40
         },
         {
           "date": "2021-08-01",
-          "value": 37
+          "value": 36
         },
         {
           "date": "2021-09-01",
@@ -5561,7 +5561,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2021-10-01",
-          "value": 43
+          "value": 42
         },
         {
           "date": "2021-11-01",
@@ -5569,55 +5569,55 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2021-12-01",
-          "value": 46
+          "value": 45
         },
         {
           "date": "2022-01-01",
-          "value": 47
+          "value": 46
         },
         {
           "date": "2022-02-01",
-          "value": 52
+          "value": 51
         },
         {
           "date": "2022-03-01",
-          "value": 58
+          "value": 56
         },
         {
           "date": "2022-04-01",
-          "value": 67
-        },
-        {
-          "date": "2022-05-01",
-          "value": 68
-        },
-        {
-          "date": "2022-06-01",
           "value": 64
         },
         {
-          "date": "2022-07-01",
-          "value": 55
-        },
-        {
-          "date": "2022-08-01",
-          "value": 52
-        },
-        {
-          "date": "2022-09-01",
-          "value": 57
-        },
-        {
-          "date": "2022-10-01",
-          "value": 63
-        },
-        {
-          "date": "2022-11-01",
+          "date": "2022-05-01",
           "value": 66
         },
         {
-          "date": "2022-12-01",
+          "date": "2022-06-01",
+          "value": 62
+        },
+        {
+          "date": "2022-07-01",
+          "value": 54
+        },
+        {
+          "date": "2022-08-01",
+          "value": 51
+        },
+        {
+          "date": "2022-09-01",
+          "value": 56
+        },
+        {
+          "date": "2022-10-01",
+          "value": 61
+        },
+        {
+          "date": "2022-11-01",
           "value": 65
+        },
+        {
+          "date": "2022-12-01",
+          "value": 64
         },
         {
           "date": "2023-01-01",
@@ -5625,7 +5625,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2023-02-01",
-          "value": 68
+          "value": 67
         },
         {
           "date": "2023-03-01",
@@ -5637,167 +5637,167 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2023-05-01",
-          "value": 79
+          "value": 78
         },
         {
           "date": "2023-06-01",
-          "value": 73
-        },
-        {
-          "date": "2023-07-01",
-          "value": 65
-        },
-        {
-          "date": "2023-08-01",
-          "value": 57
-        },
-        {
-          "date": "2023-09-01",
-          "value": 64
-        },
-        {
-          "date": "2023-10-01",
-          "value": 75
-        },
-        {
-          "date": "2023-11-01",
-          "value": 86
-        },
-        {
-          "date": "2023-12-01",
-          "value": 86
-        },
-        {
-          "date": "2024-01-01",
-          "value": 83
-        },
-        {
-          "date": "2024-02-01",
-          "value": 85
-        },
-        {
-          "date": "2024-03-01",
-          "value": 89
-        },
-        {
-          "date": "2024-04-01",
-          "value": 96
-        },
-        {
-          "date": "2024-05-01",
-          "value": 90
-        },
-        {
-          "date": "2024-06-01",
-          "value": 80
-        },
-        {
-          "date": "2024-07-01",
-          "value": 67
-        },
-        {
-          "date": "2024-08-01",
-          "value": 63
-        },
-        {
-          "date": "2024-09-01",
           "value": 72
         },
         {
-          "date": "2024-10-01",
+          "date": "2023-07-01",
+          "value": 63
+        },
+        {
+          "date": "2023-08-01",
+          "value": 55
+        },
+        {
+          "date": "2023-09-01",
+          "value": 63
+        },
+        {
+          "date": "2023-10-01",
+          "value": 74
+        },
+        {
+          "date": "2023-11-01",
+          "value": 85
+        },
+        {
+          "date": "2023-12-01",
+          "value": 85
+        },
+        {
+          "date": "2024-01-01",
           "value": 82
         },
         {
-          "date": "2024-11-01",
-          "value": 91
+          "date": "2024-02-01",
+          "value": 84
         },
         {
-          "date": "2024-12-01",
-          "value": 89
-        },
-        {
-          "date": "2025-01-01",
+          "date": "2024-03-01",
           "value": 87
         },
         {
-          "date": "2025-02-01",
-          "value": 92
+          "date": "2024-04-01",
+          "value": 94
         },
         {
-          "date": "2025-03-01",
-          "value": 100
+          "date": "2024-05-01",
+          "value": 89
         },
         {
-          "date": "2025-04-01",
-          "value": 110
+          "date": "2024-06-01",
+          "value": 79
         },
         {
-          "date": "2025-05-01",
-          "value": 103
+          "date": "2024-07-01",
+          "value": 66
         },
         {
-          "date": "2025-06-01",
-          "value": 97
+          "date": "2024-08-01",
+          "value": 61
         },
         {
-          "date": "2025-07-01",
+          "date": "2024-09-01",
+          "value": 70
+        },
+        {
+          "date": "2024-10-01",
+          "value": 81
+        },
+        {
+          "date": "2024-11-01",
           "value": 90
         },
         {
+          "date": "2024-12-01",
+          "value": 88
+        },
+        {
+          "date": "2025-01-01",
+          "value": 86
+        },
+        {
+          "date": "2025-02-01",
+          "value": 91
+        },
+        {
+          "date": "2025-03-01",
+          "value": 99
+        },
+        {
+          "date": "2025-04-01",
+          "value": 109
+        },
+        {
+          "date": "2025-05-01",
+          "value": 102
+        },
+        {
+          "date": "2025-06-01",
+          "value": 96
+        },
+        {
+          "date": "2025-07-01",
+          "value": 88
+        },
+        {
           "date": "2025-08-01",
-          "value": 93
+          "value": 91
         },
         {
           "date": "2025-09-01",
-          "value": 104
+          "value": 102
         },
         {
           "date": "2025-10-01",
-          "value": 115
+          "value": 112
         },
         {
           "date": "2025-11-01",
-          "value": 125
+          "value": 121
         },
         {
           "date": "2025-12-01",
-          "value": 125
+          "value": 122
         },
         {
           "date": "2026-01-01",
-          "value": 126
+          "value": 122
         },
         {
           "date": "2026-02-01",
-          "value": 132
+          "value": 128
         },
         {
           "date": "2026-03-01",
-          "value": 147
+          "value": 143
         },
         {
           "date": "2026-04-01",
-          "value": 164
+          "value": 161
         },
         {
           "date": "2026-05-01",
-          "value": 176
+          "value": 173
         },
         {
           "date": "2026-06-01",
-          "value": 186
+          "value": 183
         },
         {
           "date": "2026-07-01",
-          "value": 166
+          "value": 164
         },
         {
           "date": "2026-08-01",
-          "value": 140
+          "value": 141
         },
         {
           "date": "2026-09-01",
-          "value": 122
+          "value": 121
         },
         {
           "date": "2026-10-01",
@@ -5811,59 +5811,59 @@ const DASHBOARD_DATA = {
       "food_insecurity": [
         {
           "date": "2016-12-01",
-          "value": 85
+          "value": 84
         },
         {
           "date": "2017-01-01",
-          "value": 98
+          "value": 95
         },
         {
           "date": "2017-02-01",
-          "value": 96
+          "value": 94
         },
         {
           "date": "2017-03-01",
-          "value": 96
+          "value": 94
         },
         {
           "date": "2017-04-01",
-          "value": 88
-        },
-        {
-          "date": "2017-05-01",
           "value": 87
         },
         {
+          "date": "2017-05-01",
+          "value": 86
+        },
+        {
           "date": "2017-06-01",
-          "value": 93
+          "value": 92
         },
         {
           "date": "2017-07-01",
-          "value": 99
+          "value": 98
         },
         {
           "date": "2017-08-01",
-          "value": 103
+          "value": 102
         },
         {
           "date": "2017-09-01",
-          "value": 115
+          "value": 114
         },
         {
           "date": "2017-10-01",
-          "value": 129
+          "value": 127
         },
         {
           "date": "2017-11-01",
-          "value": 129
+          "value": 127
         },
         {
           "date": "2017-12-01",
-          "value": 113
+          "value": 111
         },
         {
           "date": "2018-01-01",
-          "value": 104
+          "value": 102
         },
         {
           "date": "2018-02-01",
@@ -5875,15 +5875,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-04-01",
-          "value": 98
+          "value": 97
         },
         {
           "date": "2018-05-01",
-          "value": 88
+          "value": 86
         },
         {
           "date": "2018-06-01",
-          "value": 92
+          "value": 91
         },
         {
           "date": "2018-07-01",
@@ -5891,7 +5891,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-08-01",
-          "value": 106
+          "value": 107
         },
         {
           "date": "2018-09-01",
@@ -5903,47 +5903,47 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-11-01",
-          "value": 100
+          "value": 99
         },
         {
           "date": "2018-12-01",
-          "value": 94
+          "value": 93
         },
         {
           "date": "2019-01-01",
-          "value": 129
+          "value": 127
         },
         {
           "date": "2019-02-01",
-          "value": 136
+          "value": 133
         },
         {
           "date": "2019-03-01",
-          "value": 135
+          "value": 132
         },
         {
           "date": "2019-04-01",
-          "value": 95
+          "value": 94
         },
         {
           "date": "2019-05-01",
-          "value": 88
+          "value": 87
         },
         {
           "date": "2019-06-01",
-          "value": 92
+          "value": 91
         },
         {
           "date": "2019-07-01",
-          "value": 102
+          "value": 101
         },
         {
           "date": "2019-08-01",
-          "value": 109
+          "value": 108
         },
         {
           "date": "2019-09-01",
-          "value": 109
+          "value": 108
         },
         {
           "date": "2019-10-01",
@@ -5951,19 +5951,19 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2019-11-01",
-          "value": 91
+          "value": 92
         },
         {
           "date": "2019-12-01",
-          "value": 90
+          "value": 91
         },
         {
           "date": "2020-01-01",
-          "value": 94
+          "value": 93
         },
         {
           "date": "2020-02-01",
-          "value": 96
+          "value": 95
         },
         {
           "date": "2020-03-01",
@@ -5971,31 +5971,31 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2020-04-01",
-          "value": 205
+          "value": 204
         },
         {
           "date": "2020-05-01",
-          "value": 235
+          "value": 234
         },
         {
           "date": "2020-06-01",
-          "value": 223
+          "value": 221
         },
         {
           "date": "2020-07-01",
-          "value": 163
+          "value": 162
         },
         {
           "date": "2020-08-01",
-          "value": 152
+          "value": 151
         },
         {
           "date": "2020-09-01",
-          "value": 143
+          "value": 142
         },
         {
           "date": "2020-10-01",
-          "value": 145
+          "value": 144
         },
         {
           "date": "2020-11-01",
@@ -6003,187 +6003,187 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2020-12-01",
-          "value": 146
-        },
-        {
-          "date": "2021-01-01",
-          "value": 149
-        },
-        {
-          "date": "2021-02-01",
-          "value": 153
-        },
-        {
-          "date": "2021-03-01",
-          "value": 148
-        },
-        {
-          "date": "2021-04-01",
-          "value": 135
-        },
-        {
-          "date": "2021-05-01",
-          "value": 129
-        },
-        {
-          "date": "2021-06-01",
-          "value": 138
-        },
-        {
-          "date": "2021-07-01",
-          "value": 148
-        },
-        {
-          "date": "2021-08-01",
-          "value": 163
-        },
-        {
-          "date": "2021-09-01",
-          "value": 170
-        },
-        {
-          "date": "2021-10-01",
-          "value": 170
-        },
-        {
-          "date": "2021-11-01",
-          "value": 158
-        },
-        {
-          "date": "2021-12-01",
-          "value": 145
-        },
-        {
-          "date": "2022-01-01",
-          "value": 150
-        },
-        {
-          "date": "2022-02-01",
-          "value": 154
-        },
-        {
-          "date": "2022-03-01",
-          "value": 157
-        },
-        {
-          "date": "2022-04-01",
-          "value": 148
-        },
-        {
-          "date": "2022-05-01",
-          "value": 145
-        },
-        {
-          "date": "2022-06-01",
-          "value": 155
-        },
-        {
-          "date": "2022-07-01",
-          "value": 166
-        },
-        {
-          "date": "2022-08-01",
-          "value": 176
-        },
-        {
-          "date": "2022-09-01",
-          "value": 179
-        },
-        {
-          "date": "2022-10-01",
-          "value": 182
-        },
-        {
-          "date": "2022-11-01",
-          "value": 176
-        },
-        {
-          "date": "2022-12-01",
-          "value": 163
-        },
-        {
-          "date": "2023-01-01",
-          "value": 155
-        },
-        {
-          "date": "2023-02-01",
-          "value": 148
-        },
-        {
-          "date": "2023-03-01",
-          "value": 141
-        },
-        {
-          "date": "2023-04-01",
-          "value": 128
-        },
-        {
-          "date": "2023-05-01",
-          "value": 126
-        },
-        {
-          "date": "2023-06-01",
-          "value": 133
-        },
-        {
-          "date": "2023-07-01",
-          "value": 143
-        },
-        {
-          "date": "2023-08-01",
-          "value": 146
-        },
-        {
-          "date": "2023-09-01",
-          "value": 149
-        },
-        {
-          "date": "2023-10-01",
           "value": 144
         },
         {
+          "date": "2021-01-01",
+          "value": 148
+        },
+        {
+          "date": "2021-02-01",
+          "value": 152
+        },
+        {
+          "date": "2021-03-01",
+          "value": 147
+        },
+        {
+          "date": "2021-04-01",
+          "value": 134
+        },
+        {
+          "date": "2021-05-01",
+          "value": 128
+        },
+        {
+          "date": "2021-06-01",
+          "value": 134
+        },
+        {
+          "date": "2021-07-01",
+          "value": 141
+        },
+        {
+          "date": "2021-08-01",
+          "value": 156
+        },
+        {
+          "date": "2021-09-01",
+          "value": 166
+        },
+        {
+          "date": "2021-10-01",
+          "value": 168
+        },
+        {
+          "date": "2021-11-01",
+          "value": 156
+        },
+        {
+          "date": "2021-12-01",
+          "value": 143
+        },
+        {
+          "date": "2022-01-01",
+          "value": 146
+        },
+        {
+          "date": "2022-02-01",
+          "value": 150
+        },
+        {
+          "date": "2022-03-01",
+          "value": 154
+        },
+        {
+          "date": "2022-04-01",
+          "value": 144
+        },
+        {
+          "date": "2022-05-01",
+          "value": 141
+        },
+        {
+          "date": "2022-06-01",
+          "value": 149
+        },
+        {
+          "date": "2022-07-01",
+          "value": 165
+        },
+        {
+          "date": "2022-08-01",
+          "value": 174
+        },
+        {
+          "date": "2022-09-01",
+          "value": 178
+        },
+        {
+          "date": "2022-10-01",
+          "value": 180
+        },
+        {
+          "date": "2022-11-01",
+          "value": 173
+        },
+        {
+          "date": "2022-12-01",
+          "value": 160
+        },
+        {
+          "date": "2023-01-01",
+          "value": 152
+        },
+        {
+          "date": "2023-02-01",
+          "value": 146
+        },
+        {
+          "date": "2023-03-01",
+          "value": 140
+        },
+        {
+          "date": "2023-04-01",
+          "value": 127
+        },
+        {
+          "date": "2023-05-01",
+          "value": 124
+        },
+        {
+          "date": "2023-06-01",
+          "value": 131
+        },
+        {
+          "date": "2023-07-01",
+          "value": 141
+        },
+        {
+          "date": "2023-08-01",
+          "value": 145
+        },
+        {
+          "date": "2023-09-01",
+          "value": 148
+        },
+        {
+          "date": "2023-10-01",
+          "value": 141
+        },
+        {
           "date": "2023-11-01",
-          "value": 136
+          "value": 135
         },
         {
           "date": "2023-12-01",
-          "value": 124
+          "value": 123
         },
         {
           "date": "2024-01-01",
-          "value": 124
+          "value": 123
         },
         {
           "date": "2024-02-01",
-          "value": 123
+          "value": 120
         },
         {
           "date": "2024-03-01",
-          "value": 116
+          "value": 114
         },
         {
           "date": "2024-04-01",
-          "value": 106
+          "value": 105
         },
         {
           "date": "2024-05-01",
-          "value": 102
+          "value": 101
         },
         {
           "date": "2024-06-01",
-          "value": 108
+          "value": 107
         },
         {
           "date": "2024-07-01",
-          "value": 115
+          "value": 114
         },
         {
           "date": "2024-08-01",
-          "value": 122
+          "value": 121
         },
         {
           "date": "2024-09-01",
-          "value": 123
+          "value": 122
         },
         {
           "date": "2024-10-01",
@@ -6199,15 +6199,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-01-01",
-          "value": 118
+          "value": 116
         },
         {
           "date": "2025-02-01",
-          "value": 120
+          "value": 118
         },
         {
           "date": "2025-03-01",
-          "value": 119
+          "value": 118
         },
         {
           "date": "2025-04-01",
@@ -6219,35 +6219,35 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-06-01",
-          "value": 103
+          "value": 102
         },
         {
           "date": "2025-07-01",
-          "value": 110
+          "value": 109
         },
         {
           "date": "2025-08-01",
-          "value": 114
+          "value": 113
         },
         {
           "date": "2025-09-01",
-          "value": 116
+          "value": 114
         },
         {
           "date": "2025-10-01",
-          "value": 170
+          "value": 166
         },
         {
           "date": "2025-11-01",
-          "value": 211
+          "value": 206
         },
         {
           "date": "2025-12-01",
-          "value": 208
+          "value": 204
         },
         {
           "date": "2026-01-01",
-          "value": 152
+          "value": 150
         },
         {
           "date": "2026-02-01",
@@ -6259,7 +6259,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2026-04-01",
-          "value": 103
+          "value": 104
         },
         {
           "date": "2026-05-01",
@@ -6267,23 +6267,23 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2026-06-01",
-          "value": 111
+          "value": 110
         },
         {
           "date": "2026-07-01",
-          "value": 113
+          "value": 110
         },
         {
           "date": "2026-08-01",
-          "value": 115
+          "value": 112
         },
         {
           "date": "2026-09-01",
-          "value": 114
+          "value": 112
         },
         {
           "date": "2026-10-01",
-          "value": 112
+          "value": 111
         },
         {
           "date": "2026-11-01",
@@ -6293,31 +6293,31 @@ const DASHBOARD_DATA = {
       "housing_stress": [
         {
           "date": "2016-12-01",
-          "value": 58
+          "value": 61
         },
         {
           "date": "2017-01-01",
-          "value": 62
+          "value": 64
         },
         {
           "date": "2017-02-01",
-          "value": 60
+          "value": 61
         },
         {
           "date": "2017-03-01",
-          "value": 59
-        },
-        {
-          "date": "2017-04-01",
-          "value": 55
-        },
-        {
-          "date": "2017-05-01",
           "value": 60
         },
         {
+          "date": "2017-04-01",
+          "value": 56
+        },
+        {
+          "date": "2017-05-01",
+          "value": 61
+        },
+        {
           "date": "2017-06-01",
-          "value": 66
+          "value": 65
         },
         {
           "date": "2017-07-01",
@@ -6325,11 +6325,11 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2017-08-01",
-          "value": 80
+          "value": 79
         },
         {
           "date": "2017-09-01",
-          "value": 78
+          "value": 77
         },
         {
           "date": "2017-10-01",
@@ -6341,55 +6341,55 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2017-12-01",
-          "value": 65
+          "value": 66
         },
         {
           "date": "2018-01-01",
-          "value": 65
+          "value": 66
         },
         {
           "date": "2018-02-01",
-          "value": 62
+          "value": 63
         },
         {
           "date": "2018-03-01",
-          "value": 61
+          "value": 62
         },
         {
           "date": "2018-04-01",
-          "value": 59
+          "value": 57
         },
         {
           "date": "2018-05-01",
-          "value": 64
+          "value": 62
         },
         {
           "date": "2018-06-01",
-          "value": 69
+          "value": 67
         },
         {
           "date": "2018-07-01",
-          "value": 76
+          "value": 75
         },
         {
           "date": "2018-08-01",
-          "value": 79
+          "value": 78
         },
         {
           "date": "2018-09-01",
-          "value": 79
+          "value": 78
         },
         {
           "date": "2018-10-01",
-          "value": 76
+          "value": 77
         },
         {
           "date": "2018-11-01",
-          "value": 70
+          "value": 72
         },
         {
           "date": "2018-12-01",
-          "value": 69
+          "value": 71
         },
         {
           "date": "2019-01-01",
@@ -6401,11 +6401,11 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2019-03-01",
-          "value": 63
+          "value": 64
         },
         {
           "date": "2019-04-01",
-          "value": 62
+          "value": 63
         },
         {
           "date": "2019-05-01",
@@ -6421,27 +6421,27 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2019-08-01",
-          "value": 74
+          "value": 75
         },
         {
           "date": "2019-09-01",
-          "value": 74
+          "value": 76
         },
         {
           "date": "2019-10-01",
-          "value": 73
+          "value": 76
         },
         {
           "date": "2019-11-01",
-          "value": 71
+          "value": 74
         },
         {
           "date": "2019-12-01",
-          "value": 72
+          "value": 74
         },
         {
           "date": "2020-01-01",
-          "value": 73
+          "value": 74
         },
         {
           "date": "2020-02-01",
@@ -6461,15 +6461,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2020-06-01",
-          "value": 49
+          "value": 50
         },
         {
           "date": "2020-07-01",
-          "value": 57
+          "value": 58
         },
         {
           "date": "2020-08-01",
-          "value": 71
+          "value": 72
         },
         {
           "date": "2020-09-01",
@@ -6477,19 +6477,19 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2020-10-01",
-          "value": 89
+          "value": 88
         },
         {
           "date": "2020-11-01",
-          "value": 80
-        },
-        {
-          "date": "2020-12-01",
           "value": 81
         },
         {
+          "date": "2020-12-01",
+          "value": 82
+        },
+        {
           "date": "2021-01-01",
-          "value": 86
+          "value": 87
         },
         {
           "date": "2021-02-01",
@@ -6497,11 +6497,11 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2021-03-01",
-          "value": 83
+          "value": 84
         },
         {
           "date": "2021-04-01",
-          "value": 71
+          "value": 72
         },
         {
           "date": "2021-05-01",
@@ -6517,7 +6517,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2021-08-01",
-          "value": 84
+          "value": 85
         },
         {
           "date": "2021-09-01",
@@ -6529,11 +6529,11 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2021-11-01",
-          "value": 80
+          "value": 81
         },
         {
           "date": "2021-12-01",
-          "value": 74
+          "value": 75
         },
         {
           "date": "2022-01-01",
@@ -6557,15 +6557,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2022-06-01",
-          "value": 94
+          "value": 96
         },
         {
           "date": "2022-07-01",
-          "value": 105
+          "value": 108
         },
         {
           "date": "2022-08-01",
-          "value": 114
+          "value": 115
         },
         {
           "date": "2022-09-01",
@@ -6573,15 +6573,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2022-10-01",
-          "value": 110
+          "value": 109
         },
         {
           "date": "2022-11-01",
-          "value": 108
+          "value": 107
         },
         {
           "date": "2022-12-01",
-          "value": 106
+          "value": 105
         },
         {
           "date": "2023-01-01",
@@ -6589,15 +6589,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2023-02-01",
-          "value": 103
-        },
-        {
-          "date": "2023-03-01",
           "value": 104
         },
         {
+          "date": "2023-03-01",
+          "value": 105
+        },
+        {
           "date": "2023-04-01",
-          "value": 103
+          "value": 104
         },
         {
           "date": "2023-05-01",
@@ -6605,7 +6605,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2023-06-01",
-          "value": 105
+          "value": 106
         },
         {
           "date": "2023-07-01",
@@ -6613,55 +6613,55 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2023-08-01",
-          "value": 112
-        },
-        {
-          "date": "2023-09-01",
-          "value": 111
-        },
-        {
-          "date": "2023-10-01",
           "value": 113
         },
         {
-          "date": "2023-11-01",
-          "value": 116
+          "date": "2023-09-01",
+          "value": 112
         },
         {
-          "date": "2023-12-01",
+          "date": "2023-10-01",
           "value": 114
         },
         {
+          "date": "2023-11-01",
+          "value": 117
+        },
+        {
+          "date": "2023-12-01",
+          "value": 115
+        },
+        {
           "date": "2024-01-01",
-          "value": 111
+          "value": 112
         },
         {
           "date": "2024-02-01",
-          "value": 103
-        },
-        {
-          "date": "2024-03-01",
-          "value": 102
-        },
-        {
-          "date": "2024-04-01",
-          "value": 96
-        },
-        {
-          "date": "2024-05-01",
-          "value": 98
-        },
-        {
-          "date": "2024-06-01",
-          "value": 98
-        },
-        {
-          "date": "2024-07-01",
           "value": 104
         },
         {
+          "date": "2024-03-01",
+          "value": 103
+        },
+        {
+          "date": "2024-04-01",
+          "value": 97
+        },
+        {
+          "date": "2024-05-01",
+          "value": 100
+        },
+        {
+          "date": "2024-06-01",
+          "value": 100
+        },
+        {
+          "date": "2024-07-01",
+          "value": 107
+        },
+        {
           "date": "2024-08-01",
-          "value": 110
+          "value": 111
         },
         {
           "date": "2024-09-01",
@@ -6681,7 +6681,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-01-01",
-          "value": 106
+          "value": 107
         },
         {
           "date": "2025-02-01",
@@ -6689,31 +6689,31 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-03-01",
-          "value": 99
+          "value": 101
         },
         {
           "date": "2025-04-01",
-          "value": 95
+          "value": 97
         },
         {
           "date": "2025-05-01",
-          "value": 93
+          "value": 96
         },
         {
           "date": "2025-06-01",
-          "value": 100
+          "value": 103
         },
         {
           "date": "2025-07-01",
-          "value": 111
+          "value": 113
         },
         {
           "date": "2025-08-01",
-          "value": 122
+          "value": 125
         },
         {
           "date": "2025-09-01",
-          "value": 128
+          "value": 129
         },
         {
           "date": "2025-10-01",
@@ -6721,7 +6721,7 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2025-11-01",
-          "value": 132
+          "value": 131
         },
         {
           "date": "2025-12-01",
@@ -6729,43 +6729,43 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2026-01-01",
-          "value": 154
+          "value": 153
         },
         {
           "date": "2026-02-01",
-          "value": 162
+          "value": 161
         },
         {
           "date": "2026-03-01",
-          "value": 170
+          "value": 169
         },
         {
           "date": "2026-04-01",
-          "value": 179
+          "value": 181
         },
         {
           "date": "2026-05-01",
-          "value": 200
+          "value": 203
         },
         {
           "date": "2026-06-01",
-          "value": 231
-        },
-        {
-          "date": "2026-07-01",
           "value": 235
         },
         {
+          "date": "2026-07-01",
+          "value": 237
+        },
+        {
           "date": "2026-08-01",
-          "value": 216
+          "value": 217
         },
         {
           "date": "2026-09-01",
-          "value": 178
+          "value": 180
         },
         {
           "date": "2026-10-01",
-          "value": 157
+          "value": 159
         },
         {
           "date": "2026-11-01",
@@ -6775,51 +6775,51 @@ const DASHBOARD_DATA = {
       "affordability": [
         {
           "date": "2016-12-01",
-          "value": 109
+          "value": 107
         },
         {
           "date": "2017-01-01",
-          "value": 119
+          "value": 114
         },
         {
           "date": "2017-02-01",
-          "value": 121
+          "value": 117
         },
         {
           "date": "2017-03-01",
-          "value": 128
+          "value": 124
         },
         {
           "date": "2017-04-01",
-          "value": 129
+          "value": 126
         },
         {
           "date": "2017-05-01",
-          "value": 129
+          "value": 126
         },
         {
           "date": "2017-06-01",
-          "value": 129
+          "value": 126
         },
         {
           "date": "2017-07-01",
-          "value": 130
+          "value": 125
         },
         {
           "date": "2017-08-01",
-          "value": 127
+          "value": 123
         },
         {
           "date": "2017-09-01",
-          "value": 122
+          "value": 117
         },
         {
           "date": "2017-10-01",
-          "value": 116
+          "value": 113
         },
         {
           "date": "2017-11-01",
-          "value": 115
+          "value": 113
         },
         {
           "date": "2017-12-01",
@@ -6831,15 +6831,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-02-01",
-          "value": 125
+          "value": 126
         },
         {
           "date": "2018-03-01",
-          "value": 130
+          "value": 132
         },
         {
           "date": "2018-04-01",
-          "value": 130
+          "value": 134
         },
         {
           "date": "2018-05-01",
@@ -6847,15 +6847,15 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-06-01",
-          "value": 135
+          "value": 137
         },
         {
           "date": "2018-07-01",
-          "value": 136
+          "value": 137
         },
         {
           "date": "2018-08-01",
-          "value": 135
+          "value": 138
         },
         {
           "date": "2018-09-01",
@@ -6867,387 +6867,387 @@ const DASHBOARD_DATA = {
         },
         {
           "date": "2018-11-01",
-          "value": 130
+          "value": 128
         },
         {
           "date": "2018-12-01",
-          "value": 126
+          "value": 124
         },
         {
           "date": "2019-01-01",
-          "value": 129
-        },
-        {
-          "date": "2019-02-01",
-          "value": 133
-        },
-        {
-          "date": "2019-03-01",
-          "value": 141
-        },
-        {
-          "date": "2019-04-01",
-          "value": 140
-        },
-        {
-          "date": "2019-05-01",
-          "value": 138
-        },
-        {
-          "date": "2019-06-01",
-          "value": 137
-        },
-        {
-          "date": "2019-07-01",
-          "value": 136
-        },
-        {
-          "date": "2019-08-01",
-          "value": 137
-        },
-        {
-          "date": "2019-09-01",
-          "value": 133
-        },
-        {
-          "date": "2019-10-01",
-          "value": 132
-        },
-        {
-          "date": "2019-11-01",
-          "value": 127
-        },
-        {
-          "date": "2019-12-01",
-          "value": 131
-        },
-        {
-          "date": "2020-01-01",
-          "value": 137
-        },
-        {
-          "date": "2020-02-01",
-          "value": 146
-        },
-        {
-          "date": "2020-03-01",
-          "value": 131
-        },
-        {
-          "date": "2020-04-01",
-          "value": 111
-        },
-        {
-          "date": "2020-05-01",
-          "value": 94
-        },
-        {
-          "date": "2020-06-01",
-          "value": 98
-        },
-        {
-          "date": "2020-07-01",
-          "value": 107
-        },
-        {
-          "date": "2020-08-01",
-          "value": 112
-        },
-        {
-          "date": "2020-09-01",
-          "value": 112
-        },
-        {
-          "date": "2020-10-01",
-          "value": 111
-        },
-        {
-          "date": "2020-11-01",
-          "value": 109
-        },
-        {
-          "date": "2020-12-01",
-          "value": 108
-        },
-        {
-          "date": "2021-01-01",
-          "value": 110
-        },
-        {
-          "date": "2021-02-01",
-          "value": 116
-        },
-        {
-          "date": "2021-03-01",
-          "value": 118
-        },
-        {
-          "date": "2021-04-01",
-          "value": 113
-        },
-        {
-          "date": "2021-05-01",
-          "value": 109
-        },
-        {
-          "date": "2021-06-01",
-          "value": 111
-        },
-        {
-          "date": "2021-07-01",
-          "value": 114
-        },
-        {
-          "date": "2021-08-01",
-          "value": 115
-        },
-        {
-          "date": "2021-09-01",
-          "value": 115
-        },
-        {
-          "date": "2021-10-01",
-          "value": 118
-        },
-        {
-          "date": "2021-11-01",
-          "value": 118
-        },
-        {
-          "date": "2021-12-01",
-          "value": 116
-        },
-        {
-          "date": "2022-01-01",
           "value": 126
         },
         {
-          "date": "2022-02-01",
-          "value": 142
-        },
-        {
-          "date": "2022-03-01",
-          "value": 159
-        },
-        {
-          "date": "2022-04-01",
-          "value": 161
-        },
-        {
-          "date": "2022-05-01",
-          "value": 156
-        },
-        {
-          "date": "2022-06-01",
-          "value": 152
-        },
-        {
-          "date": "2022-07-01",
-          "value": 149
-        },
-        {
-          "date": "2022-08-01",
-          "value": 148
-        },
-        {
-          "date": "2022-09-01",
-          "value": 147
-        },
-        {
-          "date": "2022-10-01",
-          "value": 147
-        },
-        {
-          "date": "2022-11-01",
-          "value": 143
-        },
-        {
-          "date": "2022-12-01",
-          "value": 135
-        },
-        {
-          "date": "2023-01-01",
+          "date": "2019-02-01",
           "value": 131
         },
         {
-          "date": "2023-02-01",
-          "value": 133
-        },
-        {
-          "date": "2023-03-01",
-          "value": 137
-        },
-        {
-          "date": "2023-04-01",
+          "date": "2019-03-01",
           "value": 138
         },
         {
-          "date": "2023-05-01",
-          "value": 139
+          "date": "2019-04-01",
+          "value": 136
         },
         {
-          "date": "2023-06-01",
+          "date": "2019-05-01",
+          "value": 132
+        },
+        {
+          "date": "2019-06-01",
+          "value": 130
+        },
+        {
+          "date": "2019-07-01",
+          "value": 130
+        },
+        {
+          "date": "2019-08-01",
+          "value": 130
+        },
+        {
+          "date": "2019-09-01",
+          "value": 128
+        },
+        {
+          "date": "2019-10-01",
+          "value": 125
+        },
+        {
+          "date": "2019-11-01",
+          "value": 122
+        },
+        {
+          "date": "2019-12-01",
+          "value": 122
+        },
+        {
+          "date": "2020-01-01",
+          "value": 128
+        },
+        {
+          "date": "2020-02-01",
+          "value": 135
+        },
+        {
+          "date": "2020-03-01",
+          "value": 126
+        },
+        {
+          "date": "2020-04-01",
+          "value": 107
+        },
+        {
+          "date": "2020-05-01",
+          "value": 91
+        },
+        {
+          "date": "2020-06-01",
+          "value": 93
+        },
+        {
+          "date": "2020-07-01",
+          "value": 101
+        },
+        {
+          "date": "2020-08-01",
+          "value": 105
+        },
+        {
+          "date": "2020-09-01",
+          "value": 106
+        },
+        {
+          "date": "2020-10-01",
+          "value": 106
+        },
+        {
+          "date": "2020-11-01",
+          "value": 105
+        },
+        {
+          "date": "2020-12-01",
+          "value": 103
+        },
+        {
+          "date": "2021-01-01",
+          "value": 106
+        },
+        {
+          "date": "2021-02-01",
+          "value": 110
+        },
+        {
+          "date": "2021-03-01",
+          "value": 112
+        },
+        {
+          "date": "2021-04-01",
+          "value": 108
+        },
+        {
+          "date": "2021-05-01",
+          "value": 104
+        },
+        {
+          "date": "2021-06-01",
+          "value": 106
+        },
+        {
+          "date": "2021-07-01",
+          "value": 111
+        },
+        {
+          "date": "2021-08-01",
+          "value": 113
+        },
+        {
+          "date": "2021-09-01",
+          "value": 113
+        },
+        {
+          "date": "2021-10-01",
+          "value": 114
+        },
+        {
+          "date": "2021-11-01",
+          "value": 114
+        },
+        {
+          "date": "2021-12-01",
+          "value": 113
+        },
+        {
+          "date": "2022-01-01",
+          "value": 122
+        },
+        {
+          "date": "2022-02-01",
+          "value": 138
+        },
+        {
+          "date": "2022-03-01",
+          "value": 154
+        },
+        {
+          "date": "2022-04-01",
+          "value": 156
+        },
+        {
+          "date": "2022-05-01",
+          "value": 151
+        },
+        {
+          "date": "2022-06-01",
+          "value": 148
+        },
+        {
+          "date": "2022-07-01",
+          "value": 146
+        },
+        {
+          "date": "2022-08-01",
+          "value": 144
+        },
+        {
+          "date": "2022-09-01",
           "value": 141
         },
         {
-          "date": "2023-07-01",
-          "value": 141
-        },
-        {
-          "date": "2023-08-01",
+          "date": "2022-10-01",
           "value": 140
         },
         {
+          "date": "2022-11-01",
+          "value": 136
+        },
+        {
+          "date": "2022-12-01",
+          "value": 129
+        },
+        {
+          "date": "2023-01-01",
+          "value": 126
+        },
+        {
+          "date": "2023-02-01",
+          "value": 130
+        },
+        {
+          "date": "2023-03-01",
+          "value": 133
+        },
+        {
+          "date": "2023-04-01",
+          "value": 134
+        },
+        {
+          "date": "2023-05-01",
+          "value": 134
+        },
+        {
+          "date": "2023-06-01",
+          "value": 136
+        },
+        {
+          "date": "2023-07-01",
+          "value": 136
+        },
+        {
+          "date": "2023-08-01",
+          "value": 136
+        },
+        {
           "date": "2023-09-01",
-          "value": 141
+          "value": 138
         },
         {
           "date": "2023-10-01",
-          "value": 142
+          "value": 138
         },
         {
           "date": "2023-11-01",
-          "value": 142
+          "value": 138
         },
         {
           "date": "2023-12-01",
-          "value": 139
+          "value": 134
         },
         {
           "date": "2024-01-01",
-          "value": 141
+          "value": 136
         },
         {
           "date": "2024-02-01",
-          "value": 142
+          "value": 137
         },
         {
           "date": "2024-03-01",
-          "value": 146
-        },
-        {
-          "date": "2024-04-01",
-          "value": 145
-        },
-        {
-          "date": "2024-05-01",
-          "value": 146
-        },
-        {
-          "date": "2024-06-01",
-          "value": 143
-        },
-        {
-          "date": "2024-07-01",
-          "value": 139
-        },
-        {
-          "date": "2024-08-01",
-          "value": 138
-        },
-        {
-          "date": "2024-09-01",
-          "value": 139
-        },
-        {
-          "date": "2024-10-01",
-          "value": 139
-        },
-        {
-          "date": "2024-11-01",
           "value": 141
         },
         {
-          "date": "2024-12-01",
-          "value": 138
+          "date": "2024-04-01",
+          "value": 141
         },
         {
-          "date": "2025-01-01",
+          "date": "2024-05-01",
           "value": 142
         },
         {
-          "date": "2025-02-01",
-          "value": 143
+          "date": "2024-06-01",
+          "value": 140
         },
         {
-          "date": "2025-03-01",
-          "value": 148
+          "date": "2024-07-01",
+          "value": 135
         },
         {
-          "date": "2025-04-01",
-          "value": 145
+          "date": "2024-08-01",
+          "value": 134
         },
         {
-          "date": "2025-05-01",
-          "value": 139
+          "date": "2024-09-01",
+          "value": 135
         },
         {
-          "date": "2025-06-01",
+          "date": "2024-10-01",
+          "value": 135
+        },
+        {
+          "date": "2024-11-01",
+          "value": 136
+        },
+        {
+          "date": "2024-12-01",
+          "value": 133
+        },
+        {
+          "date": "2025-01-01",
           "value": 138
         },
         {
+          "date": "2025-02-01",
+          "value": 140
+        },
+        {
+          "date": "2025-03-01",
+          "value": 145
+        },
+        {
+          "date": "2025-04-01",
+          "value": 142
+        },
+        {
+          "date": "2025-05-01",
+          "value": 136
+        },
+        {
+          "date": "2025-06-01",
+          "value": 134
+        },
+        {
           "date": "2025-07-01",
-          "value": 155
+          "value": 149
         },
         {
           "date": "2025-08-01",
-          "value": 167
+          "value": 162
         },
         {
           "date": "2025-09-01",
-          "value": 171
+          "value": 164
         },
         {
           "date": "2025-10-01",
-          "value": 159
+          "value": 153
         },
         {
           "date": "2025-11-01",
-          "value": 179
+          "value": 171
         },
         {
           "date": "2025-12-01",
-          "value": 206
+          "value": 199
         },
         {
           "date": "2026-01-01",
-          "value": 242
+          "value": 233
         },
         {
           "date": "2026-02-01",
-          "value": 258
+          "value": 250
         },
         {
           "date": "2026-03-01",
-          "value": 266
+          "value": 258
         },
         {
           "date": "2026-04-01",
-          "value": 255
+          "value": 248
         },
         {
           "date": "2026-05-01",
-          "value": 239
+          "value": 233
         },
         {
           "date": "2026-06-01",
-          "value": 232
+          "value": 223
         },
         {
           "date": "2026-07-01",
-          "value": 217
+          "value": 208
         },
         {
           "date": "2026-08-01",
-          "value": 191
+          "value": 181
         },
         {
           "date": "2026-09-01",
-          "value": 161
+          "value": 154
         },
         {
           "date": "2026-10-01",
-          "value": 148
+          "value": 146
         },
         {
           "date": "2026-11-01",
